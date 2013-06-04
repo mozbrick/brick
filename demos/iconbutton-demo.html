@@ -8,27 +8,91 @@
     <script type="text/javascript" src="../src/js/iconbutton.js"></script>
     
     <style>
+    /* applying styles to x-iconbutton applies styles as if it were to the 
+       "wrapper" of the button
+       
+       applying styles to x-iconbutton .button applies styles to the 
+       button itself
+       
+       applying styles to x-iconbutton .icon applies styles to the icon of the
+       button
+       
+       applying styles to x-iconbutton .label applies styles to the label of the
+       button
+    */
+    
+    x-iconbutton{
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    .custom-style-iconbutton .button{
+        cursor: pointer;
+        border: 1px solid grey;
+        border-radius: 4px;
+        background-color: black;
+        box-shadow: 1px 1px grey;
+    }
+    
+    .custom-style-iconbutton .button:hover{
+        background-color: #333;
+    }
+    
+    .custom-style-iconbutton .icon{
+        background-color: white;
+        border-radius: 4px;
+        margin: .5em;
+        padding: 4px;
+    }
+    
+    .custom-style-iconbutton .label{
+        font-family: Courier, monospace;
+        font-size: 3em;
+        padding: .25em;
+        color: #3efa3e;
+        text-shadow: -1px -1px limegreen;
+    }
     </style>
 </head>
 <body>
     <h1>X-Iconbutton demo below</h1>
-    <span>No label:</span>
-    <x-iconbutton src="http://placekitten.com/20"></x-iconbutton>
     
-    <span>No Icon (ie: normal button):</span>
-    <x-iconbutton>Hello</x-iconbutton>
-    
-    <span>Left icon:</span>
-    <x-iconbutton src="http://placekitten.com/50">Hello</x-iconbutton>
-    <x-iconbutton src="http://placekitten.com/22" icon-anchor="left">Hello</x-iconbutton>
-    
-    <span>Right icon:</span>
-    <x-iconbutton src="http://placekitten.com/54" icon-anchor="right">Hello</x-iconbutton>
-    
-    <span>Top icon:</span>
-    <x-iconbutton src="http://placekitten.com/33" icon-anchor="top">Hello</x-iconbutton>
-    
-    <span>Bottom icon:</span>
-    <x-iconbutton src="http://placekitten.com/29" icon-anchor="bottom" >Hello</x-iconbutton>
+    <ul>
+      <li>
+        <span>Left icon (default):</span>
+        <x-iconbutton src="http://placekitten.com/50">Hello</x-iconbutton>
+      </li> 
+      <li>
+        <span>Left icon (specified):</span>
+        <x-iconbutton src="http://placekitten.com/22" icon-anchor="left">Hello</x-iconbutton>
+      </li>
+      <li>
+        <span>Right icon:</span>
+        <x-iconbutton src="http://placekitten.com/54" icon-anchor="right">Hello</x-iconbutton>
+      </li> 
+      <li>
+        <span>Top icon:</span>
+        <x-iconbutton src="http://placekitten.com/33" icon-anchor="top">Hello</x-iconbutton>
+      </li> 
+      <li>
+        <span>Bottom icon:</span>
+        <x-iconbutton src="http://placekitten.com/29" icon-anchor="bottom" >Hello</x-iconbutton>
+      </li>  
+      <li>
+        <span>No label:</span>
+        <x-iconbutton src="http://placekitten.com/20"></x-iconbutton>
+      </li>
+      <li>
+        <span>No Icon (ie: normal button):</span>
+        <x-iconbutton>Hello</x-iconbutton>
+      </li>
+      <li>
+        <span>Custom Stylings:</span>
+        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="left">Left</x-iconbutton>
+        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="right">Right</x-iconbutton>
+        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="top">Top</x-iconbutton>
+        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="bottom">Bottom</x-iconbutton>
+      </li>
+    </ul>
 </body>
 </html>

@@ -3,12 +3,13 @@ x-iconbutton{
     box-sizing: border-box;
     
     & > button > *{
+       margin: 0;
+       padding: 0;
        vertical-align: middle;
        display: inline-block;
     }
     
     &[icon-anchor=top], &[icon-anchor=bottom]{
-    
         & > button > *{
             margin: 0 auto;
             display: block;
