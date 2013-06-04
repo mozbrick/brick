@@ -1,0 +1,57 @@
+x-spinner, x-spinner b, x-spinner img {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+x-spinner {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  line-height: 100%;
+  font-family: sans-serif;
+  color: #000;
+  overflow: hidden;
+}
+x-spinner b {
+  display: block;
+  font-size: inherit;
+  height: 100%;
+  left: 0;
+  font-size: .20em;
+  overflow: hidden;
+  padding: 0 15%;
+  position: absolute;
+  text-align: center;
+  text-overflow: ellipsis;
+  top: 0;
+  white-space: nowrap;
+  width: 100%;
+  word-wrap: break-word;
+  z-index: 1;
+}
+x-spinner img {
+  -webkit-animation: 1s spin infinite linear;
+  -moz-animation: 1s spin infinite linear;
+  -ms-animation: 1s spin infinite linear;
+  animation: 1s spin infinite linear;
+  height: auto;
+  width: 100%;
+}
+
+
+    x-spinner[paused] img {
+		-webkit-animation-play-state: paused;
+		-moz-animation-play-state: paused;
+		-ms-animation-play-state: paused;
+		animation-play-state: paused;
+	}
+
+x-spinner:not([src]) img {
+  border-radius: 100%;
+  border: solid transparent;
+  border-top-color: inherit;
+}
+
+@-webkit-keyframes spin { to { -webkit-transform: rotate(360deg); } }
+@-moz-keyframes spin { to { -moz-transform: rotate(360deg); } }
+@-ms-keyframes spin { to { -ms-transform: rotate(360deg); } }
+@keyframes spin { to { transform: rotate(360deg); } }

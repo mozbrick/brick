@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="../src/css/view.css"/>
+    
+    <script type="text/javascript" src="x-tag-core.min.js"></script>
+    <script type="text/javascript" src="../src/js/view.js"></script>
+    
+    <style>
+        body, html{
+            width: 100%;
+            height: 100%;
+            
+            padding:0;
+            margin:0;
+        }
+        
+        #container{
+            border: 1px solid grey;
+            width: 320px;
+            height: 480px;
+        }
+        
+        
+        x-view > *{
+            border: 1px solid #ccc;
+        }
+        
+        x-view > *:nth-child(odd){
+            background-color: #ddd;
+        }
+        
+        x-view > *:nth-child(even){
+            background-color: #eee;
+        }
+        
+        p{
+            width: 50%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>X-View demo below</h1>
+    <div id="container">
+        <x-view>
+            <section> This should be normal </section>
+            <section class="view-section"> This should be vertically flexed </section>
+            <section class="view-section"> This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            This should be vertically flexed
+            </section>
+            <section class="view-section"> This should be vertically flexed </section>
+            <p> This should be half-size </p>
+            <p> This should be half-size </p>
+            <section> This should be normal </section>
+            <p class="view-section"> This should be half-size and vertically flexed </p>
+            <x-panel> This should be vertically flexed </x-panel>
+            <p> This should be half-size </p>
+        </x-view>
+    </div>
+</body>
+</html>
