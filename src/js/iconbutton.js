@@ -1,16 +1,41 @@
 (function(){
-    // hides/unhides elements depending on if they have any content
-    function updateVisible(elem){
-        elem.xtag.iconWrapper.style.display = (elem.xtag.icon.src) ? "" : "none";
-        elem.xtag.label.style.display = (elem.xtag.label.innerHTML) ? "" : "none";
+    // dataUrl for a 1x1 transparent gif
+    var EMPTY_SRC = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+    var IMG_NODE_NAME = document.createElement("img").nodeName;
+    
+    // hides/unhides parts of the button depending on if they have any content, also
+    // removes image source if explicitly given a null/empty src
+    function updatePartsVisibility(elem, iconSrc){
+        // if the icon is an img tag, modify based on its img src
+        
+        if(elem.xtag.iconEl.nodeName === IMG_NODE_NAME){
+            iconSrc = (iconSrc !== undefined) ? iconSrc : elem.xtag.iconEl.src;
+            
+            // replace image with empty source if given an empty source
+            if(!iconSrc){
+                elem.xtag.iconEl.src = EMPTY_SRC;
+            }
+            
+            // only show if given a valid source that is not empty
+            elem.xtag.iconWrapperEl.style.display = 
+                (iconSrc && iconSrc !== EMPTY_SRC) ? "" : "none";
+        }
+        // if the icon is an img tag, modify based on its innerHTML
+        else{
+            elem.xtag.iconEl.style.display = 
+                (elem.xtag.iconEl.innerHTML) ? "" : "none";
+        }
+        
+        elem.xtag.labelEl.style.display = 
+            (elem.xtag.labelEl.innerHTML) ? "" : "none";
     }
     
     // updates the html layout order of the icon and label to match any given
     // anchors
-    function updateOrder(elem){
-        var iconWrapper = elem.xtag.iconWrapper;
-        var label = elem.xtag.label;
-        var button = elem.xtag.button;
+    function updatePartsOrder(elem){
+        var iconWrapper = elem.xtag.iconWrapperEl;
+        var label = elem.xtag.labelEl;
+        var button = elem.xtag.buttonEl;
         
         switch(elem.getAttribute('icon-anchor')){
             // icon goes after label
@@ -28,6 +53,21 @@
         }
     }
     
+    // replaces the element in the given category with the new element
+    // useful for full replacements of button components
+    function replaceComponentElement(xButtonElem, newElem, categoryName, elemClass){
+        var oldElem = xButtonElem.xtag[categoryName];
+        if(newElem instanceof HTMLElement){
+            oldElem.parentNode.replaceChild(newElem, oldElem);
+            
+            // don't forget to change the xtag reference to the element
+            xButtonElem.xtag[categoryName] = newElem;
+            newElem.addClass(elemClass);
+        }
+        else{
+            throw "Attempted to insert non HTML-DOM element replacement";
+        }
+    }
     
     xtag.register("x-iconbutton", {
         lifecycle:{
@@ -35,52 +75,70 @@
             // the icon's <img> element
             // and a <span> element for the label
             created: function(){
-                this.xtag.button = document.createElement('button');
-                this.xtag.iconWrapper = document.createElement('figure');
-                this.xtag.icon = document.createElement('img');
-                this.xtag.label = document.createElement('span');
+                this.xtag.buttonEl = document.createElement('button');
+                // we use a wrapper to prevent our css styles from clobbering 
+                // custom styles due to specificity issues
+                this.xtag.iconWrapperEl = document.createElement('figure');
+                this.xtag.iconEl = document.createElement('img');
+                this.xtag.labelEl = document.createElement('span');
                 
                 // provide classes to expose certain elements and allow
                 // users to hook in their own styles
-                xtag.addClass(this.xtag.button, "button");
-                xtag.addClass(this.xtag.icon, "icon");
-                xtag.addClass(this.xtag.label, "label");
+                xtag.addClass(this.xtag.buttonEl, "button");
+                xtag.addClass(this.xtag.iconEl, "icon");
+                xtag.addClass(this.xtag.labelEl, "label");
                 
                 // remove content and put into the label
-                this.xtag.label.innerHTML = this.innerHTML;
+                this.xtag.labelEl.innerHTML = this.innerHTML;
                 this.innerHTML = "";
                 
-                // initialize blank image
-                this.xtag.icon.src = null;
-                
                 // actually create the button
-                this.xtag.iconWrapper.appendChild(this.xtag.icon);
-                this.appendChild(this.xtag.button);
-                this.xtag.button.appendChild(this.xtag.iconWrapper);
-                this.xtag.button.appendChild(this.xtag.label);
+                this.xtag.iconWrapperEl.appendChild(this.xtag.iconEl);
+                this.appendChild(this.xtag.buttonEl);
+                this.xtag.buttonEl.appendChild(this.xtag.iconWrapperEl);
+                this.xtag.buttonEl.appendChild(this.xtag.labelEl);
                 
-                updateOrder(this);
-                updateVisible(this);
+                updatePartsOrder(this);
+                updatePartsVisibility(this);
             },
             inserted: function() {
-                updateOrder(this);
-                updateVisible(this);
+                updatePartsOrder(this);
+                updatePartsVisibility(this);
+            },
+            attributeChange: function(){
+                updatePartsOrder(this);
+                updatePartsVisibility(this);
             }
         },
         accessors:{
             "src":{
                 attribute: {selector: ".icon"},
                 set: function(newSrc){
-                    // if not given a src, use null in order to actually clear
-                    // the image's src (using empty string defaults to the
-                    // 
-                    return newSrc ? newSrc : null;
+                    updatePartsVisibility(this, newSrc);
                 }
             },
             "icon-anchor":{
                 attribute: {},
                 set: function(newAnchor){
-                    updateOrder(this);
+                    updatePartsOrder(this);
+                }
+            },
+            "label":{
+                attribute: {},
+                get: function(){
+                    return this.xtag.labelEl;
+                },
+                set: function(newLabelEl){
+                    replaceComponentElement(this, newLabelEl, 'labelEl', 'label');
+                }
+            },
+            "icon":{
+                attribute: {},
+                get: function(){
+                    return this.xtag.iconEl;
+                },
+                set: function(newIconEl){
+                    replaceComponentElement(this, newIconEl, 'iconEl', 'icon');
                 }
             }
         }

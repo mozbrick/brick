@@ -2,7 +2,7 @@ x-iconbutton{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     
-    & > button > *{
+    & .button > *{
        margin: 0;
        padding: 0;
        vertical-align: middle;
@@ -10,7 +10,7 @@ x-iconbutton{
     }
     
     &[icon-anchor=top], &[icon-anchor=bottom]{
-        & > button > *{
+        & .button > *{
             margin: 0 auto;
             display: block;
         }

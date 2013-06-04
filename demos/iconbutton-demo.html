@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="../src/css/iconbutton.css"/>
     
-    <script type="text/javascript" src="x-tag-core.min.js"></script>
+    <script type="text/javascript" src="x-tag-core.js"></script>
     <script type="text/javascript" src="../src/js/iconbutton.js"></script>
     
     <style>
@@ -39,7 +39,8 @@
     }
     
     .custom-style-iconbutton .icon{
-        background-color: white;
+        background-color: #444;
+        border: 1px dashed white;
         border-radius: 4px;
         margin: .5em;
         padding: 4px;
@@ -52,46 +53,204 @@
         color: #3efa3e;
         text-shadow: -1px -1px limegreen;
     }
+    
+    .demo .button{
+        border: 1px solid grey;
+        background-color: #eee;
+        font-size: 2em;
+    }
+    
+    #fancy-html-icon{
+        margin: 0 auto;
+        padding: 0;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ccc;
+    }
+    
+    #fancy-html-icon span{
+        position: absolute;
+        right: 10%;
+        bottom: 10%;
+        
+        font-family: Georgia, serif;
+        z-index: 2;
+    }
+    
+    #fancy-html-icon div{
+        position: absolute;
+        width: 70%;
+        height: 70%;
+        left: 10%;
+        right: 10%;
+        background-color: cyan;
+        border-radius: 4px;
+        z-index: 1;
+    }
+    
+    #fancy-html-label{
+        font-family: Georgia, serif;
+        text-shadow: 0 0 50px red;
+    }
+    
+    .circle{
+        border-radius: 100%;
+        border: 3px dotted red;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+    }
     </style>
+    
+    <script>
+        function changeAnchor(button, anchor){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            
+            iconButton["icon-anchor"] = anchor;
+        }
+        
+        function changeSrc(button, imgSrc){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            
+            iconButton.src = imgSrc;
+        }
+        
+        function editPart(button, editFn){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            editFn(iconButton);
+        }
+        
+        document.addEventListener('DOMComponentsLoaded', function(){
+            
+        }, false);
+        
+    </script>
 </head>
 <body>
-    <h1>X-Iconbutton demo below</h1>
+    <h1>X-Iconbutton demos</h1>
     
     <ul>
       <li>
         <span>Left icon (default):</span>
-        <x-iconbutton src="http://placekitten.com/50">Hello</x-iconbutton>
+        <x-iconbutton src="http://placekitten.com/30">Hello</x-iconbutton>
       </li> 
       <li>
         <span>Left icon (specified):</span>
-        <x-iconbutton src="http://placekitten.com/22" icon-anchor="left">Hello</x-iconbutton>
+        <x-iconbutton src="http://placekitten.com/30" icon-anchor="left">Hello</x-iconbutton>
       </li>
       <li>
         <span>Right icon:</span>
-        <x-iconbutton src="http://placekitten.com/54" icon-anchor="right">Hello</x-iconbutton>
+        <x-iconbutton src="http://placekitten.com/30" icon-anchor="right">Hello</x-iconbutton>
       </li> 
       <li>
         <span>Top icon:</span>
-        <x-iconbutton src="http://placekitten.com/33" icon-anchor="top">Hello</x-iconbutton>
+        <x-iconbutton src="http://placekitten.com/30" icon-anchor="top">Hello</x-iconbutton>
       </li> 
       <li>
         <span>Bottom icon:</span>
-        <x-iconbutton src="http://placekitten.com/29" icon-anchor="bottom" >Hello</x-iconbutton>
+        <x-iconbutton src="http://placekitten.com/30" icon-anchor="bottom" >Hello</x-iconbutton>
       </li>  
       <li>
         <span>No label:</span>
-        <x-iconbutton src="http://placekitten.com/20"></x-iconbutton>
+        <x-iconbutton src="http://placekitten.com/30"></x-iconbutton>
       </li>
       <li>
         <span>No Icon (ie: normal button):</span>
         <x-iconbutton>Hello</x-iconbutton>
       </li>
       <li>
+        <span>No content at all:</span>
+        <x-iconbutton></x-iconbutton>
+      </li>
+      <li>
         <span>Custom Stylings:</span>
+        <x-iconbutton class="custom-style-iconbutton" icon-anchor="left">No Icon</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="left">Left</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="right">Right</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="top">Top</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="bottom">Bottom</x-iconbutton>
+      </li>
+      
+      <li>
+        <span>Anchor editing:</span>
+        <x-iconbutton id="anchor-demo"  class="demo" src="http://placekitten.com/40">Lorem Ipsum</x-iconbutton>
+        <button onclick="changeAnchor(this, 'left')">Left</button>
+        <button onclick="changeAnchor(this, 'right')">Right</button>
+        <button onclick="changeAnchor(this, 'top')">Top</button>
+        <button onclick="changeAnchor(this, 'bottom')">Bottom</button>
+        <button onclick="changeAnchor(this, '')">Default (left)</button>
+      </li>
+      <li>
+        <span>Icon Src editing:</span>
+        <x-iconbutton id="icon-demo" class="demo" src="http://placekitten.com/39">Icons</x-iconbutton>
+        <button onclick="changeSrc(this, 'http://placekitten.com/39')">
+            Kitten (url)
+        </button>
+        <button onclick="changeSrc(this, 'firefox.png')">
+            Firefox (local)
+        </button>
+        <button onclick="changeSrc(this, 'data:image/png;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAoACgDASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAUDBAcGAv/EACwQAAIBAwIFAwIHAAAAAAAAAAECAwAEEQUhBhITMUEiUWEUkQcVQ3GBofD/xAAWAQEBAQAAAAAAAAAAAAAAAAAEAwX/xAAeEQACAgIDAQEAAAAAAAAAAAABAgARAyESEzEiQf/aAAwDAQACEQMRAD8A7kQ5/TFenjjjjZ3K4UZPwKY9FsnKZ+aW8RI6cO37IpysJJ5e+PNHOgTLAWanPajxjaaUIyDyhpAoAGS3zVG3/EWWTU0iiglubF+ZJXTHoOdzjvnFI2YX8M0aRB2jAZsdyCNqXcP2N9NqcKRW8vNOW6gY49WNsZ+1GQBgWPsUxohR5NhKJLloN18bfzRRw7p2oW2mKmplTchiMK2QFGAuSPOBRS1BrcK1XqPlT05CsKRy6j9QhdMiMg+lgM4x5rk+NuJLq212G1heTkLKgRWwPlj774+1ePzJbeDozyEXM8pVIwNskFn32wAcftnzRszs2l8iMWKhyMjv9MsZUlmFqqTs+epGu57HfH+2qSyjWzlt57WEK6vgFTv8k5qCLVZYYJkeGInIADEkkZG6+x281NqBuLTRfr44mYXMnQLntGSDvj5qYx3TA6/YpuM06xuIr2ziuYTzJKvMDRSvhh3XhqxVjzkR4BG3mitBNqDMx9MQJV1XRILyF5TaxyTqOZHZQSCO2M1mi6Vrl5q4kvYZILWN+oGnQjmYeO/90UVFlHsomRgKEux6VDqtyVeaWGSOMlQjlebfz70kl0nUOHJ5J7x53tpXAjVnLjPfOfFFFQVR03LEntAmx8LSJd6Fa9Mj0IFY57Giiil4z8CGcfRn/9k=')">
+            Dog (dataUrl)
+        </button>
+        <button onclick="changeSrc(this, '')">
+            None (empty string)
+        </button>
+        <button onclick="changeSrc(this, null)">
+            None (null)
+        </button>
+      </li>
+      <li>
+         <span>Complete parts editing (see source)</span>
+         <x-iconbutton id="parts-demo" class="demo" 
+                       src="firefox.png" icon-anchor="top">Parts</x-iconbutton>
+         <button onclick="editPart(this, function(iconButton){
+            var color = iconButton.icon.style.backgroundColor;
+            
+            if(color == 'red'){
+                iconButton.icon.style.backgroundColor = '';
+            }
+            else{
+                iconButton.icon.style.backgroundColor = 'red';
+            }
+         })">
+            Edit Icon
+         </button>
+         <button onclick="editPart(this, function(iconButton){
+            var newIcon = document.createElement('figure');
+            newIcon.id = 'fancy-html-icon';
+            
+            var textEl = document.createElement('span');
+            textEl.innerHTML = 'A';
+            
+            var colorEl = document.createElement('div');
+            
+            newIcon.appendChild(colorEl);
+            newIcon.appendChild(textEl);
+            
+            iconButton.icon = newIcon;
+         })">
+            Replace Icon
+         </button>
+         <button onclick="editPart(this, function(iconButton){
+           iconButton.label.innerHTML = String(new Date().valueOf());
+         })">
+            Edit Label
+         </button>
+         <button onclick="editPart(this, function(iconButton){
+            var newLabel = document.createElement('p');
+            newLabel.innerHTML = 'Lorem Ipsum!'
+            newLabel.id = 'fancy-html-label';
+            
+            var circle = document.createElement('div');
+            xtag.addClass(circle, 'circle');
+            
+            newLabel.appendChild(circle);
+            
+            iconButton.label = newLabel;
+         })">
+            Replace Label
+         </button>
       </li>
     </ul>
 </body>
