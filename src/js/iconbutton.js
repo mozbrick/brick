@@ -97,9 +97,9 @@
                 
                 // set up default getter and setters for modifying text content
                 // default behavior: modify text directly
-                this.xtag.textGetter = DEFAULT_TEXT_GETTER;
+                this.textGetter = DEFAULT_TEXT_GETTER;
                 
-                this.xtag.textSetter = DEFAULT_TEXT_SETTER;
+                this.textSetter = DEFAULT_TEXT_SETTER;
                 
                 // remove content and put into the label
                 this.xtag.labelEl.innerHTML = this.innerHTML;
@@ -155,31 +155,15 @@
             "text":{
                 attribute: {},
                 get: function(){
-                    return this.xtag.textGetter(this);
+                    return this.textGetter(this);
                 },
                 set: function(newText){
-                    this.xtag.textSetter(this, newText);
+                    this.textSetter(this, newText);
                 }
             },
             // if the user defines a different label structure, it is up to them
             // to provide callback functions to correctly interface with the 
             // new label
-            "textGetter":{
-                get: function(){
-                    return this.xtag.textGetter;
-                },
-                set: function(newGetterFn){
-                    this.xtag.textGetter = newGetterFn;
-                }
-            },
-            "textSetter":{
-                get: function(){
-                    return this.xtag.textSetter;
-                },
-                set: function(newSetterFn){
-                    this.xtag.textSetter = newSetterFn;
-                }
-            }
         }
     });
 
