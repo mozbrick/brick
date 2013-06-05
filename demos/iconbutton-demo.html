@@ -60,7 +60,7 @@
         font-size: 2em;
     }
     
-    #fancy-html-icon{
+    .fancy-html-icon{
         margin: 0 auto;
         padding: 0;
         position: relative;
@@ -69,7 +69,7 @@
         border: 4px solid #ccc;
     }
     
-    #fancy-html-icon span{
+    .fancy-html-icon span{
         position: absolute;
         right: 10%;
         bottom: 10%;
@@ -78,7 +78,7 @@
         z-index: 2;
     }
     
-    #fancy-html-icon div{
+    .fancy-html-icon div{
         position: absolute;
         width: 70%;
         height: 70%;
@@ -89,9 +89,8 @@
         z-index: 1;
     }
     
-    #fancy-html-label{
+    .fancy-html-label{
         font-family: Georgia, serif;
-        text-shadow: 0 0 50px red;
     }
     
     .circle{
@@ -104,6 +103,18 @@
     </style>
     
     <script>
+        function randomColor(){
+            var _randomVal = function(){
+                return Math.floor(Math.random() * 256);
+            }
+            
+            return "rgb("+_randomVal()+","+_randomVal()+","+_randomVal()+")";
+        }
+        
+        function getUniqueString(){
+            return String(new Date().valueOf());
+        }
+    
         function changeAnchor(button, anchor){
             var iconButton = button.parentNode.querySelector("x-iconbutton");
             
@@ -116,13 +127,36 @@
             iconButton.src = imgSrc;
         }
         
-        function editPart(button, editFn){
+        function showText(button){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            console.log(iconButton.text);
+            alert(iconButton.text);
+        }
+        
+        function changeText(button){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+           
+            iconButton.text = getUniqueString();
+        }
+        
+        function editButton(button, editFn){
             var iconButton = button.parentNode.querySelector("x-iconbutton");
             editFn(iconButton);
         }
         
         document.addEventListener('DOMComponentsLoaded', function(){
+            var customLabelIconButton = document.getElementById("custom-accessor-demo");
             
+            var customGetter = function(iconButton){
+                return iconButton.querySelector("strong").textContent;
+            }
+            
+            var customSetter = function(iconButton, newText){
+                iconButton.querySelector("strong").textContent = newText;
+            }
+            
+            customLabelIconButton.textGetter = customGetter;
+            customLabelIconButton.textSetter = customSetter;
         }, false);
         
     </script>
@@ -204,21 +238,14 @@
          <span>Complete parts editing (see source)</span>
          <x-iconbutton id="parts-demo" class="demo" 
                        src="firefox.png" icon-anchor="top">Parts</x-iconbutton>
-         <button onclick="editPart(this, function(iconButton){
-            var color = iconButton.icon.style.backgroundColor;
-            
-            if(color == 'red'){
-                iconButton.icon.style.backgroundColor = '';
-            }
-            else{
-                iconButton.icon.style.backgroundColor = 'red';
-            }
+         <button onclick="editButton(this, function(iconButton){
+            iconButton.icon.style.backgroundColor = randomColor();
          })">
             Edit Icon
          </button>
-         <button onclick="editPart(this, function(iconButton){
+         <button onclick="editButton(this, function(iconButton){
             var newIcon = document.createElement('figure');
-            newIcon.id = 'fancy-html-icon';
+            xtag.addClass(newIcon, 'fancy-html-icon');
             
             var textEl = document.createElement('span');
             textEl.innerHTML = 'A';
@@ -232,25 +259,38 @@
          })">
             Replace Icon
          </button>
-         <button onclick="editPart(this, function(iconButton){
-           iconButton.label.innerHTML = String(new Date().valueOf());
+         <button onclick="editButton(this, function(iconButton){
+           iconButton.label.style.backgroundColor = randomColor();
          })">
             Edit Label
          </button>
-         <button onclick="editPart(this, function(iconButton){
+         <button onclick="editButton(this, function(iconButton){
             var newLabel = document.createElement('p');
-            newLabel.innerHTML = 'Lorem Ipsum!'
-            newLabel.id = 'fancy-html-label';
-            
-            var circle = document.createElement('div');
-            xtag.addClass(circle, 'circle');
-            
-            newLabel.appendChild(circle);
+            xtag.addClass(newLabel, 'fancy-html-label');
+            console.log(newLabel.innerHTML);
+            newLabel.innerHTML = '<div class=\'circle\'></div> Carpe diem! <div class=\'circle\'></div>';
             
             iconButton.label = newLabel;
          })">
             Replace Label
          </button>
+      </li>
+      <li>
+        <span>Text Modification (default accessors)</span>
+        <x-iconbutton class="demo" 
+                      src="firefox.png" icon-anchor="right">Default text</x-iconbutton>
+        <button onclick="showText(this)">Show Text</button>
+        <button onclick="changeText(this)">Change Text</button>
+      </li>
+      <li>
+        <span>Text Modification (custom accessors)</span>
+        <x-iconbutton class="demo" id="custom-accessor-demo" icon-anchor="bottom">
+            <strong>Change me!</strong>
+            <div class="circle"></div>
+            <em>Ignore me!</em>         
+        </x-iconbutton>
+        <button onclick="showText(this)">Show Text</button>
+        <button onclick="changeText(this)">Change Text</button>
       </li>
     </ul>
 </body>

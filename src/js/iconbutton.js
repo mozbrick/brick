@@ -2,6 +2,13 @@
     // dataUrl for a 1x1 transparent gif
     var EMPTY_SRC = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
     var IMG_NODE_NAME = document.createElement("img").nodeName;
+    var DEFAULT_TEXT_GETTER = function(iconButton){
+                                 return iconButton.xtag.labelEl.textContent;
+                              }
+    var DEFAULT_TEXT_SETTER = function(iconButton, newText){
+                                  iconButton.xtag.labelEl.textContent = newText;
+                              }
+    
     
     // hides/unhides parts of the button depending on if they have any content, also
     // removes image source if explicitly given a null/empty src
@@ -20,7 +27,7 @@
             elem.xtag.iconWrapperEl.style.display = 
                 (iconSrc && iconSrc !== EMPTY_SRC) ? "" : "none";
         }
-        // if the icon is an img tag, modify based on its innerHTML
+        // if the icon isn't an img tag, modify based on its innerHTML
         else{
             elem.xtag.iconEl.style.display = 
                 (elem.xtag.iconEl.innerHTML) ? "" : "none";
@@ -62,7 +69,7 @@
             
             // don't forget to change the xtag reference to the element
             xButtonElem.xtag[categoryName] = newElem;
-            newElem.addClass(elemClass);
+            xtag.addClass(newElem, elemClass);
         }
         else{
             throw "Attempted to insert non HTML-DOM element replacement";
@@ -87,6 +94,12 @@
                 xtag.addClass(this.xtag.buttonEl, "button");
                 xtag.addClass(this.xtag.iconEl, "icon");
                 xtag.addClass(this.xtag.labelEl, "label");
+                
+                // set up default getter and setters for modifying text content
+                // default behavior: modify text directly
+                this.xtag.textGetter = DEFAULT_TEXT_GETTER;
+                
+                this.xtag.textSetter = DEFAULT_TEXT_SETTER;
                 
                 // remove content and put into the label
                 this.xtag.labelEl.innerHTML = this.innerHTML;
@@ -123,8 +136,15 @@
                     updatePartsOrder(this);
                 }
             },
+            "icon":{
+                get: function(){
+                    return this.xtag.iconEl;
+                },
+                set: function(newIconEl){
+                    replaceComponentElement(this, newIconEl, 'iconEl', 'icon');
+                }
+            },
             "label":{
-                attribute: {},
                 get: function(){
                     return this.xtag.labelEl;
                 },
@@ -132,13 +152,32 @@
                     replaceComponentElement(this, newLabelEl, 'labelEl', 'label');
                 }
             },
-            "icon":{
+            "text":{
                 attribute: {},
                 get: function(){
-                    return this.xtag.iconEl;
+                    return this.xtag.textGetter(this);
                 },
-                set: function(newIconEl){
-                    replaceComponentElement(this, newIconEl, 'iconEl', 'icon');
+                set: function(newText){
+                    this.xtag.textSetter(this, newText);
+                }
+            },
+            // if the user defines a different label structure, it is up to them
+            // to provide callback functions to correctly interface with the 
+            // new label
+            "textGetter":{
+                get: function(){
+                    return this.xtag.textGetter;
+                },
+                set: function(newGetterFn){
+                    this.xtag.textGetter = newGetterFn;
+                }
+            },
+            "textSetter":{
+                get: function(){
+                    return this.xtag.textSetter;
+                },
+                set: function(newSetterFn){
+                    this.xtag.textSetter = newSetterFn;
                 }
             }
         }
