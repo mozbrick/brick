@@ -1,0 +1,39 @@
+x-shuffledeck {
+  display: block;
+  position: relative;
+  overflow: hidden; }
+  x-shuffledeck > x-slide {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    overflow: hidden;
+    position: absolute;
+    transition-property: transform;
+    -webkit-transition-property: -webkit-transform;
+    -moz-transition-property: -moz-transform;
+    -o-transition-property: -o-transform;
+    transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-in;
+    -moz-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    -o-transition-delay: 0s;
+    transition-delay: 0s;
+    height: 100%;
+    width: 100%;
+    left: 0px;
+    right: 0px;
+    z-index: 0; }
+    x-shuffledeck > x-slide[selected] {
+      z-index: 1; }
+    x-shuffledeck > x-slide[hiddenfoo]:not([selected]) {
+      display: none;
+      border-radius: 50%; }

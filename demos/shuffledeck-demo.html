@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="../src/css/shuffledeck.css"/>
+    
+    <script type="text/javascript" src="x-tag-core.js"></script>
+    <script type="text/javascript" src="../src/js/shuffledeck.js"></script>
+    
+    <style>
+        #demo-box{
+            margin: 5em auto 0 auto;
+            
+            width: 100px;
+            height: 100px;
+            border: 4px solid grey;
+        }
+        
+        #demo-box x-slide{
+            font-size: 5em;
+            background-color: black;
+        }
+        
+        #demo-box x-slide:not([selected]){
+            opacity: 0.7;
+        }
+        
+        #demo-box x-slide[selected]{
+            color: white;
+            text-shadow: 1px 1px 10px black;
+        }
+    </style>
+    <script>
+        function randomColor(alpha){
+            var _randomVal = function(){
+                return Math.floor(Math.random() * 256);
+            }
+            var type = (alpha) ? "rgba" : "rgb";
+            var alphaStr = (alpha) ? ","+alpha : "";
+            
+            return type+"("+_randomVal()+","+_randomVal()+","+_randomVal()+alphaStr+")";
+        }
+        
+        var demoBox;
+        
+        document.addEventListener('DOMComponentsLoaded', function(){
+            xtag.query(document, "x-slide").forEach(function(slide){
+                slide.style.backgroundColor = randomColor();
+            });
+            
+            demoBox = document.getElementById("demo-box");
+            
+            demoBox.addEventListener('slideend', function(e){
+                console.log("slideend event fired", e.target, this);
+            });
+            
+            updateTypeBox();
+        }, false);
+        
+        function changeType(newType){
+            var oldType = demoBox["transition-type"];
+            
+            if(!newType){
+                switch(oldType){
+                    case "scrollLeft": 
+                        newType = "scrollUp";
+                        break;
+                    case "scrollUp":
+                        newType = "scrollRight";
+                        break;
+                    case "scrollRight":
+                        newType = "scrollDown";
+                        break;
+                    case "scrollDown":
+                    default:
+                        newType = "scrollLeft";
+                        break;
+                }
+            }
+            
+            demoBox["transition-type"] = newType;
+            
+            updateTypeBox();
+        }
+        
+        function updateTypeBox(){
+            document.getElementById("transition-label").textContent = 
+                    "transition-type = "+demoBox["transition-type"];
+        }
+        
+        function addSlide(){
+            var numSlides = demoBox.getAllSlides().length;
+            
+            var newSlide = document.createElement("x-slide");
+            newSlide.style.backgroundColor = randomColor();
+            
+            newSlide.textContent = String(numSlides+1);
+            
+            demoBox.appendChild(newSlide);
+            
+            var allSlides = demoBox.getAllSlides();
+            console.log("Added slide labeled", allSlides.indexOf(newSlide));
+            demoBox.slideTo(allSlides.indexOf(newSlide));
+        }
+    </script>
+</head>
+<body>
+    <x-shuffledeck id="demo-box" transition-type="scrollUp">
+        <x-slide>1</x-slide>
+        <x-slide>2</x-slide>
+    </x-shuffledeck>
+    <button onclick="demoBox.slideNext()">Slide Next</button>
+    <button onclick="demoBox.slidePrev()">Slide Prev</button>
+    <button onclick="demoBox.slideTo(2)">Slide to 3</button>
+    <button onclick="changeType()">change transition type</button>
+    <button onclick="addSlide()">Add slide</button>
+    <p id="transition-label"></p>
+</body>
+</html>

@@ -1,0 +1,34 @@
+@import "custommixins";
+
+x-shuffledeck{
+    display: block; //can be overridden with anything non-inline
+    position: relative;
+    overflow: hidden;
+    
+    & > x-slide{
+        @include boxSizing(border-box);
+        display: inline-block;
+        overflow: hidden;
+        position: absolute;
+        
+        @include animated(transform, 0.5s);
+        
+        height: 100%;
+        width: 100%;
+        
+        left: 0px;
+        right: 0px;
+        
+        z-index: 0;
+        
+        &[selected]{
+            z-index: 1;
+        }
+        
+        &[hiddenfoo]:not([selected]){
+            display: none;
+            border-radius: 50%;
+        }
+    }
+    
+}
