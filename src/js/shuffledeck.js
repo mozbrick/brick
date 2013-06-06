@@ -125,6 +125,7 @@
                     });
                     newSlide.removeAttribute("hiddenfoo");
                     newSlide.setAttribute("selected", true);
+                    console.log(newSlide);
                     
                     // wait for both to finish sliding before firing completion callback
                     // TODO: waiting not yet implemented, see if there's a proper xtag helper for this before rolling own implementation
@@ -264,11 +265,13 @@
     xtag.register("x-slide", {
         lifecycle:{
             inserted: function(){
+                console.log("insert start");
                 var deckContainer = this.parentNode;
                 if (deckContainer && deckContainer.tagName.toLowerCase() == 'x-shuffledeck'){
                     init.call(deckContainer);
                     console.log("inserted", this);
                 }
+                console.log("insert end");
             },
             created: function(e){
                 var deckContainer = this.parentNode;
