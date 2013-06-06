@@ -124,7 +124,7 @@
                         slide.removeAttribute("selected");
                     });
                     newSlide.removeAttribute("hiddenfoo");
-                    newSlide.setAttribute("selected");
+                    newSlide.setAttribute("selected", true);
                     
                     // wait for both to finish sliding before firing completion callback
                     // TODO: waiting not yet implemented, see if there's a proper xtag helper for this before rolling own implementation
@@ -179,9 +179,9 @@
             _getAllSlides(slideBox).forEach(function(slide){
                 slide.removeAttribute("selected");
             });
-            oldSlide.setAttribute("hiddenfoo");
+            oldSlide.setAttribute("hiddenfoo", true);
             oldSlide.removeAttribute("selected");
-            newSlide.setAttribute("selected");
+            newSlide.setAttribute("selected", true);
             newSlide.removeAttribute("hiddenfoo");
         });
     }
@@ -199,12 +199,12 @@
                 
         // if no slide is yet selected, choose the first available one      
         if((!_getCurrSlide(this)) && slides.length > 0){
-            slides[0].setAttribute("selected");
+            slides[0].setAttribute("selected", true);
         }
         
         slides.forEach(function(slide){
             if(!slide.hasAttribute("selected")){
-                slide.setAttribute("hiddenfoo");
+                slide.setAttribute("hiddenfoo", true);
             }
         });
         
