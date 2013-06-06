@@ -6,7 +6,7 @@
     var transitionTypeData = {
         "scrollLeft": {
             forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
-                _scrollTransition(slideBox, oldSlide, newSlide, "left", callbacks);
+                _replaceWithScroll(slideBox, oldSlide, newSlide, "left", callbacks);
             },
             reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollRight'].forwardFn.apply(this, arguments);
@@ -14,7 +14,7 @@
         },
         "scrollRight": {
             forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
-                _scrollTransition(slideBox, oldSlide, newSlide, "right", callbacks);
+                _replaceWithScroll(slideBox, oldSlide, newSlide, "right", callbacks);
             },
             reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollLeft'].forwardFn.apply(this, arguments);
@@ -22,7 +22,7 @@
         },
         "scrollUp": {
             forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
-                _scrollTransition(slideBox, oldSlide, newSlide, "up", callbacks);
+                _replaceWithScroll(slideBox, oldSlide, newSlide, "up", callbacks);
             },
             reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollDown'].forwardFn.apply(this, arguments);
@@ -30,7 +30,7 @@
         },
         "scrollDown": {
             forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
-                _scrollTransition(slideBox, oldSlide, newSlide, "down", callbacks);
+                _replaceWithScroll(slideBox, oldSlide, newSlide, "down", callbacks);
             },
             reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollUp'].forwardFn.apply(this, arguments);
@@ -67,58 +67,37 @@
     
     /** transition functions **/
     
-    // transition function for scroll-type transitions
-    // essentially places the new slide next to the current slide and moves 
-    // both over
-    // with CSS translates
-    function _scrollTransition(slideBox, oldSlide, newSlide, 
-                               incomingDir, callbacks){
-        callbacks = (callbacks) ? callbacks : {};
+    // helper function to apply a transform data object to the
+    // css transition property of the given DOM element
+    var _applyTransform = function(targetElem, transformData){
+        var finalTransformStrs = [];
         
-        // helper function to apply a transform {x, y} data object to the
-        // css transition property of the given DOM element
-        var _applyTransform = function(targetElem, transformData){
-            var xStr = (transformData.hasOwnProperty("x")) ? 
-                            "translateX("+transformData.x+")": "";
-            var yStr = (transformData.hasOwnProperty("y")) ? 
-                            "translateY("+transformData.y+")": "";
-                            
-            var finalTransformStr = xStr + " " + yStr;
-            targetElem.style[transformPropName] = finalTransformStr;
+        for (var transformName in transformData){
+            var transformValue = transformData[transformName];
+            finalTransformStrs.push(transformName+"("+transformValue+")");
         }
+                        
+        targetElem.style[transformPropName] = finalTransformStrs.join(" ");
+    }
+    
+    function _animateSlideReplacement(slideBox, oldSlide, newSlide, transforms, callbacks){
+        var oldStartingTransform = ("oldStartingTransform" in transforms) ?
+                transforms["oldStartingTransform"] : {};
+        var newStartingTransform = ("newStartingTransform" in transforms) ?
+                transforms["newStartingTransform"] : {};
+        var oldEndingTransform = ("oldEndingTransform" in transforms) ?
+                transforms["oldEndingTransform"] : {};
+        var newEndingTransform = ("newEndingTransform" in transforms) ?
+                transforms["newEndingTransform"] : {};
+                
+        callbacks = (callbacks) ? callbacks : {};
         
         // abort redundant transitions
         if (newSlide === oldSlide){
             return;
-        }                               
+        }    
         
-        // set default transform targets
-        var oldStartingTransform = {x: "0%", y: "0%"};
-        var oldEndingTransform = {x: "0%", y: "0%"};
-        var newStartingTransform = {x: "0%", y: "0%"};
-        var newEndingTransform = {x: "0%", y: "0%"};                
-        
-        switch(incomingDir){
-            case "down":
-                newStartingTransform.y = "-100%"; // go from top to bottom
-                oldEndingTransform.y = "100%"; 
-                break;
-            case "up":
-                newStartingTransform.y = "100%"; // go from bottom to top
-                oldEndingTransform.y = "-100%"; 
-                break;
-            case "right":
-                newStartingTransform.x = "-100%"; // go from left to right
-                oldEndingTransform.x = "100%";
-                break;
-            case "left":
-            default:
-                newStartingTransform.x = "100%"; // go from right to left
-                oldEndingTransform.x = "-100%";
-                break;
-        }
-        
-        // if no old slide exists, immediately place new slide in correct spot 
+        // if no need for old slide exists, immediately place new slide in correct spot 
         // and abort remaining animation calculations
         if(!oldSlide){
             xtag.skipTransition(newSlide, function(){
@@ -132,8 +111,6 @@
             }, this);
             return;
         }
-        
-        
         
         // immediately place the old and new slides into their starting positions
         // where they will be scrolling from
@@ -180,6 +157,49 @@
         }, this);
     }
     
+    // transition function for scroll-type transitions
+    // essentially places the new slide next to the current slide and moves 
+    // both over simultaneously with CSS translates
+    function _replaceWithScroll(slideBox, oldSlide, newSlide, 
+                               incomingDir, callbacks){
+                       
+        
+        // set default transform targets
+        var oldStartingTransform = {translateX: "0%", translateY: "0%"};
+        var oldEndingTransform = {translateX: "0%", translateY: "0%"};
+        var newStartingTransform = {translateX: "0%", translateY: "0%"};
+        var newEndingTransform = {translateX: "0%", translateY: "0%"};                
+        
+        switch(incomingDir){
+            case "down":
+                newStartingTransform.translateY = "-100%"; // go from top to bottom
+                oldEndingTransform.translateY = "100%"; 
+                break;
+            case "up":
+                newStartingTransform.translateY = "100%"; // go from bottom to top
+                oldEndingTransform.translateY = "-100%"; 
+                break;
+            case "right":
+                newStartingTransform.translateX = "-100%"; // go from left to right
+                oldEndingTransform.translateX = "100%";
+                break;
+            case "left":
+            default:
+                newStartingTransform.translateX = "100%"; // go from right to left
+                oldEndingTransform.translateX = "-100%";
+                break;
+        }
+        
+        var transforms = {
+            "oldStartingTransform": oldStartingTransform,
+            "newStartingTransform": newStartingTransform,
+            "oldEndingTransform": oldEndingTransform,
+            "newEndingTransform": newEndingTransform
+        };
+        
+        _animateSlideReplacement(slideBox, oldSlide, newSlide, transforms, callbacks);
+    }
+    
     /**
     param:
         progressType            if "forward", slide will use forwards animation
@@ -197,10 +217,12 @@
         }
         
         // pull appropriate transitioning animation functions
-        // default to forwards animation if no reverse animation is specified
         var transitionData = transitionTypeData[transitionType];
         var forwardFn = transitionData["forwardFn"];
         var reverseFn = transitionData["reverseFn"];
+        
+        // reverseFn defaults to forwards animation if no 
+        // reverse animation function is specified
         reverseFn = (reverseFn) ? reverseFn : forwardFn;
         
         var transitionFn;
@@ -213,7 +235,6 @@
                 break;
             case "auto":
             default:
-                console.log("auto");
                 if(!oldSlide){
                     transitionFn = forwardFn;
                 }
