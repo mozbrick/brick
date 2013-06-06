@@ -35,6 +35,26 @@
             reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollUp'].forwardFn.apply(this, arguments);
             }
+        },
+        "flipX": {
+            forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _replaceWithFlip(slideBox, oldSlide, newSlide, 
+                                 "X", false, callbacks)
+            },
+            reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _replaceWithFlip(slideBox, oldSlide, newSlide, 
+                                 "X", true, callbacks)
+            },
+        },
+        "flipY": {
+            forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _replaceWithFlip(slideBox, oldSlide, newSlide, 
+                                 "Y", false, callbacks)
+            },
+            reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _replaceWithFlip(slideBox, oldSlide, newSlide, 
+                                 "Y", true, callbacks)
+            },
         }
     }
     
@@ -155,6 +175,28 @@
                 };
             }, this);
         }, this);
+    }
+    
+    function _replaceWithFlip(slideBox, oldSlide, newSlide, 
+                              orientation, reverse, callbacks){
+        var propName = (orientation.toLowerCase() == "x") ? "rotateX" : "rotateY";
+        var flipSign = (reverse) ? "-" : "+";
+        
+        
+        console.log(orientation, reverse, propName, flipSign);
+        
+        var transforms = {
+            "oldStartingTransform": {},
+            "newStartingTransform": {},
+            "oldEndingTransform": {},
+            "newEndingTransform": {}
+        }
+        
+        transforms.newStartingTransform[propName] = flipSign+"180deg";
+        transforms.oldEndingTransform[propName] = flipSign+"180deg";
+        
+        _animateSlideReplacement(slideBox, oldSlide, newSlide, 
+                                 transforms, callbacks);
     }
     
     // transition function for scroll-type transitions

@@ -37,6 +37,16 @@
             color: white;
             text-shadow: 1px 1px 10px black;
         }
+        
+        #demo-box x-slide:nth-child(odd){
+            background-image: url("cream_pixels.png");
+            background-repeat: repeat;
+        }
+        
+        #demo-box x-slide:nth-child(even){
+            background-image: url("retina_wood.png");
+            background-repeat: repeat;
+        }
     </style>
     <script>
         function randomColor(alpha){
@@ -82,6 +92,12 @@
                         newType = "scrollDown";
                         break;
                     case "scrollDown":
+                        newType = "flipX";
+                        break;
+                    case "flipX":
+                        newType = "flipY";
+                        break;
+                    case "flipY":
                     default:
                         newType = "scrollLeft";
                         break;

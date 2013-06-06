@@ -15,6 +15,12 @@ $FONTS_FOLDER: "../fonts/";
     box-sizing: $value;
 }
 
+@mixin backfaceVisibility($value){
+    -webkit-backface-visibility: $value;
+    -moz-backface-visibility: $value;
+    -ms-backface-visibility: $value;
+}
+
 @mixin customFont($fileName, $fontFolder: $FONTS_FOLDER, $fontFamily: false, $fontExt: ".ttf", 
                   $fontWeight: normal, $fontStyle: normal, $format: "truetype"){
     @font-face {
