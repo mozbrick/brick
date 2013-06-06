@@ -7,11 +7,12 @@ x-shuffledeck{
     
     & > x-slide{
         @include boxSizing(border-box);
-        display: inline-block;
+        display: block;
+        
         overflow: hidden;
         position: absolute;
         
-        @include animated(transform, 0.5s);
+        @include animated(transform, 0.3s, ease, 0s);
         
         height: 100%;
         width: 100%;
@@ -22,12 +23,15 @@ x-shuffledeck{
         z-index: 0;
         
         &[selected]{
+            z-index: 2;
+        }
+        
+        &[leaving]{
             z-index: 1;
         }
         
-        &[hiddenfoo]:not([selected]){
-            display: none;
-            border-radius: 50%;
+        &:not([selected]):not([leaving]){
+            visibility: hidden; // note: do not use display: none here!
         }
     }
     

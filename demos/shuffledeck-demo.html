@@ -8,20 +8,28 @@
     <script type="text/javascript" src="../src/js/shuffledeck.js"></script>
     
     <style>
+        html, body{
+            width: 100%;
+            height: 100%;
+        }
+        
+        #demo-controls{
+            text-align: center;
+        }
+        
         #demo-box{
-            margin: 5em auto 0 auto;
+            margin: 0 auto;
             
-            width: 100px;
-            height: 100px;
+            width: 30%;
+            height: 20%;
             border: 4px solid grey;
         }
         
         #demo-box x-slide{
             font-size: 5em;
-            background-color: black;
         }
         
-        #demo-box x-slide:not([selected]){
+        #demo-box x-slide[leaving]{
             opacity: 0.7;
         }
         
@@ -55,8 +63,10 @@
             });
             
             updateTypeBox();
+            updateCountBox();
         }, false);
         
+        // changes the transition type of shuffledeck
         function changeType(newType){
             var oldType = demoBox["transition-type"];
             
@@ -81,11 +91,17 @@
             demoBox["transition-type"] = newType;
             
             updateTypeBox();
+            demoBox.slideNext();
         }
         
         function updateTypeBox(){
             document.getElementById("transition-label").textContent = 
                     "transition-type = "+demoBox["transition-type"];
+        }
+        
+        function updateCountBox(){
+            document.getElementById("count-label").textContent = 
+                    "num slides = "+demoBox.getAllSlides().length;
         }
         
         function addSlide(){
@@ -101,22 +117,33 @@
             var allSlides = demoBox.getAllSlides();
             console.log("Added slide labeled", allSlides.indexOf(newSlide));
             
-            console.log("calling slide");
             demoBox.slideTo(allSlides.indexOf(newSlide));
+            
+            updateCountBox();
         }
     </script>
 </head>
 <body>
-    <x-shuffledeck id="demo-box" transition-type="scrollUp">
+    <h1>x-shuffledeck demo</h1>
+    <x-shuffledeck id="demo-box" transition-type="scrollLeft">
         <x-slide>1</x-slide>
         <x-slide>2</x-slide>
+        <x-slide>3</x-slide>
+        <x-slide>4</x-slide>
     </x-shuffledeck>
-    
-    <button onclick="demoBox.slidePrev()"><-- Slide Prev</button>
-    <button onclick="demoBox.slideNext()">Slide Next --></button>
-    <button onclick="demoBox.slideTo(2)">Slide to 3</button>
-    <button onclick="changeType()">change transition type</button>
-    <button onclick="addSlide()">Add slide</button>
-    <p id="transition-label"></p>
+    <div id="demo-controls">
+        <button onclick="demoBox.slidePrev()"><-- Slide Prev</button>
+        <button onclick="demoBox.slideNext()">Slide Next --></button>
+        <br/>
+        <button onclick="changeType()">change transition type</button>
+        <button onclick="addSlide()">Add slide</button>
+        <p id="transition-label"></p>
+        <p id="count-label"></p>
+        <br/>
+        <button onclick="demoBox.slideTo(2)">Jump to 3 (default)</button>
+        <button onclick="demoBox.slideTo(2, 'auto')">Jump to 3 (auto)</button>
+        <button onclick="demoBox.slideTo(2, 'forward')">Jump to 3 (always forwards)</button>
+        <button onclick="demoBox.slideTo(2, 'reverse')">Jump to 3 (always reverse)</button>
+    </div>
 </body>
 </html>

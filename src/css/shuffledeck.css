@@ -8,21 +8,21 @@ x-shuffledeck {
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    display: inline-block;
+    display: block;
     overflow: hidden;
     position: absolute;
     transition-property: transform;
     -webkit-transition-property: -webkit-transform;
     -moz-transition-property: -moz-transform;
     -o-transition-property: -o-transform;
-    transition-duration: 0.5s;
-    -webkit-transition-duration: 0.5s;
-    -moz-transition-duration: 0.5s;
-    -o-transition-duration: 0.5s;
-    -webkit-transition-timing-function: ease-in;
-    -moz-transition-timing-function: ease-in;
-    -o-transition-timing-function: ease-in;
-    transition-timing-function: ease-in;
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease;
+    -moz-transition-timing-function: ease;
+    -o-transition-timing-function: ease;
+    transition-timing-function: ease;
     -webkit-transition-delay: 0s;
     -moz-transition-delay: 0s;
     -o-transition-delay: 0s;
@@ -33,7 +33,8 @@ x-shuffledeck {
     right: 0px;
     z-index: 0; }
     x-shuffledeck > x-slide[selected] {
+      z-index: 2; }
+    x-shuffledeck > x-slide[leaving] {
       z-index: 1; }
-    x-shuffledeck > x-slide[hiddenfoo]:not([selected]) {
-      display: none;
-      border-radius: 50%; }
+    x-shuffledeck > x-slide:not([selected]):not([leaving]) {
+      visibility: hidden; }

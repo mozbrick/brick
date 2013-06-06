@@ -5,38 +5,40 @@
     // holds data on the transition functions used for different transition types
     var transitionTypeData = {
         "scrollLeft": {
-            forwardFn: function(slideBox, oldSlide, newSlide, completeCallback){
-                _scrollTransition(slideBox, oldSlide, newSlide, "left", completeCallback);
+            forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _scrollTransition(slideBox, oldSlide, newSlide, "left", callbacks);
             },
-            reverseFn: function(slideBox, oldSlide, newSlide, completeCallback){
+            reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollRight'].forwardFn.apply(this, arguments);
             }
         },
         "scrollRight": {
-            forwardFn: function(slideBox, oldSlide, newSlide, completeCallback){
-                _scrollTransition(slideBox, oldSlide, newSlide, "right", completeCallback);
+            forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _scrollTransition(slideBox, oldSlide, newSlide, "right", callbacks);
             },
-            reverseFn: function(slideBox, oldSlide, newSlide, completeCallback){
+            reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollLeft'].forwardFn.apply(this, arguments);
             }
         },
         "scrollUp": {
-            forwardFn: function(slideBox, oldSlide, newSlide, completeCallback){
-                _scrollTransition(slideBox, oldSlide, newSlide, "up", completeCallback);
+            forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _scrollTransition(slideBox, oldSlide, newSlide, "up", callbacks);
             },
-            reverseFn: function(slideBox, oldSlide, newSlide, completeCallback){
+            reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollDown'].forwardFn.apply(this, arguments);
             }
         },
         "scrollDown": {
-            forwardFn: function(slideBox, oldSlide, newSlide, completeCallback){
-                _scrollTransition(slideBox, oldSlide, newSlide, "down", completeCallback);
+            forwardFn: function(slideBox, oldSlide, newSlide, callbacks){
+                _scrollTransition(slideBox, oldSlide, newSlide, "down", callbacks);
             },
-            reverseFn: function(slideBox, oldSlide, newSlide, completeCallback){
+            reverseFn: function(slideBox, oldSlide, newSlide, callbacks){
                 transitionTypeData['scrollUp'].forwardFn.apply(this, arguments);
             }
         }
     }
+    
+    /** HELPERS **/
     
     // hacky workaround to get Python-esque modding so that doing
     // negative mods returns a positive number
@@ -45,23 +47,48 @@
         return ((x % divisor) + divisor) % divisor;
     }
     
+    
+    function _getAllSlides(slideBox){
+        return xtag.query(slideBox, "x-slide");
+    }
+    
+    // return the slide at the current index
+    // returns null if no such slide exists
+    function _getTargetSlide(slideBox, targetIndex){
+        var slides = _getAllSlides(slideBox);
+        
+        return (targetIndex < 0 || targetIndex >= slides.length) ? 
+                    null : slides[targetIndex];
+    }
+    
+    function _getCurrSlide(slideBox){
+        return slideBox.querySelector("[selected]");
+    }
+    
+    /** transition functions **/
+    
     // transition function for scroll-type transitions
     // essentially places the new slide next to the current slide and moves 
     // both over
     // with CSS translates
     function _scrollTransition(slideBox, oldSlide, newSlide, 
-                               incomingDir, completeCallback){
-        // abort redundant transitions and simply place into correct spot
+                               incomingDir, callbacks){
+        callbacks = (callbacks) ? callbacks : {};
+        
+        // helper function to apply a transform {x, y} data object to the
+        // css transition property of the given DOM element
+        var _applyTransform = function(targetElem, transformData){
+            var xStr = (transformData.hasOwnProperty("x")) ? 
+                            "translateX("+transformData.x+")": "";
+            var yStr = (transformData.hasOwnProperty("y")) ? 
+                            "translateY("+transformData.y+")": "";
+                            
+            var finalTransformStr = xStr + " " + yStr;
+            targetElem.style[transformPropName] = finalTransformStr;
+        }
+        
+        // abort redundant transitions
         if (newSlide === oldSlide){
-            // skip any transitions and immediately place slide into 
-            // butting up against the top-left corner
-            xtag.skipTransition(oldSlide, function(){
-                oldSlide.style[transformPropName] = "translate(0%, 0%)";
-                // trigger completion callback after placing redundant slide
-                return function(){
-                    completeCallback(oldSlide, newSlide);
-                }
-            }, this);
             return;
         }                               
         
@@ -91,17 +118,22 @@
                 break;
         }
         
-        // helper function to apply a transform {x, y} data object to the
-        // css transition property of the given DOM element
-        var _applyTransform = function(targetElem, transformData){
-            var xStr = (transformData.hasOwnProperty("x")) ? 
-                            "translateX("+transformData.x+")": "";
-            var yStr = (transformData.hasOwnProperty("y")) ? 
-                            "translateY("+transformData.y+")": "";
-                            
-            var finalTransformStr = xStr + " " + yStr;
-            targetElem.style[transformPropName] = finalTransformStr;
+        // if no old slide exists, immediately place new slide in correct spot 
+        // and abort remaining animation calculations
+        if(!oldSlide){
+            xtag.skipTransition(newSlide, function(){
+                _applyTransform(newSlide, newEndingTransform);
+                
+                return function(){
+                    if(callbacks.complete){
+                        callbacks.complete(oldSlide, newSlide);
+                    }
+                }
+            }, this);
+            return;
         }
+        
+        
         
         // immediately place the old and new slides into their starting positions
         // where they will be scrolling from
@@ -110,48 +142,53 @@
                 _applyTransform(oldSlide, oldStartingTransform);
                 _applyTransform(newSlide, newStartingTransform);
                 
-                console.log(oldSlide, newSlide, oldStartingTransform, newStartingTransform, newSlide.style[transformPropName]);
                 // upon getting into position, perform scroll transitions
                 return function(){
-                    _applyTransform(oldSlide, oldEndingTransform);
-                    _applyTransform(newSlide, newEndingTransform);
+                    if(callbacks.before){
+                        callbacks.before(oldSlide, newSlide);
+                    }
+                    var oldSlideDone = false;
+                    var newSlideDone = false;
                     
-                    // mark selection before scrolling to give illusion
-                    // that active screen is replacing old screen
-                    // 
-                    // also ensure that only the newSlide is selected
-                    _getAllSlides(slideBox).forEach(function(slide){
-                        slide.removeAttribute("selected");
-                    });
-                    newSlide.removeAttribute("hiddenfoo");
-                    newSlide.setAttribute("selected", true);
-                    console.log(newSlide);
+                    // listener to be fired after final animations complete
+                    var onTransitionComplete = function(e){
+                        if(e.target === oldSlide){
+                            oldSlideDone = true;
+                            oldSlide.removeEventListener("transitionend", onTransitionComplete);
+                        }
+                        else if(e.target === newSlide){
+                            newSlideDone = true;
+                            newSlide.removeEventListener("transitionend", onTransitionComplete);
+                        }
+                        
+                        if(oldSlideDone && newSlideDone){
+                            // actually call the completion callback function
+                            if(callbacks.complete){
+                                callbacks.complete(oldSlide, newSlide);
+                            }
+                        }
+                    }
                     
                     // wait for both to finish sliding before firing completion callback
-                    // TODO: waiting not yet implemented, see if there's a proper xtag helper for this before rolling own implementation
-                    window.setTimeout(function(){completeCallback(oldSlide, newSlide);}, 500);
+                    oldSlide.addEventListener('transitionend', onTransitionComplete);
+                    newSlide.addEventListener('transitionend', onTransitionComplete);
+                    
+                    _applyTransform(oldSlide, oldEndingTransform);
+                    _applyTransform(newSlide, newEndingTransform);
                 };
             }, this);
         }, this);
     }
     
-    function _getAllSlides(slideBox){
-        return xtag.query(slideBox, "x-slide");
-    }
-    
-    // return the slide at the current index
-    function _getTargetSlide(slideBox, targetIndex){
-        var slides = _getAllSlides(slideBox);
-        
-        return (targetIndex < 0 || targetIndex >= slides.length) ? 
-                    null : slides[targetIndex];
-    }
-    
-    function _getCurrSlide(slideBox){
-        return slideBox.querySelector("[selected]");
-    }
-    
-    function _replaceCurrSlide(slideBox, newSlide, transitionType, isReverse){
+    /**
+    param:
+        progressType            if "forward", slide will use forwards animation
+                                if "reverse", slide will use reverse animation
+                                if "auto", slide will use forward animation if
+                                the target's is further ahead and reverse if
+                                it is farther behind (default option)
+    **/
+    function _replaceCurrSlide(slideBox, newSlide, transitionType, progressType){
         var oldSlide = _getCurrSlide(slideBox);
         
         if(!(transitionType in transitionTypeData)){
@@ -162,53 +199,93 @@
         // pull appropriate transitioning animation functions
         // default to forwards animation if no reverse animation is specified
         var transitionData = transitionTypeData[transitionType];
+        var forwardFn = transitionData["forwardFn"];
+        var reverseFn = transitionData["reverseFn"];
+        reverseFn = (reverseFn) ? reverseFn : forwardFn;
         
         var transitionFn;
-        if(isReverse && transitionData["reverseFn"]){
-            transitionFn = transitionData["reverseFn"];
-        }
-        else{
-            transitionFn = transitionData["forwardFn"];
+        switch (progressType){
+            case "forward":
+                transitionFn = forwardFn;
+                break;
+            case "reverse":
+                transitionFn = reverseFn;
+                break;
+            case "auto":
+            default:
+                console.log("auto");
+                if(!oldSlide){
+                    transitionFn = forwardFn;
+                }
+                var allSlides = _getAllSlides(slideBox);
+                if(allSlides.indexOf(newSlide) < allSlides.indexOf(oldSlide)){
+                    transitionFn = reverseFn;
+                }
+                else{
+                    transitionFn = forwardFn;
+                }
+                break;
         }
         
-        // show both slides before calling transition function
-        oldSlide.removeAttribute("hiddenfoo");
-        newSlide.removeAttribute("hiddenfoo");
         
-        transitionFn(slideBox, oldSlide, newSlide, function(oldSlide, newSlide){
-            // guarantee that attributes are consistent upon completion
-            _getAllSlides(slideBox).forEach(function(slide){
-                slide.removeAttribute("selected");
-            });
-            oldSlide.setAttribute("hiddenfoo", true);
-            oldSlide.removeAttribute("selected");
-            newSlide.setAttribute("selected", true);
-            newSlide.removeAttribute("hiddenfoo");
+        transitionFn(slideBox, oldSlide, newSlide, {
+            // called when ready and at starting animation positions, 
+            // but before transitioning
+            before: function(oldSlide, newSlide){
+                _getAllSlides(slideBox).forEach(function(slide){
+                    slide.removeAttribute("selected");
+                    slide.removeAttribute("leaving");
+                });
+                // show both slides upon positioning into place
+                oldSlide.setAttribute("leaving", true);
+                newSlide.setAttribute("selected", true);
+            },
+            // called after transition animation is complete
+            complete: function(oldSlide, newSlide){
+                // guarantee that attributes are consistent upon completion
+                
+                _getAllSlides(slideBox).forEach(function(slide){
+                    slide.removeAttribute("selected");
+                    slide.removeAttribute("leaving");
+                });
+                
+                newSlide.setAttribute("selected", true);
+            }
         });
     }
     
-    function _slideTo(slideBox, targetIndex, transitionType, isReverse){
+    function _slideToIndex(slideBox, targetIndex, transitionType, progressType){
         var newSlide = _getTargetSlide(slideBox, targetIndex);
-        if(!newSlide) return;
         
-        _replaceCurrSlide(slideBox, newSlide, transitionType, isReverse);
+        if(!newSlide) return;
+            
+        _replaceCurrSlide(slideBox, newSlide, transitionType, progressType);
     }
     
     // relies on caller to provide scope
     function init(){
         var slides = _getAllSlides(this);
-                
+        
+        var currSlide = _getCurrSlide(this);
         // if no slide is yet selected, choose the first available one      
-        if((!_getCurrSlide(this)) && slides.length > 0){
-            slides[0].setAttribute("selected", true);
+        if((!currSlide) && slides.length > 0){
+            currSlide = slides[0];
         }
         
+        // ensure that only one slide is selected at a time
         slides.forEach(function(slide){
-            if(!slide.hasAttribute("selected")){
-                slide.setAttribute("hiddenfoo", true);
+            slide.removeAttribute("leaving");
+            
+            if(slide !== currSlide){
+                slide.removeAttribute("selected");
             }
         });
         
+        if(currSlide){
+            currSlide.setAttribute("selected", true);
+        }
+        
+        // ensure that selected 
         this.slideTo(_getAllSlides(this).indexOf(_getCurrSlide(this)));
     }
     
@@ -232,8 +309,8 @@
             }
         },
         methods:{
-            slideTo: function(index, isReverse){
-                _slideTo(this, index, this["transition-type"], isReverse);
+            slideTo: function(index, progressType){
+                _slideToIndex(this, index, this["transition-type"], progressType);
             },
             slideNext: function(){
                 var slides = _getAllSlides(this);
@@ -241,7 +318,7 @@
                 var currIndex = slides.indexOf(currSlide);
                 
                 if(currIndex > -1){
-                    this.slideTo(posModulo(currIndex+1, slides.length));
+                    this.slideTo(posModulo(currIndex+1, slides.length), "forward");
                 }
             },
             slidePrev: function(){
@@ -249,7 +326,7 @@
                 var currSlide = _getCurrSlide(this);
                 var currIndex = slides.indexOf(currSlide);
                 if(currIndex > -1){
-                    this.slideTo(posModulo(currIndex-1, slides.length), true);
+                    this.slideTo(posModulo(currIndex-1, slides.length), "reverse");
                 }
             },
             getAllSlides: function(){
@@ -258,26 +335,21 @@
             getCurrSlide: function(){
                 return _getCurrSlide(this);
             }
-           
         }
     });
 
     xtag.register("x-slide", {
         lifecycle:{
             inserted: function(){
-                console.log("insert start");
                 var deckContainer = this.parentNode;
                 if (deckContainer && deckContainer.tagName.toLowerCase() == 'x-shuffledeck'){
                     init.call(deckContainer);
-                    console.log("inserted", this);
                 }
-                console.log("insert end");
             },
             created: function(e){
                 var deckContainer = this.parentNode;
                 if (deckContainer && deckContainer.tagName.toLowerCase() == 'x-shuffledeck'){
                     init.call(deckContainer);
-                    console.log("created", this);
                 }
             }
         }
