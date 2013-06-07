@@ -81,7 +81,7 @@
                     null : slides[targetIndex];
     }
     
-    function _getCurrSlide(slideBox){
+    function _getSelectedSlide(slideBox){
         return slideBox.querySelector("[selected]");
     }
     
@@ -251,7 +251,7 @@
                                 it is farther behind (default option)
     **/
     function _replaceCurrSlide(slideBox, newSlide, transitionType, progressType){
-        var oldSlide = _getCurrSlide(slideBox);
+        var oldSlide = _getSelectedSlide(slideBox);
         
         if(!(transitionType in transitionTypeData)){
             console.log("invalid transitionType, defaulting to scrollLeft");
@@ -305,14 +305,16 @@
             },
             // called after transition animation is complete
             complete: function(oldSlide, newSlide){
-                // guarantee that attributes are consistent upon completion
-                
-                _getAllSlides(slideBox).forEach(function(slide){
-                    slide.removeAttribute("selected");
-                    slide.removeAttribute("leaving");
-                });
-                
-                newSlide.setAttribute("selected", true);
+                // for synchronization purposes, only set these attributes if 
+                // the newSlide is actually the currently selected slide
+                if(newSlide === _getSelectedSlide(slideBox)){
+                    // guarantee that attributes are consistent upon completion
+                    _getAllSlides(slideBox).forEach(function(slide){
+                        slide.removeAttribute("selected");
+                        slide.removeAttribute("leaving");
+                    });
+                    newSlide.setAttribute("selected", true);
+                }
             }
         });
     }
@@ -329,7 +331,7 @@
     function init(){
         var slides = _getAllSlides(this);
         
-        var currSlide = _getCurrSlide(this);
+        var currSlide = _getSelectedSlide(this);
         // if no slide is yet selected, choose the first available one      
         if((!currSlide) && slides.length > 0){
             currSlide = slides[0];
@@ -342,14 +344,13 @@
             if(slide !== currSlide){
                 slide.removeAttribute("selected");
             }
+            else{
+                slide.setAttribute("selected", true);
+            }
         });
         
-        if(currSlide){
-            currSlide.setAttribute("selected", true);
-        }
-        
         // ensure that selected 
-        this.slideTo(_getAllSlides(this).indexOf(_getCurrSlide(this)));
+        this.slideTo(_getAllSlides(this).indexOf(_getSelectedSlide(this)));
     }
     
     xtag.register("x-shuffledeck", {
@@ -377,7 +378,7 @@
             },
             slideNext: function(){
                 var slides = _getAllSlides(this);
-                var currSlide = _getCurrSlide(this);
+                var currSlide = _getSelectedSlide(this);
                 var currIndex = slides.indexOf(currSlide);
                 
                 if(currIndex > -1){
@@ -386,7 +387,7 @@
             },
             slidePrev: function(){
                 var slides = _getAllSlides(this);
-                var currSlide = _getCurrSlide(this);
+                var currSlide = _getSelectedSlide(this);
                 var currIndex = slides.indexOf(currSlide);
                 if(currIndex > -1){
                     this.slideTo(posModulo(currIndex-1, slides.length), "reverse");
@@ -395,8 +396,8 @@
             getAllSlides: function(){
                 return _getAllSlides(this);
             },
-            getCurrSlide: function(){
-                return _getCurrSlide(this);
+            getSelectedSlide: function(){
+                return _getSelectedSlide(this);
             }
         }
     });
