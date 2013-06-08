@@ -8,6 +8,17 @@
     <script type="text/javascript" src="../src/js/shuffledeck.js"></script>
     
     <style>
+        /** Defining custom styles:
+        
+            Besides applying custom styles to the x-shuffledeck and x-slides
+            themselves, you can define styles for the following selectors to 
+            determine how the widget appears during animations
+            
+            x-slide[leaving]  => defines how a slide looks when in the middle
+                                 of transitioning out of frame
+            x-slide[selected] => defines how the currently selected slide looks
+        **/
+    
         html, body{
             width: 100%;
             height: 100%;
@@ -30,7 +41,7 @@
             font-size: 5em;
             text-align:center;
         }
-        
+       
         #demo-box x-slide[leaving]{
             opacity: 0.7;
         }
@@ -50,6 +61,31 @@
             background-repeat: repeat;
         }
     </style>
+</head>
+<body>
+    <h1>x-shuffledeck demo</h1>
+    <x-shuffledeck id="demo-box" transition-type="scrollLeft">
+        <x-slide>1</x-slide>
+        <x-slide>2</x-slide>
+        <x-slide>3</x-slide>
+        <x-slide>4</x-slide>
+    </x-shuffledeck>
+    <div id="demo-controls">
+        <button onclick="demoBox.slidePrev('reverse')"><-- Slide Prev</button>
+        <button onclick="demoBox.slideNext('forward')">Slide Next --></button>
+        <br/>
+        <button onclick="changeType()">change transition type</button>
+        <button onclick="addSlide()">Add slide</button>
+        <p id="transition-label"></p>
+        <p id="count-label"></p>
+        <br/>
+        <button onclick="demoBox.slideTo(2)">Jump to 3 (default)</button>
+        <button onclick="demoBox.slideTo(2, 'auto')">Jump to 3 (auto)</button>
+        <button onclick="demoBox.slideTo(2, 'forward')">Jump to 3 (always forwards)</button>
+        <button onclick="demoBox.slideTo(2, 'reverse')">Jump to 3 (always reverse)</button>
+    </div>
+    
+    
     <script>
         function randomColor(alpha){
             var _randomVal = function(){
@@ -140,28 +176,5 @@
             updateCountBox();
         }
     </script>
-</head>
-<body>
-    <h1>x-shuffledeck demo</h1>
-    <x-shuffledeck id="demo-box" transition-type="scrollLeft">
-        <x-slide>1</x-slide>
-        <x-slide>2</x-slide>
-        <x-slide>3</x-slide>
-        <x-slide>4</x-slide>
-    </x-shuffledeck>
-    <div id="demo-controls">
-        <button onclick="demoBox.slidePrev()"><-- Slide Prev</button>
-        <button onclick="demoBox.slideNext()">Slide Next --></button>
-        <br/>
-        <button onclick="changeType()">change transition type</button>
-        <button onclick="addSlide()">Add slide</button>
-        <p id="transition-label"></p>
-        <p id="count-label"></p>
-        <br/>
-        <button onclick="demoBox.slideTo(2)">Jump to 3 (default)</button>
-        <button onclick="demoBox.slideTo(2, 'auto')">Jump to 3 (auto)</button>
-        <button onclick="demoBox.slideTo(2, 'forward')">Jump to 3 (always forwards)</button>
-        <button onclick="demoBox.slideTo(2, 'reverse')">Jump to 3 (always reverse)</button>
-    </div>
 </body>
 </html>

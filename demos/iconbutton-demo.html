@@ -101,65 +101,6 @@
         display: inline-block;
     }
     </style>
-    
-    <script>
-        function randomColor(){
-            var _randomVal = function(){
-                return Math.floor(Math.random() * 256);
-            }
-            
-            return "rgb("+_randomVal()+","+_randomVal()+","+_randomVal()+")";
-        }
-        
-        function getUniqueString(){
-            return String(new Date().valueOf());
-        }
-    
-        function changeAnchor(button, anchor){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-            
-            iconButton["icon-anchor"] = anchor;
-        }
-        
-        function changeSrc(button, imgSrc){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-            
-            iconButton.src = imgSrc;
-        }
-        
-        function showText(button){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-            console.log(iconButton.text);
-            alert(iconButton.text);
-        }
-        
-        function changeText(button){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-           
-            iconButton.text = getUniqueString();
-        }
-        
-        function editButton(button, editFn){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-            editFn(iconButton);
-        }
-        
-        document.addEventListener('DOMComponentsLoaded', function(){
-            var customLabelIconButton = document.getElementById("custom-accessor-demo");
-            
-            var customGetter = function(iconButton){
-                return iconButton.querySelector("strong").textContent;
-            }
-            
-            var customSetter = function(iconButton, newText){
-                iconButton.querySelector("strong").textContent = newText;
-            }
-            
-            customLabelIconButton.textGetter = customGetter;
-            customLabelIconButton.textSetter = customSetter;
-        }, false);
-        
-    </script>
 </head>
 <body>
     <h1>X-Iconbutton demos</h1>
@@ -257,7 +198,7 @@
             
             iconButton.icon = newIcon;
          })">
-            Replace Icon
+            Replace Icon With New DOM
          </button>
          <button onclick="editButton(this, function(iconButton){
            iconButton.label.style.backgroundColor = randomColor();
@@ -272,7 +213,7 @@
             
             iconButton.label = newLabel;
          })">
-            Replace Label
+            Replace Label With New DOM
          </button>
       </li>
       <li>
@@ -283,6 +224,8 @@
         <button onclick="changeText(this)">Change Text</button>
       </li>
       <li>
+        <!-- custom getter/setters are defined in the DOMComponentsLoaded
+             listener -->
         <span>Text Modification (custom accessors)</span>
         <x-iconbutton class="demo" id="custom-accessor-demo" icon-anchor="bottom">
             <strong>Change me!</strong>
@@ -293,5 +236,65 @@
         <button onclick="changeText(this)">Change Text</button>
       </li>
     </ul>
+    
+    
+    <script>
+        function randomColor(){
+            var _randomVal = function(){
+                return Math.floor(Math.random() * 256);
+            }
+            
+            return "rgb("+_randomVal()+","+_randomVal()+","+_randomVal()+")";
+        }
+        
+        function getUniqueString(){
+            return String(new Date().valueOf());
+        }
+    
+        function changeAnchor(button, anchor){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            
+            iconButton["icon-anchor"] = anchor;
+        }
+        
+        function changeSrc(button, imgSrc){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            
+            iconButton.src = imgSrc;
+        }
+        
+        function showText(button){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            console.log(iconButton.text);
+            alert(iconButton.text);
+        }
+        
+        function changeText(button){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+           
+            iconButton.text = getUniqueString();
+        }
+        
+        function editButton(button, editFn){
+            var iconButton = button.parentNode.querySelector("x-iconbutton");
+            editFn(iconButton);
+        }
+        
+        document.addEventListener('DOMComponentsLoaded', function(){
+            var customLabelIconButton = document.getElementById("custom-accessor-demo");
+            
+            var customGetter = function(iconButton){
+                return iconButton.querySelector("strong").textContent;
+            }
+            
+            var customSetter = function(iconButton, newText){
+                iconButton.querySelector("strong").textContent = newText;
+            }
+            
+            customLabelIconButton.textGetter = customGetter;
+            customLabelIconButton.textSetter = customSetter;
+        }, false);
+        
+    </script>
 </body>
 </html>
