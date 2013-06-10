@@ -1,0 +1,27 @@
+{
+	"name": "ToolTip",
+	"tagName": "x-tooltip",
+	"version": "0.1.0",
+	"author": "Leon Zhang",
+	"description": "Content container that appears over current context and is associated with a trigger element in the underlying content",
+	"demo": "demo/tooltip-demo.html",
+	"categories": [
+        "ui"
+    ],
+	"compatibility": {
+		"firefox": 5,
+		"chrome": 4,
+		"ie": 9,
+		"opera": 12,
+		"android": 2.1,
+		"ios": 4
+	},
+	"documentation": {
+		"description": "",
+		"attributes": {},
+		"events": {},
+		"methods": {},
+		"getters": {},
+		"setters": {}
+	}
+}

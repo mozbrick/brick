@@ -1,0 +1,27 @@
+{
+	"name": "TabBar",
+	"tagName": "x-tabbar",
+	"version": "0.1.0",
+	"author": "Leon Zhang",
+	"description": "The TabBar is used to display an app-level navigation/tabbing bar at the bottom of the UI",
+	"demo": "demo/tabbar-demo.html",
+	"categories": [
+        "ui"
+    ],
+	"compatibility": {
+		"firefox": 5,
+		"chrome": 4,
+		"ie": 9,
+		"opera": 12,
+		"android": 2.1,
+		"ios": 4
+	},
+	"documentation": {
+		"description": "",
+		"attributes": {},
+		"events": {},
+		"methods": {},
+		"getters": {},
+		"setters": {}
+	}
+}

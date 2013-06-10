@@ -1,0 +1,19 @@
+{
+  "name": "x-tooltip",
+  "description": "A box in which slides can be cycled and replaced with in a variety of different orders and transitions",
+  "version": "0.1.0",
+  "keywords": [
+    "web-components",
+    "button",
+    "icon",
+    "label",
+    "x-tag"
+  ],
+  "main": [
+    "src/tooltip.js",
+    "src/tooltip.css"
+  ],
+  "dependencies": {
+    "x-tag-core": "*"
+  }
+}

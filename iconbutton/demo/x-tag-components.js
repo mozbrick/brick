@@ -44,7 +44,7 @@ if (typeof WeakMap !== 'undefined' && navigator.userAgent.indexOf('Firefox/') < 
  * license that can be found in the LICENSE file.
  */
 (function() {
-
+  
   // poor man's adapter for template.content on various platform scenarios
   window.templateContent = window.templateContent || function(inTemplate) {
     return inTemplate.content;
@@ -150,7 +150,7 @@ scope.mixin = window.mixin;
     oldName && this.remove(oldName);
     newName && this.add(newName);
   };
-
+  
   // make forEach work on NodeList
 
   NodeList.prototype.forEach = function(cb, context) {
@@ -201,7 +201,7 @@ scope.mixin = window.mixin;
   // utility
 
   function createDOM(inTagOrNode, inHTML, inAttrs) {
-    var dom = typeof inTagOrNode == 'string' ?
+    var dom = typeof inTagOrNode == 'string' ? 
         document.createElement(inTagOrNode) : inTagOrNode.cloneNode(true);
     dom.innerHTML = inHTML;
     if (inAttrs) {
@@ -417,17 +417,16 @@ var path = {
     return inNode.getAttribute("href") || inNode.getAttribute("src");
   },
   documentUrlFromNode: function(inNode) {
-    var url = path.getDocumentUrl(inNode.ownerDocument);
-    // take only the left side if there is a #
-    url = url.split('#')[0];
-    return url;
+    return path.getDocumentUrl(inNode.ownerDocument);
   },
   getDocumentUrl: function(inDocument) {
-    return inDocument &&
+    var url = inDocument &&
         // TODO(sjmiles): ShadowDOMPolyfill intrusion
         (inDocument._URL || (inDocument.impl && inDocument.impl._URL)
             || inDocument.baseURI || inDocument.URL)
                 || '';
+    // take only the left side if there is a #
+    return url.split('#')[0];
   },
   resolveUrl: function(inBaseUrl, inUrl, inRelativeToDocument) {
     if (this.isAbsUrl(inUrl)) {
@@ -541,11 +540,12 @@ var URL_ATTRS = ['href', 'src', 'action'];
 var URL_ATTRS_SELECTOR = '[' + URL_ATTRS.join('],[') + ']';
 var URL_TEMPLATE_SEARCH = '{{.*}}';
 
-var xhr = {
+var xhr = scope.xhr || {
   async: true,
   ok: function(inRequest) {
     return (inRequest.status >= 200 && inRequest.status < 300)
-        || (inRequest.status === 304);
+        || (inRequest.status === 304)
+        || (inRequest.status === 0);
   },
   load: function(url, next, nextContext) {
     var request = new XMLHttpRequest();
@@ -567,6 +567,7 @@ var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
 
 // exports
 
+scope.xhr = xhr;
 scope.importer = importer;
 scope.getDocumentUrl = path.getDocumentUrl;
 
@@ -581,7 +582,7 @@ if (typeof window.CustomEvent !== 'function') {
   };
 }
 
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
   // preload document resource trees
   importer.load(document, function() {
     // TODO(sjmiles): ShadowDOM polyfill pollution
@@ -598,557 +599,14 @@ window.addEventListener('load', function() {
 })(window.HTMLImports);
 
 /*
- * Copyright 2012 The Polymer Authors. All rights reserved.
- * Use of this source code is goverened by a BSD-style
- * license that can be found in the LICENSE file.
- */
-
-(function(global) {
-
-  var registrationsTable = new SideTable();
-
-  // We use setImmediate or postMessage for our future callback.
-  var setImmediate = window.msSetImmediate;
-
-  // Use post message to emulate setImmediate.
-  if (!setImmediate) {
-    var setImmediateQueue = [];
-    var sentinel = String(Math.random());
-    window.addEventListener('message', function(e) {
-      if (e.data === sentinel) {
-        var queue = setImmediateQueue;
-        setImmediateQueue = [];
-        queue.forEach(function(func) {
-          func();
-        });
-      }
-    });
-    setImmediate = function(func) {
-      setImmediateQueue.push(func);
-      window.postMessage(sentinel, '*');
-    };
-  }
-
-  // This is used to ensure that we never schedule 2 callas to setImmediate
-  var isScheduled = false;
-
-  // Keep track of observers that needs to be notified next time.
-  var scheduledObservers = [];
-
-  /**
-   * Schedules |dispatchCallback| to be called in the future.
-   * @param {MutationObserver} observer
-   */
-  function scheduleCallback(observer) {
-    scheduledObservers.push(observer);
-    if (!isScheduled) {
-      isScheduled = true;
-      setImmediate(dispatchCallbacks);
-    }
-  }
-
-  function wrapIfNeeded(node) {
-    return window.ShadowDOMPolyfill &&
-        window.ShadowDOMPolyfill.wrapIfNeeded(node) ||
-        node;
-  }
-
-  function dispatchCallbacks() {
-    // http://dom.spec.whatwg.org/#mutation-observers
-
-    isScheduled = false; // Used to allow a new setImmediate call above.
-
-    var observers = scheduledObservers;
-    scheduledObservers = [];
-    // Sort observers based on their creation UID (incremental).
-    observers.sort(function(o1, o2) {
-      return o1.uid_ - o2.uid_;
-    });
-
-    var anyNonEmpty = false;
-    observers.forEach(function(observer) {
-
-      // 2.1, 2.2
-      var queue = observer.takeRecords();
-      // 2.3. Remove all transient registered observers whose observer is mo.
-      removeTransientObserversFor(observer);
-
-      // 2.4
-      if (queue.length) {
-        observer.callback_(queue, observer);
-        anyNonEmpty = true;
-      }
-    });
-
-    // 3.
-    if (anyNonEmpty)
-      dispatchCallbacks();
-  }
-
-  function removeTransientObserversFor(observer) {
-    observer.nodes_.forEach(function(node) {
-      var registrations = registrationsTable.get(node);
-      if (!registrations)
-        return;
-      registrations.forEach(function(registration) {
-        if (registration.observer === observer)
-          registration.removeTransientObservers();
-      });
-    });
-  }
-
-  /**
-   * This function is used for the "For each registered observer observer (with
-   * observer's options as options) in target's list of registered observers,
-   * run these substeps:" and the "For each ancestor ancestor of target, and for
-   * each registered observer observer (with options options) in ancestor's list
-   * of registered observers, run these substeps:" part of the algorithms. The
-   * |options.subtree| is checked to ensure that the callback is called
-   * correctly.
-   *
-   * @param {Node} target
-   * @param {function(MutationObserverInit):MutationRecord} callback
-   */
-  function forEachAncestorAndObserverEnqueueRecord(target, callback) {
-    for (var node = target; node; node = node.parentNode) {
-      var registrations = registrationsTable.get(node);
-
-      if (registrations) {
-        for (var j = 0; j < registrations.length; j++) {
-          var registration = registrations[j];
-          var options = registration.options;
-
-          // Only target ignores subtree.
-          if (node !== target && !options.subtree)
-            continue;
-
-          var record = callback(options);
-          if (record)
-            registration.enqueue(record);
-        }
-      }
-    }
-  }
-
-  var uidCounter = 0;
-
-  /**
-   * The class that maps to the DOM MutationObserver interface.
-   * @param {Function} callback.
-   * @constructor
-   */
-  function JsMutationObserver(callback) {
-    this.callback_ = callback;
-    this.nodes_ = [];
-    this.records_ = [];
-    this.uid_ = ++uidCounter;
-  }
-
-  JsMutationObserver.prototype = {
-    observe: function(target, options) {
-      target = wrapIfNeeded(target);
-
-      // 1.1
-      if (!options.childList && !options.attributes && !options.characterData ||
-
-          // 1.2
-          options.attributeOldValue && !options.attributes ||
-
-          // 1.3
-          options.attributeFilter && options.attributeFilter.length &&
-              !options.attributes ||
-
-          // 1.4
-          options.characterDataOldValue && !options.characterData) {
-
-        throw new SyntaxError();
-      }
-
-      var registrations = registrationsTable.get(target);
-      if (!registrations)
-        registrationsTable.set(target, registrations = []);
-
-      // 2
-      // If target's list of registered observers already includes a registered
-      // observer associated with the context object, replace that registered
-      // observer's options with options.
-      var registration;
-      for (var i = 0; i < registrations.length; i++) {
-        if (registrations[i].observer === this) {
-          registration = registrations[i];
-          registration.removeListeners();
-          registration.options = options;
-          break;
-        }
-      }
-
-      // 3.
-      // Otherwise, add a new registered observer to target's list of registered
-      // observers with the context object as the observer and options as the
-      // options, and add target to context object's list of nodes on which it
-      // is registered.
-      if (!registration) {
-        registration = new Registration(this, target, options);
-        registrations.push(registration);
-        this.nodes_.push(target);
-      }
-
-      registration.addListeners();
-    },
-
-    disconnect: function() {
-      this.nodes_.forEach(function(node) {
-        var registrations = registrationsTable.get(node);
-        for (var i = 0; i < registrations.length; i++) {
-          var registration = registrations[i];
-          if (registration.observer === this) {
-            registration.removeListeners();
-            registrations.splice(i, 1);
-            // Each node can only have one registered observer associated with
-            // this observer.
-            break;
-          }
-        }
-      }, this);
-      this.records_ = [];
-    },
-
-    takeRecords: function() {
-      var copyOfRecords = this.records_;
-      this.records_ = [];
-      return copyOfRecords;
-    }
-  };
-
-  /**
-   * @param {string} type
-   * @param {Node} target
-   * @constructor
-   */
-  function MutationRecord(type, target) {
-    this.type = type;
-    this.target = target;
-    this.addedNodes = [];
-    this.removedNodes = [];
-    this.previousSibling = null;
-    this.nextSibling = null;
-    this.attributeName = null;
-    this.attributeNamespace = null;
-    this.oldValue = null;
-  }
-
-  function copyMutationRecord(original) {
-    var record = new MutationRecord(original.type, original.target);
-    record.addedNodes = original.addedNodes.slice();
-    record.removedNodes = original.removedNodes.slice();
-    record.previousSibling = original.previousSibling;
-    record.nextSibling = original.nextSibling;
-    record.attributeName = original.attributeName;
-    record.attributeNamespace = original.attributeNamespace;
-    record.oldValue = original.oldValue;
-    return record;
-  };
-
-  // We keep track of the two (possibly one) records used in a single mutation.
-  var currentRecord, recordWithOldValue;
-
-  /**
-   * Creates a record without |oldValue| and caches it as |currentRecord| for
-   * later use.
-   * @param {string} oldValue
-   * @return {MutationRecord}
-   */
-  function getRecord(type, target) {
-    return currentRecord = new MutationRecord(type, target);
-  }
-
-  /**
-   * Gets or creates a record with |oldValue| based in the |currentRecord|
-   * @param {string} oldValue
-   * @return {MutationRecord}
-   */
-  function getRecordWithOldValue(oldValue) {
-    if (recordWithOldValue)
-      return recordWithOldValue;
-    recordWithOldValue = copyMutationRecord(currentRecord);
-    recordWithOldValue.oldValue = oldValue;
-    return recordWithOldValue;
-  }
-
-  function clearRecords() {
-    currentRecord = recordWithOldValue = undefined;
-  }
-
-  /**
-   * @param {MutationRecord} record
-   * @return {boolean} Whether the record represents a record from the current
-   * mutation event.
-   */
-  function recordRepresentsCurrentMutation(record) {
-    return record === recordWithOldValue || record === currentRecord;
-  }
-
-  /**
-   * Selects which record, if any, to replace the last record in the queue.
-   * This returns |null| if no record should be replaced.
-   *
-   * @param {MutationRecord} lastRecord
-   * @param {MutationRecord} newRecord
-   * @param {MutationRecord}
-   */
-  function selectRecord(lastRecord, newRecord) {
-    if (lastRecord === newRecord)
-      return lastRecord;
-
-    // Check if the the record we are adding represents the same record. If
-    // so, we keep the one with the oldValue in it.
-    if (recordWithOldValue && recordRepresentsCurrentMutation(lastRecord))
-      return recordWithOldValue;
-
-    return null;
-  }
-
-  /**
-   * Class used to represent a registered observer.
-   * @param {MutationObserver} observer
-   * @param {Node} target
-   * @param {MutationObserverInit} options
-   * @constructor
-   */
-  function Registration(observer, target, options) {
-    this.observer = observer;
-    this.target = target;
-    this.options = options;
-    this.transientObservedNodes = [];
-  }
-
-  Registration.prototype = {
-    enqueue: function(record) {
-      var records = this.observer.records_;
-      var length = records.length;
-
-      // There are cases where we replace the last record with the new record.
-      // For example if the record represents the same mutation we need to use
-      // the one with the oldValue. If we get same record (this can happen as we
-      // walk up the tree) we ignore the new record.
-      if (records.length > 0) {
-        var lastRecord = records[length - 1];
-        var recordToReplaceLast = selectRecord(lastRecord, record);
-        if (recordToReplaceLast) {
-          records[length - 1] = recordToReplaceLast;
-          return;
-        }
-      } else {
-        scheduleCallback(this.observer);
-      }
-
-      records[length] = record;
-    },
-
-    addListeners: function() {
-      this.addListeners_(this.target);
-    },
-
-    addListeners_: function(node) {
-      var options = this.options;
-      if (options.attributes)
-        node.addEventListener('DOMAttrModified', this, true);
-
-      if (options.characterData)
-        node.addEventListener('DOMCharacterDataModified', this, true);
-
-      if (options.childList)
-        node.addEventListener('DOMNodeInserted', this, true);
-
-      if (options.childList || options.subtree)
-        node.addEventListener('DOMNodeRemoved', this, true);
-    },
-
-    removeListeners: function() {
-      this.removeListeners_(this.target);
-    },
-
-    removeListeners_: function(node) {
-      var options = this.options;
-      if (options.attributes)
-        node.removeEventListener('DOMAttrModified', this, true);
-
-      if (options.characterData)
-        node.removeEventListener('DOMCharacterDataModified', this, true);
-
-      if (options.childList)
-        node.removeEventListener('DOMNodeInserted', this, true);
-
-      if (options.childList || options.subtree)
-        node.removeEventListener('DOMNodeRemoved', this, true);
-    },
-
-    /**
-     * Adds a transient observer on node. The transient observer gets removed
-     * next time we deliver the change records.
-     * @param {Node} node
-     */
-    addTransientObserver: function(node) {
-      // Don't add transient observers on the target itself. We already have all
-      // the required listeners set up on the target.
-      if (node === this.target)
-        return;
-
-      this.addListeners_(node);
-      this.transientObservedNodes.push(node);
-      var registrations = registrationsTable.get(node);
-      if (!registrations)
-        registrationsTable.set(node, registrations = []);
-
-      // We know that registrations does not contain this because we already
-      // checked if node === this.target.
-      registrations.push(this);
-    },
-
-    removeTransientObservers: function() {
-      var transientObservedNodes = this.transientObservedNodes;
-      this.transientObservedNodes = [];
-
-      transientObservedNodes.forEach(function(node) {
-        // Transient observers are never added to the target.
-        this.removeListeners_(node);
-
-        var registrations = registrationsTable.get(node);
-        for (var i = 0; i < registrations.length; i++) {
-          if (registrations[i] === this) {
-            registrations.splice(i, 1);
-            // Each node can only have one registered observer associated with
-            // this observer.
-            break;
-          }
-        }
-      }, this);
-    },
-
-    handleEvent: function(e) {
-      // Stop propagation since we are managing the propagation manually.
-      // This means that other mutation events on the page will not work
-      // correctly but that is by design.
-      e.stopImmediatePropagation();
-
-      switch (e.type) {
-        case 'DOMAttrModified':
-          // http://dom.spec.whatwg.org/#concept-mo-queue-attributes
-
-          var name = e.attrName;
-          var namespace = e.relatedNode.namespaceURI;
-          var target = e.target;
-
-          // 1.
-          var record = new getRecord('attributes', target);
-          record.attributeName = name;
-          record.attributeNamespace = namespace;
-
-          // 2.
-          var oldValue =
-              e.attrChange === MutationEvent.ADDITION ? null : e.prevValue;
-
-          forEachAncestorAndObserverEnqueueRecord(target, function(options) {
-            // 3.1, 4.2
-            if (!options.attributes)
-              return;
-
-            // 3.2, 4.3
-            if (options.attributeFilter && options.attributeFilter.length &&
-                options.attributeFilter.indexOf(name) === -1 &&
-                options.attributeFilter.indexOf(namespace) === -1) {
-              return;
-            }
-            // 3.3, 4.4
-            if (options.attributeOldValue)
-              return getRecordWithOldValue(oldValue);
-
-            // 3.4, 4.5
-            return record;
-          });
-
-          break;
-
-        case 'DOMCharacterDataModified':
-          // http://dom.spec.whatwg.org/#concept-mo-queue-characterdata
-          var target = e.target;
-
-          // 1.
-          var record = getRecord('characterData', target);
-
-          // 2.
-          var oldValue = e.prevValue;
-
-
-          forEachAncestorAndObserverEnqueueRecord(target, function(options) {
-            // 3.1, 4.2
-            if (!options.characterData)
-              return;
-
-            // 3.2, 4.3
-            if (options.characterDataOldValue)
-              return getRecordWithOldValue(oldValue);
-
-            // 3.3, 4.4
-            return record;
-          });
-
-          break;
-
-        case 'DOMNodeRemoved':
-          this.addTransientObserver(e.target);
-          // Fall through.
-        case 'DOMNodeInserted':
-          // http://dom.spec.whatwg.org/#concept-mo-queue-childlist
-          var target = e.relatedNode;
-          var changedNode = e.target;
-          var addedNodes, removedNodes;
-          if (e.type === 'DOMNodeInserted') {
-            addedNodes = [changedNode];
-            removedNodes = [];
-          } else {
-
-            addedNodes = [];
-            removedNodes = [changedNode];
-          }
-          var previousSibling = changedNode.previousSibling;
-          var nextSibling = changedNode.nextSibling;
-
-          // 1.
-          var record = getRecord('childList', target);
-          record.addedNodes = addedNodes;
-          record.removedNodes = removedNodes;
-          record.previousSibling = previousSibling;
-          record.nextSibling = nextSibling;
-
-          forEachAncestorAndObserverEnqueueRecord(target, function(options) {
-            // 2.1, 3.2
-            if (!options.childList)
-              return;
-
-            // 2.2, 3.3
-            return record;
-          });
-
-      }
-
-      clearRecords();
-    }
-  };
-
-  global.JsMutationObserver = JsMutationObserver;
-
-})(this);
-
-/*
  * Copyright 2013 The Polymer Authors. All rights reserved.
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
 
 if (!window.MutationObserver) {
-  window.MutationObserver =
-      window.WebKitMutationObserver ||
+  window.MutationObserver = 
+      window.WebKitMutationObserver || 
       window.JsMutationObserver;
   if (!MutationObserver) {
     throw new Error("no mutation observer support");
@@ -1262,23 +720,16 @@ function register(inName, inOptions) {
   // some platforms require modifications to the user-supplied prototype
   // chain
   resolvePrototypeChain(definition);
-  // overrides to implement callbacks
-  // TODO(sjmiles): should support access via .attributes NamedNodeMap
-  // preserve (set|get)Attribute
-  var oldSetAttr = definition.prototype.setAttribute;
-  definition.prototype.setAttribute = function(name, value){
-    changeAttribute.call(this, name, value, oldSetAttr || HTMLElement.prototype.setAttribute);
-  };
-  var oldRemAttr = definition.prototype.removeAttribute;
-  definition.prototype.removeAttribute = function(name, value){
-    changeAttribute.call(this, name, value, oldRemAttr || HTMLElement.prototype.removeAttribute);
-  };
+  // overrides to implement attributeChanged callback
+  overrideAttributeApi(definition.prototype);
   // 7.1.5: Register the DEFINITION with DOCUMENT
   registerDefinition(inName, definition);
   // 7.1.7. Run custom element constructor generation algorithm with PROTOTYPE
   // 7.1.8. Return the output of the previous step.
   definition.ctor = generateConstructor(definition);
   definition.ctor.prototype = definition.prototype;
+  // force our .constructor to be our actual constructor
+  definition.prototype.constructor = definition.ctor;
   // if initial parsing is complete
   if (scope.ready) {
     // upgrade any pre-existing nodes of this type
@@ -1316,13 +767,12 @@ function resolvePrototypeChain(inDefinition) {
   // if we don't support __proto__ we need to locate the native level
   // prototype for precise mixing in
   if (!Object.__proto__) {
+    // default prototype
+    var native = HTMLElement.prototype;
+    // work out prototype when using type-extension
     if (inDefinition.is) {
-      // for non-trivial extensions, work out both prototypes
       var inst = document.createElement(inDefinition.tag);
-      var native = Object.getPrototypeOf(inst);
-    } else {
-      // otherwise, use the default
-      native = HTMLElement.prototype;
+      native = Object.getPrototypeOf(inst);
     }
   }
   // cache this in case of mixin
@@ -1405,21 +855,24 @@ function ready(inElement) {
 
 // attribute watching
 
-var originalSetAttribute = HTMLElement.prototype.setAttribute;
-var originalRemoveAttribute = HTMLElement.prototype.removeAttribute;
-
-function setAttribute(name, value) {
-  changeAttribute.call(this, name, value, originalSetAttribute);
-}
-
-function removeAttribute(name, value) {
-  changeAttribute.call(this, name, value, originalRemoveAttribute);
+function overrideAttributeApi(prototype) {
+  // overrides to implement callbacks
+  // TODO(sjmiles): should support access via .attributes NamedNodeMap
+  // TODO(sjmiles): preserves user defined overrides, if any
+  var setAttribute = prototype.setAttribute;
+  prototype.setAttribute = function(name, value) {
+    changeAttribute.call(this, name, value, setAttribute);
+  }
+  var removeAttribute = prototype.removeAttribute;
+  prototype.removeAttribute = function(name, value) {
+    changeAttribute.call(this, name, value, removeAttribute);
+  }
 }
 
 function changeAttribute(name, value, operation) {
   var oldValue = this.getAttribute(name);
   operation.apply(this, arguments);
-  if (this.attributeChangedCallback
+  if (this.attributeChangedCallback 
       && (this.getAttribute(name) !== oldValue)) {
     this.attributeChangedCallback(name, oldValue);
   }
@@ -1454,20 +907,33 @@ function upgradeElement(inElement) {
     return definition && upgrade(inElement, definition);
   }
 }
+
+function cloneNode(deep) {
+  // call original clone
+  var n = domCloneNode.call(this, deep);
+  // upgrade the element and subtree
+  scope.upgradeAll(n);
+  return n;
+}
 // capture native createElement before we override it
 
 var domCreateElement = document.createElement.bind(document);
+
+// capture native cloneNode before we override it
+
+var domCloneNode = Node.prototype.cloneNode;
 
 // exports
 
 document.register = register;
 document.createElement = createElement; // override
+Node.prototype.cloneNode = cloneNode; // override
 
 scope.registry = registry;
 
 /**
  * Upgrade an element to a custom element. Upgrading an element
- * causes the custom prototype to be applied, an `is` attribute
+ * causes the custom prototype to be applied, an `is` attribute 
  * to be attached (as needed), and invocation of the `readyCallback`.
  * `upgrade` does nothing if the element is already upgraded, or
  * if it matches no registered custom tag name.
@@ -1500,9 +966,9 @@ if (HTMLElement.prototype.webkitShadowRoot) {
 }
 */
 
-// walk the subtree rooted at node, applying 'find(element, data)' function
+// walk the subtree rooted at node, applying 'find(element, data)' function 
 // to each element
-// if 'find' returns true for 'element', do not search element's subtree
+// if 'find' returns true for 'element', do not search element's subtree  
 function findAll(node, find, data) {
   var e = node.firstElementChild;
   if (!e) {
@@ -1520,7 +986,7 @@ function findAll(node, find, data) {
   return null;
 }
 
-// walk the subtree rooted at node, including descent into shadow-roots,
+// walk the subtree rooted at node, including descent into shadow-roots, 
 // applying 'cb' to each element
 function forSubtree(node, cb) {
   //logFlags.dom && node.childNodes && node.childNodes.length && console.group('subTree: ', node);
@@ -1542,7 +1008,7 @@ function forSubtree(node, cb) {
 function added(node) {
   if (upgrade(node)) {
     insertedNode(node);
-    return true;
+    return true; 
   }
   inserted(node);
 }
@@ -1551,7 +1017,7 @@ function added(node) {
 function addedSubtree(node) {
   forSubtree(node, function(e) {
     if (added(e)) {
-      return true;
+      return true; 
     }
   });
 }
@@ -1774,7 +1240,7 @@ scope.takeRecords = takeRecords;
  */
 
 (function(){
-
+  
 var HTMLElementElement = function(inElement) {
   inElement.register = HTMLElementElement.prototype.register;
   parseElementElement(inElement);
@@ -1832,7 +1298,7 @@ function parseElementElement(inElement) {
     window[refName] = ctor;
   }
 }
-
+  
 // each property in inDictionary takes a value
 // from the matching attribute in inElement, if any
 function takeAttributes(inElement, inDictionary) {
@@ -1850,7 +1316,7 @@ function executeComponentScript(inScript, inContext, inName) {
   context = inContext;
   // source location
   var owner = context.ownerDocument;
-  var url = (owner._URL || owner.URL || owner.impl
+  var url = (owner._URL || owner.URL || owner.impl 
       && (owner.impl._URL || owner.impl.URL));
   // ensure the component has a unique source map so it can be debugged
   // if the name matches the filename part of the owning document's url,
@@ -1881,41 +1347,24 @@ window.__componentScript = function(inName, inFunc) {
 
 // utility
 
-// copy all properties from inProps (et al) to inObj
-function mixin(inObj/*, inProps, inMoreProps, ...*/) {
-  var obj = inObj || {};
-  for (var i = 1; i < arguments.length; i++) {
-    var p = arguments[i];
-    try {
-      for (var n in p) {
-        copyProperty(n, p, obj);
+// copy top level properties from props to obj
+function mixin(obj, props) {
+  obj = obj || {};
+  try {
+    Object.getOwnPropertyNames(props).forEach(function(n) {
+      var pd = Object.getOwnPropertyDescriptor(props, n);
+      if (pd) {
+        Object.defineProperty(obj, n, pd);
       }
-    } catch(x) {
-    }
+    });
+  } catch(x) {
   }
   return obj;
-}
-
-// copy property inName from inSource object to inTarget object
-function copyProperty(inName, inSource, inTarget) {
-  var pd = getPropertyDescriptor(inSource, inName);
-  Object.defineProperty(inTarget, inName, pd);
-}
-
-// get property descriptor for inName on inObject, even if
-// inName exists on some link in inObject's prototype chain
-function getPropertyDescriptor(inObject, inName) {
-  if (inObject) {
-    var pd = Object.getOwnPropertyDescriptor(inObject, inName);
-    return pd || getPropertyDescriptor(Object.getPrototypeOf(inObject), inName);
-  }
 }
 
 // exports
 
 window.HTMLElementElement = HTMLElementElement;
-// TODO(sjmiles): completely ad-hoc, used by Polymer.register
-window.mixin = mixin;
 
 })();
 
@@ -1970,31 +1419,23 @@ var componentParser = {
       if (inLinkElt.content) {
         cp.parse(inLinkElt.content);
       }
-    } else if (!inMainDocument(inLinkElt)
-        && inLinkElt.parentNode
-        && !isElementElementChild(inLinkElt)) {
+    } else if (canAddToMainDoument(inLinkElt)) {
       document.head.appendChild(inLinkElt);
     }
   },
   parseScript: function(inScriptElt) {
-    // ignore scripts in primary document, they are already loaded
-    if (inMainDocument(inScriptElt)) {
-      return;
-    }
-    // ignore scripts inside <element>
-    if (isElementElementChild(inScriptElt)) {
-      return;
-    }
-    // otherwise, evaluate now
-    var code = inScriptElt.__resource || inScriptElt.textContent;
-    if (code) {
-      code += "\n//@ sourceURL=" + inScriptElt.__nodeUrl + "\n";
-      eval.call(window, code);
+    if (canAddToMainDoument(inScriptElt)) {
+      // otherwise, evaluate now
+      var code = inScriptElt.__resource || inScriptElt.textContent;
+      if (code) {
+        code += "\n//@ sourceURL=" + inScriptElt.__nodeUrl + "\n";
+        eval.call(window, code);
+      }
     }
   },
   parseStyle: function(inStyleElt) {
-    if (!inMainDocument(inStyleElt) && !isElementElementChild(inStyleElt)) {
-      document.querySelector('head').appendChild(inStyleElt);
+    if (canAddToMainDoument(inStyleElt)) {
+      document.head.appendChild(inStyleElt);
     }
   },
   parseElement: function(inElementElt) {
@@ -2003,6 +1444,15 @@ var componentParser = {
 };
 
 var cp = componentParser;
+
+// nodes can be moved to the main document
+// if they are not in the main document, are not children of <element>
+// and are in a tree at parse time.
+function canAddToMainDoument(node) {
+  return !inMainDocument(node)
+    && node.parentNode
+    && !isElementElementChild(node);
+}
 
 function inMainDocument(inElt) {
   return inElt.ownerDocument === document ||
@@ -2070,7 +1520,11 @@ function bootstrap() {
 if (window.HTMLImports) {
   document.addEventListener('HTMLImportsLoaded', bootstrap);
 } else {
-  window.addEventListener('load', bootstrap);
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    boostrap();
+  } else {
+    window.addEventListener('DOMContentLoaded', bootstrap);
+  }
 }
 
 })();
@@ -2083,7 +1537,10 @@ if (window.HTMLImports) {
 (function() {
 
 // inject style sheet
-document.write('<style>element {display: none;} /* injected by platform.js */</style>');
+var style = document.createElement('style');
+style.textContent = 'element {display: none;} /* injected by platform.js */';
+var head = document.querySelector('head');
+head.insertBefore(style, head.firstChild);
 
 if (window.ShadowDOMPolyfill) {
 
@@ -2266,9 +1723,9 @@ if (window.ShadowDOMPolyfill) {
     };
   }
 
-  function setAttr(attr, name, value, skip){
+  function setAttr(attr, name, value){
     var args = getArgs(attr, value);
-    this[args.method](name, args.value, skip);
+    this[args.method](name, args.value);
   }
 
   function syncAttr(attr, name, value){
@@ -2281,15 +1738,17 @@ if (window.ShadowDOMPolyfill) {
   function wrapAttr(tag, method){
     var original = tag.prototype[method] || HTMLElement.prototype[method];
     tag.prototype[method] = {
+      writable: true,
       enumberable: true,
       value: function (name, value, skip){
         var attr = tag.attributes[name.toLowerCase()];
         original.call(this, name, attr && attr.boolean ? '' : value);
         if (attr) {
           syncAttr.call(this, attr, name, value);
-          if (!skip && !attr.skip) {
+          if (!attr.skip && !this.xtag._skipAttr) {
             attr.setter.call(this, attr.boolean ? method == 'setAttribute' : this.getAttribute(name));
           }
+          delete this.xtag._skipAttr;
         }
       }
     };
@@ -2305,7 +1764,10 @@ if (window.ShadowDOMPolyfill) {
       key[0] = prop;
       if (attr) attr.setter = accessor[z];
       tag.prototype[prop].set = xtag.applyPseudos(key.join(':'), attr ? function(value, skip){
-        if (!skip && !attr.skip) setAttr.call(this, attr, name, value, true);
+        if (!skip && !attr.skip) {
+          this.xtag._skipAttr = true;
+          setAttr.call(this, attr, name, value);
+        }
         syncAttr.call(this, attr, name, value);
         accessor[z].call(this, value);
       } : accessor[z], tag.pseudos);
@@ -2330,7 +1792,8 @@ if (window.ShadowDOMPolyfill) {
         };
       }
       if (!tag.prototype[prop].set) tag.prototype[prop].set = function(value){
-        setAttr.call(this, attr, name, value, true);
+        this.xtag._skipAttr = true;
+        setAttr.call(this, attr, name, value);
       };
     }
   }
@@ -2405,7 +1868,7 @@ if (window.ShadowDOMPolyfill) {
 
       wrapAttr(tag, 'setAttribute');
       wrapAttr(tag, 'removeAttribute');
-
+      
       if (element){
         element.register({
           'prototype': Object.create(Object.prototype, tag.prototype)
@@ -2413,9 +1876,9 @@ if (window.ShadowDOMPolyfill) {
       } else {
         return doc.register(_name, {
           'extends': options['extends'],
-          'prototype': Object.create((options['extends'] ?
+          'prototype': Object.create(Object.create((options['extends'] ?
             document.createElement(options['extends']).constructor :
-            win.HTMLElement).prototype, tag.prototype)
+            win.HTMLElement).prototype, tag.prototype), tag.prototype)
         });
       }
     },

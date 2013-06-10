@@ -1,1 +1,3 @@
-src/css/.sass-cache
+*/src/.sass-cache
+*/components
+*/node_modules

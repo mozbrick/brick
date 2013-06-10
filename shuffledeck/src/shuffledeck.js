@@ -50,6 +50,7 @@
                     if(callbacks.complete){
                         callbacks.complete(oldSlide, newSlide);
                     }
+                    xtag.fireEvent(shuffleDeck, "slideend");
                 };
             
                 // set up functions to call in order to move the oldSlide
@@ -70,14 +71,13 @@
                            
                             return function(){
                                 doCallbacks(oldSlide, newSlide);
-                            }
+                            };
                         }, this);
-                    }
+                    };
                 }
             
                 if(!newSlide){
                     throw "new target slide is required for transition";
-                    return;
                 }
                 else{
                     // finally, move the newslide into its default position, 
@@ -95,7 +95,7 @@
                 _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "left", callbacks);
             },
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                transitionTypeData['scrollRight'].forwardFn.apply(this, arguments);
+                transitionTypeData.scrollRight.forwardFn.apply(this, arguments);
             }
         },
         "scrollRight": {
@@ -103,7 +103,7 @@
                 _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "right", callbacks);
             },
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                transitionTypeData['scrollLeft'].forwardFn.apply(this, arguments);
+                transitionTypeData.scrollLeft.forwardFn.apply(this, arguments);
             }
         },
         "scrollUp": {
@@ -111,7 +111,7 @@
                 _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "up", callbacks);
             },
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                transitionTypeData['scrollDown'].forwardFn.apply(this, arguments);
+                transitionTypeData.scrollDown.forwardFn.apply(this, arguments);
             }
         },
         "scrollDown": {
@@ -119,30 +119,30 @@
                 _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "down", callbacks);
             },
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                transitionTypeData['scrollUp'].forwardFn.apply(this, arguments);
+                transitionTypeData.scrollUp.forwardFn.apply(this, arguments);
             }
         },
         "flipX": {
             forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "X", false, callbacks)
+                                 "X", false, callbacks);
             },
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "X", true, callbacks)
+                                 "X", true, callbacks);
             },
         },
         "flipY": {
             forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "Y", false, callbacks)
+                                 "Y", false, callbacks);
             },
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "Y", true, callbacks)
+                                 "Y", true, callbacks);
             },
         }
-    }
+    };
     
     /** HELPERS **/
     
@@ -222,7 +222,7 @@
         }
                         
         targetElem.style[transformStyleName] = finalTransformStrs.join(" ");
-    }
+    };
     
     
     /**  _animateSlideReplacement : (DOM, DOM, DOM, data map, data map)
@@ -280,13 +280,13 @@
     function _animateSlideReplacement(shuffleDeck, oldSlide, newSlide, 
                                       transforms, callbacks){
         var oldStartingTransform = ("oldStartingTransform" in transforms) ?
-                transforms["oldStartingTransform"] : {};
+                transforms.oldStartingTransform : {};
         var newStartingTransform = ("newStartingTransform" in transforms) ?
-                transforms["newStartingTransform"] : {};
+                transforms.newStartingTransform : {};
         var oldEndingTransform = ("oldEndingTransform" in transforms) ?
-                transforms["oldEndingTransform"] : {};
+                transforms.oldEndingTransform : {};
         var newEndingTransform = ("newEndingTransform" in transforms) ?
-                transforms["newEndingTransform"] : {};
+                transforms.newEndingTransform : {};
                 
         callbacks = (callbacks) ? callbacks : {};
         
@@ -310,7 +310,7 @@
                     if(callbacks.complete){
                         callbacks.complete(oldSlide, newSlide);
                     }
-                }
+                };
             }, this);
             return;
         }
@@ -355,7 +355,7 @@
                                 callbacks.complete(oldSlide, newSlide);
                             }
                         }
-                    }
+                    };
                     
                     // wait for both to finish sliding before firing completion callback
                     oldSlide.addEventListener('transitionend', onTransitionComplete);
@@ -396,7 +396,7 @@
             "newStartingTransform": {},
             "oldEndingTransform": {},
             "newEndingTransform": {}
-        }
+        };
         
         transforms.newStartingTransform[propName] = flipSign+"180deg";
         transforms.oldEndingTransform[propName] = flipSign+"180deg";
@@ -452,7 +452,7 @@
                 newStartingTransform.translateX = "-100%"; // go from left to right
                 oldEndingTransform.translateX = "100%";
                 break;
-            case "left":
+            //case "left":
             default:
                 newStartingTransform.translateX = "100%"; // go from right to left
                 oldEndingTransform.translateX = "-100%";
@@ -515,13 +515,12 @@
         }
         else if(!(transitionType in transitionTypeData)){
             throw "invalid transitionType";
-            returm;
         }
         
         // pull appropriate transitioning animation functions
         var transitionData = transitionTypeData[transitionType];
-        var forwardFn = transitionData["forwardFn"];
-        var reverseFn = transitionData["reverseFn"];
+        var forwardFn = transitionData.forwardFn;
+        var reverseFn = transitionData.reverseFn;
         
         // reverseFn defaults to forwards animation if no 
         // reverse animation function is specified
@@ -535,7 +534,7 @@
             case "reverse":
                 transitionFn = reverseFn;
                 break;
-            case "auto":
+            //case "auto":
             default:
                 if(!oldSlide){
                     transitionFn = forwardFn;
@@ -605,7 +604,6 @@
         
         if(!newSlide){
             throw "no slide at index " + targetIndex;
-            return;
         }
             
         _replaceCurrSlide(shuffleDeck, newSlide, 
@@ -763,6 +761,9 @@
                 if(newSlide.nodeName.toLowerCase() === "x-shuffleslide"){
                     this.appendChild(newSlide);
                 }
+                else{
+                    throw "given invalid element of type " + newSlide.nodeName;
+                }
             },
             
             removeSlideFrom: function(index, callback){
@@ -770,7 +771,6 @@
                 
                 if(!slideToRemove){
                     throw "attempted to remove slide at invalid index " + index;
-                    return;
                 }
                 
                 var allSlides = _getAllSlides(this);
@@ -783,7 +783,7 @@
                         if(callback){
                             callback();
                         }
-                    }
+                    };
                 })(this);
                 
                 if(currSlide === slideToRemove && allSlides.length > 1){

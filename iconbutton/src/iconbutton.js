@@ -4,10 +4,10 @@
     var IMG_NODE_NAME = document.createElement("img").nodeName;
     var DEFAULT_TEXT_GETTER = function(iconButton){
                                  return iconButton.xtag.labelEl.textContent;
-                              }
+                              };
     var DEFAULT_TEXT_SETTER = function(iconButton, newText){
                                   iconButton.xtag.labelEl.textContent = newText;
-                              }
+                              };
     
     
     // hides/unhides parts of the button depending on if they have any content, also
@@ -52,8 +52,8 @@
                 break;
             
             //icon goes before label
-            case "left":
-            case "top":
+            //case "left":
+            //case "top":
             default:
                 button.insertBefore(iconWrapper, label);
                 break;
@@ -97,9 +97,12 @@
                 
                 // set up default getter and setters for modifying text content
                 // default behavior: modify text directly
-                this.textGetter = DEFAULT_TEXT_GETTER;
-                
-                this.textSetter = DEFAULT_TEXT_SETTER;
+                if(!this.textGetter){
+                    this.textGetter = DEFAULT_TEXT_GETTER;
+                }
+                if(!this.textSetter){
+                    this.textSetter = DEFAULT_TEXT_SETTER;
+                }
                 
                 // remove content and put into the label
                 this.xtag.labelEl.innerHTML = this.innerHTML;
@@ -153,7 +156,6 @@
                 }
             },
             "text":{
-                attribute: {},
                 get: function(){
                     return this.textGetter(this);
                 },
@@ -164,6 +166,22 @@
             // if the user defines a different label structure, it is up to them
             // to provide callback functions to correctly interface with the 
             // new label
+            "textGetter": {
+                get: function(){
+                    return this.xtag.textGetter;
+                },
+                set: function(newGetter){
+                    this.xtag.textGetter = newGetter;
+                }
+            },
+            "textSetter": {
+                get: function(){
+                    return this.xtag.textSetter;
+                },
+                set: function(newSetter){
+                    this.xtag.textSetter = newSetter;
+                }
+            }
         }
     });
 

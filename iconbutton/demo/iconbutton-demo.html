@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="../src/css/iconbutton.css"/>
+    <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <link rel="stylesheet" type="text/css" href="../src/iconbutton.css"/>
     
-    <script type="text/javascript" src="x-tag-core.js"></script>
-    <script type="text/javascript" src="../src/js/iconbutton.js"></script>
+    <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../src/iconbutton.js"></script>
     
     <style>
     /* applying styles to x-iconbutton applies styles as if it were to the 
@@ -41,7 +42,15 @@
     }
     
     .custom-style-iconbutton .button:hover{
+        background-color: #bbd5eb;
+        background-repeat: no-repeat;
+        background-image: -moz-linear-gradient(top, #bbd5eb, #bbd5eb 25%, #7fb0da);
+        background-image: -webkit-linear-gradient(#bbd5eb, #bbd5eb 25%, #7fb0da);
+        background-image: linear-gradient(#bbd5eb, #bbd5eb 25%, #7fb0da);
+    }
     
+    .custom-style-iconbutton .button:active{
+        box-shadow: inset 1px 1px 4px grey;
     }
     
     .custom-style-iconbutton .icon{

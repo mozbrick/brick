@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="../src/css/shuffledeck.css"/>
+    <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <link rel="stylesheet" type="text/css" href="../src/shuffledeck.css"/>
     
-    <script type="text/javascript" src="x-tag-core.js"></script>
-    <script type="text/javascript" src="../src/js/shuffledeck.js"></script>
+    <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../src/shuffledeck.js"></script>
     
     <style>
         /** Defining custom styles:
@@ -134,7 +135,7 @@
             demoBox["transition-type"] = newType;
             
             updateTypeBox();
-            demoBox.slideNext();
+            demoBox.slideNext("forward");
         }
         
         function updateTypeBox(){
