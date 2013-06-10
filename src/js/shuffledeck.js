@@ -37,6 +37,59 @@
     }
     **/
     var transitionTypeData = {
+        // transition in which no animations are performed at all 
+        // (ie: an immediate jump to the new slide)
+        "none": {
+            forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
+                // set up a helper function to handle calling the before
+                // and complete callbacks
+                var doCallbacks = function(){
+                    if(callbacks.before){
+                        callbacks.before(oldSlide, newSlide);
+                    }
+                    if(callbacks.complete){
+                        callbacks.complete(oldSlide, newSlide);
+                    }
+                };
+            
+                // set up functions to call in order to move the oldSlide
+                var moveOldSlideFn;
+                // if no old slide to be had, just call the callbacks immediately
+                if(!oldSlide){
+                    moveOldSlide = function(){
+                        doCallbacks(oldSlide, newSlide);
+                    };
+                }
+                // otherwise, function will move the old slide
+                //  to the dfault transform position, then 
+                // call callbacks
+                else{
+                    moveOldSlideFn = function(){
+                        xtag.skipTransition(oldSlide, function(){
+                            oldSlide.style[transformStyleName] = "";
+                           
+                            return function(){
+                                doCallbacks(oldSlide, newSlide);
+                            }
+                        }, this);
+                    }
+                }
+            
+                if(!newSlide){
+                    throw "new target slide is required for transition";
+                    return;
+                }
+                else{
+                    // finally, move the newslide into its default position, 
+                    // then call callbacks
+                    xtag.skipTransition(newSlide, function(){
+                        newSlide.style[transformStyleName] = "";
+                        
+                        moveOldSlideFn();
+                    }, this);
+                }
+            }
+        },
         "scrollLeft": {
             forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "left", callbacks);
@@ -130,6 +183,12 @@
     **/
     function _getSelectedSlide(shuffleDeck){
         return shuffleDeck.querySelector("[selected]");
+    }
+    
+    function _getSlideIndex(shuffleDeck, slide){
+        var allSlides = _getAllSlides(shuffleDeck);
+        
+        return allSlides.indexOf(slide);
     }
     
     /** transition functions **/
@@ -440,6 +499,15 @@
         
         var oldSlide = _getSelectedSlide(shuffleDeck);
         
+        // avoid redundant call that doesnt actually change anything
+        // about the slides
+        if(oldSlide === newSlide){
+            if(callback){
+                callback();
+            }
+            return;
+        }
+        
         if(transitionType === undefined){
             console.log("defaulting to scrollLeft transition");
             
@@ -535,7 +603,10 @@
                            transitionType, progressType, callback){
         var newSlide = _getTargetSlide(shuffleDeck, targetIndex);
         
-        if(!newSlide) return;
+        if(!newSlide){
+            throw "no slide at index " + targetIndex;
+            return;
+        }
             
         _replaceCurrSlide(shuffleDeck, newSlide, 
                           transitionType, progressType, callback);
@@ -617,7 +688,8 @@
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
                 callback        (optional)
-                                a function to call once finished transitioning
+                                a function to call once finished transitioning,
+                                takes no parameters
             **/
             slideTo: function(index, progressType, callback){
                 _slideToIndex(this, index, this["transition-type"], 
@@ -684,9 +756,50 @@
             },
             
             getSlideIndex: function(slide){
-                var allSlides = _getAllSlides(this);
+                return _getSlideIndex(this, slide);
+            },
+            
+            appendSlide: function(newSlide){
+                if(newSlide.nodeName.toLowerCase() === "x-slide"){
+                    this.appendChild(newSlide);
+                }
+            },
+            
+            removeSlideFrom: function(index, callback){
+                var slideToRemove = _getTargetSlide(this, index);
                 
-                return allSlides.indexOf(slide);
+                if(!slideToRemove){
+                    throw "attempted to remove slide at invalid index " + index;
+                    return;
+                }
+                
+                var allSlides = _getAllSlides(this);
+                var currSlide = _getSelectedSlide(this);
+                
+                var deleteFn = (function(shuffleDeck){
+                    return function(){
+                        console.log(shuffleDeck, slideToRemove);
+                        shuffleDeck.removeChild(slideToRemove);
+                        if(callback){
+                            callback();
+                        }
+                    }
+                })(this);
+                
+                if(currSlide === slideToRemove && allSlides.length > 1){
+                    // if other slides exist, first move to another slide before
+                    // removing the slide we want to get rid of in order
+                    // to prevent graphical flickering that occurs when
+                    // deleting the current slide out from under us
+                    _slideToIndex(this, posModulo(index-1, allSlides.length),
+                                  "none", "auto", deleteFn);
+                }
+                // otherwise, just immediately delete the slide without faffing
+                // about
+                else{
+                    deleteFn();
+                }
+                
             }
         }
     });
