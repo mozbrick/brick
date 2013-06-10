@@ -30,28 +30,32 @@
         cursor: pointer;
         border: 1px solid grey;
         border-radius: 4px;
-        background-color: black;
         box-shadow: 1px 1px grey;
+        padding: 5px;
+        
+        background-color: #93bce0;
+        background-repeat: no-repeat;
+        background-image: -moz-linear-gradient(top, #93bce0, #93bce0 25%, #5897cf);
+        background-image: -webkit-linear-gradient(#93bce0, #93bce0 25%, #5897cf);
+        background-image: linear-gradient(#93bce0, #93bce0 25%, #5897cf);
     }
     
     .custom-style-iconbutton .button:hover{
-        background-color: #333;
+    
     }
     
     .custom-style-iconbutton .icon{
-        background-color: #444;
-        border: 1px dashed white;
-        border-radius: 4px;
-        margin: .5em;
-        padding: 4px;
+        padding: 2px;
+        margin: 0px;
     }
     
     .custom-style-iconbutton .label{
-        font-family: Courier, monospace;
-        font-size: 3em;
-        padding: .25em;
-        color: #3efa3e;
-        text-shadow: -1px -1px limegreen;
+        font-family: font-family: ‘Lucida Sans Unicode’, ‘Lucida Grande’, sans-serif;
+        font-size: 2em;
+        letter-spacing: 1px;
+        padding: 0em;
+        color: white;
+        text-shadow: -1px -1px #ddd;
     }
     
     .demo .button{
@@ -141,12 +145,14 @@
       <li>
         <span>Custom Stylings:</span>
         <x-iconbutton class="custom-style-iconbutton" icon-anchor="left">No Icon</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="left">Left</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="right">Right</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="top">Top</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="bottom">Bottom</x-iconbutton>
+        <x-iconbutton class="custom-style-iconbutton" src="friends.svg" icon-anchor="left">Left</x-iconbutton>
+        <x-iconbutton class="custom-style-iconbutton" src="friends.svg" icon-anchor="right">Right</x-iconbutton>
+        <x-iconbutton class="custom-style-iconbutton" src="friends.svg" icon-anchor="top">Top</x-iconbutton>
+        <x-iconbutton class="custom-style-iconbutton" src="friends.svg" icon-anchor="bottom">Bottom</x-iconbutton>
+        <ul>
+            <li><a href="http://thenounproject.com/noun/friends/#icon-No3359" target="_blank">Friends</a> icon designed by <a href="http://thenounproject.com/schillidog" target="_blank">Rob Schill</a> from The Noun Project</li>
+        </ul>
       </li>
-      
       <li>
         <span>Anchor editing:</span>
         <x-iconbutton id="anchor-demo"  class="demo" src="http://placekitten.com/40">Lorem Ipsum</x-iconbutton>
@@ -236,7 +242,6 @@
         <button onclick="changeText(this)">Change Text</button>
       </li>
     </ul>
-    
     
     <script>
         function randomColor(){

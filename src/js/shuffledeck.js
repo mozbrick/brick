@@ -12,8 +12,8 @@
                      
                      parameters are:
                         shuffleDeck      the current x-shuffledeck DOM element
-                        oldSlide         the x-slide DOM element to be replaced
-                        newSlide         the x-slide DOM element we are 
+                        oldSlide         the x-shuffleslide DOM element to be replaced
+                        newSlide         the x-shuffleslide DOM element we are 
                                          transitioning to
                         callbacks        (optional) a data map with the 
                                          following possible options:
@@ -157,10 +157,10 @@
     
     /** _getAllSlides : (DOM) => DOM array
     
-    simply returns a list of all x-slide DOM elements in the given DOM element
+    simply returns a list of all x-shuffleslide DOM elements in the given DOM element
     **/
     function _getAllSlides(elem){
-        return xtag.query(elem, "x-slide");
+        return xtag.query(elem, "x-shuffleslide");
     }
     
     /** _getTargetSlide : (DOM, Number) => DOM/null
@@ -233,8 +233,8 @@
     
     params:
         shuffleDeck             the x-shuffledeck DOM element we are working in
-        oldSlide                the x-slide DOM element we are replacing
-        newSlide                the x-slide DOM element we are replacing with
+        oldSlide                the x-shuffleslide DOM element we are replacing
+        newSlide                the x-shuffleslide DOM element we are replacing with
         transforms              a data map in the following format:
                                 {
                                     "oldStartingTransform": 
@@ -376,8 +376,8 @@
     
     params:
         shuffleDeck             the x-shuffledeck DOM element we are working in
-        oldSlide                the x-slide DOM element we are replacing
-        newSlide                the x-slide DOM element we are replacing with
+        oldSlide                the x-shuffleslide DOM element we are replacing
+        newSlide                the x-shuffleslide DOM element we are replacing with
         orientation             defines the rotation axis 
                                 (Valid options: "x" or "y")
         reverse                 (optional) whether or not the animation should 
@@ -414,8 +414,8 @@
     
     params:
         shuffleDeck             the x-shuffledeck DOM element we are working in
-        oldSlide                the x-slide DOM element we are replacing
-        newSlide                the x-slide DOM element we are replacing with
+        oldSlide                the x-shuffleslide DOM element we are replacing
+        newSlide                the x-shuffleslide DOM element we are replacing with
         scrollDir             defines the direction the scroll will be 
                                 performed (ie: in which direction the oldSlide
                                 leaves)
@@ -477,7 +477,7 @@
     
     param:
         shuffleDeck             the x-shuffledeck DOM element we are working in
-        newSlide                the x-slide DOM element we are replacing the
+        newSlide                the x-shuffleslide DOM element we are replacing the
                                 current slide with
         transitionType          (optional) The name of the animation type
                                 Valid options are any type defined in 
@@ -590,7 +590,7 @@
     
     param:
         shuffleDeck             the x-shuffledeck DOM element we are working in
-        targetIndex             the index of the x-slide we want to display
+        targetIndex             the index of the x-shuffleslide we want to display
         transitionType          same as _replaceCurrSlide's transitionType
                                 parameter
                                 
@@ -664,7 +664,7 @@
         events:{
             // tag fires a "slideend" event after transitions 
             // end on any current slide
-            'transitionend:delegate(x-slide[selected])': function(e){
+            'transitionend:delegate(x-shuffleslide[selected])': function(e){
                 if (e.target === this){
                   xtag.fireEvent(this, 'slideend');
                 }
@@ -760,7 +760,7 @@
             },
             
             appendSlide: function(newSlide){
-                if(newSlide.nodeName.toLowerCase() === "x-slide"){
+                if(newSlide.nodeName.toLowerCase() === "x-shuffleslide"){
                     this.appendChild(newSlide);
                 }
             },
@@ -804,7 +804,7 @@
         }
     });
 
-    xtag.register("x-slide", {
+    xtag.register("x-shuffleslide", {
         lifecycle:{
             inserted: function(){
                 var deckContainer = this.parentNode;

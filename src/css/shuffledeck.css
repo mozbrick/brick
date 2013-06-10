@@ -2,7 +2,7 @@ x-shuffledeck {
   display: block;
   position: relative;
   overflow: hidden; }
-  x-shuffledeck > x-slide {
+  x-shuffledeck > x-shuffleslide {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -35,9 +35,9 @@ x-shuffledeck {
     left: 0px;
     right: 0px;
     z-index: 0; }
-    x-shuffledeck > x-slide[selected] {
+    x-shuffledeck > x-shuffleslide[selected] {
       z-index: 2; }
-    x-shuffledeck > x-slide[leaving] {
+    x-shuffledeck > x-shuffleslide[leaving] {
       z-index: 1; }
-    x-shuffledeck > x-slide:not([selected]):not([leaving]) {
+    x-shuffledeck > x-shuffleslide:not([selected]):not([leaving]) {
       visibility: hidden; }

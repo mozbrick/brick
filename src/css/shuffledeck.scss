@@ -5,7 +5,7 @@ x-shuffledeck{
     position: relative;
     overflow: hidden;
     
-    & > x-slide{
+    & > x-shuffleslide{
         @include boxSizing(border-box);
         display: block;
         

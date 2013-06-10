@@ -10,13 +10,13 @@
     <style>
         /** Defining custom styles:
         
-            Besides applying custom styles to the x-shuffledeck and x-slides
+            Besides applying custom styles to the x-shuffledeck and x-shuffleslides
             themselves, you can define styles for the following selectors to 
             determine how the widget appears during animations
             
-            x-slide[leaving]  => defines how a slide looks when in the middle
+            x-shuffleslide[leaving]  => defines how a slide looks when in the middle
                                  of transitioning out of frame
-            x-slide[selected] => defines how the currently selected slide looks
+            x-shuffleslide[selected] => defines how the currently selected slide looks
         **/
     
         html, body{
@@ -37,26 +37,26 @@
             background-color: #333;
         }
         
-        #demo-box x-slide{
+        #demo-box x-shuffleslide{
             font-size: 5em;
             text-align:center;
         }
        
-        #demo-box x-slide[leaving]{
+        #demo-box x-shuffleslide[leaving]{
             opacity: 0.7;
         }
         
-        #demo-box x-slide[selected]{
+        #demo-box x-shuffleslide[selected]{
             color: white;
             text-shadow: 1px 1px 10px black;
         }
         
-        #demo-box x-slide:nth-child(odd){
+        #demo-box x-shuffleslide:nth-child(odd){
             background-image: url("cream_pixels.png");
             background-repeat: repeat;
         }
         
-        #demo-box x-slide:nth-child(even){
+        #demo-box x-shuffleslide:nth-child(even){
             background-image: url("retina_wood.png");
             background-repeat: repeat;
         }
@@ -65,10 +65,10 @@
 <body>
     <h1>x-shuffledeck demo</h1>
     <x-shuffledeck id="demo-box" transition-type="scrollLeft">
-        <x-slide>1</x-slide>
-        <x-slide>2</x-slide>
-        <x-slide>3</x-slide>
-        <x-slide>4</x-slide>
+        <x-shuffleslide>1</x-shuffleslide>
+        <x-shuffleslide>2</x-shuffleslide>
+        <x-shuffleslide>3</x-shuffleslide>
+        <x-shuffleslide>4</x-shuffleslide>
     </x-shuffledeck>
     <div id="demo-controls">
         <button onclick="demoBox.slidePrev('reverse')"><-- Slide Prev</button>
@@ -101,7 +101,7 @@
         var demoBox;
         
         document.addEventListener('DOMComponentsLoaded', function(){
-            xtag.query(document, "x-slide").forEach(function(slide){
+            xtag.query(document, "x-shuffleslide").forEach(function(slide){
                 slide.style.backgroundColor = randomColor();
             });
             
@@ -150,7 +150,7 @@
         function addSlide(){
             var numSlides = demoBox.getAllSlides().length;
             
-            var newSlide = document.createElement("x-slide");
+            var newSlide = document.createElement("x-shuffleslide");
             newSlide.style.backgroundColor = randomColor();
             
             newSlide.textContent = String(numSlides+1);
