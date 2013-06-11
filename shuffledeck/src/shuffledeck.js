@@ -1,7 +1,11 @@
 (function(){
-    // browser-specific name of the transform css property
-    var transformStyleName = xtag.prefix.js + "Transform";
-    
+    function _makeSlideAnimatorFn(animationName){
+        return function(shuffleDeck, oldSlide, newSlide, callbacks){
+            _animateSlideReplacement(shuffleDeck, oldSlide, newSlide, 
+                                     animationName, callbacks);
+        };
+    };
+
     /** transitionTypeData holds data on the transition-animating functions 
         used for different transition types
     
@@ -53,95 +57,45 @@
                     xtag.fireEvent(shuffleDeck, "slideend");
                 };
             
-                // set up functions to call in order to move the oldSlide
-                var moveOldSlideFn;
-                // if no old slide to be had, just call the callbacks immediately
-                if(!oldSlide){
-                    moveOldSlide = function(){
-                        doCallbacks(oldSlide, newSlide);
-                    };
-                }
-                // otherwise, function will move the old slide
-                //  to the dfault transform position, then 
-                // call callbacks
-                else{
-                    moveOldSlideFn = function(){
-                        xtag.skipTransition(oldSlide, function(){
-                            oldSlide.style[transformStyleName] = "";
-                           
-                            return function(){
-                                doCallbacks(oldSlide, newSlide);
-                            };
-                        }, this);
-                    };
-                }
-            
                 if(!newSlide){
                     throw "new target slide is required for transition";
                 }
                 else{
-                    // finally, move the newslide into its default position, 
-                    // then call callbacks
-                    xtag.skipTransition(newSlide, function(){
-                        newSlide.style[transformStyleName] = "";
-                        
-                        moveOldSlideFn();
-                    }, this);
+                    doCallbacks(oldSlide, newSlide);
                 }
             }
         },
         "scrollLeft": {
-            forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "left", callbacks);
-            },
+            forwardFn: _makeSlideAnimatorFn("scrollLeft"),
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 transitionTypeData.scrollRight.forwardFn.apply(this, arguments);
             }
         },
         "scrollRight": {
-            forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "right", callbacks);
-            },
+            forwardFn: _makeSlideAnimatorFn("scrollRight"),
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 transitionTypeData.scrollLeft.forwardFn.apply(this, arguments);
             }
         },
         "scrollUp": {
-            forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "up", callbacks);
-            },
+            forwardFn: _makeSlideAnimatorFn("scrollUp"),
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 transitionTypeData.scrollDown.forwardFn.apply(this, arguments);
             }
         },
         "scrollDown": {
-            forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithScroll(shuffleDeck, oldSlide, newSlide, "down", callbacks);
-            },
+            forwardFn: _makeSlideAnimatorFn("scrollDown"),
             reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
                 transitionTypeData.scrollUp.forwardFn.apply(this, arguments);
             }
         },
         "flipX": {
-            forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "X", false, callbacks);
-            },
-            reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "X", true, callbacks);
-            },
+            forwardFn: _makeSlideAnimatorFn("flipX")
         },
         "flipY": {
-            forwardFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "Y", false, callbacks);
-            },
-            reverseFn: function(shuffleDeck, oldSlide, newSlide, callbacks){
-                _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                                 "Y", true, callbacks);
-            },
-        }
+            forwardFn: _makeSlideAnimatorFn("flipY")
+        },
+        
     };
     
     /** HELPERS **/
@@ -191,41 +145,9 @@
         return allSlides.indexOf(slide);
     }
     
-    /** transition functions **/
-    
-    /** _applyTransform : (DOM, data map)
-    
-    helper function to apply a transform data object to the
-    CSS transition property of the given DOM element
-    
-    params:
-        targetElem      the DOM element to apply our CSS transforms to
-        transformData   a data map with key/value pairs in the format of
-                        <name of CSS transform type> : <value of transform>
-                        
-    Example usage:
-
-    _applyTransform(foo, {
-        "translateX": "100%",
-        "rotate": "90deg"
-    })
-    
-    This will apply a transform of 100% x-coordinate translation and 90degree
-    rotation to the DOM element given as foo
-    **/
-    var _applyTransform = function(targetElem, transformData){
-        var finalTransformStrs = [];
-        
-        for (var transformName in transformData){
-            var transformValue = transformData[transformName];
-            finalTransformStrs.push(transformName+"("+transformValue+")");
-        }
-                        
-        targetElem.style[transformStyleName] = finalTransformStrs.join(" ");
-    };
     
     
-    /**  _animateSlideReplacement : (DOM, DOM, DOM, data map, data map)
+    /**  _animateSlideReplacement : (DOM, DOM, DOM, string, data map)
     
     given a transform data map and the callbacks to fire during an animation,
     will animate the transition of replacing oldSlide with newSlide in the given
@@ -235,31 +157,7 @@
         shuffleDeck             the x-shuffledeck DOM element we are working in
         oldSlide                the x-shuffleslide DOM element we are replacing
         newSlide                the x-shuffleslide DOM element we are replacing with
-        transforms              a data map in the following format:
-                                {
-                                    "oldStartingTransform": 
-                                        a transform datamap in the same format
-                                        as that which we pass into 
-                                        _applyTransform
-                                        
-                                        This defines the starting position of 
-                                        the oldSlide in our transition animation
-                                                            
-                                    "newStartingTransform":
-                                        same format, but this defines the 
-                                        starting position of the newSlide in 
-                                        our transition animation
-                                    "oldEndingTransform":
-                                        same format, but this defines the 
-                                        final position of the oldSlide to 
-                                        animate towards
-                                       
-                                    "newEndingTransform":
-                                        same format, but this defines the 
-                                        final position of the newSlide to 
-                                        animate towards
-                                }
-                                
+        slideAnimName           the name of the animation type to use
         callbacks           (optional) a data map in the following format:
                             {
                                 before : a callback function taking
@@ -278,16 +176,7 @@
                             }              
     **/
     function _animateSlideReplacement(shuffleDeck, oldSlide, newSlide, 
-                                      transforms, callbacks){
-        var oldStartingTransform = ("oldStartingTransform" in transforms) ?
-                transforms.oldStartingTransform : {};
-        var newStartingTransform = ("newStartingTransform" in transforms) ?
-                transforms.newStartingTransform : {};
-        var oldEndingTransform = ("oldEndingTransform" in transforms) ?
-                transforms.oldEndingTransform : {};
-        var newEndingTransform = ("newEndingTransform" in transforms) ?
-                transforms.newEndingTransform : {};
-                
+                                      slideAnimName, callbacks){
         callbacks = (callbacks) ? callbacks : {};
         
         // abort redundant transitions
@@ -298,175 +187,86 @@
             return;
         }    
         
-        // if no need for old slide exists, immediately place new slide in correct spot 
-        // and abort remaining animation calculations
-        if(!oldSlide){
-            xtag.skipTransition(newSlide, function(){
-                _applyTransform(newSlide, newEndingTransform);
+        var oldSlideAtStart = false;
+        var newSlideAtStart = false;
+        var animationStarted = false;
+        var _attemptBeforeCallback = function(){
+            if(oldSlideAtStart && newSlideAtStart && callbacks.before){
+                callbacks.before(oldSlide, newSlide);
+            }
+        };
+        
+        var _attemptAnimation = function(){
+            if(animationStarted){
+                return;
+            }
+            if(!(oldSlideAtStart && newSlideAtStart))
+            {
+                return;
+            }
+            animationStarted = true;
+            
+            var oldSlideDone = false;
+            var newSlideDone = false;
+            
+            // create the listener to be fired after final animations 
+            // complete
+            var onTransitionComplete = function(e){
+                if(e.target === oldSlide){
+                    console.log("old slide done moving");
+                    oldSlideDone = true;
+                    oldSlide.removeEventListener("transitionend", 
+                                                 onTransitionComplete);
+                }
+                else if(e.target === newSlide){
+                    console.log("new slide done moving");
+                    newSlideDone = true;
+                    newSlide.removeEventListener("transitionend", 
+                                                 onTransitionComplete);
+                }
                 
-                return function(){
-                    newSlide.style[transformStyleName] = "";
+                if(oldSlideDone && newSlideDone){
+                    // remove transforms to prevent them spilling beyond this scope
+                    oldSlide.removeAttribute("slide-anim-type");
+                    newSlide.removeAttribute("slide-anim-type");
                 
+                    // actually call the completion callback function
                     if(callbacks.complete){
                         callbacks.complete(oldSlide, newSlide);
                     }
-                };
-            }, this);
-            return;
-        }
+                }
+            };
+            
+            // wait for both to finish sliding before firing completion callback
+            oldSlide.addEventListener('transitionend', onTransitionComplete);
+            newSlide.addEventListener('transitionend', onTransitionComplete);
+            
+            // unleash the animation!
+            oldSlide.removeAttribute("before-animation");
+            newSlide.removeAttribute("before-animation");
+        };
         
-        // immediately place the old and new slides into their starting positions
-        // where they will be scrolling from
+        
         xtag.skipTransition(oldSlide, function(){
-            xtag.skipTransition(newSlide, function(){
-                _applyTransform(oldSlide, oldStartingTransform);
-                _applyTransform(newSlide, newStartingTransform);
-                
-                // upon getting into position, perform scroll transitions
-                return function(){
-                    if(callbacks.before){
-                        callbacks.before(oldSlide, newSlide);
-                    }
-                    var oldSlideDone = false;
-                    var newSlideDone = false;
-                    
-                    // create the listener to be fired after final animations 
-                    // complete
-                    var onTransitionComplete = function(e){
-                        if(e.target === oldSlide){
-                            oldSlideDone = true;
-                            oldSlide.removeEventListener("transitionend", 
-                                                         onTransitionComplete);
-                        }
-                        else if(e.target === newSlide){
-                            newSlideDone = true;
-                            newSlide.removeEventListener("transitionend", 
-                                                         onTransitionComplete);
-                        }
-                        
-                        if(oldSlideDone && newSlideDone){
-                            // remove transforms to prevent them overriding
-                            // styles beyond this scope
-                            oldSlide.style[transformStyleName] = "";
-                            newSlide.style[transformStyleName] = "";
-                        
-                            // actually call the completion callback function
-                            if(callbacks.complete){
-                                callbacks.complete(oldSlide, newSlide);
-                            }
-                        }
-                    };
-                    
-                    // wait for both to finish sliding before firing completion callback
-                    oldSlide.addEventListener('transitionend', onTransitionComplete);
-                    newSlide.addEventListener('transitionend', onTransitionComplete);
-                    
-                    _applyTransform(oldSlide, oldEndingTransform);
-                    _applyTransform(newSlide, newEndingTransform);
-                };
-            }, this);
+            oldSlide.setAttribute("slide-anim-type", slideAnimName);
+            oldSlide.setAttribute("before-animation", true);
+            
+            oldSlideAtStart = true;
+            _attemptBeforeCallback();
+            
+            return _attemptAnimation;
         }, this);
-    }
-    
-    
-    /** _replaceWithFlip: (DOM, DOM, DOM, String, Boolean, data map)
-    
-    a helper function used to animate a transition where the oldSlide flips
-    over to reveal the newSlide
-    
-    params:
-        shuffleDeck             the x-shuffledeck DOM element we are working in
-        oldSlide                the x-shuffleslide DOM element we are replacing
-        newSlide                the x-shuffleslide DOM element we are replacing with
-        orientation             defines the rotation axis 
-                                (Valid options: "x" or "y")
-        reverse                 (optional) whether or not the animation should 
-                                be reversed
-        callbacks               same format as _animateSlideReplacement's
-                                callbacks parameter
-    **/
-    function _replaceWithFlip(shuffleDeck, oldSlide, newSlide, 
-                              orientation, reverse, callbacks){
-        var propName = (orientation && orientation.toLowerCase() == "x") ? 
-                            "rotateX" : "rotateY";
-        var flipSign = (reverse) ? "-" : "+";
         
-        var transforms = {
-            "oldStartingTransform": {},
-            "newStartingTransform": {},
-            "oldEndingTransform": {},
-            "newEndingTransform": {}
-        };
-        
-        transforms.newStartingTransform[propName] = flipSign+"180deg";
-        transforms.oldEndingTransform[propName] = flipSign+"180deg";
-        
-        _animateSlideReplacement(shuffleDeck, oldSlide, newSlide, 
-                                 transforms, callbacks);
-    }
-    
-    
-    /** _replaceWithScroll: (DOM, DOM, DOM, String, data map)
-    
-    a helper function used to animate scroll-type transitions
-    which essentially place the new slide next to the current slide and moves 
-    both over simultaneously with CSS translates
-    
-    params:
-        shuffleDeck             the x-shuffledeck DOM element we are working in
-        oldSlide                the x-shuffleslide DOM element we are replacing
-        newSlide                the x-shuffleslide DOM element we are replacing with
-        scrollDir             defines the direction the scroll will be 
-                                performed (ie: in which direction the oldSlide
-                                leaves)
-                                
-                                Valid options: 
-                                    "left" 
-                                    "up"
-                                    "right"
-                                    "down"
-                                    
-        callbacks               same format as _animateSlideReplacement's
-                                callbacks parameter
-    **/
-    function _replaceWithScroll(shuffleDeck, oldSlide, newSlide, 
-                                scrollDir, callbacks){
-                       
-        
-        // set default transform targets
-        var oldStartingTransform = {translateX: "0%", translateY: "0%"};
-        var oldEndingTransform = {translateX: "0%", translateY: "0%"};
-        var newStartingTransform = {translateX: "0%", translateY: "0%"};
-        var newEndingTransform = {translateX: "0%", translateY: "0%"};                
-        
-        switch(scrollDir){
-            case "down":
-                newStartingTransform.translateY = "-100%"; // go from top to bottom
-                oldEndingTransform.translateY = "100%"; 
-                break;
-            case "up":
-                newStartingTransform.translateY = "100%"; // go from bottom to top
-                oldEndingTransform.translateY = "-100%"; 
-                break;
-            case "right":
-                newStartingTransform.translateX = "-100%"; // go from left to right
-                oldEndingTransform.translateX = "100%";
-                break;
-            //case "left":
-            default:
-                newStartingTransform.translateX = "100%"; // go from right to left
-                oldEndingTransform.translateX = "-100%";
-                break;
-        }
-        
-        var transforms = {
-            "oldStartingTransform": oldStartingTransform,
-            "newStartingTransform": newStartingTransform,
-            "oldEndingTransform": oldEndingTransform,
-            "newEndingTransform": newEndingTransform
-        };
-        
-        _animateSlideReplacement(shuffleDeck, oldSlide, newSlide, transforms, callbacks);
+        xtag.skipTransition(newSlide, function(){
+            newSlide.setAttribute("slide-anim-type", slideAnimName);
+            newSlide.setAttribute("before-animation", true);
+            
+            newSlideAtStart = true;
+            _attemptBeforeCallback();
+            
+            // upon getting into position, perform scroll transitions
+            return _attemptAnimation;
+        }, this);
     }
     
     
@@ -514,7 +314,7 @@
             transitionType = "scrollLeft";
         }
         else if(!(transitionType in transitionTypeData)){
-            throw "invalid transitionType";
+            throw "invalid transitionType "+transitionType;
         }
         
         // pull appropriate transitioning animation functions
@@ -614,6 +414,8 @@
     
     sanitizes the slides in the deck by ensuring that there is always a single
     selected slide except (and only except) when no slides exist
+    
+    also removes any temp-attributes used for animatoin
     **/
     function _sanitizeSlideAttrs(shuffleDeck){
         var slides = _getAllSlides(shuffleDeck);
@@ -627,7 +429,8 @@
         // ensure that only one slide is selected at a time
         slides.forEach(function(slide){
             slide.removeAttribute("leaving");
-            slide.style[transformStyleName] = "";
+            slide.removeAttribute("before-animation");
+            slide.removeAttribute("slide-anim-type");
             if(slide !== currSlide){
                 slide.removeAttribute("selected");
             }

@@ -19,9 +19,15 @@
 <body>
 <h1>X-ToolTip demos</h1>
 
+<div id="container">
+    <x-tooltip trigger-selector="#container" direction="auto">
+        Hi! I'm a tooltip! <img src="http://placekitten.com/25"/>
+    </x-tooltip>
+</div>
+
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
-
+    console.log(document.querySelector("x-tooltip")["trigger-selector"]);
 });
 </script>
 </body>

@@ -1,5 +1,16 @@
 @import "custommixins";
 
+$oldSlide: "[leaving]";
+$newSlide: "[selected]";
+$beforeAnimation: "[before-animation]";
+$afterAnimation: ":not(#{$beforeAnimation})";
+
+$oldStartingSelector: "#{$oldSlide}#{$beforeAnimation}";
+$newStartingSelector: "#{$newSlide}#{$beforeAnimation}";
+$oldEndingSelector: "#{$oldSlide}#{$afterAnimation}";
+$newEndingSelector: "#{$newSlide}#{$afterAnimation}";
+
+
 x-shuffledeck{
     display: block; //can be overridden with anything non-inline
     position: relative;
@@ -12,8 +23,9 @@ x-shuffledeck{
         overflow: hidden;
         position: absolute;
         
-        @include animated(transform, 0.5s, ease, 0s);
+        @include animated(transform, .5s, ease, 0s);
         @include backfaceVisibility(hidden);
+        @include transformed(translate3d(0%,0%,1px));
         
         height: 100%;
         width: 100%;
@@ -23,17 +35,94 @@ x-shuffledeck{
         
         z-index: 0;
         
-        &[selected]{
+        &#{$newSlide}{
             z-index: 2;
         }
         
-        &[leaving]{
+        &#{$oldSlide}{
             z-index: 1;
         }
         
-        &:not([selected]):not([leaving]){
+        &:not(#{$newSlide}):not(#{$oldSlide}){
             visibility: hidden; // note: do not use display: none here!
         }
+        
+        /** slide animation types go here **/
+        
+        /* new slide scrolls from right to left */
+        &[slide-anim-type=scrollLeft]{ 
+            // initial positions for animation
+            &#{$newStartingSelector}{
+                @include transformed(translateX(100%));
+            }
+            
+            // target positions for animation
+            &#{$oldEndingSelector}{
+                @include transformed(translateX(-100%));
+            }
+        }
+        
+        /* new slide scrolls from left to right */
+        &[slide-anim-type=scrollRight]{
+            // initial positions for animation
+            &#{$newStartingSelector}{
+                @include transformed(translateX(-100%));
+            }
+            
+            // target positions for animation
+            &#{$oldEndingSelector}{
+                @include transformed(translateX(100%));
+            }
+        }
+        
+        /* new slide scrolls from bottom to top */
+        &[slide-anim-type=scrollUp]{
+            // initial positions for animation
+            &#{$newStartingSelector}{
+                @include transformed(translateY(100%));
+            }
+            
+            // target positions for animation
+            &#{$oldEndingSelector}{
+                @include transformed(translateY(-100%));
+            }
+        }
+        
+        /* new slide scrolls from top to bottom */
+        &[slide-anim-type=scrollDown]{
+            // initial positions for animation
+            &#{$newStartingSelector}{
+                @include transformed(translateY(-100%));
+            }
+            
+            // target positions for animation
+            &#{$oldEndingSelector}{
+                @include transformed(translateY(100%));
+            }
+        }
+        
+        &[slide-anim-type=flipX]{
+            // initial positions for animation
+            &#{$newStartingSelector}{
+                @include transformed(rotateX(180deg));
+            }
+            
+            // target positions for animation
+            &#{$oldEndingSelector}{
+                @include transformed(rotateX(-180deg));
+            }
+        }
+        
+        &[slide-anim-type=flipY]{
+            // initial positions for animation
+            &#{$newStartingSelector}{
+                @include transformed(rotateY(180deg));
+            }
+            
+            // target positions for animation
+            &#{$oldEndingSelector}{
+                @include transformed(rotateY(-180deg));
+            }
+        }
     }
-    
 }
