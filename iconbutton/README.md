@@ -32,6 +32,8 @@ the following CSS selectors, assuming that `"foo"` represents an `x-iconbutton` 
 To edit the icon image source, simply change the `src` attribute on the `<x-iconbutton>` tag:
 
     fooIconButton.setAttribute("src", "http://<YOUR IMAGE HERE>");
+    
+_Note:_ If the icon is no longer an &lt;img&gt; node, due to the user changing the DOM from the default, this will not do anything.
 
 ### Editing the icon location
 To edit the icon location, simply change the `icon-anchor` attribute on the `<x-iconbutton>` tag
@@ -70,4 +72,4 @@ To replace the current label with your own custom DOM element, you can simply re
 
     fooIconButton.label = myAwesomeNewLabelDOMElem;
     
-*Note* If your custom DOM element's structure is different, make sure to update the `.textGetter`/`.textSetter` attributes so that you can still 
+_Note:_ If your custom DOM element's structure is different, make sure to update the `.textGetter`/`.textSetter` attributes so that you can still correctly use the `.text` attribute.
