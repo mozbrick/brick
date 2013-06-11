@@ -36,19 +36,35 @@ $FONTS_FOLDER: "../fonts/";
     }
 }
 
-@mixin animated($properties: all, $duration: 0.2s, $timing:ease-in, $delay: 0s){
-    @if($properties == transform){
-        transition-property: transform;
-        -webkit-transition-property: -webkit-transform;
-        -moz-transition-property: -moz-transform;
-        -o-transition-property: -o-transform;
+@function replaceItem($list, $oldItem, $newItem, $separator: comma){
+    @if type-of($list) == list{
+        $newList: ();
+        @each $item in $list{
+            @if $item == $oldItem{
+                $newList: append($newList, $newItem, $separator);
+            }
+            @else{
+                $newList: append($newList, $item, $separator);
+            }
+        }
+        @return $newList;
+    }
+    @else if $list == $oldItem{
+        @return $newItem;
     }
     @else{
-        transition-property: $properties;
-        -webkit-transition-property: $properties;
-        -moz-transition-property: $properties;
-        -o-transition-property: $properties;
+        @return $list;
     }
+}
+
+@mixin animated($properties: all, $duration: 0.2s, $timing:ease-in, $delay: 0s){
+    transition-property: $properties;
+    -webkit-transition-property: replaceItem($properties, transform, 
+                                             -webkit-transform);
+    -moz-transition-property: replaceItem($properties, transform, 
+                                          -moz-transform);
+    -o-transition-property: replaceItem($properties, transform, 
+                                        -o-transform);
     
     transition-duration: $duration;
     -webkit-transition-duration: $duration;
@@ -68,10 +84,10 @@ $FONTS_FOLDER: "../fonts/";
 
 @mixin transformed($transform){
     transform:$transform;
-    -ms-transform:$transform; /* IE 9 */
-    -moz-transform:$transform; /* Firefox */
-    -webkit-transform:$transform; /* Safari and Chrome */
-    -o-transform:$transform; /* Opera */
+    -ms-transform:$transform; // IE 9
+    -moz-transform:$transform; // Firefox
+    -webkit-transform:$transform; // Safari and Chrome
+    -o-transform:$transform; // Opera
 }
 
 @mixin shadowed($color:$shadowColor){

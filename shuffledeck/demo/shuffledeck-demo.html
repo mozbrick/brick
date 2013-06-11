@@ -39,12 +39,25 @@
         }
         
         #demo-box x-shuffleslide{
-            font-size: 5em;
             text-align:center;
+            font-size: 5em;
         }
        
-        #demo-box x-shuffleslide[leaving]{
-            opacity: 0.7;
+        #demo-box x-shuffleslide[transition-override]:after{
+            content: "(transition-override = " attr(transition-override) ")";
+            font-size: .25em;
+            display: block;
+            white-space:nowrap;
+        }
+       
+        #demo-box x-shuffleslide[leaving]:before{
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.3);
         }
         
         #demo-box x-shuffleslide[selected]{
@@ -70,6 +83,7 @@
         <x-shuffleslide>2</x-shuffleslide>
         <x-shuffleslide>3</x-shuffleslide>
         <x-shuffleslide>4</x-shuffleslide>
+        <x-shuffleslide>5</x-shuffleslide>
     </x-shuffledeck>
     <div id="demo-controls">
         <button onclick="demoBox.slidePrev('reverse')"><-- Slide Prev</button>
@@ -77,6 +91,7 @@
         <br/>
         <button onclick="nextType()">change transition type</button>
         <button onclick="addSlide()">Add slide</button>
+        <button onclick="addSlide(true)">Add slide with transition-override</button>
         <button onclick="removeSlide()">Remove last slide</button>
         <p id="transition-label"></p>
         <p id="count-label"></p>
@@ -100,6 +115,13 @@
         }
         
         var demoBox;
+        var transitionTypes = [
+            "scrollLeft", "scrollUp", "scrollRight", "scrollDown",
+            "flipX", "flipY", 
+            "coverLeft", "coverUp", "coverRight", "coverDown",
+            "uncoverLeft", "uncoverUp", "uncoverRight", "uncoverDown",
+            "none"
+        ];
         
         document.addEventListener('DOMComponentsLoaded', function(){
             xtag.query(document, "x-shuffleslide").forEach(function(slide){
@@ -120,8 +142,7 @@
         function nextType(){
             var oldType = demoBox["transition-type"];
             
-            var types = ["scrollLeft", "scrollUp", "scrollRight", "scrollDown",
-                         "flipX", "flipY", "none"];
+            var types = transitionTypes;
                          
             var typeIndex = types.indexOf(oldType);
 
@@ -148,13 +169,22 @@
                     "num slides = "+demoBox.getAllSlides().length;
         }
         
-        function addSlide(){
+        function addSlide(addOverride){
             var numSlides = demoBox.getAllSlides().length;
             
             var newSlide = document.createElement("x-shuffleslide");
             newSlide.style.backgroundColor = randomColor();
             
             newSlide.textContent = String(numSlides+1);
+            
+            if(addOverride){
+                var overrideType = (transitionTypes.length) ?
+                                    transitionTypes[
+                                        Math.floor(Math.random() * 
+                                                   transitionTypes.length)
+                                    ] : "none";
+                newSlide.setAttribute("transition-override", overrideType);
+            }
             
             demoBox.appendSlide(newSlide);
             

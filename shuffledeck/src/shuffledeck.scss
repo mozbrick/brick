@@ -1,7 +1,8 @@
-@import "custommixins";
+@import "../../custommixins";
 
 $oldSlide: "[leaving]";
 $newSlide: "[selected]";
+
 $beforeAnimation: "[before-animation]";
 $afterAnimation: ":not(#{$beforeAnimation})";
 
@@ -10,6 +11,32 @@ $newStartingSelector: "#{$newSlide}#{$beforeAnimation}";
 $oldEndingSelector: "#{$oldSlide}#{$afterAnimation}";
 $newEndingSelector: "#{$newSlide}#{$afterAnimation}";
 
+$oldSlideZIndex: 1;
+$newSlideZIndex: 2;
+
+@mixin defaultSlideOrder(){
+    &#{$newSlide}{
+        z-index: $newSlideZIndex;
+    }
+    
+    &#{$oldSlide}{
+        z-index: $oldSlideZIndex;
+    }
+}
+
+@mixin swappedSlideOrder(){
+    &#{$newSlide}{
+        z-index: $oldSlideZIndex;
+    }
+    
+    &#{$oldSlide}{
+        z-index: $newSlideZIndex;
+    }
+}
+
+@mixin defaultTransform(){
+    @include transformed(translate3d(0%,0%,1px));
+}
 
 x-shuffledeck{
     display: block; //can be overridden with anything non-inline
@@ -23,9 +50,9 @@ x-shuffledeck{
         overflow: hidden;
         position: absolute;
         
-        @include animated(transform, .5s, ease, 0s);
+        @include animated(transform, 0.5s, ease, 0s);
         @include backfaceVisibility(hidden);
-        @include transformed(translate3d(0%,0%,1px));
+        @include defaultTransform;
         
         height: 100%;
         width: 100%;
@@ -35,69 +62,134 @@ x-shuffledeck{
         
         z-index: 0;
         
-        &#{$newSlide}{
-            z-index: 2;
-        }
-        
-        &#{$oldSlide}{
-            z-index: 1;
-        }
+        @include defaultSlideOrder;
         
         &:not(#{$newSlide}):not(#{$oldSlide}){
             visibility: hidden; // note: do not use display: none here!
+            opacity: 0;
         }
         
         /** slide animation types go here **/
         
-        /* new slide scrolls from right to left */
+        // default animation: jump from one spot to another
+        &[slide-anim-type]{ 
+            // initial positions for animation
+            &#{$oldStartingSelector}{
+                @include defaultTransform;
+            }
+            
+            &#{$newStartingSelector}{
+                @include defaultTransform;
+            }
+            
+            // target positions for animation
+            &#{$oldEndingSelector}{
+                @include defaultTransform;
+            }
+            
+            &#{$newEndingSelector}{
+                @include defaultTransform;
+            }
+        }
+        
+        // new slide scrolls from right to left 
         &[slide-anim-type=scrollLeft]{ 
-            // initial positions for animation
-            &#{$newStartingSelector}{
-                @include transformed(translateX(100%));
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(100%));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(-100%));
+                }
             }
             
-            // target positions for animation
-            &#{$oldEndingSelector}{
-                @include transformed(translateX(-100%));
+            // animation for reverse direction
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(-100%));
+                }
+                
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(100%));
+                }
             }
         }
         
-        /* new slide scrolls from left to right */
+        // new slide scrolls from left to right 
         &[slide-anim-type=scrollRight]{
-            // initial positions for animation
-            &#{$newStartingSelector}{
-                @include transformed(translateX(-100%));
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(-100%));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(100%));
+                }
             }
             
-            // target positions for animation
-            &#{$oldEndingSelector}{
-                @include transformed(translateX(100%));
+            // animation for reverse direction
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(100%));
+                }
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(-100%));
+                }
             }
         }
         
-        /* new slide scrolls from bottom to top */
+        // new slide scrolls from bottom to top 
         &[slide-anim-type=scrollUp]{
-            // initial positions for animation
-            &#{$newStartingSelector}{
-                @include transformed(translateY(100%));
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(100%));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(-100%));
+                }
             }
             
-            // target positions for animation
-            &#{$oldEndingSelector}{
-                @include transformed(translateY(-100%));
+            // animation for reverse direction
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(-100%));
+                }
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(100%));
+                }
             }
         }
         
-        /* new slide scrolls from top to bottom */
+        // new slide scrolls from top to bottom 
         &[slide-anim-type=scrollDown]{
-            // initial positions for animation
-            &#{$newStartingSelector}{
-                @include transformed(translateY(-100%));
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(-100%));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(100%));
+                }
             }
             
-            // target positions for animation
-            &#{$oldEndingSelector}{
-                @include transformed(translateY(100%));
+            // animation for reverse direction
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(100%));
+                }
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(-100%));
+                }
             }
         }
         
@@ -122,6 +214,137 @@ x-shuffledeck{
             // target positions for animation
             &#{$oldEndingSelector}{
                 @include transformed(rotateY(-180deg));
+            }
+        }
+        
+        &[slide-anim-type=coverLeft]{
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(100%));
+                }
+            }
+            
+            &[reverse]{
+                @include swappedSlideOrder;
+                
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(100%));
+                }
+            }
+        }
+        
+        &[slide-anim-type=coverRight]{
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(-100%));
+                }
+            }
+            
+            &[reverse]{
+                @include swappedSlideOrder;
+                
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(-100%));
+                }
+            }
+        }
+        
+        &[slide-anim-type=coverUp]{
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(100%));
+                }
+            }
+            
+            &[reverse]{
+                @include swappedSlideOrder;
+                
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(100%));
+                }
+            }
+        }
+        
+        &[slide-anim-type=coverDown]{
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(-100%));
+                }
+            }
+            
+            &[reverse]{
+                @include swappedSlideOrder;
+            
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(-100%));
+                }
+            }
+        }
+        
+        &[slide-anim-type=uncoverLeft]{
+            &:not([reverse]){
+                @include swappedSlideOrder;
+            
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(-100%));
+                }
+            }
+            
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(-100%));
+                }
+            }
+        }
+        
+        &[slide-anim-type=uncoverRight]{
+            &:not([reverse]){
+                @include swappedSlideOrder;
+                
+                &#{$oldEndingSelector}{
+                    @include transformed(translateX(100%));
+                }
+            }
+            
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateX(100%));
+                }
+            }
+        }
+        
+        &[slide-anim-type=uncoverUp]{
+            &:not([reverse]){
+                @include swappedSlideOrder;
+                
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(-100%));
+                }
+            }
+            
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(-100%));
+                }
+            }
+        }
+        
+        &[slide-anim-type=uncoverDown]{
+            &:not([reverse]){
+                @include swappedSlideOrder;
+                
+                &#{$oldEndingSelector}{
+                    @include transformed(translateY(100%));
+                }
+            }
+            &[reverse]{
+                &#{$newStartingSelector}{
+                    @include transformed(translateY(100%));
+                }
             }
         }
     }

@@ -3,7 +3,7 @@
 	"tagName": "x-shuffledeck",
 	"version": "0.1.0",
 	"author": "Leon Zhang",
-	"description": "A box in which slides can be cycled and replaced with in a variety of different orders and transitions",
+	"description": "A box in which slides can be cycled independently of order with a variety of different transitions",
 	"demo": "demo/shuffledeck-demo.html",
 	"categories": [
         "ui"
@@ -17,7 +17,7 @@
 		"ios": 4
 	},
 	"documentation": {
-		"description": "A box in which slides can be cycled and replaced with in a variety of different orders and transitions",
+		"description": "A box in which slides can be cycled independently of order with a variety of different transitions",
 		"attributes": {
             "transition-type" : "Defines the kind of transition animation that is used when cycling slides. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
         },

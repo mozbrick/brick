@@ -49,6 +49,13 @@ Positions/appearances will likely differ on larger displays or with different in
 * Content does not fully slide out of the viewport.
 * May contain top level navigation
 
+### 'Shuffledeck' ('Cycle'/'Gallery')
+
+* Somewhat like a combination of slidebox and flipbox
+* A box in which slides can be cycled independently of order with a variety of different transitions
+* Transition types can be switched and overridden on the fly, allowing for a 
+  variety of different entrance/exits
+
 ### 'Modal' (Overlay)
 
 * Content container that appears over current view context
