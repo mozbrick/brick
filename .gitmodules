@@ -1,0 +1,3 @@
+[submodule "view"]
+	path = view
+	url = git@github.com:x-tag/view.git
