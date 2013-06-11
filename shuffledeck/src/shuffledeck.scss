@@ -38,6 +38,7 @@ $newSlideZIndex: 2;
     @include transformed(translate3d(0%,0%,1px));
 }
 
+
 x-shuffledeck{
     display: block; //can be overridden with anything non-inline
     position: relative;
@@ -73,126 +74,15 @@ x-shuffledeck{
         
         // default animation: jump from one spot to another
         &[slide-anim-type]{ 
-            // initial positions for animation
-            &#{$oldStartingSelector}{
-                @include defaultTransform;
-            }
-            
-            &#{$newStartingSelector}{
-                @include defaultTransform;
-            }
-            
-            // target positions for animation
-            &#{$oldEndingSelector}{
-                @include defaultTransform;
-            }
-            
-            &#{$newEndingSelector}{
+            &#{$oldStartingSelector}, &#{$newStartingSelector},
+            &#{$oldEndingSelector}, &#{$newEndingSelector}{
                 @include defaultTransform;
             }
         }
         
-        // new slide scrolls from right to left 
-        &[slide-anim-type=scrollLeft]{ 
-            &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(100%));
-                }
-                
-                // target positions for animation
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(-100%));
-                }
-            }
-            
-            // animation for reverse direction
-            &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(-100%));
-                }
-                
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(100%));
-                }
-            }
-        }
-        
-        // new slide scrolls from left to right 
-        &[slide-anim-type=scrollRight]{
-            &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(-100%));
-                }
-                
-                // target positions for animation
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(100%));
-                }
-            }
-            
-            // animation for reverse direction
-            &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(100%));
-                }
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(-100%));
-                }
-            }
-        }
-        
-        // new slide scrolls from bottom to top 
-        &[slide-anim-type=scrollUp]{
-            &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(100%));
-                }
-                
-                // target positions for animation
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(-100%));
-                }
-            }
-            
-            // animation for reverse direction
-            &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(-100%));
-                }
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(100%));
-                }
-            }
-        }
-        
-        // new slide scrolls from top to bottom 
-        &[slide-anim-type=scrollDown]{
-            &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(-100%));
-                }
-                
-                // target positions for animation
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(100%));
-                }
-            }
-            
-            // animation for reverse direction
-            &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(100%));
-                }
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(-100%));
-                }
-            }
-        }
-        
+        //////////////////////
+        // rotation animations
+        //////////////////////
         &[slide-anim-type=flipX]{
             // initial positions for animation
             &#{$newStartingSelector}{
@@ -217,135 +107,248 @@ x-shuffledeck{
             }
         }
         
+        //////////////////////
+        // scroll animations
+        //////////////////////
+        
+        // new slide scrolls from right to left 
+        &[slide-anim-type=scrollLeft]{ 
+            &:not([reverse]){
+                @extend %scrollLeftAnim;
+            }
+            
+            // animation for reverse direction
+            &[reverse]{
+                @extend %scrollRightAnim;
+            }
+        }
+        
+        // new slide scrolls from left to right 
+        &[slide-anim-type=scrollRight]{
+            &:not([reverse]){
+                @extend %scrollRightAnim;
+            }
+            
+            // animation for reverse direction
+            &[reverse]{
+                @extend %scrollLeftAnim;
+            }
+        }
+        
+        // new slide scrolls from bottom to top 
+        &[slide-anim-type=scrollUp]{
+            &:not([reverse]){
+                @extend %scrollUpAnim;
+            }
+            
+            // animation for reverse direction
+            &[reverse]{
+                @extend %scrollDownAnim;
+            }
+        }
+        
+        // new slide scrolls from top to bottom 
+        &[slide-anim-type=scrollDown]{
+            &:not([reverse]){
+                @extend %scrollDownAnim;
+            }
+            
+            // animation for reverse direction
+            &[reverse]{
+                @extend %scrollUpAnim;
+            }
+        }
+        
+        //////////////////////
+        // covering animations
+        //////////////////////
+        
         &[slide-anim-type=coverLeft]{
             &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(100%));
-                }
+                @extend %coverLeftAnim;
             }
             
             &[reverse]{
-                @include swappedSlideOrder;
-                
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(100%));
-                }
+                @extend %uncoverRightAnim;
             }
         }
         
         &[slide-anim-type=coverRight]{
             &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(-100%));
-                }
+                @extend %coverRightAnim;
             }
             
             &[reverse]{
-                @include swappedSlideOrder;
-                
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(-100%));
-                }
+                @extend %uncoverLeftAnim;
             }
         }
         
         &[slide-anim-type=coverUp]{
             &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(100%));
-                }
+                @extend %coverUpAnim;
             }
             
             &[reverse]{
-                @include swappedSlideOrder;
-                
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(100%));
-                }
+                @extend %uncoverDownAnim;
             }
         }
         
         &[slide-anim-type=coverDown]{
             &:not([reverse]){
-                // initial positions for animation
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(-100%));
-                }
+                @extend %coverDownAnim;
             }
             
             &[reverse]{
-                @include swappedSlideOrder;
-            
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(-100%));
-                }
+                @extend %uncoverUpAnim;
             }
         }
         
+        //////////////////////
+        // uncovering animations
+        //////////////////////
+        
         &[slide-anim-type=uncoverLeft]{
             &:not([reverse]){
-                @include swappedSlideOrder;
-            
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(-100%));
-                }
+                @extend %uncoverLeftAnim;
             }
             
             &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(-100%));
-                }
+                @extend %coverRightAnim;
             }
         }
         
         &[slide-anim-type=uncoverRight]{
             &:not([reverse]){
-                @include swappedSlideOrder;
-                
-                &#{$oldEndingSelector}{
-                    @include transformed(translateX(100%));
-                }
+                @extend %uncoverRightAnim;
             }
             
             &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateX(100%));
-                }
+                @extend %coverLeftAnim;
             }
         }
         
         &[slide-anim-type=uncoverUp]{
             &:not([reverse]){
-                @include swappedSlideOrder;
-                
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(-100%));
-                }
+                @extend %uncoverUpAnim;
             }
             
             &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(-100%));
-                }
+                @extend %coverDownAnim;
             }
         }
         
         &[slide-anim-type=uncoverDown]{
             &:not([reverse]){
-                @include swappedSlideOrder;
-                
-                &#{$oldEndingSelector}{
-                    @include transformed(translateY(100%));
-                }
+                @extend %uncoverDownAnim;
             }
+            
             &[reverse]{
-                &#{$newStartingSelector}{
-                    @include transformed(translateY(100%));
-                }
+                @extend %coverUpAnim;
             }
         }
+    }
+}
+
+////////////////////////////////////////////////////
+// animation silent-classes for @extend'ing
+/////////////////////////////////////////////////////
+
+%scrollLeftAnim{
+    // initial positions for animation
+    &#{$newStartingSelector}{
+        @include transformed(translateX(100%));
+    }
+    
+    // target positions for animation
+    &#{$oldEndingSelector}{
+        @include transformed(translateX(-100%));
+    }
+}
+
+%scrollRightAnim{
+    // initial positions for animation
+    &#{$newStartingSelector}{
+        @include transformed(translateX(-100%));
+    }
+
+    // target positions for animation
+    &#{$oldEndingSelector}{
+        @include transformed(translateX(100%));
+    }
+}
+
+%scrollUpAnim{
+    // initial positions for animation
+    &#{$newStartingSelector}{
+        @include transformed(translateY(100%));
+    }
+    
+    // target positions for animation
+    &#{$oldEndingSelector}{
+        @include transformed(translateY(-100%));
+    }
+}
+
+%scrollDownAnim{
+    // initial positions for animation
+    &#{$newStartingSelector}{
+        @include transformed(translateY(-100%));
+    }
+
+    // target positions for animation
+    &#{$oldEndingSelector}{
+        @include transformed(translateY(100%));
+    }
+}
+
+%coverLeftAnim{
+    &#{$newStartingSelector}{
+        @include transformed(translateX(100%));
+    }
+}
+
+%coverRightAnim{
+    &#{$newStartingSelector}{
+        @include transformed(translateX(-100%));
+    }
+}
+
+%coverUpAnim{
+    &#{$newStartingSelector}{
+        @include transformed(translateY(100%));
+    }
+}
+
+%coverDownAnim{
+    &#{$newStartingSelector}{
+        @include transformed(translateY(-100%));
+    }
+}
+
+%uncoverLeftAnim{
+    @include swappedSlideOrder;  
+    &#{$oldEndingSelector}{
+        @include transformed(translateX(-100%));
+    }
+}
+
+%uncoverRightAnim{
+    @include swappedSlideOrder;  
+    &#{$oldEndingSelector}{
+        @include transformed(translateX(100%));
+    }
+}
+
+%uncoverUpAnim{
+    @include swappedSlideOrder;  
+    &#{$oldEndingSelector}{
+        @include transformed(translateY(-100%));
+    }
+}
+
+%uncoverDownAnim{
+    @include swappedSlideOrder;  
+    &#{$oldEndingSelector}{
+        @include transformed(translateY(100%));
     }
 }

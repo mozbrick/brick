@@ -1,6 +1,12 @@
 (function(){
     
     /** HELPERS **/
+    
+    /** getDurationStr: (DOM) => String
+    
+    returns the computed style value of the given element's CSS transition
+    duration property
+    **/
     function getDurationStr(elem){
         var style = window.getComputedStyle(elem);
         var browserDurationName = xtag.prefix.js+"TransitionDuration";
@@ -13,6 +19,11 @@
         }
     }
     
+    /** durationStrToMs: (String) => Number
+    
+    given a string in an acceptable format for a css transition duration, 
+    parse out and return the number of milliseconds this represents
+    **/
     function durationStrToMs(str){
         var reg = /^(\d*\.?\d+)(m?s)$/;
         var matchInfo = str.toLowerCase().match(reg);
@@ -80,6 +91,11 @@
         return shuffleDeck.querySelector("[selected]");
     }
     
+    /** _getSlideIndex: (DOM, DOM) => Number
+    *
+    * returns the index of the given x-shuffleslide in the deck
+    * returns -1 if the given slide does not exist in this deck
+    **/
     function _getSlideIndex(shuffleDeck, slide){
         var allSlides = _getAllSlides(shuffleDeck);
         
@@ -105,7 +121,6 @@
     **/
     function _animateSlideReplacement(shuffleDeck, oldSlide, newSlide, 
                                       slideAnimName, isReverse, callback){
-
         // set up an attribute-cleaning up function and callback caller function
         // that will be fired when the animation is completed
         var _onComplete = function(){
@@ -141,8 +156,8 @@
         
         // define a helper function to call
         // when both slides are ready to animate;
-        // necessary so that slide additions aren't transitioning into the
-        // void
+        // necessary so that slide additions aren't transitioning into the void
+        // and graphically flickering
         var _attemptBeforeCallback = function(){
             if(oldSlideAnimReady && newSlideAnimReady){
                 _getAllSlides(shuffleDeck).forEach(function(slide){
@@ -171,7 +186,9 @@
             _doAnimation();
         };
 
-        // function to actually run the animation
+        // function to actually the animation of the two slides,
+        // starting from the initial state and going until the end of the 
+        // animation
         var _doAnimation = function(){
             animationStarted = true;
             
@@ -179,8 +196,8 @@
             var newSlideDone = false;
             var animationComplete = false;
             
-            // create the listener to be fired after final animations 
-            // complete
+            // create the listener to be fired after the final animations 
+            // have completed
             var onTransitionComplete = function(e){
                 if(animationComplete){
                     return;
@@ -243,6 +260,9 @@
             }, timeoutDuration);
         };
         
+        // finally, after setting up all these callback functions, actually
+        // start the animation by setting the old and newslides into their
+        // beginning animation states 
         
         xtag.skipTransition(oldSlide, function(){
             oldSlide.setAttribute("slide-anim-type", slideAnimName);
@@ -261,7 +281,6 @@
             newSlideAnimReady = true;
             _attemptBeforeCallback();
             
-            // upon getting into position, perform scroll transitions
             return _attemptAnimation;
         }, this);
     }
@@ -288,7 +307,8 @@
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
         callback                (optional) a callback function to execute 
-                                once finished replacing slide
+                                once finished replacing slide; 
+                                takes no parameters
     **/
     function _replaceCurrSlide(shuffleDeck, newSlide, 
                                transitionType, progressType, callback){
@@ -318,6 +338,8 @@
             case "reverse":
                 isReverse = true;
                 break;
+            // automatically determine direction based on which way the target
+            // index is from our current index
             default:
                 if(!oldSlide){
                     isReverse = false;
@@ -505,18 +527,36 @@
                 }
             },
             
+            /** getAllSlides: => DOM array
+            
+            returns a list of all x-shuffleslide elements in the shuffledeck
+            **/
             getAllSlides: function(){
                 return _getAllSlides(this);
             },
             
+            /** getSelectedSlide: => DOM/null
+            
+            returns the currently selected x-shuffleslide in the deck, if any
+            **/
             getSelectedSlide: function(){
                 return _getSelectedSlide(this);
             },
             
+            /** getSlideIndex: (DOM) => Number
+            *
+            * returns the index of the given x-shuffleslide in the deck
+            * returns -1 if the given slide does not exist in this deck
+            **/
             getSlideIndex: function(slide){
                 return _getSlideIndex(this, slide);
             },
             
+            /** appendSlide: (DOM)
+            * 
+            * given an x-shuffleslide DOM element, this function adds the
+            * given slide to the deck
+            **/
             appendSlide: function(newSlide){
                 if(newSlide.nodeName.toLowerCase() === "x-shuffleslide"){
                     this.appendChild(newSlide);
@@ -526,6 +566,13 @@
                 }
             },
             
+            /** removeSlideFrom: (Number, Function)
+            *
+            * given an index, this function removes the x-shuffleslide at the
+            * given index from the deck. This function also takes an optional
+            * callback function, which gets called with no parameters after the 
+            * slide is successfully removed.
+            **/
             removeSlideFrom: function(index, callback){
                 var slideToRemove = _getTargetSlide(this, index);
                 
