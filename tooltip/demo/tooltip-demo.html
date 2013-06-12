@@ -14,21 +14,156 @@
             margin: 0;
             padding: 0;
         }
+        
+        #container{
+            border: 1px solid grey;
+            margin: 0 auto;
+            width: 190px;
+            height: 350px;
+            position: relative;
+        }
+        
+        #prev-sib{
+            position: relative;
+            margin: 1em;
+            border: 1px solid grey;
+        }
+        
+        #next-sib{
+            background-color: cyan; 
+            position: absolute; 
+            bottom: 0; 
+            left: 0;
+        }
+        
+        .fancy-selector{
+            position: relative;
+            display: inline-block;
+            background-color: lightsteelblue;
+            font-size: 1.2em;
+            margin:.5em;
+        }
+        
+        /* arrow is always in relation to content, so modify borders here */
+        #demoTip{
+            border-radius: 4px;
+            border: 5px solid black;
+            
+            left: 150%;
+            top: 50%;
+        }
+        
+        #demoTip > .tooltip-content{
+            background-color: orange;
+            padding: .5em;
+            font-family: Courier;
+        }
+        
+        #demoTip > .tooltip-arrow{
+            border-color: orange; /* edit arrow color */
+            border-width: 1em; /* edit arrow size (ie: pointer length) */
+        }
+        
+        /** users can apply custom styles using this attribute for anything
+         ** with a tooltip attached **/
+        [x-tooltip-targeted]{
+            box-shadow: 1px 1px 10px goldenrod;
+        }
+        
+        /** example usage: attaching a tooltip indicator to elements **/
+        [x-tooltip-targeted]:after{
+            content: "?";
+            position: absolute;
+            top: 95%;
+            left: 95%;
+            background-color: blue;
+            color: white;
+            font-size: 1.1em;
+            border: 1px solid white;
+            box-shadow: 1px 1px 4px grey;
+            border-radius: 100%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+        }
+        
+        #controls{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-<h1>X-ToolTip demos</h1>
+<h1>X-ToolTip demo</h1>
 
 <div id="container">
-    <x-tooltip trigger-selector="#container" direction="auto">
-        Hi! I'm a tooltip! <img src="http://placekitten.com/25"/>
+    parent node
+    <button id="prev-sib">
+        <p style="background-color: tomato;">prev sibling
+            <img style="position: absolute; top: 10px; left: 50px;" src="http://placekitten.com/100/50"/>
+        </p>
+    </button>
+    <x-tooltip id="demoTip" orientation="above" target-selector="_previousSibling">
+        Hi! I'm a tooltip! <br/><img src="http://placekitten.com/50"/>
     </x-tooltip>
+    <div id="next-sib">
+        <h1>Next sibling</h1>
+    </div>
+</div>
+
+<span class="fancy-selector">".fancy-selector" box 1</span>
+<span class="fancy-selector">".fancy-selector" box 2</span>
+
+<div id="controls">
+    <button onClick="changeOrientation()">Change orientation</button>
+    <button onClick="toggleVisible()">Toggle visible</button>
+    <button onClick="toggleSelector()">Toggle selector type</button>
+    <p>Current selector = <span id="curr-selector-status"></span></p>
+    <p>Current orientation = <span id="curr-orient-status"></span></p>
 </div>
 
 <script>
+var demoTip;
 document.addEventListener('DOMComponentsLoaded', function(){
-    console.log(document.querySelector("x-tooltip")["trigger-selector"]);
+    demoTip = document.getElementById("demoTip");
+    updateSelectorBox();
+    updateOrientationBox();
 });
+
+function changeOrientation(){
+    var orients = ["above", "onright", "below", "onleft"];
+    var currOrient = demoTip.getAttribute("orientation");
+    
+    var currIndex = orients.indexOf(currOrient);
+    
+    demoTip.setAttribute("orientation", orients[(currIndex+1) % orients.length]);
+    updateOrientationBox();
+}
+
+function toggleVisible(){
+    demoTip.visible = !demoTip.visible;
+}
+
+function toggleSelector(){
+    var selectors = ["_previousSibling", "_nextSibling", "_parentNode", ".fancy-selector"];
+    var currSelector = demoTip["target-selector"];
+    
+    var currIndex = selectors.indexOf(currSelector);
+    
+    demoTip["target-selector"] = selectors[(currIndex+1) % selectors.length];
+    updateSelectorBox();
+}
+
+function updateSelectorBox(){
+    var statusBox = document.getElementById("curr-selector-status");
+    
+    statusBox.textContent = demoTip["target-selector"];
+}
+
+function updateOrientationBox(){
+    var statusBox = document.getElementById("curr-orient-status");
+    
+    statusBox.textContent = demoTip.orientation;
+}
 </script>
 </body>
 </html>

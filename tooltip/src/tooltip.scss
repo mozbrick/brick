@@ -1,8 +1,112 @@
 @import "../../custommixins";
 
+@function attrValNotInList($attrName, $invalidList){
+    $finalSelector: "";
+    
+    @each $invalidVal in $invalidList{
+        $finalSelector: "#{$finalSelector}:not([#{$attrName}=#{$invalidVal}])"
+    }
+    
+    @return $finalSelector;
+}
+
+
+@mixin setTriangleBorders($direction){
+    $remainOrient: "";
+    $removeOrient: "";
+    @if $direction == up{
+        $remainOrient: bottom;
+    }
+    @else if $direction == down{
+        $remainOrient: top;
+    }
+    @else if $direction == left{
+        $remainOrient: right;
+    }
+    @else if $direction == right{
+        $remainOrient: left;
+    }
+    
+    @if $remainOrient != "" {
+        @each $orient in (top, left, right, bottom){
+            @if $orient != $remainOrient{
+                border-#{$orient}-color: transparent !important;
+            }
+        }
+    }
+}
+
+
+// the only thing this should do is positioning
 x-tooltip{
+    display: inline-block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    
+    visibility: hidden;
+    opacity: 0;
+    
+    @include animated(opacity, 0.2s);
+    
+    &[visible]{
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+// let user style this to style the balloon
+x-tooltip > .tooltip-content{
+    z-index: 1;
+    @include boxSizing(border-box);
+}
+
+x-tooltip > .tooltip-arrow{
+    @include boxSizing(border-box);
+    z-index: 2;
     position: absolute;
     
+    margin: 0px;
+    padding: 0px;
     
+    vertical-align: top;
+    display: inline-block;
+    
+    border-style: solid;
+    border-width: .5em; // default
+    border-color: inherit; // default
+    
+    // default to pointing down
+    &#{attrValNotInList(arrow-direction, (up, left, right))}{
+        top: 100%; // default positions to be overridden later
+        left: 40%;
+        
+        @include setTriangleBorders("down");
+        border-bottom-width: 0px !important;
+    }
+    
+    &[arrow-direction=up]{
+        bottom: 100%;
+        left: 40%;
+        
+        @include setTriangleBorders("up");
+        border-top-width: 0px !important;
+    }
+    
+    &[arrow-direction=left]{
+        right: 100%;
+        top: 40%;
+        
+        @include setTriangleBorders("left");
+        border-left-width: 0px !important;
+    }
+    
+    &[arrow-direction=right]{
+        left: 100%;
+        top: 40%;
+        
+        @include setTriangleBorders("right");
+        border-right-width: 0px !important;
+    }
 }
 
