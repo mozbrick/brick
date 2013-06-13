@@ -91,7 +91,7 @@
 </head>
 <body>
 <h1>X-ToolTip demo</h1>
-
+<span class="fancy-selector">Out of scope ".fancy-selector" box</span>
 <div id="container">
     parent node
     <button id="prev-sib">
@@ -101,7 +101,7 @@
     </button>
     <x-tooltip id="demoTip" orientation="above" target-selector=".fancy-selector">
         Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
-        <br/>Lorem ipsum
+        <br/><a href="http://google.com">Lorem ipsum</a><span class="fancy-selector">buttes</span> 
     </x-tooltip>
     <div id="next-sib">
         <h1>Next sibling</h1>
@@ -113,16 +113,18 @@
     </div>
 </div>
 
-<span class="fancy-selector">Out of scope ".fancy-selector" box</span>
 
 <div id="controls">
     <button onClick="changeOrientation()">Change orientation</button>
     <button onClick="toggleVisible()">Toggle visible</button>
     <button onClick="toggleSelector()">Toggle selector type</button>
+    <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
     <br/>
     <span>Current orientation = <span id="curr-orient-status"></span></span>
+    <br/>
+    <span>Current trigger style = <span id="curr-trigger-style-status"></span></span>
 </div>
 <script>
 var demoTip;
@@ -130,6 +132,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
     demoTip = document.getElementById("demoTip");
     updateSelectorBox();
     updateOrientationBox();
+    updateTriggerStyleBox();
 });
 
 function changeOrientation(){
@@ -156,6 +159,16 @@ function toggleSelector(){
     updateSelectorBox();
 }
 
+function toggleTriggerStyle(){
+    var styles = ["hover"];
+    var currStyle = demoTip["trigger-style"];
+    
+    var currIndex = styles.indexOf(currStyle);
+    
+    demoTip["trigger-style"] = styles[(currIndex+1) % styles.length];
+    updateSelectorBox();
+}
+
 function updateSelectorBox(){
     var statusBox = document.getElementById("curr-selector-status");
     
@@ -166,6 +179,12 @@ function updateOrientationBox(){
     var statusBox = document.getElementById("curr-orient-status");
     
     statusBox.textContent = demoTip.orientation;
+}
+
+function updateTriggerStyleBox(){
+    var triggerStyleBox = document.getElementById("curr-trigger-style-status");
+    
+    triggerStyleBox.textContent = demoTip["trigger-style"];
 }
 </script>
 </body>

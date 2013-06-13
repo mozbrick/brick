@@ -1,11 +1,11 @@
 (function(){
-    var tooltipOrientToArrowDirMap = {
+    var TOOLTIP_ORIENT_ARROW_DIR_MAP = {
         "onleft": "right",
         "onright": "left",
         "below": "up",
         "above": "down"
     };
-
+    
     function _selectorToElems(tooltip, selector){
         if(selector === "_previousSibling"){
             return (tooltip.previousElementSibling) ? [tooltip.previousElementSibling] : [];
@@ -40,16 +40,26 @@
     //   listener attached to it and ignores any mouseouts that exit to 
     //   somewhere that is still within the listening container element;
     //   emulates jQuery's mouseleave polyfill
+    // - acts normally for any non-mouseover/mouseleave events
     //
     // TL;DR edition: creates a function that doesn't fire a callback if the
     // event is simply triggered by moving between children of the same 
-    // listening element
-    function makeIgnoreBetweenChildrenFn(callback){
+    // listening element in order to simulate the mouseenter/mouseleave events
+    // in jQuery
+    function mkSimulateMouseEnterLeaveFn(callback){
         return function(e){
-            var listeningElem = e.currentTarget;
-            var relElem = e.relatedTarget || e.toElement;
-            
-            if(!hasParentNode(relElem, listeningElem)){
+            var eventType = e.type.toLowerCase();
+            if(eventType === "mouseover" || eventType === "mouseleave"){
+                var listeningElem = e.currentTarget;
+                var relElem = e.relatedTarget || e.toElement;
+                
+                if(!hasParentNode(relElem, listeningElem)){
+                    callback(e);
+                }
+            }
+            // if not a event where we need to ignore hovers, don't change
+            // how the callback gets called
+            else{
                 callback(e);
             }
         };
@@ -191,12 +201,12 @@
                                 origTooltipHeight - arrowHeight
                               ) + "px";
         }
-        
     }
     
     function _showTooltip(tooltip, targetElem){
+        console.log("show called");
         var orient = tooltip.orientation;
-        if(!(orient in tooltipOrientToArrowDirMap)){
+        if(!(orient in TOOLTIP_ORIENT_ARROW_DIR_MAP)){
             // TODO: auto placement algorithm 
         }
         else{
@@ -206,6 +216,7 @@
     }
     
     function _hideTooltip(tooltip, targetElem){
+        console.log("hide called");
         tooltip.removeAttribute("visible");
         tooltip.style.left = "";
         tooltip.style.top = "";
@@ -217,23 +228,97 @@
         arrow.style.bottom = "";
     }
     
+    // because removing event listeners requires references to the same exact
+    // functions that were initially assigned, we create the functions we will
+    // be using for event listeners at tooltip creation and store them here
+    //
+    // format:
+    //   <trigger style> :{
+    //       <element type>: {
+    //            <event type> : event listener callback function
+    //       }
+    //   }
+    //
+    // (trigger styles indicate how the user wants tooltips to be triggered.
+    //  for example, by hovering over element or by clicking on event)
+    // 
+    // SPECIAL ELEMENT TYPES: 
+    //      "_target" => any of the elements selected by tooltip.xtag.triggeringElems
+    //      "_tooltip" => the tooltip element itself
+    function _makeEventListenerData(tooltip){
+        return {
+            "hover": {
+                "_target":{
+                    "mouseover": mkSimulateMouseEnterLeaveFn(function(e){
+                                    _showTooltip(tooltip, e.currentTarget);
+                                    return false;
+                                 }),
+                    "mouseout": mkSimulateMouseEnterLeaveFn(function(e){
+                                   _hideTooltip(tooltip, e.currentTarget);
+                                    return false;
+                                })
+                }
+            }
+        };
+    }
+    
+    // get the <eventType> : <listener callback functions> 
+    // data map corresponding to the given trigger style and element type
+    function _getElemTypeListeners(tooltip, currTriggerStyle, elemType){
+        var eventListenerData = tooltip.xtag.eventListenerData;
+        
+        if(!(currTriggerStyle in eventListenerData)){
+            throw "invalid trigger style " + currTriggerStyle;
+        }
+        
+        var triggerStyleData = eventListenerData[currTriggerStyle];
+        if(!(elemType in triggerStyleData)){
+            console.log("no event listeners found for", elemType, 
+                        "in the", currTriggerStyle, "style");
+            return;
+        }
+        return triggerStyleData[elemType];
+    }
+    
+    // remove any event listeners corresponding to the given trigger style 
+    // and element type from the given listening element
+    function _removeTriggerStyleListeners(tooltip, listeningElem, 
+                                          currTriggerStyle, elemType){
+        
+        var targetEventListeners = _getElemTypeListeners(
+                                        tooltip, currTriggerStyle, elemType
+                                   );
+                                   
+        for(var eventType in targetEventListeners){
+            console.log("unbound", eventType, "from", currTriggerStyle, "style from", listeningElem);
+            listeningElem.removeEventListener(
+                eventType, targetEventListeners[eventType]
+            );
+        }
+    }                                    
+    
+    // attach any event listeners corresponding to the given trigger style 
+    // and element type from the given listening element
+    function _addTriggerStyleListeners(tooltip, listeningElem, 
+                                       currTriggerStyle, elemType){
+        var targetEventListeners = _getElemTypeListeners(
+                                        tooltip, currTriggerStyle, elemType
+                                   );
+        for(var eventType in targetEventListeners){
+            console.log("bound", eventType, "from", currTriggerStyle, "style to", listeningElem);
+            listeningElem.addEventListener(
+                eventType, targetEventListeners[eventType]
+            );
+        }
+    }
+    
     xtag.register("x-tooltip", {
         lifecycle:{
             created: function(){
                 console.log("created");
                 this.xtag.triggeringElems = [];
-                
-                var tooltip = this;
-                this.xtag.targetShowTipFn = makeIgnoreBetweenChildrenFn(function(e){
-                    _showTooltip(tooltip, e.currentTarget);
-                    return false;
-                });
-                
-                this.xtag.targetHideTipFn = makeIgnoreBetweenChildrenFn(function(e){
-                    _hideTooltip(tooltip, e.currentTarget);
-                    return false;
-                });
-                
+                this.xtag.currTriggerStyle = "hover";
+                this.xtag.eventListenerData = _makeEventListenerData(this)
                 
                 // create content elements (allows user to style separately)
                 this.xtag.contentEl = document.createElement("div");
@@ -253,15 +338,18 @@
         events: {
         },
         accessors: {
+            // sets the placement of the tooltip in relation to a target element
             "orientation":{
                 attribute: {},
+                // when orientation of tooltip is set, also set direction of 
+                // arrow pointer
                 set: function(newOrientation){
                     newOrientation = newOrientation.toLowerCase();
                     var arrow = this.querySelector(".tooltip-arrow");
                     
                     var newArrowDir = null;
-                    if(newOrientation in tooltipOrientToArrowDirMap){
-                        newArrowDir = tooltipOrientToArrowDirMap[newOrientation];
+                    if(newOrientation in TOOLTIP_ORIENT_ARROW_DIR_MAP){
+                        newArrowDir = TOOLTIP_ORIENT_ARROW_DIR_MAP[newOrientation];
                     }
                     
                     arrow.setAttribute("arrow-direction", newArrowDir);
@@ -272,30 +360,56 @@
                 attribute: {boolean: true},
                 set: function(isVisible){}
             },
-        
+            
+            "trigger-style": {
+                attribute: {},
+                get: function(){
+                    return this.xtag.currTriggerStyle;
+                },
+                set: function(newTriggerStyle){
+                    if(!(newTriggerStyle in this.xtag.eventListenerData)){
+                        throw "attempted to set invalid trigger style " + newTriggerStyle;
+                    }
+                    this.xtag.currTriggerStyle = newTriggerStyle;
+                }
+            },
+            
             // selector must be in relation to parent node of the tooltip
             // ie: can only select tooltip's siblings or deeper in the DOM tree
             "target-selector": {
                 attribute: {},
                 set: function(newSelector){
-                    console.log("selector setter called");
-                    var showFn = this.xtag.targetShowTipFn;
-                    var hideFn = this.xtag.targetHideTipFn;
+                    console.log("target selector changed to ", newSelector);
+                    var eventListenerData = this.xtag.eventListenerData;
+                    var tooltip = this;
+                    var currTriggerStyle = this.xtag.currTriggerStyle;
                     
-                    // unbind elements
+                    // unbind _all_ events from elements (including those not
+                    // used by current trigger style, to ensure clean slate)
                     this.xtag.triggeringElems.forEach(function(oldTriggerElem){
-                        console.log("unbound from", oldTriggerElem);
-                        oldTriggerElem.removeEventListener("mouseover", showFn);
-                        oldTriggerElem.removeEventListener("mouseout", hideFn);
+                        if(hasParentNode(oldTriggerElem, tooltip)){
+                            return;
+                        }
+                        for(var triggerStyle in eventListenerData){
+                            _removeTriggerStyleListeners(tooltip, oldTriggerElem, 
+                                                        triggerStyle, "_target");
+                        }
+                        
                         oldTriggerElem.removeAttribute("x-tooltip-targeted");
                     });
                 
-                    // bind new element listeners
+                    // bind new element listeners, but only those needed for the
+                    // current trigger style
                     var newTriggerElems = _selectorToElems(this, newSelector);
                     newTriggerElems.forEach(function(newTriggerElem){
-                        console.log("bound to", newTriggerElem);
-                        newTriggerElem.addEventListener("mouseover", showFn);
-                        newTriggerElem.addEventListener("mouseout", hideFn);
+                        // don't give the tooltip itself the ability to 
+                        // trigger itself
+                        if(hasParentNode(newTriggerElem, tooltip)){
+                            return;
+                        }
+                        _addTriggerStyleListeners(tooltip, newTriggerElem, 
+                                                  currTriggerStyle, "_target");
+                        
                         newTriggerElem.setAttribute("x-tooltip-targeted", true);
                     });
                     this.xtag.triggeringElems = newTriggerElems;
