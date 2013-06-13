@@ -81,36 +81,36 @@ x-tooltip > .tooltip-arrow{
     // default to pointing down
     &#{attrValNotInList(arrow-direction, (up, left, right))}{
         top: 100%; // default positions to be overridden later
-        left: 40%;
+        left: 50%;
         
-        @include transformed(rotate(45deg) translateY(-60%));
+        @include transformed(translateY(-45%) rotate(45deg));
         border-top-width: 0px !important;
         border-left-width: 0px !important;
     }
     
     &[arrow-direction=up]{
         bottom: 100%;
-        left: 40%;
+        left: 50%;
         
-        @include transformed(rotate(45deg) translateY(60%));
+        @include transformed(translateY(45%) rotate(45deg));
         border-bottom-width: 0px !important;
         border-right-width: 0px !important;
     }
     
     &[arrow-direction=left]{
         right: 100%;
-        top: 40%;
+        top: 50%;
         
-        @include transformed(rotate(45deg) translateX(60%));
+        @include transformed(translateX(45%) rotate(45deg));
         border-top-width: 0px !important;
         border-right-width: 0px !important;
     }
     
     &[arrow-direction=right]{
         left: 100%;
-        top: 40%;
+        top: 50%;
         
-        @include transformed(rotate(45deg) translateX(-60%));
+        @include transformed(translateX(-45%) rotate(45deg));
         border-bottom-width: 0px !important;
         border-left-width: 0px !important;
     }

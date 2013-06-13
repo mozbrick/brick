@@ -117,7 +117,8 @@
         var origTooltipWidth = tooltip.offsetWidth;
         var origTooltipHeight = tooltip.offsetHeight;
         
-        // TODO: more intelligent rotation angle calculation
+        // TODO: more intelligent rotation angle calculation; currently
+        // just assumes rotation is 45 degrees
         var arrowRotationDegs = 45;
         var arrowDims = getRotationDims(arrow.offsetWidth, arrow.offsetHeight, 
                                         arrowRotationDegs);
@@ -130,57 +131,67 @@
             "top": targetContainerOffset.top + (targetHeight - origTooltipHeight)/2
         };
         
-        // eugh, gotta clean these calculations up later
+        
+        var getAlignedArrowCoords = function(tooltipTop, tooltipLeft){
+            return {
+                "left": (targetWidth - arrowWidth)/2 + 
+                        targetContainerOffset.left - tooltipLeft,
+                "top":  (targetHeight - arrowHeight)/2 + 
+                         targetContainerOffset.top - newTop
+            };
+        };
+        
+        // messy calculations for aligning the tooltip and the arrow
         var newTop;
         var newLeft;
+        var maxTop;
+        var maxLeft;
         if(orientation === "above"){
             newTop = targetContainerOffset.top - origTooltipHeight - arrowHeight;
             newLeft = centerAlignCoords.left;
-            
-            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight - arrowHeight);
-            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth);
-            
-            tooltip.style.top = newTop + "px";
-            tooltip.style.left = newLeft + "px";
-            arrow.style.left = (targetWidth-arrowWidth)/2 + 
-                                targetContainerOffset.left - newLeft + "px";
+            maxTop = containerHeight - origTooltipHeight - arrowHeight;
+            maxLeft = containerWidth - origTooltipWidth;
         }
         else if(orientation === "below"){
             newTop = targetContainerOffset.top + targetHeight + arrowHeight;
             newLeft = centerAlignCoords.left;
-            
-            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight);
-            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth);
-            
-            tooltip.style.top = newTop + "px";
-            tooltip.style.left = newLeft + "px";
-            arrow.style.left = (targetWidth-arrowWidth)/2 + targetContainerOffset.left - newLeft + "px";
+            maxTop = containerHeight - origTooltipHeight;
+            maxLeft = containerWidth - origTooltipWidth;
         }
         else if(orientation === "onleft"){
             newTop = centerAlignCoords.top;
             newLeft = targetContainerOffset.left - origTooltipWidth - arrowWidth;
-            
-            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight);
-            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth - arrowWidth);
-            
-            tooltip.style.top = newTop + "px";
-            tooltip.style.left = newLeft + "px";
-            arrow.style.top = (targetHeight-arrowHeight)/2 + targetContainerOffset.top - newTop + "px";
+            maxTop = containerHeight - origTooltipHeight;
+            maxLeft = containerWidth - origTooltipWidth - arrowWidth;
         }
         else if(orientation === "onright"){
             newTop = centerAlignCoords.top;
             newLeft = targetContainerOffset.left + targetWidth + arrowWidth;
-        
-            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight);
-            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth);
-        
-            tooltip.style.top = newTop + "px";
-            tooltip.style.left = newLeft + "px";
-            arrow.style.top = (targetHeight-arrowHeight)/2 + targetContainerOffset.top - newTop + "px";
+            maxTop = containerHeight - origTooltipHeight;
+            maxLeft = containerWidth - origTooltipWidth;
         }
         else{
             throw "invalid orientation " + orientation;
         }
+        
+        newTop = constrainNum(newTop, 0, maxTop);
+        newLeft = constrainNum(newLeft, 0, maxLeft);
+        tooltip.style.top = newTop + "px";
+        tooltip.style.left = newLeft + "px";
+        var arrowCoords = getAlignedArrowCoords(newTop, newLeft);
+        if(orientation === "above" || orientation === "below"){
+            arrow.style.left = constrainNum(
+                                 arrowCoords.left, 0, 
+                                 origTooltipWidth - arrowWidth
+                               ) + "px";
+        }
+        else{
+            arrow.style.top = constrainNum(
+                                arrowCoords.top, 0, 
+                                origTooltipHeight - arrowHeight
+                              ) + "px";
+        }
+        
     }
     
     function _showTooltip(tooltip, targetElem){

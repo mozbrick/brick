@@ -87,41 +87,41 @@ x-tooltip > .tooltip-arrow {
   background: inherit; }
   x-tooltip > .tooltip-arrow:not([arrow-direction=up]):not([arrow-direction=left]):not([arrow-direction=right]) {
     top: 100%;
-    left: 40%;
-    transform: rotate(45deg) translateY(-60%);
-    -ms-transform: rotate(45deg) translateY(-60%);
-    -moz-transform: rotate(45deg) translateY(-60%);
-    -webkit-transform: rotate(45deg) translateY(-60%);
-    -o-transform: rotate(45deg) translateY(-60%);
+    left: 50%;
+    transform: translateY(-45%) rotate(45deg);
+    -ms-transform: translateY(-45%) rotate(45deg);
+    -moz-transform: translateY(-45%) rotate(45deg);
+    -webkit-transform: translateY(-45%) rotate(45deg);
+    -o-transform: translateY(-45%) rotate(45deg);
     border-top-width: 0px !important;
     border-left-width: 0px !important; }
   x-tooltip > .tooltip-arrow[arrow-direction=up] {
     bottom: 100%;
-    left: 40%;
-    transform: rotate(45deg) translateY(60%);
-    -ms-transform: rotate(45deg) translateY(60%);
-    -moz-transform: rotate(45deg) translateY(60%);
-    -webkit-transform: rotate(45deg) translateY(60%);
-    -o-transform: rotate(45deg) translateY(60%);
+    left: 50%;
+    transform: translateY(45%) rotate(45deg);
+    -ms-transform: translateY(45%) rotate(45deg);
+    -moz-transform: translateY(45%) rotate(45deg);
+    -webkit-transform: translateY(45%) rotate(45deg);
+    -o-transform: translateY(45%) rotate(45deg);
     border-bottom-width: 0px !important;
     border-right-width: 0px !important; }
   x-tooltip > .tooltip-arrow[arrow-direction=left] {
     right: 100%;
-    top: 40%;
-    transform: rotate(45deg) translateX(60%);
-    -ms-transform: rotate(45deg) translateX(60%);
-    -moz-transform: rotate(45deg) translateX(60%);
-    -webkit-transform: rotate(45deg) translateX(60%);
-    -o-transform: rotate(45deg) translateX(60%);
+    top: 50%;
+    transform: translateX(45%) rotate(45deg);
+    -ms-transform: translateX(45%) rotate(45deg);
+    -moz-transform: translateX(45%) rotate(45deg);
+    -webkit-transform: translateX(45%) rotate(45deg);
+    -o-transform: translateX(45%) rotate(45deg);
     border-top-width: 0px !important;
     border-right-width: 0px !important; }
   x-tooltip > .tooltip-arrow[arrow-direction=right] {
     left: 100%;
-    top: 40%;
-    transform: rotate(45deg) translateX(-60%);
-    -ms-transform: rotate(45deg) translateX(-60%);
-    -moz-transform: rotate(45deg) translateX(-60%);
-    -webkit-transform: rotate(45deg) translateX(-60%);
-    -o-transform: rotate(45deg) translateX(-60%);
+    top: 50%;
+    transform: translateX(-45%) rotate(45deg);
+    -ms-transform: translateX(-45%) rotate(45deg);
+    -moz-transform: translateX(-45%) rotate(45deg);
+    -webkit-transform: translateX(-45%) rotate(45deg);
+    -o-transform: translateX(-45%) rotate(45deg);
     border-bottom-width: 0px !important;
     border-left-width: 0px !important; }
