@@ -67,6 +67,11 @@
             box-shadow: 1px 1px 10px goldenrod;
         }
         
+        [x-tooltip-targeted=click]:hover{
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
         /** example usage: attaching a tooltip indicator to elements **/
         [x-tooltip-targeted]:after{
             content: "?";
@@ -116,7 +121,7 @@
 
 <div id="controls">
     <button onClick="changeOrientation()">Change orientation</button>
-    <button onClick="toggleVisible()">Toggle visible</button>
+    <button onClick="toggleVisible(event)">Toggle visible (debug, not intended for API)</button>
     <button onClick="toggleSelector()">Toggle selector type</button>
     <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
     <br/>
@@ -145,8 +150,9 @@ function changeOrientation(){
     updateOrientationBox();
 }
 
-function toggleVisible(){
+function toggleVisible(e){
     demoTip.visible = !demoTip.visible;
+    e.stopPropagation();
 }
 
 function toggleSelector(){
@@ -160,13 +166,16 @@ function toggleSelector(){
 }
 
 function toggleTriggerStyle(){
-    var styles = ["hover"];
+    var styles = ["click", "hover"];
     var currStyle = demoTip["trigger-style"];
     
     var currIndex = styles.indexOf(currStyle);
     
     demoTip["trigger-style"] = styles[(currIndex+1) % styles.length];
-    updateSelectorBox();
+    
+    
+    console.log(currStyle, currIndex, styles[(currIndex+1) % styles.length]);
+    updateTriggerStyleBox();
 }
 
 function updateSelectorBox(){

@@ -6,6 +6,102 @@
         "above": "down"
     };
     
+    // a simple struct to store all information needed to add and remove
+    // a particular event listener
+    function CachedListener(elem, eventType, listenerFn, triggerStyle){
+        this.eventType = eventType;
+        this.listenerFn = listenerFn;
+        this.elem = elem;
+        this.triggerStyle = triggerStyle;
+        this.isAttached = false;
+    }
+    
+    CachedListener.prototype.attachListener = function(){
+        if(this.isAttached === false){
+            this.elem.addEventListener(this.eventType, this.listenerFn);
+            console.log("bound '"+this.triggerStyle+"'-style "+ 
+                        this.eventType+" event to", this.elem);
+            this.isAttached = true;
+        }
+    };
+    
+    CachedListener.prototype.removeListener = function(){
+        if(this.isAttached === true){
+            this.elem.removeEventListener(this.eventType, this.listenerFn);
+            console.log("unbound '"+this.triggerStyle+"'-style "+ 
+                        this.eventType+" event from", this.elem);
+            this.isAttached = false;
+        }
+    };
+    
+    // each trigger style is mapped to a function that returns a list of
+    // CachedListeners that the tooltip would need to attach
+    // NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
+    var TRIGGER_STYLE_GETLISTENERS = {
+        "hover": function(tooltip, triggerElems){
+            var createdListeners = [];
+            
+            var showTipFn = mkSimulateMouseEnterLeaveFn(function(e){
+                _showTooltip(tooltip, e.currentTarget);
+                e.stopPropagation();
+            });
+            var hideTipFn = mkSimulateMouseEnterLeaveFn(function(e){
+                _hideTooltip(tooltip);
+                e.stopPropagation();
+            });
+            
+            triggerElems.forEach(function(triggerElem){
+                var enterListener = new CachedListener(triggerElem, "mouseover",
+                                                       showTipFn, "hover");
+                var exitListener = new CachedListener(triggerElem, "mouseout", 
+                                                      hideTipFn, "hover");
+                createdListeners.push(enterListener);
+                createdListeners.push(exitListener);
+            });
+            
+            return createdListeners;
+        },
+        "click": function(tooltip, triggerElems){
+            var createdListeners = [];
+            
+            var targetClickFn = function(e){
+                if(tooltip.hasAttribute("visible") && 
+                   tooltip.xtag.currTargetElem === e.currentTarget)
+                {
+                    _hideTooltip(tooltip);
+                }
+                else{
+                    _showTooltip(tooltip, e.currentTarget);
+                }
+                console.log("target click");
+                e.stopPropagation();
+            };
+            
+            triggerElems.forEach(function(triggerElem){
+                var targetListener = new CachedListener(triggerElem, "click", 
+                                                        targetClickFn, "click");
+                createdListeners.push(targetListener);
+            });
+            
+            createdListeners.push(
+                new CachedListener(document.body, "click", function(e){
+                                      _hideTooltip(tooltip);
+                                      console.log("body click");
+                                   }, "click")
+            );
+            
+            // stop propagation on clicking the tooltip so we dont just
+            // immediately close it
+            createdListeners.push(
+                new CachedListener(tooltip, "click", function(e){
+                    e.stopPropagation();
+                }, "click")
+            );
+            return createdListeners;
+        }
+    };
+    
+    
     function _selectorToElems(tooltip, selector){
         if(selector === "_previousSibling"){
             return (tooltip.previousElementSibling) ? [tooltip.previousElementSibling] : [];
@@ -213,103 +309,62 @@
             _positionTooltip(tooltip, targetElem, orient);
         }
         tooltip.setAttribute("visible", true);
+        tooltip.xtag.currTargetElem = targetElem;
+        
+        xtag.fireEvent(tooltip, "tooltipshown", {
+            "targetElem": targetElem
+        });
     }
     
-    function _hideTooltip(tooltip, targetElem){
+    function _hideTooltip(tooltip){
         console.log("hide called");
         tooltip.removeAttribute("visible");
-        tooltip.style.left = "";
-        tooltip.style.top = "";
+        tooltip.xtag.currTargetElem = null;
         
-        var arrow = tooltip.xtag.arrowEl;
-        arrow.style.left = "";
-        arrow.style.right = "";
-        arrow.style.left = "";
-        arrow.style.bottom = "";
+        xtag.fireEvent(tooltip, "tooltiphidden");
     }
     
-    // because removing event listeners requires references to the same exact
-    // functions that were initially assigned, we create the functions we will
-    // be using for event listeners at tooltip creation and store them here
-    //
-    // format:
-    //   <trigger style> :{
-    //       <element type>: {
-    //            <event type> : event listener callback function
-    //       }
-    //   }
-    //
-    // (trigger styles indicate how the user wants tooltips to be triggered.
-    //  for example, by hovering over element or by clicking on event)
-    // 
-    // SPECIAL ELEMENT TYPES: 
-    //      "_target" => any of the elements selected by tooltip.xtag.triggeringElems
-    //      "_tooltip" => the tooltip element itself
-    function _makeEventListenerData(tooltip){
-        return {
-            "hover": {
-                "_target":{
-                    "mouseover": mkSimulateMouseEnterLeaveFn(function(e){
-                                    _showTooltip(tooltip, e.currentTarget);
-                                    return false;
-                                 }),
-                    "mouseout": mkSimulateMouseEnterLeaveFn(function(e){
-                                   _hideTooltip(tooltip, e.currentTarget);
-                                    return false;
-                                })
-                }
+    function _updateTriggers(tooltip, newTriggerElems, newTriggerStyle){
+        if(newTriggerElems === undefined || newTriggerElems === null){
+            newTriggerElems = tooltip.xtag.triggeringElems;
+        }
+        if(newTriggerStyle === undefined || newTriggerStyle === null){
+            newTriggerStyle = tooltip.xtag.currTriggerStyle;
+        }
+        
+        // remove all active cached listeners
+        var cachedListeners = tooltip.xtag.cachedListeners;
+        cachedListeners.forEach(function(cachedListener){
+            cachedListener.removeListener();
+        });
+        tooltip.xtag.cachedListeners = [];
+        
+        // clear old trigger elem attributes
+        var oldTriggerElems = tooltip.xtag.triggeringElems;
+        oldTriggerElems.forEach(function(oldTriggerElem){
+            oldTriggerElem.removeAttribute("x-tooltip-targeted");
+        });
+        
+        // bind new element listeners, but only those needed for the
+        // current trigger style
+        newTriggerElems.forEach(function(newTriggerElem){
+            if(!hasParentNode(newTriggerElem, tooltip)){
+                newTriggerElem.setAttribute("x-tooltip-targeted", 
+                                            newTriggerStyle);
             }
-        };
-    }
-    
-    // get the <eventType> : <listener callback functions> 
-    // data map corresponding to the given trigger style and element type
-    function _getElemTypeListeners(tooltip, currTriggerStyle, elemType){
-        var eventListenerData = tooltip.xtag.eventListenerData;
+        });
         
-        if(!(currTriggerStyle in eventListenerData)){
-            throw "invalid trigger style " + currTriggerStyle;
-        }
+        // get new event listeners that we'll need to attach
+        var getListenersFn = TRIGGER_STYLE_GETLISTENERS[newTriggerStyle];
+        var listeners = getListenersFn(tooltip, newTriggerElems);
         
-        var triggerStyleData = eventListenerData[currTriggerStyle];
-        if(!(elemType in triggerStyleData)){
-            console.log("no event listeners found for", elemType, 
-                        "in the", currTriggerStyle, "style");
-            return;
-        }
-        return triggerStyleData[elemType];
-    }
-    
-    // remove any event listeners corresponding to the given trigger style 
-    // and element type from the given listening element
-    function _removeTriggerStyleListeners(tooltip, listeningElem, 
-                                          currTriggerStyle, elemType){
-        
-        var targetEventListeners = _getElemTypeListeners(
-                                        tooltip, currTriggerStyle, elemType
-                                   );
-                                   
-        for(var eventType in targetEventListeners){
-            console.log("unbound", eventType, "from", currTriggerStyle, "style from", listeningElem);
-            listeningElem.removeEventListener(
-                eventType, targetEventListeners[eventType]
-            );
-        }
-    }                                    
-    
-    // attach any event listeners corresponding to the given trigger style 
-    // and element type from the given listening element
-    function _addTriggerStyleListeners(tooltip, listeningElem, 
-                                       currTriggerStyle, elemType){
-        var targetEventListeners = _getElemTypeListeners(
-                                        tooltip, currTriggerStyle, elemType
-                                   );
-        for(var eventType in targetEventListeners){
-            console.log("bound", eventType, "from", currTriggerStyle, "style to", listeningElem);
-            listeningElem.addEventListener(
-                eventType, targetEventListeners[eventType]
-            );
-        }
+        // actually attach the listener functions
+        listeners.forEach(function(listener){
+            listener.attachListener();
+        });
+        tooltip.xtag.cachedListeners = listeners;
+        tooltip.xtag.triggeringElems = newTriggerElems;
+        tooltip.xtag.currTriggerStyle = newTriggerStyle;
     }
     
     xtag.register("x-tooltip", {
@@ -317,8 +372,9 @@
             created: function(){
                 console.log("created");
                 this.xtag.triggeringElems = [];
-                this.xtag.currTriggerStyle = "hover";
-                this.xtag.eventListenerData = _makeEventListenerData(this)
+                this.xtag.currTriggerStyle = "click";
+                this.xtag.currTargetElem = null;
+                this.xtag.cachedListeners = [];
                 
                 // create content elements (allows user to style separately)
                 this.xtag.contentEl = document.createElement("div");
@@ -367,10 +423,11 @@
                     return this.xtag.currTriggerStyle;
                 },
                 set: function(newTriggerStyle){
-                    if(!(newTriggerStyle in this.xtag.eventListenerData)){
-                        throw "attempted to set invalid trigger style " + newTriggerStyle;
+                    if(!(newTriggerStyle in TRIGGER_STYLE_GETLISTENERS)){
+                        throw "invalid trigger style " + newTriggerStyle;
                     }
-                    this.xtag.currTriggerStyle = newTriggerStyle;
+                    console.log("trigger-style changed to", newTriggerStyle);
+                    _updateTriggers(this, null, newTriggerStyle)
                 }
             },
             
@@ -380,39 +437,19 @@
                 attribute: {},
                 set: function(newSelector){
                     console.log("target selector changed to ", newSelector);
-                    var eventListenerData = this.xtag.eventListenerData;
                     var tooltip = this;
-                    var currTriggerStyle = this.xtag.currTriggerStyle;
                     
-                    // unbind _all_ events from elements (including those not
-                    // used by current trigger style, to ensure clean slate)
-                    this.xtag.triggeringElems.forEach(function(oldTriggerElem){
-                        if(hasParentNode(oldTriggerElem, tooltip)){
-                            return;
+                    // filter out selected elements that are 
+                    // themselves in the tooltip
+                    var selectedElems = _selectorToElems(this, newSelector);
+                    var newTriggerElems = [];
+                    selectedElems.forEach(function(selectedElem){
+                        if(!hasParentNode(selectedElem, tooltip)){
+                            newTriggerElems.push(selectedElem);
                         }
-                        for(var triggerStyle in eventListenerData){
-                            _removeTriggerStyleListeners(tooltip, oldTriggerElem, 
-                                                        triggerStyle, "_target");
-                        }
-                        
-                        oldTriggerElem.removeAttribute("x-tooltip-targeted");
                     });
-                
-                    // bind new element listeners, but only those needed for the
-                    // current trigger style
-                    var newTriggerElems = _selectorToElems(this, newSelector);
-                    newTriggerElems.forEach(function(newTriggerElem){
-                        // don't give the tooltip itself the ability to 
-                        // trigger itself
-                        if(hasParentNode(newTriggerElem, tooltip)){
-                            return;
-                        }
-                        _addTriggerStyleListeners(tooltip, newTriggerElem, 
-                                                  currTriggerStyle, "_target");
-                        
-                        newTriggerElem.setAttribute("x-tooltip-targeted", true);
-                    });
-                    this.xtag.triggeringElems = newTriggerElems;
+                    
+                    _updateTriggers(tooltip, newTriggerElems)
                 }
             },
             
