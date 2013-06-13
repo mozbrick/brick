@@ -48,17 +48,17 @@
         #demoTip{
             border-radius: 4px;
             border: 2px solid black;
+            
+            background: orange url('cream_pixels.png') center repeat repeat;
         }
         
         #demoTip > .tooltip-content{
-            background-color: orange;
             padding: .5em;
             font-family: Courier;
         }
         
         #demoTip > .tooltip-arrow{
-            border-color: orange; /* edit arrow color */
-            /* border-width: .5em;  edit arrow size (ie: pointer length) */
+            /*background-color: orange;*/
         }
         
         /** users can apply custom styles using this attribute for anything
@@ -99,15 +99,16 @@
             <img src="http://placekitten.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" orientation="above" target-selector="_previousSibling">
+    <x-tooltip id="demoTip" orientation="above" target-selector=".fancy-selector">
         Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
+        <br/>Lorem ipsum
     </x-tooltip>
     <div id="next-sib">
         <h1>Next sibling</h1>
     </div>
     <div style="position: relative; background-color: lavender">    
         
-        <span class="fancy-selector">".fancy-selector" box</span>
+        <span class="fancy-selector">#</span>
         <span class="fancy-selector">".fancy-selector" box</span>
     </div>
 </div>

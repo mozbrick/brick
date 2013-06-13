@@ -10,32 +10,6 @@
     @return $finalSelector;
 }
 
-
-@mixin setTriangleBorders($direction){
-    $remainOrient: "";
-    $removeOrient: "";
-    @if $direction == up{
-        $remainOrient: bottom;
-    }
-    @else if $direction == down{
-        $remainOrient: top;
-    }
-    @else if $direction == left{
-        $remainOrient: right;
-    }
-    @else if $direction == right{
-        $remainOrient: left;
-    }
-    
-    @if $remainOrient != "" {
-        @each $orient in (top, left, right, bottom){
-            @if $orient != $remainOrient{
-                border-#{$orient}-color: transparent !important;
-            }
-        }
-    }
-}
-
 // responsible for positioning;
 // the only user styling that should be applied here is border
 x-tooltip{
@@ -46,7 +20,6 @@ x-tooltip{
     padding: 0;
     
     z-index: 999;
-    //white-space: nowrap;
     overflow: visible;
     visibility: hidden;
     
@@ -73,58 +46,73 @@ x-tooltip{
 
 // let user style this to style the balloon
 x-tooltip > .tooltip-content{
+    position: relative;
+    z-index: 2;
     display: block;
-    z-index: 1;
     overflow: hidden;
+    padding: .5em;
     @include boxSizing(border-box);
 }
 
 x-tooltip > .tooltip-arrow{
+    z-index: 1;
     @include boxSizing(border-box);
-    z-index: 2;
     position: absolute;
     
     margin: 0px;
     padding: 0px;
     
     vertical-align: top;
-    display: inline-block;
+    display: block;
     
-    border-style: solid;
-    border-width: .75em; // default
-    border-color: inherit; // default
+    // override arrow size by modifying these together;
+    // may also need to mess with transforms to line things up
+    // (remember to preserve the rotate(45deg) !
+    width: 1em;
+    height: 1em;
+    
+    // default: shares these properties with the tooltip itself
+    // can be overridden directly by using .tooltip-arrow class as well
+    border-style: inherit;
+    border-width: inherit; 
+    border-color: inherit; 
+    background: inherit;
     
     // default to pointing down
     &#{attrValNotInList(arrow-direction, (up, left, right))}{
         top: 100%; // default positions to be overridden later
         left: 40%;
         
-        @include setTriangleBorders("down");
-        border-bottom-width: 0px !important;
+        @include transformed(rotate(45deg) translateY(-60%));
+        border-top-width: 0px !important;
+        border-left-width: 0px !important;
     }
     
     &[arrow-direction=up]{
         bottom: 100%;
         left: 40%;
         
-        @include setTriangleBorders("up");
-        border-top-width: 0px !important;
+        @include transformed(rotate(45deg) translateY(60%));
+        border-bottom-width: 0px !important;
+        border-right-width: 0px !important;
     }
     
     &[arrow-direction=left]{
         right: 100%;
         top: 40%;
         
-        @include setTriangleBorders("left");
-        border-left-width: 0px !important;
+        @include transformed(rotate(45deg) translateX(60%));
+        border-top-width: 0px !important;
+        border-right-width: 0px !important;
     }
     
     &[arrow-direction=right]{
         left: 100%;
         top: 40%;
         
-        @include setTriangleBorders("right");
-        border-right-width: 0px !important;
+        @include transformed(rotate(45deg) translateX(-60%));
+        border-bottom-width: 0px !important;
+        border-left-width: 0px !important;
     }
 }
 
