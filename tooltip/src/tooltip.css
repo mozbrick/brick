@@ -1,14 +1,16 @@
 x-tooltip {
-  display: inline-block;
+  display: block;
   position: absolute;
   margin: 0;
   padding: 0;
+  z-index: 999;
+  overflow: visible;
   visibility: hidden;
   opacity: 0;
-  transition-property: opacity;
-  -webkit-transition-property: opacity;
-  -moz-transition-property: opacity;
-  -o-transition-property: opacity;
+  transition-property: transform, opacity;
+  -webkit-transition-property: -webkit-transform, opacity;
+  -moz-transition-property: -moz-transform, opacity;
+  -o-transition-property: -o-transform, opacity;
   transition-duration: 0.2s;
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;
@@ -20,13 +22,43 @@ x-tooltip {
   -webkit-transition-delay: 0s;
   -moz-transition-delay: 0s;
   -o-transition-delay: 0s;
-  transition-delay: 0s; }
+  transition-delay: 0s;
+  transform: translateY(10px);
+  -ms-transform: translateY(10px);
+  -moz-transform: translateY(10px);
+  -webkit-transform: translateY(10px);
+  -o-transform: translateY(10px); }
+  x-tooltip[orientation=below] {
+    transform: translateY(-10px);
+    -ms-transform: translateY(-10px);
+    -moz-transform: translateY(-10px);
+    -webkit-transform: translateY(-10px);
+    -o-transform: translateY(-10px); }
+  x-tooltip[orientation=onleft] {
+    transform: translateX(10px);
+    -ms-transform: translateX(10px);
+    -moz-transform: translateX(10px);
+    -webkit-transform: translateX(10px);
+    -o-transform: translateX(10px); }
+  x-tooltip[orientation=onright] {
+    transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -webkit-transform: translateX(-10px);
+    -o-transform: translateX(-10px); }
   x-tooltip[visible] {
+    visibility: visible;
     opacity: 1;
-    visibility: visible; }
+    transform: none;
+    -ms-transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none; }
 
 x-tooltip > .tooltip-content {
+  display: block;
   z-index: 1;
+  overflow: hidden;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
@@ -46,7 +78,7 @@ x-tooltip > .tooltip-arrow {
   vertical-align: top;
   display: inline-block;
   border-style: solid;
-  border-width: .5em;
+  border-width: .75em;
   border-color: inherit; }
   x-tooltip > .tooltip-arrow:not([arrow-direction=up]):not([arrow-direction=left]):not([arrow-direction=right]) {
     top: 100%;

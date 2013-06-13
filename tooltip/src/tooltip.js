@@ -1,16 +1,21 @@
 (function(){
+    var tooltipOrientToArrowDirMap = {
+        "onleft": "right",
+        "onright": "left",
+        "below": "up",
+        "above": "down"
+    };
+
     function _selectorToElems(tooltip, selector){
-        if(selector === "_parentNode"){
-            return (tooltip.parentNode) ? [tooltip.parentNode] : [];
-        }
-        else if(selector === "_previousSibling"){
+        if(selector === "_previousSibling"){
             return (tooltip.previousElementSibling) ? [tooltip.previousElementSibling] : [];
         }
         else if(selector === "_nextSibling"){
             return (tooltip.nextElementSibling) ? [tooltip.nextElementSibling] : [];
         }
         else{
-            return xtag.query(document, selector);
+            var parent = (tooltip.parentNode) ? tooltip.parentNode : document;
+            return xtag.query(parent, selector);
         }
     }
 
@@ -42,22 +47,144 @@
     function makeIgnoreBetweenChildrenFn(callback){
         return function(e){
             var listeningElem = e.currentTarget;
-            var fromElem = e.relatedTarget || event.toElement;
+            var relElem = e.relatedTarget || e.toElement;
             
-            if(!hasParentNode(fromElem, listeningElem)){
+            if(!hasParentNode(relElem, listeningElem)){
                 callback(e);
             }
         };
     }
     
-    function _showTooltip(tooltip, e){
-        console.log("show", tooltip, e);
+    function getPageOffset(elem){
+        var left = 0;
+        var top = 0;
+        
+        while(elem.offsetParent){
+            left += elem.offsetLeft;
+            top += elem.offsetTop;
+            
+            elem = elem.offsetParent;
+        }
+        
+        return {
+            "left": left,
+            "top": top
+        };
+    }
+    
+    function constrainNum(num, min, max){
+        var output = num;
+        output = (min !== undefined) ? Math.max(min, output) : output;
+        output = (max !== undefined) ? Math.min(max, output) : output;
+        return output;
+    }    
+    
+    function _positionTooltip(tooltip, targetElem, orientation){
+        var offsetContainer = (tooltip.offsetParent) ? 
+                                    tooltip.offsetParent : tooltip.parentNode;
+        
+        var arrow = tooltip.xtag.arrowEl;
+        tooltip.style.top = "";
+        tooltip.style.left = "";
+        arrow.style.top = "";
+        arrow.style.left = "";
+        
+        var targetPageOffset = getPageOffset(targetElem);
+        var containerPageOffset = getPageOffset(offsetContainer);
+        
+        var targetLocalOffset = {
+            "top": targetPageOffset.top - containerPageOffset.top,
+            "left": targetPageOffset.left - containerPageOffset.left
+        };
+        
+        var containerWidth = offsetContainer.offsetWidth;
+        var containerHeight = offsetContainer.offsetHeight;
+        var targetWidth = targetElem.offsetWidth;
+        var targetHeight = targetElem.offsetHeight;
+        var origTooltipWidth = tooltip.offsetWidth;
+        var origTooltipHeight = tooltip.offsetHeight;
+        var arrowWidth = arrow.offsetWidth;
+        var arrowHeight = arrow.offsetHeight;
+        
+        // coords for if we need to either vertically or horizontally center
+        var centerAlignCoords = {
+            "left": targetLocalOffset.left + (targetWidth - origTooltipWidth)/2,
+            "top": targetLocalOffset.top + (targetHeight - origTooltipHeight)/2
+        };
+        
+        // eugh, gotta clean these calculations up later
+        var newTop;
+        var newLeft;
+        if(orientation === "above"){
+            newTop = targetLocalOffset.top - origTooltipHeight - arrowHeight;
+            newLeft = centerAlignCoords.left;
+            
+            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight - arrowHeight);
+            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth);
+            
+            tooltip.style.top = newTop + "px";
+            tooltip.style.left = newLeft + "px";
+            arrow.style.left = (targetWidth-arrowWidth)/2 + targetLocalOffset.left - newLeft + "px";
+        }
+        else if(orientation === "below"){
+            newTop = targetLocalOffset.top + targetHeight + arrowHeight;
+            newLeft = centerAlignCoords.left;
+            
+            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight);
+            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth);
+            
+            tooltip.style.top = newTop + "px";
+            tooltip.style.left = newLeft + "px";
+            arrow.style.left = (targetWidth-arrowWidth)/2 + targetLocalOffset.left - newLeft + "px";
+        }
+        else if(orientation === "onleft"){
+            newTop = centerAlignCoords.top;
+            newLeft = targetLocalOffset.left - origTooltipWidth - arrowWidth;
+            
+            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight);
+            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth - arrowWidth);
+            
+            tooltip.style.top = newTop + "px";
+            tooltip.style.left = newLeft + "px";
+            arrow.style.top = (targetHeight-arrowHeight)/2 + targetLocalOffset.top - newTop + "px";
+        }
+        else if(orientation === "onright"){
+            newTop = centerAlignCoords.top;
+            newLeft = targetLocalOffset.left + targetWidth + arrowWidth;
+        
+            newTop = constrainNum(newTop, 0, containerHeight - origTooltipHeight);
+            newLeft = constrainNum(newLeft, 0, containerWidth - origTooltipWidth);
+        
+            tooltip.style.top = newTop + "px";
+            tooltip.style.left = newLeft + "px";
+            arrow.style.top = (targetHeight-arrowHeight)/2 + targetLocalOffset.top - newTop + "px";
+        }
+        else{
+            throw "invalid orientation " + orientation;
+        }
+    }
+    
+    function _showTooltip(tooltip, targetElem){
+        var orient = tooltip.orientation;
+        if(!(orient in tooltipOrientToArrowDirMap)){
+            // TODO: auto placement algorithm 
+        }
+        else{
+            _positionTooltip(tooltip, targetElem, orient);
+        }
         tooltip.setAttribute("visible", true);
     }
     
-    function _hideTooltip(tooltip, e){
-        console.log("hide", tooltip, e);
+    function _hideTooltip(tooltip, targetElem){
         tooltip.removeAttribute("visible");
+        tooltip.style.left = "";
+        tooltip.style.top = "";
+        
+        var arrow = tooltip.xtag.arrowEl;
+        arrow.style.left = "";
+        arrow.style.right = "";
+        arrow.style.left = "";
+        arrow.style.bottom = "";
     }
     
     xtag.register("x-tooltip", {
@@ -67,15 +194,16 @@
                 this.xtag.triggeringElems = [];
                 
                 var tooltip = this;
-                this.xtag.showTooltipFn = makeIgnoreBetweenChildrenFn(function(e){
-                    _showTooltip(tooltip, e);
+                this.xtag.targetShowTipFn = makeIgnoreBetweenChildrenFn(function(e){
+                    _showTooltip(tooltip, e.currentTarget);
                     return false;
                 });
                 
-                this.xtag.hideTooltipFn = makeIgnoreBetweenChildrenFn(function(e){
-                    _hideTooltip(tooltip, e);
+                this.xtag.targetHideTipFn = makeIgnoreBetweenChildrenFn(function(e){
+                    _hideTooltip(tooltip, e.currentTarget);
                     return false;
                 });
+                
                 
                 // create content elements (allows user to style separately)
                 this.xtag.contentEl = document.createElement("div");
@@ -101,16 +229,9 @@
                     newOrientation = newOrientation.toLowerCase();
                     var arrow = this.querySelector(".tooltip-arrow");
                     
-                    var orientationToArrowDirMap = {
-                        "onleft": "right",
-                        "onright": "left",
-                        "below": "up",
-                        "above": "down"
-                    };
-                    
                     var newArrowDir = null;
-                    if(newOrientation in orientationToArrowDirMap){
-                        newArrowDir = orientationToArrowDirMap[newOrientation];
+                    if(newOrientation in tooltipOrientToArrowDirMap){
+                        newArrowDir = tooltipOrientToArrowDirMap[newOrientation];
                     }
                     
                     arrow.setAttribute("arrow-direction", newArrowDir);
@@ -119,17 +240,17 @@
             
             "visible":{
                 attribute: {boolean: true},
-                set: function(isVisible){
-                    
-                }
+                set: function(isVisible){}
             },
         
+            // selector must be in relation to parent node of the tooltip
+            // ie: can only select tooltip's siblings or deeper in the DOM tree
             "target-selector": {
                 attribute: {},
                 set: function(newSelector){
                     console.log("selector setter called");
-                    var showFn = this.xtag.showTooltipFn;
-                    var hideFn = this.xtag.hideTooltipFn;
+                    var showFn = this.xtag.targetShowTipFn;
+                    var hideFn = this.xtag.targetHideTipFn;
                     
                     // unbind elements
                     this.xtag.triggeringElems.forEach(function(oldTriggerElem){
@@ -149,12 +270,24 @@
                     });
                     this.xtag.triggeringElems = newTriggerElems;
                 }
+            },
+            
+            // the DOM element representing the content of the tooltip
+            "content": {
+                get: function(){
+                    return this.xtag.contentEl;
+                },
+                set: function(newContentElem){
+                    var oldContent = this.xtag.contentEl;
+                    
+                    xtag.addClass(newContentElem, "tooltip-content");
+                    
+                    this.replaceChild(newContentElem, oldContent);
+                    this.xtag.contentEl = newContentElem;
+                }
             }
         },
         methods: {
-            showTooltip: function(){
-                _showTooltip(this);
-            }
         }
     });
 })();

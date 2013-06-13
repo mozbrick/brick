@@ -18,8 +18,8 @@
         #container{
             border: 1px solid grey;
             margin: 0 auto;
-            width: 190px;
-            height: 350px;
+            width: 320px;
+            height: 480px;
             position: relative;
         }
         
@@ -27,13 +27,13 @@
             position: relative;
             margin: 1em;
             border: 1px solid grey;
+            overflow: visible;
         }
         
         #next-sib{
+            margin-top: 10em;
             background-color: cyan; 
-            position: absolute; 
-            bottom: 0; 
-            left: 0;
+            position: relative;
         }
         
         .fancy-selector{
@@ -47,10 +47,7 @@
         /* arrow is always in relation to content, so modify borders here */
         #demoTip{
             border-radius: 4px;
-            border: 5px solid black;
-            
-            left: 150%;
-            top: 50%;
+            border: 2px solid black;
         }
         
         #demoTip > .tooltip-content{
@@ -61,7 +58,7 @@
         
         #demoTip > .tooltip-arrow{
             border-color: orange; /* edit arrow color */
-            border-width: 1em; /* edit arrow size (ie: pointer length) */
+            /* border-width: .5em;  edit arrow size (ie: pointer length) */
         }
         
         /** users can apply custom styles using this attribute for anything
@@ -74,8 +71,8 @@
         [x-tooltip-targeted]:after{
             content: "?";
             position: absolute;
-            top: 95%;
-            left: 95%;
+            right: -7px;
+            bottom: -7px;
             background-color: blue;
             color: white;
             font-size: 1.1em;
@@ -99,28 +96,33 @@
     parent node
     <button id="prev-sib">
         <p style="background-color: tomato;">prev sibling
-            <img style="position: absolute; top: 10px; left: 50px;" src="http://placekitten.com/100/50"/>
+            <img src="http://placekitten.com/100/50"/>
         </p>
     </button>
     <x-tooltip id="demoTip" orientation="above" target-selector="_previousSibling">
-        Hi! I'm a tooltip! <br/><img src="http://placekitten.com/50"/>
+        Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
     </x-tooltip>
     <div id="next-sib">
         <h1>Next sibling</h1>
     </div>
+    <div style="position: relative; background-color: lavender">    
+        
+        <span class="fancy-selector">".fancy-selector" box</span>
+        <span class="fancy-selector">".fancy-selector" box</span>
+    </div>
 </div>
 
-<span class="fancy-selector">".fancy-selector" box 1</span>
-<span class="fancy-selector">".fancy-selector" box 2</span>
+<span class="fancy-selector">Out of scope ".fancy-selector" box</span>
 
 <div id="controls">
     <button onClick="changeOrientation()">Change orientation</button>
     <button onClick="toggleVisible()">Toggle visible</button>
     <button onClick="toggleSelector()">Toggle selector type</button>
-    <p>Current selector = <span id="curr-selector-status"></span></p>
-    <p>Current orientation = <span id="curr-orient-status"></span></p>
+    <br/>
+    <span>Current selector = <span id="curr-selector-status"></span></span>
+    <br/>
+    <span>Current orientation = <span id="curr-orient-status"></span></span>
 </div>
-
 <script>
 var demoTip;
 document.addEventListener('DOMComponentsLoaded', function(){
@@ -144,7 +146,7 @@ function toggleVisible(){
 }
 
 function toggleSelector(){
-    var selectors = ["_previousSibling", "_nextSibling", "_parentNode", ".fancy-selector"];
+    var selectors = ["_previousSibling", "_nextSibling", ".fancy-selector"];
     var currSelector = demoTip["target-selector"];
     
     var currIndex = selectors.indexOf(currSelector);
