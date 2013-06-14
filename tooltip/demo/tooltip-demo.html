@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../src/tooltip.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="event-resize.js"></script>
     <script type="text/javascript" src="../src/tooltip.js"></script>
     <style>
         body, html{
@@ -229,11 +230,6 @@ var changeContents = (function(){
         contentEl.innerHTML = newHtml;
     }
 })();
-
-console.log(document.body.firstElementChild);
-xtag.addEvent(document.body.firstElementChild, 'resize', function(e){
-    console.log("resize", e);
-});
 </script>
 </body>
 </html>

@@ -305,6 +305,29 @@
     }    
     
     function _positionTooltip(tooltip, targetElem, orientation){
+        // if not given a valid placement, recursively attempt valid placements
+        // until getting something that doesn't overlap the target element
+        if(!(orientation in TIP_ORIENT_ARROW_DIR_MAP)){
+            console.log("defaulting to auto orientation placement");
+            for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
+                console.log("attempted", tmpOrient, "positioning");
+                
+                // recursively attempt a valid positioning
+                _positionTooltip(tooltip, targetElem, tmpOrient);
+                
+                // found a good position, so finalize and ensure that
+                // arrow is pointing in correct direction 
+                if(!overlaps(tooltip, targetElem)){
+                    console.log("decided on", tmpOrient, "positioning");
+                    tooltip.xtag.arrowEl.setAttribute("arrow-direction", 
+                           TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
+                    return;
+                }
+            }
+            return;
+        }
+    
+    
         var offsetContainer = (tooltip.offsetParent) ? 
                                     tooltip.offsetParent : tooltip.parentNode;
         
@@ -426,22 +449,7 @@
     function _showTooltip(tooltip, targetElem){
         var arrow = tooltip.xtag.arrowEl;
         var targetOrient = tooltip.orientation;
-        var newOrient;
-        if(targetOrient in TIP_ORIENT_ARROW_DIR_MAP){
-            _positionTooltip(tooltip, targetElem, targetOrient);
-        }
-        else{
-            for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
-                targetOrient = tmpOrient;
-                _positionTooltip(tooltip, targetElem, targetOrient);
-                if(!overlaps(tooltip, targetElem)){
-                    console.log(targetOrient);
-                    break;
-                }
-            }
-        }
-        arrow.setAttribute("arrow-direction", 
-                           TIP_ORIENT_ARROW_DIR_MAP[targetOrient]);
+        _positionTooltip(tooltip, targetElem, targetOrient);
         
         tooltip.setAttribute("visible", true);
         tooltip.xtag.currTargetElem = targetElem;
@@ -530,7 +538,11 @@
                 this.xtag.currTargetElem = null;
                 this.xtag.cachedListeners = [];
                 _updateTriggerListeners(this, this.xtag.triggeringElems, 
-                                this.xtag.currTriggerStyle)
+                                this.xtag.currTriggerStyle);
+                                
+                xtag.addEvent(this, 'resize', function(e){
+                    console.log("tooltip resized!");
+                });
             }
         },
         events: {
