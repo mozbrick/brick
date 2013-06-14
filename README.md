@@ -61,7 +61,7 @@ Positions/appearances will likely differ on larger displays or with different in
 * Content container that appears over current view context
 * Blocks interaction with underlying content
 
-### 'Tooltip' (Callout)(https://github.com/mozilla/app-components/tree/master/tooltip)
+### ['Tooltip' (Callout)](https://github.com/mozilla/app-components/tree/master/tooltip)
 
 * Content container that appears over current view context
 * Associated with a trigger element in the underlying content
