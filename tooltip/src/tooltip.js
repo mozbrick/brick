@@ -6,6 +6,10 @@
         "onright": "left"
     };
     
+    function _isValidOrientation(orient){
+        return orient in TIP_ORIENT_ARROW_DIR_MAP;
+    }
+    
     // a simple struct to store all information needed to add and remove
     // a particular event listener
     function CachedListener(elem, eventType, listenerFn){
@@ -319,25 +323,24 @@
     function _positionTooltip(tooltip, targetElem, orientation){
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
-        if(!(orientation in TIP_ORIENT_ARROW_DIR_MAP)){
+        if(!(_isValidOrientation(orientation))){
             var arrow = tooltip.xtag.arrowEl;
             for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
                 // ensure arrow is pointing in correct direction
                 arrow.setAttribute("arrow-direction", 
                                    TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
-                
                 // recursively attempt a valid positioning
                 _positionTooltip(tooltip, targetElem, tmpOrient);
                                    
                 // found a good position, so finalize and stop checking
                 if(!overlaps(tooltip, targetElem)){
+                    tooltip.setAttribute("auto-orientation", tmpOrient);
                     return;
                 }
             }
             return;
         }
-    
-    
+        
         var offsetContainer = (tooltip.offsetParent) ? 
                                     tooltip.offsetParent : tooltip.parentNode;
         
@@ -403,14 +406,15 @@
         // its constraints
         var newTop, newLeft, maxTop, maxLeft;
         if(orientation === "above"){
-            arrowHeight /= 2; // remember that the arrow is translated to overlap
+            arrowHeight /= 2; // remember that the arrow is translated to 
+                              // overlap the balloon
             newTop =targetContainerOffset.top - origTooltipHeight - arrowHeight;
             newLeft = centerAlignCoords.left;
             maxTop = containerHeight - origTooltipHeight - arrowHeight;
             maxLeft = containerWidth - origTooltipWidth;
         }
         else if(orientation === "below"){
-            arrowHeight /= 2; // remember that the arrow is translated to overlap
+            arrowHeight /= 2; //remember that the arrow is translated to overlap
             newTop = targetContainerOffset.top + targetHeight + arrowHeight;
             newLeft = centerAlignCoords.left;
             maxTop = containerHeight - origTooltipHeight;
@@ -454,36 +458,51 @@
                                 origTooltipHeight - arrowHeight
                               ) + "px";
         }
+        
+        return;
     }
     
     function _showTooltip(tooltip, targetElem){
         if(targetElem === tooltip){
-            console.log("The tooltip's target element is the tooltip itself!"+
+            console.log("The tooltip's target element is the tooltip itself!" +
                         " Is this intentional?");
         }
         var arrow = tooltip.xtag.arrowEl;
         var targetOrient = tooltip.orientation;
+        
+        // fire this when preparation for showing the tooltip is complete
+        var _readyToShowFn = function(){
+            tooltip.setAttribute("visible", true);
+            
+            xtag.fireEvent(tooltip, "tooltipshown", {
+                "targetElem": targetElem
+            });
+        };
+        
         if(targetElem){
-            _positionTooltip(tooltip, targetElem, targetOrient);
-            tooltip.xtag.lastTargetElem = targetElem;
+            // skip transition in order to completely position tooltip
+            xtag.skipTransition(tooltip, function(){
+                _positionTooltip(tooltip, targetElem, targetOrient);
+                tooltip.xtag.lastTargetElem = targetElem;
+                
+                return _readyToShowFn;
+            }, this);
         }
         else{
             tooltip.style.top = "";
             tooltip.style.left = "";
             arrow.style.top = "";
             arrow.style.left = "";
+            _readyToShowFn();
         }
         
-        tooltip.setAttribute("visible", true);
-        
-        xtag.fireEvent(tooltip, "tooltipshown", {
-            "targetElem": targetElem
-        });
     }
     
     function _hideTooltip(tooltip){
         tooltip.removeAttribute("visible");
-        
+        if(_isValidOrientation(tooltip.orientation)){
+            tooltip.removeAttribute("auto-orientation");
+        }
         
         xtag.fireEvent(tooltip, "tooltiphidden");
     }
@@ -499,6 +518,9 @@
         else if(newTriggerElems.indexOf(tooltip.xtag.lastTargetElem) === -1){
             tooltip.xtag.lastTargetElem = (newTriggerElems.length > 0) ? 
                                            newTriggerElems[0] : null; 
+            // reposition tooltip
+            _positionTooltip(tooltip, tooltip.xtag.lastTargetElem, 
+                             tooltip.orientation);
         }
         
         if(newTriggerStyle === undefined || newTriggerStyle === null){
@@ -592,9 +614,10 @@
                     var arrow = this.querySelector(".tooltip-arrow");
                     
                     var newArrowDir = null;
-                    if(newOrientation in TIP_ORIENT_ARROW_DIR_MAP){
+                    if(_isValidOrientation(newOrientation)){
                         newArrowDir = TIP_ORIENT_ARROW_DIR_MAP[newOrientation];
                         arrow.setAttribute("arrow-direction", newArrowDir);
+                        arrow.removeAttribute("auto-orientation");
                     }
                     else{
                         // when auto placing, we will determine arrow direction

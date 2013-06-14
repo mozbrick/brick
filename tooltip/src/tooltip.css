@@ -22,12 +22,13 @@ x-tooltip {
   -webkit-transition-delay: 0s;
   -moz-transition-delay: 0s;
   -o-transition-delay: 0s;
-  transition-delay: 0s;
-  transform: translateY(10px);
-  -ms-transform: translateY(10px);
-  -moz-transform: translateY(10px);
-  -webkit-transform: translateY(10px);
-  -o-transform: translateY(10px); }
+  transition-delay: 0s; }
+  x-tooltip[orientation=above] {
+    transform: translateY(10px);
+    -ms-transform: translateY(10px);
+    -moz-transform: translateY(10px);
+    -webkit-transform: translateY(10px);
+    -o-transform: translateY(10px); }
   x-tooltip[orientation=below] {
     transform: translateY(-10px);
     -ms-transform: translateY(-10px);
@@ -49,6 +50,36 @@ x-tooltip {
   x-tooltip[visible] {
     visibility: visible;
     opacity: 1;
+    transform: none;
+    -ms-transform: none;
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none; }
+  x-tooltip:not([orientation=above]):not([orientation=below]):not([orientation=onleft]):not([orientation=onright])[auto-orientation=above] {
+    transform: translateY(10px);
+    -ms-transform: translateY(10px);
+    -moz-transform: translateY(10px);
+    -webkit-transform: translateY(10px);
+    -o-transform: translateY(10px); }
+  x-tooltip:not([orientation=above]):not([orientation=below]):not([orientation=onleft]):not([orientation=onright])[auto-orientation=below] {
+    transform: translateY(-10px);
+    -ms-transform: translateY(-10px);
+    -moz-transform: translateY(-10px);
+    -webkit-transform: translateY(-10px);
+    -o-transform: translateY(-10px); }
+  x-tooltip:not([orientation=above]):not([orientation=below]):not([orientation=onleft]):not([orientation=onright])[auto-orientation=onleft] {
+    transform: translateX(10px);
+    -ms-transform: translateX(10px);
+    -moz-transform: translateX(10px);
+    -webkit-transform: translateX(10px);
+    -o-transform: translateX(10px); }
+  x-tooltip:not([orientation=above]):not([orientation=below]):not([orientation=onleft]):not([orientation=onright])[auto-orientation=onright] {
+    transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -webkit-transform: translateX(-10px);
+    -o-transform: translateX(-10px); }
+  x-tooltip:not([orientation=above]):not([orientation=below]):not([orientation=onleft]):not([orientation=onright])[visible] {
     transform: none;
     -ms-transform: none;
     -moz-transform: none;

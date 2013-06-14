@@ -24,17 +24,22 @@ x-tooltip{
     
     visibility: hidden;
     opacity: 0;
+    
+    
     @include animated((visibility, transform, opacity), 0.2s);
     
-    // different translates for different directional slide-ins
-    @include transformed(translateY(10px));
+    &[orientation=above]{
+        @include transformed(translateY(10px));
+    }
     
     &[orientation=below]{
         @include transformed(translateY(-10px));
     }
+        
     &[orientation=onleft]{
         @include transformed(translateX(10px));
     }
+        
     &[orientation=onright]{
         @include transformed(translateX(-10px));
     }
@@ -43,6 +48,30 @@ x-tooltip{
         visibility: visible;
         opacity: 1;
         @include transformed(none);
+    }
+    
+    // hackery to have auto orientation have the same transform animations
+    $autoOrientationSelector: attrValNotInList(orientation, (above, below, onleft, onright));
+    &#{$autoOrientationSelector}{
+        &[auto-orientation=above]{
+            @include transformed(translateY(10px));
+        }
+        
+        &[auto-orientation=below]{
+            @include transformed(translateY(-10px));
+        }
+            
+        &[auto-orientation=onleft]{
+            @include transformed(translateX(10px));
+        }
+            
+        &[auto-orientation=onright]{
+            @include transformed(translateX(-10px));
+        }
+        
+        &[visible]{
+            @include transformed(none);
+        }
     }
 }
 
