@@ -120,7 +120,7 @@
 
 <div id="controls">
     <button onClick="changeOrientation()">Change orientation</button>
-    <button onClick="toggleVisible(event)">Toggle visible (debug, not intended for API)</button>
+    <button onClick="toggleTooltip(event)">Toggle tooltip</button>
     <button onClick="toggleSelector()">Toggle selector</button>
     <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
     <button onClick="changeContents(event)">Change tooltip contents</button>
@@ -150,8 +150,8 @@ function changeOrientation(){
     updateOrientationBox();
 }
 
-function toggleVisible(e){
-    demoTip.visible = !demoTip.visible;
+function toggleTooltip(e){
+    demoTip.toggleTooltip();
     e.stopPropagation();
 }
 

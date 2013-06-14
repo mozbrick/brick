@@ -74,10 +74,11 @@
                 
                 // don't trigger show when coming from the target element
                 var fromElem = e.relatedTarget || e.toElement;
-                var currTarget = tooltip.xtag.currTargetElem;
+                var lastTarget = tooltip.xtag.lastTargetElem;
                 // also don't trigger a reshow unless we are actually hidden
-                if(currTarget && !hasParentNode(fromElem, currTarget) &&
-                   !tooltip.hasAttribute("visible"))
+                // (ie: unless the last target is also the CURRENT target
+                if(!tooltip.hasAttribute("visible") &&
+                    lastTarget && !hasParentNode(fromElem, lastTarget))
                 {
                     _showTooltip(tooltip, e.currentTarget);
                     e.stopPropagation();
@@ -88,8 +89,8 @@
                 cancelTimerFn();
                 // don't get triggered when exiting to the target element
                 var toElem = e.relatedTarget || e.toElement;
-                var currTarget = tooltip.xtag.currTargetElem;
-                if(currTarget && !hasParentNode(toElem, currTarget))
+                var lastTarget = tooltip.xtag.lastTargetElem;
+                if(lastTarget && !hasParentNode(toElem, lastTarget))
                 {
                     // add delay so that we can interact with tooltip
                     hoverOutTimer = window.setTimeout(function(){
@@ -126,7 +127,7 @@
             
             var targetClickFn = function(e){
                 if(tooltip.hasAttribute("visible") && 
-                   tooltip.xtag.currTargetElem === e.currentTarget)
+                   tooltip.xtag.lastTargetElem === e.currentTarget)
                 {
                     _hideTooltip(tooltip);
                 }
@@ -458,10 +459,18 @@
     function _showTooltip(tooltip, targetElem){
         var arrow = tooltip.xtag.arrowEl;
         var targetOrient = tooltip.orientation;
-        _positionTooltip(tooltip, targetElem, targetOrient);
+        if(targetElem){
+            _positionTooltip(tooltip, targetElem, targetOrient);
+        }
+        else{
+            tooltip.style.top = "";
+            tooltip.style.left = "";
+            arrow.style.top = "";
+            arrow.style.left = "";
+        }
         
         tooltip.setAttribute("visible", true);
-        tooltip.xtag.currTargetElem = targetElem;
+        tooltip.xtag.lastTargetElem = targetElem;
         
         xtag.fireEvent(tooltip, "tooltipshown", {
             "targetElem": targetElem
@@ -470,7 +479,6 @@
     
     function _hideTooltip(tooltip){
         tooltip.removeAttribute("visible");
-        tooltip.xtag.currTargetElem = null;
         
         
         xtag.fireEvent(tooltip, "tooltiphidden");
@@ -482,6 +490,13 @@
         if(newTriggerElems === undefined || newTriggerElems === null){
             newTriggerElems = tooltip.xtag.triggeringElems;
         }
+        // if we are actually changing the triggering elements, but are losing
+        // our last target elem, default to first one in the list
+        else if(newTriggerElems.indexOf(tooltip.xtag.lastTargetElem) === -1){
+            tooltip.xtag.lastTargetElem = (newTriggerElems.length > 0) ? 
+                                           newTriggerElems[0] : null; 
+        }
+        
         if(newTriggerStyle === undefined || newTriggerStyle === null){
             newTriggerStyle = tooltip.xtag.currTriggerStyle;
         }
@@ -544,10 +559,17 @@
                                                 this, this.xtag.triggerSelector
                                             );
                 this.xtag.currTriggerStyle = "hover";
-                this.xtag.currTargetElem = null;
+                // remember who the last element that triggered the tip was
+                // (ie: who we should be pointing to if suddenly told to show
+                //  outside of a trigger style)
+                var triggeringElems = this.xtag.triggeringElems;
+                this.xtag.lastTargetElem = (triggeringElems.length > 0) ? 
+                                            triggeringElems[0] : null; 
+                
+                // remember what event listeners are still active
                 this.xtag.cachedListeners = [];
                 _updateTriggerListeners(this, this.xtag.triggeringElems, 
-                                this.xtag.currTriggerStyle);
+                                        this.xtag.currTriggerStyle);
             }
         },
         events: {
@@ -644,11 +666,28 @@
             // call this when the position of the tooltip needs to be 
             // recalculated; such as after updating the DOM of the contents
             refreshPosition: function(){
-                if(this.xtag.currTargetElem){
-                    _positionTooltip(this, this.xtag.currTargetElem,
+                if(this.xtag.lastTargetElem){
+                    _positionTooltip(this, this.xtag.lastTargetElem,
                                      this.orientation);
                 }
-            }
+            },
+            
+            showTooltip: function(){
+                _showTooltip(this, this.xtag.lastTargetElem);
+            },
+            
+            hideTooltip: function(){
+                _hideTooltip(this);
+            },
+            
+            toggleTooltip: function(){
+                if(this.hasAttribute("visible")){
+                    this.hideTooltip();
+                }
+                else{
+                    this.showTooltip();
+                }
+            },
         }
     });
 })();
