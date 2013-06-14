@@ -63,7 +63,6 @@
             });
             
             var showTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
-                console.log("on tooltip");
                 isHovering = true;
                 
                 // don't trigger show when coming from the target element
@@ -196,7 +195,8 @@
         };
     }
     
-    
+    // returns list of elements selected by the given selector in relation to
+    // the tooltip
     function _selectorToElems(tooltip, selector){
         if(selector === "_previousSibling"){
             return (tooltip.previousElementSibling) ? 
@@ -444,7 +444,9 @@
         xtag.fireEvent(tooltip, "tooltiphidden");
     }
     
-    function _updateTriggers(tooltip, newTriggerElems, newTriggerStyle){
+    // unbinds cached listeners and binds new listeners for new trigger 
+    // parameters; call this anytime the tooltip trigger changes
+    function _updateTriggerListeners(tooltip, newTriggerElems, newTriggerStyle){
         if(newTriggerElems === undefined || newTriggerElems === null){
             newTriggerElems = tooltip.xtag.triggeringElems;
         }
@@ -483,18 +485,11 @@
             listener.attachListener();
         });
         tooltip.xtag.cachedListeners = listeners;
-        tooltip.xtag.triggeringElems = newTriggerElems;
-        tooltip.xtag.currTriggerStyle = newTriggerStyle;
     }
     
     xtag.register("x-tooltip", {
         lifecycle:{
             created: function(){
-                this.xtag.triggeringElems = [];
-                this.xtag.currTriggerStyle = "click";
-                this.xtag.currTargetElem = null;
-                this.xtag.cachedListeners = [];
-                
                 // create content elements (allows user to style separately)
                 this.xtag.contentEl = document.createElement("div");
                 this.xtag.arrowEl = document.createElement("span");
@@ -508,6 +503,19 @@
                 
                 this.appendChild(this.xtag.contentEl);
                 this.appendChild(this.xtag.arrowEl);
+                
+                
+                // default trigger variables
+                this.xtag.orientation = "auto";
+                this.xtag.triggerSelector = "_previousSibling";
+                this.xtag.triggeringElems = _selectorToElems(
+                                                this, this.xtag.triggerSelector
+                                            );
+                this.xtag.currTriggerStyle = "hover";
+                this.xtag.currTargetElem = null;
+                this.xtag.cachedListeners = [];
+                _updateTriggerListeners(this, this.xtag.triggeringElems, 
+                                this.xtag.currTriggerStyle)
             }
         },
         events: {
@@ -516,6 +524,9 @@
             // sets the placement of the tooltip in relation to a target element
             "orientation":{
                 attribute: {},
+                get: function(){
+                    return this.xtag.orientation;
+                },
                 // when orientation of tooltip is set, also set direction of 
                 // arrow pointer
                 set: function(newOrientation){
@@ -532,6 +543,8 @@
                         // when shown
                         arrow.removeAttribute("arrow-direction");
                     }
+                    
+                    this.xtag.orientation = newOrientation;
                 }
             },
             
@@ -549,14 +562,18 @@
                     if(!(newTriggerStyle in TRIGGER_STYLE_GETLISTENERS)){
                         throw "invalid trigger style " + newTriggerStyle;
                     }
-                    _updateTriggers(this, null, newTriggerStyle)
+                    _updateTriggerListeners(this, null, newTriggerStyle)
+                    this.xtag.currTriggerStyle = newTriggerStyle;
                 }
             },
             
             // selector must be in relation to parent node of the tooltip
             // ie: can only select tooltip's siblings or deeper in the DOM tree
-            "target-selector": {
+            "trigger-selector": {
                 attribute: {},
+                get: function(){
+                    return this.xtag.triggerSelector;
+                },
                 set: function(newSelector){
                     var tooltip = this;
                     
@@ -570,7 +587,9 @@
                         }
                     });
                     
-                    _updateTriggers(tooltip, newTriggerElems)
+                    _updateTriggerListeners(tooltip, newTriggerElems)
+                    this.xtag.triggeringElems = newTriggerElems;
+                    this.xtag.triggerSelector = newSelector;
                 }
             },
             

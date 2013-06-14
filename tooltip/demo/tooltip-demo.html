@@ -104,7 +104,7 @@
             <img src="http://placekitten.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" orientation="auto" target-selector=".fancy-selector">
+    <x-tooltip id="demoTip">
         Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
         <br/><a href="http://google.com">Lorem ipsum</a><span class="fancy-selector">buttes</span> 
     </x-tooltip>
@@ -122,7 +122,7 @@
 <div id="controls">
     <button onClick="changeOrientation()">Change orientation</button>
     <button onClick="toggleVisible(event)">Toggle visible (debug, not intended for API)</button>
-    <button onClick="toggleSelector()">Toggle selector type</button>
+    <button onClick="toggleSelector()">Toggle selector</button>
     <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
@@ -157,11 +157,11 @@ function toggleVisible(e){
 
 function toggleSelector(){
     var selectors = ["_previousSibling", "_nextSibling", ".fancy-selector"];
-    var currSelector = demoTip["target-selector"];
+    var currSelector = demoTip["trigger-selector"];
     
     var currIndex = selectors.indexOf(currSelector);
     
-    demoTip["target-selector"] = selectors[(currIndex+1) % selectors.length];
+    demoTip["trigger-selector"] = selectors[(currIndex+1) % selectors.length];
     updateSelectorBox();
 }
 
@@ -173,15 +173,13 @@ function toggleTriggerStyle(){
     
     demoTip["trigger-style"] = styles[(currIndex+1) % styles.length];
     
-    
-    console.log(currStyle, currIndex, styles[(currIndex+1) % styles.length]);
     updateTriggerStyleBox();
 }
 
 function updateSelectorBox(){
     var statusBox = document.getElementById("curr-selector-status");
     
-    statusBox.textContent = demoTip["target-selector"];
+    statusBox.textContent = demoTip["trigger-selector"];
 }
 
 function updateOrientationBox(){
