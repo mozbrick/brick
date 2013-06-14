@@ -269,7 +269,16 @@
             return true; 
         }
         else{
-            return false; 
+            //check cross intersections
+            var _isCrossIntersect = function(rectA, rectB){
+                return (rectA.top <= rectB.top && 
+                        rectB.bottom <= rectA.bottom &&
+                        rectB.left <= rectA.left && 
+                        rectA.right <= rectB.right);
+            };
+           
+            return (_isCrossIntersect(rectA, rectB) || 
+                    _isCrossIntersect(rectB, rectA)); 
         }
     }
     
@@ -426,6 +435,7 @@
                 targetOrient = tmpOrient;
                 _positionTooltip(tooltip, targetElem, targetOrient);
                 if(!overlaps(tooltip, targetElem)){
+                    console.log(targetOrient);
                     break;
                 }
             }
@@ -444,6 +454,7 @@
     function _hideTooltip(tooltip){
         tooltip.removeAttribute("visible");
         tooltip.xtag.currTargetElem = null;
+        
         
         xtag.fireEvent(tooltip, "tooltiphidden");
     }

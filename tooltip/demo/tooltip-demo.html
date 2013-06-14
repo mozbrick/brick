@@ -123,7 +123,7 @@
     <button onClick="toggleVisible(event)">Toggle visible (debug, not intended for API)</button>
     <button onClick="toggleSelector()">Toggle selector</button>
     <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
-    <button onClick="changeContents()">Change tooltip contents</button>
+    <button onClick="changeContents(event)">Change tooltip contents</button>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
     <br/>
@@ -200,22 +200,40 @@ function randomKittenUrl(){
     return "http://placekitten.com/50/?image="+catNumber;
 }
 
-function changeContents(){
-    var contentEl = demoTip.content;
-    
+var changeContents = (function(){
+    var currIndex = 0;
     var htmlStrs = [
         "Hi! I'm a tooltip! <img src=\"http://placekitten.com/30\"/><br/><a href=\"http://google.com\">Lorem ipsum</a><span class=\"fancy-selector\">buttes</span>",
-        "Nothing here!",
-        "<img src='"+randomKittenUrl()+"'/><img src='"+randomKittenUrl()+"'/><img src='"+randomKittenUrl()+"'/>",
-        "<img src='http://i.imgur.com/pQFn2wj.gif'/>",
-        "A<br/>B<br/>C",
-        ""
+        "Text text text text",
+        "<img src='http://tinyurl.com/mgptl87'/>",
+        "<img src='http://i.imgur.com/K8Vytv8.gif'/>",
+        (function(){
+            var aCode = "A".charCodeAt(0);
+            var letters = [];
+            for(var i=0; i < 26; i++){
+                letters.push(String.fromCharCode(aCode+i));
+            }
+            return letters.join("<br/>");
+        })()
     ];
     
-    var randomHtml = htmlStrs[Math.floor(Math.random() * htmlStrs.length)];
-    
-    contentEl.innerHTML = randomHtml;
-}
+    return function(e){
+        e.stopPropagation();
+        
+        var contentEl = demoTip.content;
+        
+        var newIndex = (currIndex+1) % htmlStrs.length;
+        currIndex = newIndex;
+        var newHtml = htmlStrs[newIndex];
+        
+        contentEl.innerHTML = newHtml;
+    }
+})();
+
+console.log(document.body.firstElementChild);
+xtag.addEvent(document.body.firstElementChild, 'resize', function(e){
+    console.log("resize", e);
+});
 </script>
 </body>
 </html>
