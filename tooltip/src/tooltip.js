@@ -328,7 +328,7 @@
         // just assumes rotation is 45 degrees
         var arrowRotationDegs = 45;
         var arrowDims = getRotationDims(arrow.offsetWidth, arrow.offsetHeight, 
-                                        arrowRotationDegs);
+                                        arrowRotationDegs);                                
         var arrowWidth = arrowDims.width;
         var arrowHeight = arrowDims.height;
         
@@ -361,24 +361,28 @@
         // its constraints
         var newTop, newLeft, maxTop, maxLeft;
         if(orientation === "above"){
+            arrowHeight /= 2; // remember that the arrow is translated to overlap
             newTop =targetContainerOffset.top - origTooltipHeight - arrowHeight;
             newLeft = centerAlignCoords.left;
             maxTop = containerHeight - origTooltipHeight - arrowHeight;
             maxLeft = containerWidth - origTooltipWidth;
         }
         else if(orientation === "below"){
+            arrowHeight /= 2; // remember that the arrow is translated to overlap
             newTop = targetContainerOffset.top + targetHeight + arrowHeight;
             newLeft = centerAlignCoords.left;
             maxTop = containerHeight - origTooltipHeight;
             maxLeft = containerWidth - origTooltipWidth;
         }
         else if(orientation === "onleft"){
+            arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
             newLeft =targetContainerOffset.left - origTooltipWidth - arrowWidth;
             maxTop = containerHeight - origTooltipHeight;
             maxLeft = containerWidth - origTooltipWidth - arrowWidth;
         }
         else if(orientation === "onright"){
+            arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
             newLeft = targetContainerOffset.left + targetWidth + arrowWidth;
             maxTop = containerHeight - origTooltipHeight;

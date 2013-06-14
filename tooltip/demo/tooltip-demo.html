@@ -104,7 +104,7 @@
             <img src="http://placekitten.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip">
+    <x-tooltip id="demoTip" trigger-selector="_nextSibling">
         Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
         <br/><a href="http://google.com">Lorem ipsum</a><span class="fancy-selector">buttes</span> 
     </x-tooltip>
@@ -112,7 +112,6 @@
         <h1>Next sibling</h1>
     </div>
     <div style="position: relative; background-color: lavender">    
-        
         <span class="fancy-selector">#</span>
         <span class="fancy-selector">".fancy-selector" box</span>
     </div>
@@ -124,6 +123,7 @@
     <button onClick="toggleVisible(event)">Toggle visible (debug, not intended for API)</button>
     <button onClick="toggleSelector()">Toggle selector</button>
     <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
+    <button onClick="changeContents()">Change tooltip contents</button>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
     <br/>
@@ -142,7 +142,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
 
 function changeOrientation(){
     var orients = ["auto", "above", "onright", "below", "onleft"];
-    var currOrient = demoTip.getAttribute("orientation");
+    var currOrient = demoTip.orientation;
     
     var currIndex = orients.indexOf(currOrient);
     
@@ -192,6 +192,29 @@ function updateTriggerStyleBox(){
     var triggerStyleBox = document.getElementById("curr-trigger-style-status");
     
     triggerStyleBox.textContent = demoTip["trigger-style"];
+}
+
+function randomKittenUrl(){
+    var catNumber = Math.floor(Math.random() * 15 + 1);
+    
+    return "http://placekitten.com/50/?image="+catNumber;
+}
+
+function changeContents(){
+    var contentEl = demoTip.content;
+    
+    var htmlStrs = [
+        "Hi! I'm a tooltip! <img src=\"http://placekitten.com/30\"/><br/><a href=\"http://google.com\">Lorem ipsum</a><span class=\"fancy-selector\">buttes</span>",
+        "Nothing here!",
+        "<img src='"+randomKittenUrl()+"'/><img src='"+randomKittenUrl()+"'/><img src='"+randomKittenUrl()+"'/>",
+        "<img src='http://i.imgur.com/pQFn2wj.gif'/>",
+        "A<br/>B<br/>C",
+        ""
+    ];
+    
+    var randomHtml = htmlStrs[Math.floor(Math.random() * htmlStrs.length)];
+    
+    contentEl.innerHTML = randomHtml;
 }
 </script>
 </body>
