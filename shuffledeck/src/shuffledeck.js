@@ -63,7 +63,8 @@
     
     /** _getAllSlides : (DOM) => DOM array
     
-    simply returns a list of all x-shuffleslide DOM elements in the given DOM element
+    simply returns a list of all x-shuffleslide DOM elements in the given 
+    DOM element
     **/
     function _getAllSlides(elem){
         return xtag.query(elem, "x-shuffleslide");
@@ -112,7 +113,8 @@
     params:
         shuffleDeck             the x-shuffledeck DOM element we are working in
         oldSlide                the x-shuffleslide DOM element we are replacing
-        newSlide                the x-shuffleslide DOM element we are replacing with
+        newSlide                the x-shuffleslide DOM element we are replacing 
+                                the oldSlide with
         slideAnimName           the name of the animation type to use   
         isReverse               whether or not the animation should be reversed
         callback                (optional) on completion, call this function 
@@ -232,7 +234,7 @@
             
             // alternatively, because transitionend may not ever fire, have a
             // fallback setTimeout to catch cases where transitionend doesn't
-            // fire (heuristic: wait some multiplier longer than actual duration)
+            // fire (heuristic:wait some multiplier longer than actual duration)
             var oldDuration = durationStrToMs(getDurationStr(oldSlide));
             var newDuration = durationStrToMs(getDurationStr(newSlide));
             
@@ -293,8 +295,8 @@
     
     param:
         shuffleDeck             the x-shuffledeck DOM element we are working in
-        newSlide                the x-shuffleslide DOM element we are replacing the
-                                current slide with
+        newSlide                the x-shuffleslide DOM element we are replacing
+                                the current slide with
         transitionType          (optional) The name of the animation type
                                 Valid options are any type defined in 
                                 transitionTypeData
@@ -367,7 +369,8 @@
     
     param:
         shuffleDeck             the x-shuffledeck DOM element we are working in
-        targetIndex             the index of the x-shuffleslide we want to display
+        targetIndex             the index of the x-shuffleslide we want to  
+                                display
         transitionType          same as _replaceCurrSlide's transitionType
                                 parameter
                                 
@@ -469,8 +472,14 @@
                     throw "invalid slideTo index " + index;
                 }
                 
-                var transitionType = (targetSlide.hasAttribute("transition-override")) ?
-                     targetSlide.getAttribute("transition-override") : this["transition-type"];
+                var transitionType;
+                if(targetSlide.hasAttribute("transition-override")){
+                    transitionType = targetSlide
+                                     .getAttribute("transition-override");
+                }
+                else{
+                    transitionType = this["transition-type"];
+                }
                      
                 _slideToIndex(this, index, transitionType, 
                               progressType, callback);

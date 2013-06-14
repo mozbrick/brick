@@ -54,30 +54,54 @@ x-shuffledeck {
       -moz-transform: translate3d(0%, 0%, 1px);
       -webkit-transform: translate3d(0%, 0%, 1px);
       -o-transform: translate3d(0%, 0%, 1px); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][selected][before-animation] {
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX]:not([reverse])[selected][before-animation] {
       transform: rotateX(180deg);
       -ms-transform: rotateX(180deg);
       -moz-transform: rotateX(180deg);
       -webkit-transform: rotateX(180deg);
       -o-transform: rotateX(180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][leaving]:not([before-animation]) {
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX]:not([reverse])[leaving]:not([before-animation]) {
       transform: rotateX(-180deg);
       -ms-transform: rotateX(-180deg);
       -moz-transform: rotateX(-180deg);
       -webkit-transform: rotateX(-180deg);
       -o-transform: rotateX(-180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY][selected][before-animation] {
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][selected][before-animation] {
+      transform: rotateX(-180deg);
+      -ms-transform: rotateX(-180deg);
+      -moz-transform: rotateX(-180deg);
+      -webkit-transform: rotateX(-180deg);
+      -o-transform: rotateX(-180deg); }
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][leaving]:not([before-animation]) {
+      transform: rotateX(180deg);
+      -ms-transform: rotateX(180deg);
+      -moz-transform: rotateX(180deg);
+      -webkit-transform: rotateX(180deg);
+      -o-transform: rotateX(180deg); }
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY]:not([reverse])[selected][before-animation] {
       transform: rotateY(180deg);
       -ms-transform: rotateY(180deg);
       -moz-transform: rotateY(180deg);
       -webkit-transform: rotateY(180deg);
       -o-transform: rotateY(180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY][leaving]:not([before-animation]) {
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY]:not([reverse])[leaving]:not([before-animation]) {
       transform: rotateY(-180deg);
       -ms-transform: rotateY(-180deg);
       -moz-transform: rotateY(-180deg);
       -webkit-transform: rotateY(-180deg);
       -o-transform: rotateY(-180deg); }
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY][reverse][selected][before-animation] {
+      transform: rotateY(-180deg);
+      -ms-transform: rotateY(-180deg);
+      -moz-transform: rotateY(-180deg);
+      -webkit-transform: rotateY(-180deg);
+      -o-transform: rotateY(-180deg); }
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY][reverse][leaving]:not([before-animation]) {
+      transform: rotateY(180deg);
+      -ms-transform: rotateY(180deg);
+      -moz-transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+      -o-transform: rotateY(180deg); }
 
 x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollLeft]:not([reverse]), x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollRight][reverse] {
   transform: translateX(100%);

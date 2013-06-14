@@ -10,8 +10,8 @@
                               };
     
     
-    // hides/unhides parts of the button depending on if they have any content, also
-    // removes image source if explicitly given a null/empty src
+    // hides/unhides parts of the button depending on if they have any content, 
+    // also removes image source if explicitly given a null/empty src
     function updatePartsVisibility(elem, iconSrc){
         // if the icon is an img tag, modify based on its img src
         
@@ -62,7 +62,9 @@
     
     // replaces the element in the given category with the new element
     // useful for full replacements of button components
-    function replaceComponentElement(xButtonElem, newElem, categoryName, elemClass){
+    function replaceComponentElement(xButtonElem, newElem, categoryName, 
+                                     elemClass)
+    {
         var oldElem = xButtonElem.xtag[categoryName];
         if(newElem instanceof HTMLElement){
             oldElem.parentNode.replaceChild(newElem, oldElem);
@@ -152,7 +154,8 @@
                     return this.xtag.labelEl;
                 },
                 set: function(newLabelEl){
-                    replaceComponentElement(this, newLabelEl, 'labelEl', 'label');
+                    replaceComponentElement(this, newLabelEl, 'labelEl', 
+                                            'label');
                 }
             },
             "text":{

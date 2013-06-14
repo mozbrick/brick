@@ -104,7 +104,7 @@
             <img src="http://placekitten.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" orientation="above" target-selector=".fancy-selector">
+    <x-tooltip id="demoTip" orientation="auto" target-selector=".fancy-selector">
         Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
         <br/><a href="http://google.com">Lorem ipsum</a><span class="fancy-selector">buttes</span> 
     </x-tooltip>
@@ -141,7 +141,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
 });
 
 function changeOrientation(){
-    var orients = ["above", "onright", "below", "onleft"];
+    var orients = ["auto", "above", "onright", "below", "onleft"];
     var currOrient = demoTip.getAttribute("orientation");
     
     var currIndex = orients.indexOf(currOrient);

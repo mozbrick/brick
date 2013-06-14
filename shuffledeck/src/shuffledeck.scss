@@ -84,26 +84,52 @@ x-shuffledeck{
         // rotation animations
         //////////////////////
         &[slide-anim-type=flipX]{
-            // initial positions for animation
-            &#{$newStartingSelector}{
-                @include transformed(rotateX(180deg));
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(rotateX(180deg));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(rotateX(-180deg));
+                }
             }
-            
-            // target positions for animation
-            &#{$oldEndingSelector}{
-                @include transformed(rotateX(-180deg));
+            &[reverse]{
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(rotateX(-180deg));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(rotateX(180deg));
+                }
             }
         }
         
         &[slide-anim-type=flipY]{
-            // initial positions for animation
-            &#{$newStartingSelector}{
-                @include transformed(rotateY(180deg));
+            &:not([reverse]){
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(rotateY(180deg));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(rotateY(-180deg));
+                }
             }
-            
-            // target positions for animation
-            &#{$oldEndingSelector}{
-                @include transformed(rotateY(-180deg));
+            &[reverse]{
+                // initial positions for animation
+                &#{$newStartingSelector}{
+                    @include transformed(rotateY(-180deg));
+                }
+                
+                // target positions for animation
+                &#{$oldEndingSelector}{
+                    @include transformed(rotateY(180deg));
+                }
             }
         }
         

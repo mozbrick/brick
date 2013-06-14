@@ -1,9 +1,9 @@
 (function(){
-    var TOOLTIP_ORIENT_ARROW_DIR_MAP = {
-        "onleft": "right",
-        "onright": "left",
+    var TIP_ORIENT_ARROW_DIR_MAP = {
+        "above": "down",
         "below": "up",
-        "above": "down"
+        "onleft": "right",
+        "onright": "left"
     };
     
     // a simple struct to store all information needed to add and remove
@@ -19,8 +19,8 @@
     CachedListener.prototype.attachListener = function(){
         if(this.isAttached === false){
             this.elem.addEventListener(this.eventType, this.listenerFn);
-            console.log("bound '"+this.triggerStyle+"'-style "+ 
-                        this.eventType+" event to", this.elem);
+            /*console.log("bound '"+this.triggerStyle+"'-style "+ 
+                        this.eventType+" event to", this.elem);*/
             this.isAttached = true;
         }
     };
@@ -28,8 +28,8 @@
     CachedListener.prototype.removeListener = function(){
         if(this.isAttached === true){
             this.elem.removeEventListener(this.eventType, this.listenerFn);
-            console.log("unbound '"+this.triggerStyle+"'-style "+ 
-                        this.eventType+" event from", this.elem);
+            /*console.log("unbound '"+this.triggerStyle+"'-style "+ 
+                        this.eventType+" event from", this.elem);*/
             this.isAttached = false;
         }
     };
@@ -41,23 +41,61 @@
         "hover": function(tooltip, triggerElems){
             var createdListeners = [];
             
-            var showTipFn = mkSimulateMouseEnterLeaveFn(function(e){
-                _showTooltip(tooltip, e.currentTarget);
-                e.stopPropagation();
+            var showTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
+                // don't get triggered when coming from a tooltip element
+                var fromElem = e.relatedTarget || e.toElement;
+                if(!hasParentNode(fromElem, tooltip)){
+                    _showTooltip(tooltip, e.currentTarget);
+                    e.stopPropagation();
+                }
             });
-            var hideTipFn = mkSimulateMouseEnterLeaveFn(function(e){
-                _hideTooltip(tooltip);
-                e.stopPropagation();
+            var hideTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
+                // don't get triggered when exiting to a tooltip element
+                var toElem = e.relatedTarget || e.toElement;
+                if(!hasParentNode(toElem, tooltip)){
+                    _hideTooltip(tooltip);
+                    e.stopPropagation();
+                }
             });
             
+            var showTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
+                // don't get triggered when coming from the target element
+                var fromElem = e.relatedTarget || e.toElement;
+                var currTarget = tooltip.xtag.currTargetElem;
+                if(currTarget && !hasParentNode(fromElem, currTarget)){
+                    _showTooltip(tooltip, e.currentTarget);
+                    e.stopPropagation();
+                }
+            });
+            
+            var hideTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
+                // don't get triggered when exiting to the target element
+                var toElem = e.relatedTarget || e.toElement;
+                var currTarget = tooltip.xtag.currTargetElem;
+                if(currTarget && !hasParentNode(toElem, currTarget)){
+                    _hideTooltip(tooltip);
+                    e.stopPropagation();
+                }
+            });
+            
+            // create and add the CachedListeners to the list to be returned
             triggerElems.forEach(function(triggerElem){
                 var enterListener = new CachedListener(triggerElem, "mouseover",
-                                                       showTipFn, "hover");
+                                                       showTipTargetFn, "hover");
                 var exitListener = new CachedListener(triggerElem, "mouseout", 
-                                                      hideTipFn, "hover");
+                                                      hideTipTargetFn, "hover");
                 createdListeners.push(enterListener);
                 createdListeners.push(exitListener);
             });
+            
+            createdListeners.push(
+                new CachedListener(tooltip, "mouseover",
+                                   showTipTooltipFn, "hover")
+            );
+            createdListeners.push(
+                new CachedListener(tooltip, "mouseout", 
+                                   hideTipTooltipFn, "hover")
+            );
             
             return createdListeners;
         },
@@ -73,7 +111,6 @@
                 else{
                     _showTooltip(tooltip, e.currentTarget);
                 }
-                console.log("target click");
                 e.stopPropagation();
             };
             
@@ -86,12 +123,11 @@
             createdListeners.push(
                 new CachedListener(document.body, "click", function(e){
                                       _hideTooltip(tooltip);
-                                      console.log("body click");
                                    }, "click")
             );
             
-            // stop propagation on clicking the tooltip so we dont just
-            // immediately close it
+            // stop propagation on clicking the tooltip so that we dont just
+            // immediately close it due to the body listener
             createdListeners.push(
                 new CachedListener(tooltip, "click", function(e){
                     e.stopPropagation();
@@ -102,19 +138,6 @@
     };
     
     
-    function _selectorToElems(tooltip, selector){
-        if(selector === "_previousSibling"){
-            return (tooltip.previousElementSibling) ? [tooltip.previousElementSibling] : [];
-        }
-        else if(selector === "_nextSibling"){
-            return (tooltip.nextElementSibling) ? [tooltip.nextElementSibling] : [];
-        }
-        else{
-            var parent = (tooltip.parentNode) ? tooltip.parentNode : document;
-            return xtag.query(parent, selector);
-        }
-    }
-
     function hasParentNode(elem, parent){
         while(elem){
             if(elem === parent){
@@ -145,7 +168,7 @@
     function mkSimulateMouseEnterLeaveFn(callback){
         return function(e){
             var eventType = e.type.toLowerCase();
-            if(eventType === "mouseover" || eventType === "mouseleave"){
+            if(eventType === "mouseover" || eventType === "mouseout"){
                 var listeningElem = e.currentTarget;
                 var relElem = e.relatedTarget || e.toElement;
                 
@@ -159,6 +182,22 @@
                 callback(e);
             }
         };
+    }
+    
+    
+    function _selectorToElems(tooltip, selector){
+        if(selector === "_previousSibling"){
+            return (tooltip.previousElementSibling) ? 
+                      [tooltip.previousElementSibling] : [];
+        }
+        else if(selector === "_nextSibling"){
+            return (tooltip.nextElementSibling) ? 
+                      [tooltip.nextElementSibling] : [];
+        }
+        else{
+            var parent = (tooltip.parentNode) ? tooltip.parentNode : document;
+            return xtag.query(parent, selector);
+        }
     }
     
     function getPageOffset(elem){
@@ -178,12 +217,58 @@
         };
     }
     
-    // see: http://stackoverflow.com/a/9793197 for inspiration
+    function overlaps(elemA, elemB){
+        var _pointIsInRect = function(x, y, rect){
+            return (rect.left <= x && x <= rect.right && 
+                    rect.top <= y && y <= rect.bottom);
+        };
+        
+        var absCoordsA = getPageOffset(elemA);
+        var absCoordsB = getPageOffset(elemB);
+        var rectA = {
+            left: absCoordsA.left,
+            top: absCoordsA.top,
+            right: absCoordsA.left+elemA.offsetWidth,
+            bottom: absCoordsA.top + elemA.offsetHeight
+        };
+        
+        var rectB = {
+            left: absCoordsB.left,
+            top: absCoordsB.top,
+            right: absCoordsB.left+elemB.offsetWidth,
+            bottom: absCoordsB.top + elemB.offsetHeight
+        };
+        
+        //check box A 
+        if(_pointIsInRect(rectA.left, rectA.top, rectB) || 
+           _pointIsInRect(rectA.right, rectA.top, rectB) || 
+           _pointIsInRect(rectA.right, rectA.bottom, rectB) || 
+           _pointIsInRect(rectA.left, rectA.bottom, rectB))
+        {
+            return true; 
+        }
+        
+        //check box B 
+        else if(_pointIsInRect(rectB.left, rectB.top, rectA) || 
+           _pointIsInRect(rectB.right, rectB.top, rectA) || 
+           _pointIsInRect(rectB.right, rectB.bottom, rectA) || 
+           _pointIsInRect(rectB.left, rectB.bottom, rectA)) 
+        {    
+            return true; 
+        }
+        else{
+            return false; 
+        }
+    }
+    
+    // see: http://stackoverflow.com/a/9793197 for base inspiration of calc
     function getRotationDims(width, height, degrees){
         var radians = degrees * (Math.PI / 180);
         
-        var rotatedHeight = width * Math.sin(radians) + height * Math.cos(radians);
-        var rotatedWidth = width * Math.cos(radians) + height * Math.sin(radians);
+        var rotatedHeight = width * Math.sin(radians) + 
+                            height * Math.cos(radians);
+        var rotatedWidth = width * Math.cos(radians) + 
+                           height * Math.sin(radians);
         
         return {
             "height": rotatedHeight,
@@ -208,9 +293,13 @@
         arrow.style.top = "";
         arrow.style.left = "";
         
+        // coordinates of the target element, relative to the page
         var targetPageOffset = getPageOffset(targetElem);
+        
+        // coordinates of the tooltip's container element, relative to the page
         var containerPageOffset = getPageOffset(offsetContainer);
         
+        // coordinates of the target element,relative to the tooltip's container
         var targetContainerOffset = {
             "top": targetPageOffset.top - containerPageOffset.top,
             "left": targetPageOffset.left - containerPageOffset.left
@@ -223,7 +312,7 @@
         var origTooltipWidth = tooltip.offsetWidth;
         var origTooltipHeight = tooltip.offsetHeight;
         
-        // TODO: more intelligent rotation angle calculation; currently
+        // TODO: needs more intelligent rotation angle calculation; currently
         // just assumes rotation is 45 degrees
         var arrowRotationDegs = 45;
         var arrowDims = getRotationDims(arrow.offsetWidth, arrow.offsetHeight, 
@@ -231,14 +320,21 @@
         var arrowWidth = arrowDims.width;
         var arrowHeight = arrowDims.height;
         
-        // coords for if we need to either vertically or horizontally center
+        // coords for if we need to either vertically or horizontally center the
+        // tooltip on the target element;
+        // coords are relative to the tooltip's container
         var centerAlignCoords = {
-            "left": targetContainerOffset.left + (targetWidth - origTooltipWidth)/2,
-            "top": targetContainerOffset.top + (targetHeight - origTooltipHeight)/2
+            "left": targetContainerOffset.left + 
+                    (targetWidth - origTooltipWidth)/2,
+            "top": targetContainerOffset.top + 
+                   (targetHeight - origTooltipHeight)/2
         };
         
-        
-        var getAlignedArrowCoords = function(tooltipTop, tooltipLeft){
+        // given the final top and left of the tooltip, this helper function
+        // will return the top and left coordinates that would allow the tooltip
+        // arrow to be horizontally/vertically centered on an element;
+        // returned coordinates are relative to the tooltip element
+        var _getAlignedArrowCoords = function(tooltipTop, tooltipLeft){
             return {
                 "left": (targetWidth - arrowWidth)/2 + 
                         targetContainerOffset.left - tooltipLeft,
@@ -247,13 +343,13 @@
             };
         };
         
-        // messy calculations for aligning the tooltip and the arrow
-        var newTop;
-        var newLeft;
-        var maxTop;
-        var maxLeft;
+        /** messy calculations for aligning the tooltip and the arrow **/
+        
+        // on first pass, determine the coordinates of the tooltip, as well as 
+        // its constraints
+        var newTop, newLeft, maxTop, maxLeft;
         if(orientation === "above"){
-            newTop = targetContainerOffset.top - origTooltipHeight - arrowHeight;
+            newTop =targetContainerOffset.top - origTooltipHeight - arrowHeight;
             newLeft = centerAlignCoords.left;
             maxTop = containerHeight - origTooltipHeight - arrowHeight;
             maxLeft = containerWidth - origTooltipWidth;
@@ -266,7 +362,7 @@
         }
         else if(orientation === "onleft"){
             newTop = centerAlignCoords.top;
-            newLeft = targetContainerOffset.left - origTooltipWidth - arrowWidth;
+            newLeft =targetContainerOffset.left - origTooltipWidth - arrowWidth;
             maxTop = containerHeight - origTooltipHeight;
             maxLeft = containerWidth - origTooltipWidth - arrowWidth;
         }
@@ -280,11 +376,14 @@
             throw "invalid orientation " + orientation;
         }
         
+        // actually constrain and position the tooltip
         newTop = constrainNum(newTop, 0, maxTop);
         newLeft = constrainNum(newLeft, 0, maxLeft);
         tooltip.style.top = newTop + "px";
         tooltip.style.left = newLeft + "px";
-        var arrowCoords = getAlignedArrowCoords(newTop, newLeft);
+        
+        // position the arrow in the tooltip to center on the target element
+        var arrowCoords = _getAlignedArrowCoords(newTop, newLeft);
         if(orientation === "above" || orientation === "below"){
             arrow.style.left = constrainNum(
                                  arrowCoords.left, 0, 
@@ -300,14 +399,24 @@
     }
     
     function _showTooltip(tooltip, targetElem){
-        console.log("show called");
-        var orient = tooltip.orientation;
-        if(!(orient in TOOLTIP_ORIENT_ARROW_DIR_MAP)){
-            // TODO: auto placement algorithm 
+        var arrow = tooltip.xtag.arrowEl;
+        var targetOrient = tooltip.orientation;
+        var newOrient;
+        if(targetOrient in TIP_ORIENT_ARROW_DIR_MAP){
+            _positionTooltip(tooltip, targetElem, targetOrient);
         }
         else{
-            _positionTooltip(tooltip, targetElem, orient);
+            for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
+                targetOrient = tmpOrient;
+                _positionTooltip(tooltip, targetElem, targetOrient);
+                if(!overlaps(tooltip, targetElem)){
+                    break;
+                }
+            }
         }
+        arrow.setAttribute("arrow-direction", 
+                           TIP_ORIENT_ARROW_DIR_MAP[targetOrient]);
+        
         tooltip.setAttribute("visible", true);
         tooltip.xtag.currTargetElem = targetElem;
         
@@ -317,7 +426,6 @@
     }
     
     function _hideTooltip(tooltip){
-        console.log("hide called");
         tooltip.removeAttribute("visible");
         tooltip.xtag.currTargetElem = null;
         
@@ -370,7 +478,6 @@
     xtag.register("x-tooltip", {
         lifecycle:{
             created: function(){
-                console.log("created");
                 this.xtag.triggeringElems = [];
                 this.xtag.currTriggerStyle = "click";
                 this.xtag.currTargetElem = null;
@@ -404,11 +511,15 @@
                     var arrow = this.querySelector(".tooltip-arrow");
                     
                     var newArrowDir = null;
-                    if(newOrientation in TOOLTIP_ORIENT_ARROW_DIR_MAP){
-                        newArrowDir = TOOLTIP_ORIENT_ARROW_DIR_MAP[newOrientation];
+                    if(newOrientation in TIP_ORIENT_ARROW_DIR_MAP){
+                        newArrowDir = TIP_ORIENT_ARROW_DIR_MAP[newOrientation];
+                        arrow.setAttribute("arrow-direction", newArrowDir);
                     }
-                    
-                    arrow.setAttribute("arrow-direction", newArrowDir);
+                    else{
+                        // when auto placing, we will determine arrow direction
+                        // when shown
+                        arrow.removeAttribute("arrow-direction");
+                    }
                 }
             },
             
@@ -426,7 +537,6 @@
                     if(!(newTriggerStyle in TRIGGER_STYLE_GETLISTENERS)){
                         throw "invalid trigger style " + newTriggerStyle;
                     }
-                    console.log("trigger-style changed to", newTriggerStyle);
                     _updateTriggers(this, null, newTriggerStyle)
                 }
             },
@@ -436,7 +546,6 @@
             "target-selector": {
                 attribute: {},
                 set: function(newSelector){
-                    console.log("target selector changed to ", newSelector);
                     var tooltip = this;
                     
                     // filter out selected elements that are 
