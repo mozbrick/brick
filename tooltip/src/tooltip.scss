@@ -39,9 +39,12 @@ x-tooltip{
     
     &[visible]{
         visibility: visible;
-        opacity: 1;
-        @include transformed(none);
+        
+            opacity: 1;
+            @include transformed(none);
     }
+    
+    
 }
 
 // let user style this to style the balloon

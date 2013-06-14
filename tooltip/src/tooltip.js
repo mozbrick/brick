@@ -35,9 +35,17 @@
     var TRIGGER_STYLE_GETLISTENERS = {
         "hover": function(tooltip, triggerElems){
             var createdListeners = [];
-            var isHovering = false;
+            var hoverOutTimer = null;
+            var hideDelay = 200;
+            var cancelTimerFn = function(){
+                if(hoverOutTimer){
+                    window.clearTimeout(hoverOutTimer);
+                }
+                hoverOutTimer = null;
+            };
+            
             var showTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
-                isHovering = true;
+                cancelTimerFn();
                 // don't trigger show when coming from a tooltip element
                 var fromElem = e.relatedTarget || e.toElement;
                 if(!hasParentNode(fromElem, tooltip)){
@@ -46,24 +54,23 @@
                 }
             });
             var hideTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
+                cancelTimerFn();
                 // don't get triggered when exiting to a tooltip element
                 var toElem = e.relatedTarget || e.toElement;
                 if(!hasParentNode(toElem, tooltip)){
-                    isHovering = false;
                     // add delay so that we can interact with tooltip
-                    window.setTimeout(function(){
-                        if(isHovering === false && 
-                           tooltip.xtag.currTriggerStyle === "hover")
+                    hoverOutTimer = window.setTimeout(function(){
+                        if(tooltip.xtag.currTriggerStyle === "hover")
                         {
                             _hideTooltip(tooltip);
                         }
-                    }, 500);
+                    }, hideDelay);
                     e.stopPropagation();
                 }
             });
             
             var showTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
-                isHovering = true;
+                cancelTimerFn();
                 
                 // don't trigger show when coming from the target element
                 var fromElem = e.relatedTarget || e.toElement;
@@ -78,15 +85,19 @@
             });
             
             var hideTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
+                cancelTimerFn();
                 // don't get triggered when exiting to the target element
                 var toElem = e.relatedTarget || e.toElement;
                 var currTarget = tooltip.xtag.currTargetElem;
                 if(currTarget && !hasParentNode(toElem, currTarget))
                 {
-                    isHovering = false;
-                    if(tooltip.hasAttribute("visible")){
-                        _hideTooltip(tooltip);
-                    }
+                    // add delay so that we can interact with tooltip
+                    hoverOutTimer = window.setTimeout(function(){
+                        if(tooltip.xtag.currTriggerStyle === "hover")
+                        {
+                            _hideTooltip(tooltip);
+                        }
+                    }, hideDelay);
                     e.stopPropagation();
                 }
             });
@@ -309,10 +320,7 @@
         // until getting something that doesn't overlap the target element
         if(!(orientation in TIP_ORIENT_ARROW_DIR_MAP)){
             var arrow = tooltip.xtag.arrowEl;
-            console.log("defaulting to auto orientation placement");
             for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
-                console.log("attempted", tmpOrient, "positioning");
-                
                 // ensure arrow is pointing in correct direction
                 arrow.setAttribute("arrow-direction", 
                                    TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
@@ -322,7 +330,6 @@
                                    
                 // found a good position, so finalize and stop checking
                 if(!overlaps(tooltip, targetElem)){
-                    console.log("decided on", tmpOrient, "positioning");
                     return;
                 }
             }
