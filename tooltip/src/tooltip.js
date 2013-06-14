@@ -80,7 +80,7 @@
                 if(!tooltip.hasAttribute("visible") &&
                     lastTarget && !hasParentNode(fromElem, lastTarget))
                 {
-                    _showTooltip(tooltip, e.currentTarget);
+                    _showTooltip(tooltip, lastTarget);
                     e.stopPropagation();
                 }
             });
@@ -457,10 +457,15 @@
     }
     
     function _showTooltip(tooltip, targetElem){
+        if(targetElem === tooltip){
+            console.log("The tooltip's target element is the tooltip itself!"+
+                        " Is this intentional?");
+        }
         var arrow = tooltip.xtag.arrowEl;
         var targetOrient = tooltip.orientation;
         if(targetElem){
             _positionTooltip(tooltip, targetElem, targetOrient);
+            tooltip.xtag.lastTargetElem = targetElem;
         }
         else{
             tooltip.style.top = "";
@@ -470,7 +475,6 @@
         }
         
         tooltip.setAttribute("visible", true);
-        tooltip.xtag.lastTargetElem = targetElem;
         
         xtag.fireEvent(tooltip, "tooltipshown", {
             "targetElem": targetElem

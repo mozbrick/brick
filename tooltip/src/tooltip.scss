@@ -22,8 +22,6 @@ x-tooltip{
     z-index: 999;
     overflow: visible;
     
-    
-    
     visibility: hidden;
     opacity: 0;
     @include animated((visibility, transform, opacity), 0.2s);
