@@ -21,10 +21,14 @@ x-tooltip{
     
     z-index: 999;
     overflow: visible;
-    visibility: hidden;
     
+    
+    
+    visibility: hidden;
     opacity: 0;
-    @include animated((transform, opacity), 0.2s);
+    @include animated((visibility, transform, opacity), 0.2s);
+    
+    // different translates for different directional slide-ins
     @include transformed(translateY(10px));
     
     &[orientation=below]{
@@ -39,12 +43,9 @@ x-tooltip{
     
     &[visible]{
         visibility: visible;
-        
-            opacity: 1;
-            @include transformed(none);
+        opacity: 1;
+        @include transformed(none);
     }
-    
-    
 }
 
 // let user style this to style the balloon

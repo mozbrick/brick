@@ -57,7 +57,7 @@ $FONTS_FOLDER: "../fonts/";
     }
 }
 
-@mixin animated($properties: all, $duration: 0.2s, $timing:ease-in, $delay: 0s){
+@mixin animated($properties: all, $durations: 0.2s, $timings:ease-in, $delays: 0s){
     transition-property: $properties;
     -webkit-transition-property: replaceItem($properties, transform, 
                                              -webkit-transform);
@@ -66,20 +66,20 @@ $FONTS_FOLDER: "../fonts/";
     -o-transition-property: replaceItem($properties, transform, 
                                         -o-transform);
     
-    transition-duration: $duration;
-    -webkit-transition-duration: $duration;
-    -moz-transition-duration: $duration;
-    -o-transition-duration: $duration;
+    transition-duration: $durations;
+    -webkit-transition-duration: $durations;
+    -moz-transition-duration: $durations;
+    -o-transition-duration: $durations;
     
-    -webkit-transition-timing-function:$timing;
-    -moz-transition-timing-function:$timing;
-    -o-transition-timing-function:$timing;
-    transition-timing-function:$timing;
+    -webkit-transition-timing-function:$timings;
+    -moz-transition-timing-function:$timings;
+    -o-transition-timing-function:$timings;
+    transition-timing-function:$timings;
     
-    -webkit-transition-delay:$delay;
-    -moz-transition-delay:$delay;
-    -o-transition-delay:$delay;
-    transition-delay:$delay;
+    -webkit-transition-delay:$delays;
+    -moz-transition-delay:$delays;
+    -o-transition-delay:$delays;
+    transition-delay:$delays;
 }
 
 @mixin transformed($transform){
