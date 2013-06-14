@@ -8,19 +8,16 @@
     
     // a simple struct to store all information needed to add and remove
     // a particular event listener
-    function CachedListener(elem, eventType, listenerFn, triggerStyle){
+    function CachedListener(elem, eventType, listenerFn){
         this.eventType = eventType;
         this.listenerFn = listenerFn;
         this.elem = elem;
-        this.triggerStyle = triggerStyle;
         this.isAttached = false;
     }
     
     CachedListener.prototype.attachListener = function(){
         if(this.isAttached === false){
             this.elem.addEventListener(this.eventType, this.listenerFn);
-            /*console.log("bound '"+this.triggerStyle+"'-style "+ 
-                        this.eventType+" event to", this.elem);*/
             this.isAttached = true;
         }
     };
@@ -28,8 +25,6 @@
     CachedListener.prototype.removeListener = function(){
         if(this.isAttached === true){
             this.elem.removeEventListener(this.eventType, this.listenerFn);
-            /*console.log("unbound '"+this.triggerStyle+"'-style "+ 
-                        this.eventType+" event from", this.elem);*/
             this.isAttached = false;
         }
     };
@@ -40,9 +35,10 @@
     var TRIGGER_STYLE_GETLISTENERS = {
         "hover": function(tooltip, triggerElems){
             var createdListeners = [];
-            
+            var isHovering = false;
             var showTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
-                // don't get triggered when coming from a tooltip element
+                isHovering = true;
+                // don't trigger show when coming from a tooltip element
                 var fromElem = e.relatedTarget || e.toElement;
                 if(!hasParentNode(fromElem, tooltip)){
                     _showTooltip(tooltip, e.currentTarget);
@@ -53,16 +49,30 @@
                 // don't get triggered when exiting to a tooltip element
                 var toElem = e.relatedTarget || e.toElement;
                 if(!hasParentNode(toElem, tooltip)){
-                    _hideTooltip(tooltip);
+                    isHovering = false;
+                    // add delay so that we can interact with tooltip
+                    window.setTimeout(function(){
+                        if(isHovering === false && 
+                           tooltip.xtag.currTriggerStyle === "hover")
+                        {
+                            _hideTooltip(tooltip);
+                        }
+                    }, 500);
                     e.stopPropagation();
                 }
             });
             
             var showTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
-                // don't get triggered when coming from the target element
+                console.log("on tooltip");
+                isHovering = true;
+                
+                // don't trigger show when coming from the target element
                 var fromElem = e.relatedTarget || e.toElement;
                 var currTarget = tooltip.xtag.currTargetElem;
-                if(currTarget && !hasParentNode(fromElem, currTarget)){
+                // also don't trigger a reshow unless we are actually hidden
+                if(currTarget && !hasParentNode(fromElem, currTarget) &&
+                   !tooltip.hasAttribute("visible"))
+                {
                     _showTooltip(tooltip, e.currentTarget);
                     e.stopPropagation();
                 }
@@ -72,8 +82,12 @@
                 // don't get triggered when exiting to the target element
                 var toElem = e.relatedTarget || e.toElement;
                 var currTarget = tooltip.xtag.currTargetElem;
-                if(currTarget && !hasParentNode(toElem, currTarget)){
-                    _hideTooltip(tooltip);
+                if(currTarget && !hasParentNode(toElem, currTarget))
+                {
+                    isHovering = false;
+                    if(tooltip.hasAttribute("visible")){
+                        _hideTooltip(tooltip);
+                    }
                     e.stopPropagation();
                 }
             });
@@ -81,20 +95,18 @@
             // create and add the CachedListeners to the list to be returned
             triggerElems.forEach(function(triggerElem){
                 var enterListener = new CachedListener(triggerElem, "mouseover",
-                                                       showTipTargetFn, "hover");
+                                                       showTipTargetFn);
                 var exitListener = new CachedListener(triggerElem, "mouseout", 
-                                                      hideTipTargetFn, "hover");
+                                                      hideTipTargetFn);
                 createdListeners.push(enterListener);
                 createdListeners.push(exitListener);
             });
             
             createdListeners.push(
-                new CachedListener(tooltip, "mouseover",
-                                   showTipTooltipFn, "hover")
+                new CachedListener(tooltip, "mouseover", showTipTooltipFn)
             );
             createdListeners.push(
-                new CachedListener(tooltip, "mouseout", 
-                                   hideTipTooltipFn, "hover")
+                new CachedListener(tooltip, "mouseout", hideTipTooltipFn)
             );
             
             return createdListeners;
@@ -116,14 +128,14 @@
             
             triggerElems.forEach(function(triggerElem){
                 var targetListener = new CachedListener(triggerElem, "click", 
-                                                        targetClickFn, "click");
+                                                        targetClickFn);
                 createdListeners.push(targetListener);
             });
             
             createdListeners.push(
                 new CachedListener(document.body, "click", function(e){
                                       _hideTooltip(tooltip);
-                                   }, "click")
+                                   })
             );
             
             // stop propagation on clicking the tooltip so that we dont just
@@ -131,7 +143,7 @@
             createdListeners.push(
                 new CachedListener(tooltip, "click", function(e){
                     e.stopPropagation();
-                }, "click")
+                })
             );
             return createdListeners;
         }
