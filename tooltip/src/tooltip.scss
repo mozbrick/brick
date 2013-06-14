@@ -83,7 +83,6 @@ x-tooltip > .tooltip-arrow{
         top: 100%; // default positions to be overridden later
         left: 50%;
         
-        @include animated(left, 0.2s);
         @include transformed(translateY(-50%) rotate(45deg));
         border-top-color: transparent !important;
         border-left-color: transparent !important;
@@ -93,7 +92,6 @@ x-tooltip > .tooltip-arrow{
         bottom: 100%;
         left: 50%;
         
-        @include animated(left, 0.2s);
         @include transformed(translateY(50%) rotate(45deg));
         border-bottom-color: transparent !important;
         border-right-color: transparent !important;
@@ -103,7 +101,6 @@ x-tooltip > .tooltip-arrow{
         right: 100%;
         top: 50%;
         
-        @include animated(top, 0.2s);
         @include transformed(translateX(50%) rotate(45deg));
         border-top-color: transparent !important;
         border-right-color: transparent !important;
@@ -113,7 +110,6 @@ x-tooltip > .tooltip-arrow{
         left: 100%;
         top: 50%;
         
-        @include animated(top, 0.2s);
         @include transformed(translateX(-50%) rotate(45deg));
         border-bottom-color: transparent !important;
         border-left-color: transparent !important;

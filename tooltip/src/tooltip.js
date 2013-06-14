@@ -308,19 +308,21 @@
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
         if(!(orientation in TIP_ORIENT_ARROW_DIR_MAP)){
+            var arrow = tooltip.xtag.arrowEl;
             console.log("defaulting to auto orientation placement");
             for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
                 console.log("attempted", tmpOrient, "positioning");
                 
+                // ensure arrow is pointing in correct direction
+                arrow.setAttribute("arrow-direction", 
+                                   TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
+                
                 // recursively attempt a valid positioning
                 _positionTooltip(tooltip, targetElem, tmpOrient);
-                
-                // found a good position, so finalize and ensure that
-                // arrow is pointing in correct direction 
+                                   
+                // found a good position, so finalize and stop checking
                 if(!overlaps(tooltip, targetElem)){
                     console.log("decided on", tmpOrient, "positioning");
-                    tooltip.xtag.arrowEl.setAttribute("arrow-direction", 
-                           TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
                     return;
                 }
             }
@@ -539,10 +541,6 @@
                 this.xtag.cachedListeners = [];
                 _updateTriggerListeners(this, this.xtag.triggeringElems, 
                                 this.xtag.currTriggerStyle);
-                                
-                xtag.addEvent(this, 'resize', function(e){
-                    console.log("tooltip resized!");
-                });
             }
         },
         events: {
@@ -636,6 +634,14 @@
             }
         },
         methods: {
+            // call this when the position of the tooltip needs to be 
+            // recalculated; such as after updating the DOM of the contents
+            refreshPosition: function(){
+                if(this.xtag.currTargetElem){
+                    _positionTooltip(this, this.xtag.currTargetElem,
+                                     this.orientation);
+                }
+            }
         }
     });
 })();

@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" href="../src/tooltip.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
-    <script type="text/javascript" src="event-resize.js"></script>
     <script type="text/javascript" src="../src/tooltip.js"></script>
     <style>
         body, html{
@@ -107,7 +106,7 @@
     </button>
     <x-tooltip id="demoTip" trigger-selector="_nextSibling">
         Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
-        <br/><a href="http://google.com">Lorem ipsum</a><span class="fancy-selector">buttes</span> 
+        <br/><a href="http://google.com">Check out this link!</a>
     </x-tooltip>
     <div id="next-sib">
         <h1>Next sibling</h1>
@@ -204,14 +203,14 @@ function randomKittenUrl(){
 var changeContents = (function(){
     var currIndex = 0;
     var htmlStrs = [
-        "Hi! I'm a tooltip! <img src=\"http://placekitten.com/30\"/><br/><a href=\"http://google.com\">Lorem ipsum</a><span class=\"fancy-selector\">buttes</span>",
+        "Hi! I'm a tooltip! <img src='http://placekitten.com/30'/><br/><a href='http://google.com'>Check out this link!</a>",
         "Text text text text",
-        "<img src='http://tinyurl.com/mgptl87'/>",
-        "<img src='http://i.imgur.com/K8Vytv8.gif'/>",
+        "<img src='test.png'/>",
+        "<img src='test.gif'/>",
         (function(){
             var aCode = "A".charCodeAt(0);
             var letters = [];
-            for(var i=0; i < 26; i++){
+            for(var i=0; i < 25; i++){
                 letters.push(String.fromCharCode(aCode+i));
             }
             return letters.join("<br/>");
@@ -227,7 +226,42 @@ var changeContents = (function(){
         currIndex = newIndex;
         var newHtml = htmlStrs[newIndex];
         
-        contentEl.innerHTML = newHtml;
+        // set up a temporary holding element to load images in
+        var container = document.createElement("div");
+        container.innerHTML = newHtml;
+        
+        var imgs = container.querySelectorAll("img");
+        var numImgs = imgs.length;
+        var loadedImgs = 0;
+        
+        // copy over html from the temp container to the content element and
+        // trigger a refresh
+        var _onContainerReady = function(){
+            contentEl.innerHTML = container.innerHTML;
+            demoTip.refreshPosition();
+        };
+        
+        if(numImgs === 0){
+            _onContainerReady();
+        }
+        else{
+            // wait for any images to load before setting the content's html
+            var _onImgLoaded = function(){
+                loadedImgs += 1;
+                if(loadedImgs === numImgs){
+                    _onContainerReady();
+                }
+            };
+        
+            imgs.forEach(function(img){
+                if(img.complete){
+                    _onImgLoaded();
+                }
+                else{
+                    img.onload = _onImgLoaded;
+                }
+            });
+        }
     }
 })();
 </script>
