@@ -22,7 +22,7 @@
             "transition-type" : "Defines the kind of transition animation that is used when cycling slides. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
         },
 		"events": {
-            "x-shuffledeck:slideend": "fired when a slide transition animation has finished"
+            "slideend": "fired by the x-shuffledeck element when a slide transition animation has finished"
         },
 		"methods": {
             "slideTo" : "Transitions to the x-shuffleslide at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.",

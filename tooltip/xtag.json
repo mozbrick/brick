@@ -3,7 +3,7 @@
 	"tagName": "x-tooltip",
 	"version": "0.1.0",
 	"author": "Leon Zhang",
-	"description": "Content container that appears over current context and is associated with a trigger element in the underlying content",
+	"description": "Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content",
 	"demo": "demo/tooltip-demo.html",
 	"categories": [
         "ui"
@@ -17,11 +17,33 @@
 		"ios": 4
 	},
 	"documentation": {
-		"description": "",
-		"attributes": {},
-		"events": {},
-		"methods": {},
-		"getters": {},
-		"setters": {}
+		"description": "Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content",
+		"attributes": {
+            "orientation": "Determines where the tooltip appears in relation to the triggering element. Valid options are 'above', 'below', 'onleft', 'onright'. If not provided, or if invalid, defaults to auto placement of tooltip.",
+            "trigger-style": "Indicates how the tooltip is triggered. Valid options are 'hover', 'click' and 'none' (defaults to 'hover'). When set to 'hover', the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to 'click', the tooltip is triggered when the user clicks on the trigger element, and is dismissed when the user clicks anywhere else (or on the trigger again). When set to 'none', no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the showTooltip and hideTooltip API calls without any default behaviors getting in the way.",
+            "trigger-selector": "Indicates how to select elements that would trigger the tooltip. If given a selector of '_previousSibling', the tooltip will use the immediately preceding sibling element in the DOM tree as its triggering element. Similarly, when set to '_nextSibling', the tooltip will use its next DOM sibling as its triggering element. Otherwise, the selector will be applied to the tooltip's parent node as a search query, and any elements that are not part of the tooltip itself will act as triggering elements for the tooltip. (For example, if you were to provide '.fancy-selector' as this attribute's value, the elements you would get back would be those found from foo.parentNode.querySelectorAll('.fancy-selector'), where foo is your tooltip element.)"
+        },
+		"events": {
+            "tooltipshown": "Fired by the x-tooltip element when tooltip is shown",
+            "tooltiphidden": "Fired by the x-tooltip element when tooltip is hidden"
+        },
+		"methods": {
+            "refreshPosition": "This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.",
+            "showTooltip": "This method forces the tooltip to display (this will fire a 'tooltipshown' event).",
+            "hideTooltip": "This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).",
+            "toggleTooltip": "This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate)."
+        },
+		"getters": {
+            "orientation": "This will provide the current value of the orientation attribute.",
+            "trigger-style": "This will provide the current value of the trigger-style attribute.",
+            "trigger-selector": "This will provide the current value of the trigger-selector attribute.",
+            "content": "This will provide the DOM element that is acting as the content area of the tooltip."
+        },
+		"setters": {
+            "orientation": "This will change the value of the tooltip's orientation attribute.",
+            "trigger-style": "This will change the value of the tooltip's trigger-style attribute.",
+            "trigger-selector": "This will change the value of the tooltip's trigger-selector attribute.",
+            "content": "This will replace the DOM element for the tooltip's content area with an entirely new DOM element, destroying the old one."
+        }
 	}
 }

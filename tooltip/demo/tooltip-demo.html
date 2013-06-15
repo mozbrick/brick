@@ -74,11 +74,11 @@
         
         /** example usage: attaching a tooltip indicator to elements **/
         [x-tooltip-targeted]:after{
-            content: "?";
+            content: "!";
             position: absolute;
             right: -7px;
             bottom: -7px;
-            background-color: blue;
+            background-color: red;
             color: white;
             font-size: 1.1em;
             border: 1px solid white;
@@ -112,8 +112,8 @@
         <h1>Next sibling</h1>
     </div>
     <div style="position: relative; background-color: lavender">    
-        <span class="fancy-selector">#</span>
-        <span class="fancy-selector">".fancy-selector" box</span>
+        <span class="fancy-selector">".fancy-selector" box1</span>
+        <span class="fancy-selector">box2</span>
     </div>
 </div>
 
@@ -138,6 +138,14 @@ document.addEventListener('DOMComponentsLoaded', function(){
     updateSelectorBox();
     updateOrientationBox();
     updateTriggerStyleBox();
+    
+    demoTip.addEventListener("tooltipshown", function(e){
+        console.log("tooltip shown!", e);
+    });
+    
+    demoTip.addEventListener("tooltiphidden", function(e){
+        console.log("tooltip hidden!", e);
+    });
 });
 
 function changeOrientation(){
@@ -166,7 +174,7 @@ function toggleSelector(){
 }
 
 function toggleTriggerStyle(){
-    var styles = ["click", "hover"];
+    var styles = ["hover", "click", "none"];
     var currStyle = demoTip["trigger-style"];
     
     var currIndex = styles.indexOf(currStyle);
@@ -210,10 +218,10 @@ var changeContents = (function(){
         (function(){
             var aCode = "A".charCodeAt(0);
             var letters = [];
-            for(var i=0; i < 25; i++){
+            for(var i=0; i < 10; i++){
                 letters.push(String.fromCharCode(aCode+i));
             }
-            return letters.join("<br/>");
+            return letters.join("<hr/>");
         })()
     ];
     

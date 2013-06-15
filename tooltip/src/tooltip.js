@@ -37,6 +37,9 @@
     // CachedListeners that the tooltip would need to attach
     // NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
     var TRIGGER_STYLE_GETLISTENERS = {
+        "none": function(tooltip, triggerElems){
+            return [];
+        },
         "hover": function(tooltip, triggerElems){
             var createdListeners = [];
             var hoverOutTimer = null;
@@ -149,7 +152,9 @@
             
             createdListeners.push(
                 new CachedListener(document.body, "click", function(e){
-                                      _hideTooltip(tooltip);
+                                      if(tooltip.hasAttribute("visible")){
+                                        _hideTooltip(tooltip);
+                                      }
                                    })
             );
             
@@ -321,10 +326,10 @@
     }    
     
     function _positionTooltip(tooltip, targetElem, orientation){
+        var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
         if(!(_isValidOrientation(orientation))){
-            var arrow = tooltip.xtag.arrowEl;
             for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
                 // ensure arrow is pointing in correct direction
                 arrow.setAttribute("arrow-direction", 
@@ -344,7 +349,6 @@
         var offsetContainer = (tooltip.offsetParent) ? 
                                     tooltip.offsetParent : tooltip.parentNode;
         
-        var arrow = tooltip.xtag.arrowEl;
         tooltip.style.top = "";
         tooltip.style.left = "";
         arrow.style.top = "";
@@ -462,8 +466,8 @@
         return;
     }
     
-    function _showTooltip(tooltip, targetElem){
-        if(targetElem === tooltip){
+    function _showTooltip(tooltip, triggerElem){
+        if(triggerElem === tooltip){
             console.log("The tooltip's target element is the tooltip itself!" +
                         " Is this intentional?");
         }
@@ -475,15 +479,15 @@
             tooltip.setAttribute("visible", true);
             
             xtag.fireEvent(tooltip, "tooltipshown", {
-                "targetElem": targetElem
+                "triggerElem": triggerElem
             });
         };
         
-        if(targetElem){
+        if(triggerElem){
             // skip transition in order to completely position tooltip
             xtag.skipTransition(tooltip, function(){
-                _positionTooltip(tooltip, targetElem, targetOrient);
-                tooltip.xtag.lastTargetElem = targetElem;
+                _positionTooltip(tooltip, triggerElem, targetOrient);
+                tooltip.xtag.lastTargetElem = triggerElem;
                 
                 return _readyToShowFn;
             }, this);
@@ -599,6 +603,7 @@
             }
         },
         events: {
+            // tooltipshown and tooltiphidden are fired manually
         },
         accessors: {
             // sets the placement of the tooltip in relation to a target element
@@ -629,11 +634,6 @@
                 }
             },
             
-            "visible":{
-                attribute: {boolean: true},
-                set: function(isVisible){}
-            },
-            
             "trigger-style": {
                 attribute: {},
                 get: function(){
@@ -643,7 +643,7 @@
                     if(!(newTriggerStyle in TRIGGER_STYLE_GETLISTENERS)){
                         throw "invalid trigger style " + newTriggerStyle;
                     }
-                    _updateTriggerListeners(this, null, newTriggerStyle)
+                    _updateTriggerListeners(this, null, newTriggerStyle);
                     this.xtag.currTriggerStyle = newTriggerStyle;
                 }
             },
@@ -668,7 +668,7 @@
                         }
                     });
                     
-                    _updateTriggerListeners(tooltip, newTriggerElems)
+                    _updateTriggerListeners(tooltip, newTriggerElems);
                     this.xtag.triggeringElems = newTriggerElems;
                     this.xtag.triggerSelector = newSelector;
                 }
@@ -686,6 +686,8 @@
                     
                     this.replaceChild(newContentElem, oldContent);
                     this.xtag.contentEl = newContentElem;
+                    
+                    this.refreshPosition();
                 }
             }
         },
@@ -714,7 +716,7 @@
                 else{
                     this.showTooltip();
                 }
-            },
+            }
         }
     });
 })();

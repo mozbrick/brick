@@ -24,6 +24,8 @@ x-tooltip{
     
     visibility: hidden;
     opacity: 0;
+    max-width: 100%;
+    max-height: 100%;
     
     
     @include animated((visibility, transform, opacity), 0.2s);
@@ -80,7 +82,7 @@ x-tooltip > .tooltip-content{
     position: relative;
     z-index: 2;
     display: block;
-    overflow: hidden;
+    overflow: auto;
     padding: .5em;
     @include boxSizing(border-box);
 }
