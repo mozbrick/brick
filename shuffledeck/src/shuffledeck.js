@@ -446,8 +446,8 @@
             }
         },
         events:{
-            "showtab:delegate(x-shuffleslide)": function(e){
-                console.log("showtab detected!", e);
+            "show:delegate(x-shuffleslide)": function(e){
+                console.log("show detected!", e);
                 var slide = e.target;
                 if(slide.parentNode.nodeName.toLowerCase() === "x-shuffledeck"){
                     var deck = slide.parentNode;

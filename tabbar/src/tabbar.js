@@ -21,7 +21,7 @@
                 for(var i = 0; i < targets.length; i++){
                     var target = targets[i];
                     
-                    xtag.fireEvent(target, "showtab");
+                    xtag.fireEvent(target, "show");
                 }
             }
         },
