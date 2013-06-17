@@ -1,11 +1,15 @@
 x-iconbutton {
   -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-  x-iconbutton .button > * {
-    margin: 0;
-    padding: 0;
-    vertical-align: middle;
-    display: inline-block; }
+  box-sizing: border-box;
+  display: inline-block; }
+  x-iconbutton .button {
+    cursor: inherit;
+    margin: 0; }
+    x-iconbutton .button > * {
+      margin: 0;
+      padding: 0;
+      vertical-align: middle;
+      display: inline-block; }
   x-iconbutton[icon-anchor=top] .button > *, x-iconbutton[icon-anchor=bottom] .button > * {
     margin: 0 auto;
     display: block; }

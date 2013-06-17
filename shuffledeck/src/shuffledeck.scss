@@ -43,6 +43,8 @@ x-shuffledeck{
     display: block; //can be overridden with anything non-inline
     position: relative;
     overflow: hidden;
+    width: 200px; // override these defaults
+    height: 150px; // override these defaults
     
     & > x-shuffleslide{
         @include boxSizing(border-box);

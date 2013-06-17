@@ -1,0 +1,8 @@
+x-tabbar {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap; }
+  x-tabbar > x-tabbar-tab {
+    display: inline-block; }

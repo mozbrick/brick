@@ -52,6 +52,7 @@
             };
             
             var showTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
+                console.log(e.type);
                 cancelTimerFn();
                 // don't trigger show when coming from a tooltip element
                 var fromElem = e.relatedTarget || e.toElement;
@@ -200,7 +201,9 @@
     function mkSimulateMouseEnterLeaveFn(callback){
         return function(e){
             var eventType = e.type.toLowerCase();
-            if(eventType === "mouseover" || eventType === "mouseout"){
+            if(eventType === "mouseover" || eventType === "mouseout" ||
+               eventType === "touchenter" || eventType === "touchleave")
+            {
                 var listeningElem = e.currentTarget;
                 var relElem = e.relatedTarget || e.toElement;
                 

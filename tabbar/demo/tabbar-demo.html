@@ -3,9 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <link rel="stylesheet" type="text/css" href="../../shuffledeck/src/shuffledeck.css"/>
+    <link rel="stylesheet" type="text/css" href="../../iconbutton/src/iconbutton.css"/>
     <link rel="stylesheet" type="text/css" href="../src/tabbar.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../../shuffledeck/src/shuffledeck.js"></script>
+    <script type="text/javascript" src="../../iconbutton/src/iconbutton.js"></script>
     <script type="text/javascript" src="../src/tabbar.js"></script>
     <style>
         body, html{
@@ -14,10 +18,84 @@
             margin: 0;
             padding: 0;
         }
+        
+        .container{
+            width: 320px;
+            height: 480px;
+            border: 1px solid grey;
+        }
+        
+        #demo-box{
+            width: 100%;
+            height: 50%;
+        }
+        
+        #demo-box img{
+            width: 100%;
+            height: 100%;
+        }
+        
+        x-tabbar{
+            background-color: orange;
+        }
+        
+        x-iconbutton{
+            border: 1px solid transparent;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+        }
+        
+        x-iconbutton .button{
+            border: 1px solid transparent;
+            background-color: goldenrod;
+            color: white;
+        }
+        
+        x-iconbutton .button:hover{
+            background-color: #e6be5a;
+        }
+        
+        x-iconbutton .label{
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
 <h1>X-TabBar demos</h1>
+
+<div class="container">
+    <h2>With shuffledeck</h2>
+    <x-shuffledeck id="demo-box">
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=1"/></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=2"/></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=3"/></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=4"/></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=5"/></x-shuffleslide>
+    </x-shuffledeck>
+    
+    <x-tabbar>
+        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:first-child">
+            <x-iconbutton src="http://placekitten.com/30/?image=1">One</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(2)">
+            <x-iconbutton src="http://placekitten.com/30/?image=2">Two</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(3)">
+            <x-iconbutton src="http://placekitten.com/30/?image=3">Three</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(4)">
+            <x-iconbutton src="http://placekitten.com/30/?image=4">Four</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(5)">
+            <x-iconbutton src="http://placekitten.com/30/?image=5">Five</x-iconbutton>
+        </x-tabbar-tab>
+    </x-tabbar>
+</div>
+
+<div class="container">
+    
+</div>
 
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){

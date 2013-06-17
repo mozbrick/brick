@@ -442,12 +442,28 @@
         lifecycle:{
             created: function(){
                 init(this);
+                this.xtag.transitionType = "scrollLeft";
             }
         },
-        events:{},
+        events:{
+            "showtab:delegate(x-shuffleslide)": function(e){
+                console.log("showtab detected!", e);
+                var slide = e.target;
+                if(slide.parentNode.nodeName.toLowerCase() === "x-shuffledeck"){
+                    var deck = slide.parentNode;
+                    deck.slideTo(deck.getSlideIndex(slide));
+                }
+            }
+        },
         accessors:{
             "transition-type":{
-                attribute: {}
+                attribute: {},
+                get: function(){
+                    return this.xtag.transitionType;
+                },
+                set: function(newType){
+                    this.xtag.transitionType = newType;
+                }
             }
         },
         methods:{
@@ -478,7 +494,7 @@
                                      .getAttribute("transition-override");
                 }
                 else{
-                    transitionType = this["transition-type"];
+                    transitionType = this.xtag.transitionType;
                 }
                      
                 _slideToIndex(this, index, transitionType, 

@@ -3,12 +3,17 @@
 x-iconbutton{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    display: inline-block;
     
-    & .button > *{
+    & .button {
+       cursor: inherit;
        margin: 0;
-       padding: 0;
-       vertical-align: middle;
-       display: inline-block;
+        & > *{
+           margin: 0;
+           padding: 0;
+           vertical-align: middle;
+           display: inline-block;
+        }
     }
     
     &[icon-anchor=top], &[icon-anchor=bottom]{

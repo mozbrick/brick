@@ -1,7 +1,9 @@
 x-shuffledeck {
   display: block;
   position: relative;
-  overflow: hidden; }
+  overflow: hidden;
+  width: 200px;
+  height: 150px; }
   x-shuffledeck > x-shuffleslide {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
