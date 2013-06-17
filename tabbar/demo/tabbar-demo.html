@@ -26,6 +26,7 @@
         }
         
         #demo-box{
+            position: relative;
             width: 100%;
             height: 50%;
         }
@@ -33,6 +34,18 @@
         #demo-box img{
             width: 100%;
             height: 100%;
+        }
+        
+        #demo-box span{
+            position: absolute;
+            color: white;
+            text-shadow: 1px 1px 10px black;
+            left: 25%;
+            top: 40%;
+            width: 50%;
+            text-align: center;
+            
+            font-size: 3em;
         }
         
         x-tabbar{
@@ -67,11 +80,11 @@
 <div class="container">
     <h2>With shuffledeck</h2>
     <x-shuffledeck id="demo-box">
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=1"/></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=2"/></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=3"/></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=4"/></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=5"/></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=1"/><span>One</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=2"/><span>Two</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=3"/><span>Three</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=4"/><span>Four</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=5"/><span>Five</span></x-shuffleslide>
     </x-shuffledeck>
     
     <x-tabbar>
