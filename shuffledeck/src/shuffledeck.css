@@ -3,7 +3,13 @@ x-shuffledeck {
   position: relative;
   overflow: hidden;
   width: 200px;
-  height: 150px; }
+  height: 150px;
+  -webkit-perspective: 2000px;
+  -moz-perspective: 2000px;
+  -ms-perspective: 2000px;
+  perspective: 2000px; }
+  x-shuffledeck[transition-type=flipX], x-shuffledeck[transition-type=flipY] {
+    overflow: visible; }
   x-shuffledeck > x-shuffleslide {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -57,29 +63,29 @@ x-shuffledeck {
       -webkit-transform: translate3d(0%, 0%, 1px);
       -o-transform: translate3d(0%, 0%, 1px); }
     x-shuffledeck > x-shuffleslide[slide-anim-type=flipX]:not([reverse])[selected][before-animation] {
-      transform: rotateX(180deg);
-      -ms-transform: rotateX(180deg);
-      -moz-transform: rotateX(180deg);
-      -webkit-transform: rotateX(180deg);
-      -o-transform: rotateX(180deg); }
+      transform: rotateX(-180deg);
+      -ms-transform: rotateX(-180deg);
+      -moz-transform: rotateX(-180deg);
+      -webkit-transform: rotateX(-180deg);
+      -o-transform: rotateX(-180deg); }
     x-shuffledeck > x-shuffleslide[slide-anim-type=flipX]:not([reverse])[leaving]:not([before-animation]) {
-      transform: rotateX(-180deg);
-      -ms-transform: rotateX(-180deg);
-      -moz-transform: rotateX(-180deg);
-      -webkit-transform: rotateX(-180deg);
-      -o-transform: rotateX(-180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][selected][before-animation] {
-      transform: rotateX(-180deg);
-      -ms-transform: rotateX(-180deg);
-      -moz-transform: rotateX(-180deg);
-      -webkit-transform: rotateX(-180deg);
-      -o-transform: rotateX(-180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][leaving]:not([before-animation]) {
       transform: rotateX(180deg);
       -ms-transform: rotateX(180deg);
       -moz-transform: rotateX(180deg);
       -webkit-transform: rotateX(180deg);
       -o-transform: rotateX(180deg); }
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][selected][before-animation] {
+      transform: rotateX(180deg);
+      -ms-transform: rotateX(180deg);
+      -moz-transform: rotateX(180deg);
+      -webkit-transform: rotateX(180deg);
+      -o-transform: rotateX(180deg); }
+    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][leaving]:not([before-animation]) {
+      transform: rotateX(-180deg);
+      -ms-transform: rotateX(-180deg);
+      -moz-transform: rotateX(-180deg);
+      -webkit-transform: rotateX(-180deg);
+      -o-transform: rotateX(-180deg); }
     x-shuffledeck > x-shuffleslide[slide-anim-type=flipY]:not([reverse])[selected][before-animation] {
       transform: rotateY(180deg);
       -ms-transform: rotateY(180deg);

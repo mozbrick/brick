@@ -21,6 +21,13 @@ $FONTS_FOLDER: "../fonts/";
     -ms-backface-visibility: $value;
 }
 
+@mixin perspective($val){
+    -webkit-perspective: $val;
+    -moz-perspective: $val;
+    -ms-perspective: $val;
+    perspective: $val;
+}
+
 @mixin customFont($fileName, $fontFolder: $FONTS_FOLDER, $fontFamily: false, $fontExt: ".ttf", 
                   $fontWeight: normal, $fontStyle: normal, $format: "truetype"){
     @font-face {

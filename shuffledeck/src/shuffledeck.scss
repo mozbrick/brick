@@ -43,8 +43,14 @@ x-shuffledeck{
     display: block; //can be overridden with anything non-inline
     position: relative;
     overflow: hidden;
+    // allow overflow for certain transforms to enhance 3d effect
+    &[transition-type=flipX], &[transition-type=flipY]{
+        overflow: visible;
+    }
+    
     width: 200px; // override these defaults
     height: 150px; // override these defaults
+    @include perspective(2000px);
     
     & > x-shuffleslide{
         @include boxSizing(border-box);
@@ -89,23 +95,23 @@ x-shuffledeck{
             &:not([reverse]){
                 // initial positions for animation
                 &#{$newStartingSelector}{
-                    @include transformed(rotateX(180deg));
+                    @include transformed(rotateX(-180deg));
                 }
                 
                 // target positions for animation
                 &#{$oldEndingSelector}{
-                    @include transformed(rotateX(-180deg));
+                    @include transformed(rotateX(180deg));
                 }
             }
             &[reverse]{
                 // initial positions for animation
                 &#{$newStartingSelector}{
-                    @include transformed(rotateX(-180deg));
+                    @include transformed(rotateX(180deg));
                 }
                 
                 // target positions for animation
                 &#{$oldEndingSelector}{
-                    @include transformed(rotateX(180deg));
+                    @include transformed(rotateX(-180deg));
                 }
             }
         }
