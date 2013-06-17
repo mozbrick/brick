@@ -44,7 +44,7 @@ if (typeof WeakMap !== 'undefined' && navigator.userAgent.indexOf('Firefox/') < 
  * license that can be found in the LICENSE file.
  */
 (function() {
-  
+
   // poor man's adapter for template.content on various platform scenarios
   window.templateContent = window.templateContent || function(inTemplate) {
     return inTemplate.content;
@@ -150,7 +150,7 @@ scope.mixin = window.mixin;
     oldName && this.remove(oldName);
     newName && this.add(newName);
   };
-  
+
   // make forEach work on NodeList
 
   NodeList.prototype.forEach = function(cb, context) {
@@ -201,7 +201,7 @@ scope.mixin = window.mixin;
   // utility
 
   function createDOM(inTagOrNode, inHTML, inAttrs) {
-    var dom = typeof inTagOrNode == 'string' ? 
+    var dom = typeof inTagOrNode == 'string' ?
         document.createElement(inTagOrNode) : inTagOrNode.cloneNode(true);
     dom.innerHTML = inHTML;
     if (inAttrs) {
@@ -605,8 +605,8 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 
 if (!window.MutationObserver) {
-  window.MutationObserver = 
-      window.WebKitMutationObserver || 
+  window.MutationObserver =
+      window.WebKitMutationObserver ||
       window.JsMutationObserver;
   if (!MutationObserver) {
     throw new Error("no mutation observer support");
@@ -872,7 +872,7 @@ function overrideAttributeApi(prototype) {
 function changeAttribute(name, value, operation) {
   var oldValue = this.getAttribute(name);
   operation.apply(this, arguments);
-  if (this.attributeChangedCallback 
+  if (this.attributeChangedCallback
       && (this.getAttribute(name) !== oldValue)) {
     this.attributeChangedCallback(name, oldValue);
   }
@@ -933,7 +933,7 @@ scope.registry = registry;
 
 /**
  * Upgrade an element to a custom element. Upgrading an element
- * causes the custom prototype to be applied, an `is` attribute 
+ * causes the custom prototype to be applied, an `is` attribute
  * to be attached (as needed), and invocation of the `readyCallback`.
  * `upgrade` does nothing if the element is already upgraded, or
  * if it matches no registered custom tag name.
@@ -966,9 +966,9 @@ if (HTMLElement.prototype.webkitShadowRoot) {
 }
 */
 
-// walk the subtree rooted at node, applying 'find(element, data)' function 
+// walk the subtree rooted at node, applying 'find(element, data)' function
 // to each element
-// if 'find' returns true for 'element', do not search element's subtree  
+// if 'find' returns true for 'element', do not search element's subtree
 function findAll(node, find, data) {
   var e = node.firstElementChild;
   if (!e) {
@@ -986,7 +986,7 @@ function findAll(node, find, data) {
   return null;
 }
 
-// walk the subtree rooted at node, including descent into shadow-roots, 
+// walk the subtree rooted at node, including descent into shadow-roots,
 // applying 'cb' to each element
 function forSubtree(node, cb) {
   //logFlags.dom && node.childNodes && node.childNodes.length && console.group('subTree: ', node);
@@ -1008,7 +1008,7 @@ function forSubtree(node, cb) {
 function added(node) {
   if (upgrade(node)) {
     insertedNode(node);
-    return true; 
+    return true;
   }
   inserted(node);
 }
@@ -1017,7 +1017,7 @@ function added(node) {
 function addedSubtree(node) {
   forSubtree(node, function(e) {
     if (added(e)) {
-      return true; 
+      return true;
     }
   });
 }
@@ -1240,7 +1240,7 @@ scope.takeRecords = takeRecords;
  */
 
 (function(){
-  
+
 var HTMLElementElement = function(inElement) {
   inElement.register = HTMLElementElement.prototype.register;
   parseElementElement(inElement);
@@ -1284,7 +1284,7 @@ function parseElementElement(inElement) {
   // install options
   inElement.options = options;
   // locate user script
-  var script = inElement.querySelector('script,scripts');
+  var script = inElement.querySelector('script:not([type]),script[type="text/javascript"],scripts');
   if (script) {
     // execute user script in 'inElement' context
     executeComponentScript(script.textContent, inElement, options.name);
@@ -1298,7 +1298,7 @@ function parseElementElement(inElement) {
     window[refName] = ctor;
   }
 }
-  
+
 // each property in inDictionary takes a value
 // from the matching attribute in inElement, if any
 function takeAttributes(inElement, inDictionary) {
@@ -1316,7 +1316,7 @@ function executeComponentScript(inScript, inContext, inName) {
   context = inContext;
   // source location
   var owner = context.ownerDocument;
-  var url = (owner._URL || owner.URL || owner.impl 
+  var url = (owner._URL || owner.URL || owner.impl
       && (owner.impl._URL || owner.impl.URL));
   // ensure the component has a unique source map so it can be debugged
   // if the name matches the filename part of the owning document's url,
@@ -1385,7 +1385,8 @@ var componentParser = {
     'link[rel=' + IMPORT_LINK_TYPE + ']',
     'link[rel=stylesheet]',
     'script[src]',
-    'script',
+    'script:not([type])',
+    'script[type="text/javascript"]',
     'style',
     'element'
   ],
@@ -1578,7 +1579,7 @@ if (window.ShadowDOMPolyfill) {
   var win = window,
     doc = document,
     noop = function(){},
-    regexPseudoSplit = /(\w+(?:\([^\)]+\))?)/g,
+    regexPseudoSplit = /([\w-]+(?:\([^\)]+\))?)/g,
     regexPseudoReplace = /(\w*)(?:\(([^\)]*)\))?/,
     regexDigits = /(\d+)/g,
     keypseudo = {
@@ -1754,6 +1755,12 @@ if (window.ShadowDOMPolyfill) {
     };
   }
 
+  function updateTemplate(element, name, value){
+    if (element.template){
+      element.xtag.template.updateBindingValue(element, name, value);
+    }
+  }
+
   function attachProperties(tag, prop, z, accessor, attr, name){
     var key = z.split(':'), type = key[0];
     if (type == 'get') {
@@ -1764,13 +1771,18 @@ if (window.ShadowDOMPolyfill) {
       key[0] = prop;
       if (attr) attr.setter = accessor[z];
       tag.prototype[prop].set = xtag.applyPseudos(key.join(':'), attr ? function(value, skip){
+        syncAttr.call(this, attr, name, value);
+        accessor[z].call(this, value);
         if (!skip && !attr.skip) {
           this.xtag._skipAttr = true;
           setAttr.call(this, attr, name, value);
         }
-        syncAttr.call(this, attr, name, value);
+        updateTemplate(this, name, value);
+
+      } : accessor[z] ? function(value){
         accessor[z].call(this, value);
-      } : accessor[z], tag.pseudos);
+        updateTemplate(this, name, value);
+      } : null, tag.pseudos);
     }
     else tag.prototype[prop][z] = accessor[z];
   }
@@ -1794,6 +1806,7 @@ if (window.ShadowDOMPolyfill) {
       if (!tag.prototype[prop].set) tag.prototype[prop].set = function(value){
         this.xtag._skipAttr = true;
         setAttr.call(this, attr, name, value);
+        updateTemplate(this, name, value);
       };
     }
   }
@@ -1807,7 +1820,16 @@ if (window.ShadowDOMPolyfill) {
       mixins: [],
       events: {},
       methods: {},
-      accessors: {},
+      accessors: {
+        template: {
+          attribute: {},
+          set: function(value){
+            var last = this.getAttribute('template');
+            this.xtag.__previousTemplate__ = last;
+            xtag.fireEvent(this, 'templatechange', { template: value });
+          }
+        }
+      },
       lifecycle: {},
       attributes: {},
       'prototype': {
@@ -1841,6 +1863,10 @@ if (window.ShadowDOMPolyfill) {
         enumerable: true,
         value: function(){
           var element = this;
+          var template = element.getAttribute('template');
+          if (template){
+            xtag.fireEvent(this, 'templatechange', { template: template });
+          }
           xtag.addEvents(this, tag.events);
           tag.mixins.forEach(function(mixin){
             if (xtag.mixins[mixin].events) xtag.addEvents(element, xtag.mixins[mixin].events);
@@ -1868,7 +1894,7 @@ if (window.ShadowDOMPolyfill) {
 
       wrapAttr(tag, 'setAttribute');
       wrapAttr(tag, 'removeAttribute');
-      
+
       if (element){
         element.register({
           'prototype': Object.create(Object.prototype, tag.prototype)
@@ -1887,6 +1913,7 @@ if (window.ShadowDOMPolyfill) {
 
     mixins: {},
     prefix: prefix,
+    templates: {},
     captureEvents: ['focus', 'blur'],
     customEvents: {
       overflow: createFlowEvent('over'),
@@ -2080,11 +2107,11 @@ if (window.ShadowDOMPolyfill) {
             i = split.length;
         while (--i) {
           split[i].replace(regexPseudoReplace, function (match, name, value) {
+            if (!xtag.pseudos[name]) throw "pseudo not found: " + name + " " + split;
             var pseudo = pseudos[i] = Object.create(xtag.pseudos[name]);
                 pseudo.key = key;
                 pseudo.name = name;
                 pseudo.value = value;
-            if (!pseudo) throw "pseudo not found: " + name;
             var last = listener;
             listener = function(){
               var args = toArray(arguments),

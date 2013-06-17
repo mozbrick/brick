@@ -1,3 +1,6 @@
 [submodule "view"]
 	path = view
 	url = git@github.com:x-tag/view.git
+[submodule "slidebox"]
+	path = slidebox
+	url = git@github.com:x-tag/slidebox.git

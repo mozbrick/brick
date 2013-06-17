@@ -5,11 +5,13 @@
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
     <link rel="stylesheet" type="text/css" href="../../shuffledeck/src/shuffledeck.css"/>
     <link rel="stylesheet" type="text/css" href="../../iconbutton/src/iconbutton.css"/>
+    <link rel="stylesheet" type="text/css" href="../../slidebox/src/slidebox.css"/>
     <link rel="stylesheet" type="text/css" href="../src/tabbar.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
     <script type="text/javascript" src="../../shuffledeck/src/shuffledeck.js"></script>
     <script type="text/javascript" src="../../iconbutton/src/iconbutton.js"></script>
+    <script type="text/javascript" src="../../slidebox/src/slidebox.js"></script>
     <script type="text/javascript" src="../src/tabbar.js"></script>
     <style>
         body, html{
@@ -28,18 +30,21 @@
             vertical-align: top;
         }
         
-        #demo-box{
+        #shuffledeck-demo,
+        #slidebox-demo{
             position: relative;
             width: 100%;
-            height: 50%;
+            height: 60%;
         }
         
-        #demo-box img{
+        #shuffledeck-demo img,
+        #slidebox-demo img{
             width: 100%;
             height: 100%;
+            background-color: #eee;
         }
         
-        #demo-box span{
+        #shuffledeck-demo span{
             position: absolute;
             color: white;
             text-shadow: 1px 1px 10px black;
@@ -71,6 +76,11 @@
             background-color: #e6be5a;
         }
         
+        x-iconbutton .icon{
+            max-width: 30px;
+            max-height: 30px;
+        }
+        
         x-iconbutton .label{
             padding: 5px;
         }
@@ -81,36 +91,58 @@
 
 <div class="container">
     <h2>With shuffledeck</h2>
-    <x-shuffledeck id="demo-box">
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=1"/><span>One</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=2"/><span>Two</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=3"/><span>Three</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=4"/><span>Four</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/200/150/?image=5"/><span>Five</span></x-shuffleslide>
+    <x-shuffledeck id="shuffledeck-demo" transition-type="coverDown">
+        <x-shuffleslide><img src="http://placekitten.com/250/?image=1"/><span>One</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/250/?image=2"/><span>Two</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/250/?image=3"/><span>Three</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/250/?image=4"/><span>Four</span></x-shuffleslide>
+        <x-shuffleslide><img src="http://placekitten.com/250/?image=5"/><span>Five</span></x-shuffleslide>
     </x-shuffledeck>
     
     <x-tabbar>
-        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:first-child">
+        <x-tabbar-tab target-selector="#shuffledeck-demo x-shuffleslide:first-child">
             <x-iconbutton src="http://placekitten.com/30/?image=1">One</x-iconbutton>
         </x-tabbar-tab>
-        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(2)">
+        <x-tabbar-tab target-selector="#shuffledeck-demo x-shuffleslide:nth-child(2)">
             <x-iconbutton src="http://placekitten.com/30/?image=2">Two</x-iconbutton>
         </x-tabbar-tab>
-        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(3)">
+        <x-tabbar-tab target-selector="#shuffledeck-demo x-shuffleslide:nth-child(3)">
             <x-iconbutton src="http://placekitten.com/30/?image=3">Three</x-iconbutton>
         </x-tabbar-tab>
-        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(4)">
+        <x-tabbar-tab target-selector="#shuffledeck-demo x-shuffleslide:nth-child(4)">
             <x-iconbutton src="http://placekitten.com/30/?image=4">Four</x-iconbutton>
         </x-tabbar-tab>
-        <x-tabbar-tab target-selector="#demo-box x-shuffleslide:nth-child(5)">
+        <x-tabbar-tab target-selector="#shuffledeck-demo x-shuffleslide:nth-child(5)">
             <x-iconbutton src="http://placekitten.com/30/?image=5">Five</x-iconbutton>
         </x-tabbar-tab>
     </x-tabbar>
 </div>
 
 <div class="container">
-    <h2></h2>
+    <h2>With slidebox</h2>
+    <x-slidebox id="slidebox-demo" orientation="x">
+        <x-slides>
+          <x-slide><img src="birnimal-calendar.png" /></x-slide>
+          <x-slide><img src="birnimal-graph.png" /></x-slide>
+          <x-slide><img src="birnimal-detail.png" /></x-slide>
+          <x-slide><img src="birnimal-settings.png" /></x-slide>
+        </x-slides>
+    </x-slidebox>
     
+    <x-tabbar>
+        <x-tabbar-tab target-selector="#slidebox-demo x-slide:first-child">
+            <x-iconbutton src="birnimal-calendar.png">Calendar</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#slidebox-demo x-slide:nth-child(2)">
+            <x-iconbutton src="birnimal-graph.png">Graph</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#slidebox-demo x-slide:nth-child(3)">
+            <x-iconbutton src="birnimal-detail.png">Detail</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#slidebox-demo x-slide:nth-child(4)">
+            <x-iconbutton src="birnimal-settings.png">Settings</x-iconbutton>
+        </x-tabbar-tab>
+    </x-tabbar>
 </div>
 
 <script>
