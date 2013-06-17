@@ -33,6 +33,18 @@
                     
                     console.log("target of", this, "is", this.xtag.targetElems);
                 }
+            },
+            "targetElems":{
+                get: function(){
+                    return this.xtag.targetElems;
+                },
+                // a way to manually override targets by passing DOM elements in
+                // with code
+                set: function(newElems){
+                    this.xtag.targetElems = newElems;
+                    // remove attribute to avoid confusing desynched attributes
+                    this.removeAttribute("target-selector");
+                }
             }
         },
         methods: {}
