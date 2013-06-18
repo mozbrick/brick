@@ -42,13 +42,16 @@ Defines how to select the elements that trigger/are targeted by the tooltip.
 Options:
 * If set to `_previousSibling`, the sibling element directly before the tooltip will be used. See the usage section for an example of this.
 * If set to `_nextSibling`, the sibling element directly after the tooltip will be used. For example, the &lt;p&gt; would be selected in this example:
-
+<pre>
     <div>
         <x-tooltip trigger-selector="_nextSibling">I am the tooltip!</x-tooltip>
         <p>I am the target!</p>
     </div>
+</pre>    
+    
 * If set to anything else, the selector will be used as a CSS query selector on the parent node of the tooltip, and all selected nodes will be set as target elements. For example, this example would select the &lt;div&gt;s marked A and B, but not the one marked C.
 
+<pre>
     <figure>
         <div>A</div>
         <x-tooltip trigger-selector="div">I select all divs!</div>
@@ -56,7 +59,8 @@ Options:
         <span>I won't be selected!</span>
     </figure>
     <div>C</div>
-    
+</pre>  
+  
 If this attribute is not provided, the default is `_previousSibling`.
 
 __Note__: selectors can be any valid CSS selector that could be used in querySelectorAll    

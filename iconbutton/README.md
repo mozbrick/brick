@@ -81,7 +81,7 @@ You can use the `.text` attribute to view and modify the text contents of your b
 
     fooIconButton.text = "Hello world!";
    
-### ___textGetter___/___textSetter___
+### ___textGetter___ / ___textSetter___
 
 Defines how to change label text.
 
