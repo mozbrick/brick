@@ -43,22 +43,22 @@ Options:
 * If set to `_previousSibling`, the sibling element directly before the tooltip will be used. See the usage section for an example of this.
 * If set to `_nextSibling`, the sibling element directly after the tooltip will be used. For example, the &lt;p&gt; would be selected in this example:
 <pre>
-    <div>
-        <x-tooltip trigger-selector="_nextSibling">I am the tooltip!</x-tooltip>
-        <p>I am the target!</p>
-    </div>
+    &lt;div&gt;
+        &lt;x-tooltip trigger-selector="_nextSibling"&gt;I am the tooltip!&lt;/x-tooltip&gt;
+        &lt;p&gt;I am the target!&lt;/p&gt;
+    &lt;/div&gt;
 </pre>    
     
 * If set to anything else, the selector will be used as a CSS query selector on the parent node of the tooltip, and all selected nodes will be set as target elements. For example, this example would select the &lt;div&gt;s marked A and B, but not the one marked C.
 
 <pre>
-    <figure>
-        <div>A</div>
-        <x-tooltip trigger-selector="div">I select all divs!</div>
-        <div>B</div>
-        <span>I won't be selected!</span>
-    </figure>
-    <div>C</div>
+    &lt;figure&gt;
+        &lt;div&gt;A&lt;/div&gt;
+        &lt;x-tooltip trigger-selector="div"&gt;I select all divs!&lt;/div&gt;
+        &lt;div&gt;B&lt;/div&gt;
+        &lt;span&gt;I won't be selected!&lt;/span&gt;
+    &lt;/figure&gt;
+    &lt;div&gt;C&lt;/div&gt;
 </pre>  
   
 If this attribute is not provided, the default is `_previousSibling`.
