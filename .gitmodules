@@ -4,3 +4,6 @@
 [submodule "slidebox"]
 	path = slidebox
 	url = git@github.com:ldoubleuz/slidebox.git
+[submodule "flipbox"]
+	path = flipbox
+	url = git@github.com:ldoubleuz/flipbox.git

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 9.0, SVG Export Plug-In  -->
+<!-- This set of SVG files is a complete cards game with figures, numbers	-->
+<!--    and backs of cards completely designed in SVG.				-->
+<!--    									-->
+<!--    Copyright (C) 2004 David Bellot						-->
+<!--										-->
+<!--    This library is free software; you can redistribute it and/or		-->
+<!--    modify it under the terms of the GNU Lesser General Public		-->
+<!--    License as published by the Free Software Foundation; either		-->
+<!--    version 2 of the License, or (at your option) any later version		-->
+<!--										-->
+<!--    This library is distributed in the hope that it will be useful,		-->
+<!--    but WITHOUT ANY WARRANTY; without even the implied warranty of		-->
+<!--    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU	-->
+<!--    Lesser General Public License for more details.				-->
+<!--										-->
+<!--    You should have received a copy of the GNU Lesser General Public	-->
+<!--    License along with this library; if not, write to the Free Software	-->
+<!--    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA-->
+<!--										-->
+<!--    Contact the author David Bellot at bellot@stat.berkeley.edu or 		-->
+<!--    david.bellot@free.fr or yimyom@users.sourceforge.net			-->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="208"
+   height="303"
+   viewBox="0 0 167.08643 242.66748"
+   xml:space="preserve"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   sodipodi:docname="01_of_hearts A.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:docbase="C:\Documents and Settings\Flanker\Desktop\Temporanei\SVG\Carte"
+   version="1.0"><metadata
+   id="metadata90"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs88" /><sodipodi:namedview
+   inkscape:window-height="1003"
+   inkscape:window-width="1280"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="0.0"
+   guidetolerance="10.0"
+   gridtolerance="10.0"
+   objecttolerance="10.0"
+   borderopacity="1.0"
+   bordercolor="#666666"
+   pagecolor="#ffffff"
+   id="base"
+   inkscape:zoom="1.242853"
+   inkscape:cx="289.632"
+   inkscape:cy="155.50654"
+   inkscape:window-x="397"
+   inkscape:window-y="-8"
+   inkscape:current-layer="svg2"
+   inkscape:showpageshadow="false"
+   width="208px"
+   height="303px" />
+	<path
+   id="path5"
+   d="M 166.83643,235.89281 C 166.83643,239.68452 163.75049,242.78371 159.96632,242.78371 L 7.1113279,242.78371 C 3.3359375,242.78371 0.25,239.68452 0.25,235.89281 L 0.25,6.7746656 C 0.25,2.9883456 3.3359375,-0.11623093 7.1113279,-0.11623093 L 159.96632,-0.11623093 C 163.75049,-0.11623093 166.83643,2.9883456 166.83643,6.7746656 L 166.83643,235.89281 L 166.83643,235.89281 z "
+   style="fill:#ffffff;fill-rule:nonzero;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4" />
+<g
+   style="fill-rule:nonzero;stroke:#000000;stroke-miterlimit:4;fill:#e61408;fill-opacity:1"
+   id="g2192"
+   transform="translate(0.9940219,0.2158208)">
+			<path
+   style="stroke:none;fill:#e61408;fill-opacity:1"
+   d="M 10.987793,25.827148 L 10.987793,24.358398 L 11.649414,24.358398 L 14.682129,7.7958984 L 15.962891,7.7958984 L 19.007812,24.358398 L 19.769043,24.358398 L 19.769043,25.827148 L 15.999023,25.827148 L 15.999023,24.358398 L 16.784668,24.358398 L 16.120117,20.670898 L 13.099121,20.670898 L 12.422852,24.358398 L 13.38916,24.358398 L 13.38916,25.827148 L 10.987793,25.827148 z M 13.365234,19.202148 L 15.854004,19.202148 L 14.621582,12.317383 L 13.365234,19.202148 L 13.365234,19.202148 z "
+   id="path2194" />
+		</g><g
+   style="fill-rule:nonzero;stroke:#000000;stroke-miterlimit:4;fill:#e61408;fill-opacity:1"
+   id="g2196"
+   transform="translate(-0.4061249,0.2153312)">
+			<path
+   style="stroke:none;fill:#e61408;fill-opacity:1"
+   d="M 155.51074,216.40918 L 155.51074,217.87793 L 154.84961,217.87793 L 151.81641,234.44043 L 150.53516,234.44043 L 147.49023,217.87793 L 146.72949,217.87793 L 146.72949,216.40918 L 150.5,216.40918 L 150.5,217.87793 L 149.71387,217.87793 L 150.37891,221.56543 L 153.39941,221.56543 L 154.07617,217.87793 L 153.10938,217.87793 L 153.10938,216.40918 L 155.51074,216.40918 z M 153.13281,223.03418 L 150.64453,223.03418 L 151.87695,229.91895 L 153.13281,223.03418 L 153.13281,223.03418 z "
+   id="path2198" />
+		</g><path
+   style="fill:#e61408;fill-rule:nonzero;stroke:none;stroke-miterlimit:4"
+   d="M 75.673382,105.19244 C 71.365772,105.20171 67.862932,108.88359 67.891412,113.40116 C 67.951812,122.98076 79.983792,129.90867 83.530662,137.47506 C 87.077541,129.90867 99.134628,122.98076 99.195018,113.40116 C 99.2235,108.88359 95.720664,105.20171 91.413048,105.19244 C 87.105432,105.18364 83.543362,108.84969 83.530662,113.37606 C 83.517972,108.84969 79.981002,105.18364 75.673382,105.19244 z "
+   id="path2170" /><path
+   id="path2225"
+   d="M 14.006095,29.437332 C 12.710865,29.440119 11.657615,30.547204 11.666185,31.905567 C 11.684335,34.786006 15.302175,36.869121 16.368665,39.144218 C 17.435155,36.869121 21.060535,34.786006 21.078695,31.905567 C 21.087255,30.547204 20.034005,29.440119 18.738775,29.437332 C 17.443535,29.434686 16.372475,30.53701 16.368665,31.89802 C 16.364845,30.53701 15.301335,29.434686 14.006095,29.437332 z "
+   style="fill:#e61408;fill-rule:nonzero;stroke:none;stroke-miterlimit:4" /><use
+   x="0"
+   y="0"
+   xlink:href="#path2225"
+   id="use2231"
+   transform="matrix(1,0,0,-1,134.34155,242.36206)"
+   width="167.08643"
+   height="242.66748" /></svg>

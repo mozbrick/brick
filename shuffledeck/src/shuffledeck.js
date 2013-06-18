@@ -256,15 +256,13 @@
                                              onTransitionComplete);
                 newSlide.removeEventListener("transitionend", 
                                              onTransitionComplete);
-                console.log("timed out", slideAnimName);
-                                             
                 _onComplete();
             }, timeoutDuration);
         };
         
         // finally, after setting up all these callback functions, actually
-        // start the animation by setting the old and newslides into their
-        // beginning animation states 
+        // start the animation by setting the old and newslides at their
+        // animation beginning states 
         
         xtag.skipTransition(oldSlide, function(){
             oldSlide.setAttribute("slide-anim-type", slideAnimName);
