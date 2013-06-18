@@ -79,11 +79,11 @@
 <body>
     <h1>x-shuffledeck demo</h1>
     <x-shuffledeck id="demo-box">
+        <x-shuffleslide>0</x-shuffleslide>
         <x-shuffleslide>1</x-shuffleslide>
         <x-shuffleslide>2</x-shuffleslide>
         <x-shuffleslide>3</x-shuffleslide>
         <x-shuffleslide>4</x-shuffleslide>
-        <x-shuffleslide>5</x-shuffleslide>
     </x-shuffledeck>
     <div id="demo-controls">
         <button onclick="demoBox.slidePrev('reverse')"><-- Slide Prev</button>
@@ -96,10 +96,10 @@
         <p id="transition-label"></p>
         <p id="count-label"></p>
         <br/>
-        <button onclick="demoBox.slideTo(2)">Jump to 3 (default)</button>
-        <button onclick="demoBox.slideTo(2, 'auto')">Jump to 3 (auto)</button>
-        <button onclick="demoBox.slideTo(2, 'forward')">Jump to 3 (always forwards)</button>
-        <button onclick="demoBox.slideTo(2, 'reverse')">Jump to 3 (always reverse)</button>
+        <button onclick="demoBox.slideTo(2)">Jump to 2 (default)</button>
+        <button onclick="demoBox.slideTo(2, 'auto')">Jump to 2 (auto)</button>
+        <button onclick="demoBox.slideTo(2, 'forward')">Jump to 2 (always forwards)</button>
+        <button onclick="demoBox.slideTo(2, 'reverse')">Jump to 2 (always reverse)</button>
     </div>
     
     
@@ -175,7 +175,7 @@
             var newSlide = document.createElement("x-shuffleslide");
             newSlide.style.backgroundColor = randomColor();
             
-            newSlide.textContent = String(numSlides+1);
+            newSlide.textContent = String(numSlides);
             
             if(addOverride){
                 var overrideType = (transitionTypes.length) ?
@@ -186,7 +186,7 @@
                 newSlide.setAttribute("transition-override", overrideType);
             }
             
-            demoBox.appendSlide(newSlide);
+            demoBox.appendChild(newSlide);
             
             var allSlides = demoBox.getAllSlides();
             console.log("Added slide labeled", allSlides.indexOf(newSlide));
@@ -200,9 +200,10 @@
             var allSlides = demoBox.getAllSlides();
             
             if (allSlides.length > 0){
-                demoBox.removeSlideFrom(allSlides.length - 1, function(){
-                    updateCountBox();
-                });
+                var lastSlide = allSlides[allSlides.length - 1];
+                
+                demoBox.removeChild(lastSlide);
+                updateCountBox();
             }
         }
     </script>

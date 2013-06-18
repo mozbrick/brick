@@ -137,6 +137,7 @@
                     slide.removeAttribute("slide-anim-type");
                 });
                 newSlide.setAttribute("selected", true);
+                shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck, newSlide);
                 
                 if(callback){
                     callback();
@@ -168,6 +169,7 @@
                 });
                 oldSlide.setAttribute("leaving", true);
                 newSlide.setAttribute("selected", true);
+                shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck, newSlide);
                 if(isReverse){
                     oldSlide.setAttribute("reverse", true);
                     newSlide.setAttribute("reverse", true);
@@ -394,18 +396,40 @@
     sanitizes the slides in the deck by ensuring that there is always a single
     selected slide except (and only except) when no slides exist
     
+    also synchronizes the selected slide with the lastSelectedIndex
+    
     also removes any temp-attributes used for animatoin
     **/
     function _sanitizeSlideAttrs(shuffleDeck){
         var slides = _getAllSlides(shuffleDeck);
         
         var currSlide = _getSelectedSlide(shuffleDeck);
-        // if no slide is yet selected, choose the first available one      
-        if((!currSlide) && slides.length > 0){
-            currSlide = slides[0];
+        // ensure that the index is in sync
+        if(currSlide){
+            shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck, currSlide);
+        }
+        // if no slide is yet selected, attempt to match it to the index reference  
+        else if(slides.length > 0){
+            if(shuffleDeck.xtag.lastSelectedIndex !== null){
+                if(shuffleDeck.xtag.lastSelectedIndex == slides.length){
+                    shuffleDeck.xtag.lastSelectedIndex = slides.length-1;
+                    currSlide = slides[slides.length-1];
+                }
+                else{
+                    currSlide = slides[shuffleDeck.xtag.lastSelectedIndex];
+                }
+            }
+            else{
+                currSlide = slides[0];
+                shuffleDeck.xtag.lastSelectedIndex = 0;
+            }
+        }
+        else{
+            currSlide = null;
+            shuffleDeck.xtag.lastSelectedIndex = null;
         }
         
-        // ensure that only one slide is selected at a time
+        // ensure that the currSlide and _only_ the currSlide is selected
         slides.forEach(function(slide){
             slide.removeAttribute("leaving");
             slide.removeAttribute("before-animation");
@@ -431,7 +455,7 @@
         var currSlide = _getSelectedSlide(shuffleDeck);
         if(currSlide){
             // ensure that selected slide is actually shown
-            shuffleDeck.slideTo(_getAllSlides(shuffleDeck).indexOf(currSlide));
+            shuffleDeck.slideTo(shuffleDeck.xtag.lastSelectedIndex);
         }
     }
     
@@ -439,6 +463,8 @@
     xtag.register("x-shuffledeck", {
         lifecycle:{
             created: function(){
+                // make sure to sync this with the actual current slides
+                this.xtag.lastSelectedIndex = null;
                 init(this);
                 this.xtag.transitionType = "scrollLeft";
             }
@@ -572,64 +598,8 @@
             **/
             getSlideIndex: function(slide){
                 return _getSlideIndex(this, slide);
-            },
-            
-            /** appendSlide: (DOM)
-            * 
-            * given an x-shuffleslide DOM element, this function adds the
-            * given slide to the deck
-            **/
-            appendSlide: function(newSlide){
-                if(newSlide.nodeName.toLowerCase() === "x-shuffleslide"){
-                    this.appendChild(newSlide);
-                }
-                else{
-                    throw "given invalid element of type " + newSlide.nodeName;
-                }
-            },
-            
-            /** removeSlideFrom: (Number, Function)
-            *
-            * given an index, this function removes the x-shuffleslide at the
-            * given index from the deck. This function also takes an optional
-            * callback function, which gets called with no parameters after the 
-            * slide is successfully removed.
-            **/
-            removeSlideFrom: function(index, callback){
-                var slideToRemove = _getTargetSlide(this, index);
-                
-                if(!slideToRemove){
-                    throw "attempted to remove slide at invalid index " + index;
-                }
-                
-                var allSlides = _getAllSlides(this);
-                var currSlide = _getSelectedSlide(this);
-                
-                var deleteFn = (function(shuffleDeck){
-                    return function(){
-                        console.log(shuffleDeck, slideToRemove);
-                        shuffleDeck.removeChild(slideToRemove);
-                        if(callback){
-                            callback();
-                        }
-                    };
-                })(this);
-                
-                if(currSlide === slideToRemove && allSlides.length > 1){
-                    // if other slides exist, first move to another slide before
-                    // removing the slide we want to get rid of in order
-                    // to prevent graphical flickering that occurs when
-                    // deleting the current slide out from under us
-                    _slideToIndex(this, posModulo(index-1, allSlides.length),
-                                  "none", "auto", deleteFn);
-                }
-                // otherwise, just immediately delete the slide without faffing
-                // about
-                else{
-                    deleteFn();
-                }
-                
             }
+            
         }
     });
 
@@ -641,6 +611,7 @@
                     if(deckContainer.tagName.toLowerCase() == 'x-shuffledeck')
                     {
                         init(deckContainer);
+                        this.xtag.parentDeck = deckContainer;
                     }
                 }                
                         
@@ -651,7 +622,16 @@
                         deckContainer.tagName.toLowerCase() == 'x-shuffledeck')
                 {
                     init(deckContainer);
+                    this.xtag.parentDeck = deckContainer;
                 }
+            },
+            removed: function(){
+                if(!this.xtag.parentDeck){
+                    return;
+                }
+                
+                var shuffleDeck = this.xtag.parentDeck;
+                init(shuffleDeck);
             },
             accessors:{
                 "transition-override": {
