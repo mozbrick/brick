@@ -106,9 +106,7 @@ x-tooltip > .tooltip-arrow{
     
     // default: shares these properties with the tooltip itself
     // can be overridden directly by using .tooltip-arrow class as well
-    border-style: inherit;
-    border-width: inherit; 
-    border-color: inherit; 
+    border: inherit; 
     background: inherit;
     
     // default to pointing down

@@ -44,7 +44,11 @@
             margin:.5em;
         }
         
-        /* arrow is always in relation to content, so modify borders here */
+        /* arrow is always in relation to content, so modify borders here instead
+           of in the content element
+           
+           any border or background styles here will be inherited by the tooltip arrow
+        */
         #demoTip{
             border-radius: 4px;
             border: 2px solid black;

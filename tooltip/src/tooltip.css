@@ -114,9 +114,7 @@ x-tooltip > .tooltip-arrow {
   display: block;
   width: 1em;
   height: 1em;
-  border-style: inherit;
-  border-width: inherit;
-  border-color: inherit;
+  border: inherit;
   background: inherit; }
   x-tooltip > .tooltip-arrow:not([arrow-direction=up]):not([arrow-direction=left]):not([arrow-direction=right]) {
     top: 100%;

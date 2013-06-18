@@ -67,7 +67,16 @@
     DOM element
     **/
     function _getAllSlides(elem){
-        return xtag.query(elem, "x-shuffleslide");
+        var slides = xtag.query(elem, "x-shuffleslide");
+        var output = [];
+        // filter for those that are actually direct descendents
+        slides.forEach(function(slide){
+            if(slide.parentNode && slide.parentNode === elem){
+                output.push(slide);
+            }
+        });
+        
+        return output;
     }
     
     /** _getTargetSlide : (DOM, Number) => DOM/null
@@ -89,7 +98,18 @@
      * shuffledeck, if any exists     
     **/
     function _getSelectedSlide(shuffleDeck){
-        return shuffleDeck.querySelector("[selected]");
+        var selected = xtag.query(shuffleDeck, "[selected]");
+        
+        for(var i = 0; i < selected.length; i++){
+            var selectedSlide = selected[i];
+            if(selectedSlide.parentNode &&
+               selectedSlide.parentNode === shuffleDeck)
+            {
+                return selectedSlide;
+            }
+        }
+        
+        return null;
     }
     
     /** _getSlideIndex: (DOM, DOM) => Number
@@ -472,6 +492,8 @@
             }
         },
         events:{
+            // slideend is fired when done transitioning
+        
             "show:delegate(x-shuffleslide)": function(e){
                 var slide = e.target;
                 if(slide.parentNode.nodeName.toLowerCase() === "x-shuffledeck"){
