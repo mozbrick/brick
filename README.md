@@ -23,11 +23,16 @@ Positions/appearances will likely differ on larger displays or with different in
 * Contains top-level information and UI
 * Similar to a toolbar or roughly equivalent to Android's action bar
 
-### 'Tab Bar' (navigation, footer) 
+### ['Tab Bar' (navigation, footer)](https://github.com/mozilla/app-components/tree/master/tabbar)
 
 * Used to display an app-level navigation at the bottom of the UI
 * Usually a series of icons with labels.
 * Tabs are linked to panels/views. Changing tab changes the active panel, and changing the active panel changes the tab
+* Essentially fires a 'show' event at targeted elements. It is up to target elements to respond appropriately.
+    - Components with default support for show event:
+        - Slidebox
+        - Flipbox
+        - Shuffledeck
 
 ### ['Panel'](https://github.com/x-tag/panel)
 

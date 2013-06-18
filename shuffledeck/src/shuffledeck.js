@@ -169,7 +169,8 @@
                 });
                 oldSlide.setAttribute("leaving", true);
                 newSlide.setAttribute("selected", true);
-                shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck, newSlide);
+                shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck,
+                                                                    newSlide);
                 if(isReverse){
                     oldSlide.setAttribute("reverse", true);
                     newSlide.setAttribute("reverse", true);
@@ -406,9 +407,10 @@
         var currSlide = _getSelectedSlide(shuffleDeck);
         // ensure that the index is in sync
         if(currSlide){
-            shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck, currSlide);
+            shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck, 
+                                                                currSlide);
         }
-        // if no slide is yet selected, attempt to match it to the index reference  
+        // if no slide is yet selected, attempt to match it to the index ref
         else if(slides.length > 0){
             if(shuffleDeck.xtag.lastSelectedIndex !== null){
                 if(shuffleDeck.xtag.lastSelectedIndex == slides.length){

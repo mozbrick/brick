@@ -236,6 +236,8 @@
         }
     }
     
+    // return the absolute top-left coordinates of the given element in 
+    // relation to the page
     function getPageOffset(elem){
         var left = 0;
         var top = 0;
@@ -253,6 +255,7 @@
         };
     }
     
+    // returns true if the two given elements' bounding boxes visually overlap
     function overlaps(elemA, elemB){
         var _pointIsInRect = function(x, y, rect){
             return (rect.left <= x && x <= rect.right && 
@@ -306,6 +309,8 @@
         }
     }
     
+    // returns the height and width of the given dimensions rotated by the
+    // given number of degrees
     // see: http://stackoverflow.com/a/9793197 for base inspiration of calc
     function getRotationDims(width, height, degrees){
         var radians = degrees * (Math.PI / 180);
@@ -328,6 +333,12 @@
         return output;
     }    
     
+    
+    // when called, attempts to reposition the tooltip so that it is centered
+    // on the target element with the correct orientation
+    // if given orientation is not a valid orientation type, this will attempt
+    // to autoplace the tooltip in an orientation that doesn't overlap the 
+    // targeted elements
     function _positionTooltip(tooltip, targetElem, orientation){
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
@@ -342,6 +353,9 @@
                                    
                 // found a good position, so finalize and stop checking
                 if(!overlaps(tooltip, targetElem)){
+                    // set the auto-orientation attribute so that CSS animations
+                    // still apply even though orientation attribute is not
+                    // valid
                     tooltip.setAttribute("auto-orientation", tmpOrient);
                     return;
                 }
@@ -469,6 +483,8 @@
         return;
     }
     
+    // positions the tooltip on the triggering element (if given) and makes the
+    // tooltip visible
     function _showTooltip(tooltip, triggerElem){
         if(triggerElem === tooltip){
             console.log("The tooltip's target element is the tooltip itself!" +
@@ -487,7 +503,8 @@
         };
         
         if(triggerElem){
-            // skip transition in order to completely position tooltip
+            // skip transition in order to completely position tooltip before
+            // marking as visible and triggering the CSS transition
             xtag.skipTransition(tooltip, function(){
                 _positionTooltip(tooltip, triggerElem, targetOrient);
                 tooltip.xtag.lastTargetElem = triggerElem;
@@ -516,6 +533,8 @@
     
     // unbinds cached listeners and binds new listeners for new trigger 
     // parameters; call this anytime the tooltip trigger changes
+    // if newTriggerElems is not given, uses previously existing trigger elems
+    // if newTriggerStyle is not given, uses the previously used trigger style
     function _updateTriggerListeners(tooltip, newTriggerElems, newTriggerStyle){
         if(newTriggerElems === undefined || newTriggerElems === null){
             newTriggerElems = tooltip.xtag.triggeringElems;
@@ -637,6 +656,7 @@
                 }
             },
             
+            // valid options are 'hover', 'click', and 'none'
             "trigger-style": {
                 attribute: {},
                 get: function(){
