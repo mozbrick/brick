@@ -1,4 +1,6 @@
 (function(){
+    // a data map of the tooltip orientation type to the type of direction the
+    // tooltip arrow should take as a result
     var TIP_ORIENT_ARROW_DIR_MAP = {
         "above": "down",
         "below": "up",
@@ -6,12 +8,32 @@
         "onright": "left"
     };
     
-    function _isValidOrientation(orient){
+    
+    /** isValidOrientation: (string)
+    *
+    *   utility function to simply return if the given orientation is 
+    *   one listed in the above data map
+    **/
+    function isValidOrientation(orient){
         return orient in TIP_ORIENT_ARROW_DIR_MAP;
     }
     
-    // a simple struct to store all information needed to add and remove
-    // a particular event listener
+    
+    /** CachedListener : (DOM, string, Function)
+    * a simple struct to store all information needed to add and remove
+    * a particular event listener
+    *
+    * used to track a single event listener so that it can easily be 
+    * bound/unbound
+    * 
+    * constructor params:
+    *   elem                    the DOM element the event listener should be
+    *                           bound/unbound to
+    *   eventType               the name of the event that we want to 
+    *                           bind/unbind listeners for
+    *   listenerFn              a callback function to bind/unbind for the
+    *                           given event on the given element
+    **/
     function CachedListener(elem, eventType, listenerFn){
         this.eventType = eventType;
         this.listenerFn = listenerFn;
@@ -19,6 +41,11 @@
         this.isAttached = false;
     }
     
+    
+    /** CachedListener.attachListener
+    *   
+    *   binds the event listener as described by the struct
+    **/
     CachedListener.prototype.attachListener = function(){
         if(this.isAttached === false){
             this.elem.addEventListener(this.eventType, this.listenerFn);
@@ -26,6 +53,11 @@
         }
     };
     
+    
+    /** CachedListener.attachListener
+    *   
+    *   unbinds the event listener as described by the struct
+    **/
     CachedListener.prototype.removeListener = function(){
         if(this.isAttached === true){
             this.elem.removeEventListener(this.eventType, this.listenerFn);
@@ -33,17 +65,34 @@
         }
     };
     
-    // each trigger style is mapped to a function that returns a list of
-    // CachedListeners that the tooltip would need to attach
-    // NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
+    
+    /** TRIGGER_STYLE_GETLISTENERS
+     * 
+     * A data map of trigger "styles" mapped to callback functions that return
+     * lists of the CachedListeners that the tooltip would need to bind
+     * to properly show/hide the tooltip
+     *
+     * NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
+    **/
     var TRIGGER_STYLE_GETLISTENERS = {
+        /* the "none" style provides no default event listener functionality;
+         * this is useful if the user wishes to do their own custom triggerstyle
+         */
         "none": function(tooltip, triggerElems){
             return [];
         },
+        /* the "hover" style allows the tooltip to be shown upon hovering over
+         * a targeted element. The tooltip is hidden upon hovering off the
+         * target/tooltip
+         */
         "hover": function(tooltip, triggerElems){
             var createdListeners = [];
+            
+            // need a small delay before hiding a tooltip on hovering off the 
+            // target in order to give the user a chance to interact with the
+            // tooltip before it is hidden
             var hoverOutTimer = null;
-            var hideDelay = 200;
+            var hideDelay = 200; 
             var cancelTimerFn = function(){
                 if(hoverOutTimer){
                     window.clearTimeout(hoverOutTimer);
@@ -51,8 +100,8 @@
                 hoverOutTimer = null;
             };
             
+            // callback function for when a target element is hovered over
             var showTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
-                console.log(e.type);
                 cancelTimerFn();
                 // don't trigger show when coming from a tooltip element
                 var fromElem = e.relatedTarget || e.toElement;
@@ -61,12 +110,14 @@
                     e.stopPropagation();
                 }
             });
+            
+            // callback function for when a target element is hovered off
             var hideTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
                 cancelTimerFn();
-                // don't get triggered when exiting to a tooltip element
+                // don't trigger hide when exiting to a tooltip element
                 var toElem = e.relatedTarget || e.toElement;
                 if(!hasParentNode(toElem, tooltip)){
-                    // add delay so that we can interact with tooltip
+                    // add delay before hide so that we can interact w/ tooltip
                     hoverOutTimer = window.setTimeout(function(){
                         if(tooltip.xtag.currTriggerStyle === "hover")
                         {
@@ -77,6 +128,7 @@
                 }
             });
             
+            // callback function for when the tooltip itself is hovered over
             var showTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
                 cancelTimerFn();
                 
@@ -93,6 +145,7 @@
                 }
             });
             
+            // callback function for when the tooltip itself is hovered off
             var hideTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
                 cancelTimerFn();
                 // don't get triggered when exiting to the target element
@@ -111,7 +164,8 @@
                 }
             });
             
-            // create and add the CachedListeners to the list to be returned
+            // create CachedListeners for each target element and add them
+            // to the list to be returned
             triggerElems.forEach(function(triggerElem){
                 var enterListener = new CachedListener(triggerElem, "mouseover",
                                                        showTipTargetFn);
@@ -121,6 +175,7 @@
                 createdListeners.push(exitListener);
             });
             
+            // also create/add the CachedListeners fo rthe tooltip itself
             createdListeners.push(
                 new CachedListener(tooltip, "mouseover", showTipTooltipFn)
             );
@@ -130,9 +185,15 @@
             
             return createdListeners;
         },
+        /* The "click" style allows the tooltip to be shown when the target elem
+         * is clicked. The tooltip persists until either the target is clicked
+         * again or the user clicks outside of the tooltip
+         */
         "click": function(tooltip, triggerElems){
             var createdListeners = [];
             
+            // create and add the visibility-toggling click callback on target
+            // elements
             var targetClickFn = function(e){
                 if(tooltip.hasAttribute("visible") && 
                    tooltip.xtag.lastTargetElem === e.currentTarget)
@@ -144,13 +205,14 @@
                 }
                 e.stopPropagation();
             };
-            
             triggerElems.forEach(function(triggerElem){
                 var targetListener = new CachedListener(triggerElem, "click", 
                                                         targetClickFn);
                 createdListeners.push(targetListener);
             });
             
+            // create and add listener for when the user clicks outside the
+            // tooltip to hide the tooltip
             createdListeners.push(
                 new CachedListener(document.body, "click", function(e){
                                       if(tooltip.hasAttribute("visible")){
@@ -171,6 +233,11 @@
     };
     
     
+    /** hasParentNode: (DOM, DOM) => Boolean
+    * 
+    *  utility function that determines if the given element actually has the 
+    *  proposed parent element as a parent or ancestor node
+    **/
     function hasParentNode(elem, parent){
         while(elem){
             if(elem === parent){
@@ -181,23 +248,34 @@
         return false;
     }
     
-    // create a function for mouseover/mouseleave events where:
-    // - for mouseover events, only fires callback when
-    //   the mouse first enters the element that has the mouseover event 
-    //   listener attached to it and ignores any mouseovers between children
-    //   elements in this same continer element; essentially emulates jQuery's
-    //   mouseenter polyfill
-    // - for mouseout events, only fires callback when the mouse actually
-    //   completely exits the element that has the mouseleave event 
-    //   listener attached to it and ignores any mouseouts that exit to 
-    //   somewhere that is still within the listening container element;
-    //   emulates jQuery's mouseleave polyfill
-    // - acts normally for any non-mouseover/mouseleave events
-    //
-    // TL;DR edition: creates a function that doesn't fire a callback if the
-    // event is simply triggered by moving between children of the same 
-    // listening element in order to simulate the mouseenter/mouseleave events
-    // in jQuery
+    
+    /** mkSimulateMouseEnterLeaveFn: Function => Function
+     *
+     * creates and returns a callback function for mouseover/mouseleave 
+     * events where:
+     * - for mouseover events, only fires callback when
+     *   the mouse first enters the element that has the mouseover event 
+     *   listener attached to it and ignores any mouseovers between children
+     *   elements in this same continer element; essentially emulates jQuery's
+     *   mouseenter polyfill
+     * - for mouseout events, only fires callback when the mouse actually
+     *   completely exits the element that has the mouseleave event 
+     *   listener attached to it and ignores any mouseouts that exit to 
+     *   somewhere that is still within the listening container element;
+     *   emulates jQuery's mouseleave polyfill
+     * - acts normally for any non-mouseover/mouseleave events
+     *
+     * TL;DR edition: creates a function that doesn't fire a callback if the
+     * event is simply triggered by moving between children of the same 
+     * listening element; this is similar to jQuery's mouseenter/mouseleave
+     * implementations
+     *
+     * params:
+     *      callback                    a callback function taking an event
+     *                                  to be called when moving between
+     *                                  two elements not both in the same
+     *                                  listening element
+     **/
     function mkSimulateMouseEnterLeaveFn(callback){
         return function(e){
             var eventType = e.type.toLowerCase();
@@ -219,8 +297,17 @@
         };
     }
     
-    // returns list of elements selected by the given selector in relation to
-    // the tooltip
+    
+    /** _selectorToElems: (x-tooltip, string) => DOM list
+     *
+     * returns list of DOM elements selected by the given selector string 
+     * in relation to the tooltip
+     *
+     * If given "_previousSibling", returns the previous sibling of the tooltip
+     * If given "_nextSibling", returns the next sibling of the tooltip
+     * Otherwise, applies the selector as a CSS query selector on the tooltip's
+     * parent element
+     */
     function _selectorToElems(tooltip, selector){
         if(selector === "_previousSibling"){
             return (tooltip.previousElementSibling) ? 
@@ -230,14 +317,23 @@
             return (tooltip.nextElementSibling) ? 
                       [tooltip.nextElementSibling] : [];
         }
+        // otherwise, apply as CSS selector string
         else{
             var parent = (tooltip.parentNode) ? tooltip.parentNode : document;
             return xtag.query(parent, selector);
         }
     }
     
-    // return the absolute top-left coordinates of the given element in 
-    // relation to the page
+    
+    /** getPageOffset: (DOM) => {}
+    * utility function to  return the absolute top-left coordinates of the 
+    * given element in relation to the page
+    *
+    * returns as datamap of 
+    * { "left": <number of left offset pixels>, 
+    *   "top": <number of top offset pixels>
+    * }
+    **/
     function getPageOffset(elem){
         var left = 0;
         var top = 0;
@@ -255,7 +351,11 @@
         };
     }
     
-    // returns true if the two given elements' bounding boxes visually overlap
+    
+    /** overlaps: (DOM, DOM) => Boolean
+    *
+    *  returns true if the two given elements' bounding boxes visually overlap
+    **/
     function overlaps(elemA, elemB){
         var _pointIsInRect = function(x, y, rect){
             return (rect.left <= x && x <= rect.right && 
@@ -278,40 +378,36 @@
             bottom: absCoordsB.top + elemB.offsetHeight
         };
         
-        //check box A 
-        if(_pointIsInRect(rectA.left, rectA.top, rectB) || 
-           _pointIsInRect(rectA.right, rectA.top, rectB) || 
-           _pointIsInRect(rectA.right, rectA.bottom, rectB) || 
-           _pointIsInRect(rectA.left, rectA.bottom, rectB))
-        {
-            return true; 
-        }
-        
-        //check box B 
-        else if(_pointIsInRect(rectB.left, rectB.top, rectA) || 
-           _pointIsInRect(rectB.right, rectB.top, rectA) || 
-           _pointIsInRect(rectB.right, rectB.bottom, rectA) || 
-           _pointIsInRect(rectB.left, rectB.bottom, rectA)) 
-        {    
-            return true; 
-        }
-        else{
-            //check cross intersections
-            var _isCrossIntersect = function(rectA, rectB){
-                return (rectA.top <= rectB.top && 
-                        rectB.bottom <= rectA.bottom &&
-                        rectB.left <= rectA.left && 
-                        rectA.right <= rectB.right);
-            };
-           
-            return (_isCrossIntersect(rectA, rectB) || 
-                    _isCrossIntersect(rectB, rectA)); 
-        }
+        // checks if any corner of one rect is contained in the other rect
+        var _cornersOverlapBox = function(rectA, rectB){
+            return (_pointIsInRect(rectA.left, rectA.top, rectB) || 
+                    _pointIsInRect(rectA.right, rectA.top, rectB) || 
+                    _pointIsInRect(rectA.right, rectA.bottom, rectB) || 
+                    _pointIsInRect(rectA.left, rectA.bottom, rectB));
+        };
+       
+        // checks for cross intersections
+        var _isCrossIntersect = function(rectA, rectB){
+            return (rectA.top <= rectB.top && 
+                    rectB.bottom <= rectA.bottom &&
+                    rectB.left <= rectA.left && 
+                    rectA.right <= rectB.right);
+        };
+       
+        return (_cornersOverlapBox(rectA, rectB) ||
+                _cornersOverlapBox(rectB, rectA) ||
+                _isCrossIntersect(rectA, rectB) || 
+                _isCrossIntersect(rectB, rectA)); 
     }
     
-    // returns the height and width of the given dimensions rotated by the
-    // given number of degrees
-    // see: http://stackoverflow.com/a/9793197 for base inspiration of calc
+    
+    /** getRotationDims: (number, number, number) => {}
+    *
+    * returns the height and width of the given dimensions rotated by the
+    * given number of degrees
+    * see: http://stackoverflow.com/a/9793197 for base inspiration of calc
+    *   
+    **/
     function getRotationDims(width, height, degrees){
         var radians = degrees * (Math.PI / 180);
         
@@ -326,6 +422,11 @@
         };
     }
     
+    
+    /** constrainNum: (number, number, number) => number
+    *   
+    * simple utility function to constrain a given number to the given range
+    **/
     function constrainNum(num, min, max){
         var output = num;
         output = (min !== undefined) ? Math.max(min, output) : output;
@@ -334,16 +435,20 @@
     }    
     
     
-    // when called, attempts to reposition the tooltip so that it is centered
-    // on the target element with the correct orientation
-    // if given orientation is not a valid orientation type, this will attempt
-    // to autoplace the tooltip in an orientation that doesn't overlap the 
-    // targeted elements
+    /** _positionTooltip: (x-tooltip, DOM, string)
+     *
+     * when called, attempts to reposition the tooltip so that it is centered
+     * on and pointing to the target element with the correct orientation
+     *
+     * if given orientation is not a valid orientation type, this will attempt
+     * to autoplace the tooltip in an orientation that doesn't overlap the 
+     * targeted elements
+     **/
     function _positionTooltip(tooltip, targetElem, orientation){
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
-        if(!(_isValidOrientation(orientation))){
+        if(!(isValidOrientation(orientation))){
             for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
                 // ensure arrow is pointing in correct direction
                 arrow.setAttribute("arrow-direction", 
@@ -483,8 +588,14 @@
         return;
     }
     
-    // positions the tooltip on the triggering element (if given) and makes the
-    // tooltip visible
+    
+    /** _showTooltip: (x-tooltip, DOM)
+     *
+     * positions the tooltip on the triggering element (if given) and makes the
+     * tooltip visible
+     *
+     * fires a 'tooltipshown' event
+     **/
     function _showTooltip(tooltip, triggerElem){
         if(triggerElem === tooltip){
             console.log("The tooltip's target element is the tooltip itself!" +
@@ -522,19 +633,31 @@
         
     }
     
+    
+    /** _hideTooltip: (x-tooltip) 
+     *
+     * as expected, simply hides/cleans up the tooltip
+     *
+     * fires a 'tooltiphidden' event
+     **/
     function _hideTooltip(tooltip){
         tooltip.removeAttribute("visible");
-        if(_isValidOrientation(tooltip.orientation)){
+        // remove remnant attribute used for auto placement animations
+        if(isValidOrientation(tooltip.orientation)){
             tooltip.removeAttribute("auto-orientation");
         }
         
         xtag.fireEvent(tooltip, "tooltiphidden");
     }
     
-    // unbinds cached listeners and binds new listeners for new trigger 
-    // parameters; call this anytime the tooltip trigger changes
-    // if newTriggerElems is not given, uses previously existing trigger elems
-    // if newTriggerStyle is not given, uses the previously used trigger style
+    
+    /** _updateTriggerListeners: (x-tooltip, DOM list, string)
+     *
+     * unbinds existing cached listeners and binds new listeners for new trigger 
+     * parameters; call this anytime the tooltip trigger changes
+     * if newTriggerElems is not given, uses previously existing trigger elems
+     * if newTriggerStyle is not given, uses the previously used trigger style
+    **/
     function _updateTriggerListeners(tooltip, newTriggerElems, newTriggerStyle){
         if(newTriggerElems === undefined || newTriggerElems === null){
             newTriggerElems = tooltip.xtag.triggeringElems;
@@ -584,7 +707,11 @@
             listener.attachListener();
         });
         tooltip.xtag.cachedListeners = listeners;
+        
+        // also hide the tooltip since the trigger has changed
+        _hideTooltip(tooltip);
     }
+    
     
     xtag.register("x-tooltip", {
         lifecycle:{
@@ -641,7 +768,7 @@
                     var arrow = this.querySelector(".tooltip-arrow");
                     
                     var newArrowDir = null;
-                    if(_isValidOrientation(newOrientation)){
+                    if(isValidOrientation(newOrientation)){
                         newArrowDir = TIP_ORIENT_ARROW_DIR_MAP[newOrientation];
                         arrow.setAttribute("arrow-direction", newArrowDir);
                         arrow.removeAttribute("auto-orientation");
@@ -656,7 +783,9 @@
                 }
             },
             
-            // valid options are 'hover', 'click', and 'none'
+            // selects the style of tooltip trigger to use
+            // can choose from presets or set to "none" in order to define
+            // custom trigger
             "trigger-style": {
                 attribute: {},
                 get: function(){
@@ -702,6 +831,7 @@
                 get: function(){
                     return this.xtag.contentEl;
                 },
+                // can use this to replace the DOM outright
                 set: function(newContentElem){
                     var oldContent = this.xtag.contentEl;
                     
@@ -715,7 +845,7 @@
             }
         },
         methods: {
-            // call this when the position of the tooltip needs to be 
+            // called when the position of the tooltip needs to be manually
             // recalculated; such as after updating the DOM of the contents
             refreshPosition: function(){
                 if(this.xtag.lastTargetElem){
@@ -724,14 +854,18 @@
                 }
             },
             
+            // exactly as you'd expect; shows the tooltip
             showTooltip: function(){
                 _showTooltip(this, this.xtag.lastTargetElem);
             },
             
+            // exactly as you'd expect; hides the tooltip
             hideTooltip: function(){
                 _hideTooltip(this);
             },
             
+            // exactly as you'd expect; toggles between showing and hiding the
+            // tooltip
             toggleTooltip: function(){
                 if(this.hasAttribute("visible")){
                     this.hideTooltip();

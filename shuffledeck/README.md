@@ -16,22 +16,6 @@ the text "Lorem ipsum", one with an image, and one with a button.
 
 Note that `<x-shuffleslide>` elements can contain any kind of html markup!
 
-# Styling
-
-Because `<x-shuffledeck>` and `<x-shuffleslide>` elements are just regular DOM elements,
-you can style them as normal.
-
-However, shuffledecks also add some extra selectors, allowing you to finetune how slides
-appear during animations. (The following examples use the same html structure as the usage example.)
-
-* Styles applied to `x-shuffledeck > x-shuffleslide[selected]` are only applied to the currently visible slide in the deck.
-* Styles applied to `x-shuffledeck > x-shuffleslide[leaving]` define how a slide looks when in the middle of transitioning out of view
-    - For example, if you wanted slides to be faded when leaving the deck's viewport, you could apply the following style:
-            
-            x-shuffledeck > x-shuffleslide[leaving]{
-                opacity: 0.7;
-            }
-
 # Attributes
 
 ## ___transition-type___
@@ -107,6 +91,24 @@ A `slideend` event is fired by the &lt;x-shuffledeck&gt; element when a cycle fr
 ##  x-shuffleslide: ___show___
 
 If an &lt;x-shuffleslide&gt; element receives a `show` event, the shuffledeck will transition to the slide that received the event using the currently set transition type.
+
+
+# Styling
+
+Because `<x-shuffledeck>` and `<x-shuffleslide>` elements are just regular DOM elements,
+you can style them as normal.
+
+However, shuffledecks also add some extra selectors, allowing you to finetune how slides
+appear during animations. (The following examples use the same html structure as the usage example.)
+
+* Styles applied to `x-shuffledeck > x-shuffleslide[selected]` are only applied to the currently visible slide in the deck.
+* Styles applied to `x-shuffledeck > x-shuffleslide[leaving]` define how a slide looks when in the middle of transitioning out of view
+    - For example, if you wanted slides to be faded when leaving the deck's viewport, you could apply the following style:
+            
+            x-shuffledeck > x-shuffleslide[leaving]{
+                opacity: 0.7;
+            }
+
 
 # Misc
 

@@ -9,6 +9,9 @@ x-tooltip {
   opacity: 0;
   max-width: 100%;
   max-height: 100%;
+  border: 1px solid grey;
+  background-color: #eee;
+  border-radius: 4px;
   transition-property: visibility, transform, opacity;
   -webkit-transition-property: visibility, -webkit-transform, opacity;
   -moz-transition-property: visibility, -moz-transform, opacity;

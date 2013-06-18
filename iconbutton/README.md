@@ -9,22 +9,6 @@ Iconbuttons are essentially buttons with an anchored icon in addition to a label
 Indicates that the browser should render a button with an icon of a kitten to the right of the
 button's label, which reads "Hello".
 
-# Styling
-
-To define your own stylings for an icon button, you can apply your own CSS styles to
-the following CSS selectors, assuming that `"foo"` represents an `x-iconbutton` element:
-
-* applying styles to `foo` applies styles as if it were to the 
-  "wrapper" of the button
-       
-* applying styles to `foo > .button` applies styles to the 
-  button element itself
-
-* applying styles to `foo > .icon` applies styles to the icon of the
-  button
-
-* applying styles to `foo > .label` applies styles to the label of the
-  button
 
 # Attributes
 
@@ -112,3 +96,20 @@ override the getter and setter behaviors for text by modifying the `.textGetter`
         // custom text setting behavior
     }
 
+    
+# Styling
+
+To define your own stylings for an icon button, you can apply your own CSS styles to
+the following CSS selectors, assuming that `"foo"` represents an `x-iconbutton` element:
+
+* applying styles to `foo` applies styles as if it were to the 
+  "wrapper" of the button
+       
+* applying styles to `foo > .button` applies styles to the 
+  button element itself
+
+* applying styles to `foo > .icon` applies styles to the icon of the
+  button
+
+* applying styles to `foo > .label` applies styles to the label of the
+  button
