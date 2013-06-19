@@ -44,8 +44,6 @@
         var label = elem.xtag.labelEl;
         var button = elem.xtag.buttonEl;
         
-        console.log(elem.getAttribute('icon-anchor'));
-        
         switch(elem.getAttribute('icon-anchor')){
             // icon goes after label
             case "right":
