@@ -3,7 +3,7 @@
 	"tagName": "x-tabbar",
 	"version": "0.1.0",
 	"author": "Leon Zhang",
-	"description": "The TabBar is used to display an app-level navigation/tabbing bar at the bottom of the UI",
+	"description": "Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.",
 	"demo": "demo/tabbar-demo.html",
 	"categories": [
         "ui"
@@ -17,7 +17,7 @@
 		"ios": 4
 	},
 	"documentation": {
-		"description": "",
+		"description": "Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.",
 		"attributes": {},
 		"events": {},
 		"methods": {},

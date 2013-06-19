@@ -23,19 +23,27 @@
             padding: 0;
         }
         
-        .container{
-            width: 320px;
-            height: 480px;
-            border: 1px solid grey;
+        body > figure{
+            position: relative;
             display: inline-block;
             margin: 5px;
-            vertical-align: top;
+            vertical-align: bottom;
+            width: 320px;
+        }
+        
+        .demo-container{
+            position: relative;
+            width: 100%;
+            height: 480px;
+            border: 1px solid grey;
         }
         
         .component-demo{
             position: relative;
             width: 100%;
-            height: 60%;
+            height: 85%;
+            margin: 0;
+            padding: 0;
         }
         
         .component-demo img{
@@ -57,13 +65,20 @@
         }
         
         x-tabbar{
+            height: 15%;
             background-color: orange;
+        }
+        
+        x-tabbar-tab{
+            height: 100%;
         }
         
         x-iconbutton{
             margin: 0;
             padding: 0;
             cursor: pointer;
+            
+            height: 100%;
         }
         
         x-iconbutton .button{
@@ -77,8 +92,8 @@
         }
         
         x-iconbutton .icon{
-            max-width: 30px;
-            max-height: 30px;
+            max-width: 40px;
+            max-height: 40px;
         }
         
         x-iconbutton .label{
@@ -89,85 +104,103 @@
 <body>
 <h1>X-TabBar demos</h1>
 
-<div class="container">
+<figure>
     <h2>With shuffledeck</h2>
-    <x-shuffledeck class="component-demo" transition-type="coverDown">
-        <x-shuffleslide><img src="http://placekitten.com/250/?image=1"/><span>One</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/250/?image=2"/><span>Two</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/250/?image=3"/><span>Three</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/250/?image=4"/><span>Four</span></x-shuffleslide>
-        <x-shuffleslide><img src="http://placekitten.com/250/?image=5"/><span>Five</span></x-shuffleslide>
-    </x-shuffledeck>
-    
-    <x-tabbar>
-        <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:first-child">
-            <x-iconbutton src="http://placekitten.com/30/?image=1">One</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(2)">
-            <x-iconbutton src="http://placekitten.com/30/?image=2">Two</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(3)">
-            <x-iconbutton src="http://placekitten.com/30/?image=3">Three</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(4)">
-            <x-iconbutton src="http://placekitten.com/30/?image=4">Four</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(5)">
-            <x-iconbutton src="http://placekitten.com/30/?image=5">Five</x-iconbutton>
-        </x-tabbar-tab>
-    </x-tabbar>
-</div>
+    <div class="demo-container">    
+        <x-shuffledeck class="component-demo" transition-type="coverDown">
+            <x-shuffleslide><img src="http://placekitten.com/250/?image=1"/><span>One</span></x-shuffleslide>
+            <x-shuffleslide><img src="http://placekitten.com/250/?image=2"/><span>Two</span></x-shuffleslide>
+            <x-shuffleslide><img src="http://placekitten.com/250/?image=3"/><span>Three</span></x-shuffleslide>
+            <x-shuffleslide><img src="http://placekitten.com/250/?image=4"/><span>Four</span></x-shuffleslide>
+            <x-shuffleslide><img src="http://placekitten.com/250/?image=5"/><span>Five</span></x-shuffleslide>
+        </x-shuffledeck>
+        
+        <x-tabbar>
+            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:first-child">
+                <x-iconbutton src="http://placekitten.com/30/?image=1">One</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(2)">
+                <x-iconbutton src="http://placekitten.com/30/?image=2">Two</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(3)">
+                <x-iconbutton src="http://placekitten.com/30/?image=3">Three</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(4)">
+                <x-iconbutton src="http://placekitten.com/30/?image=4">Four</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(5)">
+                <x-iconbutton src="http://placekitten.com/30/?image=5">Five</x-iconbutton>
+            </x-tabbar-tab>
+        </x-tabbar>
+    </div>
+</figure>
 
-<div class="container">
-    <h2>With slidebox</h2>
-    <x-slidebox class="component-demo" orientation="x">
-        <x-slides>
-          <x-slide><img src="birnimal-calendar.png" /></x-slide>
-          <x-slide><img src="birnimal-graph.png" /></x-slide>
-          <x-slide><img src="birnimal-detail.png" /></x-slide>
-          <x-slide><img src="birnimal-settings.png" /></x-slide>
-        </x-slides>
-    </x-slidebox>
-    
-    <x-tabbar>
-        <x-tabbar-tab target-selector="x-slidebox x-slide:first-child">
-            <x-iconbutton src="birnimal-calendar.png">Calendar</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-slidebox x-slide:nth-child(2)">
-            <x-iconbutton src="birnimal-graph.png">Graph</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-slidebox x-slide:nth-child(3)">
-            <x-iconbutton src="birnimal-detail.png">Detail</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-slidebox x-slide:nth-child(4)">
-            <x-iconbutton src="birnimal-settings.png">Settings</x-iconbutton>
-        </x-tabbar-tab>
-    </x-tabbar>
-</div>
 
-<div class="container">
+<figure>
+    <h2>With slidebox <br/>(also dynamically assigned tab targets)</h2>
+    <div class="demo-container">
+        <x-slidebox class="component-demo" orientation="x">
+            <x-slides>
+              <x-slide><img src="birnimal-calendar.png" /></x-slide>
+              <x-slide><img src="birnimal-graph.png" /></x-slide>
+              <x-slide><img src="birnimal-detail.png" /></x-slide>
+              <x-slide><img src="birnimal-settings.png" /></x-slide>
+            </x-slides>
+        </x-slidebox>
+        
+        <!-- see javascript to see demo of dynamically assigning targets -->
+        <x-tabbar>
+            <x-tabbar-tab>
+                <x-iconbutton src="birnimal-calendar.png">Calendar</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab>
+                <x-iconbutton src="birnimal-graph.png">Graph</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab>
+                <x-iconbutton src="birnimal-detail.png">Detail</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab>
+                <x-iconbutton src="birnimal-settings.png">Settings</x-iconbutton>
+            </x-tabbar-tab>
+        </x-tabbar>
+    </div>
+</figure>
+
+<figure class="container">
     <h2>With flipbox</h2>
-    <x-flipbox class="component-demo">
-      <div>
-        <img src="Card_front.svg"/>
-      </div>
-      <div>
-        <img src="Card_back.svg"/>
-      </div>
-    </x-flipbox>
-    <x-tabbar>
-        <x-tabbar-tab target-selector="x-flipbox > *:first-child">
-            <x-iconbutton src="Card_front.svg" icon-anchor="top">Front</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="x-flipbox > *:last-child">
-            <x-iconbutton src="Card_back.svg" icon-anchor="top">Back</x-iconbutton>
-        </x-tabbar-tab>
-    </x-tabbar>
-</div>    
+        <div class="demo-container">  
+        <x-flipbox class="component-demo">
+          <div>
+            <img src="Card_front.svg"/>
+          </div>
+          <div>
+            <img src="Card_back.svg"/>
+          </div>
+        </x-flipbox>
+        <x-tabbar>
+            <x-tabbar-tab target-selector="x-flipbox > *:first-child">
+                <x-iconbutton src="Card_front.svg" icon-anchor="top">Front</x-iconbutton>
+            </x-tabbar-tab>
+            <x-tabbar-tab target-selector="x-flipbox > *:last-child">
+                <x-iconbutton src="Card_back.svg" icon-anchor="top">Back</x-iconbutton>
+            </x-tabbar-tab>
+        </x-tabbar>
+    </div>
+</figure>    
 
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
-
+    var slideBox = document.querySelector('x-slidebox');
+    var slideBoxTabbar = document.querySelector('x-slidebox + x-tabbar');
+    
+    var tabs = slideBoxTabbar.tabs;
+    var slides = xtag.query(slideBox, 'x-slide');
+    for(var i=0; i < slides.length && i < tabs.length; i++){
+        var tab = tabs[i];
+        var slide = slides[i];
+        
+        tab.targetElems = [slide];
+    }
 });
 </script>
 </body>

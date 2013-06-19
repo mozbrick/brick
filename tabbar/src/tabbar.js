@@ -4,7 +4,23 @@
             created: function(){}
         },
         events: {},
-        accessors: {},
+        accessors: {
+            // retrive a list of the tabs in this bar
+            'tabs': {
+                get: function(){
+                    var tabs = xtag.query(this, "x-tabbar-tab");
+                    var tabbar = this;
+                    var output = [];
+                    
+                    tabs.forEach(function(tab){
+                        if(tab.parentNode && tab.parentNode === tabbar){
+                            output.push(tab);
+                        }
+                    });
+                    return output;
+                }
+            }
+        },
         methods: {}
     });
     
@@ -28,19 +44,22 @@
             "target-selector": {
                 attribute: {},
                 set: function(newTargetSelector){
-                    this.xtag.targetElems = xtag.query(document, newTargetSelector);
+                    this.xtag.targetElems = xtag.query(document, 
+                                                       newTargetSelector);
                 }
             },
             "targetElems":{
                 get: function(){
                     return this.xtag.targetElems;
                 },
-                // a way to manually override targets by passing DOM elements in
-                // with code
+                // provide a way to manually override targets by passing DOM 
+                // elements in with code if users don't want to bother with
+                // CSS selectors
                 set: function(newElems){
-                    this.xtag.targetElems = newElems;
                     // remove attribute to avoid confusing desynched attributes
                     this.removeAttribute("target-selector");
+                
+                    this.xtag.targetElems = newElems;
                 }
             }
         },

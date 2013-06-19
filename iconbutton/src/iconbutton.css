@@ -1,9 +1,13 @@
 x-iconbutton {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  display: inline-block; }
+  display: inline-block;
+  margin: 0;
+  padding: 0; }
   x-iconbutton .button {
     cursor: inherit;
+    height: inherit;
+    width: inherit;
     margin: 0; }
     x-iconbutton .button > * {
       margin: 0;
