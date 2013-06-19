@@ -124,27 +124,27 @@
     <ul>
       <li>
         <span>Left icon (default):</span>
-        <x-iconbutton src="http://placekitten.com/30">Hello</x-iconbutton>
+        <x-iconbutton src="http://placecage.com/30/30">Hello</x-iconbutton>
       </li> 
       <li>
         <span>Left icon (specified):</span>
-        <x-iconbutton src="http://placekitten.com/30" icon-anchor="left">Hello</x-iconbutton>
+        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="left">Hello</x-iconbutton>
       </li>
       <li>
         <span>Right icon:</span>
-        <x-iconbutton src="http://placekitten.com/30" icon-anchor="right">Hello</x-iconbutton>
+        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="right">Hello</x-iconbutton>
       </li> 
       <li>
         <span>Top icon:</span>
-        <x-iconbutton src="http://placekitten.com/30" icon-anchor="top">Hello</x-iconbutton>
+        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="top">Hello</x-iconbutton>
       </li> 
       <li>
         <span>Bottom icon:</span>
-        <x-iconbutton src="http://placekitten.com/30" icon-anchor="bottom" >Hello</x-iconbutton>
+        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="bottom" >Hello</x-iconbutton>
       </li>  
       <li>
         <span>No label:</span>
-        <x-iconbutton src="http://placekitten.com/30"></x-iconbutton>
+        <x-iconbutton src="http://placecage.com/30/30"></x-iconbutton>
       </li>
       <li>
         <span>No Icon (ie: normal button):</span>
@@ -167,7 +167,7 @@
       </li>
       <li>
         <span>Anchor editing:</span>
-        <x-iconbutton id="anchor-demo"  class="demo" src="http://placekitten.com/40">Lorem Ipsum</x-iconbutton>
+        <x-iconbutton id="anchor-demo"  class="demo" src="http://placecage.com/40/40">Lorem Ipsum</x-iconbutton>
         <button onclick="changeAnchor(this, 'left')">Left</button>
         <button onclick="changeAnchor(this, 'right')">Right</button>
         <button onclick="changeAnchor(this, 'top')">Top</button>
@@ -176,9 +176,9 @@
       </li>
       <li>
         <span>Icon Src editing:</span>
-        <x-iconbutton id="icon-demo" class="demo" src="http://placekitten.com/39">Icons</x-iconbutton>
-        <button onclick="changeSrc(this, 'http://placekitten.com/39')">
-            Kitten (url)
+        <x-iconbutton id="icon-demo" class="demo" src="http://placecage.com/39/39">Icons</x-iconbutton>
+        <button onclick="changeSrc(this, 'http://placecage.com/39/39')">
+            Nic Cage (url)
         </button>
         <button onclick="changeSrc(this, 'firefox.png')">
             Firefox (local)
@@ -272,6 +272,7 @@
             var iconButton = button.parentNode.querySelector("x-iconbutton");
             
             iconButton["icon-anchor"] = anchor;
+            console.log(anchor);
         }
         
         function changeSrc(button, imgSrc){

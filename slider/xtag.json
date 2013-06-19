@@ -1,0 +1,27 @@
+{
+	"name": "Slider",
+	"tagName": "x-slider",
+	"version": "0.1.0",
+	"author": "Leon Zhang",
+	"description": "Polyfill on top of input type='range', providing a consistent UI regardless of whether type='range' is supported or not.",
+	"demo": "demo/slider-demo.html",
+	"categories": [
+        "ui"
+    ],
+	"compatibility": {
+		"firefox": 5,
+		"chrome": 4,
+		"ie": 9,
+		"opera": 12,
+		"android": 2.1,
+		"ios": 4
+	},
+	"documentation": {
+		"description": "Polyfill on top of input type='range', providing a consistent UI regardless of whether type='range' is supported or not.",
+		"attributes": {},
+		"events": {},
+		"methods": {},
+		"getters": {},
+		"setters": {}
+	}
+}
