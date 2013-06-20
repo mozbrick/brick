@@ -149,13 +149,12 @@
             // for synchronization purposes, only set these attributes if 
             // the newSlide is actually the currently selected slide
             if(newSlide === _getSelectedSlide(shuffleDeck)){
-                shuffleDeck.removeAttribute("active-transition-type");
                 // guarantee that attributes are consistent upon completion
                 _getAllSlides(shuffleDeck).forEach(function(slide){
+                    slide.removeAttribute("slide-anim-type");
                     slide.removeAttribute("selected");
                     slide.removeAttribute("leaving");
                     slide.removeAttribute("reverse");
-                    slide.removeAttribute("slide-anim-type");
                 });
                 newSlide.setAttribute("selected", true);
                 shuffleDeck.xtag.lastSelectedIndex = _getSlideIndex(shuffleDeck, newSlide);
@@ -184,9 +183,6 @@
         // and graphically flickering
         var _attemptBeforeCallback = function(){
             if(oldSlideAnimReady && newSlideAnimReady){
-                shuffleDeck.setAttribute("active-transition-type", 
-                                         slideAnimName);
-            
                 _getAllSlides(shuffleDeck).forEach(function(slide){
                     slide.removeAttribute("selected");
                     slide.removeAttribute("leaving");
@@ -277,6 +273,8 @@
                 if(animationComplete){
                     return;
                 }
+                console.log("time out!");
+                
                 animationComplete = true;
                 
                 newSlide.removeEventListener("transitionend", 
@@ -290,7 +288,6 @@
         // finally, after setting up all these callback functions, actually
         // start the animation by setting the old and newslides at their
         // animation beginning states 
-        
         xtag.skipTransition(oldSlide, function(){
             oldSlide.setAttribute("slide-anim-type", slideAnimName);
             oldSlide.setAttribute("before-animation", true);
@@ -432,8 +429,6 @@
     also removes any temp-attributes used for animation
     **/
     function _sanitizeSlideAttrs(shuffleDeck){
-        shuffleDeck.removeAttribute("active-transition-type");
-    
         var slides = _getAllSlides(shuffleDeck);
         
         var currSlide = _getSelectedSlide(shuffleDeck);

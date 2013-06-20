@@ -43,11 +43,6 @@ x-shuffledeck{
     display: block; //can be overridden with anything non-inline
     position: relative;
     overflow: hidden;
-    // allow overflow for certain transforms at the moment of animation 
-    // to enhance 3d effect
-    &[active-transition-type=flipX], &[active-transition-type=flipY]{
-        overflow: visible;
-    }
     
     width: 200px; // override these defaults
     height: 150px; // override these defaults
@@ -55,6 +50,8 @@ x-shuffledeck{
     
     & > x-shuffleslide{
         @include boxSizing(border-box);
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
         display: block;
         
         overflow: hidden;
