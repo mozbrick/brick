@@ -17,6 +17,7 @@ x-slider {
     background: transparent;
     border: 0px solid transparent;
     color: transparent;
+    cursor: default;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;

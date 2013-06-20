@@ -30,7 +30,7 @@
 <h1>x-slider demo</h1>
 <h3>&lt;input type="range"&gt; is <em id="native-support-status"></em> natively supported by this browser!</h3>
 
-<x-slider max="100" min="0" step="10" value="25"></x-slider>
+<x-slider min="-50" max="50" step="10" value="20"></x-slider>
 
 <br/>
 <button onclick="togglePolyfill()">Toggle polyfill (Currently <span id="polyfill-status"></span>)</button>
@@ -44,6 +44,10 @@ document.addEventListener('DOMComponentsLoaded', function(){
     
     var nativeSupportStatus = document.getElementById("native-support-status");
     nativeSupportStatus.textContent = (hasNativeRangeSupport()) ? "" : "not";
+    
+    demoSlider.addEventListener("change", function(e){
+        console.log("slider change", e);
+    });
 });
 
 function updatePolyfillStatus(){

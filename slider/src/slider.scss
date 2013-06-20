@@ -27,6 +27,7 @@ x-slider{
             background: transparent;
             border: 0px solid transparent;
             color: transparent;
+            cursor: default;
             @include unhighlightable;
             
             z-index: 1;

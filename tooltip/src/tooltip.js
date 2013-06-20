@@ -325,33 +325,6 @@
     }
     
     
-    /** getPageOffset: (DOM) => {}
-    * utility function to  return the absolute top-left coordinates of the 
-    * given element in relation to the page
-    *
-    * returns as datamap of 
-    * { "left": <number of left offset pixels>, 
-    *   "top": <number of top offset pixels>
-    * }
-    **/
-    function getPageOffset(elem){
-        var left = 0;
-        var top = 0;
-        
-        while(elem.offsetParent){
-            left += elem.offsetLeft;
-            top += elem.offsetTop;
-            
-            elem = elem.offsetParent;
-        }
-        
-        return {
-            "left": left,
-            "top": top
-        };
-    }
-    
-    
     /** overlaps: (DOM, DOM) => Boolean
     *
     *  returns true if the two given elements' bounding boxes visually overlap
@@ -362,8 +335,8 @@
                     rect.top <= y && y <= rect.bottom);
         };
         
-        var absCoordsA = getPageOffset(elemA);
-        var absCoordsB = getPageOffset(elemB);
+        var absCoordsA = elemA.getBoundingClientRect();
+        var absCoordsB = elemB.getBoundingClientRect();
         var rectA = {
             left: absCoordsA.left,
             top: absCoordsA.top,
@@ -477,10 +450,10 @@
         arrow.style.left = "";
         
         // coordinates of the target element, relative to the page
-        var targetPageOffset = getPageOffset(targetElem);
+        var targetPageOffset = targetElem.getBoundingClientRect();
         
         // coordinates of the tooltip's container element, relative to the page
-        var containerPageOffset = getPageOffset(offsetContainer);
+        var containerPageOffset = offsetContainer.getBoundingClientRect();
         
         // coordinates of the target element,relative to the tooltip's container
         var targetContainerOffset = {
