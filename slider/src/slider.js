@@ -5,6 +5,13 @@
         return !isNaN(parseFloat(num));
     }
 
+    function _getDefaultVal(slider){
+        var min = (isNum(slider.min)) ? (+slider.min) : 0;
+        var max = (isNum(slider.max)) ? (+slider.max) : 100;
+        var step = (isNum(slider.step) && slider.step > 0) ? (+slider.step) : 1;
+        return Math.round((((max - min) / 2) + min) / step) * step;
+    }
+    
     function _valToFraction(slider, value){
         var min = (isNum(slider.min)) ? (+slider.min) : 0;
         var max = (isNum(slider.max)) ? (+slider.max) : 100;
@@ -17,7 +24,7 @@
         return ((max - min) * fraction) + min;
     }
     
-    function _calcValue(slider, sliderFraction){
+    function _fractionToSliderValue(slider, sliderFraction){
         sliderFraction = Math.min(Math.max(0.0, sliderFraction), 1.0);
         
         var step = (isNum(slider.step) && slider.step > 0) ? (+slider.step) : 1;
@@ -34,40 +41,79 @@
         if(!thumb){
             return;
         }
-        
         var sliderRect = slider.getBoundingClientRect();
         var thumbRect = thumb.getBoundingClientRect();
-        
         var fraction = _valToFraction(slider, value);
         
-        newThumbX = (sliderRect.width * fraction) - (thumbRect.width / 2);
+        // note that range inputs don't allow the thumb to spill past the bar
+        // boundaries, so we actually have a little less width to work with
+        // than you'd think
+        var availableWidth = Math.max(sliderRect.width - thumbRect.width, 0);
+        
+        newThumbX = (availableWidth * fraction) - (thumbRect.width / 2);
         
         thumb.style[TRANSFORM_NAME] = "translateX("+newThumbX+"px)";
     }
     
     function _redraw(slider){
-        _positionThumb(slider, slider.value);
+        var value = (isNum(slider.value)) ? 
+                      (+slider.value) : _getDefaultVal(slider);
+        
+        _positionThumb(slider, value);
     }
 
-    function _onDragStart(slider, pageX, pageY){
+    function _onMouseInput(slider, pageX, pageY){
         var inputEl = slider.xtag.rangeInputEl;
         var inputOffsets = inputEl.getBoundingClientRect();
         var inputClickX = pageX - inputOffsets.left;
-        var inputClickY = pageY - inputOffsets.top;
         
-        slider.value = _calcValue(slider, inputClickX / inputOffsets.width);
+        var oldValue = +slider.value;
+        var newValue = +_fractionToSliderValue(slider, 
+                                              inputClickX / inputOffsets.width);
+        
+        slider.value = newValue;
+        xtag.fireEvent(inputEl, "input");
+        if(oldValue !== newValue){
+            xtag.fireEvent(inputEl, "change");
+        }
         _redraw(slider);
     }
     
-    function onMouseStart(e){
-        var slider = e.currentTarget;
+    function _onDragStart(slider, pageX, pageY){
+        _onMouseInput(slider, pageX, pageY);
         
-        _onDragStart(slider, e.pageX, e.pageY);
+        document.body.addEventListener("mousemove", slider.xtag.callbackFns["onMouseDragMove"]);
+        document.body.addEventListener("mouseup", slider.xtag.callbackFns["onMouseDragEnd"]);
+    }
+    
+    function _onDragMove(slider, pageX, pageY){
+        _onMouseInput(slider, pageX, pageY);
+    }
+    
+    function _makeCallbackFns(slider){
+        return {
+            "onMouseDragStart": function(e){
+                _onDragStart(slider, e.pageX, e.pageY);
+                
+                e.preventDefault(); // disable selecting elements while dragging
+            },
+            
+            "onMouseDragMove": function(e){
+                _onDragMove(slider, e.pageX, e.pageY);
+            },
+            
+            "onMouseDragEnd": function(e){
+                document.body.removeEventListener("mousemove", slider.xtag.callbackFns["onMouseDragMove"]);
+                document.body.removeEventListener("mouseup", slider.xtag.callbackFns["onMouseDragEnd"]);
+            }                  
+        };
     }
     
     xtag.register("x-slider", {
         lifecycle: {
             created: function(){
+                this.xtag.callbackFns = _makeCallbackFns(this);
+            
                 this.xtag.rangeInputEl = document.createElement("input");
                 xtag.addClass(this.xtag.rangeInputEl, "input");
                 this.xtag.rangeInputEl.setAttribute("type", "range");
@@ -83,42 +129,46 @@
                 else{
                     this.setAttribute("polyfill", true);
                 }
+                
+                if(!isNum(this.value)){
+                    this.value = _getDefaultVal(this);
+                }
+                
+                _redraw(this);
+            },
+            attributeChanged: function(){
+                _redraw(this);
             }
         },
         events: {
-            'change:delegate(input[type=range])': function(e){}
+            'change:delegate(input[type=range])': function(e){},
+            'input:delegate(input[type=range])': function(e){}
         },
         accessors: {
             "polyfill": {
                 attribute: {boolean: true},
                 set: function(isPolyfill){
+                    var callbackFns = this.xtag.callbackFns;
+                    
                     // create polyfill thumb element if missing; 
-                    // otherwise unhide it
+                    // otherwise CSS takes care of unhiding it
                     if(isPolyfill){
                         this.xtag.rangeInputEl.setAttribute("readonly", true);
                         
-                        if(this.xtag.polyFillSliderThumb){
-                            this.xtag.polyFillSliderThumb.removeAttribute("hidden");
-                        }
-                        else{
+                        if(!this.xtag.polyFillSliderThumb){
                             var sliderThumb = document.createElement("span");
                             xtag.addClass(sliderThumb, "slider-thumb");
                             
                             this.xtag.polyFillSliderThumb = sliderThumb;
                             this.appendChild(sliderThumb);
                         }
-                        _redraw(this);
                         
-                        this.addEventListener("mousedown", onMouseStart);
+                        this.addEventListener("mousedown", callbackFns['onMouseDragStart']);
                     }
                     // simply hide the polyfill element
                     else{
                         this.xtag.rangeInputEl.removeAttribute("readonly");
-                        if(this.xtag.polyFillSliderThumb){
-                            this.xtag.polyFillSliderThumb.setAttribute("hidden", true);
-                        }
-                        
-                        this.removeEventListener("mousedown", onMouseStart);
+                        this.removeEventListener("mousedown", callbackFns['onMouseDragStart']);
                     }
                 }
             },

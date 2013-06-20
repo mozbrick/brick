@@ -13,52 +13,162 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            
+        }
+        
+        body{
+            text-align: center;
         }
         
         x-slider{
             width: 500px;
             margin: 0 auto;
-            display: block;
+            display: inline-block;
+            position: relative;
+        }
+       
+        .slider-wrap{
+            margin: 0;
+            padding: .5em;
         }
         
-        x-slider[polyfill] > .input{
+        .slider-wrap:nth-child(even){
+            background-color: #eee;
         }
     </style>
 </head>
 <body>
 <h1>x-slider demo</h1>
-<h3>&lt;input type="range"&gt; is <em id="native-support-status"></em> natively supported by this browser!</h3>
+<h3>
+    &lt;input type="range"&gt; is <em id="native-support-status"></em> natively supported by this browser! 
+    <button id="toggle-all-button">Toggle all polyfills</button>
+</h3>
 
-<x-slider min="-50" max="50" step="10" value="20"></x-slider>
+<div class="slider-wrap">
+    <h4>Default (step = 1, init value = 50)</h4>
+    <span class="min"></span>
+    
+    <x-slider></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
 
-<br/>
-<button onclick="togglePolyfill()">Toggle polyfill (Currently <span id="polyfill-status"></span>)</button>
+<div class="slider-wrap">
+    <h4>Custom range (step = 1, init value = 0)</h4>
+    <span class="min"></span>
+    
+    <x-slider min="-50" max=50></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
+
+<div class="slider-wrap">
+    <h4>Custom step (step = 10, init value = 0)</h4>
+    <span class="min"></span>
+    
+    <x-slider min="-50" max=50 step=10></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
+
+<div class="slider-wrap">
+    <h4>Fractional step (step = 0.5, init value = 2.5)</h4>
+    <span class="min"></span>
+    
+    <x-slider min=0 max=5 step=0.5></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
+
+<div class="slider-wrap">
+    <h4>Custom init value (step = 2, init value = 8)</h4>
+    <span class="min"></span>
+    
+    <x-slider min=-10 max=10 step=2 value=8></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
+
+<div class="slider-wrap">
+    <h4>Custom invalid init value (min = 0, max = 10, step = 5, init value = 3, but is rounded to 5)</h4>
+    <span class="min"></span>
+    
+    <x-slider min=0 max=10 step=5 value=3></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
 
 <script>
-var demoSlider;
 document.addEventListener('DOMComponentsLoaded', function(){
-    demoSlider = document.querySelector("x-slider");
-    
-    updatePolyfillStatus();
-    
     var nativeSupportStatus = document.getElementById("native-support-status");
     nativeSupportStatus.textContent = (hasNativeRangeSupport()) ? "" : "not";
+
+    var demoSliders = xtag.query(document, "x-slider");
     
-    demoSlider.addEventListener("change", function(e){
-        console.log("slider change", e);
+    demoSliders.forEach(function(demoSlider){
+        var minSpan = demoSlider.parentNode.querySelector(".min");
+        var maxSpan = demoSlider.parentNode.querySelector(".max");
+        
+        minSpan.textContent = (demoSlider.min != undefined) ? demoSlider.min : 0;
+        maxSpan.textContent = (demoSlider.max != undefined) ? demoSlider.max : 100;
+    
+        updatePolyfillStatus(demoSlider);
+        updateSliderValStatus(demoSlider);
+        
+        demoSlider.addEventListener("change", function(e){
+            console.log("slider change", demoSlider);
+            updateSliderValStatus(demoSlider);
+        });
+        
+        demoSlider.addEventListener("input", function(e){
+            updateSliderValStatus(demoSlider);
+        });
+        
+        var togglePolyFillButton = demoSlider.parentNode.querySelector("button");
+        togglePolyFillButton.addEventListener("click", function(e){
+            togglePolyfill(demoSlider);
+        });
+    });
+    
+    var toggleAllButton = document.getElementById("toggle-all-button");
+    toggleAllButton.addEventListener("click", function(e){
+        xtag.query(document, "x-slider").forEach(function(slider){
+            togglePolyfill(slider);
+        });
     });
 });
 
-function updatePolyfillStatus(){
-    var status = document.getElementById("polyfill-status");
-    status.textContent = (demoSlider.polyfill) ? "on" : "off";
+function updatePolyfillStatus(slider){
+    var status = slider.parentNode.querySelector(".polyfill-status");
+    status.textContent = (slider.polyfill) ? "on" : "off";
 }
 
-function togglePolyfill(){
-    demoSlider.polyfill = !demoSlider.polyfill;
+function togglePolyfill(slider){
+    slider.polyfill = !slider.polyfill;
     
-    updatePolyfillStatus();
+    updatePolyfillStatus(slider);
+}
+
+function updateSliderValStatus(slider){
+    var sliderStatus = slider.parentNode.querySelector(".slider-val-status");
+    sliderStatus.textContent = slider.value;
 }
 
 function hasNativeRangeSupport(){

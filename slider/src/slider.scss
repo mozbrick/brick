@@ -21,14 +21,18 @@ x-slider{
     }
     
     &[polyfill]{
+        cursor: default;
+        @include unhighlightable;
+    
         & > .input{
+            cursor: default;
+            @include unhighlightable;
+            
             -webkit-appearance: none;
             -moz-appearance: none;
             background: transparent;
             border: 0px solid transparent;
             color: transparent;
-            cursor: default;
-            @include unhighlightable;
             
             z-index: 1;
             display: inline-block;
@@ -38,11 +42,11 @@ x-slider{
             /* use CSS to draw a trackbar in the background of the input */
             background-size: 100% 3px;
             background-repeat: no-repeat;
-            background-image: -webkit-linear-gradient(top, $trackTopColor, $trackBottomColor);
-            background-image: -moz-linear-gradient(top, $trackTopColor, $trackBottomColor);
-            background-image: -ms-linear-gradient(top, $trackTopColor, $trackBottomColor);
-            background-image: -o-linear-gradient(top, $trackTopColor, $trackBottomColor);
-            background-image: linear-gradient(top, $trackTopColor, $trackBottomColor);
+            background-image: -webkit-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: -moz-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: -ms-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: -o-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
             background-position: center;
             
             &::-webkit-slider-thumb{
@@ -52,7 +56,10 @@ x-slider{
         
         
         // slider thumb graphic
-        &  .slider-thumb{
+        & > .slider-thumb{
+            cursor: default;
+            @include unhighlightable;
+        
             vertical-align: middle;
             position: absolute !important;
             top: 0;
@@ -75,6 +82,12 @@ x-slider{
             &:hover{
                 @include simplegradient(#E7F5FD);
             }
+        }
+    }
+    
+    &:not([polyfill]){
+        & > .slider-thumb{
+            visibility: hidden;
         }
     }
     
