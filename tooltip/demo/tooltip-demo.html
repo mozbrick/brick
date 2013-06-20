@@ -103,7 +103,7 @@
             <img src="http://placekitten.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" trigger-selector="_nextSibling">
+    <x-tooltip id="demoTip" target-selector="_nextSibling">
         Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
         <br/><a href="http://google.com">Check out this link!</a>
     </x-tooltip>
@@ -158,17 +158,17 @@ function changeOrientation(){
 }
 
 function toggleTooltip(e){
-    demoTip.toggleTooltip();
+    demoTip.toggle();
     e.stopPropagation();
 }
 
 function toggleSelector(){
     var selectors = ["_previousSibling", "_nextSibling", ".fancy-selector"];
-    var currSelector = demoTip["trigger-selector"];
+    var currSelector = demoTip["target-selector"];
     
     var currIndex = selectors.indexOf(currSelector);
     
-    demoTip["trigger-selector"] = selectors[(currIndex+1) % selectors.length];
+    demoTip["target-selector"] = selectors[(currIndex+1) % selectors.length];
     updateSelectorBox();
 }
 
@@ -186,7 +186,7 @@ function toggleTriggerStyle(){
 function updateSelectorBox(){
     var statusBox = document.getElementById("curr-selector-status");
     
-    statusBox.textContent = demoTip["trigger-selector"];
+    statusBox.textContent = demoTip["target-selector"];
 }
 
 function updateOrientationBox(){

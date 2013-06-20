@@ -35,7 +35,7 @@ Valid options:
 
 If orientation is not set, or is set to a value not in this list, the tooltip will attempt to automatically determine its orientation based on what orientation does not cause it to overlap the element.
 
-## ___trigger-selector___
+## ___target-selector___
 
 Defines how to select the elements that trigger/are targeted by the tooltip.
 
@@ -44,7 +44,7 @@ Options:
 * If set to `_nextSibling`, the sibling element directly after the tooltip will be used. For example, the &lt;p&gt; would be selected in this example:
 <pre>
     &lt;div&gt;
-        &lt;x-tooltip trigger-selector="_nextSibling"&gt;I am the tooltip!&lt;/x-tooltip&gt;
+        &lt;x-tooltip target-selector="_nextSibling"&gt;I am the tooltip!&lt;/x-tooltip&gt;
         &lt;p&gt;I am the target!&lt;/p&gt;
     &lt;/div&gt;
 </pre>    
@@ -54,7 +54,7 @@ Options:
 <pre>
     &lt;figure&gt;
         &lt;div&gt;A&lt;/div&gt;
-        &lt;x-tooltip trigger-selector="div"&gt;I select all divs!&lt;/div&gt;
+        &lt;x-tooltip target-selector="div"&gt;I select all divs!&lt;/div&gt;
         &lt;div&gt;B&lt;/div&gt;
         &lt;span&gt;I won't be selected!&lt;/span&gt;
     &lt;/figure&gt;
@@ -97,15 +97,15 @@ The user can also completely replace the content DOM of the tooltip with their c
 If the position of the tooltip needs to be recalculated (say, after modifying the contents of a visible tooltip), calling this method will manually reposition the 
 the tooltip to account for any dimension changes.
 
-## ___showTooltip___()
+## ___show___()
 
 Exactly as you'd expect; This makes the tooltip visible.
 
-## ___hideTooltip___()
+## ___hide___()
 
 Exactly as you'd expect; This hides the tooltip.
 
-## ___toggleTooltip___()
+## ___toggle___()
 
 Exactly as you'd expect; This toggles between showing and hiding the tooltip.
 

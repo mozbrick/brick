@@ -706,9 +706,9 @@
                 
                 // default trigger variables
                 this.xtag.orientation = "auto";
-                this.xtag.triggerSelector = "_previousSibling";
+                this.xtag.targetSelector = "_previousSibling";
                 this.xtag.triggeringElems = _selectorToElems(
-                                                this, this.xtag.triggerSelector
+                                                this, this.xtag.targetSelector
                                             );
                 this.xtag.currTriggerStyle = "hover";
                 // remember who the last element that triggered the tip was
@@ -775,10 +775,10 @@
             
             // selector must be in relation to parent node of the tooltip
             // ie: can only select tooltip's siblings or deeper in the DOM tree
-            "trigger-selector": {
+            "target-selector": {
                 attribute: {},
                 get: function(){
-                    return this.xtag.triggerSelector;
+                    return this.xtag.targetSelector;
                 },
                 set: function(newSelector){
                     var tooltip = this;
@@ -795,7 +795,7 @@
                     
                     _updateTriggerListeners(tooltip, newTriggerElems);
                     this.xtag.triggeringElems = newTriggerElems;
-                    this.xtag.triggerSelector = newSelector;
+                    this.xtag.targetSelector = newSelector;
                 }
             },
             
@@ -828,23 +828,23 @@
             },
             
             // exactly as you'd expect; shows the tooltip
-            showTooltip: function(){
+            show: function(){
                 _showTooltip(this, this.xtag.lastTargetElem);
             },
             
             // exactly as you'd expect; hides the tooltip
-            hideTooltip: function(){
+            hide: function(){
                 _hideTooltip(this);
             },
             
             // exactly as you'd expect; toggles between showing and hiding the
             // tooltip
-            toggleTooltip: function(){
+            toggle: function(){
                 if(this.hasAttribute("visible")){
-                    this.hideTooltip();
+                    this.hide();
                 }
                 else{
-                    this.showTooltip();
+                    this.show();
                 }
             }
         }
