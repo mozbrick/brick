@@ -147,13 +147,25 @@ $FONTS_FOLDER: "../fonts/";
     }
 }
 
-@mixin gradient($base: #ffffff){
+@mixin simplegradient($base: #ffffff, $glossy: false){
     $darker: darken($base, 15%);
     background-color: $base;
     background-repeat: no-repeat;
-    background-image: -moz-linear-gradient(top, $base, $base 25%, $darker);
-    background-image: -webkit-linear-gradient($base, $base 25%, $darker);
-    background-image: linear-gradient($base, $base 25%, $darker);
+    
+    @if $glossy{
+        background-image: -o-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+        background-image: -ms-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+        background-image: -moz-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+        background-image: -webkit-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+        background-image: linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+    }
+    @else{
+        background-image: -o-linear-gradient(top, $base, $base 25%, $darker);
+        background-image: -ms-linear-gradient(top, $base, $base 25%, $darker);
+        background-image: -moz-linear-gradient(top, $base, $base 25%, $darker);
+        background-image: -webkit-linear-gradient(top, $base, $base 25%, $darker);
+        background-image: linear-gradient(top, $base, $base 25%, $darker);
+    }
 }
 
 //from here: http://css-tricks.com/snippets/css/a-guide-to-flexbox/

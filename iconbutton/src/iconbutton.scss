@@ -1,8 +1,7 @@
 @import "../../custommixins";
 
 x-iconbutton{
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    @include boxSizing(border-box);
     display: inline-block;
     margin: 0;
     padding: 0;

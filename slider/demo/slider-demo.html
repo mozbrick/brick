@@ -13,19 +13,56 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            
         }
         
+        x-slider{
+            width: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        x-slider[polyfill] > .input{
+        }
     </style>
 </head>
 <body>
-<h1>X-Slide demo</h1>
+<h1>x-slider demo</h1>
+<h3>&lt;input type="range"&gt; is <em id="native-support-status"></em> natively supported by this browser!</h3>
 
-<x-slider max="100" min="0" step="10" value="50"></x-slider>
+<x-slider max="100" min="0" step="10" value="25"></x-slider>
+
+<br/>
+<button onclick="togglePolyfill()">Toggle polyfill (Currently <span id="polyfill-status"></span>)</button>
 
 <script>
+var demoSlider;
 document.addEventListener('DOMComponentsLoaded', function(){
+    demoSlider = document.querySelector("x-slider");
     
+    updatePolyfillStatus();
+    
+    var nativeSupportStatus = document.getElementById("native-support-status");
+    nativeSupportStatus.textContent = (hasNativeRangeSupport()) ? "" : "not";
 });
+
+function updatePolyfillStatus(){
+    var status = document.getElementById("polyfill-status");
+    status.textContent = (demoSlider.polyfill) ? "on" : "off";
+}
+
+function togglePolyfill(){
+    demoSlider.polyfill = !demoSlider.polyfill;
+    
+    updatePolyfillStatus();
+}
+
+function hasNativeRangeSupport(){
+    rangeInput = document.createElement("input");
+    rangeInput.setAttribute("type", "range");
+    
+    return (rangeInput.type.toLowerCase() === "range");
+}
 </script>
 </body>
 </html>
