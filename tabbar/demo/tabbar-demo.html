@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
-    <link rel="stylesheet" type="text/css" href="../../shuffledeck/src/shuffledeck.css"/>
+    <link rel="stylesheet" type="text/css" href="../../deck/src/deck.css"/>
     <link rel="stylesheet" type="text/css" href="../../iconbutton/src/iconbutton.css"/>
     <link rel="stylesheet" type="text/css" href="../../slidebox/src/slidebox.css"/>
     <link rel="stylesheet" type="text/css" href="../../flipbox/src/flipbox.css"/>
     <link rel="stylesheet" type="text/css" href="../src/tabbar.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
-    <script type="text/javascript" src="../../shuffledeck/src/shuffledeck.js"></script>
+    <script type="text/javascript" src="../../deck/src/deck.js"></script>
     <script type="text/javascript" src="../../iconbutton/src/iconbutton.js"></script>
     <script type="text/javascript" src="../../slidebox/src/slidebox.js"></script>
     <script type="text/javascript" src="../../flipbox/src/flipbox.js"></script>
@@ -105,30 +105,30 @@
 <h1>X-TabBar demos</h1>
 
 <figure>
-    <h2>With shuffledeck</h2>
+    <h2>With deck</h2>
     <div class="demo-container">    
-        <x-shuffledeck class="component-demo" transition-type="coverDown">
-            <x-shuffleslide><img src="dog1.png"/><span>One</span></x-shuffleslide>
-            <x-shuffleslide><img src="dog2.png"/><span>Two</span></x-shuffleslide>
-            <x-shuffleslide><img src="dog3.png"/><span>Three</span></x-shuffleslide>
-            <x-shuffleslide><img src="dog4.png"/><span>Four</span></x-shuffleslide>
-            <x-shuffleslide><img src="dog5.png"/><span>Five</span></x-shuffleslide>
-        </x-shuffledeck>
+        <x-deck class="component-demo" transition-type="coverDown">
+            <x-card><img src="dog1.png"/><span>One</span></x-card>
+            <x-card><img src="dog2.png"/><span>Two</span></x-card>
+            <x-card><img src="dog3.png"/><span>Three</span></x-card>
+            <x-card><img src="dog4.png"/><span>Four</span></x-card>
+            <x-card><img src="dog5.png"/><span>Five</span></x-card>
+        </x-deck>
         
         <x-tabbar>
-            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:first-child">
+            <x-tabbar-tab target-selector="x-deck x-card:first-child">
                 <x-iconbutton src="dog1.png">One</x-iconbutton>
             </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(2)">
+            <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
                 <x-iconbutton src="dog2.png">Two</x-iconbutton>
             </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(3)">
+            <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
                 <x-iconbutton src="dog3.png">Three</x-iconbutton>
             </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(4)">
+            <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
                 <x-iconbutton src="dog4.png">Four</x-iconbutton>
             </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-shuffledeck x-shuffleslide:nth-child(5)">
+            <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
                 <x-iconbutton src="dog5.png">Five</x-iconbutton>
             </x-tabbar-tab>
         </x-tabbar>
