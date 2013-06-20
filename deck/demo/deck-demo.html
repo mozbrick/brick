@@ -3,21 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
-    <link rel="stylesheet" type="text/css" href="../src/shuffledeck.css"/>
+    <link rel="stylesheet" type="text/css" href="../src/deck.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
-    <script type="text/javascript" src="../src/shuffledeck.js"></script>
+    <script type="text/javascript" src="../src/deck.js"></script>
     
     <style>
         /** Defining custom styles:
         
-            Besides applying custom styles to the x-shuffledeck and x-shuffleslides
+            Besides applying custom styles to the x-deck and x-cards
             themselves, you can define styles for the following selectors to 
             determine how the widget appears during animations
             
-            x-shuffleslide[leaving]  => defines how a slide looks when in the middle
+            x-card[leaving]  => defines how a card looks when in the middle
                                  of transitioning out of frame
-            x-shuffleslide[selected] => defines how the currently selected slide looks
+            x-card[selected] => defines how the currently selected card looks
         **/
     
         html, body{
@@ -38,19 +38,19 @@
             background-color: #333;
         }
         
-        #demo-box x-shuffleslide{
+        #demo-box x-card{
             text-align:center;
             font-size: 5em;
         }
        
-        #demo-box x-shuffleslide[transition-override]:after{
+        #demo-box x-card[transition-override]:after{
             content: "(transition-override = " attr(transition-override) ")";
             font-size: .25em;
             display: block;
             white-space:nowrap;
         }
        
-        #demo-box x-shuffleslide[leaving]:before{
+        #demo-box x-card[leaving]:before{
             content: "";
             position: absolute;
             top: 0;
@@ -60,46 +60,46 @@
             background-color: rgba(0,0,0,0.3);
         }
         
-        #demo-box x-shuffleslide[selected]{
+        #demo-box x-card[selected]{
             color: white;
             text-shadow: 1px 1px 10px black;
         }
         
-        #demo-box x-shuffleslide:nth-child(odd){
+        #demo-box x-card:nth-child(odd){
             background-image: url("cream_pixels.png");
             background-repeat: repeat;
         }
         
-        #demo-box x-shuffleslide:nth-child(even){
+        #demo-box x-card:nth-child(even){
             background-image: url("retina_wood.png");
             background-repeat: repeat;
         }
     </style>
 </head>
 <body>
-    <h1>x-shuffledeck demo</h1>
-    <x-shuffledeck id="demo-box">
-        <x-shuffleslide>0</x-shuffleslide>
-        <x-shuffleslide>1</x-shuffleslide>
-        <x-shuffleslide>2</x-shuffleslide>
-        <x-shuffleslide>3</x-shuffleslide>
-        <x-shuffleslide>4</x-shuffleslide>
-    </x-shuffledeck>
+    <h1>x-deck demo</h1>
+    <x-deck id="demo-box">
+        <x-card>0</x-card>
+        <x-card>1</x-card>
+        <x-card>2</x-card>
+        <x-card>3</x-card>
+        <x-card>4</x-card>
+    </x-deck>
     <div id="demo-controls">
-        <button onclick="demoBox.slidePrev('reverse')"><-- Slide Prev</button>
-        <button onclick="demoBox.slideNext('forward')">Slide Next --></button>
+        <button onclick="demoBox.shufflePrev('reverse')"><-- Shuffle Prev</button>
+        <button onclick="demoBox.shuffleNext('forward')">Shuffle Next --></button>
         <br/>
         <button onclick="nextType()">change transition type</button>
-        <button onclick="addSlide()">Add slide</button>
-        <button onclick="addSlide(true)">Add slide with transition-override</button>
-        <button onclick="removeSlide()">Remove last slide</button>
+        <button onclick="addCard()">Add card</button>
+        <button onclick="addCard(true)">Add card with transition-override</button>
+        <button onclick="removeCard()">Remove last card</button>
         <p id="transition-label"></p>
         <p id="count-label"></p>
         <br/>
-        <button onclick="demoBox.slideTo(2)">Jump to 2 (default)</button>
-        <button onclick="demoBox.slideTo(2, 'auto')">Jump to 2 (auto)</button>
-        <button onclick="demoBox.slideTo(2, 'forward')">Jump to 2 (always forwards)</button>
-        <button onclick="demoBox.slideTo(2, 'reverse')">Jump to 2 (always reverse)</button>
+        <button onclick="demoBox.shuffleTo(2)">Jump to 2 (default)</button>
+        <button onclick="demoBox.shuffleTo(2, 'auto')">Jump to 2 (auto)</button>
+        <button onclick="demoBox.shuffleTo(2, 'forward')">Jump to 2 (always forwards)</button>
+        <button onclick="demoBox.shuffleTo(2, 'reverse')">Jump to 2 (always reverse)</button>
         <br/>
         <button onclick="triggerShow(2)">Trigger show on 2</button>
     </div>
@@ -107,9 +107,9 @@
     
     <script>
         function triggerShow(index){
-            var slide = demoBox.getSlideAt(2);
-            console.log(slide);
-            slide.show();
+            var card = demoBox.getCardAt(2);
+            console.log(card);
+            card.show();
         }
     
         function randomColor(alpha){
@@ -132,21 +132,21 @@
         ];
         
         document.addEventListener('DOMComponentsLoaded', function(){
-            xtag.query(document, "x-shuffleslide").forEach(function(slide){
-                slide.style.backgroundColor = randomColor();
+            xtag.query(document, "x-card").forEach(function(card){
+                card.style.backgroundColor = randomColor();
             });
             
             demoBox = document.getElementById("demo-box");
             
-            demoBox.addEventListener('slideend', function(e){
-                console.log("slideend event fired", e.target, this);
+            demoBox.addEventListener('shuffleend', function(e){
+                console.log("shuffleend event fired", e.target, this);
             });
             
             updateTypeBox();
             updateCountBox();
         }, false);
         
-        // changes the transition type of shuffledeck
+        // changes the transition type of deck
         function nextType(){
             var oldType = demoBox["transition-type"];
             
@@ -164,7 +164,7 @@
             demoBox["transition-type"] = newType;
             
             updateTypeBox();
-            demoBox.slideNext("forward");
+            demoBox.shuffleNext("forward");
         }
         
         function updateTypeBox(){
@@ -174,16 +174,16 @@
         
         function updateCountBox(){
             document.getElementById("count-label").textContent = 
-                    "num slides = "+demoBox.getAllSlides().length;
+                    "num cards = "+demoBox.getAllCards().length;
         }
         
-        function addSlide(addOverride){
-            var numSlides = demoBox.getAllSlides().length;
+        function addCard(addOverride){
+            var numCards = demoBox.getAllCards().length;
             
-            var newSlide = document.createElement("x-shuffleslide");
-            newSlide.style.backgroundColor = randomColor();
+            var newCard = document.createElement("x-card");
+            newCard.style.backgroundColor = randomColor();
             
-            newSlide.textContent = String(numSlides);
+            newCard.textContent = String(numCards);
             
             if(addOverride){
                 var overrideType = (transitionTypes.length) ?
@@ -191,26 +191,26 @@
                                         Math.floor(Math.random() * 
                                                    transitionTypes.length)
                                     ] : "none";
-                newSlide["transition-override"] = overrideType;
+                newCard["transition-override"] = overrideType;
             }
             
-            demoBox.appendChild(newSlide);
+            demoBox.appendChild(newCard);
             
-            var allSlides = demoBox.getAllSlides();
-            console.log("Added slide labeled", allSlides.indexOf(newSlide));
+            var allCards = demoBox.getAllCards();
+            console.log("Added card labeled", allCards.indexOf(newCard));
             
-            demoBox.slideTo(allSlides.indexOf(newSlide));
+            demoBox.shuffleTo(allCards.indexOf(newCard));
             
             updateCountBox();
         }
         
-        function removeSlide(){
-            var allSlides = demoBox.getAllSlides();
+        function removeCard(){
+            var allCards = demoBox.getAllCards();
             
-            if (allSlides.length > 0){
-                var lastSlide = allSlides[allSlides.length - 1];
+            if (allCards.length > 0){
+                var lastCard = allCards[allCards.length - 1];
                 
-                demoBox.removeChild(lastSlide);
+                demoBox.removeChild(lastCard);
                 updateCountBox();
             }
         }

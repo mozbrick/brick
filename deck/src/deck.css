@@ -1,4 +1,4 @@
-x-shuffledeck {
+x-deck {
   display: block;
   position: relative;
   overflow: hidden;
@@ -8,7 +8,7 @@ x-shuffledeck {
   -moz-perspective: 2000px;
   -ms-perspective: 2000px;
   perspective: 2000px; }
-  x-shuffledeck > x-shuffleslide {
+  x-deck > x-card {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -48,187 +48,187 @@ x-shuffledeck {
     left: 0px;
     right: 0px;
     z-index: 0;
-    /** slide animation types go here **/ }
-    x-shuffledeck > x-shuffleslide[selected] {
+    /** card animation types go here **/ }
+    x-deck > x-card[selected] {
       z-index: 2; }
-    x-shuffledeck > x-shuffleslide[leaving] {
+    x-deck > x-card[leaving] {
       z-index: 1; }
-    x-shuffledeck > x-shuffleslide:not([selected]):not([leaving]) {
+    x-deck > x-card:not([selected]):not([leaving]) {
       visibility: hidden;
       opacity: 0; }
-    x-shuffledeck > x-shuffleslide[slide-anim-type][leaving][before-animation], x-shuffledeck > x-shuffleslide[slide-anim-type][selected][before-animation], x-shuffledeck > x-shuffleslide[slide-anim-type][leaving]:not([before-animation]), x-shuffledeck > x-shuffleslide[slide-anim-type][selected]:not([before-animation]) {
+    x-deck > x-card[card-anim-type][leaving][before-animation], x-deck > x-card[card-anim-type][selected][before-animation], x-deck > x-card[card-anim-type][leaving]:not([before-animation]), x-deck > x-card[card-anim-type][selected]:not([before-animation]) {
       transform: translate3d(0%, 0%, 1px);
       -ms-transform: translate3d(0%, 0%, 1px);
       -moz-transform: translate3d(0%, 0%, 1px);
       -webkit-transform: translate3d(0%, 0%, 1px);
       -o-transform: translate3d(0%, 0%, 1px); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX]:not([reverse])[selected][before-animation] {
+    x-deck > x-card[card-anim-type=flipX]:not([reverse])[selected][before-animation] {
       transform: rotateX(-180deg);
       -ms-transform: rotateX(-180deg);
       -moz-transform: rotateX(-180deg);
       -webkit-transform: rotateX(-180deg);
       -o-transform: rotateX(-180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX]:not([reverse])[leaving]:not([before-animation]) {
+    x-deck > x-card[card-anim-type=flipX]:not([reverse])[leaving]:not([before-animation]) {
       transform: rotateX(180deg);
       -ms-transform: rotateX(180deg);
       -moz-transform: rotateX(180deg);
       -webkit-transform: rotateX(180deg);
       -o-transform: rotateX(180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][selected][before-animation] {
+    x-deck > x-card[card-anim-type=flipX][reverse][selected][before-animation] {
       transform: rotateX(180deg);
       -ms-transform: rotateX(180deg);
       -moz-transform: rotateX(180deg);
       -webkit-transform: rotateX(180deg);
       -o-transform: rotateX(180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipX][reverse][leaving]:not([before-animation]) {
+    x-deck > x-card[card-anim-type=flipX][reverse][leaving]:not([before-animation]) {
       transform: rotateX(-180deg);
       -ms-transform: rotateX(-180deg);
       -moz-transform: rotateX(-180deg);
       -webkit-transform: rotateX(-180deg);
       -o-transform: rotateX(-180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY]:not([reverse])[selected][before-animation] {
+    x-deck > x-card[card-anim-type=flipY]:not([reverse])[selected][before-animation] {
       transform: rotateY(180deg);
       -ms-transform: rotateY(180deg);
       -moz-transform: rotateY(180deg);
       -webkit-transform: rotateY(180deg);
       -o-transform: rotateY(180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY]:not([reverse])[leaving]:not([before-animation]) {
+    x-deck > x-card[card-anim-type=flipY]:not([reverse])[leaving]:not([before-animation]) {
       transform: rotateY(-180deg);
       -ms-transform: rotateY(-180deg);
       -moz-transform: rotateY(-180deg);
       -webkit-transform: rotateY(-180deg);
       -o-transform: rotateY(-180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY][reverse][selected][before-animation] {
+    x-deck > x-card[card-anim-type=flipY][reverse][selected][before-animation] {
       transform: rotateY(-180deg);
       -ms-transform: rotateY(-180deg);
       -moz-transform: rotateY(-180deg);
       -webkit-transform: rotateY(-180deg);
       -o-transform: rotateY(-180deg); }
-    x-shuffledeck > x-shuffleslide[slide-anim-type=flipY][reverse][leaving]:not([before-animation]) {
+    x-deck > x-card[card-anim-type=flipY][reverse][leaving]:not([before-animation]) {
       transform: rotateY(180deg);
       -ms-transform: rotateY(180deg);
       -moz-transform: rotateY(180deg);
       -webkit-transform: rotateY(180deg);
       -o-transform: rotateY(180deg); }
 
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollLeft]:not([reverse]), x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollRight][reverse] {
+x-deck > x-card[selected][before-animation][card-anim-type=scrollLeft]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=scrollRight][reverse] {
   transform: translateX(100%);
   -ms-transform: translateX(100%);
   -moz-transform: translateX(100%);
   -webkit-transform: translateX(100%);
   -o-transform: translateX(100%); }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollLeft]:not([before-animation]):not([reverse]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollRight][reverse]:not([before-animation]) {
+x-deck > x-card[leaving][card-anim-type=scrollLeft]:not([before-animation]):not([reverse]), x-deck > x-card[leaving][card-anim-type=scrollRight][reverse]:not([before-animation]) {
   transform: translateX(-100%);
   -ms-transform: translateX(-100%);
   -moz-transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
   -o-transform: translateX(-100%); }
 
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollLeft][reverse], x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollRight]:not([reverse]) {
+x-deck > x-card[selected][before-animation][card-anim-type=scrollLeft][reverse], x-deck > x-card[selected][before-animation][card-anim-type=scrollRight]:not([reverse]) {
   transform: translateX(-100%);
   -ms-transform: translateX(-100%);
   -moz-transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
   -o-transform: translateX(-100%); }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollLeft][reverse]:not([before-animation]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollRight]:not([before-animation]):not([reverse]) {
+x-deck > x-card[leaving][card-anim-type=scrollLeft][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=scrollRight]:not([before-animation]):not([reverse]) {
   transform: translateX(100%);
   -ms-transform: translateX(100%);
   -moz-transform: translateX(100%);
   -webkit-transform: translateX(100%);
   -o-transform: translateX(100%); }
 
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollUp]:not([reverse]), x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollDown][reverse] {
+x-deck > x-card[selected][before-animation][card-anim-type=scrollUp]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=scrollDown][reverse] {
   transform: translateY(100%);
   -ms-transform: translateY(100%);
   -moz-transform: translateY(100%);
   -webkit-transform: translateY(100%);
   -o-transform: translateY(100%); }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollUp]:not([before-animation]):not([reverse]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollDown][reverse]:not([before-animation]) {
+x-deck > x-card[leaving][card-anim-type=scrollUp]:not([before-animation]):not([reverse]), x-deck > x-card[leaving][card-anim-type=scrollDown][reverse]:not([before-animation]) {
   transform: translateY(-100%);
   -ms-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
   -webkit-transform: translateY(-100%);
   -o-transform: translateY(-100%); }
 
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollUp][reverse], x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=scrollDown]:not([reverse]) {
+x-deck > x-card[selected][before-animation][card-anim-type=scrollUp][reverse], x-deck > x-card[selected][before-animation][card-anim-type=scrollDown]:not([reverse]) {
   transform: translateY(-100%);
   -ms-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
   -webkit-transform: translateY(-100%);
   -o-transform: translateY(-100%); }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollUp][reverse]:not([before-animation]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=scrollDown]:not([before-animation]):not([reverse]) {
-  transform: translateY(100%);
-  -ms-transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -webkit-transform: translateY(100%);
-  -o-transform: translateY(100%); }
-
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=coverLeft]:not([reverse]), x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=uncoverRight][reverse] {
-  transform: translateX(100%);
-  -ms-transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  -webkit-transform: translateX(100%);
-  -o-transform: translateX(100%); }
-
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=coverRight]:not([reverse]), x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=uncoverLeft][reverse] {
-  transform: translateX(-100%);
-  -ms-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
-  -o-transform: translateX(-100%); }
-
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=coverUp]:not([reverse]), x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=uncoverDown][reverse] {
+x-deck > x-card[leaving][card-anim-type=scrollUp][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=scrollDown]:not([before-animation]):not([reverse]) {
   transform: translateY(100%);
   -ms-transform: translateY(100%);
   -moz-transform: translateY(100%);
   -webkit-transform: translateY(100%);
   -o-transform: translateY(100%); }
 
-x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=coverDown]:not([reverse]), x-shuffledeck > x-shuffleslide[selected][before-animation][slide-anim-type=uncoverUp][reverse] {
-  transform: translateY(-100%);
-  -ms-transform: translateY(-100%);
-  -moz-transform: translateY(-100%);
-  -webkit-transform: translateY(-100%);
-  -o-transform: translateY(-100%); }
-
-x-shuffledeck > x-shuffleslide[selected][slide-anim-type=coverRight][reverse], x-shuffledeck > x-shuffleslide[selected][slide-anim-type=uncoverLeft]:not([reverse]) {
-  z-index: 1; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverRight][reverse], x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverLeft]:not([reverse]) {
-  z-index: 2; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverRight][reverse]:not([before-animation]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverLeft]:not([before-animation]):not([reverse]) {
-  transform: translateX(-100%);
-  -ms-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
-  -o-transform: translateX(-100%); }
-
-x-shuffledeck > x-shuffleslide[selected][slide-anim-type=coverLeft][reverse], x-shuffledeck > x-shuffleslide[selected][slide-anim-type=uncoverRight]:not([reverse]) {
-  z-index: 1; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverLeft][reverse], x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverRight]:not([reverse]) {
-  z-index: 2; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverLeft][reverse]:not([before-animation]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverRight]:not([before-animation]):not([reverse]) {
+x-deck > x-card[selected][before-animation][card-anim-type=coverLeft]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverRight][reverse] {
   transform: translateX(100%);
   -ms-transform: translateX(100%);
   -moz-transform: translateX(100%);
   -webkit-transform: translateX(100%);
   -o-transform: translateX(100%); }
 
-x-shuffledeck > x-shuffleslide[selected][slide-anim-type=coverDown][reverse], x-shuffledeck > x-shuffleslide[selected][slide-anim-type=uncoverUp]:not([reverse]) {
-  z-index: 1; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverDown][reverse], x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverUp]:not([reverse]) {
-  z-index: 2; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverDown][reverse]:not([before-animation]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverUp]:not([before-animation]):not([reverse]) {
+x-deck > x-card[selected][before-animation][card-anim-type=coverRight]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverLeft][reverse] {
+  transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=coverUp]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverDown][reverse] {
+  transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -o-transform: translateY(100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=coverDown]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverUp][reverse] {
   transform: translateY(-100%);
   -ms-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
   -webkit-transform: translateY(-100%);
   -o-transform: translateY(-100%); }
 
-x-shuffledeck > x-shuffleslide[selected][slide-anim-type=coverUp][reverse], x-shuffledeck > x-shuffleslide[selected][slide-anim-type=uncoverDown]:not([reverse]) {
+x-deck > x-card[selected][card-anim-type=coverRight][reverse], x-deck > x-card[selected][card-anim-type=uncoverLeft]:not([reverse]) {
   z-index: 1; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverUp][reverse], x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverDown]:not([reverse]) {
+x-deck > x-card[leaving][card-anim-type=coverRight][reverse], x-deck > x-card[leaving][card-anim-type=uncoverLeft]:not([reverse]) {
   z-index: 2; }
-x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=coverUp][reverse]:not([before-animation]), x-shuffledeck > x-shuffleslide[leaving][slide-anim-type=uncoverDown]:not([before-animation]):not([reverse]) {
+x-deck > x-card[leaving][card-anim-type=coverRight][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverLeft]:not([before-animation]):not([reverse]) {
+  transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%); }
+
+x-deck > x-card[selected][card-anim-type=coverLeft][reverse], x-deck > x-card[selected][card-anim-type=uncoverRight]:not([reverse]) {
+  z-index: 1; }
+x-deck > x-card[leaving][card-anim-type=coverLeft][reverse], x-deck > x-card[leaving][card-anim-type=uncoverRight]:not([reverse]) {
+  z-index: 2; }
+x-deck > x-card[leaving][card-anim-type=coverLeft][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverRight]:not([before-animation]):not([reverse]) {
+  transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  -o-transform: translateX(100%); }
+
+x-deck > x-card[selected][card-anim-type=coverDown][reverse], x-deck > x-card[selected][card-anim-type=uncoverUp]:not([reverse]) {
+  z-index: 1; }
+x-deck > x-card[leaving][card-anim-type=coverDown][reverse], x-deck > x-card[leaving][card-anim-type=uncoverUp]:not([reverse]) {
+  z-index: 2; }
+x-deck > x-card[leaving][card-anim-type=coverDown][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverUp]:not([before-animation]):not([reverse]) {
+  transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -o-transform: translateY(-100%); }
+
+x-deck > x-card[selected][card-anim-type=coverUp][reverse], x-deck > x-card[selected][card-anim-type=uncoverDown]:not([reverse]) {
+  z-index: 1; }
+x-deck > x-card[leaving][card-anim-type=coverUp][reverse], x-deck > x-card[leaving][card-anim-type=uncoverDown]:not([reverse]) {
+  z-index: 2; }
+x-deck > x-card[leaving][card-anim-type=coverUp][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverDown]:not([before-animation]):not([reverse]) {
   transform: translateY(100%);
   -ms-transform: translateY(100%);
   -moz-transform: translateY(100%);

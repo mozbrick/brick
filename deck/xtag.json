@@ -1,0 +1,42 @@
+{
+	"name": "Deck",
+	"tagName": "x-deck",
+	"version": "0.1.0",
+	"author": "Leon Zhang",
+	"description": "A box in which cards can be cycled independently of order with a variety of different transitions",
+	"demo": "demo/deck-demo.html",
+	"categories": [
+        "ui"
+    ],
+	"compatibility": {
+		"firefox": 5,
+		"chrome": 4,
+		"ie": 9,
+		"opera": 12,
+		"android": 2.1,
+		"ios": 4
+	},
+	"documentation": {
+		"description": "A box in which cards can be cycled independently of order with a variety of different transitions",
+		"attributes": {
+            "transition-type" : "Defines the kind of transition animation that is used when cycling cards. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
+        },
+		"events": {
+            "shuffleend": "fired by the x-deck element when a card transition animation has finished"
+        },
+		"methods": {
+            "shuffleTo" : "Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.",
+            "shuffleNext" : "Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.",
+            "shufflePrev" : "Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.",
+            "getAllCards" : "Returns a list of all x-card elements in the deck.",
+            "getSelectedCard" : "Returns the currently selected x-card in the deck.",
+            "getCardIndex" : "Given an x-card element, returns its index in this deck, if it is a child element.",
+        },
+		"getters": {
+            "transition-type" : "Returns the kind of transition animation that is used when cycling cards. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
+        },
+		"setters": {
+            "transition-type" : "Sets the kind of transition animation that is used when cycling cards. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
+        }
+	}
+}

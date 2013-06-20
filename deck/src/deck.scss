@@ -1,36 +1,36 @@
 @import "../../custommixins";
 
-$oldSlide: "[leaving]";
-$newSlide: "[selected]";
+$oldCard: "[leaving]";
+$newCard: "[selected]";
 
 $beforeAnimation: "[before-animation]";
 $afterAnimation: ":not(#{$beforeAnimation})";
 
-$oldStartingSelector: "#{$oldSlide}#{$beforeAnimation}";
-$newStartingSelector: "#{$newSlide}#{$beforeAnimation}";
-$oldEndingSelector: "#{$oldSlide}#{$afterAnimation}";
-$newEndingSelector: "#{$newSlide}#{$afterAnimation}";
+$oldStartingSelector: "#{$oldCard}#{$beforeAnimation}";
+$newStartingSelector: "#{$newCard}#{$beforeAnimation}";
+$oldEndingSelector: "#{$oldCard}#{$afterAnimation}";
+$newEndingSelector: "#{$newCard}#{$afterAnimation}";
 
-$oldSlideZIndex: 1;
-$newSlideZIndex: 2;
+$oldCardZIndex: 1;
+$newCardZIndex: 2;
 
-@mixin defaultSlideOrder(){
-    &#{$newSlide}{
-        z-index: $newSlideZIndex;
+@mixin defaultCardOrder(){
+    &#{$newCard}{
+        z-index: $newCardZIndex;
     }
     
-    &#{$oldSlide}{
-        z-index: $oldSlideZIndex;
+    &#{$oldCard}{
+        z-index: $oldCardZIndex;
     }
 }
 
-@mixin swappedSlideOrder(){
-    &#{$newSlide}{
-        z-index: $oldSlideZIndex;
+@mixin swappedCardOrder(){
+    &#{$newCard}{
+        z-index: $oldCardZIndex;
     }
     
-    &#{$oldSlide}{
-        z-index: $newSlideZIndex;
+    &#{$oldCard}{
+        z-index: $newCardZIndex;
     }
 }
 
@@ -39,7 +39,7 @@ $newSlideZIndex: 2;
 }
 
 
-x-shuffledeck{
+x-deck{
     display: block; //can be overridden with anything non-inline
     position: relative;
     overflow: hidden;
@@ -48,7 +48,7 @@ x-shuffledeck{
     height: 150px; // override these defaults
     @include perspective(2000px);
     
-    & > x-shuffleslide{
+    & > x-card{
         @include boxSizing(border-box);
         -webkit-transform-style: preserve-3d;
         transform-style: preserve-3d;
@@ -69,17 +69,17 @@ x-shuffledeck{
         
         z-index: 0;
         
-        @include defaultSlideOrder;
+        @include defaultCardOrder;
         
-        &:not(#{$newSlide}):not(#{$oldSlide}){
+        &:not(#{$newCard}):not(#{$oldCard}){
             visibility: hidden; // note: do not use display: none here!
             opacity: 0;
         }
         
-        /** slide animation types go here **/
+        /** card animation types go here **/
         
         // default animation: jump from one spot to another
-        &[slide-anim-type]{ 
+        &[card-anim-type]{ 
             &#{$oldStartingSelector}, &#{$newStartingSelector},
             &#{$oldEndingSelector}, &#{$newEndingSelector}{
                 @include defaultTransform;
@@ -89,7 +89,7 @@ x-shuffledeck{
         //////////////////////
         // rotation animations
         //////////////////////
-        &[slide-anim-type=flipX]{
+        &[card-anim-type=flipX]{
             &:not([reverse]){
                 // initial positions for animation
                 &#{$newStartingSelector}{
@@ -114,7 +114,7 @@ x-shuffledeck{
             }
         }
         
-        &[slide-anim-type=flipY]{
+        &[card-anim-type=flipY]{
             &:not([reverse]){
                 // initial positions for animation
                 &#{$newStartingSelector}{
@@ -143,8 +143,8 @@ x-shuffledeck{
         // scroll animations
         //////////////////////
         
-        // new slide scrolls from right to left 
-        &[slide-anim-type=scrollLeft]{ 
+        // new card scrolls from right to left 
+        &[card-anim-type=scrollLeft]{ 
             &:not([reverse]){
                 @extend %scrollLeftAnim;
             }
@@ -155,8 +155,8 @@ x-shuffledeck{
             }
         }
         
-        // new slide scrolls from left to right 
-        &[slide-anim-type=scrollRight]{
+        // new card scrolls from left to right 
+        &[card-anim-type=scrollRight]{
             &:not([reverse]){
                 @extend %scrollRightAnim;
             }
@@ -167,8 +167,8 @@ x-shuffledeck{
             }
         }
         
-        // new slide scrolls from bottom to top 
-        &[slide-anim-type=scrollUp]{
+        // new card scrolls from bottom to top 
+        &[card-anim-type=scrollUp]{
             &:not([reverse]){
                 @extend %scrollUpAnim;
             }
@@ -179,8 +179,8 @@ x-shuffledeck{
             }
         }
         
-        // new slide scrolls from top to bottom 
-        &[slide-anim-type=scrollDown]{
+        // new card scrolls from top to bottom 
+        &[card-anim-type=scrollDown]{
             &:not([reverse]){
                 @extend %scrollDownAnim;
             }
@@ -195,7 +195,7 @@ x-shuffledeck{
         // covering animations
         //////////////////////
         
-        &[slide-anim-type=coverLeft]{
+        &[card-anim-type=coverLeft]{
             &:not([reverse]){
                 @extend %coverLeftAnim;
             }
@@ -205,7 +205,7 @@ x-shuffledeck{
             }
         }
         
-        &[slide-anim-type=coverRight]{
+        &[card-anim-type=coverRight]{
             &:not([reverse]){
                 @extend %coverRightAnim;
             }
@@ -215,7 +215,7 @@ x-shuffledeck{
             }
         }
         
-        &[slide-anim-type=coverUp]{
+        &[card-anim-type=coverUp]{
             &:not([reverse]){
                 @extend %coverUpAnim;
             }
@@ -225,7 +225,7 @@ x-shuffledeck{
             }
         }
         
-        &[slide-anim-type=coverDown]{
+        &[card-anim-type=coverDown]{
             &:not([reverse]){
                 @extend %coverDownAnim;
             }
@@ -239,7 +239,7 @@ x-shuffledeck{
         // uncovering animations
         //////////////////////
         
-        &[slide-anim-type=uncoverLeft]{
+        &[card-anim-type=uncoverLeft]{
             &:not([reverse]){
                 @extend %uncoverLeftAnim;
             }
@@ -249,7 +249,7 @@ x-shuffledeck{
             }
         }
         
-        &[slide-anim-type=uncoverRight]{
+        &[card-anim-type=uncoverRight]{
             &:not([reverse]){
                 @extend %uncoverRightAnim;
             }
@@ -259,7 +259,7 @@ x-shuffledeck{
             }
         }
         
-        &[slide-anim-type=uncoverUp]{
+        &[card-anim-type=uncoverUp]{
             &:not([reverse]){
                 @extend %uncoverUpAnim;
             }
@@ -269,7 +269,7 @@ x-shuffledeck{
             }
         }
         
-        &[slide-anim-type=uncoverDown]{
+        &[card-anim-type=uncoverDown]{
             &:not([reverse]){
                 @extend %uncoverDownAnim;
             }
@@ -358,28 +358,28 @@ x-shuffledeck{
 }
 
 %uncoverLeftAnim{
-    @include swappedSlideOrder;  
+    @include swappedCardOrder;  
     &#{$oldEndingSelector}{
         @include transformed(translateX(-100%));
     }
 }
 
 %uncoverRightAnim{
-    @include swappedSlideOrder;  
+    @include swappedCardOrder;  
     &#{$oldEndingSelector}{
         @include transformed(translateX(100%));
     }
 }
 
 %uncoverUpAnim{
-    @include swappedSlideOrder;  
+    @include swappedCardOrder;  
     &#{$oldEndingSelector}{
         @include transformed(translateY(-100%));
     }
 }
 
 %uncoverDownAnim{
-    @include swappedSlideOrder;  
+    @include swappedCardOrder;  
     &#{$oldEndingSelector}{
         @include transformed(translateY(100%));
     }
