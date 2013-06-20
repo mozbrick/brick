@@ -8,7 +8,7 @@ x-shuffledeck {
   -moz-perspective: 2000px;
   -ms-perspective: 2000px;
   perspective: 2000px; }
-  x-shuffledeck[transition-type=flipX], x-shuffledeck[transition-type=flipY] {
+  x-shuffledeck[active-transition-type=flipX], x-shuffledeck[active-transition-type=flipY] {
     overflow: visible; }
   x-shuffledeck > x-shuffleslide {
     -webkit-box-sizing: border-box;

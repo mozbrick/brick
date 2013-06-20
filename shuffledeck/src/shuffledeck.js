@@ -149,6 +149,7 @@
             // for synchronization purposes, only set these attributes if 
             // the newSlide is actually the currently selected slide
             if(newSlide === _getSelectedSlide(shuffleDeck)){
+                shuffleDeck.removeAttribute("active-transition-type");
                 // guarantee that attributes are consistent upon completion
                 _getAllSlides(shuffleDeck).forEach(function(slide){
                     slide.removeAttribute("selected");
@@ -183,6 +184,9 @@
         // and graphically flickering
         var _attemptBeforeCallback = function(){
             if(oldSlideAnimReady && newSlideAnimReady){
+                shuffleDeck.setAttribute("active-transition-type", 
+                                         slideAnimName);
+            
                 _getAllSlides(shuffleDeck).forEach(function(slide){
                     slide.removeAttribute("selected");
                     slide.removeAttribute("leaving");
@@ -377,6 +381,12 @@
                 break;
         }
         
+        // check for requested animation overrides
+        if(newSlide.hasAttribute("transition-override")){
+            transitionType = newSlide
+                             .getAttribute("transition-override");
+        }
+        
         // actually perform the transition
         _animateSlideReplacement(shuffleDeck, oldSlide, newSlide, 
                                  transitionType, isReverse, callback);
@@ -419,9 +429,11 @@
     
     also synchronizes the selected slide with the lastSelectedIndex
     
-    also removes any temp-attributes used for animatoin
+    also removes any temp-attributes used for animation
     **/
     function _sanitizeSlideAttrs(shuffleDeck){
+        shuffleDeck.removeAttribute("active-transition-type");
+    
         var slides = _getAllSlides(shuffleDeck);
         
         var currSlide = _getSelectedSlide(shuffleDeck);
@@ -535,14 +547,7 @@
                     throw "invalid slideTo index " + index;
                 }
                 
-                var transitionType;
-                if(targetSlide.hasAttribute("transition-override")){
-                    transitionType = targetSlide
-                                     .getAttribute("transition-override");
-                }
-                else{
-                    transitionType = this.xtag.transitionType;
-                }
+                var transitionType = this.xtag.transitionType;
                      
                 _slideToIndex(this, index, transitionType, 
                               progressType, callback);

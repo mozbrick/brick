@@ -43,8 +43,9 @@ x-shuffledeck{
     display: block; //can be overridden with anything non-inline
     position: relative;
     overflow: hidden;
-    // allow overflow for certain transforms to enhance 3d effect
-    &[transition-type=flipX], &[transition-type=flipY]{
+    // allow overflow for certain transforms at the moment of animation 
+    // to enhance 3d effect
+    &[active-transition-type=flipX], &[active-transition-type=flipY]{
         overflow: visible;
     }
     
