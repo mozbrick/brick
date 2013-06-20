@@ -100,10 +100,18 @@
         <button onclick="demoBox.slideTo(2, 'auto')">Jump to 2 (auto)</button>
         <button onclick="demoBox.slideTo(2, 'forward')">Jump to 2 (always forwards)</button>
         <button onclick="demoBox.slideTo(2, 'reverse')">Jump to 2 (always reverse)</button>
+        <br/>
+        <button onclick="triggerShow(2)">Trigger show on 2</button>
     </div>
     
     
     <script>
+        function triggerShow(index){
+            var slide = demoBox.getSlideAt(2);
+            console.log(slide);
+            slide.show();
+        }
+    
         function randomColor(alpha){
             var _randomVal = function(){
                 return Math.floor(Math.random() * 256);
@@ -183,7 +191,7 @@
                                         Math.floor(Math.random() * 
                                                    transitionTypes.length)
                                     ] : "none";
-                newSlide.setAttribute("transition-override", overrideType);
+                newSlide["transition-override"] = overrideType;
             }
             
             demoBox.appendChild(newSlide);

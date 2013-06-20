@@ -622,6 +622,17 @@
             **/
             getSlideIndex: function(slide){
                 return _getSlideIndex(this, slide);
+            },
+            
+            getSlideAt: function(index){
+                var slides = this.getAllSlides();
+                
+                if(0 <= index && index < slides.length){
+                    return slides[index];
+                }
+                else{
+                    return null;
+                }
             }
             
         }
@@ -656,11 +667,16 @@
                 
                 var shuffleDeck = this.xtag.parentDeck;
                 init(shuffleDeck);
-            },
-            accessors:{
-                "transition-override": {
-                    attribute: {}
-                }
+            }
+        },
+        accessors:{
+            "transition-override": {
+                attribute: {}
+            }
+        },
+        methods:{
+            "show": function(){
+                xtag.fireEvent(this, "show");
             }
         }
     });

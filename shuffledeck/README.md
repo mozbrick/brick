@@ -82,6 +82,14 @@ Returns the x-shuffleslide DOM element that is currently displayed by the shuffl
 
 Given a x-shuffleslide DOM element, returns the index of the given slide among the shuffledeck's slides. Returns -1 if the given slide is not in the deck.
 
+## ___getSlideAt___(index)
+
+Returns the x-shuffleslide DOM element at the given index in the shuffledeck
+
+## (x-shuffleslide): ___show___()
+
+Forces the shuffledeck to display the slide who called this method
+
 # Events
 
 ## ___slideend___
