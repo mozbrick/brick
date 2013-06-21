@@ -1,0 +1,10 @@
+{
+    "name": "Basic Demo",
+    "description": "A basic app components demo app.",
+    "developer": {
+        "name": "Mozilla",
+        "url": "http://github.com/mozilla/app-components/"
+    },
+    "launch_path": "/index.html",
+    "default_locale": "en"
+}
