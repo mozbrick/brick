@@ -2,8 +2,8 @@ x-deck {
   display: block;
   position: relative;
   overflow: hidden;
-  width: 200px;
-  height: 150px;
+  width: 100%;
+  height: 100%;
   -webkit-perspective: 2000px;
   -moz-perspective: 2000px;
   -ms-perspective: 2000px;

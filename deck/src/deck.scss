@@ -44,8 +44,8 @@ x-deck{
     position: relative;
     overflow: hidden;
     
-    width: 200px; // override these defaults
-    height: 150px; // override these defaults
+    width: 100%;
+    height: 100%;
     @include perspective(2000px);
     
     & > x-card{
