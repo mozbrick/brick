@@ -3,7 +3,17 @@
         lifecycle: {
             created: function(){}
         },
-        events: {},
+        events: {
+            "tap:delegate(x-tabbar-tab)": function(e) {
+                var activeTab = xtag.query(this.parentNode, "x-tabbar-tab[data-active]");
+                if (activeTab.length) {
+                    activeTab.forEach(function(t) {
+                        t.removeAttribute('data-active');
+                    });
+                }
+                e.target.setAttribute('data-active', true);
+            }
+        },
         accessors: {
             // retrive a list of the tabs in this bar
             'tabs': {
@@ -11,7 +21,7 @@
                     var tabs = xtag.query(this, "x-tabbar-tab");
                     var tabbar = this;
                     var output = [];
-                    
+
                     tabs.forEach(function(tab){
                         if(tab.parentNode && tab.parentNode === tabbar){
                             output.push(tab);
@@ -23,7 +33,7 @@
         },
         methods: {}
     });
-    
+
     xtag.register("x-tabbar-tab", {
         lifecycle: {
             created: function(){
@@ -35,7 +45,6 @@
                 var targets = this.xtag.targetElems;
                 for(var i = 0; i < targets.length; i++){
                     var target = targets[i];
-                    
                     xtag.fireEvent(target, "show");
                 }
             }
@@ -44,7 +53,7 @@
             "target-selector": {
                 attribute: {},
                 set: function(newTargetSelector){
-                    this.xtag.targetElems = xtag.query(document, 
+                    this.xtag.targetElems = xtag.query(document,
                                                        newTargetSelector);
                 }
             },
@@ -52,13 +61,13 @@
                 get: function(){
                     return this.xtag.targetElems;
                 },
-                // provide a way to manually override targets by passing DOM 
+                // provide a way to manually override targets by passing DOM
                 // elements in with code if users don't want to bother with
                 // CSS selectors
                 set: function(newElems){
                     // remove attribute to avoid confusing desynched attributes
                     this.removeAttribute("target-selector");
-                
+
                     this.xtag.targetElems = newElems;
                 }
             }
