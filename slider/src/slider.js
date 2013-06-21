@@ -47,7 +47,7 @@
         
         // note that range inputs don't allow the thumb to spill past the bar
         // boundaries, so we actually have a little less width to work with
-        // than you'd think
+        // than the actual width of the slider when determining thumb position
         var availableWidth = Math.max(sliderRect.width - thumbRect.width, 0);
         
         newThumbX = (availableWidth * fraction);
@@ -82,8 +82,17 @@
     function _onDragStart(slider, pageX, pageY){
         _onMouseInput(slider, pageX, pageY);
         
-        document.body.addEventListener("mousemove", slider.xtag.callbackFns["onMouseDragMove"]);
-        document.body.addEventListener("mouseup", slider.xtag.callbackFns["onMouseDragEnd"]);
+        var callbacks = slider.xtag.callbackFns;
+        
+        document.body.addEventListener("mousemove", callbacks["onMouseDragMove"]);
+        document.body.addEventListener("touchmove", callbacks["onTouchDragMove"]);
+        document.body.addEventListener("mouseup", callbacks["onDragEnd"]);
+        document.body.addEventListener("touchend", callbacks["onDragEnd"]);
+        
+        var thumb = slider.xtag.polyFillSliderThumb;
+        if(thumb){
+            thumb.setAttribute("active", true);
+        }
     }
     
     function _onDragMove(slider, pageX, pageY){
@@ -98,14 +107,41 @@
                 e.preventDefault(); // disable selecting elements while dragging
             },
             
+            "onTouchDragStart": function(e){
+                var touches = e.targetTouches;
+                if(touches.length !== 1){
+                    return;
+                }
+                
+                _onDragStart(slider, touches[0].pageX, touches[0].pageY);
+                e.preventDefault();
+            },
+            
             "onMouseDragMove": function(e){
                 _onDragMove(slider, e.pageX, e.pageY);
             },
             
-            "onMouseDragEnd": function(e){
-                document.body.removeEventListener("mousemove", slider.xtag.callbackFns["onMouseDragMove"]);
-                document.body.removeEventListener("mouseup", slider.xtag.callbackFns["onMouseDragEnd"]);
-            }                  
+            "onTouchDragMove": function(e){
+                 var touches = e.targetTouches;
+                 if(touches.length !== 1){
+                     return;
+                 }
+                 _onDragMove(slider, touches[0].pageX, touches[0].pageY);
+            },
+            
+            "onDragEnd": function(e){
+                var callbacks = slider.xtag.callbackFns;
+            
+                document.body.removeEventListener("mousemove", callbacks["onMouseDragMove"]);
+                document.body.removeEventListener("touchmove", callbacks["onTouchDragMove"]);
+                document.body.removeEventListener("mouseup", callbacks["onDragEnd"]);
+                document.body.removeEventListener("touchend", callbacks["onDragEnd"]);
+                
+                var thumb = slider.xtag.polyFillSliderThumb;
+                if(thumb){
+                    thumb.removeAttribute("active");
+                }
+            }
         };
     }
     
@@ -163,13 +199,14 @@
                             this.xtag.polyFillSliderThumb = sliderThumb;
                             this.appendChild(sliderThumb);
                         }
-                        
                         this.addEventListener("mousedown", callbackFns['onMouseDragStart']);
+                        this.addEventListener("touchstart", callbackFns['onTouchDragStart']);
                     }
                     // simply hide the polyfill element
                     else{
                         this.xtag.rangeInputEl.removeAttribute("readonly");
                         this.removeEventListener("mousedown", callbackFns['onMouseDragStart']);
+                        this.removeEventListener("touchstart", callbackFns['onTouchDragStart']);
                     }
                 }
             },
@@ -200,6 +237,12 @@
                 }
             },
             "name": {
+                attribute: {
+                    selector: "input[type=range]"
+                }
+            },
+            
+            "required": {
                 attribute: {
                     selector: "input[type=range]"
                 }
