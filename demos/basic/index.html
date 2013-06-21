@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>Basic Demo</title>
+    <link rel="stylesheet" href="../../view/demo/x-tag-components.css">
+    <link rel="stylesheet" href="../../view/src/view.css">
+    <link rel="stylesheet" href="../../deck/src/deck.css">
+    <link rel="stylesheet" href="../../tabbar/src/tabbar.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body, html {
+        background: #666;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      #app {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        max-width: 320px;
+        max-height: 480px;
+        background: #fff;
+      }
+      #app x-card {
+        color: red;
+        background: #fff;
+      }
+      x-tabbar {
+        background: linear-gradient(#678, #456);
+        height: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <x-view id="app">
+      <section>
+        <x-deck>
+          <x-card id="home">
+            <h1>Home</h1>
+          </x-card>
+          <x-card id="detail">
+            <h1>Detail</h1>
+          </x-card>
+        </x-deck>
+      </section>
+      <footer>
+        <x-tabbar>
+          <x-tabbar-tab target-selector="#home"><button>Home</button></x-tabbar-tab>
+          <x-tabbar-tab target-selector="#detail"><button>Detail</button></x-tabbar-tab>
+        </x-tabbar>
+      </footer>
+    </x-view>
+    <script src="../../view/demo/x-tag-components.js"></script>
+    <script src="../../view/src/view.js"></script>
+    <script src="../../deck/src/deck.js"></script>
+    <script src="../../tabbar/src/tabbar.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
