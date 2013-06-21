@@ -503,6 +503,7 @@
         
             "show:delegate(x-card)": function(e){
                 var card = e.target;
+                
                 if(card.parentNode.nodeName.toLowerCase() === "x-deck"){
                     var deck = card.parentNode;
                     deck.shuffleTo(deck.getCardIndex(card));
