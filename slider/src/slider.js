@@ -50,7 +50,7 @@
         // than you'd think
         var availableWidth = Math.max(sliderRect.width - thumbRect.width, 0);
         
-        newThumbX = (availableWidth * fraction) - (thumbRect.width / 2);
+        newThumbX = (availableWidth * fraction);
         
         thumb.style[TRANSFORM_NAME] = "translateX("+newThumbX+"px)";
     }
@@ -131,7 +131,8 @@
                 }
                 
                 if(!isNum(this.value)){
-                    this.value = _getDefaultVal(this);
+                    var attrVal = this.getAttribute("value");
+                    this.value = (isNum(attrVal)) ? (+attrVal) : _getDefaultVal(this);
                 }
                 
                 _redraw(this);
