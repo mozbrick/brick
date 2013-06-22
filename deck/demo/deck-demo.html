@@ -100,15 +100,25 @@
         <button onclick="demoBox.shuffleTo(2, 'auto')">Jump to 2 (auto)</button>
         <button onclick="demoBox.shuffleTo(2, 'forward')">Jump to 2 (always forwards)</button>
         <button onclick="demoBox.shuffleTo(2, 'reverse')">Jump to 2 (always reverse)</button>
+        <button onclick="triggerShow(2)">Trigger show event on 2</button>
+        <button onclick="callShow(2)">Call .show() on 2</button>
         <br/>
-        <button onclick="triggerShow(2)">Trigger show on 2</button>
+        <button onclick="demoBox.historyBack()"><-- Back in History</button>
+        <span id="history-status"></span>
+        <button onclick="demoBox.historyForward()">Forward in History --></button>
     </div>
     
     
     <script>
+    
         function triggerShow(index){
-            var card = demoBox.getCardAt(2);
-            console.log(card);
+            var card = demoBox.getCardAt(index);
+            xtag.fireEvent(card, "show");
+            updateHistoryControls();
+        }
+    
+        function callShow(index){
+            var card = demoBox.getCardAt(index);
             card.show();
         }
     
@@ -139,12 +149,39 @@
             demoBox = document.getElementById("demo-box");
             
             demoBox.addEventListener('shuffleend', function(e){
-                console.log("shuffleend event fired", e.target, this);
+                updateTypeBox();
+                updateCountBox();
+                updateHistoryControls();
+            });
+            
+            xtag.query(document, "button").forEach(function(button){
+                button.addEventListener("click", function(){
+                    updateTypeBox();
+                    updateCountBox();
+                    updateHistoryControls();
+                });
             });
             
             updateTypeBox();
             updateCountBox();
+            updateHistoryControls();
         }, false);
+        
+        function updateHistoryControls(){
+            var history = demoBox.history;
+            
+            var statusBox = document.getElementById("history-status");
+            var backButton = statusBox.previousElementSibling;
+            var nextButton = statusBox.nextElementSibling;
+            
+            var numStates = history.numStates;
+            var currIndex = history.currIndex;
+            
+            statusBox.textContent = "(index "+currIndex+") " + "State #"+(currIndex+1)+" out of "+numStates;
+            
+            backButton.style.color = (history.canUndo) ?  "" : "red";
+            nextButton.style.color = (history.canRedo) ?  "" : "red";       
+        }
         
         // changes the transition type of deck
         function nextType(){
@@ -163,7 +200,6 @@
             
             demoBox["transition-type"] = newType;
             
-            updateTypeBox();
             demoBox.shuffleNext("forward");
         }
         
@@ -200,8 +236,6 @@
             console.log("Added card labeled", allCards.indexOf(newCard));
             
             demoBox.shuffleTo(allCards.indexOf(newCard));
-            
-            updateCountBox();
         }
         
         function removeCard(){
@@ -211,7 +245,6 @@
                 var lastCard = allCards[allCards.length - 1];
                 
                 demoBox.removeChild(lastCard);
-                updateCountBox();
             }
         }
     </script>

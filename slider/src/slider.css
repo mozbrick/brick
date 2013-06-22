@@ -74,7 +74,7 @@ x-slider {
       top: 0;
       left: 0;
       height: 100%;
-      width: 2.5em;
+      width: .5em;
       margin: 0;
       padding: 0;
       transform: translate3d(0, 0, 1px);

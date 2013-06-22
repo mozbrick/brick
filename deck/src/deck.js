@@ -1,4 +1,94 @@
 (function(){
+    function HistoryStack(validatorFn, equalityFn){
+        this.historyStack = [];
+        this.currIndex = -1;
+        
+        this.validatorFn = (validatorFn) ? validatorFn : function(x){ return true; };
+        this.equalityFn = (equalityFn) ? equalityFn : function(x,y){return x === y;};
+    }
+    
+    // add item and set it as the current state
+    HistoryStack.prototype.pushState = function(newState){
+        if(this.canRedo){
+             // remove all future items, if any exist
+            this.historyStack.splice(this.currIndex + 1,  
+                                     this.historyStack.length - 
+                                            (this.currIndex + 1));
+        }
+        this.historyStack.push(newState);
+        this.currIndex++;
+        
+        this.sanitizeStack();
+    }
+    
+    // remove consecutive duplicate states and also removes all invalid states
+    HistoryStack.prototype.sanitizeStack = function(){
+        var equalityFn = this.equalityFn;
+        var validatorFn = this.validatorFn;
+        var lastValidState = undefined;
+        var i=0;
+        while(i < this.historyStack.length){
+            var state = this.historyStack[i];
+            if((!(equalityFn(state, lastValidState))) && validatorFn(state))
+            {
+                lastValidState = state;
+                i++;
+            }
+            else{
+                this.historyStack.splice(i, 1);
+                if(i <= this.currIndex){
+                    this.currIndex--;
+                }
+            }
+        }
+    }
+    
+    HistoryStack.prototype.forwards = function(){
+        if(this.canRedo){
+            this.currIndex++;
+        }
+        this.sanitizeStack();
+    }
+
+    HistoryStack.prototype.backwards = function(){
+        if(this.canUndo){
+            this.currIndex--;
+        }
+        this.sanitizeStack();
+    }
+
+    HistoryStack.prototype.__defineGetter__("canUndo", function(){
+        return this.currIndex > 0;
+    });
+
+    HistoryStack.prototype.__defineGetter__("canRedo", function(){
+        return this.currIndex < this.historyStack.length-1;
+    });
+
+    HistoryStack.prototype.__defineGetter__("numStates", function(){
+        return this.historyStack.length;
+    });
+    
+    HistoryStack.prototype._getStateAt = function(index){
+        if(0 <= index && index < this.historyStack.length){
+            return this.historyStack[index];
+        }
+        return null;
+    };
+    
+    HistoryStack.prototype.__defineGetter__("currState", function(){
+        return this._getStateAt(this.currIndex);
+    });
+    
+    HistoryStack.prototype.__defineGetter__("prevState", function(){
+        return this._getStateAt(this.currIndex-1);
+    });
+    
+    HistoryStack.prototype.__defineGetter__("nextState", function(){
+        return this._getStateAt(this.currIndex+1);
+    });
+   
+   
     
     /** HELPERS **/
     
@@ -123,7 +213,6 @@
         return allCards.indexOf(card);
     }
     
-    
     /**  _animateCardReplacement : (DOM, DOM, DOM, string, Boolean, Function)
     
     given a transform data map and the callbacks to fire during an animation,
@@ -157,14 +246,14 @@
                     card.removeAttribute("reverse");
                 });
                 newCard.setAttribute("selected", true);
-                deck.xtag.lastSelectedIndex = _getCardIndex(deck, newCard);
-                
-                if(callback){
-                    callback();
-                }
-                
-                xtag.fireEvent(deck, "shuffleend");
+                deck.xtag.selectedIndex = _getCardIndex(deck, newCard);
             }
+            
+            if(callback){
+                callback();
+            }
+            
+            xtag.fireEvent(deck, "shuffleend");
         };
         
         // abort redundant transitions
@@ -189,8 +278,7 @@
                 });
                 oldCard.setAttribute("leaving", true);
                 newCard.setAttribute("selected", true);
-                deck.xtag.lastSelectedIndex = _getCardIndex(deck,
-                                                                    newCard);
+                deck.xtag.selectedIndex = _getCardIndex(deck, newCard);
                 if(isReverse){
                     oldCard.setAttribute("reverse", true);
                     newCard.setAttribute("reverse", true);
@@ -241,7 +329,6 @@
                 
                 if(oldCardDone && newCardDone){
                     animationComplete = true;
-                    console.log("transition done");
                     // actually call the completion callback function
                     _onComplete();
                 }
@@ -273,7 +360,6 @@
                 if(animationComplete){
                     return;
                 }
-                console.log("time out!");
                 
                 animationComplete = true;
                 
@@ -333,9 +419,12 @@
         callback                (optional) a callback function to execute 
                                 once finished replacing card; 
                                 takes no parameters
+        ignoreHistory           (optional) if true, the slide replacement will
+                                _not_ be registered to the stack's history
+                                default: false
     **/
-    function _replaceCurrCard(deck, newCard, 
-                               transitionType, progressType, callback){
+    function _replaceCurrCard(deck, newCard, transitionType, progressType, 
+                              callback, ignoreHistory){
         _sanitizeCardAttrs(deck);
         
         var oldCard = _getSelectedCard(deck);
@@ -384,6 +473,11 @@
                              .getAttribute("transition-override");
         }
         
+        // register replacement to deck history, unless otherwise indicated
+        if(!ignoreHistory){
+            deck.xtag.history.pushState(newCard);
+        }
+        
         // actually perform the transition
         _animateCardReplacement(deck, oldCard, newCard, 
                                  transitionType, isReverse, callback);
@@ -424,7 +518,7 @@
     sanitizes the cards in the deck by ensuring that there is always a single
     selected card except (and only except) when no cards exist
     
-    also synchronizes the selected card with the lastSelectedIndex
+    also synchronizes the selected card with the selectedIndex
     
     also removes any temp-attributes used for animation
     **/
@@ -434,28 +528,27 @@
         var currCard = _getSelectedCard(deck);
         // ensure that the index is in sync
         if(currCard){
-            deck.xtag.lastSelectedIndex = _getCardIndex(deck, 
-                                                                currCard);
+            deck.xtag.selectedIndex = _getCardIndex(deck, currCard);
         }
         // if no card is yet selected, attempt to match it to the index ref
         else if(cards.length > 0){
-            if(deck.xtag.lastSelectedIndex !== null){
-                if(deck.xtag.lastSelectedIndex == cards.length){
-                    deck.xtag.lastSelectedIndex = cards.length-1;
+            if(deck.xtag.selectedIndex !== null){
+                if(deck.xtag.selectedIndex == cards.length){
+                    deck.xtag.selectedIndex = cards.length-1;
                     currCard = cards[cards.length-1];
                 }
                 else{
-                    currCard = cards[deck.xtag.lastSelectedIndex];
+                    currCard = cards[deck.xtag.selectedIndex];
                 }
             }
             else{
                 currCard = cards[0];
-                deck.xtag.lastSelectedIndex = 0;
+                deck.xtag.selectedIndex = 0;
             }
         }
         else{
             currCard = null;
-            deck.xtag.lastSelectedIndex = null;
+            deck.xtag.selectedIndex = null;
         }
         
         // ensure that the currCard and _only_ the currCard is selected
@@ -480,34 +573,35 @@
     **/
     function init(deck){
         _sanitizeCardAttrs(deck);
-        
-        var currCard = _getSelectedCard(deck);
-        if(currCard){
-            // ensure that selected card is actually shown
-            deck.shuffleTo(deck.xtag.lastSelectedIndex);
-        }
     }
     
     
     xtag.register("x-deck", {
         lifecycle:{
             created: function(){
-                // make sure to sync this with the actual current cards
-                this.xtag.lastSelectedIndex = null;
+                // make sure to sync this with the actual current cards;
+                // this is used to keep track of where the selected slide is
+                // supposed to be in cases where the selected slide is removed, 
+                // leaving us temporarily without a selected slide
+                this.xtag.selectedIndex = null; 
                 init(this);
                 this.xtag.transitionType = "scrollLeft";
+                
+                this.xtag.history = new HistoryStack(function(card){
+                                        return card.parentNode === this;
+                                    }.bind(this));
+                
+                var currCard = _getSelectedCard(this);
+                if(currCard){
+                    this.xtag.history.pushState(currCard);
+                }
             }
         },
         events:{
             // shuffleend is fired when done transitioning
-        
             "show:delegate(x-card)": function(e){
                 var card = e.target;
-                
-                if(card.parentNode.nodeName.toLowerCase() === "x-deck"){
-                    var deck = card.parentNode;
-                    deck.shuffleTo(deck.getCardIndex(card));
-                }
+                card.show();
             }
         },
         accessors:{
@@ -519,9 +613,45 @@
                 set: function(newType){
                     this.xtag.transitionType = newType;
                 }
+            },
+            
+            'history':{
+                get: function(){
+                    return this.xtag.history;
+                }
             }
         },
         methods:{
+            historyBack: function(progressType, callback){
+                var history = this.history;
+                var deck = this;
+                
+                if(history.canUndo){
+                    history.backwards();
+                    
+                    var newCard = history.currState;
+                    if(newCard){
+                        _replaceCurrCard(this, newCard, this['transition-type'],
+                                         progressType, callback, true);
+                    }
+                }
+            },
+            historyForward: function(progressType, callback){
+                var history = this.history;
+                var deck = this;
+                
+                if(history.canRedo){
+                    history.forwards();
+                    
+                    var newCard = history.currState;
+                    if(newCard){
+                        _replaceCurrCard(this, newCard, this['transition-type'],
+                                         progressType, callback, true);
+                    }
+                }
+            },
+            
+        
             /** shuffleTo: (Number, String) 
             
             transitions to the card at the given index
@@ -634,8 +764,7 @@
                 else{
                     return null;
                 }
-            }
-            
+            }           
         }
     });
 
@@ -668,6 +797,7 @@
                 
                 var deck = this.xtag.parentDeck;
                 init(deck);
+                deck.history.sanitizeStack();
             }
         },
         accessors:{
@@ -677,7 +807,10 @@
         },
         methods:{
             "show": function(){
-                xtag.fireEvent(this, "show");
+                if(this.parentNode && this.parentNode.nodeName.toLowerCase() === "x-deck"){
+                    var deck = this.parentNode;
+                    deck.shuffleTo(deck.getCardIndex(this));
+                }
             }
         }
     });
