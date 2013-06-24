@@ -1,41 +1,53 @@
 (function(){
-    function HistoryStack(validatorFn, equalityFn){
-        this.historyStack = [];
+    function HistoryStack(validatorFn, itemCap){
+        this._historyStack = [];
         this.currIndex = -1;
         
-        this.validatorFn = (validatorFn) ? validatorFn : function(x){ return true; };
-        this.equalityFn = (equalityFn) ? equalityFn : function(x,y){return x === y;};
-    }
+        // setter takes care of sanitizing value
+        this._itemCap = undefined;
+        this.itemCap = itemCap;
+        
+        this._validatorFn = (validatorFn) ? validatorFn : function(x){ return true; };
+    }   
     
     // add item and set it as the current state
     HistoryStack.prototype.pushState = function(newState){
         if(this.canRedo){
              // remove all future items, if any exist
-            this.historyStack.splice(this.currIndex + 1,  
-                                     this.historyStack.length - 
+            this._historyStack.splice(this.currIndex + 1,  
+                                      this._historyStack.length - 
                                             (this.currIndex + 1));
         }
-        this.historyStack.push(newState);
-        this.currIndex++;
+        this._historyStack.push(newState);
+        this.currIndex = this._historyStack.length - 1;
         
         this.sanitizeStack();
+        
+        // remove oldest items to cap number of items in history
+        if(this._itemCap != "none" && 
+           this._historyStack.length > this._itemCap)
+        {
+            var len = this._historyStack.length;
+            this._historyStack.splice(0, len - this._itemCap);
+            
+            this.currIndex = this._historyStack.length - 1;
+        }
     }
     
     // remove consecutive duplicate states and also removes all invalid states
     HistoryStack.prototype.sanitizeStack = function(){
-        var equalityFn = this.equalityFn;
-        var validatorFn = this.validatorFn;
+        var validatorFn = this._validatorFn;
         var lastValidState = undefined;
-        var i=0;
-        while(i < this.historyStack.length){
-            var state = this.historyStack[i];
-            if((!(equalityFn(state, lastValidState))) && validatorFn(state))
+        var i = 0;
+        while(i < this._historyStack.length){
+            var state = this._historyStack[i];
+            if((state !== lastValidState) && validatorFn(state))
             {
                 lastValidState = state;
                 i++;
             }
             else{
-                this.historyStack.splice(i, 1);
+                this._historyStack.splice(i, 1);
                 if(i <= this.currIndex){
                     this.currIndex--;
                 }
@@ -57,38 +69,56 @@
         this.sanitizeStack();
     }
 
-    HistoryStack.prototype.__defineGetter__("canUndo", function(){
-        return this.currIndex > 0;
-    });
-
-    HistoryStack.prototype.__defineGetter__("canRedo", function(){
-        return this.currIndex < this.historyStack.length-1;
-    });
-
-    HistoryStack.prototype.__defineGetter__("numStates", function(){
-        return this.historyStack.length;
-    });
-    
-    HistoryStack.prototype._getStateAt = function(index){
-        if(0 <= index && index < this.historyStack.length){
-            return this.historyStack[index];
+    Object.defineProperties(HistoryStack.prototype, {
+        "DEFAULT_CAP": {
+            value: 50
+        },
+        "itemCap": {
+            get: function(){
+                return this._itemCap;
+            },
+            set: function(newCap){
+                if(newCap === undefined){
+                    this._itemCap = this.DEFAULT_CAP;
+                }
+                else if(newCap === "none")
+                {
+                    this._itemCap = "none";
+                }
+                else{
+                    var num = parseInt(newCap);
+                    if(isNaN(newCap) || newCap <= 0){
+                        throw "attempted to set invalid item cap: " + newCap;
+                    }
+                    
+                    this._itemCap = num;
+                }
+            }
+        },
+        "canUndo": {
+            get: function(){
+                return this.currIndex > 0;
+            }
+        },
+        "canRedo": {
+            get: function(){
+                return this.currIndex < this._historyStack.length-1;
+            }
+        },
+        "numStates":{
+            get: function(){
+                return this._historyStack.length;
+            }
+        },
+        "currState": {
+            get: function(){
+                if(0 <= index && index < this._historyStack.length){
+                    return this._historyStack[index];
+                }
+                return null;
+            }
         }
-        return null;
-    };
-    
-    HistoryStack.prototype.__defineGetter__("currState", function(){
-        return this._getStateAt(this.currIndex);
     });
-    
-    HistoryStack.prototype.__defineGetter__("prevState", function(){
-        return this._getStateAt(this.currIndex-1);
-    });
-    
-    HistoryStack.prototype.__defineGetter__("nextState", function(){
-        return this._getStateAt(this.currIndex+1);
-    });
-   
-   
     
     /** HELPERS **/
     
@@ -575,7 +605,6 @@
         _sanitizeCardAttrs(deck);
     }
     
-    
     xtag.register("x-deck", {
         lifecycle:{
             created: function(){
@@ -589,7 +618,7 @@
                 
                 this.xtag.history = new HistoryStack(function(card){
                                         return card.parentNode === this;
-                                    }.bind(this));
+                                    }.bind(this), HistoryStack.DEFAULT_CAP);
                 
                 var currCard = _getSelectedCard(this);
                 if(currCard){
@@ -600,13 +629,13 @@
         events:{
             // shuffleend is fired when done transitioning
             "show:delegate(x-card)": function(e){
-                var card = e.target;
+                var card = this;
                 card.show();
             }
         },
         accessors:{
-            "transition-type":{
-                attribute: {},
+            "transitionType":{
+                attribute: {name: "transition-type"},
                 get: function(){
                     return this.xtag.transitionType;
                 },
@@ -615,43 +644,45 @@
                 }
             },
             
-            'history':{
+            "selectedIndex":{
+                attribute: {name: "selected-index"},
                 get: function(){
-                    return this.xtag.history;
-                }
-            }
-        },
-        methods:{
-            historyBack: function(progressType, callback){
-                var history = this.history;
-                var deck = this;
-                
-                if(history.canUndo){
-                    history.backwards();
-                    
-                    var newCard = history.currState;
-                    if(newCard){
-                        _replaceCurrCard(this, newCard, this['transition-type'],
-                                         progressType, callback, true);
-                    }
-                }
-            },
-            historyForward: function(progressType, callback){
-                var history = this.history;
-                var deck = this;
-                
-                if(history.canRedo){
-                    history.forwards();
-                    
-                    var newCard = history.currState;
-                    if(newCard){
-                        _replaceCurrCard(this, newCard, this['transition-type'],
-                                         progressType, callback, true);
-                    }
+                    return this.xtag.selectedIndex;
+                },
+                set: function(newIndex){
+                    // TODO
                 }
             },
             
-        
+            "numCards":{
+                get: function(){
+                    return this.getAllCards().length;
+                }
+            },
+            
+            'historyCap': {
+                attribute: {name: "history-cap"},
+                get: function(){
+                    return this.xtag.history.itemCap;
+                },
+                set: function(itemCap){
+                    this.xtag.history.itemCap = itemCap;
+                }
+            },
+            
+            "currHistorySize": {
+                get: function(){
+                    return this.xtag.history.numStates;
+                }
+            },
+            
+            "currHistoryIndex": {
+                get: function(){
+                    return this.xtag.history.currIndex;
+                }
+            }
+        },
+        methods:{        
             /** shuffleTo: (Number, String) 
             
             transitions to the card at the given index
@@ -676,7 +707,7 @@
                 var transitionType = this.xtag.transitionType;
                      
                 _shuffleToIndex(this, index, transitionType, 
-                              progressType, callback);
+                                progressType, callback);
             },
             
             /** shuffleNext: (String) 
@@ -764,7 +795,36 @@
                 else{
                     return null;
                 }
-            }           
+            },
+
+            historyBack: function(progressType, callback){
+                var history = this.history;
+                var deck = this;
+                
+                if(history.canUndo){
+                    history.backwards();
+                    
+                    var newCard = history.currState;
+                    if(newCard){
+                        _replaceCurrCard(this, newCard, this['transition-type'],
+                                         progressType, callback, true);
+                    }
+                }
+            },
+            historyForward: function(progressType, callback){
+                var history = this.history;
+                var deck = this;
+                
+                if(history.canRedo){
+                    history.forwards();
+                    
+                    var newCard = history.currState;
+                    if(newCard){
+                        _replaceCurrCard(this, newCard, this['transition-type'],
+                                         progressType, callback, true);
+                    }
+                }
+            }            
         }
     });
 
@@ -797,18 +857,18 @@
                 
                 var deck = this.xtag.parentDeck;
                 init(deck);
-                deck.history.sanitizeStack();
+                deck.xtag.history.sanitizeStack();
             }
         },
         accessors:{
-            "transition-override": {
-                attribute: {}
+            "transitionOverride": {
+                attribute: {name: "transition-override"}
             }
         },
         methods:{
             "show": function(){
-                if(this.parentNode && this.parentNode.nodeName.toLowerCase() === "x-deck"){
-                    var deck = this.parentNode;
+                var deck = this.parentNode;
+                if(deck === this.xtag.parentDeck){
                     deck.shuffleTo(deck.getCardIndex(this));
                 }
             }

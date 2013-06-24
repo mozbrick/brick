@@ -78,7 +78,7 @@
 </head>
 <body>
     <h1>x-deck demo</h1>
-    <x-deck id="demo-box">
+    <x-deck id="demo-box" transition-type="scrollUp" selected-index="3">
         <x-card>0</x-card>
         <x-card>1</x-card>
         <x-card>2</x-card>
@@ -95,13 +95,15 @@
         <button onclick="removeCard()">Remove last card</button>
         <p id="transition-label"></p>
         <p id="count-label"></p>
+        <p id="selected-index-label"></p>
         <br/>
-        <button onclick="demoBox.shuffleTo(2)">Jump to 2 (default)</button>
-        <button onclick="demoBox.shuffleTo(2, 'auto')">Jump to 2 (auto)</button>
-        <button onclick="demoBox.shuffleTo(2, 'forward')">Jump to 2 (always forwards)</button>
-        <button onclick="demoBox.shuffleTo(2, 'reverse')">Jump to 2 (always reverse)</button>
+        <button onclick="demoBox.shuffleTo(2)">shuffleTo 2 (default)</button>
+        <button onclick="demoBox.shuffleTo(2, 'auto')">shuffleTo 2 (auto)</button>
+        <button onclick="demoBox.shuffleTo(2, 'forward')">shuffleTo 2 (always forwards)</button>
+        <button onclick="demoBox.shuffleTo(2, 'reverse')">shuffleTo 2 (always reverse)</button>
         <button onclick="triggerShow(2)">Trigger show event on 2</button>
         <button onclick="callShow(2)">Call .show() on 2</button>
+        <button onclick="editSelectedIndex(2)">Set selected index to 2</button>
         <br/>
         <button onclick="demoBox.historyBack()"><-- Back in History</button>
         <span id="history-status"></span>
@@ -110,18 +112,6 @@
     
     
     <script>
-    
-        function triggerShow(index){
-            var card = demoBox.getCardAt(index);
-            xtag.fireEvent(card, "show");
-            updateHistoryControls();
-        }
-    
-        function callShow(index){
-            var card = demoBox.getCardAt(index);
-            card.show();
-        }
-    
         function randomColor(alpha){
             var _randomVal = function(){
                 return Math.floor(Math.random() * 256);
@@ -152,6 +142,7 @@
                 updateTypeBox();
                 updateCountBox();
                 updateHistoryControls();
+                updateSelectedStatus();
             });
             
             xtag.query(document, "button").forEach(function(button){
@@ -159,33 +150,58 @@
                     updateTypeBox();
                     updateCountBox();
                     updateHistoryControls();
+                    updateSelectedStatus();
                 });
             });
             
             updateTypeBox();
             updateCountBox();
             updateHistoryControls();
+            updateSelectedStatus();
         }, false);
         
+        function editSelectedIndex(index){
+            demoBox.selectedIndex = index;
+            updateSelectedStatus();
+        }
+    
+        function triggerShow(index){
+            var card = demoBox.getCardAt(index);
+            xtag.fireEvent(card, "show");
+            updateHistoryControls();
+        }
+    
+        function callShow(index){
+            var card = demoBox.getCardAt(index);
+            card.show();
+        }
+        
+        function updateSelectedStatus(){
+            console.log("update");
+            var statusBox = document.getElementById("selected-index-label");
+            statusBox.textContent = "selected index = "+demoBox.selectedIndex;
+        }
+        
         function updateHistoryControls(){
-            var history = demoBox.history;
-            
             var statusBox = document.getElementById("history-status");
             var backButton = statusBox.previousElementSibling;
             var nextButton = statusBox.nextElementSibling;
             
-            var numStates = history.numStates;
-            var currIndex = history.currIndex;
+            var size = demoBox.currHistorySize;
+            var currIndex = demoBox.currHistoryIndex;
             
-            statusBox.textContent = "(index "+currIndex+") " + "State #"+(currIndex+1)+" out of "+numStates;
+            statusBox.textContent = "(index " + currIndex+") " + 
+                                    "State #" + (currIndex+1) +
+                                    " out of " + size +
+                                    " (max " + demoBox.historyCap + ")";
             
-            backButton.style.color = (history.canUndo) ?  "" : "red";
-            nextButton.style.color = (history.canRedo) ?  "" : "red";       
+            backButton.style.color = (currIndex > 0) ?  "" : "red";
+            nextButton.style.color = (currIndex < size-1) ?  "" : "red";       
         }
         
         // changes the transition type of deck
         function nextType(){
-            var oldType = demoBox["transition-type"];
+            var oldType = demoBox.transitionType;
             
             var types = transitionTypes;
                          
@@ -198,14 +214,15 @@
             
             var newType = types[(typeIndex+1) % types.length];
             
-            demoBox["transition-type"] = newType;
+            //demoBox.transitionType = newType;
+            demoBox.setAttribute("transition-type", newType);
             
             demoBox.shuffleNext("forward");
         }
         
         function updateTypeBox(){
             document.getElementById("transition-label").textContent = 
-                    "transition-type = "+demoBox["transition-type"];
+                    "transition-type = "+demoBox.transitionType;
         }
         
         function updateCountBox(){
@@ -227,7 +244,7 @@
                                         Math.floor(Math.random() * 
                                                    transitionTypes.length)
                                     ] : "none";
-                newCard["transition-override"] = overrideType;
+                newCard.transitionOverride = overrideType;
             }
             
             demoBox.appendChild(newCard);
