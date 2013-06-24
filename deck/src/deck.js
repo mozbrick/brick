@@ -276,14 +276,14 @@
                     card.removeAttribute("reverse");
                 });
                 newCard.setAttribute("selected", true);
-                deck.xtag.selectedIndex = _getCardIndex(deck, newCard);
+                deck.xtag._selectedIndex = _getCardIndex(deck, newCard);
+                
+                if(callback){
+                    callback();
+                }
+                
+                xtag.fireEvent(deck, "shuffleend");
             }
-            
-            if(callback){
-                callback();
-            }
-            
-            xtag.fireEvent(deck, "shuffleend");
         };
         
         // abort redundant transitions
@@ -308,7 +308,7 @@
                 });
                 oldCard.setAttribute("leaving", true);
                 newCard.setAttribute("selected", true);
-                deck.xtag.selectedIndex = _getCardIndex(deck, newCard);
+                deck.xtag._selectedIndex = _getCardIndex(deck, newCard);
                 if(isReverse){
                     oldCard.setAttribute("reverse", true);
                     newCard.setAttribute("reverse", true);
@@ -558,27 +558,27 @@
         var currCard = _getSelectedCard(deck);
         // ensure that the index is in sync
         if(currCard){
-            deck.xtag.selectedIndex = _getCardIndex(deck, currCard);
+            deck.xtag._selectedIndex = _getCardIndex(deck, currCard);
         }
         // if no card is yet selected, attempt to match it to the index ref
         else if(cards.length > 0){
-            if(deck.xtag.selectedIndex !== null){
-                if(deck.xtag.selectedIndex == cards.length){
-                    deck.xtag.selectedIndex = cards.length-1;
+            if(deck.xtag._selectedIndex !== null){
+                if(deck.xtag._selectedIndex == cards.length){
+                    deck.xtag._selectedIndex = cards.length-1;
                     currCard = cards[cards.length-1];
                 }
                 else{
-                    currCard = cards[deck.xtag.selectedIndex];
+                    currCard = cards[deck.xtag._selectedIndex];
                 }
             }
             else{
                 currCard = cards[0];
-                deck.xtag.selectedIndex = 0;
+                deck.xtag._selectedIndex = 0;
             }
         }
         else{
             currCard = null;
-            deck.xtag.selectedIndex = null;
+            deck.xtag._selectedIndex = null;
         }
         
         // ensure that the currCard and _only_ the currCard is selected
@@ -612,7 +612,7 @@
                 // this is used to keep track of where the selected slide is
                 // supposed to be in cases where the selected slide is removed, 
                 // leaving us temporarily without a selected slide
-                this.xtag.selectedIndex = null; 
+                this.xtag._selectedIndex = null; 
                 init(this);
                 this.xtag.transitionType = "scrollLeft";
                 
@@ -647,7 +647,7 @@
             "selectedIndex":{
                 attribute: {name: "selected-index"},
                 get: function(){
-                    return this.xtag.selectedIndex;
+                    return this.xtag._selectedIndex;
                 },
                 set: function(newIndex){
                     // TODO
