@@ -139,36 +139,27 @@
             demoBox = document.getElementById("demo-box");
             
             demoBox.addEventListener('shuffleend', function(e){
-                updateTypeBox();
-                updateCountBox();
-                updateHistoryControls();
-                updateSelectedStatus();
+                console.log("shuffleend");
+                updateStatuses();
             });
             
             xtag.query(document, "button").forEach(function(button){
                 button.addEventListener("click", function(){
-                    updateTypeBox();
-                    updateCountBox();
-                    updateHistoryControls();
-                    updateSelectedStatus();
+                    updateStatuses();
                 });
             });
-            
-            updateTypeBox();
-            updateCountBox();
-            updateHistoryControls();
-            updateSelectedStatus();
+            updateStatuses();
         }, false);
         
         function editSelectedIndex(index){
             demoBox.selectedIndex = index;
-            updateSelectedStatus();
+            updateStatuses();
         }
     
         function triggerShow(index){
             var card = demoBox.getCardAt(index);
             xtag.fireEvent(card, "show");
-            updateHistoryControls();
+            updateStatuses();
         }
     
         function callShow(index){
@@ -176,8 +167,14 @@
             card.show();
         }
         
+        function updateStatuses(){
+            updateTypeBox();
+            updateCountBox();
+            updateHistoryControls();
+            updateSelectedStatus();
+        }
+        
         function updateSelectedStatus(){
-            console.log("update");
             var statusBox = document.getElementById("selected-index-label");
             statusBox.textContent = "selected index = "+demoBox.selectedIndex;
         }

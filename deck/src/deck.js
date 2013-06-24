@@ -257,12 +257,19 @@
                                 the oldCard with
         cardAnimName           the name of the animation type to use   
         isReverse               whether or not the animation should be reversed
-        callback                (optional) on completion, call this function 
-                                with no parameters
+        callbacks                (optional) datamap of the following format:
+                                {
+                                    before: callback function to call once cards
+                                            are in position but have not started
+                                            animated (no params),
+                                    complete: callback function to call once
+                                              animation is complete
+                                              (no params)
+                                }
                                 
     **/
     function _animateCardReplacement(deck, oldCard, newCard, 
-                                      cardAnimName, isReverse, callback){
+                                      cardAnimName, isReverse, callbacks){
         // set up an attribute-cleaning up function and callback caller function
         // that will be fired when the animation is completed
         var _onComplete = function(){
@@ -279,11 +286,9 @@
                 newCard.setAttribute("selected", true);
                 deck.xtag._selectedIndex = _getCardIndex(deck, newCard);
                 
-                if(callback){
-                    callback();
+                if(callbacks && callbacks.complete){
+                    callbacks.complete();
                 }
-                
-                xtag.fireEvent(deck, "shuffleend");
             }
         };
         
@@ -314,6 +319,9 @@
                     oldCard.setAttribute("reverse", true);
                     newCard.setAttribute("reverse", true);
                 }
+                if(callbacks && callbacks.before){
+                    callbacks.before();
+                }
             }
         };
         
@@ -330,7 +338,7 @@
             _doAnimation();
         };
 
-        // function to actually the animation of the two cards,
+        // function to actually perform the animation of the two cards,
         // starting from the initial state and going until the end of the 
         // animation
         var _doAnimation = function(){
@@ -447,15 +455,14 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-        callback                (optional) a callback function to execute 
-                                once finished replacing card; 
-                                takes no parameters
+        callbacks                (optional) see _animateCardReplacement's
+                                callbacks parameter documentation
         ignoreHistory           (optional) if true, the slide replacement will
                                 _not_ be registered to the stack's history
                                 default: false
     **/
     function _replaceCurrCard(deck, newCard, transitionType, progressType, 
-                              callback, ignoreHistory){
+                              callbacks, ignoreHistory){
         _sanitizeCardAttrs(deck);
         
         var oldCard = _getSelectedCard(deck);
@@ -463,8 +470,13 @@
         // avoid redundant call that doesnt actually change anything
         // about the cards
         if(oldCard === newCard){
-            if(callback){
-                callback();
+            if(callbacks){
+                if(callbacks.before){
+                    callbacks.before();
+                }
+                if(callbacks.complete){
+                    callbacks.complete();
+                }
             }
             return;
         }
@@ -510,7 +522,7 @@
         
         // actually perform the transition
         _animateCardReplacement(deck, oldCard, newCard, 
-                                transitionType, isReverse, callback);
+                                transitionType, isReverse, callbacks);
     }
     
     
@@ -520,7 +532,7 @@
     given animation type
     
     param:
-        deck             the x-deck DOM element we are working in
+        deck                    the x-deck DOM element we are working in
         targetIndex             the index of the x-card we want to  
                                 display
         transitionType          same as _replaceCurrCard's transitionType
@@ -528,18 +540,18 @@
                                 
         progressType            same as _replaceCurrCard's progressType
                                 parameter
-        callback                (optional)
-                                a function to call once finished transitioning
+        callbacks                (optional) see _animateCardReplacement's
+                                callbacks parameter documentation
     **/
     function _replaceWithIndex(deck, targetIndex, 
-                             transitionType, progressType, callback){
+                             transitionType, progressType, callbacks){
         var newCard = _getTargetCard(deck, targetIndex);
         
         if(!newCard){
             throw "no card at index " + targetIndex;
         }
             
-        _replaceCurrCard(deck, newCard, transitionType, progressType, callback);
+        _replaceCurrCard(deck, newCard, transitionType, progressType, callbacks);
     }
     
     /** _sanitizeCardAttrs: DOM
@@ -693,11 +705,10 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-                callback        (optional)
-                                a function to call once finished transitioning,
-                                takes no parameters
+                callbacks       (optional) see _animateCardReplacement's
+                                callbacks parameter documentation
             **/
-            shuffleTo: function(index, progressType, callback){
+            shuffleTo: function(index, progressType, callbacks){
                 var targetCard = _getTargetCard(this, index);
                 if(!targetCard){
                     throw "invalid shuffleTo index " + index;
@@ -705,8 +716,21 @@
                 
                 var transitionType = this.xtag.transitionType;
                      
+                var wrapCallbacks = {};
+                if(callbacks && callbacks.before){
+                    wrapCallbacks.before = callbacks.before;
+                }
+                
+                wrapCallbacks.complete = function(){
+                    if(callbacks && callbacks.complete){
+                        callbacks.complete();
+                    }
+                    
+                    xtag.fireEvent(this, "shuffleend");
+                }.bind(this);
+                     
                 _replaceWithIndex(this, index, transitionType, 
-                                progressType, callback);
+                                progressType, wrapCallbacks);
             },
             
             /** shuffleNext: (String) 
@@ -719,10 +743,10 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-                callback        (optional)
-                                a function to call once finished transitioning
+                callbacks       (optional) see _animateCardReplacement's
+                                callbacks parameter documentation
             **/
-            shuffleNext: function(progressType, callback){
+            shuffleNext: function(progressType, callbacks){
                 progressType = (progressType) ? progressType : "auto";
             
                 var cards = _getAllCards(this);
@@ -731,7 +755,7 @@
                 
                 if(currIndex > -1){
                     this.shuffleTo(posModulo(currIndex+1, cards.length), 
-                                 progressType, callback);
+                                 progressType, callbacks);
                 }
             },
             
@@ -745,10 +769,10 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-                callback        (optional)
-                                a function to call once finished transitioning
+                callbacks       (optional) see _animateCardReplacement's
+                                callbacks parameter documentation
             **/
-            shufflePrev: function(progressType, callback){
+            shufflePrev: function(progressType, callbacks){
                 progressType = (progressType) ? progressType : "auto";
             
                 var cards = _getAllCards(this);
@@ -756,7 +780,7 @@
                 var currIndex = cards.indexOf(currCard);
                 if(currIndex > -1){
                     this.shuffleTo(posModulo(currIndex-1, cards.length), 
-                                 progressType, callback);
+                                 progressType, callbacks);
                 }
             },
             
@@ -796,7 +820,7 @@
                 }
             },
 
-            historyBack: function(progressType, callback){
+            historyBack: function(progressType, callbacks){
                 var history = this.xtag.history;
                 var deck = this;
                 
@@ -806,11 +830,11 @@
                     var newCard = history.currState;
                     if(newCard){
                         _replaceCurrCard(this, newCard, this.transitionType,
-                                         progressType, callback, true);
+                                         progressType, callbacks, true);
                     }
                 }
             },
-            historyForward: function(progressType, callback){
+            historyForward: function(progressType, callbacks){
                 var history = this.xtag.history;
                 var deck = this;
                 
@@ -820,7 +844,7 @@
                     var newCard = history.currState;
                     if(newCard){
                         _replaceCurrCard(this, newCard, this.transitionType,
-                                         progressType, callback, true);
+                                         progressType, callbacks, true);
                     }
                 }
             }            
