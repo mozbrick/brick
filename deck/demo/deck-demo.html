@@ -103,7 +103,7 @@
         <button onclick="demoBox.shuffleTo(2, 'reverse')">shuffleTo 2 (always reverse)</button>
         <button onclick="triggerShow(2)">Trigger show event on 2</button>
         <button onclick="callShow(2)">Call .show() on 2</button>
-        <button onclick="editSelectedIndex(2)">Set selected index to 2</button>
+        <button onclick="editSelectedIndex(2)" disabled>Set selected index to 2</button>
         <br/>
         <button onclick="demoBox.historyBack()"><-- Back in History</button>
         <span id="history-status"></span>
@@ -195,8 +195,11 @@
                                     " out of " + size +
                                     " (max " + demoBox.historyCap + ")";
             
-            backButton.style.color = (currIndex > 0) ?  "" : "red";
-            nextButton.style.color = (currIndex < size-1) ?  "" : "red";       
+            (currIndex > 0) ? backButton.removeAttribute("disabled") : 
+                              backButton.setAttribute("disabled", true);
+                              
+            (currIndex < size-1) ? nextButton.removeAttribute("disabled") : 
+                                   nextButton.setAttribute("disabled", true);      
         }
         
         // changes the transition type of deck

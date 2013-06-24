@@ -112,6 +112,7 @@
         },
         "currState": {
             get: function(){
+                var index = this.currIndex;
                 if(0 <= index && index < this._historyStack.length){
                     return this._historyStack[index];
                 }
@@ -499,8 +500,7 @@
         
         // check for requested animation overrides
         if(newCard.hasAttribute("transition-override")){
-            transitionType = newCard
-                             .getAttribute("transition-override");
+            transitionType = newCard.getAttribute("transition-override");
         }
         
         // register replacement to deck history, unless otherwise indicated
@@ -510,11 +510,11 @@
         
         // actually perform the transition
         _animateCardReplacement(deck, oldCard, newCard, 
-                                 transitionType, isReverse, callback);
+                                transitionType, isReverse, callback);
     }
     
     
-    /** _shuffleToIndex: (DOM, Number, String, String)
+    /** _replaceWithIndex: (DOM, Number, String, String)
     
     transitions to the card at the given index in the deck, using the
     given animation type
@@ -531,16 +531,15 @@
         callback                (optional)
                                 a function to call once finished transitioning
     **/
-    function _shuffleToIndex(deck, targetIndex, 
-                           transitionType, progressType, callback){
+    function _replaceWithIndex(deck, targetIndex, 
+                             transitionType, progressType, callback){
         var newCard = _getTargetCard(deck, targetIndex);
         
         if(!newCard){
             throw "no card at index " + targetIndex;
         }
             
-        _replaceCurrCard(deck, newCard, 
-                          transitionType, progressType, callback);
+        _replaceCurrCard(deck, newCard, transitionType, progressType, callback);
     }
     
     /** _sanitizeCardAttrs: DOM
@@ -706,7 +705,7 @@
                 
                 var transitionType = this.xtag.transitionType;
                      
-                _shuffleToIndex(this, index, transitionType, 
+                _replaceWithIndex(this, index, transitionType, 
                                 progressType, callback);
             },
             
@@ -798,7 +797,7 @@
             },
 
             historyBack: function(progressType, callback){
-                var history = this.history;
+                var history = this.xtag.history;
                 var deck = this;
                 
                 if(history.canUndo){
@@ -806,13 +805,13 @@
                     
                     var newCard = history.currState;
                     if(newCard){
-                        _replaceCurrCard(this, newCard, this['transition-type'],
+                        _replaceCurrCard(this, newCard, this.transitionType,
                                          progressType, callback, true);
                     }
                 }
             },
             historyForward: function(progressType, callback){
-                var history = this.history;
+                var history = this.xtag.history;
                 var deck = this;
                 
                 if(history.canRedo){
@@ -820,7 +819,7 @@
                     
                     var newCard = history.currState;
                     if(newCard){
-                        _replaceCurrCard(this, newCard, this['transition-type'],
+                        _replaceCurrCard(this, newCard, this.transitionType,
                                          progressType, callback, true);
                     }
                 }
