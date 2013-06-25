@@ -139,6 +139,11 @@
             
             demoBox = document.getElementById("demo-box");
             
+            demoBox.addEventListener('shufflestart', function(e){
+                console.log("shufflestart");
+                updateStatuses();
+            });
+            
             demoBox.addEventListener('shuffleend', function(e){
                 console.log("shuffleend");
                 updateStatuses();

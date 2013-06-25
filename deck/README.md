@@ -18,9 +18,12 @@ Note that `<x-card>` elements can contain any kind of html markup!
 
 # Attributes
 
-## ___transition-type___
+## ___transition-type___ / ___transitionType___
 
 Defines the type of animation to use for cycling between cards
+
+Can either be set as an HTML attribute under the name `transition-type` or
+programmatically with the property `transitionType`
 
 Valid options:
 
@@ -40,15 +43,58 @@ Valid options:
 * [coverDown](demo/transition_type_gifs/coverDown.gif)
 * [none](demo/transition_type_gifs/none.gif)
 
-## x-card: ___transition-override___
+## ___selected-index___ / ___selectedIndex___
+
+Gets/sets the index of the currently selected card in the deck
+
+Note that setting this instead of using shuffleTo is equivalent to performing 
+a "none" type transition
+
+Can either be set as an HTML attribute under the name `selected-index` or
+programmatically with the property `selectedIndex`
+
+## ___history-cap___ / ___historyCap___
+
+Get/sets the maximum number of cards to keep in history at any time
+
+Can either be a positive number or "none", which signifies an infinite number cards are allowed to be in memory
+
+If not set, defaults to 50.
+
+Can either be set as an HTML attribute under the name `history-cap` or
+programmatically with the property `historyCap`
+
+## x-card: ___transition-override___ / ___transitionOverride___
 
 If a specific card has an override property, that specific animation will be used when transitioning that card.
 
+Can either be set as an HTML attribute on the x-card under the name `transition-override` or
+programmatically with the property `transitionOverride`
+
 Valid options are the same as the x-deck's `transition-type` attribute.
+
+# Accessors
+
+## ___numCards___
+
+Gets the number of cards currently stored in the deck
+
+Example:
+```
+    var foo = document.querySelector('x-deck').numCards;
+```
+
+## ___currHistorySize___
+
+Gets the number of cards currently in history
+
+## ___currHistoryIndex___
+
+Gets the current index that we are at in our history stack
 
 # Methods
 
-## ___shuffleTo___(index, [progressType], [callback])
+## ___shuffleTo___(index, [progressType])
 
 Transitions to the x-card at the given index within the deck. 
 
@@ -56,19 +102,18 @@ If given a progressType of 'forward', will perform the forwards/normal version o
 If given 'reverse', will performs the reverse animation. 
 If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. 
 
-Also takes an optional callback function that takes no parameters to be called once the cards have finished cycling.
 
-## ___shuffleNext___([progressType], [callback])
+## ___shuffleNext___([progressType])
 
 Transitions to the next card in the deck, looping back to the start if needed.
 
-See ___shuffleTo___ for details on the progressType and callback parameters
+See ___shuffleTo___ for details on the progressType parameter
 
-## ___shufflePrev___([progressType], [callback])
+## ___shufflePrev___([progressType])
 
 Transitions to the previous card in the deck, looping back to the end if needed.
 
-See ___shuffleTo___ for details on the progressType and callback parameters
+See ___shuffleTo___ for details on the progressType parameter
 
 ## ___getAllCards___()
 
@@ -86,11 +131,28 @@ Given a x-card DOM element, returns the index of the given card among the deck's
 
 Returns the x-card DOM element at the given index in the deck
 
+## ___historyBack___([progressType])
+
+Auto-transitions to the previous card stored in history, if it exists
+
+See ___shuffleTo___ for details on the progressType parameter
+
+## ___historyForward___([progressType])
+
+Auto-transitions to the next card stored in history, if it exists
+
+See ___shuffleTo___ for details on the progressType parameter
+
 ## (x-card): ___show___()
 
 Forces the deck to display the card who called this method
 
 # Events
+
+## ___shufflestart___ 
+
+A `shufflestart` event is fired by the &lt;x-deck&gt; element when, during the process of transitioning between cards,
+the two cards are in position to start animating, but have not yet begun the actual animation.
 
 ## ___shuffleend___
 
