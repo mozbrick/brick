@@ -1,0 +1,74 @@
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body, html {
+  font-family: sans-serif;
+  background: #666;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+#app {
+  background: #fff;
+  border: 0 none;
+}
+x-appbar, x-tabbar {
+  background: #ddd;
+}
+#app x-deck {
+  width: 100%;
+  height: 100%;
+}
+#app x-card {
+  background: #fff;
+  overflow: auto;
+}
+x-tabbar {
+  height: 48px;
+  display: flex;
+  flex-align: stretch;
+  border-top: 1px solid black;
+}
+x-tabbar-tab {
+  flex: 1;
+  display: block;
+  line-height: 48px;
+  text-align: center;
+  cursor: pointer;
+}
+x-tabbar-tab[data-active] {
+  font-weight: bold;
+}
+h1 {
+  padding: 0 8px;
+  margin: 16px 0 16px;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+ul li {
+  padding: 8px;
+  height: 48px;
+  line-height: 32px;
+  border-bottom: 1px solid black;
+}
+ul li:hover {
+  background: #abc;
+}
+ul li:first-child {
+  border-top: 1px solid black;
+}
+#detail {
+  padding: 0 8px;
+}
+p {
+  padding: 8px 0;
+}
+.back {
+  height: 32px;
+  line-height: 20px;
+  margin: 4px 4px 4px 0;
+}

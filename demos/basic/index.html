@@ -8,94 +8,20 @@
     <link rel="stylesheet" href="../../view/src/view.css">
     <link rel="stylesheet" href="../../deck/src/deck.css">
     <link rel="stylesheet" href="../../tabbar/src/tabbar.css">
+    <link rel="stylesheet" href="../../appbar/src/appbar.css">
     <link rel="stylesheet" href="style.css">
-    <style>
-      * {
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-      body, html {
-        font-family: sans-serif;
-        background: #666;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-      }
-      #app {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        margin: auto;
-        max-width: 320px;
-        max-height: 480px;
-        background: #fff;
-        border: 0 none;
-      }
-      #app x-card {
-        background: #fff;
-        overflow: auto;
-      }
-      x-tabbar {
-        background: #456;
-        height: 48px;
-        display: flex;
-        flex-align: stretch;
-      }
-      x-tabbar-tab {
-        color: white;
-        flex: 1;
-        display: block;
-        line-height: 48px;
-        text-align: center;
-        cursor: pointer;
-      }
-      x-tabbar-tab[data-active] {
-        font-weight: bold;
-        background: #678;
-      }
-      h1 {
-        padding: 0 8px;
-        margin: 16px 0 16px;
-      }
-      ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-      }
-      ul li {
-        padding: 8px;
-        height: 48px;
-        line-height: 32px;
-        border-bottom: 1px solid black;
-      }
-      ul li:hover {
-        background: #abc;
-      }
-      ul li:first-child {
-        border-top: 1px solid black;
-      }
-      #detail {
-        padding: 0 8px;
-      }
-      p {
-        padding: 8px 0;
-      }
-      .back {
-        float: left;
-        height: 32px;
-        line-height: 20px;
-        margin: 10px 8px 0 0;
-      }
-    </style>
   </head>
   <body>
     <x-view id="app">
+      <x-appbar>
+        <header>
+          <button class="back">Back</button>
+          My First App
+        </header>
+      </x-appbar>
       <section>
         <x-deck>
           <x-card id="home">
-            <h1>Home</h1>
             <ul>
               <li>Item 1</li>
               <li>Item 2</li>
@@ -110,10 +36,9 @@
             </ul>
           </x-card>
           <x-card id="detail">
-            <button class="back">Back</button><h1>Detail</h1>
             <p></p>
           </x-card>
-          <x-card id="settings">
+          <x-card id="settings" transition-override="flipY">
             <h1>Settings</h1>
           </x-card>
         </x-deck>
@@ -129,6 +54,7 @@
     <script src="../../view/src/view.js"></script>
     <script src="../../deck/src/deck.js"></script>
     <script src="../../tabbar/src/tabbar.js"></script>
+    <script src="../../appbar/src/appbar.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

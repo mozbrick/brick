@@ -7,3 +7,6 @@
 [submodule "flipbox"]
 	path = flipbox
 	url = git@github.com:ldoubleuz/flipbox.git
+[submodule "appbar"]
+	path = appbar
+	url = https://github.com/x-tag/appbar.git
