@@ -95,7 +95,6 @@
 </head>
 <body>
 <h1>X-ToolTip demo</h1>
-<span class="fancy-selector">Out of scope ".fancy-selector" box</span>
 <div id="container">
     parent node
     <button id="prev-sib">
@@ -134,9 +133,7 @@
 var demoTip;
 document.addEventListener('DOMComponentsLoaded', function(){
     demoTip = document.getElementById("demoTip");
-    updateSelectorBox();
-    updateOrientationBox();
-    updateTriggerStyleBox();
+    updateStatuses();
     
     demoTip.addEventListener("tooltipshown", function(e){
         console.log("tooltip shown!", e);
@@ -148,13 +145,13 @@ document.addEventListener('DOMComponentsLoaded', function(){
 });
 
 function changeOrientation(){
-    var orients = ["auto", "above", "onright", "below", "onleft"];
+    var orients = ["auto", "top", "right", "bottom", "left"];
     var currOrient = demoTip.orientation;
     
     var currIndex = orients.indexOf(currOrient);
     
     demoTip.setAttribute("orientation", orients[(currIndex+1) % orients.length]);
-    updateOrientationBox();
+    updateStatuses();
 }
 
 function toggleTooltip(e){
@@ -164,29 +161,35 @@ function toggleTooltip(e){
 
 function toggleSelector(){
     var selectors = ["_previousSibling", "_nextSibling", ".fancy-selector"];
-    var currSelector = demoTip["target-selector"];
+    var currSelector = demoTip.targetSelector;
     
     var currIndex = selectors.indexOf(currSelector);
     
-    demoTip["target-selector"] = selectors[(currIndex+1) % selectors.length];
-    updateSelectorBox();
+    demoTip.targetSelector = selectors[(currIndex+1) % selectors.length];
+    updateStatuses();
 }
 
 function toggleTriggerStyle(){
     var styles = ["hover", "click", "none"];
-    var currStyle = demoTip["trigger-style"];
+    var currStyle = demoTip.triggerStyle;
     
     var currIndex = styles.indexOf(currStyle);
     
-    demoTip["trigger-style"] = styles[(currIndex+1) % styles.length];
+    demoTip.triggerStyle = styles[(currIndex+1) % styles.length];
     
+    updateStatuses();
+}
+
+function updateStatuses(){
+    updateSelectorBox();
+    updateOrientationBox();
     updateTriggerStyleBox();
 }
 
 function updateSelectorBox(){
     var statusBox = document.getElementById("curr-selector-status");
     
-    statusBox.textContent = demoTip["target-selector"];
+    statusBox.textContent = demoTip.targetSelector;
 }
 
 function updateOrientationBox(){
@@ -198,7 +201,7 @@ function updateOrientationBox(){
 function updateTriggerStyleBox(){
     var triggerStyleBox = document.getElementById("curr-trigger-style-status");
     
-    triggerStyleBox.textContent = demoTip["trigger-style"];
+    triggerStyleBox.textContent = demoTip.triggerStyle;
 }
 
 function randomKittenUrl(){

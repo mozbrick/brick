@@ -16,9 +16,9 @@ This example would create a tooltip positioned above the &lt;div&gt; that appear
     
 In order to allow semantic markup without extracting/moving around the tooltip's location in the DOM tree, tooltips markup follows these guidelines:
 
-* Tooltips are absolutely positioned in relation to their parent node instead of always in relation to the body, and are thus meant to be marked up inside the container element that the user would like the tooltip to be constrained by.
+* Tooltips are absolutely positioned in relation ___to their parent node___ instead of always in relation to the body, and are thus meant to be marked up inside the container element that the user would like the tooltip to be constrained by.
 * Eligible target elements are those in the same parent container as the tooltip or deeper
-* Target selectors are applied in relation to the parent node (see `target-selector` attribute documentation for further details)
+* Target selectors are applied in relation to the document
 
 # Attributes
 
@@ -28,42 +28,46 @@ Defines where the tooltip should appear in relation to the element it targets.
 
 Valid options:
 
-* `above`
-* `below`
-* `onleft`
-* `onright`
+* `top`
+* `bottom`
+* `left`
+* `right`
 
 If orientation is not set, or is set to a value not in this list, the tooltip will attempt to automatically determine its orientation based on what orientation does not cause it to overlap the element.
 
-## ___target-selector___
+## ___target-selector___ / ___targetSelector___
 
 Defines how to select the elements that trigger/are targeted by the tooltip.
 
 Options:
 * If set to `_previousSibling`, the sibling element directly before the tooltip will be used. See the usage section for an example of this.
 * If set to `_nextSibling`, the sibling element directly after the tooltip will be used. For example, the &lt;p&gt; would be selected in this example:
-<pre>
-    &lt;div&gt;
-        &lt;x-tooltip target-selector="_nextSibling"&gt;I am the tooltip!&lt;/x-tooltip&gt;
-        &lt;p&gt;I am the target!&lt;/p&gt;
-    &lt;/div&gt;
-</pre>    
+```
+    <div>
+        <x-tooltip target-selector="_nextSibling">I am the tooltip!</x-tooltip>
+        <p>I am the target!</p>
+    </div>
+```  
     
-* If set to anything else, the selector will be used as a CSS query selector on the parent node of the tooltip, and all selected nodes will be set as target elements. For example, this example would select the &lt;div&gt;s marked A and B, but not the one marked C.
+* If set to anything else, the selector will be used as a CSS query selector on the document, and all selected nodes will be set as target elements. For example, this example would select the &lt;div&gt;s marked A and B, but not the one marked C.
 
-<pre>
-    &lt;figure&gt;
-        &lt;div&gt;A&lt;/div&gt;
-        &lt;x-tooltip target-selector="div"&gt;I select all divs!&lt;/div&gt;
-        &lt;div&gt;B&lt;/div&gt;
-        &lt;span&gt;I won't be selected!&lt;/span&gt;
-    &lt;/figure&gt;
-    &lt;div&gt;C&lt;/div&gt;
-</pre>  
+```
+    <figure>
+        <div>A</div>
+        <x-tooltip target-selector="figure div">I select all divs!</div>
+        <div>B</div>
+        <span>I won't be selected!</span>
+    </figure>
+    <footer>
+        <figure>
+            <div>C</div>
+        </figure>
+    </footer>
+``` 
   
 If this attribute is not provided, the default is `_previousSibling`.
 
-__Note__: selectors can be any valid CSS selector that could be used in querySelectorAll    
+__Note__: selectors can be any valid CSS selector that could be used in querySelectorAll on the document
     
 ## ___trigger-style___
 

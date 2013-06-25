@@ -2,17 +2,17 @@
     // a data map of the tooltip orientation type to the type of direction the
     // tooltip arrow should take as a result
     var TIP_ORIENT_ARROW_DIR_MAP = {
-        "above": "down",
-        "below": "up",
-        "onleft": "right",
-        "onright": "left"
+        "top": "down",
+        "bottom": "up",
+        "left": "right",
+        "right": "left"
     };
     
     
     /** isValidOrientation: (string)
     *
     *   utility function to simply return if the given orientation is 
-    *   one listed in the above data map
+    *   one listed in the top data map
     **/
     function isValidOrientation(orient){
         return orient in TIP_ORIENT_ARROW_DIR_MAP;
@@ -305,8 +305,7 @@
      *
      * If given "_previousSibling", returns the previous sibling of the tooltip
      * If given "_nextSibling", returns the next sibling of the tooltip
-     * Otherwise, applies the selector as a CSS query selector on the tooltip's
-     * parent element
+     * Otherwise, applies the selector as a CSS query selector on the document
      */
     function _selectorToElems(tooltip, selector){
         if(selector === "_previousSibling"){
@@ -319,8 +318,7 @@
         }
         // otherwise, apply as CSS selector string
         else{
-            var parent = (tooltip.parentNode) ? tooltip.parentNode : document;
-            return xtag.query(parent, selector);
+            return xtag.query(document, selector);
         }
     }
     
@@ -504,7 +502,7 @@
         // on first pass, determine the coordinates of the tooltip, as well as 
         // its constraints
         var newTop, newLeft, maxTop, maxLeft;
-        if(orientation === "above"){
+        if(orientation === "top"){
             arrowHeight /= 2; // remember that the arrow is translated to 
                               // overlap the balloon
             newTop =targetContainerOffset.top - origTooltipHeight - arrowHeight;
@@ -512,21 +510,21 @@
             maxTop = containerHeight - origTooltipHeight - arrowHeight;
             maxLeft = containerWidth - origTooltipWidth;
         }
-        else if(orientation === "below"){
+        else if(orientation === "bottom"){
             arrowHeight /= 2; //remember that the arrow is translated to overlap
             newTop = targetContainerOffset.top + targetHeight + arrowHeight;
             newLeft = centerAlignCoords.left;
             maxTop = containerHeight - origTooltipHeight;
             maxLeft = containerWidth - origTooltipWidth;
         }
-        else if(orientation === "onleft"){
+        else if(orientation === "left"){
             arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
             newLeft =targetContainerOffset.left - origTooltipWidth - arrowWidth;
             maxTop = containerHeight - origTooltipHeight;
             maxLeft = containerWidth - origTooltipWidth - arrowWidth;
         }
-        else if(orientation === "onright"){
+        else if(orientation === "right"){
             arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
             newLeft = targetContainerOffset.left + targetWidth + arrowWidth;
@@ -545,7 +543,7 @@
         
         // position the arrow in the tooltip to center on the target element
         var arrowCoords = _getAlignedArrowCoords(newTop, newLeft);
-        if(orientation === "above" || orientation === "below"){
+        if(orientation === "top" || orientation === "bottom"){
             arrow.style.left = constrainNum(
                                  arrowCoords.left, 0, 
                                  origTooltipWidth - arrowWidth
@@ -759,8 +757,8 @@
             // selects the style of tooltip trigger to use
             // can choose from presets or set to "none" in order to define
             // custom trigger
-            "trigger-style": {
-                attribute: {},
+            "triggerStyle": {
+                attribute: {name: "trigger-style"},
                 get: function(){
                     return this.xtag.currTriggerStyle;
                 },
@@ -775,8 +773,8 @@
             
             // selector must be in relation to parent node of the tooltip
             // ie: can only select tooltip's siblings or deeper in the DOM tree
-            "target-selector": {
-                attribute: {},
+            "targetSelector": {
+                attribute: {name: "target-selector"},
                 get: function(){
                     return this.xtag.targetSelector;
                 },

@@ -34,19 +34,19 @@ x-tooltip{
     
     @include animated((visibility, transform, opacity), 0.2s);
     
-    &[orientation=above]{
+    &[orientation=top]{
         @include transformed(translateY(10px));
     }
     
-    &[orientation=below]{
+    &[orientation=bottom]{
         @include transformed(translateY(-10px));
     }
         
-    &[orientation=onleft]{
+    &[orientation=left]{
         @include transformed(translateX(10px));
     }
         
-    &[orientation=onright]{
+    &[orientation=right]{
         @include transformed(translateX(-10px));
     }
     
@@ -57,21 +57,21 @@ x-tooltip{
     }
     
     // hackery to have auto orientation have the same transform animations
-    $autoOrientationSelector: attrValNotInList(orientation, (above, below, onleft, onright));
+    $autoOrientationSelector: attrValNotInList(orientation, (top, bottom, left, right));
     &#{$autoOrientationSelector}{
-        &[auto-orientation=above]{
+        &[auto-orientation=top]{
             @include transformed(translateY(10px));
         }
         
-        &[auto-orientation=below]{
+        &[auto-orientation=bottom]{
             @include transformed(translateY(-10px));
         }
             
-        &[auto-orientation=onleft]{
+        &[auto-orientation=left]{
             @include transformed(translateX(10px));
         }
             
-        &[auto-orientation=onright]{
+        &[auto-orientation=right]{
             @include transformed(translateX(-10px));
         }
         
