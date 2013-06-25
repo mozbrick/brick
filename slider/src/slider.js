@@ -316,13 +316,13 @@
                         newVal = getMidStep(this.min, this.max, this.step);
                     }
                     
-                    newVal = +newVal
+                    newVal = +newVal;
                     var min = this.min;
                     var max = this.max;
                     var step = this.step;
                 
                     newVal = Math.max(min, Math.min(newVal, max));
-                    newVal = roundToStep(newVal, step)
+                    newVal = roundToStep(newVal, step);
                 
                     this.xtag.rangeInputEl.value = newVal;
                     _redraw(this);
