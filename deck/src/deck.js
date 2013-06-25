@@ -53,7 +53,7 @@
             
             this.currIndex = this._historyStack.length - 1;
         }
-    }
+    };
     
     
     /** HistoryStack.sanitizeStack
@@ -63,7 +63,7 @@
     **/
     HistoryStack.prototype.sanitizeStack = function(){
         var validatorFn = this._validatorFn;
-        var lastValidState = undefined;
+        var lastValidState;
         var i = 0;
         while(i < this._historyStack.length){
             var state = this._historyStack[i];
@@ -79,7 +79,7 @@
                 }
             }
         }
-    }
+    };
     
     
     /** HistoryStack.forwards
@@ -91,7 +91,7 @@
             this.currIndex++;
         }
         this.sanitizeStack();
-    }
+    };
 
     
     /** HistoryStack.forwards
@@ -103,7 +103,7 @@
             this.currIndex--;
         }
         this.sanitizeStack();
-    }
+    };
 
     Object.defineProperties(HistoryStack.prototype, {
         /** DEFAULT_CAP
@@ -131,7 +131,7 @@
                     this._itemCap = "none";
                 }
                 else{
-                    var num = parseInt(newCap);
+                    var num = parseInt(newCap, 10);
                     if(isNaN(newCap) || newCap <= 0){
                         throw "attempted to set invalid item cap: " + newCap;
                     }

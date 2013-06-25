@@ -182,6 +182,9 @@
             'input:delegate(input[type=range])': function(e){},
             'focus': function(e){
                 console.log("focus!", e);
+            },
+            'blur': function(e){
+                console.log("blur!", e);
             }
         },
         accessors: {
@@ -193,7 +196,9 @@
                     // create polyfill thumb element if missing; 
                     // otherwise CSS takes care of unhiding it
                     if(isPolyfill){
+                        // make the slider focusable, not the underlying input
                         this.setAttribute("tabindex", 0);
+                        this.xtag.rangeInputEl.setAttribute("tabindex", -1);
                         this.xtag.rangeInputEl.setAttribute("readonly", true);
                         
                         if(!this.xtag.polyFillSliderThumb){
@@ -209,6 +214,7 @@
                     // simply hide the polyfill element
                     else{
                         this.removeAttribute("tabindex");
+                        this.xtag.rangeInputEl.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("readonly");
                         this.removeEventListener("mousedown", callbackFns['onMouseDragStart']);
                         this.removeEventListener("touchstart", callbackFns['onTouchDragStart']);
