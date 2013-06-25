@@ -46,12 +46,12 @@
     }
     
     
-    /** getMidStep: (Number, Number, Number) => Number
+    /** getDefaultVal: (Number, Number, Number) => Number
     *
     * returns the multiple of the given step that is closest to the median of 
     * given range, while still remaining in the range
     **/
-    function getMidStep(min, max, step){
+    function getDefaultVal(min, max, step){
         if(max < min) throw "invalid range: "+min+" - "+max;
         var roundedVal = roundToStep(((max - min) / 2) + min, step);
         return Math.max(min, Math.min(roundedVal, max));
@@ -251,7 +251,7 @@
                 
                 var initVal = (hasNumAttr(this, "value")) ? 
                                 +this.getAttribute("value") : 
-                                getMidStep(initMin, initMax, initStep);
+                                getDefaultVal(initMin, initMax, initStep);
                 
                 // because the x-slider accessors read from the input element's
                 // attributes, make sure to actually set them
@@ -356,7 +356,7 @@
                 },
                 set: function(newVal){
                     if(!isNum(newVal)){
-                        newVal = getMidStep(this.min, this.max, this.step);
+                        newVal = getDefaultVal(this.min, this.max, this.step);
                     }
                     
                     newVal = +newVal;
