@@ -7,15 +7,33 @@
         40: "DOWN_ARROW"
     };
     
+    /** isNum: (anything) => Boolean
+    *
+    * simple utility function to determine if a value is either a number or
+    * a value representing a number
+    *
+    * ex: isNum(77) and isNum('77') both return true, but isNum('werg')
+    * returns false
+    **/
     function isNum(num){
         return !isNaN(parseFloat(num));
     }
     
+    /** hasNumAttr: (DOM, string) => Boolean
+    *
+    * utility function returning true if the given element has a number as the
+    * value of the specified attribute
+    **/
     function hasNumAttr(elem, attrName){
         return (elem.hasAttribute(attrName) && 
                 isNum(elem.getAttribute(attrName)));
     }
 
+    /** roundToStep: (Number, Number) => Number
+    *
+    * given a value to round and the size of each step, round the given value to 
+    * the closest multiple of the given step
+    **/
     function roundToStep(value, step){
         if(!isNum(value)){
             throw "invalid value " + value;
@@ -27,28 +45,52 @@
         return Math.round(value / step) * step;
     }
     
+    
+    /** getMidStep: (Number, Number, Number) => Number
+    *
+    * returns the multiple of the given step that is closest to the median of 
+    * given range, while still remaining in the range
+    **/
     function getMidStep(min, max, step){
-        return roundToStep(((max - min) / 2) + min, step);
+        if(max < min) throw "invalid range: "+min+" - "+max;
+        var roundedVal = roundToStep(((max - min) / 2) + min, step);
+        return Math.max(min, Math.min(roundedVal, max));
     }
     
-    function _sliderValToFraction(slider, value){
+    
+    /** _rawValToFraction: (DOM, Number) => Number
+    *
+    * returns a fractional value (ie: between 0.0 and 1.0) to which the given
+    * value would correspond to on the given slider (ie: how far along the
+    * slider the given value is
+    **/
+    function _rawValToFraction(slider, value){
         var min = slider.min;
         var max = slider.max;
         return (value - min) / (max - min);
     }
     
-    function _fractionToSliderVal(slider, fraction){
+    /** _fractionToRawVal: (DOM, Number) => Number
+    *
+    * takes a fractional value (ie: between 0.0 and 1.0) and returns the raw
+    * value that is that far along the slider's range
+    **/
+    function _fractionToRawVal(slider, fraction){
         var min = slider.min;
         var max = slider.max;
         return ((max - min) * fraction) + min;
     }
     
-    function _fractionToSliderValue(slider, sliderFraction){
+    /** _fractionToCorrectedVal: (DOM, Number) => Number
+    *
+    * returns the value at the given percentage along the slider, corrected
+    * to account for step constraints
+    **/
+    function _fractionToCorrectedVal(slider, sliderFraction){
         sliderFraction = Math.min(Math.max(0.0, sliderFraction), 1.0);
-        var step = slider.step;
-        
-        var rawVal = _fractionToSliderVal(slider, sliderFraction);
-        return roundToStep(rawVal, step);
+        var rawVal = _fractionToRawVal(slider, sliderFraction);
+        var roundedVal = roundToStep(rawVal, slider.step);
+        return Math.max(slider.min, Math.min(roundedVal, slider.max));
     }
     
     function _positionThumb(slider, value){
@@ -59,7 +101,7 @@
         }
         var sliderRect = slider.getBoundingClientRect();
         var thumbRect = thumb.getBoundingClientRect();
-        var fraction = _sliderValToFraction(slider, value);
+        var fraction = _rawValToFraction(slider, value);
         
         // note that range inputs don't allow the thumb to spill past the bar
         // boundaries, so we actually have a little less width to work with
@@ -81,12 +123,13 @@
         var inputClickX = pageX - inputOffsets.left;
         
         var oldValue = slider.value;
-        var newValue = _fractionToSliderValue(slider, 
+        var newValue = _fractionToCorrectedVal(slider, 
                                               inputClickX / inputOffsets.width);
         
         slider.value = newValue;
         xtag.fireEvent(inputEl, "input");
-        if(oldValue !== newValue){
+        console.log(oldValue, slider.value);
+        if(oldValue !== slider.value){
             xtag.fireEvent(inputEl, "change");
         }
         _redraw(slider);
@@ -321,8 +364,8 @@
                     var max = this.max;
                     var step = this.step;
                 
-                    newVal = Math.max(min, Math.min(newVal, max));
                     newVal = roundToStep(newVal, step);
+                    newVal = Math.max(min, Math.min(newVal, max));
                 
                     this.xtag.rangeInputEl.value = newVal;
                     _redraw(this);

@@ -115,6 +115,31 @@
     </p>
 </div>
 
+
+<div class="slider-wrap">
+    <h4>Offset range step (min = 3, max = 12, step = 5, default init value = 8) </h4>
+    <span class="min"></span>
+    
+    <x-slider min=3 max=12 step=5></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
+
+<div class="slider-wrap">
+    <h4>Uncontainable step (min = 1, max = 4, step = 5) </h4>
+    <span class="min"></span>
+    
+    <x-slider min=1 max=9 step=5></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
+
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
     var nativeSupportStatus = document.getElementById("native-support-status");
