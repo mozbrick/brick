@@ -5,9 +5,9 @@ window.addEventListener('DOMComponentsLoaded', function() {
         detail.show();
         detail.querySelector('p').innerHTML = e.target.innerHTML + " details";
     });
-    deck.addEventListener('click', function(e) {
+    document.body.addEventListener('click', function(e) {
         if (e.target.classList.contains('back')) {
-            deck.querySelector('#home').show();
+            deck.historyBack();
         }
     })
 });
