@@ -1,13 +1,27 @@
 (function(){
+    /** HistoryStack
+    
+    a generic stack implementation intended for keeping track of state history
+    
+    constructor params:
+        validatorFn             a function taking a single state and returns 
+                                a Boolean, with false indicating an invalid 
+                                state
+        itemCap                 (optional) the maximum number of items to keep
+                                in the stack at a time. If not set, will default
+                                to HistoryStack.DEFAULT_CAP. If set to "none",
+                                will allow infinite items in the stack.
+    **/
     function HistoryStack(validatorFn, itemCap){
         this._historyStack = [];
         this.currIndex = -1;
         
-        // setter takes care of sanitizing value
+        // .itemCap setter takes care of sanitizing and setting ._itemCap value
         this._itemCap = undefined;
         this.itemCap = itemCap;
         
-        this._validatorFn = (validatorFn) ? validatorFn : function(x){ return true; };
+        this._validatorFn = (validatorFn) ? validatorFn : 
+                                            function(x){ return true; };
     }   
     
     // add item and set it as the current state
@@ -213,26 +227,6 @@
                     null : cards[targetIndex];
     }
     
-    /** _getSelectedCard: (DOM) => DOM/null
-     *
-     * returns the currently selected card DOM element in the given
-     * deck, if any exists     
-    **/
-    function _getSelectedCard(deck){
-        var selected = xtag.query(deck, "[selected]");
-        
-        for(var i = 0; i < selected.length; i++){
-            var selectedCard = selected[i];
-            if(selectedCard.parentNode &&
-               selectedCard.parentNode === deck)
-            {
-                return selectedCard;
-            }
-        }
-        
-        return null;
-    }
-    
     /** _getCardIndex: (DOM, DOM) => Number
     *
     * returns the index of the given x-card in the deck
@@ -257,25 +251,18 @@
                                 the oldCard with
         cardAnimName           the name of the animation type to use   
         isReverse               whether or not the animation should be reversed
-        callbacks                (optional) datamap of the following format:
-                                {
-                                    before: callback function to call once cards
-                                            are in position but have not started
-                                            animated (no params),
-                                    complete: callback function to call once
-                                              animation is complete
-                                              (no params)
-                                }
                                 
     **/
     function _animateCardReplacement(deck, oldCard, newCard, 
-                                      cardAnimName, isReverse, callbacks){
+                                      cardAnimName, isReverse){
+        deck.xtag._selectedCard = newCard;
+                                      
         // set up an attribute-cleaning up function and callback caller function
         // that will be fired when the animation is completed
         var _onComplete = function(){
             // for synchronization purposes, only set these attributes if 
             // the newCard is actually the currently selected card
-            if(newCard === _getSelectedCard(deck)){
+            if(newCard === deck.xtag._selectedCard){
                 // guarantee that attributes are consistent upon completion
                 _getAllCards(deck).forEach(function(card){
                     card.removeAttribute("card-anim-type");
@@ -284,12 +271,10 @@
                     card.removeAttribute("reverse");
                 });
                 newCard.setAttribute("selected", true);
-                deck.xtag._selectedIndex = _getCardIndex(deck, newCard);
-                
-                if(callbacks && callbacks.complete){
-                    callbacks.complete();
-                }
+                deck.xtag._selectedCard = newCard;
             }
+            
+            xtag.fireEvent(deck, "shuffleend");
         };
         
         // abort redundant transitions
@@ -314,14 +299,12 @@
                 });
                 oldCard.setAttribute("leaving", true);
                 newCard.setAttribute("selected", true);
-                deck.xtag._selectedIndex = _getCardIndex(deck, newCard);
+                deck.xtag._selectedCard = newCard;
                 if(isReverse){
                     oldCard.setAttribute("reverse", true);
                     newCard.setAttribute("reverse", true);
                 }
-                if(callbacks && callbacks.before){
-                    callbacks.before();
-                }
+                xtag.fireEvent(deck, "shufflebefore");
             }
         };
         
@@ -455,29 +438,21 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-        callbacks                (optional) see _animateCardReplacement's
-                                callbacks parameter documentation
         ignoreHistory           (optional) if true, the slide replacement will
                                 _not_ be registered to the stack's history
                                 default: false
     **/
-    function _replaceCurrCard(deck, newCard, transitionType, progressType, 
-                              callbacks, ignoreHistory){
+    function _replaceCurrCard(deck, newCard, transitionType, 
+                              progressType, ignoreHistory){
         _sanitizeCardAttrs(deck);
         
-        var oldCard = _getSelectedCard(deck);
+        var oldCard = deck.xtag._selectedCard;
         
         // avoid redundant call that doesnt actually change anything
         // about the cards
         if(oldCard === newCard){
-            if(callbacks){
-                if(callbacks.before){
-                    callbacks.before();
-                }
-                if(callbacks.complete){
-                    callbacks.complete();
-                }
-            }
+            xtag.fireEvent(deck, "shufflebefore");
+            xtag.fireEvent(deck, "shuffleend");
             return;
         }
         
@@ -522,7 +497,7 @@
         
         // actually perform the transition
         _animateCardReplacement(deck, oldCard, newCard, 
-                                transitionType, isReverse, callbacks);
+                                transitionType, isReverse);
     }
     
     
@@ -540,18 +515,15 @@
                                 
         progressType            same as _replaceCurrCard's progressType
                                 parameter
-        callbacks                (optional) see _animateCardReplacement's
-                                callbacks parameter documentation
     **/
-    function _replaceWithIndex(deck, targetIndex, 
-                             transitionType, progressType, callbacks){
+    function _replaceWithIndex(deck, targetIndex, transitionType, progressType){
         var newCard = _getTargetCard(deck, targetIndex);
         
         if(!newCard){
             throw "no card at index " + targetIndex;
         }
             
-        _replaceCurrCard(deck, newCard, transitionType, progressType, callbacks);
+        _replaceCurrCard(deck, newCard, transitionType, progressType);
     }
     
     /** _sanitizeCardAttrs: DOM
@@ -559,37 +531,31 @@
     sanitizes the cards in the deck by ensuring that there is always a single
     selected card except (and only except) when no cards exist
     
-    also synchronizes the selected card with the selectedIndex
-    
     also removes any temp-attributes used for animation
     **/
     function _sanitizeCardAttrs(deck){
         var cards = _getAllCards(deck);
         
-        var currCard = _getSelectedCard(deck);
-        // ensure that the index is in sync
-        if(currCard){
-            deck.xtag._selectedIndex = _getCardIndex(deck, currCard);
-        }
-        // if no card is yet selected, attempt to match it to the index ref
-        else if(cards.length > 0){
-            if(deck.xtag._selectedIndex !== null){
-                if(deck.xtag._selectedIndex == cards.length){
-                    deck.xtag._selectedIndex = cards.length-1;
-                    currCard = cards[cards.length-1];
+        var currCard = deck.xtag._selectedCard;
+        
+        if(!currCard || currCard.parentNode !== deck){
+            // if no card is yet selected, but cards still exist, match to either
+            // the most recent card in the history stack, or to the first card, 
+            // if no history exists
+            if(cards.length > 0){
+                // we need to check for the existence of history, as x-cards
+                // may sometimes initialize before x-decks (ie: before
+                // x-deck even has a history stack)
+                if(deck.xtag.history && deck.xtag.history.numStates > 0){
+                    currCard = deck.xtag.history.currState;
                 }
                 else{
-                    currCard = cards[deck.xtag._selectedIndex];
+                    currCard = cards[0];
                 }
             }
             else{
-                currCard = cards[0];
-                deck.xtag._selectedIndex = 0;
+                currCard = null;
             }
-        }
-        else{
-            currCard = null;
-            deck.xtag._selectedIndex = null;
         }
         
         // ensure that the currCard and _only_ the currCard is selected
@@ -605,6 +571,8 @@
                 card.setAttribute("selected", true);
             }
         });
+        
+        deck.xtag._selectedCard = currCard;
     }
     
     /** init: (DOM)
@@ -619,19 +587,16 @@
     xtag.register("x-deck", {
         lifecycle:{
             created: function(){
-                // make sure to sync this with the actual current cards;
-                // this is used to keep track of where the selected slide is
-                // supposed to be in cases where the selected slide is removed, 
-                // leaving us temporarily without a selected slide
-                this.xtag._selectedIndex = null; 
-                init(this);
-                this.xtag.transitionType = "scrollLeft";
-                
                 this.xtag.history = new HistoryStack(function(card){
                                         return card.parentNode === this;
                                     }.bind(this), HistoryStack.DEFAULT_CAP);
+                                    
+                this.xtag._selectedCard = (this.xtag._selectedCard) ? 
+                                          this.xtag._selectedCard : null; 
+                init(this);
+                this.xtag.transitionType = "scrollLeft";
                 
-                var currCard = _getSelectedCard(this);
+                var currCard = this.xtag._selectedCard;
                 if(currCard){
                     this.xtag.history.pushState(currCard);
                 }
@@ -658,10 +623,10 @@
             "selectedIndex":{
                 attribute: {name: "selected-index"},
                 get: function(){
-                    return this.xtag._selectedIndex;
+                    return _getCardIndex(this, this.xtag._selectedCard);
                 },
                 set: function(newIndex){
-                    // TODO
+                    this.shuffleTo(newIndex);
                 }
             },
             
@@ -705,10 +670,8 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-                callbacks       (optional) see _animateCardReplacement's
-                                callbacks parameter documentation
             **/
-            shuffleTo: function(index, progressType, callbacks){
+            shuffleTo: function(index, progressType){
                 var targetCard = _getTargetCard(this, index);
                 if(!targetCard){
                     throw "invalid shuffleTo index " + index;
@@ -716,21 +679,7 @@
                 
                 var transitionType = this.xtag.transitionType;
                      
-                var wrapCallbacks = {};
-                if(callbacks && callbacks.before){
-                    wrapCallbacks.before = callbacks.before;
-                }
-                
-                wrapCallbacks.complete = function(){
-                    if(callbacks && callbacks.complete){
-                        callbacks.complete();
-                    }
-                    
-                    xtag.fireEvent(this, "shuffleend");
-                }.bind(this);
-                     
-                _replaceWithIndex(this, index, transitionType, 
-                                progressType, wrapCallbacks);
+                _replaceWithIndex(this, index, transitionType, progressType);
             },
             
             /** shuffleNext: (String) 
@@ -743,19 +692,17 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-                callbacks       (optional) see _animateCardReplacement's
-                                callbacks parameter documentation
             **/
-            shuffleNext: function(progressType, callbacks){
+            shuffleNext: function(progressType){
                 progressType = (progressType) ? progressType : "auto";
             
                 var cards = _getAllCards(this);
-                var currCard = _getSelectedCard(this);
+                var currCard = this.xtag._selectedCard;
                 var currIndex = cards.indexOf(currCard);
                 
                 if(currIndex > -1){
                     this.shuffleTo(posModulo(currIndex+1, cards.length), 
-                                 progressType, callbacks);
+                                   progressType);
                 }
             },
             
@@ -769,18 +716,16 @@
                                 if "auto", card will use forward animation if
                                 the target's is further ahead and reverse if
                                 it is farther behind (default option)
-                callbacks       (optional) see _animateCardReplacement's
-                                callbacks parameter documentation
             **/
-            shufflePrev: function(progressType, callbacks){
+            shufflePrev: function(progressType){
                 progressType = (progressType) ? progressType : "auto";
             
                 var cards = _getAllCards(this);
-                var currCard = _getSelectedCard(this);
+                var currCard = this.xtag._selectedCard;
                 var currIndex = cards.indexOf(currCard);
                 if(currIndex > -1){
                     this.shuffleTo(posModulo(currIndex-1, cards.length), 
-                                 progressType, callbacks);
+                                   progressType);
                 }
             },
             
@@ -797,7 +742,7 @@
             returns the currently selected x-card in the deck, if any
             **/
             getSelectedCard: function(){
-                return _getSelectedCard(this);
+                return this.xtag._selectedCard;
             },
             
             /** getCardIndex: (DOM) => Number
@@ -820,7 +765,7 @@
                 }
             },
 
-            historyBack: function(progressType, callbacks){
+            historyBack: function(progressType){
                 var history = this.xtag.history;
                 var deck = this;
                 
@@ -830,11 +775,11 @@
                     var newCard = history.currState;
                     if(newCard){
                         _replaceCurrCard(this, newCard, this.transitionType,
-                                         progressType, callbacks, true);
+                                         progressType, true);
                     }
                 }
             },
-            historyForward: function(progressType, callbacks){
+            historyForward: function(progressType){
                 var history = this.xtag.history;
                 var deck = this;
                 
@@ -844,7 +789,7 @@
                     var newCard = history.currState;
                     if(newCard){
                         _replaceCurrCard(this, newCard, this.transitionType,
-                                         progressType, callbacks, true);
+                                         progressType, true);
                     }
                 }
             }            
@@ -856,7 +801,7 @@
             inserted: function(){
                 var deckContainer = this.parentNode;
                 if (deckContainer){
-                    if(deckContainer.tagName.toLowerCase() == 'x-deck')
+                    if(deckContainer.tagName.toLowerCase() === 'x-deck')
                     {
                         init(deckContainer);
                         this.xtag.parentDeck = deckContainer;
@@ -867,7 +812,7 @@
             created: function(){
                 var deckContainer = this.parentNode;
                 if (deckContainer && 
-                        deckContainer.tagName.toLowerCase() == 'x-deck')
+                        deckContainer.tagName.toLowerCase() === 'x-deck')
                 {
                     init(deckContainer);
                     this.xtag.parentDeck = deckContainer;
@@ -879,8 +824,8 @@
                 }
                 
                 var deck = this.xtag.parentDeck;
-                init(deck);
                 deck.xtag.history.sanitizeStack();
+                init(deck);
             }
         },
         accessors:{

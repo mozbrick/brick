@@ -92,6 +92,7 @@
         <button onclick="nextType()">change transition type</button>
         <button onclick="addCard()">Add card</button>
         <button onclick="addCard(true)">Add card with transition-override</button>
+        <button onclick="removeCard(0)">Remove first card</button>
         <button onclick="removeCard()">Remove last card</button>
         <p id="transition-label"></p>
         <p id="count-label"></p>
@@ -103,7 +104,7 @@
         <button onclick="demoBox.shuffleTo(2, 'reverse')">shuffleTo 2 (always reverse)</button>
         <button onclick="triggerShow(2)">Trigger show event on 2</button>
         <button onclick="callShow(2)">Call .show() on 2</button>
-        <button onclick="editSelectedIndex(2)" disabled>Set selected index to 2</button>
+        <button onclick="editSelectedIndex(2)">Set selected index to 2</button>
         <br/>
         <button onclick="demoBox.historyBack()"><-- Back in History</button>
         <span id="history-status"></span>
@@ -255,10 +256,13 @@
             demoBox.shuffleTo(allCards.indexOf(newCard));
         }
         
-        function removeCard(){
+        function removeCard(index){
             var allCards = demoBox.getAllCards();
-            
-            if (allCards.length > 0){
+            if(index !== undefined && index < allCards.length){
+                var removeCard = demoBox.getCardAt(index);
+                demoBox.removeChild(removeCard);
+            }
+            else if (allCards.length > 0){
                 var lastCard = allCards[allCards.length - 1];
                 
                 demoBox.removeChild(lastCard);
