@@ -133,11 +133,22 @@ document.addEventListener('DOMComponentsLoaded', function(){
         updateSliderValStatus(demoSlider);
         
         demoSlider.addEventListener("change", function(e){
-            console.log("slider change", demoSlider);
+            console.log("slider change");
             updateSliderValStatus(demoSlider);
         });
         
         demoSlider.addEventListener("input", function(e){
+            console.log("slider input");
+            updateSliderValStatus(demoSlider);
+        });
+        
+        demoSlider.addEventListener("focus", function(e){
+            console.log("slider focus");
+            updateSliderValStatus(demoSlider);
+        });
+        
+        demoSlider.addEventListener("blur", function(e){
+            console.log("slider blur");
             updateSliderValStatus(demoSlider);
         });
         

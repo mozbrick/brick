@@ -1,38 +1,54 @@
 (function(){
     var TRANSFORM_NAME = xtag.prefix.js + "Transform";
-
+    var KEYCODES = {
+        37: "LEFT_ARROW",
+        38: "UP_ARROW",
+        39: "RIGHT_ARROW",
+        40: "DOWN_ARROW"
+    };
+    
     function isNum(num){
         return !isNaN(parseFloat(num));
     }
+    
+    function hasNumAttr(elem, attrName){
+        return (elem.hasAttribute(attrName) && 
+                isNum(elem.getAttribute(attrName)));
+    }
 
-    function _getDefaultVal(slider){
-        var min = (isNum(slider.min)) ? (+slider.min) : 0;
-        var max = (isNum(slider.max)) ? (+slider.max) : 100;
-        var step = (isNum(slider.step) && slider.step > 0) ? (+slider.step) : 1;
-        return Math.round((((max - min) / 2) + min) / step) * step;
+    function roundToStep(value, step){
+        if(!isNum(value)){
+            throw "invalid value " + value;
+        }
+        if((!isNum(step)) || +step <= 0){
+            throw "invalid step "+step;
+        }
+        
+        return Math.round(value / step) * step;
     }
     
-    function _valToFraction(slider, value){
-        var min = (isNum(slider.min)) ? (+slider.min) : 0;
-        var max = (isNum(slider.max)) ? (+slider.max) : 100;
+    function getMidStep(min, max, step){
+        return roundToStep(((max - min) / 2) + min, step);
+    }
+    
+    function _sliderValToFraction(slider, value){
+        var min = slider.min;
+        var max = slider.max;
         return (value - min) / (max - min);
     }
     
-    function _fractionToVal(slider, fraction){
-        var min = (isNum(slider.min)) ? (+slider.min) : 0;
-        var max = (isNum(slider.max)) ? (+slider.max) : 100;
+    function _fractionToSliderVal(slider, fraction){
+        var min = slider.min;
+        var max = slider.max;
         return ((max - min) * fraction) + min;
     }
     
     function _fractionToSliderValue(slider, sliderFraction){
         sliderFraction = Math.min(Math.max(0.0, sliderFraction), 1.0);
+        var step = slider.step;
         
-        var step = (isNum(slider.step) && slider.step > 0) ? (+slider.step) : 1;
-        
-        var rawVal = _fractionToVal(slider, sliderFraction);
-        var numSteps = Math.round(rawVal / step);
-        
-        return numSteps * step;
+        var rawVal = _fractionToSliderVal(slider, sliderFraction);
+        return roundToStep(rawVal, step);
     }
     
     function _positionThumb(slider, value){
@@ -43,7 +59,7 @@
         }
         var sliderRect = slider.getBoundingClientRect();
         var thumbRect = thumb.getBoundingClientRect();
-        var fraction = _valToFraction(slider, value);
+        var fraction = _sliderValToFraction(slider, value);
         
         // note that range inputs don't allow the thumb to spill past the bar
         // boundaries, so we actually have a little less width to work with
@@ -56,10 +72,7 @@
     }
     
     function _redraw(slider){
-        var value = (isNum(slider.value)) ? 
-                      (+slider.value) : _getDefaultVal(slider);
-        
-        _positionThumb(slider, value);
+        _positionThumb(slider, slider.value);
     }
 
     function _onMouseInput(slider, pageX, pageY){
@@ -67,8 +80,8 @@
         var inputOffsets = inputEl.getBoundingClientRect();
         var inputClickX = pageX - inputOffsets.left;
         
-        var oldValue = +slider.value;
-        var newValue = +_fractionToSliderValue(slider, 
+        var oldValue = slider.value;
+        var newValue = _fractionToSliderValue(slider, 
                                               inputClickX / inputOffsets.width);
         
         slider.value = newValue;
@@ -84,10 +97,10 @@
         
         var callbacks = slider.xtag.callbackFns;
         
-        document.body.addEventListener("mousemove", callbacks["onMouseDragMove"]);
-        document.body.addEventListener("touchmove", callbacks["onTouchDragMove"]);
-        document.body.addEventListener("mouseup", callbacks["onDragEnd"]);
-        document.body.addEventListener("touchend", callbacks["onDragEnd"]);
+        document.body.addEventListener("mousemove", callbacks.onMouseDragMove);
+        document.body.addEventListener("touchmove", callbacks.onTouchDragMove);
+        document.body.addEventListener("mouseup", callbacks.onDragEnd);
+        document.body.addEventListener("touchend", callbacks.onDragEnd);
         
         var thumb = slider.xtag.polyFillSliderThumb;
         if(thumb){
@@ -132,14 +145,40 @@
             "onDragEnd": function(e){
                 var callbacks = slider.xtag.callbackFns;
             
-                document.body.removeEventListener("mousemove", callbacks["onMouseDragMove"]);
-                document.body.removeEventListener("touchmove", callbacks["onTouchDragMove"]);
-                document.body.removeEventListener("mouseup", callbacks["onDragEnd"]);
-                document.body.removeEventListener("touchend", callbacks["onDragEnd"]);
+                document.body.removeEventListener("mousemove", callbacks.onMouseDragMove);
+                document.body.removeEventListener("touchmove", callbacks.onTouchDragMove);
+                document.body.removeEventListener("mouseup", callbacks.onDragEnd);
+                document.body.removeEventListener("touchend", callbacks.onDragEnd);
                 
                 var thumb = slider.xtag.polyFillSliderThumb;
                 if(thumb){
                     thumb.removeAttribute("active");
+                }
+            },
+            
+            "onKeyDown": function(e){
+                if(e.keyCode in KEYCODES){
+                    var oldVal = this.value;
+                    var step = this.step;
+                    
+                    switch(KEYCODES[e.keyCode]){
+                        case "LEFT_ARROW":
+                        case "DOWN_ARROW":
+                            this.value = oldVal - step;
+                            break;
+                        case "RIGHT_ARROW":
+                        case "UP_ARROW":
+                            this.value = oldVal + step;
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                    if(this.value !== oldVal){
+                        xtag.fireEvent(this, "change");
+                    }
+                    
+                    e.preventDefault();
                 }
             }
         };
@@ -150,25 +189,47 @@
             created: function(){
                 this.xtag.callbackFns = _makeCallbackFns(this);
             
-                this.xtag.rangeInputEl = document.createElement("input");
-                xtag.addClass(this.xtag.rangeInputEl, "input");
-                this.xtag.rangeInputEl.setAttribute("type", "range");
+                /* create and initialize attributes of input */
+                var input = document.createElement("input");
+                xtag.addClass(input, "input");
+                input.setAttribute("type", "range");
+                
+                // constrain initial attribute values
+                var initMax = (hasNumAttr(this, "max")) ? 
+                                +this.getAttribute("max") : 100;
+                                
+                var initMin = (hasNumAttr(this, "min")) ? 
+                                +this.getAttribute("min") : 0;
+                                
+                var initStep = (hasNumAttr(this, "step")) ? 
+                                +this.getAttribute("step") : 1;
+                // steps must also be strictly positive
+                initStep = (initStep > 0) ? initStep : 1;
+                
+                var initVal = (hasNumAttr(this, "value")) ? 
+                                +this.getAttribute("value") : 
+                                getMidStep(initMin, initMax, initStep);
+                
+                // because the x-slider accessors read from the input element's
+                // attributes, make sure to actually set them
+                input.setAttribute("max", initMax);
+                input.setAttribute("min", initMin);
+                input.setAttribute("step", initStep);
+                input.setAttribute("value", initVal);
+                
+                // finally, actually add the the input to the x-slider
+                this.xtag.rangeInputEl = input;
                 this.appendChild(this.xtag.rangeInputEl);
                 
                 this.xtag.polyFillSliderThumb = null;
                 
                 // range support check
-                if(this.xtag.rangeInputEl.type === "range"){
+                if(input.type === "range"){
                     this.removeAttribute("polyfill");
                 }
                 // otherwise, set up and apply polyfill
                 else{
                     this.setAttribute("polyfill", true);
-                }
-                
-                if(!isNum(this.value)){
-                    var attrVal = this.getAttribute("value");
-                    this.value = (isNum(attrVal)) ? (+attrVal) : _getDefaultVal(this);
                 }
                 
                 _redraw(this);
@@ -180,12 +241,8 @@
         events: {
             'change:delegate(input[type=range])': function(e){},
             'input:delegate(input[type=range])': function(e){},
-            'focus': function(e){
-                console.log("focus!", e);
-            },
-            'blur': function(e){
-                console.log("blur!", e);
-            }
+            'focus': function(e){},
+            'blur': function(e){}
         },
         accessors: {
             "polyfill": {
@@ -208,32 +265,43 @@
                             this.xtag.polyFillSliderThumb = sliderThumb;
                             this.appendChild(sliderThumb);
                         }
-                        this.addEventListener("mousedown", callbackFns['onMouseDragStart']);
-                        this.addEventListener("touchstart", callbackFns['onTouchDragStart']);
+                        this.addEventListener("mousedown", callbackFns.onMouseDragStart);
+                        this.addEventListener("touchstart", callbackFns.onTouchDragStart);
+                        this.addEventListener("keydown", callbackFns.onKeyDown);
                     }
                     // simply hide the polyfill element
                     else{
                         this.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("readonly");
-                        this.removeEventListener("mousedown", callbackFns['onMouseDragStart']);
-                        this.removeEventListener("touchstart", callbackFns['onTouchDragStart']);
+                        this.removeEventListener("mousedown", callbackFns.onMouseDragStart);
+                        this.removeEventListener("touchstart", callbackFns.onTouchDragStart);
+                        this.removeEventListener("keydown", callbackFns.onKeyDown);
                     }
                 }
             },
             "max": {
                 attribute: {
                     selector: "input[type=range]"
+                },
+                get: function(){
+                    return +this.xtag.rangeInputEl.getAttribute("max");
                 }
             },
             "min": {
                 attribute: {
                     selector: "input[type=range]"
+                },
+                get: function(){
+                    return +this.xtag.rangeInputEl.getAttribute("min");
                 }
             },
             "step": {
                 attribute: {
                     selector: "input[type=range]"
+                },
+                get: function(){
+                    return +this.xtag.rangeInputEl.getAttribute("step");
                 }
             },
             "value": {
@@ -241,10 +309,23 @@
                     selector: "input[type=range]"
                 },
                 get: function(){
-                    return this.xtag.rangeInputEl.value;
+                    return +this.xtag.rangeInputEl.value;
                 },
                 set: function(newVal){
+                    if(!isNum(newVal)){
+                        newVal = getMidStep(this.min, this.max, this.step);
+                    }
+                    
+                    newVal = +newVal
+                    var min = this.min;
+                    var max = this.max;
+                    var step = this.step;
+                
+                    newVal = Math.max(min, Math.min(newVal, max));
+                    newVal = roundToStep(newVal, step)
+                
                     this.xtag.rangeInputEl.value = newVal;
+                    _redraw(this);
                 }
             },
             "name": {
@@ -258,6 +339,7 @@
                     selector: "input[type=range]"
                 }
             },
+            
             "inputElem": {
                 get: function(){
                     return this.xtag.rangeInputEl;
