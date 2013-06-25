@@ -12,7 +12,7 @@ button's label, which reads "Hello".
 
 # Attributes
 
-## ___icon-anchor___
+## ___icon-anchor___ / ___iconAnchor___
 To edit the icon location, simply change the `icon-anchor` attribute on the `<x-iconbutton>` tag
 
     fooIconButton.setAttribute("icon-anchor", "left");
@@ -24,6 +24,8 @@ To edit the icon location, simply change the `icon-anchor` attribute on the `<x-
     - `"bottom"`    
     
 __Note:__ If the icon is no longer an &lt;img&gt; node, due to the user changing the DOM from the default, this will not do anything.
+
+Can be set as the HTML attribute `icon-anchor` or programmatically through the property `iconAnchor` 
 
 ## ___src___
 To edit the icon image source, simply change the `src` attribute on the `<x-iconbutton>` tag:

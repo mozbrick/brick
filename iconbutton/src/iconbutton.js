@@ -44,7 +44,7 @@
         var label = elem.xtag.labelEl;
         var button = elem.xtag.buttonEl;
         
-        switch(elem.getAttribute('icon-anchor')){
+        switch(elem.iconAnchor){
             // icon goes after label
             case "right":
             case "bottom":
@@ -135,8 +135,8 @@
                     updatePartsVisibility(this, newSrc);
                 }
             },
-            "icon-anchor":{
-                attribute: {},
+            "iconAnchor":{
+                attribute: {name: "icon-anchor"},
                 set: function(newAnchor){
                     updatePartsOrder(this);
                 }
