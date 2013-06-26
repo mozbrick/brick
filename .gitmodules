@@ -1,12 +1,12 @@
 [submodule "view"]
 	path = view
-	url = git@github.com:x-tag/view.git
+	url = https://github.com/x-tag/view.git
 [submodule "slidebox"]
 	path = slidebox
-	url = git@github.com:ldoubleuz/slidebox.git
+	url = https://github.com/ldoubleuz/slidebox.git
 [submodule "flipbox"]
 	path = flipbox
-	url = git@github.com:ldoubleuz/flipbox.git
+	url = https://github.com/ldoubleuz/flipbox.git
 [submodule "appbar"]
 	path = appbar
 	url = https://github.com/x-tag/appbar.git
