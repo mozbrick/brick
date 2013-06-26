@@ -56,7 +56,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Custom range (step = 1, default init value = 0)</h4>
+    <h4>Custom range (step = 1, default init value should be 0)</h4>
     <span class="min"></span>
     
     <x-slider min="-50" max=50></x-slider>
@@ -68,7 +68,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Custom step (step = 10, default init value = 0)</h4>
+    <h4>Custom step (step = 10, default init value should be 0)</h4>
     <span class="min"></span>
     
     <x-slider min="-50" max=50 step=10></x-slider>
@@ -80,7 +80,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Fractional step (step = 0.5, default init value = 2.5)</h4>
+    <h4>Fractional step (step = 0.5, default init value should be 2.5)</h4>
     <span class="min"></span>
     
     <x-slider min=0 max=5 step=0.5></x-slider>
@@ -104,7 +104,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Custom invalid init value (min = 0, max = 10, step = 5, init value = 3, but is rounded to 5)</h4>
+    <h4>Custom invalid init value (min = 0, max = 10, step = 5, init value = 3, but should be rounded to 5)</h4>
     <span class="min"></span>
     
     <x-slider min=0 max=10 step=5 value=3></x-slider>
@@ -117,10 +117,10 @@
 
 
 <div class="slider-wrap">
-    <h4>Offset range step (min = 3, max = 12, step = 5, default init value = 8) </h4>
+    <h4>Pos offset range step (min = 3, max = 13, step = 5, default init value should be 8) </h4>
     <span class="min"></span>
     
-    <x-slider min=3 max=12 step=5></x-slider>
+    <x-slider min=3 max=13 step=5></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
@@ -129,10 +129,22 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Uncontainable step (min = 1, max = 4, step = 5) </h4>
+    <h4>Neg offset range step (min = -1, max = 100, step = 10, default init value should be 49) </h4>
     <span class="min"></span>
     
-    <x-slider min=1 max=9 step=5></x-slider>
+    <x-slider min=-1 max=100 step=10></x-slider>
+    
+    <span class="max"></span>
+    <p>Value = <span class="slider-val-status"></span>
+        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+    </p>
+</div>
+
+<div class="slider-wrap">
+    <h4>Uncontainable step (min = 1, max = 4, step = 5, default init value should be 1) </h4>
+    <span class="min"></span>
+    
+    <x-slider min=1 max=4 step=5></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
@@ -158,22 +170,22 @@ document.addEventListener('DOMComponentsLoaded', function(){
         updateSliderValStatus(demoSlider);
         
         demoSlider.addEventListener("change", function(e){
-            console.log("slider change");
+         //   console.log("slider change");
             updateSliderValStatus(demoSlider);
         });
         
         demoSlider.addEventListener("input", function(e){
-            console.log("slider input");
+          //  console.log("slider input");
             updateSliderValStatus(demoSlider);
         });
         
         demoSlider.addEventListener("focus", function(e){
-            console.log("slider focus");
+         //   console.log("slider focus");
             updateSliderValStatus(demoSlider);
         });
         
         demoSlider.addEventListener("blur", function(e){
-            console.log("slider blur");
+          //  console.log("slider blur");
             updateSliderValStatus(demoSlider);
         });
         
