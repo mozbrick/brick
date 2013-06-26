@@ -34,6 +34,16 @@
         .slider-wrap:nth-child(even){
             background-color: #eee;
         }
+        
+        .default-init-val.passed{
+            color: green;
+        }
+        
+        .default-init-val.failed{
+            font-weight: bold;
+            color: red;
+            font-size: 1.5em;
+        }
     </style>
 </head>
 <body>
@@ -44,7 +54,7 @@
 </h3>
 
 <div class="slider-wrap">
-    <h4>Default (step = 1, default init value = 50)</h4>
+    <h4>Default (default step = 1, default init value should be <span class="default-init-val">50</span>)</h4>
     <span class="min"></span>
     
     <x-slider></x-slider>
@@ -56,7 +66,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Custom range (step = 1, default init value should be 0)</h4>
+    <h4>Custom range (default step = 1, default init value should be <span class="default-init-val">0</span>)</h4>
     <span class="min"></span>
     
     <x-slider min="-50" max=50></x-slider>
@@ -68,7 +78,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Custom step (step = 10, default init value should be 0)</h4>
+    <h4>Custom step (step = 10, default init value should be <span class="default-init-val">0</span>)</h4>
     <span class="min"></span>
     
     <x-slider min="-50" max=50 step=10></x-slider>
@@ -80,7 +90,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Fractional step (step = 0.5, default init value should be 2.5)</h4>
+    <h4>Fractional step (step = 0.5, default init value should be <span class="default-init-val">2.5</span>)</h4>
     <span class="min"></span>
     
     <x-slider min=0 max=5 step=0.5></x-slider>
@@ -104,7 +114,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Custom invalid init value (min = 0, max = 10, step = 5, init value = 3, but should be rounded to 5)</h4>
+    <h4>Custom invalid init value (min = 0, max = 10, step = 5, init value = 3, but should be rounded to <span class="default-init-val">5</span>)</h4>
     <span class="min"></span>
     
     <x-slider min=0 max=10 step=5 value=3></x-slider>
@@ -117,7 +127,7 @@
 
 
 <div class="slider-wrap">
-    <h4>Pos offset range step (min = 3, max = 13, step = 5, default init value should be 8) </h4>
+    <h4>Pos offset range step (min = 3, max = 13, step = 5, default init value should be <span class="default-init-val">8</span>) </h4>
     <span class="min"></span>
     
     <x-slider min=3 max=13 step=5></x-slider>
@@ -129,7 +139,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Neg offset range step (min = -1, max = 100, step = 10, default init value should be 49) </h4>
+    <h4>Neg offset range step (min = -1, max = 100, step = 10, default init value should be <span class="default-init-val">49</span>) </h4>
     <span class="min"></span>
     
     <x-slider min=-1 max=100 step=10></x-slider>
@@ -141,7 +151,7 @@
 </div>
 
 <div class="slider-wrap">
-    <h4>Uncontainable step (min = 1, max = 4, step = 5, default init value should be 1) </h4>
+    <h4>Uncontainable step (min = 1, max = 4, step = 5, default init value should be <span class="default-init-val">1</span>) </h4>
     <span class="min"></span>
     
     <x-slider min=1 max=4 step=5></x-slider>
@@ -170,7 +180,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
         updateSliderValStatus(demoSlider);
         
         demoSlider.addEventListener("change", function(e){
-         //   console.log("slider change");
+            console.log("slider change");
             updateSliderValStatus(demoSlider);
         });
         
@@ -200,6 +210,22 @@ document.addEventListener('DOMComponentsLoaded', function(){
         xtag.query(document, "x-slider").forEach(function(slider){
             togglePolyfill(slider);
         });
+    });
+    
+    // test each init val
+    var targetDefaults = xtag.query(document, ".default-init-val");
+    targetDefaults.forEach(function(targetElem){
+        var slider = targetElem.parentNode.parentNode.querySelector("x-slider");
+        
+        if(slider.value !== +targetElem.textContent){
+            xtag.addClass(targetElem, "failed");
+            console.log("expected init value to be", targetElem.textContent, 
+                        "but received", slider.value, slider);
+            targetElem.textContent += " but saw " + slider.value + " instead!";
+        }
+        else{
+            xtag.addClass(targetElem, "passed");
+        }
     });
 });
 

@@ -32,19 +32,20 @@
     /** roundToStep
     *
     * given a value to round and the size of each step, round the given value to 
-    * the closest multiple of the given step
+    * the closest multiple of the given step, accounting for the offset
+    * provided for the given range
     **/
-    function roundToStep(value, step, roundFn){
-        if(!roundFn){
-            roundFn = Math.round;
-        }
-        if(!isNum(value)){
-            throw "invalid value " + value;
+    function roundToStep(rawRangeVal, step, rangeMin, roundFn){
+        roundFn = (roundFn) ? roundFn : Math.round;
+        rangeMin = (rangeMin != undefined) ? rangeMin : 0;
+        
+        if(!isNum(rawRangeVal)){
+            throw "invalid value " + rawRangeVal;
         }
         if((!isNum(step)) || +step <= 0){
             throw "invalid step "+step;
         }
-        return roundFn(value / step) * step;
+        return roundFn((rawRangeVal - rangeMin) / step) * step + rangeMin;
     }
     
     
@@ -55,7 +56,7 @@
         else if(value > max){
             // return the largest number that is a multiple of step away from
             // the range start, but is still under the max
-            return Math.max(min, roundToStep(max - min, step, Math.floor) + min);
+            return Math.max(min, roundToStep(max, step, min, Math.floor));
         }
         else{
             return value;
@@ -70,7 +71,7 @@
     **/
     function getDefaultVal(min, max, step){
         if(max < min) throw "invalid range: "+min+" - "+max;
-        var roundedVal = roundToStep(((max - min) / 2), step) + min;
+        var roundedVal = roundToStep(((max - min) / 2) + min, step, min);
         return constrainToSteppedRange(roundedVal, min, max, step);
     }
     
@@ -113,7 +114,7 @@
         // rounding, then add back in the minimum so that the step is always in
         // relation to the start of the range, instead of starting partially
         // within the range
-        var roundedVal = roundToStep(rawVal - slider.min, slider.step) + slider.min;
+        var roundedVal = roundToStep(rawVal, slider.step, slider.min);
         
         return constrainToSteppedRange(roundedVal, slider.min, slider.max, slider.step);
     }
@@ -388,7 +389,7 @@
                     var max = this.max;
                     var step = this.step;
                 
-                    var roundedVal = roundToStep(rawVal - min, step) + min;
+                    var roundedVal = roundToStep(rawVal, step, min);
                     var finalVal = constrainToSteppedRange(roundedVal, min, max, step);
                     this.xtag.rangeInputEl.value = finalVal;
                     _redraw(this);
