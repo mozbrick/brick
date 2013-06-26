@@ -916,6 +916,7 @@
             }
         },
         methods:{
+            // forces the shuffledeck to display this card
             "show": function(){
                 var deck = this.parentNode;
                 if(deck === this.xtag.parentDeck){
