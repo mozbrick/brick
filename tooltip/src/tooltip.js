@@ -50,6 +50,7 @@
         if(!this._attachedFn){
             this._attachedFn = xtag.addEvent(this.elem, this.eventType, 
                                              this.listenerFn);
+            console.log("added", this.eventType, this.elem);
         }
     };
     
@@ -61,11 +62,12 @@
     CachedListener.prototype.removeListener = function(){
         if(this._attachedFn){
             xtag.removeEvent(this.elem, this.eventType, this._attachedFn);
+            console.log("removed", this.eventType, this.elem);
         }
     };
     
     
-    /** TRIGGER_STYLE_GETLISTENERS
+    /** PRESET_TRIGGER_STYLE_GETLISTENERS
      * 
      * A data map of trigger "styles" mapped to callback functions that return
      * lists of the CachedListeners that the tooltip would need to bind
@@ -73,7 +75,7 @@
      *
      * NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
     **/
-    var TRIGGER_STYLE_GETLISTENERS = {
+    var PRESET_TRIGGER_STYLE_GETLISTENERS = {
         /* the "none" style provides no default event listener functionality;
          * this is useful if the user wishes to do their own custom triggerstyle
          */
@@ -183,53 +185,56 @@
             );
             
             return createdListeners;
-        },
-        /* The "click" style allows the tooltip to be shown when the target elem
-         * is clicked. The tooltip persists until either the target is clicked
-         * again or the user clicks outside of the tooltip
-         */
-        "click": function(tooltip, triggerElems){
-            var createdListeners = [];
-            
-            // create and add the visibility-toggling click callback on target
-            // elements
-            var targetClickFn = function(e){
-                if(tooltip.hasAttribute("visible") && 
-                   tooltip.xtag.lastTargetElem === e.currentTarget)
-                {
-                    _hideTooltip(tooltip);
-                }
-                else{
-                    _showTooltip(tooltip, e.currentTarget);
-                }
-                e.stopPropagation();
-            };
-            triggerElems.forEach(function(triggerElem){
-                var targetListener = new CachedListener(triggerElem, "click", 
-                                                        targetClickFn);
-                createdListeners.push(targetListener);
-            });
-            
-            // create and add listener for when the user clicks outside the
-            // tooltip to hide the tooltip
-            createdListeners.push(
-                new CachedListener(document.body, "click", function(e){
-                                      if(tooltip.hasAttribute("visible")){
-                                        _hideTooltip(tooltip);
-                                      }
-                                   })
-            );
-            
-            // stop propagation on clicking the tooltip so that we dont just
-            // immediately close it due to the body listener
-            createdListeners.push(
-                new CachedListener(tooltip, "click", function(e){
-                    e.stopPropagation();
-                })
-            );
-            return createdListeners;
         }
     };
+    
+    
+    // given an event type, create and return a list of CachedListeners where 
+    // triggering such an event on a target elem toggles the tooltip visibility,
+    // triggering the tooltip is ignored, and triggering the body 
+    // closes the tooltip
+    function mkGenericListeners(tooltip, triggerElems, eventName){
+        var createdListeners = [];
+            
+        // create and add the visibility-toggling click callback on target
+        // elements
+        var targetClickFn = function(e){
+            if(tooltip.hasAttribute("visible") && 
+               tooltip.xtag.lastTargetElem === e.currentTarget)
+            {
+                _hideTooltip(tooltip);
+            }
+            else{
+                _showTooltip(tooltip, e.currentTarget);
+            }
+            e.stopPropagation();
+        };
+        
+        triggerElems.forEach(function(triggerElem){
+            var targetListener = new CachedListener(triggerElem, eventName, 
+                                                    targetClickFn);
+            createdListeners.push(targetListener);
+        });
+        
+        // create and add listener for when the user clicks outside the
+        // tooltip to hide the tooltip
+        createdListeners.push(
+            new CachedListener(document.body, eventName, function(e){
+                                  if(tooltip.hasAttribute("visible")){
+                                    _hideTooltip(tooltip);
+                                  }
+                               })
+        );
+        
+        // stop propagation on clicking the tooltip so that we dont just
+        // immediately close it due to the body listener
+        createdListeners.push(
+            new CachedListener(tooltip, eventName, function(e){
+                e.stopPropagation();
+            })
+        );
+        return createdListeners;
+    }
     
     
     /** hasParentNode: (DOM, DOM) => Boolean
@@ -605,7 +610,6 @@
             arrow.style.left = "";
             _readyToShowFn();
         }
-        
     }
     
     
@@ -674,8 +678,14 @@
         });
         
         // get new event listeners that we'll need to attach
-        var getListenersFn = TRIGGER_STYLE_GETLISTENERS[newTriggerStyle];
-        var listeners = getListenersFn(tooltip, newTriggerElems);
+        var listeners;
+        if(newTriggerStyle in PRESET_TRIGGER_STYLE_GETLISTENERS){
+            var getListenersFn = PRESET_TRIGGER_STYLE_GETLISTENERS[newTriggerStyle];
+            listeners = getListenersFn(tooltip, newTriggerElems);
+        }
+        else{
+            listeners = mkGenericListeners(tooltip, newTriggerElems, newTriggerStyle);
+        }
         
         // actually attach the listener functions
         listeners.forEach(function(listener){
@@ -767,9 +777,6 @@
                     return this.xtag.currTriggerStyle;
                 },
                 set: function(newTriggerStyle){
-                    if(!(newTriggerStyle in TRIGGER_STYLE_GETLISTENERS)){
-                        throw "invalid trigger style " + newTriggerStyle;
-                    }
                     _updateTriggerListeners(this, null, newTriggerStyle);
                     this.xtag.currTriggerStyle = newTriggerStyle;
                 }
@@ -816,6 +823,16 @@
                     this.xtag.contentEl = newContentElem;
                     
                     this.refreshPosition();
+                }
+            },
+            
+            "presetTriggerStyles": {
+                get: function(){
+                    var output = [];
+                    for(presetName in PRESET_TRIGGER_STYLE_GETLISTENERS){
+                        output.push(presetName);
+                    }
+                    return output;
                 }
             }
         },

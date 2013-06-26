@@ -75,8 +75,10 @@ Defines the type of interaction used to trigger the tooltip show/hide.
 
 Valid options:
 * If set to `hover`, the tooltip will appear any time the user mouses over the target element, and will disappear upon mousing off the target and tooltip.
-* If set to `click`, the tooltip will appear when the target element is clicked, and will persist until the user dismisses it by clicking outside of the tooltip.
 * If set to `none`, no handlers to show or hide the tooltip will be automatically applied. This is useful when the user wants to define a custom style of triggering the tooltip, but doesn't want any default behaviors getting in the way.
+* If set to anything else, the tooltip will appear when the target element has the given trigger-style occur as an event, and will persist until the user dismisses it by triggering the same event outside of the tooltip.
+    - This allows us to specify a wide variety of event triggers, such as 'tap', 'click', or 'mousedown'
+
 
 If not given, this defaults to `hover`.
 

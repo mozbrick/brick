@@ -41,7 +41,7 @@
             display: inline-block;
             background-color: lightsteelblue;
             font-size: 1.2em;
-            margin:.5em;
+            margin:.15em;
         }
         
         /* arrow is always in relation to content, so modify borders here instead
@@ -64,11 +64,6 @@
          ** with a tooltip attached **/
         [x-tooltip-targeted]{
             box-shadow: 1px 1px 10px goldenrod;
-        }
-        
-        [x-tooltip-targeted=click]:hover{
-            cursor: pointer;
-            opacity: 0.7;
         }
         
         /** example usage: attaching a tooltip indicator to elements **/
@@ -103,7 +98,7 @@
         </p>
     </button>
     <x-tooltip id="demoTip" target-selector="_nextSibling">
-        Hi! I'm a tooltip! <img src="http://placekitten.com/30"/>
+        <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placekitten.com/30"/>
         <br/><a href="http://google.com">Check out this link!</a>
     </x-tooltip>
     <div id="next-sib">
@@ -170,7 +165,7 @@ function toggleSelector(){
 }
 
 function toggleTriggerStyle(){
-    var styles = ["hover", "click", "none"];
+    var styles = ["hover", "click", "touchstart", "tap", "none"];
     var currStyle = demoTip.triggerStyle;
     
     var currIndex = styles.indexOf(currStyle);
@@ -202,6 +197,10 @@ function updateTriggerStyleBox(){
     var triggerStyleBox = document.getElementById("curr-trigger-style-status");
     
     triggerStyleBox.textContent = demoTip.triggerStyle;
+    
+    if(demoTip.presetTriggerStyles.indexOf(demoTip.triggerStyle) !== -1){
+        triggerStyleBox.textContent += "  (preset style)";
+    }
 }
 
 function randomKittenUrl(){
@@ -213,7 +212,7 @@ function randomKittenUrl(){
 var changeContents = (function(){
     var currIndex = 0;
     var htmlStrs = [
-        "Hi! I'm a tooltip! <img src='http://placekitten.com/30'/><br/><a href='http://google.com'>Check out this link!</a>",
+        document.getElementById("demoTip").innerHTML,
         "Text text text text",
         "<img src='test.png'/>",
         "<img src='test.gif'/>",
