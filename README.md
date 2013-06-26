@@ -117,7 +117,7 @@ Positions/appearances will likely differ on larger displays or with different in
 
 * Simple indicator to show that an action is in progress
 
-### Slider
+### [Slider](https://github.com/mozilla/app-components/tree/master/slider)
 
 * Polyfill on top of input type='range', providing a consistent UI regardless of whether type="range" is supported or not.
 
