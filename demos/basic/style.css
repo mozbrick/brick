@@ -25,15 +25,18 @@ x-appbar, x-tabbar {
   overflow: auto;
 }
 x-tabbar {
-  height: 48px;
+  height: 40px;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-align: stretch;
   flex-align: stretch;
   border-top: 1px solid black;
 }
 x-tabbar-tab {
+  -webkit-flex: 1;
   flex: 1;
   display: block;
-  line-height: 48px;
+  line-height: 40px;
   text-align: center;
   cursor: pointer;
 }
