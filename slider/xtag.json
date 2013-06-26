@@ -18,10 +18,33 @@
 	},
 	"documentation": {
 		"description": "Polyfill on top of input type='range', providing a consistent UI regardless of whether type='range' is supported or not.",
-		"attributes": {},
-		"events": {},
+		"attributes": {
+            "polyfill": "If set, the input is 'replaced' with our polyfill slider's event handlers and graphics.",
+            "max": "Sets the maximum of the slider's range",
+            "min": "Sets the minimum of the slider's range",
+            "step": "Sets the step value of the slider's range",
+            "name": "Sets the name value of the slider"
+        },
+		"events": {
+            "change": "Fired when the value of the slider changes",
+            "input": "Fired the user attempts to change the value of the slider (such as with the mouse)."
+            "focus": "Fired when the slider is focused on",
+            "blur": "Fired when the slider loses focus"
+        },
 		"methods": {},
-		"getters": {},
-		"setters": {}
+		"getters": {
+            "inputElem": "Returns the DOM element of the actual underlying <input> element",
+            "max": "Gets the maximum of the slider's range (as a number, not a string)",
+            "min": "Gets the minimum of the slider's range (as a number, not a string)",
+            "step": "Gets the step value of the slider's range (as a number, not a string)",
+            "name": "Gets the name value of the slider"
+        },
+		"setters": {
+            "polyfill": "If set, the input is 'replaced' with our polyfill slider's event handlers and graphics.",
+            "max": "Sets the maximum of the slider's range",
+            "min": "Sets the minimum of the slider's range",
+            "step": "Sets the step value of the slider's range",
+            "name": "Sets the name value of the slider"
+        }
 	}
 }

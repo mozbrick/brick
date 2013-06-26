@@ -257,6 +257,10 @@
     * given a x-slider element, returns a dictionary of callback functions
     * to use when attaching/removing event listeners for controlling the
     * polyfill slider
+    *
+    * we create these once on slider creation so that we are able to easily
+    * attach and remove event listeners without repeatedly creating the
+    * same function again and again
     **/
     function _makeCallbackFns(slider){
         return {
@@ -301,10 +305,14 @@
             "onDragEnd": function(e){
                 var callbacks = slider.xtag.callbackFns;
             
-                document.body.removeEventListener("mousemove", callbacks.onMouseDragMove);
-                document.body.removeEventListener("touchmove", callbacks.onTouchDragMove);
-                document.body.removeEventListener("mouseup", callbacks.onDragEnd);
-                document.body.removeEventListener("touchend", callbacks.onDragEnd);
+                document.body.removeEventListener("mousemove", 
+                                                  callbacks.onMouseDragMove);
+                document.body.removeEventListener("touchmove", 
+                                                  callbacks.onTouchDragMove);
+                document.body.removeEventListener("mouseup", 
+                                                  callbacks.onDragEnd);
+                document.body.removeEventListener("touchend", 
+                                                  callbacks.onDragEnd);
                 
                 var thumb = slider.xtag.polyFillSliderThumb;
                 if(thumb){
@@ -363,7 +371,7 @@
             created: function(){
                 this.xtag.callbackFns = _makeCallbackFns(this);
             
-                /* create and initialize attributes of input */
+                /** create and initialize attributes of input **/
                 var input = document.createElement("input");
                 xtag.addClass(input, "input");
                 input.setAttribute("type", "range");
@@ -415,12 +423,29 @@
         events: {
             'change:delegate(input[type=range])': function(e){},
             'input:delegate(input[type=range])': function(e){},
-            'focus': function(e){},
-            'blur': function(e){}
+            // note that focus/blur events don't bubble by default, so 
+            // in order for users to attach listeners to the x-slider focus
+            // instead of the input's, fake one level of bubbling
+            'focus:delegate(input[type=range])': function(e){
+                var slider = e.currentTarget;
+                
+                xtag.fireEvent(slider, "focus", {}, {bubbles: false});
+            },
+            'blur:delegate(input[type=range])': function(e){
+                var slider = e.currentTarget;
+                
+                xtag.fireEvent(slider, "blur", {}, {bubbles: false});
+            }
         },
         accessors: {
             "polyfill": {
                 attribute: {boolean: true},
+                /** when polyfill is set, enable the polyfill slider graphical
+                 *  elements and event handlers
+                 *
+                 * when unset, remove polyfill elements and revert to original 
+                 * settings
+                 **/
                 set: function(isPolyfill){
                     var callbackFns = this.xtag.callbackFns;
                     
@@ -439,8 +464,10 @@
                             this.xtag.polyFillSliderThumb = sliderThumb;
                             this.appendChild(sliderThumb);
                         }
-                        this.addEventListener("mousedown", callbackFns.onMouseDragStart);
-                        this.addEventListener("touchstart", callbackFns.onTouchDragStart);
+                        this.addEventListener("mousedown", 
+                                              callbackFns.onMouseDragStart);
+                        this.addEventListener("touchstart", 
+                                              callbackFns.onTouchDragStart);
                         this.addEventListener("keydown", callbackFns.onKeyDown);
                     }
                     // simply hide the polyfill element
@@ -448,12 +475,16 @@
                         this.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("readonly");
-                        this.removeEventListener("mousedown", callbackFns.onMouseDragStart);
-                        this.removeEventListener("touchstart", callbackFns.onTouchDragStart);
-                        this.removeEventListener("keydown", callbackFns.onKeyDown);
+                        this.removeEventListener("mousedown", 
+                                                 callbackFns.onMouseDragStart);
+                        this.removeEventListener("touchstart", 
+                                                 callbackFns.onTouchDragStart);
+                        this.removeEventListener("keydown", 
+                                                 callbackFns.onKeyDown);
                     }
                 }
             },
+            // simple interface with the actual input element
             "max": {
                 attribute: {
                     selector: "input[type=range]"
@@ -462,6 +493,7 @@
                     return +this.xtag.rangeInputEl.getAttribute("max");
                 }
             },
+            // simple interface with the actual input element
             "min": {
                 attribute: {
                     selector: "input[type=range]"
@@ -470,6 +502,7 @@
                     return +this.xtag.rangeInputEl.getAttribute("min");
                 }
             },
+            // simple interface with the actual input element
             "step": {
                 attribute: {
                     selector: "input[type=range]"
@@ -478,6 +511,7 @@
                     return +this.xtag.rangeInputEl.getAttribute("step");
                 }
             },
+            // simple interface with the actual input element
             "value": {
                 attribute: {
                     selector: "input[type=range]"
@@ -498,23 +532,23 @@
                     var step = this.step;
                 
                     var roundedVal = roundToStep(rawVal, step, min);
-                    var finalVal = constrainToSteppedRange(roundedVal, min, max, step);
+                    var finalVal = constrainToSteppedRange(roundedVal, min, 
+                                                           max, step);
                     this.xtag.rangeInputEl.value = finalVal;
                     _redraw(this);
                 }
             },
+            // simple interface with the actual input element
             "name": {
                 attribute: {
                     selector: "input[type=range]"
+                },
+                get: function(){
+                    return this.xtag.rangeInputEl.getAttribute("name");
                 }
             },
             
-            "required": {
-                attribute: {
-                    selector: "input[type=range]"
-                }
-            },
-            
+            // getter to retrieve the actual input DOM element we are wrapping
             "inputElem": {
                 get: function(){
                     return this.xtag.rangeInputEl;
