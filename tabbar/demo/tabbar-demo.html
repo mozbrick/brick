@@ -185,8 +185,25 @@
                 <x-iconbutton src="Card_back.svg" icon-anchor="top">Back</x-iconbutton>
             </x-tabbar-tab>
         </x-tabbar>
-    </div>
+        </div>
 </figure>    
+
+<figure class="container">
+    <h2>Fire custom event types</h2>
+    <div class="demo-container">  
+    <div id="color-box" class="component-demo">
+        <span>NIC CAGE</span>
+        <img src="http://placecage.com/c/300/325"/>
+    </div>
+    <x-tabbar event-to-fire="danceparty">
+        <x-tabbar-tab target-selector="#color-box > span">
+            <x-iconbutton src="http://placecage.com/100/100">Fire 'danceparty' on text</x-iconbutton>
+        </x-tabbar-tab>
+        <x-tabbar-tab target-selector="#color-box > img" event-to-fire="override">
+            <x-iconbutton src="http://placecage.com/c/100/100">Fire 'override' on img</x-iconbutton>
+        </x-tabbar-tab>
+    </x-tabbar>
+    </div>
 
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
@@ -201,6 +218,18 @@ document.addEventListener('DOMComponentsLoaded', function(){
         
         tab.targetElems = [slide];
     }
+    
+    document.querySelector("#color-box > span").addEventListener("danceparty", function(e){
+        alert("The text received danceparty!");
+    });
+    
+    document.querySelector("#color-box > img").addEventListener("danceparty", function(e){
+        alert("The image received danceparty!");
+    });
+    
+    document.querySelector("#color-box > img").addEventListener("override", function(e){
+        alert("The image received override!");
+    });
 });
 </script>
 </body>

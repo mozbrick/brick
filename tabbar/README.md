@@ -30,9 +30,23 @@ Alternatively, if you don't want to have to work out the CSS selectors for each 
 
 # Attributes
 
-## (x-tabbar-tab): ___target-selector___
+## ___event-to-fire___ / ___eventToFire___
+
+Specifies the default event that any tabs in the tabbar should fire on their targeted elements. Defaults to "show".
+
+Can be specified as the HTML attribute `event-to-fire` or programmatically as the JavaScript property `.eventToFire`
+
+## ___event-to-fire___ / ___eventToFire___ (x-tabbar-tab only)
+
+If set, specifies the event that a single tab should fire on its targeted elements, overriding the parent x-tabbar's default.
+
+Can be specified as the HTML attribute `event-to-fire` or programmatically as the JavaScript property `.eventToFire`
+
+## ___target-selector___  / ___targetSelector___ (x-tabbar-tab only)
 
 Defines how to select the target elements of a particular tab. This can be any format that would be a valid CSS selector for document.querySelectorAll
+
+Can be specified as the HTML attribute `target-selector` or programmatically as the JavaScript property `.targetSelector`
 
 # Accessors (getters/setters)
 
@@ -40,16 +54,17 @@ Defines how to select the target elements of a particular tab. This can be any f
 
 Returns a list of the &lt;x-tabbar-tab&gt; elements in the &lt;x-tabbar&gt;.
 
-## (x-tabbar-tab): ___targetElems___ 
+## ___targetElems___ (x-tabbar-tab only)
 
 **getter**: Returns a list of the the elements targeted by the specific tab
+
 **setter**: Assigns the tab's targeted elements as the given list of elements. (If targets are assigned using this dynamic assignment, the `target-selector` attribute is removed.)
 
 # Events
 
 ## ___show___
 
-Whenever a x-tabbar-tab is tapped/clicked, a `show` event is fired on each of its target elements. It is up to the target element to respond to this event. 
+Whenever a x-tabbar-tab is tapped/clicked, and `event-to-fire` is not otherwise specified, a `show` event is fired on each of its target elements. It is up to the target element to respond to this event. 
 
 Components with default implemented responses to `show`:
 

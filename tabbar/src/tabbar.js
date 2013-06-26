@@ -1,7 +1,9 @@
 (function(){
     xtag.register("x-tabbar", {
         lifecycle: {
-            created: function(){}
+            created: function(){
+                this.xtag.overallEventToFire = "show";
+            }
         },
         events: {
             "tap:delegate(x-tabbar-tab)": function(e) {
@@ -18,16 +20,16 @@
             // retrive a list of the tabs in this bar
             'tabs': {
                 get: function(){
-                    var tabs = xtag.query(this, "x-tabbar-tab");
-                    var tabbar = this;
-                    var output = [];
-
-                    tabs.forEach(function(tab){
-                        if(tab.parentNode && tab.parentNode === tabbar){
-                            output.push(tab);
-                        }
-                    });
-                    return output;
+                    return xtag.queryChildren(this, "x-tabbar-tab");
+                }
+            },
+            "eventToFire": {
+                attribute: {name: "event-to-fire"},
+                get: function(){
+                    return this.xtag.overallEventToFire;
+                },
+                set: function(newEventType){
+                    this.xtag.overallEventToFire = newEventType;
                 }
             }
         },
@@ -37,29 +39,51 @@
     xtag.register("x-tabbar-tab", {
         lifecycle: {
             created: function(){
-                this.xtag.targetElems = [];
+                this.xtag.targetSelector = null;
+                // for when the user provides DOM programmatically
+                // instead of through selector
+                this.xtag.overrideTargetElems = null;
+                this.xtag.eventToFire = null;
             }
         },
         events: {
             "tap": function(e){
-                var targets = this.xtag.targetElems;
-                for(var i = 0; i < targets.length; i++){
-                    var target = targets[i];
-                    xtag.fireEvent(target, "show");
+                if(this.parentNode.nodeName.toLowerCase() === "x-tabbar"){
+                    var eventToFire = this.eventToFire; // getter handles casing
+                
+                    var targets = this.targetElems;
+                    for(var i = 0; i < targets.length; i++){
+                        var target = targets[i];
+                        xtag.fireEvent(target, eventToFire);
+                    }
                 }
             }
         },
         accessors: {
-            "target-selector": {
-                attribute: {},
+            "targetSelector": {
+                attribute: {name: "target-selector"},
+                get: function(){
+                    return this.xtag.targetSelector;
+                },
                 set: function(newTargetSelector){
-                    this.xtag.targetElems = xtag.query(document,
-                                                       newTargetSelector);
+                    this.xtag.targetSelector = newTargetSelector;
+                    
+                    if(newTargetSelector){
+                        this.xtag.overrideTargetElems = null;
+                    }
                 }
             },
             "targetElems":{
                 get: function(){
-                    return this.xtag.targetElems;
+                    if(this.targetSelector){
+                        return xtag.query(document, this.targetSelector);
+                    }
+                    else if(this.xtag.overrideTargetElems != null){
+                        return this.xtag.overrideTargetElems;
+                    }
+                    else{
+                        return [];
+                    }
                 },
                 // provide a way to manually override targets by passing DOM
                 // elements in with code if users don't want to bother with
@@ -68,7 +92,24 @@
                     // remove attribute to avoid confusing desynched attributes
                     this.removeAttribute("target-selector");
 
-                    this.xtag.targetElems = newElems;
+                    this.xtag.overrideTargetElems = newElems;
+                }
+            },
+            "eventToFire":{
+                attribute: {name: "event-to-fire"},
+                get: function(){
+                    if(this.xtag.eventToFire){
+                        return this.xtag.eventToFire;
+                    }
+                    else if(this.parentNode.nodeName.toLowerCase() === "x-tabbar"){
+                        return this.parentNode.eventToFire;
+                    }
+                    else{
+                        throw "tabbar-tab is missing event to fire";
+                    }
+                },
+                set: function(newEvent){
+                    this.xtag.eventToFire = newEvent;
                 }
             }
         },
