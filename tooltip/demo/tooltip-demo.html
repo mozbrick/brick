@@ -66,6 +66,11 @@
             box-shadow: 1px 1px 10px goldenrod;
         }
         
+        [x-tooltip-targeted=click]:hover, [x-tooltip-targeted=tap]:hover{
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
         /** example usage: attaching a tooltip indicator to elements **/
         [x-tooltip-targeted]:after{
             content: "!";
@@ -113,16 +118,19 @@
 
 <div id="controls">
     <button onClick="changeOrientation()">Change orientation</button>
-    <button onClick="toggleTooltip(event)">Toggle tooltip</button>
+    <button onClick="toggleTooltip()">Toggle tooltip</button>
     <button onClick="toggleSelector()">Toggle selector</button>
     <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
-    <button onClick="changeContents(event)">Change tooltip contents</button>
+    <button onClick="toggleIgnoreOuter()">Toggle ignore-outer-trigger</button>
+    <button onClick="changeContents()">Change tooltip contents</button>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
     <br/>
     <span>Current orientation = <span id="curr-orient-status"></span></span>
     <br/>
     <span>Current trigger style = <span id="curr-trigger-style-status"></span></span>
+    <br/>
+    <span>Outer triggering = <span id="outer-trigger-status"></span></span>
 </div>
 <script>
 var demoTip;
@@ -149,9 +157,13 @@ function changeOrientation(){
     updateStatuses();
 }
 
-function toggleTooltip(e){
+function toggleTooltip(){
     demoTip.toggle();
-    e.stopPropagation();
+}
+
+function toggleIgnoreOuter(){
+    demoTip.ignoreOuterTrigger = !demoTip.ignoreOuterTrigger;
+    updateStatuses();
 }
 
 function toggleSelector(){
@@ -179,6 +191,13 @@ function updateStatuses(){
     updateSelectorBox();
     updateOrientationBox();
     updateTriggerStyleBox();
+    updateIgnoreOuterStatus();
+}
+
+function updateIgnoreOuterStatus(){
+    var statusBox = document.getElementById("outer-trigger-status");
+    
+    statusBox.textContent = (demoTip.ignoreOuterTrigger) ? "ignored" : "active";
 }
 
 function updateSelectorBox(){
@@ -226,9 +245,7 @@ var changeContents = (function(){
         })()
     ];
     
-    return function(e){
-        e.stopPropagation();
-        
+    return function(){
         var contentEl = demoTip.content;
         
         var newIndex = (currIndex+1) % htmlStrs.length;

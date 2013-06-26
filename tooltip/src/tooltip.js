@@ -219,11 +219,16 @@
         // create and add listener for when the user clicks outside the
         // tooltip to hide the tooltip
         createdListeners.push(
-            new CachedListener(document.body, eventName, function(e){
-                                  if(tooltip.hasAttribute("visible")){
-                                    _hideTooltip(tooltip);
-                                  }
-                               })
+            new CachedListener(
+                document.body, eventName, 
+                function(e){
+                  if(tooltip.hasAttribute("visible") && 
+                     !tooltip.hasAttribute("ignore-outer-trigger"))
+                  {
+                    _hideTooltip(tooltip);
+                  }
+                }
+            )
         );
         
         // stop propagation on clicking the tooltip so that we dont just
@@ -765,6 +770,8 @@
                     }
                     
                     this.xtag.orientation = newOrientation;
+                    
+                    this.refreshPosition();
                 }
             },
             
@@ -805,6 +812,13 @@
                     _updateTriggerListeners(tooltip, newTriggerElems);
                     this.xtag.triggeringElems = newTriggerElems;
                     this.xtag.targetSelector = newSelector;
+                }
+            },
+            
+            "ignoreOuterTrigger":{
+                attribute: {
+                    boolean: true, 
+                    name: "ignore-outer-trigger"
                 }
             },
             
