@@ -38,7 +38,7 @@
         this.eventType = eventType;
         this.listenerFn = listenerFn;
         this.elem = elem;
-        this.isAttached = false;
+        this._attachedFn = null;
     }
     
     
@@ -47,9 +47,9 @@
     *   binds the event listener as described by the struct
     **/
     CachedListener.prototype.attachListener = function(){
-        if(this.isAttached === false){
-            this.elem.addEventListener(this.eventType, this.listenerFn);
-            this.isAttached = true;
+        if(!this._attachedFn){
+            this._attachedFn = xtag.addEvent(this.elem, this.eventType, 
+                                             this.listenerFn);
         }
     };
     
@@ -59,9 +59,8 @@
     *   unbinds the event listener as described by the struct
     **/
     CachedListener.prototype.removeListener = function(){
-        if(this.isAttached === true){
-            this.elem.removeEventListener(this.eventType, this.listenerFn);
-            this.isAttached = false;
+        if(this._attachedFn){
+            xtag.removeEvent(this.elem, this.eventType, this._attachedFn);
         }
     };
     
@@ -267,7 +266,7 @@
      *
      * TL;DR edition: creates a function that doesn't fire a callback if the
      * event is simply triggered by moving between children of the same 
-     * listening element; this is similar to jQuery's mouseenter/mouseleave
+     * element; this is similar to jQuery's mouseenter/mouseleave
      * implementations
      *
      * params:
@@ -275,17 +274,22 @@
      *                                  to be called when moving between
      *                                  two elements not both in the same
      *                                  listening element
+     *      containerElem               (optional) Specify the container whose 
+     *                                  children we wish to ignore.
+     *                                  This is useful for event delegation, 
+     *                                  where the listening element may not be
+     *                                  the element we want to ignore childrenof
      **/
-    function mkSimulateMouseEnterLeaveFn(callback){
+    function mkSimulateMouseEnterLeaveFn(callback, containerElem){
         return function(e){
-            var eventType = e.type.toLowerCase();
-            if(eventType === "mouseover" || eventType === "mouseout" ||
-               eventType === "touchenter" || eventType === "touchleave")
+            if(!containerElem){
+                containerElem = e.currentTarget;
+            }
+            var relElem = e.relatedTarget || e.toElement;
+            
+            if(relElem)
             {
-                var listeningElem = e.currentTarget;
-                var relElem = e.relatedTarget || e.toElement;
-                
-                if(!hasParentNode(relElem, listeningElem)){
+                if(!hasParentNode(relElem, containerElem)){
                     callback(e);
                 }
             }
