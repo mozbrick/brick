@@ -102,7 +102,7 @@
             };
             
             // callback function for when a target element is hovered over
-            var showTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
+            var showTipTargetFn = mkIgnoreSubchildrenFn(function(e){
                 cancelTimerFn();
                 // don't trigger show when coming from a tooltip element
                 var fromElem = e.relatedTarget || e.toElement;
@@ -113,7 +113,7 @@
             });
             
             // callback function for when a target element is hovered off
-            var hideTipTargetFn = mkSimulateMouseEnterLeaveFn(function(e){
+            var hideTipTargetFn = mkIgnoreSubchildrenFn(function(e){
                 cancelTimerFn();
                 // don't trigger hide when exiting to a tooltip element
                 var toElem = e.relatedTarget || e.toElement;
@@ -130,7 +130,7 @@
             });
             
             // callback function for when the tooltip itself is hovered over
-            var showTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
+            var showTipTooltipFn = mkIgnoreSubchildrenFn(function(e){
                 cancelTimerFn();
                 
                 // don't trigger show when coming from the target element
@@ -147,7 +147,7 @@
             });
             
             // callback function for when the tooltip itself is hovered off
-            var hideTipTooltipFn = mkSimulateMouseEnterLeaveFn(function(e){
+            var hideTipTooltipFn = mkIgnoreSubchildrenFn(function(e){
                 cancelTimerFn();
                 // don't get triggered when exiting to the target element
                 var toElem = e.relatedTarget || e.toElement;
@@ -253,7 +253,7 @@
     }
     
     
-    /** mkSimulateMouseEnterLeaveFn: Function => Function
+    /** mkIgnoreSubchildrenFn: Function => Function
      *
      * creates and returns a callback function for mouseover/mouseleave 
      * events where:
@@ -285,7 +285,7 @@
      *                                  where the listening element may not be
      *                                  the element we want to ignore childrenof
      **/
-    function mkSimulateMouseEnterLeaveFn(callback, containerElem){
+    function mkIgnoreSubchildrenFn(callback, containerElem){
         return function(e){
             if(!containerElem){
                 containerElem = e.currentTarget;
