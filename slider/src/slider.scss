@@ -101,7 +101,7 @@ x-slider{
     
     &:not([polyfill]){
         & > .slider-thumb{
-            visibility: hidden;
+            visibility: hidden !important;
         }
     }
     

@@ -74,10 +74,7 @@
     *     value that is less than the range maximum
     **/
     function constrainToSteppedRange(value, min, max, step){
-        if(max < min){
-            return min;
-        }
-        else if(value < min){
+        if(value < min){
             return min;
         }
         else if(value > max){
@@ -97,7 +94,6 @@
     * given range, while still remaining in the range
     **/
     function getDefaultVal(min, max, step){
-        if(max < min) throw "invalid range: "+min+" - "+max;
         var roundedVal = roundToStep(((max - min) / 2) + min, step, min);
         return constrainToSteppedRange(roundedVal, min, max, step);
     }
@@ -536,15 +532,6 @@
                                                            max, step);
                     this.xtag.rangeInputEl.value = finalVal;
                     _redraw(this);
-                }
-            },
-            // simple interface with the actual input element
-            "name": {
-                attribute: {
-                    selector: "input[type=range]"
-                },
-                get: function(){
-                    return this.xtag.rangeInputEl.getAttribute("name");
                 }
             },
             

@@ -110,4 +110,4 @@ x-slider {
         background-image: -webkit-linear-gradient(top, #b8e1f9, #b8e1f9 25%, #71c4f3);
         background-image: linear-gradient(top, #b8e1f9, #b8e1f9 25%, #71c4f3); }
   x-slider:not([polyfill]) > .slider-thumb {
-    visibility: hidden; }
+    visibility: hidden !important; }
