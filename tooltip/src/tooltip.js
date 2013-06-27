@@ -50,7 +50,6 @@
         if(!this._attachedFn){
             this._attachedFn = xtag.addEvent(this.elem, this.eventType, 
                                              this.listenerFn);
-            console.log("added", this.eventType, this.elem);
         }
     };
     
@@ -62,7 +61,6 @@
     CachedListener.prototype.removeListener = function(){
         if(this._attachedFn){
             xtag.removeEvent(this.elem, this.eventType, this._attachedFn);
-            console.log("removed", this.eventType, this.elem);
         }
     };
     
@@ -322,18 +320,32 @@
      * Otherwise, applies the selector as a CSS query selector on the document
      */
     function _selectorToElems(tooltip, selector){
+        var elems = [];
         if(selector === "_previousSibling"){
-            return (tooltip.previousElementSibling) ? 
+            elems = (tooltip.previousElementSibling) ? 
                       [tooltip.previousElementSibling] : [];
         }
         else if(selector === "_nextSibling"){
-            return (tooltip.nextElementSibling) ? 
+            elems = (tooltip.nextElementSibling) ? 
                       [tooltip.nextElementSibling] : [];
         }
         // otherwise, apply as CSS selector string
         else{
-            return xtag.query(document, selector);
+            elems = xtag.query(document, selector);
         }
+        
+        // filter out elements that are part of the tooltip itself
+        var i = 0;
+        while(i < elems.length){
+            var elem = elems[i];
+            if(hasParentNode(elem, tooltip)){
+                elems.splice(i, 1);
+            }
+            else{
+                i++;
+            }
+        }
+        return elems;
     }
     
     
@@ -443,13 +455,17 @@
                                    
                 // found a good position, so finalize and stop checking
                 if(!overlaps(tooltip, targetElem)){
-                    // set the auto-orientation attribute so that CSS animations
-                    // still apply even though orientation attribute is not
-                    // valid
+                    /* set the auto-orientation attribute so that CSS animations
+                     * still apply even though orientation attribute is not
+                     * valid
+                     */
                     tooltip.setAttribute("auto-orientation", tmpOrient);
                     return;
                 }
             }
+            // if we get to this point, we didn't find any good spots, 
+            // just go with the last possible orientation
+            tooltip.setAttribute("auto-orientation", tmpOrient);
             return;
         }
         
@@ -625,39 +641,42 @@
      * fires a 'tooltiphidden' event
      **/
     function _hideTooltip(tooltip){
-        tooltip.removeAttribute("visible");
         // remove remnant attribute used for auto placement animations
         if(isValidOrientation(tooltip.orientation)){
             tooltip.removeAttribute("auto-orientation");
         }
         
-        xtag.fireEvent(tooltip, "tooltiphidden");
+        if(tooltip.hasAttribute("visible")){
+            tooltip.removeAttribute("visible");
+            xtag.fireEvent(tooltip, "tooltiphidden");
+        }
     }
     
     
-    /** _updateTriggerListeners: (x-tooltip, DOM list, string)
+    /** _updateTriggerListeners: (x-tooltip, string, string)
      *
      * unbinds existing cached listeners and binds new listeners for new trigger 
      * parameters; call this anytime the tooltip trigger changes
-     * if newTriggerElems is not given, uses previously existing trigger elems
+     * if newTargetSelector is not given, uses previously existing selector
      * if newTriggerStyle is not given, uses the previously used trigger style
     **/
-    function _updateTriggerListeners(tooltip, newTriggerElems, newTriggerStyle){
-        if(newTriggerElems === undefined || newTriggerElems === null){
-            newTriggerElems = tooltip.xtag.triggeringElems;
+    function _updateTriggerListeners(tooltip, newTargetSelector, newTriggerStyle){
+        if(newTargetSelector == undefined){
+            newTargetSelector = tooltip.xtag.targetSelector;
         }
+        if(newTriggerStyle == undefined){
+            newTriggerStyle = tooltip.xtag.currTriggerStyle;
+        }
+        
+        var newTriggerElems = _selectorToElems(tooltip, newTargetSelector);
         // if we are actually changing the triggering elements, but are losing
         // our last target elem, default to first one in the list
-        else if(newTriggerElems.indexOf(tooltip.xtag.lastTargetElem) === -1){
+        if(newTriggerElems.indexOf(tooltip.xtag.lastTargetElem) === -1){
             tooltip.xtag.lastTargetElem = (newTriggerElems.length > 0) ? 
                                            newTriggerElems[0] : null; 
             // reposition tooltip
             _positionTooltip(tooltip, tooltip.xtag.lastTargetElem, 
                              tooltip.orientation);
-        }
-        
-        if(newTriggerStyle === undefined || newTriggerStyle === null){
-            newTriggerStyle = tooltip.xtag.currTriggerStyle;
         }
         
         // remove all active cached listeners
@@ -666,21 +685,6 @@
             cachedListener.removeListener();
         });
         tooltip.xtag.cachedListeners = [];
-        
-        // clear old trigger elem attributes
-        var oldTriggerElems = tooltip.xtag.triggeringElems;
-        oldTriggerElems.forEach(function(oldTriggerElem){
-            oldTriggerElem.removeAttribute("x-tooltip-targeted");
-        });
-        
-        // bind new element listeners, but only those needed for the
-        // current trigger style
-        newTriggerElems.forEach(function(newTriggerElem){
-            if(!hasParentNode(newTriggerElem, tooltip)){
-                newTriggerElem.setAttribute("x-tooltip-targeted", 
-                                            newTriggerStyle);
-            }
-        });
         
         // get new event listeners that we'll need to attach
         var listeners;
@@ -724,20 +728,19 @@
                 // default trigger variables
                 this.xtag.orientation = "auto";
                 this.xtag.targetSelector = "_previousSibling";
-                this.xtag.triggeringElems = _selectorToElems(
-                                                this, this.xtag.targetSelector
-                                            );
                 this.xtag.currTriggerStyle = "hover";
                 // remember who the last element that triggered the tip was
                 // (ie: who we should be pointing to if suddenly told to show
                 //  outside of a trigger style)
-                var triggeringElems = this.xtag.triggeringElems;
+                var triggeringElems = _selectorToElems(
+                                         this, this.xtag.targetSelector
+                                      );
                 this.xtag.lastTargetElem = (triggeringElems.length > 0) ? 
                                             triggeringElems[0] : null; 
                 
                 // remember what event listeners are still active
                 this.xtag.cachedListeners = [];
-                _updateTriggerListeners(this, this.xtag.triggeringElems, 
+                _updateTriggerListeners(this, this.xtag.targetSelector, 
                                         this.xtag.currTriggerStyle);
             }
         },
@@ -761,7 +764,7 @@
                     if(isValidOrientation(newOrientation)){
                         newArrowDir = TIP_ORIENT_ARROW_DIR_MAP[newOrientation];
                         arrow.setAttribute("arrow-direction", newArrowDir);
-                        arrow.removeAttribute("auto-orientation");
+                        this.removeAttribute("auto-orientation");
                     }
                     else{
                         // when auto placing, we will determine arrow direction
@@ -784,7 +787,8 @@
                     return this.xtag.currTriggerStyle;
                 },
                 set: function(newTriggerStyle){
-                    _updateTriggerListeners(this, null, newTriggerStyle);
+                    _updateTriggerListeners(this, this.xtag.targetSelector, 
+                                            newTriggerStyle);
                     this.xtag.currTriggerStyle = newTriggerStyle;
                 }
             },
@@ -797,20 +801,12 @@
                     return this.xtag.targetSelector;
                 },
                 set: function(newSelector){
-                    var tooltip = this;
-                    
                     // filter out selected elements that are 
                     // themselves in the tooltip
-                    var selectedElems = _selectorToElems(this, newSelector);
-                    var newTriggerElems = [];
-                    selectedElems.forEach(function(selectedElem){
-                        if(!hasParentNode(selectedElem, tooltip)){
-                            newTriggerElems.push(selectedElem);
-                        }
-                    });
+                    var newTriggerElems = _selectorToElems(this, newSelector);
                     
-                    _updateTriggerListeners(tooltip, newTriggerElems);
-                    this.xtag.triggeringElems = newTriggerElems;
+                    _updateTriggerListeners(this, newSelector, 
+                                            this.xtag.currTriggerStyle);
                     this.xtag.targetSelector = newSelector;
                 }
             },
@@ -840,6 +836,7 @@
                 }
             },
             
+            // return a list of the preset trigger style names
             "presetTriggerStyles": {
                 get: function(){
                     var output = [];
@@ -848,7 +845,17 @@
                     }
                     return output;
                 }
+            },
+            
+            // return a list of elements currently selected by the tooltip's
+            // selector
+            "targetElems":{
+                get: function(){
+                    return _selectorToElems(this, this.targetSelector);
+                }
             }
+            
+            
         },
         methods: {
             // called when the position of the tooltip needs to be manually
