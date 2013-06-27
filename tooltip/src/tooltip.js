@@ -65,12 +65,29 @@
         }
     };
     
-    // fake a delegated event, since there isn't a reliable single-shot
-    // CSS selector for the previous sibling of a specific unnamed element
-    //
-    // callback will be called with a 'this' scope of the tooltip's 
-    // previous sibling element
-    function mkPrevSiblingCachedListener(tooltip, eventName, callback){
+    
+    /** _mkPrevSiblingCachedListener: (DOM, string, function) => CachedListener
+    * 
+    * creates and returns a CachedListener representing a "delegated" event
+    * listener on the body for the previous sibling of the tooltip
+    *
+    * fakes a delegated event, since there isn't a reliable single-shot
+    * CSS selector for the previous sibling of a specific unnamed element
+    *
+    * callback will be called with a 'this' scope of the tooltip's 
+    * previous sibling element
+    *
+    * params:
+    *   tooltip                     the x-tooltip element we are working in
+    *                               relation to
+    *   eventName                   the raw name of the event to listen for
+    *                               (ex: "click")
+    *   callback                    the callback function to call when the
+    *                               the tooltip's previous sibling is triggered;
+    *                               will be called using said sibling as the
+    *                               'this' scope
+    **/
+    function _mkPrevSiblingCachedListener(tooltip, eventName, callback){
         var filteredCallback = function(e){
             if(callback && hasParentNode(e.target, 
                                          tooltip.previousElementSibling))
@@ -84,12 +101,29 @@
                                   filteredCallback);
     }
     
-    // fake a delegated event, since there isn't a reliable single-shot
-    // CSS selector for the next sibling of a specific unnamed element
-    //
-    // callback will be called with a 'this' scope of the tooltip's 
-    // next sibling element
-    function mkNextSiblingCachedListener(tooltip, eventName, callback){
+    
+    /** _mkNextSiblingCachedListener: (DOM, string, function) => CachedListener
+    * 
+    * creates and returns a CachedListener representing a "delegated" event
+    * listener on the body for the next sibling of the tooltip
+    *
+    * fakes a delegated event, since there isn't a reliable single-shot
+    * CSS selector for the next sibling of a specific unnamed element
+    *
+    * callback will be called with a 'this' scope of the tooltip's 
+    * previous sibling element
+    *
+    * params:
+    *   tooltip                     the x-tooltip element we are working in
+    *                               relation to
+    *   eventName                   the raw name of the event to listen for
+    *                               (ex: "click")
+    *   callback                    the callback function to call when the
+    *                               the tooltip's next sibling is triggered;
+    *                               will be called using said sibling as the
+    *                               'this' scope
+    **/
+    function _mkNextSiblingCachedListener(tooltip, eventName, callback){
         var eventDelegateStr = eventName+":delegate(x-tooltip+*)";
         var filteredCallback = function(e){
             if(callback && this === tooltip.nextElementSibling){
@@ -102,15 +136,37 @@
                                   filteredCallback);
     }
     
-    function getTargetDelegatedListener(tooltip, targetSelector, eventName, 
-                                        targetCallback)
+    
+    /** _getTargetDelegatedListener: (DOM, string, string, function) => 
+     *                                  CachedListener
+     *
+     * given a callback function to call on elements selected by the given 
+     * targetSelector, returns a single CachedListener representing the
+     * listener for a delegated event that calls the given callback function
+     *
+     * params:
+     *   tooltip                     the x-tooltip element we are working in
+     *                               relation to
+     *   targetSelector              the string used to select the elements
+     *                               to delegate as targets; follows the same
+     *                               rules as x-tooltip's targetSelector
+     *                               accessor
+     *   eventName                   the raw name of the event to listen for
+     *                               (ex: "click")
+     *   callback                    the callback function to call when a
+     *                               target element is triggered;
+     *                               will be called using said element as the
+     *                               'this' scope
+    **/
+    function _getTargetDelegatedListener(tooltip, targetSelector, eventName, 
+                                         targetCallback)
     {
         if(targetSelector === "_previousSibling"){
-            return mkPrevSiblingCachedListener(tooltip, eventName, 
+            return _mkPrevSiblingCachedListener(tooltip, eventName, 
                                                targetCallback);
         }
         else if(targetSelector === "_nextSibling"){
-            return mkNextSiblingCachedListener(tooltip, eventName, 
+            return _mkNextSiblingCachedListener(tooltip, eventName, 
                                                targetCallback);
         }
         else{
@@ -128,6 +184,7 @@
                         );
         }
     }
+    
     
     /** PRESET_TRIGGER_STYLE_GETLISTENERS
      * 
@@ -195,11 +252,11 @@
             });
             
             //create CachedListeners for target elements
-            var targetEnterListener = getTargetDelegatedListener(
+            var targetEnterListener = _getTargetDelegatedListener(
                                         tooltip, targetSelector, "tapenter", 
                                         showTipTargetFn
                                       );
-            var targetExitListener = getTargetDelegatedListener(
+            var targetExitListener = _getTargetDelegatedListener(
                                         tooltip, targetSelector, "tapleave", 
                                         hideTipTargetFn
                                       );
@@ -255,10 +312,15 @@
         }
     };
     
-    // given an event type, create and return a list of CachedListeners where 
-    // triggering such an event on a target elem toggles the tooltip visibility,
-    // triggering the tooltip is ignored, and triggering the body 
-    // closes the tooltip
+    
+    /** mkGenericListeners: (DOM, string, string) => list of CachedListener
+    
+     given an event type, create and return a list of CachedListeners that
+     represents the user workflow where 
+     triggering such an event on a target elem toggles the tooltip visibility,
+     triggering the tooltip is ignored, and triggering the body 
+     closes the tooltip
+    **/
     function mkGenericListeners(tooltip, targetSelector, eventName){
         var createdListeners = [];
             
@@ -281,7 +343,7 @@
             e.stopPropagation();
         };
         
-        var delegatedTargetListener = getTargetDelegatedListener(
+        var delegatedTargetListener = _getTargetDelegatedListener(
                                         tooltip, targetSelector, eventName, 
                                         targetTriggerFn
                                       );
@@ -501,7 +563,9 @@
      * to autoplace the tooltip in an orientation that doesn't overlap the 
      * targeted elements
      **/
-    function _positionTooltip(tooltip, targetElem, orientation){
+    function _positionTooltip(tooltip, targetElem, orientation, reattemptDepth){
+        reattemptDepth = (reattemptDepth == undefined) ? 0 : reattemptDepth;
+    
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
@@ -532,10 +596,14 @@
         var offsetContainer = (tooltip.offsetParent) ? 
                                     tooltip.offsetParent : tooltip.parentNode;
         
-        tooltip.style.top = "";
-        tooltip.style.left = "";
-        arrow.style.top = "";
-        arrow.style.left = "";
+        // only position if NOT currently recursing to get a more stable
+        // position, or final size will never match up to initial size
+        if(!reattemptDepth){
+            tooltip.style.top = "";
+            tooltip.style.left = "";
+            arrow.style.top = "";
+            arrow.style.left = "";
+        }
         
         // coordinates of the target element, relative to the page
         var targetPageOffset = targetElem.getBoundingClientRect();
@@ -625,7 +693,7 @@
             throw "invalid orientation " + orientation;
         }
         
-        // actually constrain and position the tooltip
+        // finally, constrain and position the tooltip
         newTop = constrainNum(newTop, 0, maxTop);
         newLeft = constrainNum(newLeft, 0, maxLeft);
         tooltip.style.top = newTop + "px";
@@ -644,6 +712,17 @@
                                 arrowCoords.top, 0, 
                                 origTooltipHeight - arrowHeight
                               ) + "px";
+        }
+        
+        // if the tooltip window changed size in its placement, recurse
+        // once to try to get a more stable placement
+        var recursionLimit = 1;
+        if(reattemptDepth < recursionLimit &&
+           (origTooltipWidth !== tooltip.offsetWidth || 
+            origTooltipHeight !== tooltip.offsetHeight))
+        {
+            _positionTooltip(tooltip, targetElem, orientation, 
+                             reattemptDepth+1);
         }
     }
     
@@ -869,6 +948,8 @@
                 }
             },
             
+            // if set, clicking/triggering events outside of the tooltip or
+            // its targeted elements will not dismiss the tooltip
             "ignoreOuterTrigger":{
                 attribute: {
                     boolean: true, 
@@ -876,6 +957,7 @@
                 }
             },
             
+            // if set, pointer events will not be captured by the tooltip
             "ignoreTooltipPointerEvents":{
                 attribute: {
                     boolean: true, 

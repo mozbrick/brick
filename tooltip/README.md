@@ -97,7 +97,7 @@ Can be set with the `ignore-outer-trigger` HTML attribute or the `ignoreOuterTri
 
 ## ___ignore-tooltip-pointer-events___ / ___ignoreTooltipPointerEvents___
 
-If present, pointer events on the tooltip will be ignored, keeping it from blocking interaction with underlying elements.
+If present, pointer events on the tooltip will be ignored, keeping it from blocking interaction with underlying elements. This is useful when you know that users will not need to interact with the tooltip itself and want the tooltip to avoid obstructing other elements.
 
 Can be set with the `ignore-tooltip-pointer-events` HTML attribute or the `ignoreTooltipPointerEvents` JavaScript property.
 

@@ -84,4 +84,6 @@ Styling `x-slider[polyfill] > .input` allows users to define how the underlying 
 
 Styling `x-slider[polyfill] > .slider-thumb` allows users to define how the slider thumb graphic should look as a polyfill. 
 
+Styling `x-slider[polyfill] > .slider-thumb[active]` allows users to define how the polyfill slider thumb graphic should when being dragged. 
+
 
