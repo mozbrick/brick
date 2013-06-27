@@ -19,9 +19,10 @@
 	"documentation": {
 		"description": "Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content",
 		"attributes": {
-            "orientation": "Determines where the tooltip appears in relation to the triggering element. Valid options are 'above', 'below', 'onleft', 'onright'. If not provided, or if invalid, defaults to auto placement of tooltip.",
-            "trigger-style": "Indicates how the tooltip is triggered. Valid options are 'hover', 'click' and 'none' (defaults to 'hover'). When set to 'hover', the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to 'click', the tooltip is triggered when the user clicks on the trigger element, and is dismissed when the user clicks anywhere else (or on the trigger again). When set to 'none', no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the showTooltip and hideTooltip API calls without any default behaviors getting in the way.",
+            "orientation": "Determines where the tooltip appears in relation to the triggering element. Valid options are 'top', 'bottom', 'left', 'right'. If not provided, or if invalid, defaults to auto placement of tooltip.",
+            "trigger-style": "Indicates how the tooltip is triggered. Valid presets are 'hover' and 'none' (defaults to 'hover'). When set to 'hover', the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to 'none', no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the showTooltip and hideTooltip API calls without any default behaviors getting in the way. If set to anything else, the tooltip will use this as the event name to listen for on targeted elems to show the tooltip.",
             "trigger-selector": "Indicates how to select elements that would trigger the tooltip. If given a selector of '_previousSibling', the tooltip will use the immediately preceding sibling element in the DOM tree as its triggering element. Similarly, when set to '_nextSibling', the tooltip will use its next DOM sibling as its triggering element. Otherwise, the selector will be applied to the tooltip's parent node as a search query, and any elements that are not part of the tooltip itself will act as triggering elements for the tooltip. (For example, if you were to provide '.fancy-selector' as this attribute's value, the elements you would get back would be those found from foo.parentNode.querySelectorAll('.fancy-selector'), where foo is your tooltip element.)"
+            "ignore-outer-trigger": "If present, for non-preset trigger styles, indicates whether an event firing outside of a targeting element should close the tooltip. Has no effect on preset trigger styles"
         },
 		"events": {
             "tooltipshown": "Fired by the x-tooltip element when tooltip is shown",
@@ -35,15 +36,19 @@
         },
 		"getters": {
             "orientation": "This will provide the current value of the orientation attribute.",
-            "trigger-style": "This will provide the current value of the trigger-style attribute.",
-            "trigger-selector": "This will provide the current value of the trigger-selector attribute.",
-            "content": "This will provide the DOM element that is acting as the content area of the tooltip."
+            "triggerStyle": "This will provide the current value of the trigger-style attribute.",
+            "triggerSelector": "This will provide the current value of the trigger-selector attribute.",
+            "content": "This will provide the DOM element that is acting as the content area of the tooltip.",
+            "ignoreOuterTrigger": "This will provide the current value of the ignore-outer-trigger attribute.",
+            "presetTriggerStyles": "Returns a list of the valid preset style types for the 'trigger-style' attribute.",
+            "targetElems": "Returns a list of all DOM elements currently selected as a target of the tooltip."
         },
 		"setters": {
             "orientation": "This will change the value of the tooltip's orientation attribute.",
-            "trigger-style": "This will change the value of the tooltip's trigger-style attribute.",
-            "trigger-selector": "This will change the value of the tooltip's trigger-selector attribute.",
-            "content": "This will replace the DOM element for the tooltip's content area with an entirely new DOM element, destroying the old one."
+            "triggerStyle": "This will change the value of the tooltip's trigger-style attribute.",
+            "triggerSelector": "This will change the value of the tooltip's trigger-selector attribute.",
+            "content": "This will replace the DOM element for the tooltip's content area with an entirely new DOM element, destroying the old one.",
+            "ignoreOuterTrigger": "This will change the current value of the ignore-outer-trigger attribute."
         }
 	}
 }

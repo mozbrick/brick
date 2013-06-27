@@ -69,18 +69,26 @@ If this attribute is not provided, the default is `_previousSibling`.
 
 __Note__: selectors can be any valid CSS selector that could be used in querySelectorAll on the document
     
-## ___trigger-style___
+## ___trigger-style___ / ___triggerStyle___
 
 Defines the type of interaction used to trigger the tooltip show/hide.
 
 Valid options:
-* If set to `hover`, the tooltip will appear any time the user mouses over the target element, and will disappear upon mousing off the target and tooltip.
-* If set to `none`, no handlers to show or hide the tooltip will be automatically applied. This is useful when the user wants to define a custom style of triggering the tooltip, but doesn't want any default behaviors getting in the way.
+* If set to the preset `hover`, the tooltip will appear any time the user mouses over the target element, and will disappear upon mousing off the target and tooltip.
+* If set to the preset `none`, no handlers to show or hide the tooltip will be automatically applied. This is useful when the user wants to define a custom style of triggering the tooltip, but doesn't want any default behaviors getting in the way.
 * If set to anything else, the tooltip will appear when the target element has the given trigger-style occur as an event, and will persist until the user dismisses it by triggering the same event outside of the tooltip.
     - This allows us to specify a wide variety of event triggers, such as 'tap', 'click', or 'mousedown'
 
-
 If not given, this defaults to `hover`.
+
+
+## ___ignore-outer-trigger___ / ___ignoreOuterTrigger___
+
+If present and `trigger-style` is not set to a preset style, this will indicate that we should **not** hide the tooltip when the triggering event is fired outside of the tooltip's target.
+
+If absent, events triggered outside of the tooltip or its targets will close the tooltip.
+
+Has no effect when `trigger-style` is set to a preset style.
 
 # Accessors (getters/setters)
 
@@ -95,6 +103,14 @@ Accessing a tooltip's `.content` property provides access to the DOM element use
 ### (setter) Replacing the content DOM
 
 The user can also completely replace the content DOM of the tooltip with their custom DOM node by assigning it to the tooltip's `.content` property.
+
+## ___presetTriggerStyles___ (getter only)
+
+Returns a list of the valid preset style types for the `trigger-style` attribute.
+
+## ___targetElems___ (getter only)
+
+Returns a list of all DOM elements currently selected as a target of the tooltip.
 
 # Methods
 
@@ -137,26 +153,3 @@ the following CSS selectors, assuming that `"foo-tooltip"` represents an `x-tool
   styles will be inherited by the arrow pointer of the tooltip.
        
 * Applying styles to `foo-tooltip > .tooltip-content` applies styles to the content element
-
-In addition, x-tooltips provide some extra attributes useful for defining how elements look when targeted by a tooltip.
-
-* When a tooltip targets an element, it adds an `x-tooltip-targeted` attribute to the target element, with a value of the current `trigger-style`. 
-This is useful for attaching tooltip indicators to tooltip-capable elements. For example, to display a question mark icon on every element with a tooltip, we can use the following style declaration:
-
-<pre>
-    [x-tooltip-targeted]:after{
-       content: "?";
-       position: absolute;
-       right: -7px;
-       bottom: -7px;
-       background-color: blue;
-       color: white;
-       font-size: 1.1em;
-       border: 1px solid white;
-       box-shadow: 1px 1px 4px grey;
-       border-radius: 100%;
-       width: 20px;
-       height: 20px;
-       text-align: center;
-    }
-</pre>
