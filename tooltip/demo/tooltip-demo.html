@@ -21,6 +21,7 @@
             width: 320px;
             height: 480px;
             position: relative;
+            overflow: auto;
         }
         
         #prev-sib{
@@ -90,12 +91,12 @@
 <div id="container">
     parent node
     <button id="prev-sib">
-        <p style="background-color: tomato;">prev sibling
-            <img src="http://placekitten.com/100/50"/>
+        <p style="background-color: tomato; float:right;">prev sibling
+            <img src="http://placecage.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" target-selector="_nextSibling">
-        <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placekitten.com/30"/>
+    <x-tooltip id="demoTip" target-selector=".fancy-selector">
+        <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placecage.com/30/30"/>
         <br/><a href="http://google.com">Check out this link!</a>
     </x-tooltip>
     <div id="next-sib">
@@ -103,7 +104,7 @@
     </div>
     <div style="position: relative; background-color: lavender">    
         <span class="fancy-selector">".fancy-selector" box1</span>
-        <span class="fancy-selector">box2</span>
+        <span class="fancy-selector">box2 <img src="http://placecage.com/c/50/25"/></span>
     </div>
 </div>
 
@@ -123,6 +124,8 @@
     <span>Current trigger style = <span id="curr-trigger-style-status"></span></span>
     <br/>
     <span>Outer triggering = <span id="outer-trigger-status"></span></span>
+    <br/>
+    <button onClick="addFancySpan()">Add fancy-selector box</span>
 </div>
 <script>
 var demoTip;
@@ -131,13 +134,40 @@ document.addEventListener('DOMComponentsLoaded', function(){
     updateStatuses();
     
     demoTip.addEventListener("tooltipshown", function(e){
-        console.log("tooltip shown!");
+        //console.log("tooltip shown!");
     });
     
     demoTip.addEventListener("tooltiphidden", function(e){
-        console.log("tooltip hidden!");
+        //console.log("tooltip hidden!");
     });
 });
+
+function randomWord(len){
+    var output = "";
+    var aCode = "A".charCodeAt(0);
+    for(var i=0; i < len; i++){
+        var letterCode = aCode + Math.floor(Math.random() * 26);
+        var letter = String.fromCharCode(letterCode);
+        
+        if(Math.random() > 0.5){
+            letter = letter.toLowerCase();
+        }
+        output += letter;
+    }
+    return output;
+}
+
+function addFancySpan(){
+    var container = document.getElementById("container");
+    
+    var newSpan = document.createElement("span");
+    xtag.addClass(newSpan, "fancy-selector");
+    newSpan.textContent = randomWord(6);
+    
+    container.appendChild(newSpan);
+    
+    updateStatuses();
+}
 
 function changeOrientation(){
     var orients = ["auto", "top", "right", "bottom", "left"];
@@ -223,12 +253,6 @@ function updateTriggerStyleBox(){
     if(demoTip.presetTriggerStyles.indexOf(demoTip.triggerStyle) !== -1){
         triggerStyleBox.textContent += "  (preset style)";
     }
-}
-
-function randomKittenUrl(){
-    var catNumber = Math.floor(Math.random() * 15 + 1);
-    
-    return "http://placekitten.com/50/?image="+catNumber;
 }
 
 var changeContents = (function(){
