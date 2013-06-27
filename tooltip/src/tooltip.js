@@ -66,27 +66,49 @@
         }
     };
     
+    // fake a delegated event, since there isn't a reliable single-shot
+    // CSS selector for the previous sibling of a specific unnamed element
+    function mkPrevSiblingCachedListener(tooltip, eventName, callback){
+        var filteredCallback = function(e){
+            if(callback && hasParentNode(e.target, tooltip.previousElementSibling)){
+                // make sure to change the this binding to be that of the 
+                // "delegated" previous sibling element
+                callback.bind(tooltip.previousElementSibling)(e);
+            }
+        };
+        return new CachedListener(document.body, eventName, 
+                                  filteredCallback);
+    }
     
+    // fake a delegated event, since there isn't a reliable single-shot
+    // CSS selector for the next sibling of a specific unnamed element
     function mkNextSiblingCachedListener(tooltip, eventName, callback){
         var eventDelegateStr = eventName+":delegate(x-tooltip+*)";
         var filteredCallback = function(e){
-            if(callback && hasParentNode(e.target, tooltip.nextElementSibling)){
-                callback(e);
+            if(callback && this === tooltip.nextElementSibling){
+                callback.bind(this)(e);
             }
-        }
+        };
         return new CachedListener(document.body, eventDelegateStr, 
                                   filteredCallback);
     }
     
-    function mkPrevSiblingCachedListener(tooltip, eventName, callback){
-        var filteredCallback = function(e){
-            if(callback && hasParentNode(e.target, tooltip.previousElementSibling)){
-                callback(e);
-            }
+    function getTargetDelgatedListener(tooltip, targetSelector, eventName, 
+                                       targetCallback)
+    {
+        if(targetSelector === "_previousSibling"){
+            return mkPrevSiblingCachedListener(tooltip, eventName, 
+                                               targetCallback);
         }
-        
-        return new CachedListener(document.body, eventName, 
-                                  filteredCallback);
+        else if(targetSelector === "_nextSibling"){
+            return mkNextSiblingCachedListener(tooltip, eventName, 
+                                               targetCallback);
+        }
+        else{
+            var delegateEventStr = eventName+":delegate("+targetSelector+")";
+            return new CachedListener(document.body, delegateEventStr, 
+                                      targetCallback);
+        }
     }
     
     /** PRESET_TRIGGER_STYLE_GETLISTENERS
@@ -110,10 +132,8 @@
          */
         "hover": function(tooltip, targetSelector){
             console.log("creating listeners for", targetSelector, "hover...");
-            
-            var triggerElems = _selectorToElems(tooltip, targetSelector);
-        
             var createdListeners = [];
+            var triggerElems = _selectorToElems(tooltip, targetSelector);
             
             // need a small delay before hiding a tooltip on hovering off the 
             // target in order to give the user a chance to interact with the
@@ -191,6 +211,9 @@
                 }
             });
             
+            //create CachedListeners for target elements
+            
+            
             // create CachedListeners for each target element and add them
             // to the list to be returned
             triggerElems.forEach(function(triggerElem){
@@ -201,6 +224,7 @@
                 createdListeners.push(enterListener);
                 createdListeners.push(exitListener);
             });
+            
             
             // also create/add the CachedListeners fo rthe tooltip itself
             createdListeners.push(
@@ -225,8 +249,10 @@
         // create and add the visibility-toggling click callback on target
         // elements
         var targetTriggerFn = function(e){
+            var delegatedElem = this;
+            console.log(delegatedElem);
             if(tooltip.hasAttribute("visible") && 
-               hasParentNode(e.target, tooltip.xtag.lastTargetElem))
+               delegatedElem === tooltip.xtag.lastTargetElem)
             {
                 _hideTooltip(tooltip);
             }
@@ -235,30 +261,15 @@
                 // e.currentTarget is wherever the delegated event was bound,
                 // this is the the element that actually matches the delegation
                 // selector
-                _showTooltip(tooltip, this);
+                _showTooltip(tooltip, delegatedElem);
             }
             e.stopPropagation();
         };
         
-        var delegatedTargetListener;
-        if(targetSelector === "_previousSibling"){
-            delegatedTargetListener = mkPrevSiblingCachedListener(
-                                        tooltip, eventName, targetTriggerFn
-                                      );
-        }
-        else if(targetSelector === "_nextSibling"){
-            delegatedTargetListener = mkNextSiblingCachedListener(
-                                        tooltip, eventName, targetTriggerFn
-                                      );
-        }
-        else{
-            var delegateEventStr = eventName+":delegate("+targetSelector+")";
-            delegatedTargetListener = new CachedListener(
-                                        document.body, delegateEventStr, 
+        var delegatedTargetListener = getTargetDelgatedListener(
+                                        tooltip, targetSelector, eventName, 
                                         targetTriggerFn
                                       );
-        }
-        
         createdListeners.push(delegatedTargetListener);
         
         // create and add listener for when the user clicks either inside or 
