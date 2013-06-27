@@ -69,6 +69,8 @@ If this attribute is not provided, the default is `_previousSibling`.
 
 __Note__: selectors can be any valid CSS selector that could be used in querySelectorAll on the document
     
+Can be set with the `target-selector` HTML attribute or the `targetSelector` JavaScript property.
+    
 ## ___trigger-style___ / ___triggerStyle___
 
 Defines the type of interaction used to trigger the tooltip show/hide.
@@ -81,6 +83,7 @@ Valid options:
 
 If not given, this defaults to `hover`.
 
+Can be set with the `trigger-style` HTML attribute or the `triggerStyle` JavaScript property.
 
 ## ___ignore-outer-trigger___ / ___ignoreOuterTrigger___
 
@@ -89,6 +92,14 @@ If present and `trigger-style` is not set to a preset style, this will indicate 
 If absent, events triggered outside of the tooltip or its targets will close the tooltip.
 
 Has no effect when `trigger-style` is set to a preset style.
+
+Can be set with the `ignore-outer-trigger` HTML attribute or the `ignoreOuterTrigger` JavaScript property.
+
+## ___ignore-tooltip-pointer-events___ / ___ignoreTooltipPointerEvents___
+
+If present, pointer events on the tooltip will be ignored, keeping it from blocking interaction with underlying elements.
+
+Can be set with the `ignore-tooltip-pointer-events` HTML attribute or the `ignoreTooltipPointerEvents` JavaScript property.
 
 # Accessors (getters/setters)
 

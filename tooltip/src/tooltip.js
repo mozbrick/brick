@@ -48,7 +48,6 @@
     **/
     CachedListener.prototype.attachListener = function(){
         if(!this._attachedFn){
-            console.log("Added", this.eventType, this.elem);
             this._attachedFn = xtag.addEvent(this.elem, this.eventType, 
                                              this.listenerFn);
         }
@@ -61,19 +60,24 @@
     **/
     CachedListener.prototype.removeListener = function(){
         if(this._attachedFn){
-            console.log("Removed", this.eventType, this.elem);
             xtag.removeEvent(this.elem, this.eventType, this._attachedFn);
+            this._attachedFn = null;
         }
     };
     
     // fake a delegated event, since there isn't a reliable single-shot
     // CSS selector for the previous sibling of a specific unnamed element
+    //
+    // callback will be called with a 'this' scope of the tooltip's 
+    // previous sibling element
     function mkPrevSiblingCachedListener(tooltip, eventName, callback){
         var filteredCallback = function(e){
-            if(callback && hasParentNode(e.target, tooltip.previousElementSibling)){
+            if(callback && hasParentNode(e.target, 
+                                         tooltip.previousElementSibling))
+            {
                 // make sure to change the this binding to be that of the 
                 // "delegated" previous sibling element
-                callback.bind(tooltip.previousElementSibling)(e);
+                callback.call(tooltip.previousElementSibling, e);
             }
         };
         return new CachedListener(document.body, eventName, 
@@ -82,19 +86,24 @@
     
     // fake a delegated event, since there isn't a reliable single-shot
     // CSS selector for the next sibling of a specific unnamed element
+    //
+    // callback will be called with a 'this' scope of the tooltip's 
+    // next sibling element
     function mkNextSiblingCachedListener(tooltip, eventName, callback){
         var eventDelegateStr = eventName+":delegate(x-tooltip+*)";
         var filteredCallback = function(e){
             if(callback && this === tooltip.nextElementSibling){
-                callback.bind(this)(e);
+                // make sure to change the this binding to be that of the 
+                // "delegated" next sibling element
+                callback.call(this, e);
             }
         };
         return new CachedListener(document.body, eventDelegateStr, 
                                   filteredCallback);
     }
     
-    function getTargetDelgatedListener(tooltip, targetSelector, eventName, 
-                                       targetCallback)
+    function getTargetDelegatedListener(tooltip, targetSelector, eventName, 
+                                        targetCallback)
     {
         if(targetSelector === "_previousSibling"){
             return mkPrevSiblingCachedListener(tooltip, eventName, 
@@ -106,8 +115,17 @@
         }
         else{
             var delegateEventStr = eventName+":delegate("+targetSelector+")";
-            return new CachedListener(document.body, delegateEventStr, 
-                                      targetCallback);
+            return new CachedListener(
+                            document.body, delegateEventStr, function(e){
+                                var delegatedElem = this;
+                                // filter out elements that are already
+                                // part of the tooltip
+                                if(!hasParentNode(delegatedElem, tooltip)){
+                                    // remember to bind 'this' scope!
+                                    targetCallback.call(delegatedElem, e);
+                                }
+                            }
+                        );
         }
     }
     
@@ -131,9 +149,7 @@
          * target/tooltip
          */
         "hover": function(tooltip, targetSelector){
-            console.log("creating listeners for", targetSelector, "hover...");
             var createdListeners = [];
-            var triggerElems = _selectorToElems(tooltip, targetSelector);
             
             // need a small delay before hiding a tooltip on hovering off the 
             // target in order to give the user a chance to interact with the
@@ -147,13 +163,16 @@
                 hoverOutTimer = null;
             };
             
+            /** set up callbacks for target elements **/
+            
             // callback function for when a target element is hovered over
             var showTipTargetFn = mkIgnoreSubchildrenFn(function(e){
                 cancelTimerFn();
+                var delegatedElem = this;
                 // don't trigger show when coming from a tooltip element
                 var fromElem = e.relatedTarget || e.toElement;
                 if(!hasParentNode(fromElem, tooltip)){
-                    _showTooltip(tooltip, e.currentTarget);
+                    _showTooltip(tooltip, delegatedElem);
                     e.stopPropagation();
                 }
             });
@@ -175,10 +194,23 @@
                 }
             });
             
+            //create CachedListeners for target elements
+            var targetEnterListener = getTargetDelegatedListener(
+                                        tooltip, targetSelector, "tapenter", 
+                                        showTipTargetFn
+                                      );
+            var targetExitListener = getTargetDelegatedListener(
+                                        tooltip, targetSelector, "tapleave", 
+                                        hideTipTargetFn
+                                      );
+            createdListeners.push(targetEnterListener);
+            createdListeners.push(targetExitListener);    
+            
+            /** set up callbacks for the tooltip **/
+            
             // callback function for when the tooltip itself is hovered over
             var showTipTooltipFn = mkIgnoreSubchildrenFn(function(e){
                 cancelTimerFn();
-                
                 // don't trigger show when coming from the target element
                 var fromElem = e.relatedTarget || e.toElement;
                 var lastTarget = tooltip.xtag.lastTargetElem;
@@ -211,27 +243,12 @@
                 }
             });
             
-            //create CachedListeners for target elements
-            
-            
-            // create CachedListeners for each target element and add them
-            // to the list to be returned
-            triggerElems.forEach(function(triggerElem){
-                var enterListener = new CachedListener(triggerElem, "mouseover",
-                                                       showTipTargetFn);
-                var exitListener = new CachedListener(triggerElem, "mouseout", 
-                                                      hideTipTargetFn);
-                createdListeners.push(enterListener);
-                createdListeners.push(exitListener);
-            });
-            
-            
             // also create/add the CachedListeners fo rthe tooltip itself
             createdListeners.push(
-                new CachedListener(tooltip, "mouseover", showTipTooltipFn)
+                new CachedListener(tooltip, "tapenter", showTipTooltipFn)
             );
             createdListeners.push(
-                new CachedListener(tooltip, "mouseout", hideTipTooltipFn)
+                new CachedListener(tooltip, "tapleave", hideTipTooltipFn)
             );
             
             return createdListeners;
@@ -243,14 +260,12 @@
     // triggering the tooltip is ignored, and triggering the body 
     // closes the tooltip
     function mkGenericListeners(tooltip, targetSelector, eventName){
-        console.log("creating listeners for", targetSelector, eventName, "...");
         var createdListeners = [];
             
         // create and add the visibility-toggling click callback on target
         // elements
         var targetTriggerFn = function(e){
             var delegatedElem = this;
-            console.log(delegatedElem);
             if(tooltip.hasAttribute("visible") && 
                delegatedElem === tooltip.xtag.lastTargetElem)
             {
@@ -266,7 +281,7 @@
             e.stopPropagation();
         };
         
-        var delegatedTargetListener = getTargetDelgatedListener(
+        var delegatedTargetListener = getTargetDelegatedListener(
                                         tooltip, targetSelector, eventName, 
                                         targetTriggerFn
                                       );
@@ -274,18 +289,18 @@
         
         // create and add listener for when the user clicks either inside or 
         // outside of the tooltip
+        var bodyCallback = function(e){
+            if(hasParentNode(e.target, tooltip)){
+                e.stopPropagation();
+            }
+            else if(tooltip.hasAttribute("visible") && 
+                    !tooltip.hasAttribute("ignore-outer-trigger"))
+            {  
+                _hideTooltip(tooltip);
+            }
+        };
         var bodyListener = new CachedListener(document.body, eventName, 
-                            function(e){
-                                if(hasParentNode(e.target, tooltip)){
-                                    e.stopPropagation();
-                                }
-                                else if(tooltip.hasAttribute("visible") && 
-                                        !tooltip.hasAttribute("ignore-outer-trigger"))
-                                {
-                                    _hideTooltip(tooltip);
-                                }
-                            }
-                          );
+                                              bodyCallback);
         createdListeners.push(bodyListener);
         
         return createdListeners;
@@ -310,10 +325,10 @@
     
     /** mkIgnoreSubchildrenFn: Function => Function
      *
-     * creates and returns a callback function that essentially ignores 
-     * events triggered by crossing between children of the same listening
-     * node
-     * this affects events where:
+     * creates and returns a callback function that ignores events triggered 
+     * by crossing between children of the same listening node
+     *
+     * this affects events by:
      * - for mouseover events, only fires callback when
      *   the mouse first enters the element that has the mouseover event 
      *   listener attached to it and ignores any mouseovers between children
@@ -326,16 +341,14 @@
      *   emulates jQuery's mouseleave polyfill
      * - acts normally for any non-mouseover/mouseleave events
      *
-     * TL;DR edition: creates a function that doesn't fire a callback if the
-     * event is simply triggered by moving between children of the same 
-     * element; this is similar to jQuery's mouseenter/mouseleave
-     * implementations
-     *
      * params:
      *      callback                    a callback function taking an event
      *                                  to be called when moving between
      *                                  two elements not both in the same
      *                                  listening element
+     *                                  IMPORTANT NOTE: the callback will
+     *                                  be called with a "this" scope of its
+     *                                  containing element
      **/
     function mkIgnoreSubchildrenFn(callback){
         return function(e){
@@ -345,13 +358,13 @@
             if(relElem)
             {
                 if(!hasParentNode(relElem, containerElem)){
-                    callback(e);
+                    callback.call(this, e);
                 }
             }
-            // if not a event where we need to ignore hovers, don't change
+            // if not a event where we need to ignore subchildren, don't change
             // how the callback gets called
             else{
-                callback(e);
+                callback.call(this, e);
             }
         };
     }
@@ -860,6 +873,13 @@
                 attribute: {
                     boolean: true, 
                     name: "ignore-outer-trigger"
+                }
+            },
+            
+            "ignoreTooltipPointerEvents":{
+                attribute: {
+                    boolean: true, 
+                    name: "ignore-tooltip-pointer-events"
                 }
             },
             

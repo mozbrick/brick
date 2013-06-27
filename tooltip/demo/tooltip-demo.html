@@ -95,7 +95,7 @@
             <img src="http://placecage.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" target-selector="_nextSibling" trigger-style="click">
+    <x-tooltip id="demoTip" target-selector=".fancy-selector">
         <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placecage.com/30/30"/>
         <br/><a href="http://google.com">Check out this link!</a>
     </x-tooltip>
@@ -116,6 +116,7 @@
     <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
     <button onClick="toggleIgnoreOuter()">Toggle ignore-outer-trigger</button>
     <button onClick="changeContents()">Change tooltip contents</button>
+    <button onClick="toggleTooltipPointerEvents()">Toggle tooltip pointer events</button>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
     <br/>
@@ -124,6 +125,8 @@
     <span>Current trigger style = <span id="curr-trigger-style-status"></span></span>
     <br/>
     <span>Outer triggering = <span id="outer-trigger-status"></span></span>
+    <br/>
+    <span>Tooltip pointer events = <span id="tooltip-pointer-events-status"></span></span>
     <br/>
     <button onClick="addFancySpan()">Add fancy-selector box</span>
 </div>
@@ -166,6 +169,11 @@ function addFancySpan(){
     
     container.appendChild(newSpan);
     
+    updateStatuses();
+}
+
+function toggleTooltipPointerEvents(){
+    demoTip.ignoreTooltipPointerEvents = !demoTip.ignoreTooltipPointerEvents;
     updateStatuses();
 }
 
@@ -214,6 +222,7 @@ function updateStatuses(){
     updateOrientationBox();
     updateTriggerStyleBox();
     updateIgnoreOuterStatus();
+    updateTooltipPointerEventsStatus();
     
     var oldTargets = xtag.query(document, ".demo-targeted");
     var targets = demoTip.targetElems;
@@ -225,6 +234,11 @@ function updateStatuses(){
     targets.forEach(function(targ){
         xtag.addClass(targ, "demo-targeted");
     });
+}
+
+function updateTooltipPointerEventsStatus(){
+    var statusBox = document.getElementById("tooltip-pointer-events-status");
+    statusBox.textContent = (demoTip.ignoreTooltipPointerEvents) ? "ignored" : "enabled";
 }
 
 function updateIgnoreOuterStatus(){

@@ -28,6 +28,8 @@ x-tooltip {
   -moz-transition-delay: 0s;
   -o-transition-delay: 0s;
   transition-delay: 0s; }
+  x-tooltip[ignore-tooltip-pointer-events] {
+    pointer-events: none; }
   x-tooltip[orientation=top] {
     transform: translateY(10px);
     -ms-transform: translateY(10px);

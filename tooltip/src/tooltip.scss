@@ -34,6 +34,10 @@ x-tooltip{
     
     @include animated((visibility, transform, opacity), 0.2s);
     
+    &[ignore-tooltip-pointer-events]{
+        pointer-events: none;
+    }
+    
     &[orientation=top]{
         @include transformed(translateY(10px));
     }
