@@ -1,5 +1,4 @@
 (function(){
-    var TRANSFORM_NAME = xtag.prefix.js + "Transform";
     var KEYCODES = {
         33: "PAGE_UP",
         34: "PAGE_DOWN",
@@ -166,9 +165,13 @@
         // than the actual width of the slider when determining thumb position
         var availableWidth = Math.max(sliderRect.width - thumbRect.width, 0);
         
-        newThumbX = (availableWidth * fraction);
+        var newThumbX = (availableWidth * fraction);
         
-        thumb.style[TRANSFORM_NAME] = "translateX("+newThumbX+"px)";
+        // translate back into percentage in relation to the full width, since
+        // the element isn't actually constrained by our overflow constraints
+        var finalPercentage = newThumbX / sliderRect.width;
+        
+        thumb.style.left = finalPercentage*100 + "%";
     }
     
     
