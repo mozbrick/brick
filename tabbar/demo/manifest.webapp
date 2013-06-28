@@ -5,6 +5,6 @@
         "name": "Mozilla",
         "url": "http://github.com/mozilla/app-components/"
     },
-    "launch_path": "tabbar-demo.html",
+    "launch_path": "/app-components/tabbar/demo/tabbar-demo.html",
     "default_locale": "en"
 }
