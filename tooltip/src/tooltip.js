@@ -55,7 +55,6 @@
         if(!this._attachedFn){
             this._attachedFn = xtag.addEvent(this.elem, this.eventType, 
                                              this.listenerFn);
-            console.log("added", this.eventType, this.elem);
         }
     };
     
@@ -68,7 +67,6 @@
         if(this._attachedFn){
             xtag.removeEvent(this.elem, this.eventType, this._attachedFn);
             this._attachedFn = null;
-            console.log("removed", this.eventType, this.elem);
         }
     };
     
@@ -84,14 +82,13 @@
     *                               ie: "click", not "click:delegate(foo)"
     **/
     function OuterTriggerEventStruct(eventType){
-        this._cachedListener;
+        this._cachedListener = null;
         this._tooltips = [];
         
         var struct = this;
         // set up the function that will be attached to the body to handle
         // dismissal of tooltips
         var outerTriggerListener = function(e){
-            console.log("outer listener fired");
             struct._tooltips.forEach(function(tooltip){
                 // check if the tooltip is even dismissable, and if not,
                 // skip dismissing it
@@ -107,7 +104,6 @@
                 }
                 // otherwise, finally dismiss the tooltip
                 else{
-                    console.log("outerhide", tooltip);
                     _hideTooltip(tooltip);
                 }
             });
@@ -132,7 +128,7 @@
     **/
     OuterTriggerEventStruct.prototype.containsTooltip = function(tooltip){
         return this._tooltips.indexOf(tooltip) !== -1;
-    }
+    };
     
     /** OuterTriggerEventStruct.addTooltip: (DOM) 
     *
@@ -143,7 +139,7 @@
         if(!this.containsTooltip(tooltip)){
             this._tooltips.push(tooltip);
         }
-    }
+    };
     
     /** OuterTriggerEventStruct.removeTooltip: (DOM) 
     *
@@ -154,7 +150,7 @@
         if(this.containsTooltip(tooltip)){
             this._tooltips.splice(this._tooltips.indexOf(tooltip), 1);
         }
-    }
+    };
     
     /** OuterTriggerEventStruct.numTooltips
     *   property returning the number of tooltips this struct is currently
@@ -198,7 +194,7 @@
             this.eventStructDict[eventType] = new OuterTriggerEventStruct(eventType);
             this.eventStructDict[eventType].addTooltip(tooltip);
         }
-    }
+    };
     
     /** OuterTriggerManager.unregisterTooltip : (string, DOM)
     *
@@ -211,12 +207,12 @@
         {
             var eventStruct = this.eventStructDict[eventType];
             eventStruct.removeTooltip(tooltip);
-            if(eventStruct.numTooltips == 0){
+            if(eventStruct.numTooltips === 0){
                 eventStruct.destroy();
                 delete(this.eventStructDict[eventType]);
             }
         }
-    }
+    };
     
     // make this a globally defined variable to track information about all
     // tooltips, not just a single one
@@ -366,7 +362,7 @@
      *
      * NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
     **/
-    var PRESET_STYLE_LISTENERFNS = {
+    PRESET_STYLE_LISTENERFNS = {
         /* the "none" style provides no default event listener functionality;
          * this is useful if the user wishes to do their own custom triggerstyle
          */
@@ -501,7 +497,6 @@
             if(tooltip.hasAttribute("visible") && 
                delegatedElem === tooltip.xtag.lastTargetElem)
             {
-                console.log("targethide", tooltip);
                 _hideTooltip(tooltip);
             }
             else{
@@ -509,7 +504,6 @@
                 // e.currentTarget is wherever the delegated event was bound,
                 // this is the the element that actually matches the delegation
                 // selector
-                console.log("targetshow", tooltip);
                 _showTooltip(tooltip, delegatedElem);
             }
         };
@@ -726,11 +720,11 @@
     function _positionTooltip(tooltip, targetElem, orientation, reattemptDepth){
         // ignore attempts to position when not yet in document
         if(!tooltip.parentNode){
-            tooltip.left = ""
-            tooltip.top = ""
+            tooltip.left = "";
+            tooltip.top = "";
             return;
         }
-        reattemptDepth = (reattemptDepth == undefined) ? 0 : reattemptDepth;
+        reattemptDepth = (reattemptDepth === undefined) ? 0 : reattemptDepth;
         
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
@@ -977,10 +971,10 @@
             return;
         }
     
-        if(newTargetSelector == undefined){
+        if(newTargetSelector === undefined || newTargetSelector === null){
             newTargetSelector = tooltip.targetSelector;
         }
-        if(newTriggerStyle == undefined){
+        if(newTriggerStyle === undefined || newTriggerStyle === null){
             newTriggerStyle = tooltip.triggerStyle;
         }
         
@@ -1168,7 +1162,7 @@
             "presetTriggerStyles": {
                 get: function(){
                     var output = [];
-                    for(presetName in PRESET_STYLE_LISTENERFNS){
+                    for(var presetName in PRESET_STYLE_LISTENERFNS){
                         output.push(presetName);
                     }
                     return output;

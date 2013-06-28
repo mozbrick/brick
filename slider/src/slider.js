@@ -53,7 +53,7 @@
     **/
     function roundToStep(rawRangeVal, step, rangeMin, roundFn){
         roundFn = (roundFn) ? roundFn : Math.round;
-        rangeMin = (rangeMin != undefined) ? rangeMin : 0;
+        rangeMin = (isNum(rangeMin)) ? rangeMin : 0;
         
         if(!isNum(rawRangeVal)){
             throw "invalid value " + rawRangeVal;
