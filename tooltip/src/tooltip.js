@@ -7,7 +7,12 @@
         "left": "right",
         "right": "left"
     };
-    
+    // the OuterTriggerManager managing outer-trigger listeners for dismissing
+    //  tooltips. Shared with all tooltips
+    var OUTER_TRIGGER_MANAGER;
+    // a mapping of preset trigger styles to callback functions returning
+    // CachedListener lists
+    var PRESET_STYLE_LISTENERFNS;
     
     /** isValidOrientation: (string)
     *
@@ -68,7 +73,158 @@
     };
     
     
-    /** _mkPrevSiblingCachedListener: (DOM, string, function) => CachedListener
+    /** OuterTriggerEventStruct: (string)
+    * 
+    *  an object maintaining a CachedListener for a single event type to handle
+    *  dismissing tooltips when the event is triggered outside of it.
+    *  Maintains a list of tooltips to which this listener applies
+    *
+    *  constructor params:
+    *     eventType                 the literal name of the event to listen for
+    *                               ie: "click", not "click:delegate(foo)"
+    **/
+    function OuterTriggerEventStruct(eventType){
+        this._cachedListener;
+        this._tooltips = [];
+        
+        var struct = this;
+        // set up the function that will be attached to the body to handle
+        // dismissal of tooltips
+        var outerTriggerListener = function(e){
+            console.log("outer listener fired");
+            struct._tooltips.forEach(function(tooltip){
+                // check if the tooltip is even dismissable, and if not,
+                // skip dismissing it
+                if((!tooltip.hasAttribute("visible")) ||
+                   tooltip.hasAttribute("ignore-outer-trigger"))
+                {  
+                    return;
+                }
+                // otherwise, check if we are clicking inside the tooltip,
+                // and if so, also skip dismissal
+                else if(hasParentNode(e.target, tooltip)){
+                    return;
+                }
+                // otherwise, finally dismiss the tooltip
+                else{
+                    _hideTooltip(tooltip);
+                }
+            });
+        };
+        this._cachedListener = new CachedListener(document, eventType, 
+                                                  outerTriggerListener);
+        this._cachedListener.attachListener();
+    }
+    
+    /** OuterTriggerEventStruct.destroy
+    *  unbinds the maintained cached listener and removes internal references
+    **/
+    OuterTriggerEventStruct.prototype.destroy = function(){
+        this._cachedListener.removeListener();
+        this._cachedListener = null;
+        this._tooltips = null;
+    };
+    
+    /** OuterTriggerEventStruct.containsTooltip: (DOM) => Boolean
+    *
+    * determines if this struct is responsible for handling the given tooltip
+    **/
+    OuterTriggerEventStruct.prototype.containsTooltip = function(tooltip){
+        return this._tooltips.indexOf(tooltip) !== -1;
+    }
+    
+    /** OuterTriggerEventStruct.addTooltip: (DOM) 
+    *
+    * adds the given toolip to the list of tooltips this struct is 
+    * responsible for
+    **/
+    OuterTriggerEventStruct.prototype.addTooltip = function(tooltip){
+        if(!this.containsTooltip(tooltip)){
+            this._tooltips.push(tooltip);
+        }
+    }
+    
+    /** OuterTriggerEventStruct.removeTooltip: (DOM) 
+    *
+    * removes the given tooltip from the list of tooltips this struct 
+    * is responsible for
+    **/
+    OuterTriggerEventStruct.prototype.removeTooltip = function(tooltip){
+        if(this.containsTooltip(tooltip)){
+            this._tooltips.splice(this._tooltips.indexOf(tooltip), 1);
+        }
+    }
+    
+    /** OuterTriggerEventStruct.numTooltips
+    *   property returning the number of tooltips this struct is currently
+    *   maintaining
+    **/
+    Object.defineProperties(OuterTriggerEventStruct.prototype, {
+        "numTooltips": {
+            get: function(){
+                return this._tooltips.length;
+            }
+        }
+    });
+    
+    
+    
+    /** OuterTriggerManager
+    *
+    * manages a dictionary of event types mapped to OuterTriggerEventStruct objs
+    **/
+    function OuterTriggerManager(){
+        this.eventStructDict = {};
+    }
+    
+    
+   /** OuterTriggerManager.registerTooltip : (string, DOM)
+    *
+    * adds a tooltip to the event dictionary and sets it to be handled by the
+    * struct for the given type
+    **/
+    OuterTriggerManager.prototype.registerTooltip = function(eventType, tooltip){
+        // if event already in dict, just make the existing struct responsible
+        // for the tooltip
+        if(eventType in this.eventStructDict){
+            var eventStruct = this.eventStructDict[eventType];
+            if(!eventStruct.containsTooltip(tooltip)){
+                eventStruct.addTooltip(tooltip);
+            }
+        }
+        // if event does not yet exist, set up new struct for it
+        else{
+            this.eventStructDict[eventType] = new OuterTriggerEventStruct(eventType);
+            this.eventStructDict[eventType].addTooltip(tooltip);
+        }
+    }
+    
+    /** OuterTriggerManager.unregisterTooltip : (string, DOM)
+    *
+    * removes a tooltip from the event dictionary and unsets it from being 
+    * handled by the struct for the given event type
+    **/
+    OuterTriggerManager.prototype.unregisterTooltip = function(eventType, tooltip){
+        if(eventType in this.eventStructDict && 
+           this.eventStructDict[eventType].containsTooltip(tooltip))
+        {
+            var eventStruct = this.eventStructDict[eventType];
+            eventStruct.removeTooltip(tooltip);
+            if(eventStruct.numTooltips == 0){
+                eventStruct.destroy();
+                delete(this.eventStructDict[eventType]);
+            }
+        }
+    }
+    
+    // make this a globally defined variable to track information about all
+    // tooltips, not just a single one
+    OUTER_TRIGGER_MANAGER = new OuterTriggerManager();
+    
+    
+    
+    
+    /** _mkPrevSiblingTargetListener: (DOM, string, function) => CachedListener
     * 
     * creates and returns a CachedListener representing a "delegated" event
     * listener on the body for the previous sibling of the tooltip
@@ -89,7 +245,7 @@
     *                               will be called using said sibling as the
     *                               'this' scope
     **/
-    function _mkPrevSiblingCachedListener(tooltip, eventName, callback){
+    function _mkPrevSiblingTargetListener(tooltip, eventName, callback){
         var filteredCallback = function(e){
             if(callback && hasParentNode(e.target, 
                                          tooltip.previousElementSibling))
@@ -99,12 +255,16 @@
                 callback.call(tooltip.previousElementSibling, e);
             }
         };
-        return new CachedListener(document.body, eventName, 
+        
+        // note that we attach to document.documentElement so that this
+        // gets fired before any outer-click handlers (which are attached to
+        // document)
+        return new CachedListener(document.documentElement, eventName, 
                                   filteredCallback);
     }
     
     
-    /** _mkNextSiblingCachedListener: (DOM, string, function) => CachedListener
+    /** _mkNextSiblingTargetListener: (DOM, string, function) => CachedListener
     * 
     * creates and returns a CachedListener representing a "delegated" event
     * listener on the body for the next sibling of the tooltip
@@ -125,7 +285,7 @@
     *                               will be called using said sibling as the
     *                               'this' scope
     **/
-    function _mkNextSiblingCachedListener(tooltip, eventName, callback){
+    function _mkNextSiblingTargetListener(tooltip, eventName, callback){
         var eventDelegateStr = eventName+":delegate(x-tooltip+*)";
         var filteredCallback = function(e){
             if(callback && this === tooltip.nextElementSibling){
@@ -134,7 +294,11 @@
                 callback.call(this, e);
             }
         };
-        return new CachedListener(document.body, eventDelegateStr, 
+        
+        // note that we attach to document.documentElement so that this
+        // gets fired before any outer-click handlers (which are attached to
+        // document)
+        return new CachedListener(document.documentElement, eventDelegateStr, 
                                   filteredCallback);
     }
     
@@ -164,17 +328,22 @@
                                          targetCallback)
     {
         if(targetSelector === "_previousSibling"){
-            return _mkPrevSiblingCachedListener(tooltip, eventName, 
+            return _mkPrevSiblingTargetListener(tooltip, eventName, 
                                                targetCallback);
         }
         else if(targetSelector === "_nextSibling"){
-            return _mkNextSiblingCachedListener(tooltip, eventName, 
+            return _mkNextSiblingTargetListener(tooltip, eventName, 
                                                targetCallback);
         }
         else{
             var delegateEventStr = eventName+":delegate("+targetSelector+")";
+            
+            // note that we attach to document.documentElement so that this
+            // gets fired before any outer-click handlers (which are attached to
+            // document)
             return new CachedListener(
-                            document.body, delegateEventStr, function(e){
+                            document.documentElement, delegateEventStr, 
+                            function(e){
                                 var delegatedElem = this;
                                 // filter out elements that are already
                                 // part of the tooltip
@@ -188,7 +357,7 @@
     }
     
     
-    /** PRESET_TRIGGER_STYLE_GETLISTENERS
+    /** PRESET_STYLE_LISTENERFNS
      * 
      * A data map of trigger "styles" mapped to callback functions that return
      * lists of the CachedListeners that the tooltip would need to bind
@@ -196,7 +365,7 @@
      *
      * NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
     **/
-    var PRESET_TRIGGER_STYLE_GETLISTENERS = {
+    var PRESET_STYLE_LISTENERFNS = {
         /* the "none" style provides no default event listener functionality;
          * this is useful if the user wishes to do their own custom triggerstyle
          */
@@ -244,7 +413,7 @@
                 if(!hasParentNode(toElem, tooltip)){
                     // add delay before hide so that we can interact w/ tooltip
                     hoverOutTimer = window.setTimeout(function(){
-                        if(tooltip.xtag.currTriggerStyle === "hover")
+                        if(tooltip.triggerStyle === "hover")
                         {
                             _hideTooltip(tooltip);
                         }
@@ -293,7 +462,7 @@
                 {
                     // add delay so that we can interact with tooltip
                     hoverOutTimer = window.setTimeout(function(){
-                        if(tooltip.xtag.currTriggerStyle === "hover")
+                        if(tooltip.triggerStyle === "hover")
                         {
                             _hideTooltip(tooltip);
                         }
@@ -319,9 +488,10 @@
     
      given an event type, create and return a list of CachedListeners that
      represents the user workflow where 
-     triggering such an event on a target elem toggles the tooltip visibility,
-     triggering the tooltip is ignored, and triggering the body 
-     closes the tooltip
+     triggering such an event on a target elem toggles the tooltip visibility
+     
+     (the handlers for dismissing the tooltip on clicking outside it are handled
+      by the OUTER_TRIGGER_MANAGER)
     **/
     function mkGenericListeners(tooltip, targetSelector, eventName){
         var createdListeners = [];
@@ -350,22 +520,6 @@
                                         targetTriggerFn
                                       );
         createdListeners.push(delegatedTargetListener);
-        
-        // create and add listener for when the user clicks either inside or 
-        // outside of the tooltip
-        var bodyCallback = function(e){
-            if(hasParentNode(e.target, tooltip)){
-                e.stopPropagation();
-            }
-            else if(tooltip.hasAttribute("visible") && 
-                    !tooltip.hasAttribute("ignore-outer-trigger"))
-            {  
-                _hideTooltip(tooltip);
-            }
-        };
-        var bodyListener = new CachedListener(document.body, eventName, 
-                                              bodyCallback);
-        createdListeners.push(bodyListener);
         
         return createdListeners;
     }
@@ -803,6 +957,7 @@
             cachedListener.removeListener();
         });
         tooltip.xtag.cachedListeners = [];
+        OUTER_TRIGGER_MANAGER.unregisterTooltip(tooltip.triggerStyle, tooltip);
     }
     
     /** _updateTriggerListeners: (x-tooltip, string, string)
@@ -819,10 +974,10 @@
         }
     
         if(newTargetSelector == undefined){
-            newTargetSelector = tooltip.xtag.targetSelector;
+            newTargetSelector = tooltip.targetSelector;
         }
         if(newTriggerStyle == undefined){
-            newTriggerStyle = tooltip.xtag.currTriggerStyle;
+            newTriggerStyle = tooltip.triggerStyle;
         }
         
         var newTriggerElems = _selectorToElems(tooltip, newTargetSelector);
@@ -841,12 +996,13 @@
         
         // get new event listeners that we'll need to attach
         var listeners;
-        if(newTriggerStyle in PRESET_TRIGGER_STYLE_GETLISTENERS){
-            var getListenersFn = PRESET_TRIGGER_STYLE_GETLISTENERS[newTriggerStyle];
+        if(newTriggerStyle in PRESET_STYLE_LISTENERFNS){
+            var getListenersFn = PRESET_STYLE_LISTENERFNS[newTriggerStyle];
             listeners = getListenersFn(tooltip, newTargetSelector);
         }
         else{
             listeners = mkGenericListeners(tooltip, newTargetSelector, newTriggerStyle);
+            OUTER_TRIGGER_MANAGER.registerTooltip(newTriggerStyle, tooltip);
         }
         
         // actually attach the listener functions
@@ -879,14 +1035,14 @@
                 
                 
                 // default trigger variables
-                this.xtag.orientation = "auto";
-                this.xtag.targetSelector = "_previousSibling";
-                this.xtag.currTriggerStyle = "hover";
+                this.xtag._orientation = "auto";
+                this.xtag._targetSelector = "_previousSibling";
+                this.xtag._triggerStyle = "hover";
                 // remember who the last element that triggered the tip was
                 // (ie: who we should be pointing to if suddenly told to show
                 //  outside of a trigger style)
                 var triggeringElems = _selectorToElems(
-                                         this, this.xtag.targetSelector
+                                         this, this.xtag._targetSelector
                                       );
                 this.xtag.lastTargetElem = (triggeringElems.length > 0) ? 
                                             triggeringElems[0] : null; 
@@ -895,8 +1051,8 @@
                 this.xtag.cachedListeners = [];
             },
             inserted: function(){
-                _updateTriggerListeners(this, this.xtag.targetSelector, 
-                                        this.xtag.currTriggerStyle);
+                _updateTriggerListeners(this, this.xtag._targetSelector, 
+                                        this.xtag._triggerStyle);
             },
             removed: function(){
                 _destroyListeners(this);
@@ -910,7 +1066,7 @@
             "orientation":{
                 attribute: {},
                 get: function(){
-                    return this.xtag.orientation;
+                    return this.xtag._orientation;
                 },
                 // when orientation of tooltip is set, also set direction of 
                 // arrow pointer
@@ -930,7 +1086,7 @@
                         arrow.removeAttribute("arrow-direction");
                     }
                     
-                    this.xtag.orientation = newOrientation;
+                    this.xtag._orientation = newOrientation;
                     
                     this.refreshPosition();
                 }
@@ -942,12 +1098,12 @@
             "triggerStyle": {
                 attribute: {name: "trigger-style"},
                 get: function(){
-                    return this.xtag.currTriggerStyle;
+                    return this.xtag._triggerStyle;
                 },
                 set: function(newTriggerStyle){
-                    _updateTriggerListeners(this, this.xtag.targetSelector, 
+                    _updateTriggerListeners(this, this.targetSelector, 
                                             newTriggerStyle);
-                    this.xtag.currTriggerStyle = newTriggerStyle;
+                    this.xtag._triggerStyle = newTriggerStyle;
                 }
             },
             
@@ -956,7 +1112,7 @@
             "targetSelector": {
                 attribute: {name: "target-selector"},
                 get: function(){
-                    return this.xtag.targetSelector;
+                    return this.xtag._targetSelector;
                 },
                 set: function(newSelector){
                     // filter out selected elements that are 
@@ -964,8 +1120,8 @@
                     var newTriggerElems = _selectorToElems(this, newSelector);
                     
                     _updateTriggerListeners(this, newSelector, 
-                                            this.xtag.currTriggerStyle);
-                    this.xtag.targetSelector = newSelector;
+                                            this.triggerStyle);
+                    this.xtag._targetSelector = newSelector;
                 }
             },
             
@@ -1008,7 +1164,7 @@
             "presetTriggerStyles": {
                 get: function(){
                     var output = [];
-                    for(presetName in PRESET_TRIGGER_STYLE_GETLISTENERS){
+                    for(presetName in PRESET_STYLE_LISTENERFNS){
                         output.push(presetName);
                     }
                     return output;

@@ -87,7 +87,17 @@
         }
         
         #dummy-tooltips{
+            padding: .5em;
             background-color: #eee;   
+        }
+        
+        #dummy-tooltips:empty{
+            display: none;
+        }
+        
+        #dummy-tooltips:before{
+            content: "Dummy tooltips (click to remove):";
+            display: block;
         }
         
         #dummy-tooltips button{
@@ -121,6 +131,7 @@
 
 <div id="controls">
     <div id="demo-tip-controls">
+        Main tooltip: 
         <button onClick="changeOrientation()">Change orientation</button>
         <button onClick="toggleTooltip()">Toggle tooltip</button>
         <button onClick="toggleSelector()">Toggle selector</button>
@@ -144,9 +155,7 @@
     <button onClick="addRemoveMainTooltip()">Add / remove main tooltip</button>
     <button onClick="addDummyTooltip()">Add random dummy tooltip</button>
 </div>
-<div id="dummy-tooltips">
-Dummy tooltips (click to remove):<br/>
-</div>
+<div id="dummy-tooltips"></div>
 <script>
 var demoTip;
 
@@ -155,20 +164,19 @@ document.addEventListener('DOMComponentsLoaded', function(){
     updateStatuses();
     
     demoTip.addEventListener("tooltipshown", function(e){
-        console.log("tooltip shown!");
+        console.log("main tooltip shown!");
     });
     
     demoTip.addEventListener("tooltiphidden", function(e){
-        console.log("tooltip hidden!");
+        console.log("main tooltip hidden!");
     });
 });
 
 function addDummyTooltip(){
-    var cssSelectors = [".fancy-selector", "#next-sib", ".fancy-selector img",
-                         "#container", ".fancy-selector:last-child", 
-                         ".fancy-selector:first-child"];
+    var cssSelectors = [".fancy-selector", ".fancy-selector img",
+                         "#container", ".fancy-selector:last-child"];
     var orients = ["auto", "top", "right", "bottom", "left"];
-    var styles = ["hover", "click", "tap"];
+    var styles = ["tap"];
     
     var selector = cssSelectors[Math.floor(Math.random() * cssSelectors.length)];
     var style = styles[Math.floor(Math.random() * styles.length)];
