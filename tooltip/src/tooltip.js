@@ -107,6 +107,7 @@
                 }
                 // otherwise, finally dismiss the tooltip
                 else{
+                    console.log("outerhide", tooltip);
                     _hideTooltip(tooltip);
                 }
             });
@@ -401,7 +402,6 @@
                 var fromElem = e.relatedTarget || e.toElement;
                 if(!hasParentNode(fromElem, tooltip)){
                     _showTooltip(tooltip, delegatedElem);
-                    e.stopPropagation();
                 }
             });
             
@@ -418,7 +418,6 @@
                             _hideTooltip(tooltip);
                         }
                     }, hideDelay);
-                    e.stopPropagation();
                 }
             });
             
@@ -448,7 +447,6 @@
                     lastTarget && !hasParentNode(fromElem, lastTarget))
                 {
                     _showTooltip(tooltip, lastTarget);
-                    e.stopPropagation();
                 }
             });
             
@@ -503,6 +501,7 @@
             if(tooltip.hasAttribute("visible") && 
                delegatedElem === tooltip.xtag.lastTargetElem)
             {
+                console.log("targethide", tooltip);
                 _hideTooltip(tooltip);
             }
             else{
@@ -510,9 +509,9 @@
                 // e.currentTarget is wherever the delegated event was bound,
                 // this is the the element that actually matches the delegation
                 // selector
+                console.log("targetshow", tooltip);
                 _showTooltip(tooltip, delegatedElem);
             }
-            e.stopPropagation();
         };
         
         var delegatedTargetListener = _getTargetDelegatedListener(

@@ -174,9 +174,9 @@ document.addEventListener('DOMComponentsLoaded', function(){
 
 function addDummyTooltip(){
     var cssSelectors = [".fancy-selector", ".fancy-selector img",
-                         "#container", ".fancy-selector:last-child"];
+                         "#container"];
     var orients = ["auto", "top", "right", "bottom", "left"];
-    var styles = ["tap"];
+    var styles = ["tap", "click", "hover"];
     
     var selector = cssSelectors[Math.floor(Math.random() * cssSelectors.length)];
     var style = styles[Math.floor(Math.random() * styles.length)];
