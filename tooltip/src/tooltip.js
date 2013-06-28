@@ -50,6 +50,7 @@
         if(!this._attachedFn){
             this._attachedFn = xtag.addEvent(this.elem, this.eventType, 
                                              this.listenerFn);
+            console.log("added", this.eventType, this.elem);
         }
     };
     
@@ -62,6 +63,7 @@
         if(this._attachedFn){
             xtag.removeEvent(this.elem, this.eventType, this._attachedFn);
             this._attachedFn = null;
+            console.log("removed", this.eventType, this.elem);
         }
     };
     
@@ -789,6 +791,13 @@
         }
     }
     
+    function _destroyListeners(tooltip){
+        var cachedListeners = tooltip.xtag.cachedListeners;
+        cachedListeners.forEach(function(cachedListener){
+            cachedListener.removeListener();
+        });
+        tooltip.xtag.cachedListeners = [];
+    }
     
     /** _updateTriggerListeners: (x-tooltip, string, string)
      *
@@ -817,11 +826,7 @@
         }
         
         // remove all active cached listeners
-        var cachedListeners = tooltip.xtag.cachedListeners;
-        cachedListeners.forEach(function(cachedListener){
-            cachedListener.removeListener();
-        });
-        tooltip.xtag.cachedListeners = [];
+        _destroyListeners(tooltip);
         
         // get new event listeners that we'll need to attach
         var listeners;
@@ -877,8 +882,13 @@
                 
                 // remember what event listeners are still active
                 this.xtag.cachedListeners = [];
+            },
+            inserted: function(){
                 _updateTriggerListeners(this, this.xtag.targetSelector, 
                                         this.xtag.currTriggerStyle);
+            },
+            removed: function(){
+                _destroyListeners(this);
             }
         },
         events: {

@@ -110,13 +110,15 @@
 
 
 <div id="controls">
-    <button onClick="changeOrientation()">Change orientation</button>
-    <button onClick="toggleTooltip()">Toggle tooltip</button>
-    <button onClick="toggleSelector()">Toggle selector</button>
-    <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
-    <button onClick="toggleIgnoreOuter()">Toggle ignore-outer-trigger</button>
-    <button onClick="changeContents()">Change tooltip contents</button>
-    <button onClick="toggleTooltipPointerEvents()">Toggle tooltip pointer events</button>
+    <div id="demo-tip-controls">
+        <button onClick="changeOrientation()">Change orientation</button>
+        <button onClick="toggleTooltip()">Toggle tooltip</button>
+        <button onClick="toggleSelector()">Toggle selector</button>
+        <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
+        <button onClick="toggleIgnoreOuter()">Toggle ignore-outer-trigger</button>
+        <button onClick="changeContents()">Change tooltip contents</button>
+        <button onClick="toggleTooltipPointerEvents()">Toggle tooltip pointer events</button>
+    </div>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
     <br/>
@@ -129,21 +131,39 @@
     <span>Tooltip pointer events = <span id="tooltip-pointer-events-status"></span></span>
     <br/>
     <button onClick="addFancySpan()">Add fancy-selector box</span>
+    <button onClick="addRemoveTooltip()">Add / remove tooltip</button>
 </div>
 <script>
 var demoTip;
+var TRIGGER_STYLES = ["hover", "click", "touchstart", "tap", "none"];
+var ORIENTS = ["auto", "top", "right", "bottom", "left"];
+var CSS_SELECTORS = [".fancy-selector", "#next-sib", ".fancy-selector img",
+                     "#container"];
+
 document.addEventListener('DOMComponentsLoaded', function(){
     demoTip = document.getElementById("demoTip");
     updateStatuses();
     
     demoTip.addEventListener("tooltipshown", function(e){
-        //console.log("tooltip shown!");
+        console.log("tooltip shown!");
     });
     
     demoTip.addEventListener("tooltiphidden", function(e){
-        //console.log("tooltip hidden!");
+        console.log("tooltip hidden!");
     });
 });
+
+function addRemoveTooltip(){
+    var container = document.getElementById("container");
+    var nextSib = document.getElementById("next-sib");
+    if(document.getElementById("demoTip")){
+        container.removeChild(demoTip);
+    }
+    else{
+        container.insertBefore(demoTip, nextSib);
+    }
+    updateStatuses();
+}
 
 function randomWord(len){
     var output = "";
@@ -178,7 +198,7 @@ function toggleTooltipPointerEvents(){
 }
 
 function changeOrientation(){
-    var orients = ["auto", "top", "right", "bottom", "left"];
+    var orients = ORIENTS;
     var currOrient = demoTip.orientation;
     
     var currIndex = orients.indexOf(currOrient);
@@ -207,7 +227,7 @@ function toggleSelector(){
 }
 
 function toggleTriggerStyle(){
-    var styles = ["hover", "click", "touchstart", "tap", "none"];
+    var styles = TRIGGER_STYLES;
     var currStyle = demoTip.triggerStyle;
     
     var currIndex = styles.indexOf(currStyle);
@@ -231,41 +251,75 @@ function updateStatuses(){
         xtag.removeClass(oldTarg, "demo-targeted");
     });
     
-    targets.forEach(function(targ){
-        xtag.addClass(targ, "demo-targeted");
+    if(demoTip.parentNode){
+        targets.forEach(function(targ){
+            xtag.addClass(targ, "demo-targeted");
+        });
+    }
+    
+    
+    var buttons = document.querySelectorAll("#demo-tip-controls button");
+    buttons.forEach(function(button){
+        if(demoTip.parentNode){
+            button.removeAttribute("disabled");
+        }
+        else{
+            button.setAttribute("disabled", true);
+        }
     });
 }
 
 function updateTooltipPointerEventsStatus(){
     var statusBox = document.getElementById("tooltip-pointer-events-status");
-    statusBox.textContent = (demoTip.ignoreTooltipPointerEvents) ? "ignored" : "enabled";
+    if(demoTip.parentNode){
+        statusBox.textContent = (demoTip.ignoreTooltipPointerEvents) ? "ignored" : "enabled";
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
 }
 
 function updateIgnoreOuterStatus(){
     var statusBox = document.getElementById("outer-trigger-status");
-    
-    statusBox.textContent = (demoTip.ignoreOuterTrigger) ? "ignored" : "active";
+    if(demoTip.parentNode){
+        statusBox.textContent = (demoTip.ignoreOuterTrigger) ? "ignored" : "active";
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
 }
 
 function updateSelectorBox(){
     var statusBox = document.getElementById("curr-selector-status");
-    
-    statusBox.textContent = demoTip.targetSelector;
+    if(demoTip.parentNode){
+        statusBox.textContent = demoTip.targetSelector;
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
 }
 
 function updateOrientationBox(){
     var statusBox = document.getElementById("curr-orient-status");
-    
-    statusBox.textContent = demoTip.orientation;
+    if(demoTip.parentNode){
+        statusBox.textContent = demoTip.orientation;
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
 }
 
 function updateTriggerStyleBox(){
-    var triggerStyleBox = document.getElementById("curr-trigger-style-status");
-    
-    triggerStyleBox.textContent = demoTip.triggerStyle;
-    
-    if(demoTip.presetTriggerStyles.indexOf(demoTip.triggerStyle) !== -1){
-        triggerStyleBox.textContent += "  (preset style)";
+    var statusBox = document.getElementById("curr-trigger-style-status");
+    if(demoTip.parentNode){
+        statusBox.textContent = demoTip.triggerStyle;
+        
+        if(demoTip.presetTriggerStyles.indexOf(demoTip.triggerStyle) !== -1){
+            statusBox.textContent += "  (preset style)";
+        }
+    }
+    else{
+        statusBox.textContent = "N/A";
     }
 }
 
@@ -286,10 +340,12 @@ var changeContents = (function(){
         })()
     ];
     
-    return function(){
+    return function(newIndex){
         var contentEl = demoTip.content;
         
-        var newIndex = (currIndex+1) % htmlStrs.length;
+        if(newIndex == undefined){
+            newIndex = (currIndex+1) % htmlStrs.length;
+        }
         currIndex = newIndex;
         var newHtml = htmlStrs[newIndex];
         
