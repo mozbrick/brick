@@ -288,6 +288,7 @@
             // function to call on a mousemove during a drag
             "onMouseDragMove": function(e){
                 _onDragMove(slider, e.pageX, e.pageY);
+                e.preventDefault();
             },
             
             // function to call on a touchmove during a drag
@@ -297,6 +298,7 @@
                      return;
                  }
                  _onDragMove(slider, touches[0].pageX, touches[0].pageY);
+                 e.preventDefault();
             },
             
             // function to call on the end of a drag (whether mouse or touch)
@@ -317,6 +319,7 @@
                 if(thumb){
                     thumb.removeAttribute("active");
                 }
+                e.preventDefault();
             },
             
             // function to call when the polyfill slider receives key inputs,

@@ -23,7 +23,7 @@ x-slider{
     &[polyfill]{
         cursor: default;
         @include unhighlightable;
-    
+        
         & > .input{
             cursor: default;
             @include unhighlightable;
@@ -77,6 +77,10 @@ x-slider{
             height: 100%;
             
             width: .5em;
+            @include mobileMediaOverride{
+                width: 1.25em;
+            }
+            
             margin: 0;
             padding: 0;
             
