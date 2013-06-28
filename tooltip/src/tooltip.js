@@ -461,7 +461,6 @@
                             _hideTooltip(tooltip);
                         }
                     }, hideDelay);
-                    e.stopPropagation();
                 }
             });
             
