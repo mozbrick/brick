@@ -530,13 +530,18 @@
     *  proposed parent element as a parent or ancestor node
     **/
     function hasParentNode(elem, parent){
-        while(elem){
-            if(elem === parent){
-                return true;
-            }
-            elem = elem.parentNode;
+        if(parent.contains){
+            return parent.contains(elem);
         }
-        return false;
+        else{
+            while(elem){
+                if(elem === parent){
+                    return true;
+                }
+                elem = elem.parentNode;
+            }
+            return false;
+        }
     }
     
     

@@ -164,3 +164,7 @@ the following CSS selectors, assuming that `"foo-tooltip"` represents an `x-tool
   styles will be inherited by the arrow pointer of the tooltip.
        
 * Applying styles to `foo-tooltip > .tooltip-content` applies styles to the content element
+
+__Important note:__ Tooltips are positioned absolutely, so make sure to set `position: relative` on the containing element that you want them to be positioned in. 
+
+For example, if you want to position tooltips in relation to the `<body>` element, failure to set `position:relative` on the body will lead to tooltips being in positioned in relation to the window. (ie: acting as if they were `position: fixed`).
