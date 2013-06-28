@@ -1,0 +1,10 @@
+{
+    "name": "Iconbutton Demo",
+    "description": "A demo of the x-iconbutton component.",
+    "developer": {
+        "name": "Mozilla",
+        "url": "http://github.com/mozilla/app-components/"
+    },
+    "launch_path": "app-components/iconbutton/demo/iconbutton-demo.html",
+    "default_locale": "en"
+}
