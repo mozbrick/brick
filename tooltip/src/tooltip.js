@@ -566,8 +566,14 @@
      * targeted elements
      **/
     function _positionTooltip(tooltip, targetElem, orientation, reattemptDepth){
+        // ignore attempts to position when not yet in document
+        if(!tooltip.parentNode){
+            tooltip.left = ""
+            tooltip.top = ""
+            return;
+        }
         reattemptDepth = (reattemptDepth == undefined) ? 0 : reattemptDepth;
-    
+        
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
@@ -596,7 +602,7 @@
         }
         
         var offsetContainer = (tooltip.offsetParent) ? 
-                                    tooltip.offsetParent : tooltip.parentNode;
+                                tooltip.offsetParent : tooltip.parentNode;
         
         // only position if NOT currently recursing to get a more stable
         // position, or final size will never match up to initial size
@@ -613,7 +619,7 @@
         // coordinates of the tooltip's container element, relative to the page
         var containerPageOffset = offsetContainer.getBoundingClientRect();
         
-        // coordinates of the target element,relative to the tooltip's container
+        // coordinates of the target element, relative to the tooltip's container
         var targetContainerOffset = {
             "top": targetPageOffset.top - containerPageOffset.top + offsetContainer.scrollTop,
             "left": targetPageOffset.left - containerPageOffset.left + offsetContainer.scrollLeft
@@ -807,6 +813,11 @@
      * if newTriggerStyle is not given, uses the previously used trigger style
     **/
     function _updateTriggerListeners(tooltip, newTargetSelector, newTriggerStyle){
+        // dont update listeners if tooltip is not yet actually in the document
+        if(!tooltip.parentNode){
+            return;
+        }
+    
         if(newTargetSelector == undefined){
             newTargetSelector = tooltip.xtag.targetSelector;
         }
@@ -976,7 +987,7 @@
             },
             
             // the DOM element representing the content of the tooltip
-            "content": {
+            "contentEl": {
                 get: function(){
                     return this.xtag.contentEl;
                 },
@@ -1011,7 +1022,6 @@
                     return _selectorToElems(this, this.targetSelector);
                 }
             }
-            
             
         },
         methods: {

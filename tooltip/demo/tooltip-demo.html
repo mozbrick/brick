@@ -13,6 +13,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow: auto;
         }
         
         #container{
@@ -84,6 +85,15 @@
         #controls{
             text-align: center;
         }
+        
+        #dummy-tooltips{
+            background-color: #eee;   
+        }
+        
+        #dummy-tooltips button{
+            font-family: Courier, monospace;
+            position:relative;
+        }
     </style>
 </head>
 <body>
@@ -131,14 +141,14 @@
     <span>Tooltip pointer events = <span id="tooltip-pointer-events-status"></span></span>
     <br/>
     <button onClick="addFancySpan()">Add fancy-selector box</span>
-    <button onClick="addRemoveTooltip()">Add / remove tooltip</button>
+    <button onClick="addRemoveMainTooltip()">Add / remove main tooltip</button>
+    <button onClick="addDummyTooltip()">Add random dummy tooltip</button>
+</div>
+<div id="dummy-tooltips">
+Dummy tooltips (click to remove):<br/>
 </div>
 <script>
 var demoTip;
-var TRIGGER_STYLES = ["hover", "click", "touchstart", "tap", "none"];
-var ORIENTS = ["auto", "top", "right", "bottom", "left"];
-var CSS_SELECTORS = [".fancy-selector", "#next-sib", ".fancy-selector img",
-                     "#container"];
 
 document.addEventListener('DOMComponentsLoaded', function(){
     demoTip = document.getElementById("demoTip");
@@ -153,7 +163,35 @@ document.addEventListener('DOMComponentsLoaded', function(){
     });
 });
 
-function addRemoveTooltip(){
+function addDummyTooltip(){
+    var cssSelectors = [".fancy-selector", "#next-sib", ".fancy-selector img",
+                         "#container", ".fancy-selector:last-child", 
+                         ".fancy-selector:first-child"];
+    var orients = ["auto", "top", "right", "bottom", "left"];
+    var styles = ["hover", "click", "tap"];
+    
+    var selector = cssSelectors[Math.floor(Math.random() * cssSelectors.length)];
+    var style = styles[Math.floor(Math.random() * styles.length)];
+    var orientation = orients[Math.floor(Math.random() * orients.length)];
+    
+    var dummyTooltip = document.createElement("x-tooltip");
+    dummyTooltip.contentEl.textContent = [selector, style, orientation].join(" | ");
+    
+    dummyTooltip.targetSelector = selector;
+    dummyTooltip.triggerStyle = style;
+    dummyTooltip.orientation = orientation;
+    
+    var button = document.createElement("button");
+    button.textContent = dummyTooltip.contentEl.textContent;
+    button.addEventListener("click", function(e){
+        dummyTooltip.parentNode.removeChild(dummyTooltip);
+        button.parentNode.removeChild(button);
+    });
+    document.body.appendChild(dummyTooltip);
+    document.getElementById("dummy-tooltips").appendChild(button);    
+}
+
+function addRemoveMainTooltip(){
     var container = document.getElementById("container");
     var nextSib = document.getElementById("next-sib");
     if(document.getElementById("demoTip")){
@@ -198,7 +236,7 @@ function toggleTooltipPointerEvents(){
 }
 
 function changeOrientation(){
-    var orients = ORIENTS;
+    var orients = ["auto", "top", "right", "bottom", "left"];
     var currOrient = demoTip.orientation;
     
     var currIndex = orients.indexOf(currOrient);
@@ -227,7 +265,7 @@ function toggleSelector(){
 }
 
 function toggleTriggerStyle(){
-    var styles = TRIGGER_STYLES;
+    var styles = ["hover", "click", "touchstart", "tap", "none"];
     var currStyle = demoTip.triggerStyle;
     
     var currIndex = styles.indexOf(currStyle);
@@ -341,7 +379,7 @@ var changeContents = (function(){
     ];
     
     return function(newIndex){
-        var contentEl = demoTip.content;
+        var contentEl = demoTip.contentEl;
         
         if(newIndex == undefined){
             newIndex = (currIndex+1) % htmlStrs.length;
