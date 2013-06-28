@@ -1,0 +1,10 @@
+{
+    "name": "Deck Demo",
+    "description": "A demo of the x-deck component.",
+    "developer": {
+        "name": "Mozilla",
+        "url": "http://github.com/mozilla/app-components/"
+    },
+    "launch_path": "deck-demo.html",
+    "default_locale": "en"
+}

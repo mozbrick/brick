@@ -1,10 +1,10 @@
 {
-    "name": "Deck Demo",
-    "description": "A demo of the x-deck component.",
+    "name": "Tooltip Demo",
+    "description": "A demo of the x-tooltip component.",
     "developer": {
         "name": "Mozilla",
         "url": "http://github.com/mozilla/app-components/"
     },
-    "launch_path": "app-components/deck/demo/deck-demo.html",
+    "launch_path": "tooltip-demo.html",
     "default_locale": "en"
 }
