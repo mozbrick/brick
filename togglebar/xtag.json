@@ -1,0 +1,20 @@
+{
+	"name": "ToggleBar",
+	"tagName": "x-togglebar",
+	"version": "0.1.0",
+	"author": "Leon Zhang",
+	"description": "Togglebars are used to display a horizontal set of clickable options, of which only one at a time can be chosen.",
+	"demo": "demo/tabbar-demo.html",
+	"categories": [
+        "ui"
+    ],
+	"compatibility": {
+		"firefox": 5,
+		"chrome": 4,
+		"ie": 9,
+		"opera": 12,
+		"android": 2.1,
+		"ios": 4
+	},
+	"documentation": {}
+}

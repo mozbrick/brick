@@ -19,22 +19,22 @@
 	"documentation": {
 		"description": "Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.",
 		"attributes": {
-            "event-to-fire": "Sets a custom event type for the tabbar to fire on selected elements, instead of the default of 'show'. Can also be applied on x-tabbar-tabs instead to further provide granular control."
+            "target-event": "Sets a custom event type for the tabbar to fire on selected elements, instead of the default of 'show'. Can also be applied on x-tabbar-tabs instead to further provide granular control."
         },
 		"events": {
-            "show": "The default event that a x-tabbar-tab will fire on its selected elements if not overridden by 'event-to-fire'"
+            "show": "The default event that a x-tabbar-tab will fire on its selected elements if not overridden by 'target-event'"
         },
 		"methods": {},
 		"getters": {
             "tabs": "simply returns a list of the x-tabbar-tabs that are in the x-tabbar",
-            "eventToFire": "Returns the name of the event any tabs that don't have overrides will be firing.",
-            "eventToFire (x-tabbar-tab only)": "Returns the name of the event a single tabbar-tab will fire on its targets. Accounts for user-specified overrides.",
+            "targetEvent": "Returns the name of the event any tabs that don't have overrides will be firing.",
+            "targetEvent (x-tabbar-tab only)": "Returns the name of the event a single tabbar-tab will fire on its targets. Accounts for user-specified overrides.",
             "targetSelector (x-tabbar-tab only)": "Returns the CSS selector used to select the targets of a specific tab",
             "targetElems (x-tabbar-tab only)": "Returns a list of the elements currently selected as targets of the specific tab"
         },
 		"setters": {
-            "eventToFire": "Sets the name of the event any tabs that don't have overrides will be firing.",
-            "eventToFire (x-tabbar-tab only)": "Sets the name of the event a single tabbar-tab will fire on its targets, overriding the parent x-tabbar's overall eventToFire.",
+            "targetEvent": "Sets the name of the event any tabs that don't have overrides will be firing.",
+            "targetEvent (x-tabbar-tab only)": "Sets the name of the event a single tabbar-tab will fire on its targets, overriding the parent x-tabbar's overall targetEvent.",
             "targetSelector (x-tabbar-tab only)": "Sets the CSS selector used to select the targets of a specific tab",
             "targetElems (x-tabbar-tab only)": "Assigns a list of DOM elements to be targets of the specific tab"
         }

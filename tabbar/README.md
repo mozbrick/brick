@@ -30,17 +30,17 @@ Alternatively, if you don't want to have to work out the CSS selectors for each 
 
 # Attributes
 
-## ___event-to-fire___ / ___eventToFire___
+## ___target-event___ / ___targetEvent___
 
 Specifies the default event that any tabs in the tabbar should fire on their targeted elements. Defaults to "show".
 
-Can be specified as the HTML attribute `event-to-fire` or programmatically as the JavaScript property `.eventToFire`
+Can be specified as the HTML attribute `target-event` or programmatically as the JavaScript property `.targetEvent`
 
-## ___event-to-fire___ / ___eventToFire___ (x-tabbar-tab only)
+## ___target-event___ / ___targetEvent___ (x-tabbar-tab only)
 
 If set, specifies the event that a single tab should fire on its targeted elements, overriding the parent x-tabbar's default.
 
-Can be specified as the HTML attribute `event-to-fire` or programmatically as the JavaScript property `.eventToFire`
+Can be specified as the HTML attribute `target-event` or programmatically as the JavaScript property `.targetEvent`
 
 ## ___target-selector___  / ___targetSelector___ (x-tabbar-tab only)
 
@@ -64,7 +64,7 @@ Returns a list of the &lt;x-tabbar-tab&gt; elements in the &lt;x-tabbar&gt;.
 
 ## ___show___
 
-Whenever a x-tabbar-tab is tapped/clicked, and `event-to-fire` is not otherwise specified, a `show` event is fired on each of its target elements. It is up to the target element to respond to this event. 
+Whenever a x-tabbar-tab is tapped/clicked, and `target-event` is not otherwise specified, a `show` event is fired on each of its target elements. It is up to the target element to respond to this event. 
 
 Components with default implemented responses to `show`:
 
