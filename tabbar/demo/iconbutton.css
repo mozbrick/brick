@@ -1,0 +1,22 @@
+x-iconbutton {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 0;
+  padding: 0; }
+  x-iconbutton .button {
+    cursor: inherit;
+    height: inherit;
+    width: inherit;
+    margin: 0; }
+    x-iconbutton .button > * {
+      margin: 0;
+      padding: 0;
+      vertical-align: middle;
+      display: inline-block; }
+  x-iconbutton[icon-anchor=top] .button > *, x-iconbutton[icon-anchor=bottom] .button > * {
+    margin: 0 auto;
+    display: block; }

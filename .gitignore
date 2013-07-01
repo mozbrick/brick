@@ -1,3 +1,4 @@
-*/src/.sass-cache
-*/components
-*/node_modules
+.sass-cache
+components
+node_modules
+.DS_Store

@@ -95,7 +95,7 @@ x-slider {
       background-image: linear-gradient(top, white, white 25%, #d9d9d9); }
       @media only screen and (max-device-width: 1024px) {
         x-slider[polyfill] > .slider-thumb {
-          width: 1.25em; } }
+          width: 1.5em; } }
       x-slider[polyfill] > .slider-thumb:hover {
         background-color: #e7f5fd;
         background-repeat: no-repeat;

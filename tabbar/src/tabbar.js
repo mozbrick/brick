@@ -23,8 +23,8 @@
                     return xtag.queryChildren(this, "x-tabbar-tab");
                 }
             },
-            "eventToFire": {
-                attribute: {name: "event-to-fire"},
+            "targetEvent": {
+                attribute: {name: "target-event"},
                 get: function(){
                     return this.xtag.overallEventToFire;
                 },
@@ -43,18 +43,18 @@
                 // for when the user provides DOM programmatically
                 // instead of through selector
                 this.xtag.overrideTargetElems = null;
-                this.xtag.eventToFire = null;
+                this.xtag.targetEvent = null;
             }
         },
         events: {
             "tap": function(e){
                 if(this.parentNode.nodeName.toLowerCase() === "x-tabbar"){
-                    var eventToFire = this.eventToFire; // getter handles casing
+                    var targetEvent = this.targetEvent; // getter handles casing
                 
                     var targets = this.targetElems;
                     for(var i = 0; i < targets.length; i++){
                         var target = targets[i];
-                        xtag.fireEvent(target, eventToFire);
+                        xtag.fireEvent(target, targetEvent);
                     }
                 }
             }
@@ -95,21 +95,21 @@
                     this.xtag.overrideTargetElems = newElems;
                 }
             },
-            "eventToFire":{
-                attribute: {name: "event-to-fire"},
+            "targetEvent":{
+                attribute: {name: "target-event"},
                 get: function(){
-                    if(this.xtag.eventToFire){
-                        return this.xtag.eventToFire;
+                    if(this.xtag.targetEvent){
+                        return this.xtag.targetEvent;
                     }
                     else if(this.parentNode.nodeName.toLowerCase() === "x-tabbar"){
-                        return this.parentNode.eventToFire;
+                        return this.parentNode.targetEvent;
                     }
                     else{
                         throw "tabbar-tab is missing event to fire";
                     }
                 },
                 set: function(newEvent){
-                    this.xtag.eventToFire = newEvent;
+                    this.xtag.targetEvent = newEvent;
                 }
             }
         },

@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
-    <link rel="stylesheet" type="text/css" href="../../deck/src/deck.css"/>
-    <link rel="stylesheet" type="text/css" href="../../iconbutton/src/iconbutton.css"/>
-    <link rel="stylesheet" type="text/css" href="../../slidebox/src/slidebox.css"/>
-    <link rel="stylesheet" type="text/css" href="../../flipbox/src/flipbox.css"/>
+    <link rel="stylesheet" type="text/css" href="deck.css"/>
+    <link rel="stylesheet" type="text/css" href="iconbutton.css"/>
+    <link rel="stylesheet" type="text/css" href="slidebox.css"/>
+    <link rel="stylesheet" type="text/css" href="flipbox.css"/>
     <link rel="stylesheet" type="text/css" href="../src/tabbar.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
-    <script type="text/javascript" src="../../deck/src/deck.js"></script>
-    <script type="text/javascript" src="../../iconbutton/src/iconbutton.js"></script>
-    <script type="text/javascript" src="../../slidebox/src/slidebox.js"></script>
-    <script type="text/javascript" src="../../flipbox/src/flipbox.js"></script>
+    <script type="text/javascript" src="deck.js"></script>
+    <script type="text/javascript" src="iconbutton.js"></script>
+    <script type="text/javascript" src="slidebox.js"></script>
+    <script type="text/javascript" src="flipbox.js"></script>
     <script type="text/javascript" src="../src/tabbar.js"></script>
     <style>
         body, html{
@@ -26,7 +27,7 @@
         body > figure{
             position: relative;
             display: inline-block;
-            margin: 5px;
+            margin: 0;
             vertical-align: bottom;
             width: 320px;
         }
@@ -35,7 +36,6 @@
             position: relative;
             width: 100%;
             height: 480px;
-            border: 1px solid grey;
         }
         
         .component-demo{
@@ -195,11 +195,11 @@
         <span>NIC CAGE</span>
         <img src="http://placecage.com/c/300/325"/>
     </div>
-    <x-tabbar event-to-fire="danceparty">
+    <x-tabbar target-event="danceparty">
         <x-tabbar-tab target-selector="#color-box > span">
             <x-iconbutton src="http://placecage.com/100/100">Fire 'danceparty' on text</x-iconbutton>
         </x-tabbar-tab>
-        <x-tabbar-tab target-selector="#color-box > img" event-to-fire="override">
+        <x-tabbar-tab target-selector="#color-box > img" target-event="override">
             <x-iconbutton src="http://placecage.com/c/100/100">Fire 'override' on img</x-iconbutton>
         </x-tabbar-tab>
     </x-tabbar>

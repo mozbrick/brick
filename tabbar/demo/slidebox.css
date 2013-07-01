@@ -1,0 +1,28 @@
+x-slidebox {
+  display: block;
+  overflow: hidden;
+}
+
+x-slides {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  transition: transform 0.5s ease 0s;
+  -o-transition: -o-transform 0.5s ease 0s;
+  -ms-transition: -ms-transform 0.5s ease 0s;
+  -moz-transition: -moz-transform 0.5s ease 0s;
+  -webkit-transition: -webkit-transform 0.5s ease 0s;
+}
+
+x-slides > x-slide {
+  display: block;
+  float: left;
+  height: 100%;
+  width: 100%;  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+}

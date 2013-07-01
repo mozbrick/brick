@@ -1,0 +1,236 @@
+x-deck {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  -webkit-perspective: 2000px;
+  -moz-perspective: 2000px;
+  -ms-perspective: 2000px;
+  perspective: 2000px; }
+  x-deck > x-card {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    transition-property: transform;
+    -webkit-transition-property: -webkit-transform;
+    -moz-transition-property: -moz-transform;
+    -o-transition-property: -o-transform;
+    transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease;
+    -moz-transition-timing-function: ease;
+    -o-transition-timing-function: ease;
+    transition-timing-function: ease;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    -o-transition-delay: 0s;
+    transition-delay: 0s;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    transform: translate3d(0%, 0%, 1px);
+    -ms-transform: translate3d(0%, 0%, 1px);
+    -moz-transform: translate3d(0%, 0%, 1px);
+    -webkit-transform: translate3d(0%, 0%, 1px);
+    -o-transform: translate3d(0%, 0%, 1px);
+    height: 100%;
+    width: 100%;
+    left: 0px;
+    right: 0px;
+    z-index: 0;
+    /** card animation types go here **/ }
+    x-deck > x-card[selected] {
+      z-index: 2; }
+    x-deck > x-card[leaving] {
+      z-index: 1; }
+    x-deck > x-card:not([selected]):not([leaving]) {
+      visibility: hidden;
+      opacity: 0; }
+    x-deck > x-card[card-anim-type][leaving][before-animation], x-deck > x-card[card-anim-type][selected][before-animation], x-deck > x-card[card-anim-type][leaving]:not([before-animation]), x-deck > x-card[card-anim-type][selected]:not([before-animation]) {
+      transform: translate3d(0%, 0%, 1px);
+      -ms-transform: translate3d(0%, 0%, 1px);
+      -moz-transform: translate3d(0%, 0%, 1px);
+      -webkit-transform: translate3d(0%, 0%, 1px);
+      -o-transform: translate3d(0%, 0%, 1px); }
+    x-deck > x-card[card-anim-type=flipX]:not([reverse])[selected][before-animation] {
+      transform: rotateX(-180deg);
+      -ms-transform: rotateX(-180deg);
+      -moz-transform: rotateX(-180deg);
+      -webkit-transform: rotateX(-180deg);
+      -o-transform: rotateX(-180deg); }
+    x-deck > x-card[card-anim-type=flipX]:not([reverse])[leaving]:not([before-animation]) {
+      transform: rotateX(180deg);
+      -ms-transform: rotateX(180deg);
+      -moz-transform: rotateX(180deg);
+      -webkit-transform: rotateX(180deg);
+      -o-transform: rotateX(180deg); }
+    x-deck > x-card[card-anim-type=flipX][reverse][selected][before-animation] {
+      transform: rotateX(180deg);
+      -ms-transform: rotateX(180deg);
+      -moz-transform: rotateX(180deg);
+      -webkit-transform: rotateX(180deg);
+      -o-transform: rotateX(180deg); }
+    x-deck > x-card[card-anim-type=flipX][reverse][leaving]:not([before-animation]) {
+      transform: rotateX(-180deg);
+      -ms-transform: rotateX(-180deg);
+      -moz-transform: rotateX(-180deg);
+      -webkit-transform: rotateX(-180deg);
+      -o-transform: rotateX(-180deg); }
+    x-deck > x-card[card-anim-type=flipY]:not([reverse])[selected][before-animation] {
+      transform: rotateY(180deg);
+      -ms-transform: rotateY(180deg);
+      -moz-transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+      -o-transform: rotateY(180deg); }
+    x-deck > x-card[card-anim-type=flipY]:not([reverse])[leaving]:not([before-animation]) {
+      transform: rotateY(-180deg);
+      -ms-transform: rotateY(-180deg);
+      -moz-transform: rotateY(-180deg);
+      -webkit-transform: rotateY(-180deg);
+      -o-transform: rotateY(-180deg); }
+    x-deck > x-card[card-anim-type=flipY][reverse][selected][before-animation] {
+      transform: rotateY(-180deg);
+      -ms-transform: rotateY(-180deg);
+      -moz-transform: rotateY(-180deg);
+      -webkit-transform: rotateY(-180deg);
+      -o-transform: rotateY(-180deg); }
+    x-deck > x-card[card-anim-type=flipY][reverse][leaving]:not([before-animation]) {
+      transform: rotateY(180deg);
+      -ms-transform: rotateY(180deg);
+      -moz-transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+      -o-transform: rotateY(180deg); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=scrollLeft]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=scrollRight][reverse] {
+  transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  -o-transform: translateX(100%); }
+x-deck > x-card[leaving][card-anim-type=scrollLeft]:not([before-animation]):not([reverse]), x-deck > x-card[leaving][card-anim-type=scrollRight][reverse]:not([before-animation]) {
+  transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=scrollLeft][reverse], x-deck > x-card[selected][before-animation][card-anim-type=scrollRight]:not([reverse]) {
+  transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%); }
+x-deck > x-card[leaving][card-anim-type=scrollLeft][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=scrollRight]:not([before-animation]):not([reverse]) {
+  transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  -o-transform: translateX(100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=scrollUp]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=scrollDown][reverse] {
+  transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -o-transform: translateY(100%); }
+x-deck > x-card[leaving][card-anim-type=scrollUp]:not([before-animation]):not([reverse]), x-deck > x-card[leaving][card-anim-type=scrollDown][reverse]:not([before-animation]) {
+  transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -o-transform: translateY(-100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=scrollUp][reverse], x-deck > x-card[selected][before-animation][card-anim-type=scrollDown]:not([reverse]) {
+  transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -o-transform: translateY(-100%); }
+x-deck > x-card[leaving][card-anim-type=scrollUp][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=scrollDown]:not([before-animation]):not([reverse]) {
+  transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -o-transform: translateY(100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=coverLeft]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverRight][reverse] {
+  transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  -o-transform: translateX(100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=coverRight]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverLeft][reverse] {
+  transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=coverUp]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverDown][reverse] {
+  transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -o-transform: translateY(100%); }
+
+x-deck > x-card[selected][before-animation][card-anim-type=coverDown]:not([reverse]), x-deck > x-card[selected][before-animation][card-anim-type=uncoverUp][reverse] {
+  transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -o-transform: translateY(-100%); }
+
+x-deck > x-card[selected][card-anim-type=coverRight][reverse], x-deck > x-card[selected][card-anim-type=uncoverLeft]:not([reverse]) {
+  z-index: 1; }
+x-deck > x-card[leaving][card-anim-type=coverRight][reverse], x-deck > x-card[leaving][card-anim-type=uncoverLeft]:not([reverse]) {
+  z-index: 2; }
+x-deck > x-card[leaving][card-anim-type=coverRight][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverLeft]:not([before-animation]):not([reverse]) {
+  transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%); }
+
+x-deck > x-card[selected][card-anim-type=coverLeft][reverse], x-deck > x-card[selected][card-anim-type=uncoverRight]:not([reverse]) {
+  z-index: 1; }
+x-deck > x-card[leaving][card-anim-type=coverLeft][reverse], x-deck > x-card[leaving][card-anim-type=uncoverRight]:not([reverse]) {
+  z-index: 2; }
+x-deck > x-card[leaving][card-anim-type=coverLeft][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverRight]:not([before-animation]):not([reverse]) {
+  transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  -o-transform: translateX(100%); }
+
+x-deck > x-card[selected][card-anim-type=coverDown][reverse], x-deck > x-card[selected][card-anim-type=uncoverUp]:not([reverse]) {
+  z-index: 1; }
+x-deck > x-card[leaving][card-anim-type=coverDown][reverse], x-deck > x-card[leaving][card-anim-type=uncoverUp]:not([reverse]) {
+  z-index: 2; }
+x-deck > x-card[leaving][card-anim-type=coverDown][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverUp]:not([before-animation]):not([reverse]) {
+  transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -o-transform: translateY(-100%); }
+
+x-deck > x-card[selected][card-anim-type=coverUp][reverse], x-deck > x-card[selected][card-anim-type=uncoverDown]:not([reverse]) {
+  z-index: 1; }
+x-deck > x-card[leaving][card-anim-type=coverUp][reverse], x-deck > x-card[leaving][card-anim-type=uncoverDown]:not([reverse]) {
+  z-index: 2; }
+x-deck > x-card[leaving][card-anim-type=coverUp][reverse]:not([before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverDown]:not([before-animation]):not([reverse]) {
+  transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  -o-transform: translateY(100%); }
