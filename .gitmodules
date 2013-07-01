@@ -3,10 +3,10 @@
 	url = https://github.com/x-tag/view.git
 [submodule "slidebox"]
 	path = slidebox
-	url = https://github.com/ldoubleuz/slidebox.git
+	url = https://github.com/x-tag/slidebox.git
 [submodule "flipbox"]
 	path = flipbox
-	url = https://github.com/ldoubleuz/flipbox.git
+	url = https://github.com/x-tag/flipbox.git
 [submodule "appbar"]
 	path = appbar
 	url = https://github.com/x-tag/appbar.git
