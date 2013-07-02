@@ -1,0 +1,20 @@
+{
+  "name": "x-optionbar",
+  "description": "A set of associated options of which only one can be selected at a time",
+  "version": "0.1.0",
+  "keywords": [
+    "web-components",
+    "button",
+    "icon",
+    "label",
+    "x-tag"
+  ],
+  "main": [
+    "src/optionbar.js",
+    "src/optionbar.css"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "x-tag-toggle": "*"
+  }
+}

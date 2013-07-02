@@ -1,10 +1,10 @@
 {
-	"name": "ToggleBar",
-	"tagName": "x-togglebar",
+	"name": "OptionBar",
+	"tagName": "x-optionbar",
 	"version": "0.1.0",
 	"author": "Leon Zhang",
-	"description": "Togglebars are used to display a horizontal set of clickable options, of which only one at a time can be chosen.",
-	"demo": "demo/tabbar-demo.html",
+	"description": "Optionbars are used to display a set of clickable options, of which only one can be chosen at a time.",
+	"demo": "demo/optionbar-demo.html",
 	"categories": [
         "ui"
     ],

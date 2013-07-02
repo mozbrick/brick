@@ -1,0 +1,55 @@
+
+x-toggle {
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+}
+
+x-toggle input {
+	display: block !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	height: 100% !important;
+	width: 100% !important;
+	margin: 0 !important;
+	opacity: 0.0001 !important;
+	cursor: pointer;
+}
+
+x-toggle:after {
+	content: attr(label);
+	vertical-align: middle;
+}
+
+.x-toggle-check {
+	display: inline-block;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 16px;
+	height: 16px;
+	margin-right: 3px;
+	color: #000;
+	vertical-align: middle;
+	border: 2px solid;
+	-webkit-transition: border 0.15s 0s ease-in-out;
+	-moz-transition: border 0.15s 0s ease-in-out;
+	-ms-transition: border 0.15s 0s ease-in-out;
+	transition: border 0.15s 0s ease-in-out;
+}
+
+input[type="radio"] + .x-toggle-check {
+	border-radius: 50%;
+}
+
+input:checked + .x-toggle-check {
+	border-width: 8px;
+}
+
+input:focus + .x-toggle-check {
+	-webkit-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+	-moz-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+	-ms-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+	box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+}

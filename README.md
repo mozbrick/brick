@@ -96,10 +96,11 @@ Positions/appearances will likely differ on larger displays or with different in
 
 * Unifies checkboxes and radios - devs just code, we figure out the shiz
 
-### Toggle Bar (aka Radio Bar)
+### Option Bar (aka Radio Bar)
 
-* A set of associated options of which only one at a time can be selected
+* A set of associated options of which only one can be selected at a time
 * Designed to appear as a cohesive set
+* Essentially several Toggles with the appearance of option buttons
 
 ### Date Selection
 
