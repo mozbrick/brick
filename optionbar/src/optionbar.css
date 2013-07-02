@@ -1,0 +1,82 @@
+x-optionbar {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-content: center;
+  -moz-align-content: center;
+  -ms-align-content: center;
+  align-content: center;
+  width: 100%; }
+  x-optionbar > x-toggle {
+    display: block;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-image: -o-linear-gradient(top, white, white 25%, #d9d9d9);
+    background-image: -ms-linear-gradient(top, white, white 25%, #d9d9d9);
+    background-image: -moz-linear-gradient(top, white, white 25%, #d9d9d9);
+    background-image: -webkit-linear-gradient(top, white, white 25%, #d9d9d9);
+    background-image: linear-gradient(top, white, white 25%, #d9d9d9);
+    vertical-align: middle;
+    word-wrap: break-word;
+    border: 1px solid grey;
+    border-top-color: #aaa;
+    border-bottom-color: #777;
+    padding: .5em 0;
+    margin: 0;
+    text-align: center;
+    transition-property: background-position, background-color, box-shadow;
+    -webkit-transition-property: background-position, background-color, box-shadow;
+    -moz-transition-property: background-position, background-color, box-shadow;
+    -o-transition-property: background-position, background-color, box-shadow;
+    transition-duration: 0.1s;
+    -webkit-transition-duration: 0.1s;
+    -moz-transition-duration: 0.1s;
+    -o-transition-duration: 0.1s;
+    -webkit-transition-timing-function: ease-in;
+    -moz-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    -o-transition-delay: 0s;
+    transition-delay: 0s; }
+    x-optionbar > x-toggle:hover:not([checked]) {
+      background-position: 0 1em; }
+    x-optionbar > x-toggle[checked] {
+      background-image: none;
+      background-color: #eee;
+      box-shadow: inset 1px 1px 2px #888; }
+    x-optionbar > x-toggle .x-toggle-check {
+      display: none !important; }
+  x-optionbar[name] > x-toggle:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px; }
+  x-optionbar[name] > x-toggle:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px; }
+  x-optionbar[name] > x-toggle:not(:first-child) {
+    border-left-width: 0px; }
+  x-optionbar:not([name]) > x-toggle {
+    border-radius: 4px;
+    margin: 0 .25em; }
+    x-optionbar:not([name]) > x-toggle:first-child {
+      margin-left: 0; }
+    x-optionbar:not([name]) > x-toggle:last-child {
+      margin-right: 0; }

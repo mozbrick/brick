@@ -10,3 +10,6 @@
 [submodule "appbar"]
 	path = appbar
 	url = https://github.com/x-tag/appbar.git
+[submodule "toggle"]
+	path = toggle
+	url = git@github.com:x-tag/toggle.git

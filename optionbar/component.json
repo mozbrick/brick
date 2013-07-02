@@ -14,7 +14,6 @@
     "src/optionbar.css"
   ],
   "dependencies": {
-    "x-tag-core": "*",
-    "x-tag-toggle": "*"
+    "x-tag-core": "*"
   }
 }

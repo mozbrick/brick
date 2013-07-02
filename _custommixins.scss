@@ -182,7 +182,29 @@ $FONTS_FOLDER: "../fonts/";
   -moz-box-flex:  $values;
   -webkit-flex:  $values;
   -ms-flex:  $values;
+  box-flex: $values;
   flex:  $values;
+}
+
+@mixin align-items($align){
+    -webkit-align-items: $align;
+    -moz-align-items: $align;
+    -ms-align-items: $align;
+    align-items: $align;
+}
+
+@mixin align-content($align){
+    -webkit-align-content: $align;
+    -moz-align-content: $align;
+    -ms-align-content: $align;
+    align-content: $align;
+}
+
+@mixin justify-content($just){
+    -webkit-justify-content: $just;
+    -moz-justify-content: $just;
+    -ms-justify-content: $just;
+    justify-content: $just;
 }
 
 @mixin order($val) {

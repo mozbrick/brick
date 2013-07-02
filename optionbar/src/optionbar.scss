@@ -1,1 +1,71 @@
 @import "../../custommixins";
+
+x-optionbar{
+    @include unhighlightable;
+    @include flexbox;
+    @include align-content(center);
+    width: 100%;
+
+    & > x-toggle{
+        display: block; // required for old flexbox syntax
+        @include flex(1);
+        @include simplegradient;
+        vertical-align: middle;
+        word-wrap: break-word;
+        border: 1px solid grey;
+        border-top-color: #aaa;
+        border-bottom-color: #777;
+        padding: .5em 0;
+        margin: 0;
+        text-align: center;
+
+        @include animated((background-position, background-color, box-shadow), 0.1s);
+
+        &:hover:not([checked]){
+            background-position: 0 1em;
+        }
+
+        &[checked]{
+            background-image: none;   
+            background-color: #eee;
+            box-shadow: inset 1px 1px 2px #888;
+        }
+
+        .x-toggle-check{
+            display: none !important;
+        }
+    }
+
+    &[name]{
+        & > x-toggle{
+            &:first-child{
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+
+            &:last-child{
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+            }
+
+            &:not(:first-child){
+                border-left-width: 0px;
+            }
+        }
+    }
+
+    &:not([name]){
+        & > x-toggle{
+            @include rounded;
+            margin: 0 .25em;
+
+            &:first-child{
+                margin-left: 0;
+            }
+
+            &:last-child{
+                margin-right: 0;
+            }
+        }
+    }
+}

@@ -4,25 +4,44 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <link rel="stylesheet" type="text/css" href="../../toggle/src/toggle.css"/>
     <link rel="stylesheet" type="text/css" href="../src/optionbar.css"/>
 
+    <style>
+        .add-opt-button{
+            display: block;
+        }
+    </style>
+
     <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../../toggle/src/toggle.js"></script>
     <script type="text/javascript" src="../src/optionbar.js"></script>
 </head>
 <body>
     <h1>x-optionbar demo</h1>
-        <form>
-            <x-optionbar name="searchtype">
-                 <x-toggle label="Title"></x-toggle>
-                 <x-toggle label="Author"></x-toggle>
-                 <x-toggle label="Date"></x-toggle>
-            </x-optionbar>
-        <form>
+    (Radio buttons) Search by: &nbsp;
+    <x-optionbar id="radio-demo" name="searchtype" group="search">
+         <x-toggle label="Title"></x-toggle>
+         <x-toggle label="Author"></x-toggle>
+         <x-toggle label="Date"></x-toggle>
+         <x-toggle label="Publisher"></x-toggle>
+         <x-toggle label="ISBN"></x-toggle>
+         <x-toggle label="City of Publication"></x-toggle>
+         <x-toggle label="Editor"></x-toggle>
+    </x-optionbar>
+
+
+    (Check buttons) Tags: &nbsp;
+    <x-optionbar id="check-demo" group="tags">
+         <x-toggle label="Video"></x-toggle>
+         <x-toggle label="Text"></x-toggle>
+         <x-toggle label="Audio"></x-toggle>
+         <x-toggle label="Screenshot"></x-toggle>
+    </x-optionbar>
+
     <script>
         document.addEventListener('DOMComponentsLoaded', function(){
-            var demobar = document.querySelector("x-optionbar");
-            console.log(demobar.options);
-        })
+        });
     </script>
 </body>
 </html>
