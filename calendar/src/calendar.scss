@@ -53,11 +53,19 @@ x-calendar .day {
 x-calendar .day:first-child {
     margin: 0;
 }
+
+x-calendar .day.today{
+    border: 1px solid tomato;
+}
 x-calendar .day.sel,
 x-calendar .day:hover {
     background: #444;
     color: #fff;
 }
+x-calendar .day:not(.sel):hover{
+    background: #777;
+}
+
 x-calendar .day.badmonth {
     background: #fff;
     color: #aaa;
@@ -65,8 +73,12 @@ x-calendar .day.badmonth {
 x-calendar .day.badmonth.sel {
     background: #ddd;
 }
-x-calendar .day.badmonth:hover {
-    background: #ddd;
+
+x-calendar .day.badmonth.today {
+    border-color: lighten(tomato, 25%);
+}
+x-calendar .day.badmonth:not(.sel):hover {
+    background: #efefef;
 }
 
 x-calendar > .controls{

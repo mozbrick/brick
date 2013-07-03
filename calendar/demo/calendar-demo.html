@@ -10,12 +10,46 @@
     <script type="text/javascript" src="../src/calendar.js"></script>
     
     <style>
+        .cal-demo{
+            display: inline-block;
+            padding: .5em;
+            margin: 0 .5em;
+            background-color: #eee;
+        }
     </style>
 </head>
 <body>
     <h1>x-calendar demo</h1>
 
-    <x-calendar span=3 cursor="November 16, 1952" controls></x-calendar>
+    <figure class="cal-demo">
+        <header>Default:</header>
+        <x-calendar></x-calendar>
+    </figure>
+
+    <figure class="cal-demo">
+        <header>Default with controls:</header>
+        <x-calendar controls></x-calendar>
+    </figure>
+
+    <figure class="cal-demo">
+        <header>With custom span:</header>
+        <x-calendar span=3 controls></x-calendar>
+    </figure>
+
+    <figure class="cal-demo">
+        <header>With initial view (June) only:</header>
+        <x-calendar view="Jun 9, 2013" controls></x-calendar>
+    </figure>
+
+    <figure class="cal-demo">
+        <header>With initial selected (July) only:</header>
+        <x-calendar selected="Jun 4, 2013" controls></x-calendar>
+    </figure>
+
+    <figure class="cal-demo">
+        <header>With both initial view (June) and selected (July):</header>
+        <x-calendar view="Jun 9, 2013" selected="Jul 4, 2013" controls></x-calendar>
+    </figure>
 
     <script>
         var msPerDay = 24 * 60 * 60 * 1000;

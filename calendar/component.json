@@ -1,6 +1,6 @@
 {
   "name": "x-calendar",
-  "description": "",
+  "description": "A port of Potch's fortnight.js calendar UI in component form",
   "version": "0.1.0",
   "keywords": [
     "web-components",

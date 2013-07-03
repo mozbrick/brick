@@ -6,6 +6,7 @@
         months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                  'August', 'September', 'October', 'November', 'December']
     };
+    var TODAY = new Date();
 
     //minifier-friendly strings
     var className = 'className';
@@ -28,7 +29,7 @@
         var tag = a.shift();
         var el = document.createElement(tag);
         if (tag == 'a') {
-          el.href = 'javascript:;';
+          el.href = 'javascript:void(0);';
         }
         el[className] = a.join(' ');
         return el;
@@ -198,9 +199,9 @@
     // creates the html elements for a given date, highlighting the
     // given selected date ranges
     function makeMonth(d, selected) {
-        if (!isValidDateObj(d)) throw 'Invalid cursor date!';
+        if (!isValidDateObj(d)) throw 'Invalid view date!';
         var month = getMonth(d);
-        var tdate = getDate(d)
+        var tdate = getDate(d);
         var sDate = findSunday(findFirst(d));
 
         var monthEl = makeEl('div.month');
@@ -223,9 +224,15 @@
           if (getMonth(cDate) != month) {
             addClass(day, 'badmonth');
           }
+
           if (dateMatches(cDate, selected)) {
             addClass(day, 'sel');
           }
+
+          if(dateMatches(cDate, TODAY)){
+            addClass(day, "today");
+          }
+
           appendChild(week, day);
           cDate = nextDay(cDate);
           if (cDate.getUTCDay() < 1) {
@@ -244,29 +251,42 @@
         var controls = makeEl('div.controls');
         var prev = makeEl('a.prev');
         var next = makeEl('a.next');
-        prev.innerHTML = LABELS['prev'];
-        next.innerHTML = LABELS['next'];
+        prev.innerHTML = LABELS.prev;
+        next.innerHTML = LABELS.next;
         appendChild(controls, prev);
         appendChild(controls, next);
         return controls;
     }
 
-    /**
-
-    params:
-        o            (optional) a data map of the following optional properties:
-                        - span             the number of months to display
-                        - cursor           the date to center the display on
-    **/
-    function Calendar(o) {
-        var o = o || {};
+    function Calendar(data) {
         var self = this;
-        self._span = o.span || 1;
-        self._cursor = o.cursor || new Date();
+        data = data || {};
+        self._span = data.span || 1;
 
-        // TODO: modify this holdover from fortnight.js to fit component
-        self._selected = o.selected || []; // a list of [date, date] ranges
+        if(data.view){
+            self._view = data.view;
+        }
+        else if (data.selected instanceof Date){
+            self._view = data.selected;
+        }
+        else{
+            self._view = TODAY;
+        }
 
+        if(data.selected){
+            if(data.selected instanceof Date){
+                self._selectedRanges = [data.selected];
+            }
+            else{
+                self._selectedRanges = data.selected;
+            }
+        }
+        else if(data.view){
+            self._selectedRanges = [data.view];
+        }
+        else{
+            self._selectedRanges = [];
+        }
 
         self.el = makeEl('div.calendar');
 
@@ -276,10 +296,10 @@
     Calendar.prototype.render = function(){
         var span = this._span;
         this.el.innerHTML = "";
-        // get first month of the span of months centered on the cursor
-        var ref = relOffset(this._cursor, 0, -Math.floor(span/2), 0);
+        // get first month of the span of months centered on the view
+        var ref = relOffset(this._view, 0, -Math.floor(span/2), 0);
         for (var i=0; i<span; i++) {
-            appendChild(this.el, makeMonth(ref, this._selected));
+            appendChild(this.el, makeMonth(ref, this._selectedRanges));
             // get next month's date
             ref = relOffset(ref, 0, 1, 0);
         }
@@ -295,22 +315,26 @@
                 this.render();
             }
         },
-        "cursor":{
+        "view":{
             attribute: {},
             get: function(){
-                return this._cursor;
+                return this._view;
             },
-            set: function(newCursorDate){
-                this._cursor = newCursorDate;
+            set: function(newViewDate){
+                this._view = newViewDate;
                 this.render();
             }
         },
+
         "selected": {
             get: function(){
-                return this._selected;
+                return this._selectedRanges;
             },
-            set: function(newSelected){
-                this._selected = newSelected;
+            set: function(newSelectedRange){
+                if(newSelectedRange instanceof Date){
+                    newSelectedRange = [newSelectedRange];
+                }
+                this._selectedRanges = newSelectedRange;
                 this.render();
             }
         }
@@ -322,7 +346,11 @@
             created: function(){
                 this.innerHTML = "";
 
-                this.xtag.calObj = new Calendar();
+                this.xtag.calObj = new Calendar({
+                    span: this.getAttribute("span"),
+                    view: parseDate(this.getAttribute("view")),
+                    selected: parseDate(this.getAttribute("selected"))
+                });
 
                 appendChild(this, this.xtag.calObj.el);
                 // append after calendar to use natural stack order instead of 
@@ -350,9 +378,7 @@
                 var xCalendar = e.currentTarget;
                 var day = this;
                 var date = day.getAttribute("data-date");
-                xCalendar.selectDate(date);
-
-                xtag.fireEvent(xCalendar, "dateselect");
+                xCalendar.selectDate(parseDate(date));
             }
         },
         accessors: {
@@ -368,22 +394,28 @@
                     this.xtag.calObj.span = newCalSpan;
                 }
             },
-            cursor: {
+            view: {
                 attribute: {},
                 get: function(){
-                    return this.xtag.calObj.cursor;
+                    return this.xtag.calObj.view;
                 },
-                set: function(newCursor){
-                    if(isValidDateObj(newCursor)){
-                       this.xtag.calObj.cursor = newCursor;
-                       xtag.fireEvent(this, "dateselect");
+                set: function(newView){
+                    var parsedDate = parseDate(newView);
+                    if(parsedDate){
+                        this.xtag.calObj.view = parsedDate;
                     }
-                    else{
-                        var parsedDate = parseDate(newCursor);
-                        if(parsedDate){
-                            this.xtag.calObj.cursor = parsedDate;
-                            xtag.fireEvent(this, "dateselect");
-                        }
+                }
+            },
+            selected: {
+                attribute: {},
+                get: function(){
+                    return this.xtag.calObj.selected;
+                },
+                set: function(newDate){
+                    var parsedDate = parseDate(newDate);
+                    if(parsedDate){
+                        this.xtag.calObj.selected = parsedDate;
+                        xtag.fireEvent(this, "dateselect");
                     }
                 }
             }
@@ -395,15 +427,17 @@
             // Go back one month.
             prevMonth: function(){
                 var calObj = this.xtag.calObj;
-                calObj.cursor = relOffset(calObj.cursor, 0, -1, 0);
+                calObj.view = relOffset(calObj.view, 0, -1, 0);
             },
             // Advance one month forward.
             nextMonth: function(){
                 var calObj = this.xtag.calObj;
-                calObj.cursor = relOffset(calObj.cursor, 0, 1, 0);
+                calObj.view = relOffset(calObj.view, 0, 1, 0);
             },
-            selectDate: function(newDate){
-                console.log("selectedDate not yet fully implemented, but we selected", newDate);
+            selectDate: function(newDateObj){
+                if(newDateObj instanceof Date){
+                    this.selected = [newDateObj];
+                }
             }
         }
     });

@@ -3,7 +3,7 @@
 	"tagName": "x-calendar",
 	"version": "0.1.0",
 	"author": "Leon Zhang, Matthew Claypotch",
-	"description": "A port of Potch's fortnight.js in component form",
+	"description": "A port of Potch's fortnight.js calendar UI in component form",
 	"demo": "demo/calendar-demo.html",
 	"categories": [
         "ui"
