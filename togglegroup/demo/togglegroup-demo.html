@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <link rel="stylesheet" type="text/css" href="../../toggle/src/toggle.css"/>
+    <link rel="stylesheet" type="text/css" href="../src/togglegroup.css"/>
+
+    <style>
+        .add-opt-button{
+            display: block;
+        }
+
+        #fancy-demo > x-toggle{
+            background-image: none;
+            border-radius: 50%;
+            font-family: Courier, monospace;
+            margin: .5em;
+            padding: .5em;
+            max-width: 100px;
+            height: 100px;
+            border: 1px solid grey;
+
+            background-color: grey;
+            color: white;
+        }
+
+        #fancy-demo > x-toggle[checked]{
+            box-shadow: 1px 1px 10px grey;
+            -webkit-transform: translateY(-7px);
+            -moz-transform: translateY(-7px);
+            -ms-transform: translateY(-7px);
+            -o-transform: translateY(-7px);
+            transform: translateY(-7px);
+            color: black;
+        }
+
+        #fancy-demo > x-toggle:nth-child(3n+1)[checked]{
+            background-color: #F3E5AB;
+        }
+        #fancy-demo > x-toggle:nth-child(3n+2)[checked]{
+            background-color: pink;
+        }
+        #fancy-demo > x-toggle:nth-child(3n+3)[checked]{
+            background-color: chocolate;
+        }
+
+        #fancy-demo > x-toggle:not([checked]):hover{
+            opacity: 0.7;
+        }
+
+        #fancy-demo > x-toggle:after{
+            position:absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+    </style>
+
+    <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../../toggle/src/toggle.js"></script>
+    <script type="text/javascript" src="../src/togglegroup.js"></script>
+</head>
+<body>
+    <h1>x-togglegroup demo</h1>
+    (Radio) Search by: &nbsp;
+    <x-togglegroup id="radio-demo" name="searchtype" group="search">
+         <x-toggle label="Title"></x-toggle>
+         <x-toggle label="Author"></x-toggle>
+         <x-toggle label="Date"></x-toggle>
+         <x-toggle label="Publisher"></x-toggle>
+         <x-toggle label="ISBN"></x-toggle>
+         <x-toggle label="City of Publication"></x-toggle>
+         <x-toggle label="Editor"></x-toggle>
+    </x-togglegroup>
+    <button class="add-opt-button">Add option</button>
+
+    (Checkbox) Tags: &nbsp;
+    <x-togglegroup id="check-demo">
+         <x-toggle label="Video"></x-toggle>
+         <x-toggle label="Text"></x-toggle>
+         <x-toggle label="Audio"></x-toggle>
+         <x-toggle label="Screenshot"></x-toggle>
+    </x-togglegroup>
+    <button class="add-opt-button">Add option</button>
+
+    (Radio) Fancy buttons: &nbsp;
+    <x-togglegroup id="fancy-demo" name="flavor">
+         <x-toggle label="Vanilla"></x-toggle>
+         <x-toggle label="Strawberry"></x-toggle>
+         <x-toggle label="Chocolate"></x-toggle>
+    </x-togglegroup>
+    <button class="add-opt-button">Add option</button>
+
+    <script>
+        function randomWord(len){
+            var output = "";
+            var aCode = "A".charCodeAt(0);
+            for(var i=0; i < len; i++){
+                var letterCode = aCode + Math.floor(Math.random() * 26);
+                var letter = String.fromCharCode(letterCode);
+                
+                if(Math.random() > 0.5){
+                    letter = letter.toLowerCase();
+                }
+                output += letter;
+            }
+            return output;
+        }
+
+        document.addEventListener('DOMComponentsLoaded', function(){
+            xtag.addEvent(document, "click:delegate(.add-opt-button)", function(e){
+                var button = this;
+                var optBar = button.previousElementSibling;
+
+                var newOpt = document.createElement("x-toggle");
+                newOpt.label = randomWord(8);
+
+                optBar.appendChild(newOpt);
+            })
+        });
+    </script>
+</body>
+</html>

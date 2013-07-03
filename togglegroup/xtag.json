@@ -1,10 +1,10 @@
 {
-	"name": "OptionBar",
-	"tagName": "x-optionbar",
+	"name": "Togglegroup",
+	"tagName": "x-togglegroup",
 	"version": "0.1.0",
 	"author": "Leon Zhang",
-	"description": "Optionbars are used to display a set of clickable options, of which only one can be chosen at a time.",
-	"demo": "demo/optionbar-demo.html",
+	"description": "togglegroups are used to display a set of clickable options, of which only one can be chosen at a time.",
+	"demo": "demo/togglegroup-demo.html",
 	"categories": [
         "ui"
     ],

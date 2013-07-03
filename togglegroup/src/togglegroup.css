@@ -1,4 +1,4 @@
-x-optionbar {
+x-togglegroup {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -18,7 +18,7 @@ x-optionbar {
   -ms-align-content: center;
   align-content: center;
   width: 100%; }
-  x-optionbar > x-toggle {
+  x-togglegroup > x-toggle {
     display: block;
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
@@ -57,26 +57,29 @@ x-optionbar {
     -moz-transition-delay: 0s;
     -o-transition-delay: 0s;
     transition-delay: 0s; }
-    x-optionbar > x-toggle:hover:not([checked]) {
+    x-togglegroup > x-toggle:hover:not([checked]) {
       background-position: 0 1em; }
-    x-optionbar > x-toggle[checked] {
+    x-togglegroup > x-toggle[checked] {
       background-image: none;
       background-color: #eee;
       box-shadow: inset 1px 1px 2px #888; }
-    x-optionbar > x-toggle > .x-toggle-check {
-      display: none !important; }
-  x-optionbar[type="radio"] > x-toggle:first-child {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px; }
-  x-optionbar[type="radio"] > x-toggle:last-child {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px; }
-  x-optionbar[type="radio"] > x-toggle:not(:first-child) {
-    border-left-width: 0px; }
-  x-optionbar:not([name]) > x-toggle {
-    border-radius: 4px;
-    margin: 0 .25em; }
-    x-optionbar:not([name]) > x-toggle:first-child {
-      margin-left: 0; }
-    x-optionbar:not([name]) > x-toggle:last-child {
-      margin-right: 0; }
+    x-togglegroup > x-toggle[type="radio"]:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px; }
+    x-togglegroup > x-toggle[type="radio"]:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px; }
+    x-togglegroup > x-toggle[type="radio"]:not(:first-child) {
+      border-left-width: 0px; }
+    x-togglegroup > x-toggle:not([type="radio"]) {
+      border-radius: 4px;
+      margin: 0 .25em; }
+      x-togglegroup > x-toggle:not([type="radio"]):first-child {
+        margin-left: 0; }
+      x-togglegroup > x-toggle:not([type="radio"]):last-child {
+        margin-right: 0; }
+    x-togglegroup > x-toggle[focus] {
+      -webkit-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+      -moz-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+      -ms-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+      box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8); }

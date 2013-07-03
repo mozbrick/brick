@@ -1,6 +1,6 @@
 {
-  "name": "x-optionbar",
-  "description": "A set of associated options of which only one can be selected at a time",
+  "name": "x-togglegroup",
+  "description": "A set of associated toggle options, represented as a bar of buttons",
   "version": "0.1.0",
   "keywords": [
     "web-components",
@@ -10,8 +10,8 @@
     "x-tag"
   ],
   "main": [
-    "src/optionbar.js",
-    "src/optionbar.css"
+    "src/togglegroup.js",
+    "src/togglegroup.css"
   ],
   "dependencies": {
     "x-tag-core": "*"

@@ -1,5 +1,5 @@
 (function(){
-    xtag.register('x-optionbar', {
+    xtag.register('x-togglegroup', {
         lifecycle: {
             created: function(){
                 this.options.forEach(function(option){
@@ -9,9 +9,11 @@
                     if(this.group){
                         option.group = this.group;
                     }
+
+                    option.noBox = true;
                 }.bind(this));
 
-                console.log(this.childNodes);
+                console.log(this.options);
             }
         },
         events: {
