@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <link rel="stylesheet" type="text/css" href="../src/calendar.css"/>
+    
+    <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../src/calendar.js"></script>
+    
+    <style>
+    </style>
+</head>
+<body>
+    <h1>x-calendar demo</h1>
+
+    <x-calendar span=3 cursor="November 16, 1952" controls></x-calendar>
+
+    <script>
+        var msPerDay = 24 * 60 * 60 * 1000;
+
+        document.addEventListener('DOMComponentsLoaded', function(){
+            xtag.addEvent(document, "prevmonth:delegate(x-calendar)", function(e){
+                console.log("prevmonth detected on", this);
+            });
+
+            xtag.addEvent(document, "nextmonth:delegate(x-calendar)", function(e){
+                console.log("nextmonth detected on", this);
+            });
+
+            xtag.addEvent(document, "dateselect:delegate(x-calendar)", function(e){
+                console.log("dateselect detected on", this);
+            });
+
+        }, false);
+    </script>
+</body>
+</html>

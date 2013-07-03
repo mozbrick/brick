@@ -1,0 +1,84 @@
+x-calendar {
+  position: relative;
+  font-size: 14px;
+  font-family: sans-serif;
+  text-align: center;
+  overflow: hidden;
+  border: 2px solid #888;
+  display: inline-block; }
+
+x-calendar .calendar {
+  position: relative;
+  background: #fff;
+  color: #fff;
+  overflow: hidden;
+  display: inline-block; }
+
+x-calendar .month {
+  display: inline-block;
+  padding: 2px;
+  margin: 0;
+  vertical-align: top;
+  white-space: nowrap; }
+
+x-calendar .week {
+  margin-top: 1px;
+  overflow: hidden; }
+
+x-calendar .label,
+x-calendar a {
+  background: #fff;
+  color: #444;
+  height: 2em;
+  line-height: 2em;
+  text-decoration: none;
+  width: 2em; }
+
+x-calendar a:hover {
+  background: #ddd; }
+
+x-calendar .label {
+  width: 100%; }
+
+x-calendar .day {
+  color: #444;
+  display: inline-block;
+  margin-left: 1px;
+  white-space: nowrap; }
+
+x-calendar .day:first-child {
+  margin: 0; }
+
+x-calendar .day.sel,
+x-calendar .day:hover {
+  background: #444;
+  color: #fff; }
+
+x-calendar .day.badmonth {
+  background: #fff;
+  color: #aaa; }
+
+x-calendar .day.badmonth.sel {
+  background: #ddd; }
+
+x-calendar .day.badmonth:hover {
+  background: #ddd; }
+
+x-calendar > .controls {
+  background: red;
+  display: none; }
+
+x-calendar[controls] > .controls {
+  display: block; }
+
+x-calendar .prev,
+x-calendar .next {
+  color: #444;
+  position: absolute;
+  top: 2px; }
+
+x-calendar .prev {
+  left: 2px; }
+
+x-calendar .next {
+  right: 2px; }

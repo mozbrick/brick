@@ -1,0 +1,19 @@
+{
+  "name": "x-calendar",
+  "description": "",
+  "version": "0.1.0",
+  "keywords": [
+    "web-components",
+    "button",
+    "icon",
+    "label",
+    "x-tag"
+  ],
+  "main": [
+    "src/calendar.js",
+    "src/calendar.css"
+  ],
+  "dependencies": {
+    "x-tag-core": "*"
+  }
+}
