@@ -31,12 +31,12 @@ x-optionbar{
             box-shadow: inset 1px 1px 2px #888;
         }
 
-        .x-toggle-check{
+        & > .x-toggle-check{
             display: none !important;
         }
     }
 
-    &[name]{
+    &[type="radio"]{
         & > x-toggle{
             &:first-child{
                 border-top-left-radius: 4px;
