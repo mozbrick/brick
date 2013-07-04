@@ -208,6 +208,10 @@
     * parse out and return the number of milliseconds this represents
     **/
     function durationStrToMs(str){
+        if(typeof(str) !== typeof("")){
+            return 0;
+        }
+
         var reg = /^(\d*\.?\d+)(m?s)$/;
         var matchInfo = str.toLowerCase().match(reg);
         
@@ -397,9 +401,6 @@
             oldCard.addEventListener('transitionend', onTransitionComplete);
             newCard.addEventListener('transitionend', onTransitionComplete);
             
-            // unleash the animation!
-            oldCard.removeAttribute("before-animation");
-            newCard.removeAttribute("before-animation");
             
             // alternatively, because transitionend may not ever fire, have a
             // fallback setTimeout to catch cases where transitionend doesn't
@@ -414,20 +415,37 @@
             // near instant
             var timeoutDuration = (cardAnimName.toLowerCase() === "none") ?
                                   0 : Math.ceil(maxDuration * waitMultiplier);
-                                  
-            window.setTimeout(function(){
-                if(animationComplete){
-                    return;
-                }
-                
+
+            if(timeoutDuration === 0){
                 animationComplete = true;
-                
-                newCard.removeEventListener("transitionend", 
+                    
+                oldCard.removeEventListener("transitionend", 
                                              onTransitionComplete);
                 newCard.removeEventListener("transitionend", 
                                              onTransitionComplete);
+                oldCard.removeAttribute("before-animation");
+                newCard.removeAttribute("before-animation");
                 _onComplete();
-            }, timeoutDuration);
+            }
+            else{
+                // unleash the animation!
+                oldCard.removeAttribute("before-animation");
+                newCard.removeAttribute("before-animation");
+
+                window.setTimeout(function(){
+                    if(animationComplete){
+                        return;
+                    }
+                    
+                    animationComplete = true;
+                    
+                    oldCard.removeEventListener("transitionend", 
+                                                 onTransitionComplete);
+                    newCard.removeEventListener("transitionend", 
+                                                 onTransitionComplete);
+                    _onComplete();
+                }, timeoutDuration);
+            }
         };
         
         // finally, after setting up all these callback functions, actually
