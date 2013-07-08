@@ -1,11 +1,20 @@
 x-calendar {
   position: relative;
-  font-size: 14px;
+  font-size: 1em;
   font-family: sans-serif;
   text-align: center;
   overflow: hidden;
   border: 2px solid #888;
-  display: inline-block; }
+  display: inline-block;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent; }
 
 x-calendar .calendar {
   position: relative;
@@ -26,7 +35,9 @@ x-calendar .week {
   overflow: hidden; }
 
 x-calendar .label,
-x-calendar a {
+x-calendar .day,
+x-calendar .prev,
+x-calendar .next {
   background: #fff;
   color: #444;
   height: 2em;
@@ -34,8 +45,11 @@ x-calendar a {
   text-decoration: none;
   width: 2em; }
 
-x-calendar a:hover {
-  background: #ddd; }
+x-calendar .day:hover,
+x-calendar .prev:hover,
+x-calendar .next:hover {
+  background: #ddd;
+  cursor: pointer; }
 
 x-calendar .label {
   width: 100%; }

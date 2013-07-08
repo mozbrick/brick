@@ -73,6 +73,10 @@
                 console.log("dateselect detected on", this);
             });
 
+            xtag.addEvent(document, "dateremove:delegate(x-calendar)", function(e){
+                console.log("dateremove detected on", this);
+            });
+
         }, false);
     </script>
 </body>

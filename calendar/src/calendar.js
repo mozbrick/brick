@@ -16,6 +16,9 @@
     // separator between date ranges
     var OUTER_RANGE_SEP = ";";
 
+    var DRAG_ADD = "add";
+    var DRAG_REMOVE = "remove";
+
     //minifier-friendly strings
     var className = 'className';
 
@@ -324,7 +327,7 @@
         var done = false;
 
         while(!done) {
-          var day = makeEl('a.day');
+          var day = makeEl('span.day');
           day.setAttribute('data-date', iso(cDate));
           day.textContent = getDate(cDate);
           if (getMonth(cDate) != month) {
@@ -355,8 +358,8 @@
 
     function makeControls() {
         var controls = makeEl('div.controls');
-        var prev = makeEl('a.prev');
-        var next = makeEl('a.next');
+        var prev = makeEl('span.prev');
+        var next = makeEl('span.next');
         prev.innerHTML = LABELS.prev;
         next.innerHTML = LABELS.next;
         appendChild(controls, prev);
@@ -472,6 +475,50 @@
         return _collapseRanges(cleanRanges);
     };
 
+    Calendar.prototype.addDate = function(dateObj, append){
+        if(dateObj instanceof Date){
+            if(append){
+                this.selected.push(dateObj);
+                // trigger setter
+                this.selected = this.selected;
+            }
+            else{
+                this.selected = [dateObj];
+            }
+        }
+    }
+
+    Calendar.prototype.removeDate = function(dateObj){
+        if(!(dateObj instanceof Date)){
+            return;
+        }
+
+        var ranges = this.selected.slice(0);
+        for(var i = 0; i < ranges.length; i++){
+            var range = ranges[i];
+            if(dateMatches(dateObj, [range])){
+                ranges.splice(i, 1);
+
+                if(isArray(range)){
+                    var rangeStart = range[0];
+                    var rangeEnd = range[1];
+                    var prevDate = prevDay(dateObj);
+                    var nextDate = nextDay(dateObj);
+
+                    if(dateMatches(prevDate, [range])){
+                        ranges.push([rangeStart, prevDate]);
+                    }
+
+                    if(dateMatches(nextDate, [range])){
+                        ranges.push([nextDate, rangeEnd]);
+                    }
+                }
+                this.selected = _collapseRanges(ranges);
+                break;
+            }
+        }
+    }
+
     Calendar.prototype.render = function(){
         var span = this._span;
         this.el.innerHTML = "";
@@ -551,6 +598,8 @@
                 // append controls AFTER calendar to use natural stack order 
                 // instead of needing explicit z-index
                 appendChild(this, makeControls());
+
+                this.xtag.dragType = null;
             },
             inserted: function(){
                 this.render();
@@ -569,11 +618,42 @@
 
                 xtag.fireEvent(xCalendar, "prevmonth");
             },
-            "tap:delegate(.day)": function(e){
+            "tapstart:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
-                var date = day.getAttribute("data-date");
-                xCalendar.selectDate(parseSingleDate(date), e.ctrlKey);
+                var rawDate = day.getAttribute("data-date");
+                var dateObj = parseSingleDate(rawDate);
+
+                if(xtag.hasClass(day, "sel")){
+                    xCalendar.xtag.dragType = DRAG_REMOVE;
+                    xCalendar.unselectDate(dateObj);
+                }
+                else{
+                    xCalendar.xtag.dragType = DRAG_ADD;
+                    xCalendar.selectDate(dateObj, true);
+                }
+            },
+            "tapenter:delegate(.day)": function(e){
+                var xCalendar = e.currentTarget;
+                var rawDate = this.getAttribute("data-date");
+                var dateObj = parseSingleDate(rawDate);
+                if(xCalendar.xtag.dragType === DRAG_ADD){
+                    xCalendar.selectDate(dateObj, true);
+                }
+                else if(xCalendar.xtag.dragType === DRAG_REMOVE){
+                    xCalendar.unselectDate(dateObj);
+                }
+            },
+            "tapend": function(e){
+                var xCalendar = e.currentTarget;
+
+                if(xCalendar.xtag.dragType === DRAG_ADD){
+                    xtag.fireEvent(xCalendar, "dateselect");
+                }
+                else if(xCalendar.xtag.dragType === DRAG_REMOVE){
+                    xtag.fireEvent(xCalendar, "dateremove");
+                }
+                xCalendar.xtag.dragType = null;
             }
         },
         accessors: {
@@ -611,7 +691,6 @@
                     if(parsedDateRanges){
                         this.xtag.calObj.selected = parsedDateRanges;
                         this.setAttribute("selected", this.xtag.calObj.selectedString);
-                        xtag.fireEvent(this, "dateselect");
                     }
                 }
             }
@@ -631,16 +710,14 @@
                 calObj.view = relOffset(calObj.view, 0, 1, 0);
             },
             selectDate: function(newDateObj, append){
-                if(newDateObj instanceof Date){
-                    if(append){
-                        this.selected.push(newDateObj);
-                        // trigger setter
-                        this.selected = this.selected;
-                    }
-                    else{
-                        this.selected = [newDateObj];
-                    }
-                }
+                this.xtag.calObj.addDate(newDateObj, append);
+                // trigger setter
+                this.selected = this.selected;
+            },
+            unselectDate: function(dateObj){
+                this.xtag.calObj.removeDate(dateObj);
+                // trigger setter
+                this.selected = this.selected;
             }
         }
     });
