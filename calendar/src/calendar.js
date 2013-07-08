@@ -1,5 +1,4 @@
 (function(){
-
     var LABELS = {
         prev: '<',
         next: '>',
@@ -7,10 +6,14 @@
                  'August', 'September', 'October', 'November', 'December']
     };
     var TODAY = new Date();
+    TODAY.setUTCHours(0);
+    TODAY.setUTCMinutes(0);
+    TODAY.setUTCSeconds(0);
+    TODAY.setUTCMilliseconds(0);
 
-    // separator within a range between start & end
+    // separator within a range between start date & end date
     var INNER_RANGE_SEP = "|"; 
-    // separator between ranges
+    // separator between date ranges
     var OUTER_RANGE_SEP = ";";
 
     //minifier-friendly strings
@@ -188,6 +191,11 @@
                         return null;
                     }
 
+                    if(parsedStartDate.valueOf() > parsedEndDate.valueOf()){
+                        console.log("invalid range", rangeStr, "; start date is after end date");
+                        return null;
+                    }
+
                     ranges[i] = [parsedStartDate, parsedEndDate];
                     break;
 
@@ -204,17 +212,18 @@
     function parseSingleDate(dateStr){
         if(dateStr instanceof Date) return dateStr;
 
-        var parsedMs = Date.parse(dateStr);
-        if(!isNaN(parsedMs)){
-            return new Date(parsedMs);
+        // cross-browser check for ISO format that is not 
+        // supported by Date.parse without implicit time zone
+        var isoParsed = fromIso(dateStr);
+        if(isoParsed){
+            return isoParsed;
         }
         else{
-            // cross-browser check for subset of ISO format that is not natively
-            // supported by Date.parse in some older browsers
-            var isoParsed = fromIso(dateStr);
-            if(isoParsed){
-                return isoParsed;
+            var parsedMs = Date.parse(dateStr);
+            if(!isNaN(parsedMs)){
+                return new Date(parsedMs);
             }
+
             return null;
         }
     }
@@ -283,6 +292,14 @@
     function dateInRange(start, end, d) {
         // convert to strings for easier comparison
         return iso(start) <= iso(d) && iso(d) <= iso(end);
+    }
+
+    function sortRanges(ranges){
+        ranges.sort(function(rangeA, rangeB){
+            var dateA = (rangeA instanceof Date) ? rangeA : rangeA[0];
+            var dateB = (rangeB instanceof Date) ? rangeB : rangeB[0];
+            return dateA.valueOf() - dateB.valueOf();
+        });
     }
 
     // creates the html elements for a given date, highlighting the
@@ -362,6 +379,8 @@
     // given a view Date and a parsed selection range list, return the
     // Date to use as the view, depending on what information is given
     Calendar.prototype._getSanitizedViewDate = function(viewDate, selectedRanges){
+        selectedRanges = (selectedRanges === undefined) ? this.selected : selectedRanges;
+
         // if given a valid viewDate, return it
         if(viewDate instanceof Date){
            return viewDate;
@@ -384,19 +403,73 @@
         }
     };
 
+    function _collapseRanges(ranges){
+        sortRanges(ranges);
+
+        var collapsed = [];
+        for(var i = 0; i < ranges.length; i++){
+            var currRange = ranges[i];
+            var prevRange = (collapsed.length > 0) ? collapsed[collapsed.length-1] : null;
+
+            var currStart, currEnd;
+            var prevStart, prevEnd;
+
+            if(currRange instanceof Date){
+                currStart = currEnd = currRange;
+            }
+            else{
+                currStart = currRange[0];
+                currEnd = currRange[1];
+            }
+            currRange = (dateMatches(currStart, currEnd)) ? currStart : [currStart, currEnd];
+
+            if(prevRange instanceof Date){
+                prevStart = prevEnd = prevRange;
+            }
+            else if(prevRange){
+                prevStart = prevRange[0];
+                prevEnd = prevRange[1];
+            }
+            else{
+                collapsed.push(currRange);
+                continue;
+            }
+
+            // if we should collapse range, merge with previous range
+            if(dateMatches(currStart, [prevRange]) || dateMatches(prevDay(currStart), [prevRange])){
+                var minStart = (prevStart.valueOf() < currStart.valueOf()) ? prevStart : currStart;
+                var maxEnd = (prevEnd.valueOf() > currEnd.valueOf()) ? prevEnd : currEnd;
+
+                var newRange = (dateMatches(minStart, maxEnd)) ? minStart : [minStart, maxEnd];
+                collapsed[collapsed.length-1] = newRange;
+            }
+            // if we don't collapse, just add to list
+            else{
+                collapsed.push(currRange);
+            }
+        }
+
+        return collapsed;
+    }
+
     Calendar.prototype._getSanitizedSelectedRanges = function(selectedRanges, viewDate){
+        viewDate = (viewDate === undefined) ? this.view : viewDate;
+
+        var cleanRanges;
         if(selectedRanges instanceof Date){
-            return [selectedRanges];
+            cleanRanges = [selectedRanges];
         }
         else if(isArray(selectedRanges)){
-            return selectedRanges;
+            cleanRanges = selectedRanges;
         }
         else if(viewDate){
-            return [viewDate];
+            cleanRanges = [viewDate];
         }
         else{
-            return [];
+            cleanRanges = [];
         }
+
+        return _collapseRanges(cleanRanges);
     };
 
     Calendar.prototype.render = function(){
@@ -427,7 +500,7 @@
                 return this._viewDate;
             },
             set: function(newViewDate){
-                this._viewDate = this._getSanitizedViewDate(newViewDate, this.selected);
+                this._viewDate = this._getSanitizedViewDate(newViewDate);
                 this.render();
             }
         },
@@ -437,7 +510,7 @@
                 return this._selectedRanges;
             },
             set: function(newSelectedRanges){
-                this._selectedRanges = this._getSanitizedSelectedRanges(newSelectedRanges, this.view);
+                this._selectedRanges = this._getSanitizedSelectedRanges(newSelectedRanges);
                 this.render();
             }
         },
@@ -500,7 +573,7 @@
                 var xCalendar = e.currentTarget;
                 var day = this;
                 var date = day.getAttribute("data-date");
-                xCalendar.selectDate(parseSingleDate(date));
+                xCalendar.selectDate(parseSingleDate(date), e.ctrlKey);
             }
         },
         accessors: {
@@ -557,9 +630,16 @@
                 var calObj = this.xtag.calObj;
                 calObj.view = relOffset(calObj.view, 0, 1, 0);
             },
-            selectDate: function(newDateObj){
+            selectDate: function(newDateObj, append){
                 if(newDateObj instanceof Date){
-                    this.selected = [newDateObj];
+                    if(append){
+                        this.selected.push(newDateObj);
+                        // trigger setter
+                        this.selected = this.selected;
+                    }
+                    else{
+                        this.selected = [newDateObj];
+                    }
                 }
             }
         }
