@@ -514,6 +514,13 @@
                 }
             },
             // simple interface with the actual input element
+            "name":{
+                attribute:{
+                    selector: "input[type=range]"
+                },
+                set: function(){}
+            }
+            // simple interface with the actual input element
             "value": {
                 attribute: {
                     selector: "input[type=range]"

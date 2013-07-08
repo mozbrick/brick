@@ -11,6 +11,7 @@
     
     <style>
         .cal-demo{
+            vertical-align: top;
             display: inline-block;
             padding: .5em;
             margin: 0 .5em;
@@ -49,6 +50,11 @@
     <figure class="cal-demo">
         <header>With both initial view (June) and selected (July):</header>
         <x-calendar view="Jun 9, 2013" selected="Jul 4, 2013" controls></x-calendar>
+    </figure>
+
+    <figure class="cal-demo">
+        <header>Multi selected:</header>
+        <x-calendar selected="Jun 4, 2013|Jun 10, 2013; Jun 22, 2013; Jun 24, 2013|Jun 26, 2013" controls></x-calendar>
     </figure>
 
     <script>

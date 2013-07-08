@@ -78,7 +78,7 @@
                     if(this.targetSelector){
                         return xtag.query(document, this.targetSelector);
                     }
-                    else if(this.xtag.overrideTargetElems != null){
+                    else if(this.xtag.overrideTargetElems !== null){
                         return this.xtag.overrideTargetElems;
                     }
                     else{

@@ -8,6 +8,11 @@
     };
     var TODAY = new Date();
 
+    // separator within a range between start & end
+    var INNER_RANGE_SEP = "|"; 
+    // separator between ranges
+    var OUTER_RANGE_SEP = ";";
+
     //minifier-friendly strings
     var className = 'className';
 
@@ -21,6 +26,15 @@
     // is valid date object?
     function isValidDateObj(d) {
         return !!(d.getTime) && !isNaN(d.getTime());
+    }
+
+    function isArray(a){
+        if(a && a.isArray){
+            return a.isArray();
+        }
+        else{
+            return Object.prototype.toString.call(a) === "[object Array]";
+        }
     }
 
     // Takes a string 'div.foo' and returns the Node <div class="foo">.
@@ -112,7 +126,82 @@
         }
     }
 
-    function parseDate(dateStr){
+    // returns a list of selected dates/ranges
+    // returns null if any parsing error
+    function parseMultiDates(multiDateStr){
+        // if necessary, split the input into a list of unparsed ranges
+        var ranges;
+        if(isArray(multiDateStr)){
+            ranges = multiDateStr;
+        }
+        else if(typeof(multiDateStr) === "string"){
+            ranges = multiDateStr.split(OUTER_RANGE_SEP);
+        }
+        else{
+            return null;
+        }
+
+        // go through and replace each unparsed range with its parsed
+        // version (either a singular Date object or a two-item list of
+        // a start Date and an end Date)
+        for(var i = 0; i < ranges.length; i++){
+            var rangeStr = ranges[i];
+
+            var components;
+            if(rangeStr instanceof Date){
+                continue;
+            }
+            else if(isArray(rangeStr)){
+                components = rangeStr;
+            }
+            else{
+                components = rangeStr.split(INNER_RANGE_SEP);
+            }
+
+            switch(components.length){
+                // if only a single item, set the range to be a 
+                // single Date object
+                case 1:
+                    var singleParsedDate = parseSingleDate(components[0]);
+                    if(!singleParsedDate){
+                        console.log("unable to parse date:", components[0]);
+                        return null;
+                    }
+                    ranges[i] = singleParsedDate;
+                    break;
+                // if multiple items, set the range to be a 2-item list of 
+                // a start Date and an end Date
+                case 2:
+                    var startStr = components[0];
+                    var endStr = components[1];
+
+                    var parsedStartDate = parseSingleDate(startStr);
+                    if(!parsedStartDate){
+                        console.log("unable to parse start", startStr, 
+                                    "in range", rangeStr);
+                        return null;
+                    }
+                    var parsedEndDate = parseSingleDate(endStr);
+                    if(!parsedEndDate){
+                        console.log("unable to parse end", endStr, 
+                                    "in range", rangeStr);
+                        return null;
+                    }
+
+                    ranges[i] = [parsedStartDate, parsedEndDate];
+                    break;
+
+                // if not given a date or a 2-item range, log a parsing error
+                default:
+                    console.log("unable to parse range:", rangeStr);
+                    return null;
+            }
+        }
+        return ranges;
+    }
+
+    // returns actual date if parsable, otherwise null
+    function parseSingleDate(dateStr){
         if(dateStr instanceof Date) return dateStr;
 
         var parsedMs = Date.parse(dateStr);
@@ -262,42 +351,59 @@
         var self = this;
         data = data || {};
         self._span = data.span || 1;
-
-        if(data.view){
-            self._view = data.view;
-        }
-        else if (data.selected instanceof Date){
-            self._view = data.selected;
-        }
-        else{
-            self._view = TODAY;
-        }
-
-        if(data.selected){
-            if(data.selected instanceof Date){
-                self._selectedRanges = [data.selected];
-            }
-            else{
-                self._selectedRanges = data.selected;
-            }
-        }
-        else if(data.view){
-            self._selectedRanges = [data.view];
-        }
-        else{
-            self._selectedRanges = [];
-        }
-
+        // initialize private vars
+        self._viewDate = self._getSanitizedViewDate(data.view, data.selected);
+        self._selectedRanges = self._getSanitizedSelectedRanges(data.selected, data.view);
         self.el = makeEl('div.calendar');
 
         self.render();
     }
 
+    // given a view Date and a parsed selection range list, return the
+    // Date to use as the view, depending on what information is given
+    Calendar.prototype._getSanitizedViewDate = function(viewDate, selectedRanges){
+        // if given a valid viewDate, return it
+        if(viewDate instanceof Date){
+           return viewDate;
+        }
+        // otherwise, if given a valid selectedRanges, return the first date in
+        // the range as the view date
+        else if(isArray(selectedRanges) && selectedRanges.length > 0){
+            var firstRange = selectedRanges[0];
+            if(firstRange instanceof Date){
+                return firstRange;
+            }
+            else{
+                return firstRange[0];
+            }
+        }
+        // if not given a valid viewDate or selectedRanges, return the current
+        // day as the view date
+        else{
+            return TODAY;
+        }
+    };
+
+    Calendar.prototype._getSanitizedSelectedRanges = function(selectedRanges, viewDate){
+        if(selectedRanges instanceof Date){
+            return [selectedRanges];
+        }
+        else if(isArray(selectedRanges)){
+            return selectedRanges;
+        }
+        else if(viewDate){
+            return [viewDate];
+        }
+        else{
+            return [];
+        }
+    };
+
     Calendar.prototype.render = function(){
         var span = this._span;
         this.el.innerHTML = "";
         // get first month of the span of months centered on the view
-        var ref = relOffset(this._view, 0, -Math.floor(span/2), 0);
+        var ref = relOffset(this._viewDate, 0, -Math.floor(span/2), 0);
         for (var i=0; i<span; i++) {
             appendChild(this.el, makeMonth(ref, this._selectedRanges));
             // get next month's date
@@ -318,10 +424,10 @@
         "view":{
             attribute: {},
             get: function(){
-                return this._view;
+                return this._viewDate;
             },
             set: function(newViewDate){
-                this._view = newViewDate;
+                this._viewDate = this._getSanitizedViewDate(newViewDate, this.selected);
                 this.render();
             }
         },
@@ -330,12 +436,28 @@
             get: function(){
                 return this._selectedRanges;
             },
-            set: function(newSelectedRange){
-                if(newSelectedRange instanceof Date){
-                    newSelectedRange = [newSelectedRange];
-                }
-                this._selectedRanges = newSelectedRange;
+            set: function(newSelectedRanges){
+                this._selectedRanges = this._getSanitizedSelectedRanges(newSelectedRanges, this.view);
                 this.render();
+            }
+        },
+
+        "selectedString":{
+            get: function(){
+                // make copy so that we don't destroy internal representation
+                var selectedRanges = this._selectedRanges.slice(0);
+
+                for(var i = 0; i < selectedRanges.length; i++){
+                    var range = selectedRanges[i];
+                    if(range instanceof Date){
+                        selectedRanges[i] = iso(range);
+                    }
+                    else{
+                        selectedRanges[i] = iso(range[0]) + INNER_RANGE_SEP +
+                                            iso(range[1]);
+                    }
+                }
+                return selectedRanges.join(OUTER_RANGE_SEP);
             }
         }
     });
@@ -348,13 +470,13 @@
 
                 this.xtag.calObj = new Calendar({
                     span: this.getAttribute("span"),
-                    view: parseDate(this.getAttribute("view")),
-                    selected: parseDate(this.getAttribute("selected"))
+                    view: parseSingleDate(this.getAttribute("view")),
+                    selected: parseMultiDates(this.getAttribute("selected"))
                 });
 
                 appendChild(this, this.xtag.calObj.el);
-                // append after calendar to use natural stack order instead of 
-                // needing explicit z-index
+                // append controls AFTER calendar to use natural stack order 
+                // instead of needing explicit z-index
                 appendChild(this, makeControls());
             },
             inserted: function(){
@@ -378,7 +500,7 @@
                 var xCalendar = e.currentTarget;
                 var day = this;
                 var date = day.getAttribute("data-date");
-                xCalendar.selectDate(parseDate(date));
+                xCalendar.selectDate(parseSingleDate(date));
             }
         },
         accessors: {
@@ -400,21 +522,22 @@
                     return this.xtag.calObj.view;
                 },
                 set: function(newView){
-                    var parsedDate = parseDate(newView);
+                    var parsedDate = parseSingleDate(newView);
                     if(parsedDate){
                         this.xtag.calObj.view = parsedDate;
                     }
                 }
             },
             selected: {
-                attribute: {},
+                attribute: {skip: true},
                 get: function(){
                     return this.xtag.calObj.selected;
                 },
-                set: function(newDate){
-                    var parsedDate = parseDate(newDate);
-                    if(parsedDate){
-                        this.xtag.calObj.selected = parsedDate;
+                set: function(newDates){
+                    var parsedDateRanges = parseMultiDates(newDates);
+                    if(parsedDateRanges){
+                        this.xtag.calObj.selected = parsedDateRanges;
+                        this.setAttribute("selected", this.xtag.calObj.selectedString);
                         xtag.fireEvent(this, "dateselect");
                     }
                 }

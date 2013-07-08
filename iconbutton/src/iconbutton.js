@@ -17,7 +17,7 @@
         
         if(elem.xtag.iconEl.nodeName === IMG_NODE_NAME){
             iconSrc = (iconSrc !== undefined) ? iconSrc : elem.xtag.iconEl.src;
-            
+            console.log("src ", iconSrc, "\n", elem.xtag.iconEl.src);
             // replace image with empty source if given an empty source
             if(!iconSrc){
                 elem.xtag.iconEl.src = EMPTY_SRC;
@@ -125,6 +125,7 @@
             },
             attributeChanged: function(){
                 updatePartsOrder(this);
+                console.log("AC: ", this.xtag.iconEl.src);
                 updatePartsVisibility(this);
             }
         },
@@ -132,6 +133,7 @@
             "src":{
                 attribute: {selector: ".icon"},
                 set: function(newSrc){
+                    console.log("new", newSrc);
                     updatePartsVisibility(this, newSrc);
                 }
             },
