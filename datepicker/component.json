@@ -1,0 +1,19 @@
+{
+  "name": "x-datepicker",
+  "description": "A polyfill for <input type='date'>",
+  "version": "0.1.0",
+  "keywords": [
+    "web-components",
+    "button",
+    "icon",
+    "label",
+    "x-tag"
+  ],
+  "main": [
+    "src/datepicker.js",
+    "src/datepicker.css"
+  ],
+  "dependencies": {
+    "x-tag-core": "*"
+  }
+}

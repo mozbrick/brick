@@ -55,6 +55,7 @@ x-calendar .label {
   width: 100%; }
 
 x-calendar .day {
+  border-radius: 4px;
   color: #444;
   display: inline-block;
   margin-left: 1px;
@@ -72,7 +73,7 @@ x-calendar .day:hover {
   color: #fff; }
 
 x-calendar .day:not(.sel):hover {
-  background: #777; }
+  background: #999; }
 
 x-calendar .day.badmonth {
   background: #fff;

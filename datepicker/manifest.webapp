@@ -1,0 +1,10 @@
+{
+    "name": "Datepicker Demo",
+    "description": "A demo of the x-datepicker component.",
+    "developer": {
+        "name": "Mozilla",
+        "url": "http://github.com/mozilla/app-components/"
+    },
+    "launch_path": "demo/datepicker-demo.html",
+    "default_locale": "en"
+}

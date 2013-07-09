@@ -135,6 +135,7 @@
     // returns a list of selected dates/ranges
     // returns null if any parsing error
     function parseMultiDates(multiDateStr){
+        console.log(typeof(multiDateStr), "'", multiDateStr, "'");
         // if necessary, split the input into a list of unparsed ranges
         var ranges;
         if(isArray(multiDateStr)){
@@ -371,6 +372,8 @@
         var self = this;
         data = data || {};
         self._span = data.span || 1;
+        self._multiple = data.multiple || false;
+
         // initialize private vars
         self._viewDate = self._getSanitizedViewDate(data.view, data.selected);
         self._selectedRanges = self._getSanitizedSelectedRanges(data.selected, data.view);
@@ -472,7 +475,20 @@
             cleanRanges = [];
         }
 
-        return _collapseRanges(cleanRanges);
+        var collapsedRanges = _collapseRanges(cleanRanges);
+        if((!this.multiple) && collapsedRanges.length > 0){
+            var firstRange = collapsedRanges[0];
+
+            if(firstRange instanceof Date){
+                return [firstRange];
+            }
+            else{
+                return [firstRange[0]];
+            }
+        }
+        else{
+            return collapsedRanges;
+        }
     };
 
     Calendar.prototype.addDate = function(dateObj, append){
@@ -532,6 +548,16 @@
     };
 
     Object.defineProperties(Calendar.prototype, {
+        "multiple": {
+            get: function(){
+                return this._multiple;
+            },
+            set: function(multi){
+                this._multiple = multi;
+                this.selected = this._getSanitizedSelectedRanges(this.selected);
+                this.render();
+            }
+        },
         "span":{
             get: function(){
                 return this._span;
@@ -582,16 +608,31 @@
         }
     });
 
+    xtag.addEvent(document, "tapend", function(e){
+        var xCalendars = xtag.query(document, "x-calendar");
+        xCalendars.forEach(function(xCalendar){
+            if(xCalendar.xtag.dragType === DRAG_ADD){
+                xtag.fireEvent(xCalendar, "dateselect");
+            }
+            else if(xCalendar.xtag.dragType === DRAG_REMOVE){
+                xtag.fireEvent(xCalendar, "dateremove");
+            }
+            xCalendar.xtag.dragType = null;
+            xCalendar.removeAttribute("active");
+        });
+    })
 
     xtag.register("x-calendar", {
         lifecycle: {
             created: function(){
+                console.log("init", this, this.hasAttribute("multiple"));
                 this.innerHTML = "";
 
                 this.xtag.calObj = new Calendar({
                     span: this.getAttribute("span"),
                     view: parseSingleDate(this.getAttribute("view")),
-                    selected: parseMultiDates(this.getAttribute("selected"))
+                    selected: parseMultiDates(this.getAttribute("selected")),
+                    multiple: this.hasAttribute("multiple")
                 });
 
                 appendChild(this, this.xtag.calObj.el);
@@ -600,9 +641,12 @@
                 appendChild(this, makeControls());
 
                 this.xtag.dragType = null;
+                console.log("end init", this);
             },
             inserted: function(){
+                console.log("insert");
                 this.render();
+                console.log("end insert");
             }
         },
         events: {
@@ -630,37 +674,40 @@
                 }
                 else{
                     xCalendar.xtag.dragType = DRAG_ADD;
-                    xCalendar.selectDate(dateObj, true);
+                    xCalendar.selectDate(dateObj, xCalendar.multiple);
                 }
+
+                xCalendar.setAttribute("active", true);
             },
             "tapenter:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var rawDate = this.getAttribute("data-date");
                 var dateObj = parseSingleDate(rawDate);
                 if(xCalendar.xtag.dragType === DRAG_ADD){
-                    xCalendar.selectDate(dateObj, true);
+                    xCalendar.selectDate(dateObj, xCalendar.multiple);
                 }
                 else if(xCalendar.xtag.dragType === DRAG_REMOVE){
                     xCalendar.unselectDate(dateObj);
                 }
-            },
-            "tapend": function(e){
-                var xCalendar = e.currentTarget;
-
-                if(xCalendar.xtag.dragType === DRAG_ADD){
-                    xtag.fireEvent(xCalendar, "dateselect");
-                }
-                else if(xCalendar.xtag.dragType === DRAG_REMOVE){
-                    xtag.fireEvent(xCalendar, "dateremove");
-                }
-                xCalendar.xtag.dragType = null;
             }
         },
         accessors: {
-            controls:{
+            controls: {
                 attribute: {boolean: true}
             },
-            span:{
+            multiple: {
+                attribute: {boolean: true},
+                get: function(){
+                    return this.xtag.calObj.multiple;
+                },
+                set: function(multi){
+                    console.log("set multi:", multi);
+                    this.xtag.calObj.multiple = multi;
+                    this.selected = this.selected;
+                    console.log("end set multi:", multi);
+                }
+            },
+            span: {
                 attribute: {},
                 get: function(){
                     return this.xtag.calObj.span;
@@ -687,11 +734,15 @@
                     return this.xtag.calObj.selected;
                 },
                 set: function(newDates){
+                    console.log("set selected:", newDates);
                     var parsedDateRanges = parseMultiDates(newDates);
                     if(parsedDateRanges){
                         this.xtag.calObj.selected = parsedDateRanges;
+                        console.log("setAttribute");
                         this.setAttribute("selected", this.xtag.calObj.selectedString);
+                        console.log("end setAttribute");
                     }
+                    console.log("end set selected:", newDates);
                 }
             }
         },

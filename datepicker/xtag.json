@@ -1,0 +1,27 @@
+{
+	"name": "Datepicker",
+	"tagName": "x-datepicker",
+	"version": "0.1.0",
+	"author": "Leon Zhang",
+	"description": "A polyfill for <input type='date'>",
+	"demo": "demo/datepicker-demo.html",
+	"categories": [
+        "ui"
+    ],
+	"compatibility": {
+		"firefox": 5,
+		"chrome": 4,
+		"ie": 9,
+		"opera": 12,
+		"android": 2.1,
+		"ios": 4
+	},
+	"documentation": {
+		"description": "",
+		"attributes": {},
+		"events": {},
+		"methods": {},
+		"getters": {},
+		"setters": {}
+	}
+}
