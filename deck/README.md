@@ -37,6 +37,10 @@ Valid options:
 * [coverUp](demo/transition_type_gifs/coverUp.gif)
 * [coverRight](demo/transition_type_gifs/coverRight.gif)
 * [coverDown](demo/transition_type_gifs/coverDown.gif)
+* [uncoverLeft](demo/transition_type_gifs/uncoverLeft.gif)
+* [uncoverUp](demo/transition_type_gifs/uncoverUp.gif)
+* [uncoverRight](demo/transition_type_gifs/uncoverRight.gif)
+* [uncoverDown](demo/transition_type_gifs/uncoverDown.gif)
 * [none](demo/transition_type_gifs/none.gif)
 
 ## ___selected-index___ / ___selectedIndex___
