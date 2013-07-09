@@ -37,7 +37,6 @@ Valid options:
 * [coverUp](demo/transition_type_gifs/coverUp.gif)
 * [coverRight](demo/transition_type_gifs/coverRight.gif)
 * [coverDown](demo/transition_type_gifs/coverDown.gif)
-* [coverLeft](demo/transition_type_gifs/coverLeft.gif)
 * [none](demo/transition_type_gifs/none.gif)
 
 ## ___selected-index___ / ___selectedIndex___
