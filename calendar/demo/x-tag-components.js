@@ -2283,7 +2283,13 @@ if (document.readyState === 'complete') {
         original.call(this, name, attr && attr.boolean ? '' : value);
         if (attr) {
           syncAttr.call(this, attr, name, value);
+          /*
           if (!attr.skip && !this.xtag._skipAttr) {
+            attr.setter.call(this, attr.boolean ? method == 'setAttribute' : this.getAttribute(name));
+          }
+          */
+          if (!this.xtag._skipAttr) {
+            if (attr.skip) this.xtag._skipAttr = true;
             attr.setter.call(this, attr.boolean ? method == 'setAttribute' : this.getAttribute(name));
           }
           delete this.xtag._skipAttr;
