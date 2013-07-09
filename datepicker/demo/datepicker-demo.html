@@ -4,9 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <link rel="stylesheet" type="text/css" href="../../calendar/src/calendar.css"/>
     <link rel="stylesheet" type="text/css" href="../src/datepicker.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../../calendar/src/calendar.js"></script>
     <script type="text/javascript" src="../src/datepicker.js"></script>
     
     <style>
@@ -15,10 +17,29 @@
 <body>
     <h1>x-datepicker demo</h1>
 
-    <x-datepicker></x-datepicker>
+    <x-datepicker value="July 4, 2013"></x-datepicker>
+    <button>Toggle polyfill</button>
 
     <script>
         document.addEventListener('DOMComponentsLoaded', function(){
+            xtag.query(document, "x-datepicker + button").forEach(function(button){
+                var datepicker = button.previousElementSibling;
+                button.textContent = "Toggle polyfill (currently " + 
+                                    ((datepicker.polyfill) ? "on" : "off") + 
+                                    ")";
+            });
+
+            xtag.addEvent(document, "click:delegate(button)", function(e){
+                var button = this;
+                var datepicker = button.previousElementSibling;
+                if(datepicker && datepicker.tagName === "X-DATEPICKER"){
+                    datepicker.polyfill = !(datepicker.polyfill);
+
+                    button.textContent = "Toggle polyfill (currently " + 
+                                    ((datepicker.polyfill) ? "on" : "off") + 
+                                    ")";
+                }
+            });
         }, false);
     </script>
 </body>

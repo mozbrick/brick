@@ -407,13 +407,11 @@
                 
                 this.xtag.polyFillSliderThumb = null;
                 
-                // range support check
-                if(input.type === "range"){
-                    this.removeAttribute("polyfill");
-                }
-                // otherwise, set up and apply polyfill
-                else{
+                if(input.type !== "range" || this.hasAttribute("polyfill")){
                     this.setAttribute("polyfill", true);
+                }
+                else{
+                    this.removeAttribute("polyfill");
                 }
                 
                 _redraw(this);
@@ -519,7 +517,7 @@
                     selector: "input[type=range]"
                 },
                 set: function(){}
-            }
+            },
             // simple interface with the actual input element
             "value": {
                 attribute: {

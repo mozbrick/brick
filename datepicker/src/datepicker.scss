@@ -1,5 +1,59 @@
 @import "../../custommixins";
 
+$polyfillInputBorderWidth: 1px;
+
 x-datepicker {
     position: relative;
+    display: inline-block;
+    overflow: visible;
+    @include boxSizing(border-box);
+
+    & > .x-datepicker-input {
+        margin: 0;
+    }
+
+    & > .x-datepicker-polyfill-input{
+        margin: 0;
+        background-color: orange;
+        border: $polyfillInputBorderWidth solid grey;
+        padding: .25em;
+        font-family: Courier, monospace;
+        @include boxSizing(border-box);
+    }
+
+    & > x-calendar{
+        position: absolute;
+        left: 0;
+        top: 100%;
+        margin-top: -$polyfillInputBorderWidth; // offset to merge with polyfill input's border
+    }
+
+
+    &[polyfill]{
+        & > .x-datepicker-input {
+            display: none;
+        }
+
+        & > .x-datepicker-polyfill-input{
+            
+        }
+
+        & > x-calendar{
+
+        }
+    }
+
+    &:not([polyfill]){
+        & > .x-datepicker-input {
+
+        }
+
+        & > .x-datepicker-polyfill-input{
+            display: none;
+        }
+
+        & > x-calendar{
+            display: none;
+        }
+    }
 }

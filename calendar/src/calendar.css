@@ -6,6 +6,8 @@ x-calendar {
   overflow: hidden;
   border: 2px solid #888;
   display: inline-block;
+  margin: 0;
+  padding: 0;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -14,7 +16,12 @@ x-calendar {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
-  tap-highlight-color: transparent; }
+  tap-highlight-color: transparent;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box; }
 
 x-calendar .calendar {
   position: relative;

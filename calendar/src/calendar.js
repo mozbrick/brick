@@ -11,6 +11,8 @@
     TODAY.setUTCSeconds(0);
     TODAY.setUTCMilliseconds(0);
 
+    /* define constants for parsing multi-date attributes */
+
     // separator within a range between start date & end date
     var INNER_RANGE_SEP = "|"; 
     // separator between date ranges
@@ -141,7 +143,7 @@
         if(isArray(multiDateStr)){
             ranges = multiDateStr;
         }
-        else if(typeof(multiDateStr) === "string"){
+        else if(typeof(multiDateStr) === "string" && multiDateStr.length > 0){
             ranges = multiDateStr.split(OUTER_RANGE_SEP);
         }
         else{
@@ -196,7 +198,8 @@
                     }
 
                     if(parsedStartDate.valueOf() > parsedEndDate.valueOf()){
-                        console.log("invalid range", rangeStr, "; start date is after end date");
+                        console.log("invalid range", rangeStr, 
+                                    "; start date is after end date");
                         return null;
                     }
 
@@ -350,7 +353,9 @@
             week = makeEl('div.week');
             // Are we finished drawing the month?
             // Checks month rollover and year rollover
-            done = getMonth(cDate) > month || (getMonth(cDate) < month && getYear(cDate) > getYear(sDate));
+            done = (getMonth(cDate) > month || 
+                    (getMonth(cDate) < month && getYear(cDate) > getYear(sDate))
+                   );
           }
         }
 
@@ -376,7 +381,8 @@
 
         // initialize private vars
         self._viewDate = self._getSanitizedViewDate(data.view, data.selected);
-        self._selectedRanges = self._getSanitizedSelectedRanges(data.selected, data.view);
+        self._selectedRanges = self._getSanitizedSelectedRanges(data.selected, 
+                                                                data.view);
         self.el = makeEl('div.calendar');
 
         self.render();
@@ -384,8 +390,11 @@
 
     // given a view Date and a parsed selection range list, return the
     // Date to use as the view, depending on what information is given
-    Calendar.prototype._getSanitizedViewDate = function(viewDate, selectedRanges){
-        selectedRanges = (selectedRanges === undefined) ? this.selected : selectedRanges;
+    Calendar.prototype._getSanitizedViewDate = function(viewDate, 
+                                                        selectedRanges)
+    {
+        selectedRanges = (selectedRanges === undefined) ? 
+                            this.selected : selectedRanges;
 
         // if given a valid viewDate, return it
         if(viewDate instanceof Date){
@@ -415,7 +424,8 @@
         var collapsed = [];
         for(var i = 0; i < ranges.length; i++){
             var currRange = ranges[i];
-            var prevRange = (collapsed.length > 0) ? collapsed[collapsed.length-1] : null;
+            var prevRange = (collapsed.length > 0) ? 
+                              collapsed[collapsed.length-1] : null;
 
             var currStart, currEnd;
             var prevStart, prevEnd;
@@ -427,7 +437,8 @@
                 currStart = currRange[0];
                 currEnd = currRange[1];
             }
-            currRange = (dateMatches(currStart, currEnd)) ? currStart : [currStart, currEnd];
+            currRange = (dateMatches(currStart, currEnd)) ? 
+                             currStart : [currStart, currEnd];
 
             if(prevRange instanceof Date){
                 prevStart = prevEnd = prevRange;
@@ -442,11 +453,16 @@
             }
 
             // if we should collapse range, merge with previous range
-            if(dateMatches(currStart, [prevRange]) || dateMatches(prevDay(currStart), [prevRange])){
-                var minStart = (prevStart.valueOf() < currStart.valueOf()) ? prevStart : currStart;
-                var maxEnd = (prevEnd.valueOf() > currEnd.valueOf()) ? prevEnd : currEnd;
+            if(dateMatches(currStart, [prevRange]) || 
+               dateMatches(prevDay(currStart), [prevRange]))
+            {
+                var minStart = (prevStart.valueOf() < currStart.valueOf()) ? 
+                                                          prevStart : currStart;
+                var maxEnd = (prevEnd.valueOf() > currEnd.valueOf()) ? 
+                                                          prevEnd : currEnd;
 
-                var newRange = (dateMatches(minStart, maxEnd)) ? minStart : [minStart, maxEnd];
+                var newRange = (dateMatches(minStart, maxEnd)) ? 
+                                                minStart : [minStart, maxEnd];
                 collapsed[collapsed.length-1] = newRange;
             }
             // if we don't collapse, just add to list
@@ -458,7 +474,9 @@
         return collapsed;
     }
 
-    Calendar.prototype._getSanitizedSelectedRanges = function(selectedRanges, viewDate){
+    Calendar.prototype._getSanitizedSelectedRanges = function(selectedRanges, 
+                                                              viewDate)
+    {
         viewDate = (viewDate === undefined) ? this.view : viewDate;
 
         var cleanRanges;
@@ -583,7 +601,8 @@
                 return this._selectedRanges;
             },
             set: function(newSelectedRanges){
-                this._selectedRanges = this._getSanitizedSelectedRanges(newSelectedRanges);
+                this._selectedRanges = 
+                        this._getSanitizedSelectedRanges(newSelectedRanges);
                 this.render();
             }
         },
@@ -608,15 +627,10 @@
         }
     });
 
+    // added on the body to delegate dragends to all x-calendars
     xtag.addEvent(document, "tapend", function(e){
         var xCalendars = xtag.query(document, "x-calendar");
         xCalendars.forEach(function(xCalendar){
-            if(xCalendar.xtag.dragType === DRAG_ADD){
-                xtag.fireEvent(xCalendar, "dateselect");
-            }
-            else if(xCalendar.xtag.dragType === DRAG_REMOVE){
-                xtag.fireEvent(xCalendar, "dateremove");
-            }
             xCalendar.xtag.dragType = null;
             xCalendar.removeAttribute("active");
         });
@@ -662,6 +676,7 @@
 
                 xtag.fireEvent(xCalendar, "prevmonth");
             },
+            // start drag
             "tapstart:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
@@ -671,29 +686,45 @@
                 if(xtag.hasClass(day, "sel")){
                     xCalendar.xtag.dragType = DRAG_REMOVE;
                     xCalendar.unselectDate(dateObj);
+                    xtag.fireEvent(xCalendar, "dateremove");
                 }
                 else{
                     xCalendar.xtag.dragType = DRAG_ADD;
                     xCalendar.selectDate(dateObj, xCalendar.multiple);
+                    xtag.fireEvent(xCalendar, "dateselect");
                 }
 
                 xCalendar.setAttribute("active", true);
             },
+
+            // drag move
             "tapenter:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
-                var rawDate = this.getAttribute("data-date");
+                var day = this;
+                var rawDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(rawDate);
-                if(xCalendar.xtag.dragType === DRAG_ADD){
+                // trigger a selection if we enter a nonselected day while in
+                // addition mode
+                if(xCalendar.xtag.dragType === DRAG_ADD && 
+                   !(xtag.hasClass(day, "sel")))
+                {
                     xCalendar.selectDate(dateObj, xCalendar.multiple);
+                    xtag.fireEvent(xCalendar, "dateselect");
                 }
-                else if(xCalendar.xtag.dragType === DRAG_REMOVE){
+                // trigger a remove if we enter a selected day while in
+                // removal mode
+                else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
+                        xtag.hasClass(day, "sel"))
+                {
                     xCalendar.unselectDate(dateObj);
+                    xtag.fireEvent(xCalendar, "dateremove");
                 }
             }
         },
         accessors: {
             controls: {
-                attribute: {boolean: true}
+                attribute: {boolean: true},
+                set: function(){}
             },
             multiple: {
                 attribute: {boolean: true},
@@ -731,7 +762,24 @@
             selected: {
                 attribute: {skip: true},
                 get: function(){
-                    return this.xtag.calObj.selected;
+                    var selectedRanges = this.xtag.calObj.selected;
+                    if(!this.multiple){
+                        if(selectedRanges.length > 0){
+                            var firstRange = selectedRanges[0];
+                            if(firstRange instanceof Date){
+                                return firstRange;
+                            }
+                            else{
+                                return firstRange[0];
+                            }
+                        }
+                        else{
+                            return null;
+                        }
+                    }
+                    else{
+                        return this.xtag.calObj.selected;
+                    }
                 },
                 set: function(newDates){
                     console.log("set selected:", newDates);
@@ -739,7 +787,10 @@
                     if(parsedDateRanges){
                         this.xtag.calObj.selected = parsedDateRanges;
                         console.log("setAttribute");
-                        this.setAttribute("selected", this.xtag.calObj.selectedString);
+
+                        // override attribute with auto-generated string
+                        this.setAttribute("selected", 
+                                          this.xtag.calObj.selectedString);
                         console.log("end setAttribute");
                     }
                     console.log("end set selected:", newDates);
