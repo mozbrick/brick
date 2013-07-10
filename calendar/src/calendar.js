@@ -13,11 +13,6 @@
 
     /* define constants for parsing multi-date attributes */
 
-    // separator within a range between start date & end date
-    var INNER_RANGE_SEP = "|"; 
-    // separator between date ranges
-    var OUTER_RANGE_SEP = ";";
-
     var DRAG_ADD = "add";
     var DRAG_REMOVE = "remove";
 
@@ -137,14 +132,31 @@
     // returns a list of selected dates/ranges
     // returns null if any parsing error
     function parseMultiDates(multiDateStr){
-        console.log(typeof(multiDateStr), "'", multiDateStr, "'");
         // if necessary, split the input into a list of unparsed ranges
         var ranges;
         if(isArray(multiDateStr)){
             ranges = multiDateStr;
         }
         else if(typeof(multiDateStr) === "string" && multiDateStr.length > 0){
-            ranges = multiDateStr.split(OUTER_RANGE_SEP);
+            // check if this is a JSON representing a range of dates
+            try{
+                ranges = JSON.parse(multiDateStr);
+                if(!isArray(ranges)){
+                    console.log("invalid list of ranges", multiDateStr);
+                    return null;
+                }
+            }
+            catch(err){
+                // check for if this represents a single date
+                var parsedSingle = parseSingleDate(multiDateStr);
+                if(parsedSingle){
+                    return [parsedSingle];
+                }
+                else{
+                    console.log("unable to parse", multiDateStr, "as JSON or single date");
+                    return null;
+                }
+            }
         }
         else{
             return null;
@@ -154,62 +166,43 @@
         // version (either a singular Date object or a two-item list of
         // a start Date and an end Date)
         for(var i = 0; i < ranges.length; i++){
-            var rangeStr = ranges[i];
+            var range = ranges[i];
 
             var components;
-            if(rangeStr instanceof Date){
+            if(range instanceof Date){
                 continue;
             }
-            else if(isArray(rangeStr)){
-                components = rangeStr;
+            else if(typeof(range) === "string"){
+                var parsedDate = parseSingleDate(range);
+                if(!parsedDate){
+                    console.log("unable to parse date", range);
+                    return null;
+                }
+                ranges[i] = parsedDate;
+            }
+            else if(isArray(range)){
+                var parsedStartDate = parseSingleDate(range[0]);
+
+                if(!parsedStartDate){
+                    console.log("unable to parse start date", range[0], "in range", range);
+                    return null;
+                }
+
+                var parsedEndDate = parseSingleDate(range[1]);
+                if(!parsedEndDate){
+                    console.log("unable to parse end date", range[1], "in range", range);
+                    return null;
+                }
+
+                if(parsedStartDate.valueOf() > parsedEndDate.valueOf()){
+                    console.log("invalid range", range, ": start date is after end date");
+                    return null;
+                }
+                ranges[i] = [parsedStartDate, parsedEndDate];
             }
             else{
-                components = rangeStr.split(INNER_RANGE_SEP);
-            }
-
-            switch(components.length){
-                // if only a single item, set the range to be a 
-                // single Date object
-                case 1:
-                    var singleParsedDate = parseSingleDate(components[0]);
-                    if(!singleParsedDate){
-                        console.log("unable to parse date:", components[0]);
-                        return null;
-                    }
-                    ranges[i] = singleParsedDate;
-                    break;
-                // if multiple items, set the range to be a 2-item list of 
-                // a start Date and an end Date
-                case 2:
-                    var startStr = components[0];
-                    var endStr = components[1];
-
-                    var parsedStartDate = parseSingleDate(startStr);
-                    if(!parsedStartDate){
-                        console.log("unable to parse start", startStr, 
-                                    "in range", rangeStr);
-                        return null;
-                    }
-                    var parsedEndDate = parseSingleDate(endStr);
-                    if(!parsedEndDate){
-                        console.log("unable to parse end", endStr, 
-                                    "in range", rangeStr);
-                        return null;
-                    }
-
-                    if(parsedStartDate.valueOf() > parsedEndDate.valueOf()){
-                        console.log("invalid range", rangeStr, 
-                                    "; start date is after end date");
-                        return null;
-                    }
-
-                    ranges[i] = [parsedStartDate, parsedEndDate];
-                    break;
-
-                // if not given a date or a 2-item range, log a parsing error
-                default:
-                    console.log("unable to parse range:", rangeStr);
-                    return null;
+                console.log("invalid range value: ", range);
+                return null;
             }
         }
         return ranges;
@@ -230,7 +223,6 @@
             if(!isNaN(parsedMs)){
                 return new Date(parsedMs);
             }
-
             return null;
         }
     }
@@ -378,7 +370,6 @@
         data = data || {};
         self._span = data.span || 1;
         self._multiple = data.multiple || false;
-
         // initialize private vars
         self._viewDate = self._getSanitizedViewDate(data.view, data.selected);
         self._selectedRanges = self._getSanitizedSelectedRanges(data.selected, 
@@ -399,6 +390,10 @@
         // if given a valid viewDate, return it
         if(viewDate instanceof Date){
            return viewDate;
+        }
+        // otherwise if given a single date for selectedRanges, use it
+        else if(selectedRanges instanceof Date){
+            return selectedRanges;
         }
         // otherwise, if given a valid selectedRanges, return the first date in
         // the range as the view date
@@ -609,20 +604,26 @@
 
         "selectedString":{
             get: function(){
-                // make copy so that we don't destroy internal representation
-                var selectedRanges = this._selectedRanges.slice(0);
+                if(this.multiple){
+                    var isoDates = this.selected.slice(0);
 
-                for(var i = 0; i < selectedRanges.length; i++){
-                    var range = selectedRanges[i];
-                    if(range instanceof Date){
-                        selectedRanges[i] = iso(range);
+                    for(var i=0; i < isoDates.length; i++){
+                        var range = isoDates[i];
+                        if(range instanceof Date){
+                            isoDates[i] = iso(range);
+                        }
+                        else{
+                            isoDates[i] = [iso(range[0]), iso(range[1])];
+                        }
                     }
-                    else{
-                        selectedRanges[i] = iso(range[0]) + INNER_RANGE_SEP +
-                                            iso(range[1]);
-                    }
+                    return JSON.stringify(isoDates);
                 }
-                return selectedRanges.join(OUTER_RANGE_SEP);
+                else if(this.selected.length > 0){
+                    return iso(this.selected[0]);
+                }
+                else{
+                    return "";
+                }
             }
         }
     });
@@ -639,14 +640,15 @@
     xtag.register("x-calendar", {
         lifecycle: {
             created: function(){
-                console.log("init", this, this.hasAttribute("multiple"));
                 this.innerHTML = "";
 
+                var multiple = this.hasAttribute("multiple");
+                var selectedRange = this.getAttribute("selected");
                 this.xtag.calObj = new Calendar({
                     span: this.getAttribute("span"),
                     view: parseSingleDate(this.getAttribute("view")),
-                    selected: parseMultiDates(this.getAttribute("selected")),
-                    multiple: this.hasAttribute("multiple")
+                    selected: parseMultiDates(selectedRange),
+                    multiple: multiple
                 });
 
                 appendChild(this, this.xtag.calObj.el);
@@ -655,12 +657,9 @@
                 appendChild(this, makeControls());
 
                 this.xtag.dragType = null;
-                console.log("end init", this);
             },
             inserted: function(){
-                console.log("insert");
                 this.render();
-                console.log("end insert");
             }
         },
         events: {
@@ -732,10 +731,8 @@
                     return this.xtag.calObj.multiple;
                 },
                 set: function(multi){
-                    console.log("set multi:", multi);
                     this.xtag.calObj.multiple = multi;
                     this.selected = this.selected;
-                    console.log("end set multi:", multi);
                 }
             },
             span: {
@@ -763,6 +760,7 @@
                 attribute: {skip: true},
                 get: function(){
                     var selectedRanges = this.xtag.calObj.selected;
+                    // return a single date if multiple selection not allowed
                     if(!this.multiple){
                         if(selectedRanges.length > 0){
                             var firstRange = selectedRanges[0];
@@ -777,23 +775,25 @@
                             return null;
                         }
                     }
+                    // otherwise return the entire selection list
                     else{
                         return this.xtag.calObj.selected;
                     }
                 },
                 set: function(newDates){
-                    console.log("set selected:", newDates);
-                    var parsedDateRanges = parseMultiDates(newDates);
+                    var parsedDateRanges = (this.multiple) ? parseMultiDates(newDates) : parseSingleDate(newDates);
                     if(parsedDateRanges){
                         this.xtag.calObj.selected = parsedDateRanges;
-                        console.log("setAttribute");
-
+                    }
+                    
+                    if(this.xtag.calObj.selectedString){
                         // override attribute with auto-generated string
                         this.setAttribute("selected", 
                                           this.xtag.calObj.selectedString);
-                        console.log("end setAttribute");
                     }
-                    console.log("end set selected:", newDates);
+                    else{
+                        this.removeAttribute("selected");
+                    }
                 }
             }
         },
