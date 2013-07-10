@@ -73,12 +73,12 @@
                 console.log("nextmonth detected on", this);
             });
 
-            xtag.addEvent(document, "dateselect:delegate(x-calendar)", function(e){
-                console.log("dateselect detected on", this, e);
+            xtag.addEvent(document, "datetoggleon:delegate(x-calendar)", function(e){
+                console.log("datetoggleon detected on", this, e);
             });
 
-            xtag.addEvent(document, "dateremove:delegate(x-calendar)", function(e){
-                console.log("dateremove detected on", this, e);
+            xtag.addEvent(document, "datetoggleoff:delegate(x-calendar)", function(e){
+                console.log("datetoggleoff detected on", this, e);
             });
 
         }, false);

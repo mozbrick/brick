@@ -685,13 +685,11 @@
 
                 if(xtag.hasClass(day, CHOSEN_CLASS)){
                     xCalendar.xtag.dragType = DRAG_REMOVE;
-                    xCalendar.unselectDate(dateObj);
-                    xtag.fireEvent(xCalendar, "dateremove", {date: dateObj});
+                    xtag.fireEvent(xCalendar, "datetoggleoff", {date: dateObj});
                 }
                 else{
                     xCalendar.xtag.dragType = DRAG_ADD;
-                    xCalendar.selectDate(dateObj, xCalendar.multiple);
-                    xtag.fireEvent(xCalendar, "dateselect", {date: dateObj});
+                    xtag.fireEvent(xCalendar, "datetoggleon", {date: dateObj});
                 }
 
                 xCalendar.setAttribute("active", true);
@@ -708,18 +706,29 @@
                 if(xCalendar.xtag.dragType === DRAG_ADD && 
                    !(xtag.hasClass(day, CHOSEN_CLASS)))
                 {
-                    xCalendar.selectDate(dateObj, xCalendar.multiple);
-                    xtag.fireEvent(xCalendar, "dateselect", {date: dateObj});
+                    xtag.fireEvent(xCalendar, "datetoggleon", {date: dateObj});
                 }
                 // trigger a remove if we enter a chosen day while in
                 // removal mode
                 else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
                         xtag.hasClass(day, CHOSEN_CLASS))
                 {
-                    xCalendar.unselectDate(dateObj);
-                    xtag.fireEvent(xCalendar, "dateremove", {date: dateObj});
+                    xtag.fireEvent(xCalendar, "datetoggleoff", {date: dateObj});
                 }
+            },
+
+            "datetoggleon": function(e){
+                var xCalendar = this;
+
+                xCalendar.selectDate(e.date, xCalendar.multiple);
+            },
+
+            "datetoggleoff": function(e){
+                var xCalendar = this;
+
+                xCalendar.unselectDate(e.date);
             }
+
         },
         accessors: {
             controls: {

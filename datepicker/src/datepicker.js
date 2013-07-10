@@ -80,11 +80,11 @@
             }
         },
         events: {
-            "dateselect:delegate(x-calendar)": function(e){
+            "datetoggleon:delegate(x-calendar)": function(e){
                 var xCal = this;
                 var datepicker = e.currentTarget;
 
-                var selectedDate = parseSingleDate(xCal.selected);
+                var selectedDate = parseSingleDate(e.date);
                 if(selectedDate){
                     datepicker.value = iso(selectedDate);
                 }

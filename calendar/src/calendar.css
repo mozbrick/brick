@@ -22,93 +22,68 @@ x-calendar {
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box; }
-
-x-calendar .calendar {
-  position: relative;
-  background: #fff;
-  color: #fff;
-  overflow: hidden;
-  display: inline-block; }
-
-x-calendar .month {
-  display: inline-block;
-  padding: 2px;
-  margin: 0;
-  vertical-align: top;
-  white-space: nowrap; }
-
-x-calendar .week {
-  margin-top: 1px;
-  overflow: hidden; }
-
-x-calendar .label,
-x-calendar .day,
-x-calendar .prev,
-x-calendar .next {
-  background: #fff;
-  color: #444;
-  height: 2em;
-  line-height: 2em;
-  text-decoration: none;
-  width: 2em; }
-
-x-calendar .day:hover,
-x-calendar .prev:hover,
-x-calendar .next:hover {
-  background: #ddd;
-  cursor: pointer; }
-
-x-calendar .label {
-  width: 100%; }
-
-x-calendar .day {
-  border-radius: 4px;
-  color: #444;
-  display: inline-block;
-  margin-left: 1px;
-  white-space: nowrap; }
-
-x-calendar .day:first-child {
-  margin: 0; }
-
-x-calendar .day.today {
-  border: 1px solid tomato; }
-
-x-calendar .day.chosen,
-x-calendar .day:hover {
-  background: #444;
-  color: #fff; }
-
-x-calendar .day:not(.chosen):hover {
-  background: #999; }
-
-x-calendar .day.badmonth {
-  background: #fff;
-  color: #aaa; }
-
-x-calendar .day.badmonth.chosen {
-  background: #ddd; }
-
-x-calendar .day.badmonth.today {
-  border-color: #ffcfc6; }
-
-x-calendar .day.badmonth:not(.chosen):hover {
-  background: #efefef; }
-
-x-calendar > .controls {
-  display: none; }
-
-x-calendar[controls] > .controls {
-  display: block; }
-
-x-calendar .prev,
-x-calendar .next {
-  color: #444;
-  position: absolute;
-  top: 2px; }
-
-x-calendar .prev {
-  left: 2px; }
-
-x-calendar .next {
-  right: 2px; }
+  x-calendar .calendar {
+    position: relative;
+    background: #fff;
+    color: #fff;
+    overflow: hidden;
+    display: inline-block; }
+  x-calendar .month {
+    display: inline-block;
+    padding: 2px;
+    margin: 0;
+    vertical-align: top;
+    white-space: nowrap; }
+  x-calendar .week {
+    margin-top: 1px;
+    overflow: hidden; }
+  x-calendar .label, x-calendar .day, x-calendar .prev, x-calendar .next {
+    background: #fff;
+    color: #444;
+    height: 2em;
+    line-height: 2em;
+    text-decoration: none;
+    width: 2em; }
+  x-calendar .label {
+    width: 100%; }
+  x-calendar .day {
+    border-radius: 4px;
+    color: #444;
+    display: inline-block;
+    margin-left: 1px;
+    white-space: nowrap; }
+    x-calendar .day:first-child {
+      margin: 0; }
+    x-calendar .day.today {
+      border: 1px solid tomato; }
+    x-calendar .day.chosen {
+      background: #444;
+      color: #fff; }
+    x-calendar .day.badmonth {
+      background: #fff;
+      color: #aaa; }
+      x-calendar .day.badmonth.chosen {
+        background: #ddd; }
+      x-calendar .day.badmonth.today {
+        border-color: #ffcfc6; }
+  x-calendar .controls {
+    display: none; }
+  x-calendar[controls] .controls {
+    display: block; }
+  x-calendar .prev, x-calendar .next {
+    color: #444;
+    position: absolute;
+    top: 2px; }
+  x-calendar .prev {
+    left: 2px; }
+  x-calendar .next {
+    right: 2px; }
+  x-calendar:not([active]) .day:hover, x-calendar:not([active]) .prev:hover, x-calendar:not([active]) .next:hover {
+    cursor: pointer; }
+  x-calendar:not([active]) .prev:hover, x-calendar:not([active]) .next:hover {
+    background: #efefef; }
+  x-calendar:not([active]) .day:not(.chosen):hover {
+    background: #999;
+    color: #fff; }
+  x-calendar:not([active]) .day:not(.chosen).badmonth:hover {
+    background: #efefef; }
