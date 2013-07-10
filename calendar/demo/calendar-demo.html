@@ -21,7 +21,7 @@
 </head>
 <body>
     <h1>x-calendar demo</h1>
-
+<!--
     <figure class="cal-demo">
         <header>Default:</header>
         <x-calendar></x-calendar>
@@ -57,7 +57,7 @@
         <header>init with multi chosen (without multiple attribute):</header>
         <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls></x-calendar>
     </figure>
-
+-->
     <figure class="cal-demo">
         <header>init with multi chosen (with multiple attribute):</header>
         <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls multiple></x-calendar>
@@ -74,11 +74,11 @@
             });
 
             xtag.addEvent(document, "datetoggleon:delegate(x-calendar)", function(e){
-                console.log("datetoggleon detected on", this, e);
+                console.log("datetoggleon detected on", this);
             });
 
             xtag.addEvent(document, "datetoggleoff:delegate(x-calendar)", function(e){
-                console.log("datetoggleoff detected on", this, e);
+                console.log("datetoggleoff detected on", this);
             });
 
         }, false);

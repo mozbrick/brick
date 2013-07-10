@@ -54,13 +54,15 @@ x-calendar {
         display: inline-block;
         margin-left: 1px;
         white-space: nowrap;
+        border: 1px solid transparent;
 
         &:first-child{
             margin: 0;
         }
 
         &.today{
-            border: 1px solid tomato;
+            border: 1px solid blue;
+            color: blue;
         }
 
         &.chosen{
@@ -77,8 +79,12 @@ x-calendar {
             }
 
             &.today{
-                border-color: lighten(tomato, 25%);
+                border-color: lighten(blue, 25%);
             }
+        }
+
+        &[active]{
+            border-color: orange;
         }
     }
 

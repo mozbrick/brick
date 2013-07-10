@@ -549,15 +549,56 @@
         }
     }
 
-    Calendar.prototype.render = function(){
+    Calendar.prototype.hasDate = function(dateObj){
+        return dateMatches(dateObj, this._chosenRanges);
+    };
+
+    Calendar.prototype.render = function(preserveStructure){
         var span = this._span;
-        this.el.innerHTML = "";
-        // get first month of the span of months centered on the view
-        var ref = relOffset(this._viewDate, 0, -Math.floor(span/2), 0);
-        for (var i=0; i<span; i++) {
-            appendChild(this.el, makeMonth(ref, this._chosenRanges));
-            // get next month's date
-            ref = relOffset(ref, 0, 1, 0);
+
+        if(!preserveStructure){
+            this.el.innerHTML = "";
+            // get first month of the span of months centered on the view
+            var ref = relOffset(this._viewDate, 0, -Math.floor(span/2), 0);
+            for (var i=0; i<span; i++) {
+                appendChild(this.el, makeMonth(ref, this._chosenRanges));
+                // get next month's date
+                ref = relOffset(ref, 0, 1, 0);
+            }
+        }
+        // if we want to maintain the original elements without completely
+        // wiping and rewriting nodes
+        else{
+            var days = xtag.query(this.el, ".day");
+            var day;
+            for(var i = 0; i < days.length; i++){
+                day = days[i];
+
+                if(!day.hasAttribute("data-date")){
+                    return;
+                }
+
+                var dateIso = day.getAttribute("data-date");
+                var parsedDate = fromIso(dateIso);
+                if(!parsedDate){
+                    return;
+                }
+                else{
+                    if(dateMatches(parsedDate, this._chosenRanges)){
+                        addClass(day, CHOSEN_CLASS);
+                    } 
+                    else{
+                        removeClass(day, CHOSEN_CLASS);
+                    }
+
+                    if(dateMatches(parsedDate, [TODAY])){
+                        addClass(day, "today");
+                    }
+                    else{
+                        removeClass(day, "today");
+                    }
+                }
+            }
         }
     };
 
@@ -569,7 +610,7 @@
             set: function(multi){
                 this._multiple = multi;
                 this.chosen = this._getSanitizedChosenRanges(this.chosen);
-                this.render();
+                this.render(true);
             }
         },
         "span":{
@@ -599,7 +640,7 @@
             set: function(newChosenRanges){
                 this._chosenRanges = 
                         this._getSanitizedChosenRanges(newChosenRanges);
-                this.render();
+                this.render(true);
             }
         },
 
@@ -629,13 +670,20 @@
         }
     });
 
+
     // added on the body to delegate dragends to all x-calendars
     xtag.addEvent(document, "tapend", function(e){
         var xCalendars = xtag.query(document, "x-calendar");
-        xCalendars.forEach(function(xCalendar){
+        for(var i = 0; i < xCalendars.length; i++){
+            var xCalendar = xCalendars[i];
             xCalendar.xtag.dragType = null;
             xCalendar.removeAttribute("active");
-        });
+        }
+
+        var days = xtag.query(document, "x-calendar .day");
+        for(var j=0; j < days.length; j++){
+            days[j].removeAttribute("active");
+        }
     })
 
     xtag.register("x-calendar", {
@@ -676,12 +724,13 @@
 
                 xtag.fireEvent(xCalendar, "prevmonth");
             },
+
             // start drag
             "tapstart:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
-                var rawDate = day.getAttribute("data-date");
-                var dateObj = parseSingleDate(rawDate);
+                var isoDate = day.getAttribute("data-date");
+                var dateObj = parseSingleDate(isoDate);
 
                 if(xtag.hasClass(day, CHOSEN_CLASS)){
                     xCalendar.xtag.dragType = DRAG_REMOVE;
@@ -693,14 +742,15 @@
                 }
 
                 xCalendar.setAttribute("active", true);
+                day.setAttribute("active", true);
             },
 
             // drag move
             "tapenter:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
-                var rawDate = day.getAttribute("data-date");
-                var dateObj = parseSingleDate(rawDate);
+                var isoDate = day.getAttribute("data-date");
+                var dateObj = parseSingleDate(isoDate);
                 // trigger a selection if we enter a nonchosen day while in
                 // addition mode
                 if(xCalendar.xtag.dragType === DRAG_ADD && 
@@ -715,18 +765,36 @@
                 {
                     xtag.fireEvent(xCalendar, "datetoggleoff", {date: dateObj});
                 }
+
+                if(xCalendar.xtag.dragType){
+                    day.setAttribute("active", true);
+                }
+            },
+
+            "tapleave:delegate(.day)": function(e){
+                var day = this;
+                day.removeAttribute("active");
+            },
+
+            "tap:delegate(.day)": function(e){
+                var xCalendar = e.currentTarget;
+                var day = this;
+                var isoDate = day.getAttribute("data-date");
+                var dateObj = parseSingleDate(isoDate);
+                
+                xtag.fireEvent(xCalendar, "datetap", {date: dateObj});
             },
 
             "datetoggleon": function(e){
                 var xCalendar = this;
 
-                xCalendar.selectDate(e.date, xCalendar.multiple);
+                xCalendar.toggleDateOn(e.date, xCalendar.multiple);
             },
 
             "datetoggleoff": function(e){
                 var xCalendar = this;
 
-                xCalendar.unselectDate(e.date);
+                xCalendar.toggleDateOff(e.date);
             }
 
         },
@@ -795,7 +863,7 @@
                     if(parsedDateRanges){
                         this.xtag.calObj.chosen = parsedDateRanges;
                     }
-                    
+
                     if(this.xtag.calObj.chosenString){
                         // override attribute with auto-generated string
                         this.setAttribute("chosen", 
@@ -808,8 +876,8 @@
             }
         },
         methods: { 
-            render: function(){
-                this.xtag.calObj.render();
+            render: function(preserveStructure){
+                this.xtag.calObj.render(preserveStructure);
             },
             // Go back one month.
             prevMonth: function(){
@@ -821,15 +889,24 @@
                 var calObj = this.xtag.calObj;
                 calObj.view = relOffset(calObj.view, 0, 1, 0);
             },
-            selectDate: function(newDateObj, append){
+            toggleDateOn: function(newDateObj, append){
                 this.xtag.calObj.addDate(newDateObj, append);
                 // trigger setter
                 this.chosen = this.chosen;
             },
-            unselectDate: function(dateObj){
+            toggleDateOff: function(dateObj){
                 this.xtag.calObj.removeDate(dateObj);
                 // trigger setter
                 this.chosen = this.chosen;
+            },
+
+            toggleDate: function(dateObj, appendIfAdd){
+                if(this.xtag.calObj.hasDate(dateObj)){
+                    this.toggleDateOff(dateObj);
+                }
+                else{
+                    this.toggleDateOn(dateObj, appendIfAdd);
+                }
             }
         }
     });

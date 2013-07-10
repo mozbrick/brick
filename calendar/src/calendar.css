@@ -51,11 +51,13 @@ x-calendar {
     color: #444;
     display: inline-block;
     margin-left: 1px;
-    white-space: nowrap; }
+    white-space: nowrap;
+    border: 1px solid transparent; }
     x-calendar .day:first-child {
       margin: 0; }
     x-calendar .day.today {
-      border: 1px solid tomato; }
+      border: 1px solid blue;
+      color: blue; }
     x-calendar .day.chosen {
       background: #444;
       color: #fff; }
@@ -65,7 +67,9 @@ x-calendar {
       x-calendar .day.badmonth.chosen {
         background: #ddd; }
       x-calendar .day.badmonth.today {
-        border-color: #ffcfc6; }
+        border-color: #8080ff; }
+    x-calendar .day[active] {
+      border-color: orange; }
   x-calendar .controls {
     display: none; }
   x-calendar[controls] .controls {
