@@ -43,29 +43,27 @@
     </figure>
 
     <figure class="cal-demo">
-        <header>With initial selected (July) only:</header>
-        <x-calendar selected="Jun 4, 2013" controls></x-calendar>
+        <header>With initial chosen (July) only:</header>
+        <x-calendar chosen="Jun 4, 2013" controls></x-calendar>
     </figure>
 
     <figure class="cal-demo">
-        <header>With both initial view (June) and selected (July):</header>
-        <x-calendar view="Jun 9, 2013" selected="Jul 4, 2013" controls></x-calendar>
+        <header>With both initial view (June) and chosen (July):</header>
+        <x-calendar view="Jun 9, 2013" chosen="Jul 4, 2013" controls></x-calendar>
     </figure>
 
 
     <figure class="cal-demo">
-        <header>init with multi selected (without multiple attribute):</header>
-        <x-calendar selected='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls></x-calendar>
+        <header>init with multi chosen (without multiple attribute):</header>
+        <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls></x-calendar>
     </figure>
 
     <figure class="cal-demo">
-        <header>init with multi selected (with multiple attribute):</header>
-        <x-calendar selected='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls multiple></x-calendar>
+        <header>init with multi chosen (with multiple attribute):</header>
+        <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls multiple></x-calendar>
     </figure>
 
     <script>
-        var msPerDay = 24 * 60 * 60 * 1000;
-
         document.addEventListener('DOMComponentsLoaded', function(){
             xtag.addEvent(document, "prevmonth:delegate(x-calendar)", function(e){
                 console.log("prevmonth detected on", this);
@@ -76,11 +74,11 @@
             });
 
             xtag.addEvent(document, "dateselect:delegate(x-calendar)", function(e){
-                console.log("dateselect detected on", this);
+                console.log("dateselect detected on", this, e);
             });
 
             xtag.addEvent(document, "dateremove:delegate(x-calendar)", function(e){
-                console.log("dateremove detected on", this);
+                console.log("dateremove detected on", this, e);
             });
 
         }, false);

@@ -16,6 +16,8 @@
     var DRAG_ADD = "add";
     var DRAG_REMOVE = "remove";
 
+    var CHOSEN_CLASS = "chosen";
+
     //minifier-friendly strings
     var className = 'className';
 
@@ -129,7 +131,7 @@
         }
     }
 
-    // returns a list of selected dates/ranges
+    // returns a list of chosen dates/ranges
     // returns null if any parsing error
     function parseMultiDates(multiDateStr){
         // if necessary, split the input into a list of unparsed ranges
@@ -302,8 +304,8 @@
     }
 
     // creates the html elements for a given date, highlighting the
-    // given selected date ranges
-    function makeMonth(d, selected) {
+    // given chosen date ranges
+    function makeMonth(d, chosen) {
         if (!isValidDateObj(d)) throw 'Invalid view date!';
         var month = getMonth(d);
         var tdate = getDate(d);
@@ -330,8 +332,8 @@
             addClass(day, 'badmonth');
           }
 
-          if (dateMatches(cDate, selected)) {
-            addClass(day, 'sel');
+          if (dateMatches(cDate, chosen)) {
+            addClass(day, CHOSEN_CLASS);
           }
 
           if(dateMatches(cDate, TODAY)){
@@ -366,39 +368,38 @@
     }
 
     function Calendar(data) {
-        var self = this;
         data = data || {};
-        self._span = data.span || 1;
-        self._multiple = data.multiple || false;
+        this._span = data.span || 1;
+        this._multiple = data.multiple || false;
         // initialize private vars
-        self._viewDate = self._getSanitizedViewDate(data.view, data.selected);
-        self._selectedRanges = self._getSanitizedSelectedRanges(data.selected, 
+        this._viewDate = this._getSanitizedViewDate(data.view, data.chosen);
+        this._chosenRanges = this._getSanitizedChosenRanges(data.chosen, 
                                                                 data.view);
-        self.el = makeEl('div.calendar');
+        this.el = makeEl('div.calendar');
 
-        self.render();
+        this.render();
     }
 
     // given a view Date and a parsed selection range list, return the
     // Date to use as the view, depending on what information is given
     Calendar.prototype._getSanitizedViewDate = function(viewDate, 
-                                                        selectedRanges)
+                                                        chosenRanges)
     {
-        selectedRanges = (selectedRanges === undefined) ? 
-                            this.selected : selectedRanges;
+        chosenRanges = (chosenRanges === undefined) ? 
+                            this.chosen : chosenRanges;
 
         // if given a valid viewDate, return it
         if(viewDate instanceof Date){
            return viewDate;
         }
-        // otherwise if given a single date for selectedRanges, use it
-        else if(selectedRanges instanceof Date){
-            return selectedRanges;
+        // otherwise if given a single date for chosenRanges, use it
+        else if(chosenRanges instanceof Date){
+            return chosenRanges;
         }
-        // otherwise, if given a valid selectedRanges, return the first date in
+        // otherwise, if given a valid chosenRanges, return the first date in
         // the range as the view date
-        else if(isArray(selectedRanges) && selectedRanges.length > 0){
-            var firstRange = selectedRanges[0];
+        else if(isArray(chosenRanges) && chosenRanges.length > 0){
+            var firstRange = chosenRanges[0];
             if(firstRange instanceof Date){
                 return firstRange;
             }
@@ -406,7 +407,7 @@
                 return firstRange[0];
             }
         }
-        // if not given a valid viewDate or selectedRanges, return the current
+        // if not given a valid viewDate or chosenRanges, return the current
         // day as the view date
         else{
             return TODAY;
@@ -469,17 +470,17 @@
         return collapsed;
     }
 
-    Calendar.prototype._getSanitizedSelectedRanges = function(selectedRanges, 
+    Calendar.prototype._getSanitizedChosenRanges = function(chosenRanges, 
                                                               viewDate)
     {
         viewDate = (viewDate === undefined) ? this.view : viewDate;
 
         var cleanRanges;
-        if(selectedRanges instanceof Date){
-            cleanRanges = [selectedRanges];
+        if(chosenRanges instanceof Date){
+            cleanRanges = [chosenRanges];
         }
-        else if(isArray(selectedRanges)){
-            cleanRanges = selectedRanges;
+        else if(isArray(chosenRanges)){
+            cleanRanges = chosenRanges;
         }
         else if(viewDate){
             cleanRanges = [viewDate];
@@ -507,12 +508,12 @@
     Calendar.prototype.addDate = function(dateObj, append){
         if(dateObj instanceof Date){
             if(append){
-                this.selected.push(dateObj);
+                this.chosen.push(dateObj);
                 // trigger setter
-                this.selected = this.selected;
+                this.chosen = this.chosen;
             }
             else{
-                this.selected = [dateObj];
+                this.chosen = [dateObj];
             }
         }
     }
@@ -522,7 +523,7 @@
             return;
         }
 
-        var ranges = this.selected.slice(0);
+        var ranges = this.chosen.slice(0);
         for(var i = 0; i < ranges.length; i++){
             var range = ranges[i];
             if(dateMatches(dateObj, [range])){
@@ -542,7 +543,7 @@
                         ranges.push([nextDate, rangeEnd]);
                     }
                 }
-                this.selected = _collapseRanges(ranges);
+                this.chosen = _collapseRanges(ranges);
                 break;
             }
         }
@@ -554,7 +555,7 @@
         // get first month of the span of months centered on the view
         var ref = relOffset(this._viewDate, 0, -Math.floor(span/2), 0);
         for (var i=0; i<span; i++) {
-            appendChild(this.el, makeMonth(ref, this._selectedRanges));
+            appendChild(this.el, makeMonth(ref, this._chosenRanges));
             // get next month's date
             ref = relOffset(ref, 0, 1, 0);
         }
@@ -567,7 +568,7 @@
             },
             set: function(multi){
                 this._multiple = multi;
-                this.selected = this._getSanitizedSelectedRanges(this.selected);
+                this.chosen = this._getSanitizedChosenRanges(this.chosen);
                 this.render();
             }
         },
@@ -591,21 +592,21 @@
             }
         },
 
-        "selected": {
+        "chosen": {
             get: function(){
-                return this._selectedRanges;
+                return this._chosenRanges;
             },
-            set: function(newSelectedRanges){
-                this._selectedRanges = 
-                        this._getSanitizedSelectedRanges(newSelectedRanges);
+            set: function(newChosenRanges){
+                this._chosenRanges = 
+                        this._getSanitizedChosenRanges(newChosenRanges);
                 this.render();
             }
         },
 
-        "selectedString":{
+        "chosenString":{
             get: function(){
                 if(this.multiple){
-                    var isoDates = this.selected.slice(0);
+                    var isoDates = this.chosen.slice(0);
 
                     for(var i=0; i < isoDates.length; i++){
                         var range = isoDates[i];
@@ -618,8 +619,8 @@
                     }
                     return JSON.stringify(isoDates);
                 }
-                else if(this.selected.length > 0){
-                    return iso(this.selected[0]);
+                else if(this.chosen.length > 0){
+                    return iso(this.chosen[0]);
                 }
                 else{
                     return "";
@@ -643,11 +644,11 @@
                 this.innerHTML = "";
 
                 var multiple = this.hasAttribute("multiple");
-                var selectedRange = this.getAttribute("selected");
+                var chosenRange = this.getAttribute("chosen");
                 this.xtag.calObj = new Calendar({
                     span: this.getAttribute("span"),
                     view: parseSingleDate(this.getAttribute("view")),
-                    selected: parseMultiDates(selectedRange),
+                    chosen: parseMultiDates(chosenRange),
                     multiple: multiple
                 });
 
@@ -682,15 +683,15 @@
                 var rawDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(rawDate);
 
-                if(xtag.hasClass(day, "sel")){
+                if(xtag.hasClass(day, CHOSEN_CLASS)){
                     xCalendar.xtag.dragType = DRAG_REMOVE;
                     xCalendar.unselectDate(dateObj);
-                    xtag.fireEvent(xCalendar, "dateremove");
+                    xtag.fireEvent(xCalendar, "dateremove", {date: dateObj});
                 }
                 else{
                     xCalendar.xtag.dragType = DRAG_ADD;
                     xCalendar.selectDate(dateObj, xCalendar.multiple);
-                    xtag.fireEvent(xCalendar, "dateselect");
+                    xtag.fireEvent(xCalendar, "dateselect", {date: dateObj});
                 }
 
                 xCalendar.setAttribute("active", true);
@@ -702,21 +703,21 @@
                 var day = this;
                 var rawDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(rawDate);
-                // trigger a selection if we enter a nonselected day while in
+                // trigger a selection if we enter a nonchosen day while in
                 // addition mode
                 if(xCalendar.xtag.dragType === DRAG_ADD && 
-                   !(xtag.hasClass(day, "sel")))
+                   !(xtag.hasClass(day, CHOSEN_CLASS)))
                 {
                     xCalendar.selectDate(dateObj, xCalendar.multiple);
-                    xtag.fireEvent(xCalendar, "dateselect");
+                    xtag.fireEvent(xCalendar, "dateselect", {date: dateObj});
                 }
-                // trigger a remove if we enter a selected day while in
+                // trigger a remove if we enter a chosen day while in
                 // removal mode
                 else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
-                        xtag.hasClass(day, "sel"))
+                        xtag.hasClass(day, CHOSEN_CLASS))
                 {
                     xCalendar.unselectDate(dateObj);
-                    xtag.fireEvent(xCalendar, "dateremove");
+                    xtag.fireEvent(xCalendar, "dateremove", {date: dateObj});
                 }
             }
         },
@@ -732,7 +733,7 @@
                 },
                 set: function(multi){
                     this.xtag.calObj.multiple = multi;
-                    this.selected = this.selected;
+                    this.chosen = this.chosen;
                 }
             },
             span: {
@@ -756,14 +757,14 @@
                     }
                 }
             },
-            selected: {
+            chosen: {
                 attribute: {skip: true},
                 get: function(){
-                    var selectedRanges = this.xtag.calObj.selected;
+                    var chosenRanges = this.xtag.calObj.chosen;
                     // return a single date if multiple selection not allowed
                     if(!this.multiple){
-                        if(selectedRanges.length > 0){
-                            var firstRange = selectedRanges[0];
+                        if(chosenRanges.length > 0){
+                            var firstRange = chosenRanges[0];
                             if(firstRange instanceof Date){
                                 return firstRange;
                             }
@@ -777,22 +778,22 @@
                     }
                     // otherwise return the entire selection list
                     else{
-                        return this.xtag.calObj.selected;
+                        return this.xtag.calObj.chosen;
                     }
                 },
                 set: function(newDates){
                     var parsedDateRanges = (this.multiple) ? parseMultiDates(newDates) : parseSingleDate(newDates);
                     if(parsedDateRanges){
-                        this.xtag.calObj.selected = parsedDateRanges;
+                        this.xtag.calObj.chosen = parsedDateRanges;
                     }
                     
-                    if(this.xtag.calObj.selectedString){
+                    if(this.xtag.calObj.chosenString){
                         // override attribute with auto-generated string
-                        this.setAttribute("selected", 
-                                          this.xtag.calObj.selectedString);
+                        this.setAttribute("chosen", 
+                                          this.xtag.calObj.chosenString);
                     }
                     else{
-                        this.removeAttribute("selected");
+                        this.removeAttribute("chosen");
                     }
                 }
             }
@@ -814,12 +815,12 @@
             selectDate: function(newDateObj, append){
                 this.xtag.calObj.addDate(newDateObj, append);
                 // trigger setter
-                this.selected = this.selected;
+                this.chosen = this.chosen;
             },
             unselectDate: function(dateObj){
                 this.xtag.calObj.removeDate(dateObj);
                 // trigger setter
-                this.selected = this.selected;
+                this.chosen = this.chosen;
             }
         }
     });

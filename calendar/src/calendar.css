@@ -74,25 +74,25 @@ x-calendar .day:first-child {
 x-calendar .day.today {
   border: 1px solid tomato; }
 
-x-calendar .day.sel,
+x-calendar .day.chosen,
 x-calendar .day:hover {
   background: #444;
   color: #fff; }
 
-x-calendar .day:not(.sel):hover {
+x-calendar .day:not(.chosen):hover {
   background: #999; }
 
 x-calendar .day.badmonth {
   background: #fff;
   color: #aaa; }
 
-x-calendar .day.badmonth.sel {
+x-calendar .day.badmonth.chosen {
   background: #ddd; }
 
 x-calendar .day.badmonth.today {
   border-color: #ffcfc6; }
 
-x-calendar .day.badmonth:not(.sel):hover {
+x-calendar .day.badmonth:not(.chosen):hover {
   background: #efefef; }
 
 x-calendar > .controls {
