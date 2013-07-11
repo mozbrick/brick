@@ -120,7 +120,7 @@ x-calendar {
         }
 
         .day:not(.chosen){
-            &:hover{
+            &:not(.badmonth):hover{
                 background: #999;
                 color: #fff;
             }

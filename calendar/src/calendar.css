@@ -86,7 +86,7 @@ x-calendar {
     cursor: pointer; }
   x-calendar:not([active]) .prev:hover, x-calendar:not([active]) .next:hover {
     background: #efefef; }
-  x-calendar:not([active]) .day:not(.chosen):hover {
+  x-calendar:not([active]) .day:not(.chosen):not(.badmonth):hover {
     background: #999;
     color: #fff; }
   x-calendar:not([active]) .day:not(.chosen).badmonth:hover {

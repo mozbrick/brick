@@ -785,14 +785,18 @@
                 var day = this;
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
-
+                var toggleEventName;
                 if(xtag.hasClass(day, CHOSEN_CLASS)){
                     xCalendar.xtag.dragType = DRAG_REMOVE;
-                    xtag.fireEvent(xCalendar, "datetoggleoff", {date: dateObj});
+                    toggleEventName = "datetoggleoff";
                 }
                 else{
                     xCalendar.xtag.dragType = DRAG_ADD;
-                    xtag.fireEvent(xCalendar, "datetoggleon", {date: dateObj});
+                    toggleEventName = "datetoggleon";
+                }
+
+                if(!xCalendar.noToggle){
+                    xtag.fireEvent(xCalendar, toggleEventName, {date: dateObj});
                 }
 
                 xCalendar.setAttribute("active", true);
@@ -805,21 +809,22 @@
                 var day = this;
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
-                // trigger a selection if we enter a nonchosen day while in
-                // addition mode
-                if(xCalendar.xtag.dragType === DRAG_ADD && 
-                   !(xtag.hasClass(day, CHOSEN_CLASS)))
-                {
-                    xtag.fireEvent(xCalendar, "datetoggleon", {date: dateObj});
+                if(!xCalendar.noToggle){
+                    // trigger a selection if we enter a nonchosen day while in
+                    // addition mode
+                    if(xCalendar.xtag.dragType === DRAG_ADD && 
+                       !(xtag.hasClass(day, CHOSEN_CLASS)))
+                    {
+                        xtag.fireEvent(xCalendar, "datetoggleon", {date: dateObj});
+                    }
+                    // trigger a remove if we enter a chosen day while in
+                    // removal mode
+                    else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
+                            xtag.hasClass(day, CHOSEN_CLASS))
+                    {
+                        xtag.fireEvent(xCalendar, "datetoggleoff", {date: dateObj});
+                    }
                 }
-                // trigger a remove if we enter a chosen day while in
-                // removal mode
-                else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
-                        xtag.hasClass(day, CHOSEN_CLASS))
-                {
-                    xtag.fireEvent(xCalendar, "datetoggleoff", {date: dateObj});
-                }
-
                 if(xCalendar.xtag.dragType){
                     day.setAttribute("active", true);
                 }
@@ -913,7 +918,7 @@
                 },
                 set: function(newDates){
                     var parsedDateRanges = (this.multiple) ? parseMultiDates(newDates) : parseSingleDate(newDates);
-                    if(parsedDateRanges){
+                    if(parsedDateRanges && !this.noToggle){
                         this.xtag.calObj.chosen = parsedDateRanges;
                     }
                     else{
@@ -930,6 +935,16 @@
                     }
                 }
             },
+
+            noToggle:{
+                attribute: {boolean: true, name: "notoggle"},
+                set: function(toggleDisabled){
+                    if(toggleDisabled){
+                        this.chosen = null;
+                    }
+                }
+            },
+
             firstVisibleMonth:{
                 get: function(){
                     return this.xtag.calObj.firstVisibleMonth;
@@ -956,14 +971,18 @@
                 calObj.view = relOffset(calObj.view, 0, 1, 0);
             },
             toggleDateOn: function(newDateObj, append){
-                this.xtag.calObj.addDate(newDateObj, append);
-                // trigger setter
-                this.chosen = this.chosen;
+                if(!this.noToggle){
+                    this.xtag.calObj.addDate(newDateObj, append);
+                    // trigger setter
+                    this.chosen = this.chosen;
+                }
             },
             toggleDateOff: function(dateObj){
-                this.xtag.calObj.removeDate(dateObj);
-                // trigger setter
-                this.chosen = this.chosen;
+                if(!this.noToggle){
+                    this.xtag.calObj.removeDate(dateObj);
+                    // trigger setter
+                    this.chosen = this.chosen;
+                }
             },
 
             toggleDate: function(dateObj, appendIfAdd){

@@ -63,6 +63,11 @@
         <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls multiple></x-calendar>
     </figure>
 
+    <figure class="cal-demo">
+        <header>notoggle (see console to see how toggle events no longer occur either)</header>
+        <x-calendar controls notoggle></x-calendar>
+    </figure>
+
     <script>
         document.addEventListener('DOMComponentsLoaded', function(){
             xtag.addEvent(document, "prevmonth:delegate(x-calendar)", function(e){
@@ -79,6 +84,10 @@
 
             xtag.addEvent(document, "datetoggleoff:delegate(x-calendar)", function(e){
                 console.log("datetoggleoff detected on", this);
+            });
+
+            xtag.addEvent(document, "datetap:delegate(x-calendar)", function(e){
+                console.log("datetap detected on", this);
             });
 
         }, false);
