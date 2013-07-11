@@ -13,6 +13,7 @@ x-datepicker {
     }
 
     & > .x-datepicker-polyfill-input{
+        position: relative;
         margin: 0;
         border: $polyfillInputBorderWidth solid grey;
         padding: .25em;
@@ -20,11 +21,12 @@ x-datepicker {
         @include boxSizing(border-box);
     }
 
-    & > x-calendar{
+    & > .x-datepicker-polyfillUI{
         position: absolute;
         left: 0;
         top: 100%;
         margin-top: -$polyfillInputBorderWidth; // offset to merge with polyfill input's border
+        box-shadow: 1px 1px 4px grey;
     }
 
 
@@ -37,20 +39,18 @@ x-datepicker {
 
         }
 
-        & > x-calendar{
+        & > .x-datepicker-polyfillUI{
             @include animated((opacity, visibility), 0.2s);
-           // opacity: 0;
-            //visibility: hidden;
+            opacity: 0;
+            visibility: hidden;
         }
 
         &:focus, &[focused]{
-            & > .x-datepicker-polyfill-input{
-                box-shadow: 1px 1px 4px green;
+            box-shadow: 1px 1px 4px orange;
 
-                & + x-calendar{
-                    opacity: 1;
-                    visibility: visible;
-                }
+            & > .x-datepicker-polyfillUI{
+                opacity: 1;
+                visibility: visible;
             }
         }
 
@@ -70,7 +70,7 @@ x-datepicker {
             display: none;
         }
 
-        & > x-calendar{
+        & > .x-datepicker-polyfillUI{
             display: none;
         }
     }

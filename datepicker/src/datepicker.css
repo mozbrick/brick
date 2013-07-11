@@ -10,6 +10,7 @@ x-datepicker {
   x-datepicker > .x-datepicker-input {
     margin: 0; }
   x-datepicker > .x-datepicker-polyfill-input {
+    position: relative;
     margin: 0;
     border: 1px solid grey;
     padding: .25em;
@@ -19,14 +20,15 @@ x-datepicker {
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box; }
-  x-datepicker > x-calendar {
+  x-datepicker > .x-datepicker-polyfillUI {
     position: absolute;
     left: 0;
     top: 100%;
-    margin-top: -1px; }
+    margin-top: -1px;
+    box-shadow: 1px 1px 4px grey; }
   x-datepicker[polyfill] > .x-datepicker-input {
     display: none; }
-  x-datepicker[polyfill] > x-calendar {
+  x-datepicker[polyfill] > .x-datepicker-polyfillUI {
     transition-property: opacity, visibility;
     -webkit-transition-property: opacity, visibility;
     -moz-transition-property: opacity, visibility;
@@ -42,15 +44,17 @@ x-datepicker {
     -webkit-transition-delay: 0s;
     -moz-transition-delay: 0s;
     -o-transition-delay: 0s;
-    transition-delay: 0s; }
-  x-datepicker[polyfill]:focus > .x-datepicker-polyfill-input, x-datepicker[polyfill][focused] > .x-datepicker-polyfill-input {
-    box-shadow: 1px 1px 4px green; }
-    x-datepicker[polyfill]:focus > .x-datepicker-polyfill-input + x-calendar, x-datepicker[polyfill][focused] > .x-datepicker-polyfill-input + x-calendar {
+    transition-delay: 0s;
+    opacity: 0;
+    visibility: hidden; }
+  x-datepicker[polyfill]:focus, x-datepicker[polyfill][focused] {
+    box-shadow: 1px 1px 4px orange; }
+    x-datepicker[polyfill]:focus > .x-datepicker-polyfillUI, x-datepicker[polyfill][focused] > .x-datepicker-polyfillUI {
       opacity: 1;
       visibility: visible; }
   x-datepicker[polyfill][invalid] > .x-datepicker-polyfill-input {
     background-color: tomato; }
   x-datepicker:not([polyfill]) > .x-datepicker-polyfill-input {
     display: none; }
-  x-datepicker:not([polyfill]) > x-calendar {
+  x-datepicker:not([polyfill]) > .x-datepicker-polyfillUI {
     display: none; }

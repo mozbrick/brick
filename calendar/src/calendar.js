@@ -108,17 +108,18 @@
         return d.getUTCDate();
     }
 
-    // Pad a single digit with preceding zeros to be 2 digits long
-    function pad2(n) {
+    // Pad a single digit with preceding zeros to be padSize digits long
+    function pad(n, padSize) {
         var str = n.toString();
-        return ('0' + str).substr(-2);
+        var padZeros = (new Array(padSize)).join('0');
+        return (padZeros + str).substr(-padSize);
     }
 
     // ISO Date formatting (YYYY-MM-DD)
     function iso(d) {
-        return [getYear(d),
-                pad2(getMonth(d)+1),
-                pad2(getDate(d))].join('-');
+        return [pad(getYear(d), 4),
+                pad(getMonth(d)+1, 2),
+                pad(getDate(d), 2)].join('-');
     }
 
     // parse for YYYY-MM-DD format

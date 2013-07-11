@@ -16,28 +16,42 @@
 </head>
 <body>
     <h1>x-datepicker demo</h1>
-
-    <x-datepicker></x-datepicker>
-    <button>Toggle polyfill</button>
+   <form method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
+        <x-datepicker name="datepicker-demo"></x-datepicker>
+        <button class="toggle" type="button">Toggle polyfill</button>
+        <br/><br/>
+        <input type="submit"></input>
+    </form>
 
     <script>
+        var ENTER_KEYCODE = 13;
+
         document.addEventListener('DOMComponentsLoaded', function(){
-            xtag.query(document, "x-datepicker + button").forEach(function(button){
-                var datepicker = button.previousElementSibling;
+            xtag.query(document, "x-datepicker ~ button.toggle").forEach(function(button){
+                var datepicker = button.parentNode.querySelector("x-datepicker");
                 button.textContent = "Toggle polyfill (currently " + 
-                                    ((datepicker.polyfill) ? "on" : "off") + 
+                                      ((datepicker.polyfill) ? "on" : "off") + 
                                     ")";
             });
 
-            xtag.addEvent(document, "click:delegate(button)", function(e){
+            xtag.addEvent(document, "click:delegate(button.toggle)", function(e){
                 var button = this;
-                var datepicker = button.previousElementSibling;
-                if(datepicker && datepicker.tagName === "X-DATEPICKER"){
+                var datepicker = button.parentNode.querySelector("x-datepicker");
+                if(datepicker){
                     datepicker.polyfill = !(datepicker.polyfill);
 
                     button.textContent = "Toggle polyfill (currently " + 
                                     ((datepicker.polyfill) ? "on" : "off") + 
                                     ")";
+                }
+                e.preventDefault();
+            });
+
+            xtag.addEvent(document, "keypress:delegate(x-datepicker)", function(e){
+                // for demo, prevent submitting form with enter
+                var keyCode = e.key || e.keyCode;
+                if(keyCode === ENTER_KEYCODE){
+                    e.preventDefault();
                 }
             });
         }, false);
