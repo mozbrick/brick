@@ -54,114 +54,123 @@
     <button id="toggle-all-button">Toggle all polyfills</button>
 </h3>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Default (default step = 1, default init value should be <span class="default-init-val">50</span>)</h4>
     <span class="min"></span>
     
-    <x-slider></x-slider>
+    <x-slider name="sliderdemo"></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Custom range (default step = 1, default init value should be <span class="default-init-val">0</span>)</h4>
     <span class="min"></span>
     
-    <x-slider min="-50" max=50></x-slider>
+    <x-slider name="sliderdemo" min="-50" max=50></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Custom step (step = 10, default init value should be <span class="default-init-val">0</span>)</h4>
     <span class="min"></span>
     
-    <x-slider min="-50" max=50 step=10></x-slider>
+    <x-slider name="sliderdemo" min="-50" max=50 step=10></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Fractional step (step = 0.5, default init value should be <span class="default-init-val">2.5</span>)</h4>
     <span class="min"></span>
     
-    <x-slider min=0 max=5 step=0.5></x-slider>
+    <x-slider name="sliderdemo" min=0 max=5 step=0.5></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Custom init value (step = 2, init value = 8)</h4>
     <span class="min"></span>
     
-    <x-slider min=-10 max=10 step=2 value=8></x-slider>
+    <x-slider name="sliderdemo" min=-10 max=10 step=2 value=8></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Custom invalid init value (min = 0, max = 10, step = 5, init value = 3, but should be rounded to <span class="default-init-val">5</span>)</h4>
     <span class="min"></span>
     
-    <x-slider min=0 max=10 step=5 value=3></x-slider>
+    <x-slider name="sliderdemo" min=0 max=10 step=5 value=3></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Pos offset range step (min = 3, max = 13, step = 5, default init value should be <span class="default-init-val">8</span>) </h4>
     <span class="min"></span>
     
-    <x-slider min=3 max=13 step=5></x-slider>
+    <x-slider name="sliderdemo" min=3 max=13 step=5></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Neg offset range step (min = -1, max = 100, step = 10, default init value should be <span class="default-init-val">49</span>) </h4>
     <span class="min"></span>
     
-    <x-slider min=-1 max=100 step=10></x-slider>
+    <x-slider name="sliderdemo" min=-1 max=100 step=10></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
-<div class="slider-wrap">
+<form class="slider-wrap" method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
     <h4>Uncontainable step (min = 1, max = 4, step = 5, default init value should be <span class="default-init-val">1</span>) </h4>
     <span class="min"></span>
     
-    <x-slider min=1 max=4 step=5></x-slider>
+    <x-slider name="sliderdemo" min=1 max=4 step=5></x-slider>
     
     <span class="max"></span>
     <p>Value = <span class="slider-val-status"></span>
-        <button>Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+        <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
     </p>
-</div>
+    <br/><input type="submit"></input>
+</form>
 
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){

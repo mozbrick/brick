@@ -94,6 +94,11 @@
                 this.xtag.polyfillInput = null;
                 this.xtag.polyfillUI = null;
 
+                // note that changing the calendar's view stops the propagation
+                // of any event fired on the old calendar's node, so this
+                // variable is used as a flag to avoid an unprevented blur
+                this.xtag._skipBlur = false;
+
                 this.polyfill = (this.hasAttribute("polyfill") || 
                                  this.xtag.dateInput.type.toLowerCase() !== "date");
             },
@@ -102,28 +107,27 @@
         },
         events: {
             "datetoggleon:delegate(x-calendar)": function(e){
-                console.log("datepicker toggleon");
                 var xCal = this;
                 var datepicker = e.currentTarget;
 
                 var selectedDate = parseSingleDate(e.date);
-                if(selectedDate){
-                    datepicker.value = iso(selectedDate);
-                }
-                else{
-                    datepicker.value = "";
-                }
+
+                datepicker.xtag._skipBlur = 
+                      selectedDate && !xCal.hasVisibleDate(selectedDate, true);
+
+                datepicker.value = (selectedDate) ? iso(selectedDate) : "";
+
+                xtag.fireEvent(datepicker.xtag.polyfillInput, "input");
             },
 
             "datetoggleoff:delegate(x-calendar)": function(e){
-                console.log("datepicker toggleoff");
                 var datepicker = e.currentTarget;
-                datepicker.value = null; // workaround until skip:true works
+                datepicker.value = null;
             },
 
             "focus": function(e){
-                console.log("focus");
-                e.currentTarget.setAttribute("focused", true); 
+                var datepicker = e.currentTarget;
+                datepicker.setAttribute("focused", true);
             },
 
             "blur:delegate(.x-datepicker-input)": function(e){
@@ -131,19 +135,23 @@
             },
 
             "blur:delegate(.x-datepicker-polyfill-input)": function(e){
-                console.log("blur", e);
                 var datepicker = e.currentTarget;
+                if(datepicker.xtag._skipBlur){
+                    var refocusTarget = (datepicker.polyfill) ? 
+                                            datepicker.xtag.polyfillInput :
+                                            datepicker.xtag.dateInput;
+                    refocusTarget.focus();
+                    datepicker.xtag._skipBlur = false;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+
                 _updateDatepicker(datepicker, true);
                 datepicker.removeAttribute("focused");
             },
 
             "tapstart:delegate(x-calendar)": function(e){
-                console.log("datepicker tapstart");
-                e.preventDefault(); // prevent blurring of polyfill input
-            },
-
-            "tapend:delegate(x-calendar)": function(e){
-                console.log("datepicker tapend");
                 e.preventDefault(); // prevent blurring of polyfill input
             },
 
@@ -182,7 +190,6 @@
                                              this.xtag.dateInput.value;
                 },
                 set: function(rawDateVal){
-                    console.log("value set=", rawDateVal);
                     var parsedDate = parseSingleDate(rawDateVal);
                     var isoStr = (parsedDate) ? iso(parsedDate) : null;
                     var dateInput = this.xtag.dateInput;
@@ -221,12 +228,8 @@
                         if(isoStr){
                             dateInput.value = isoStr;
                             if(polyfillUI){
-                                polyfillUI.view = parsedDate; 
-                               // TODO: fix issue where clicking on a gray node
-                               //  re-paints the calendar and throws away the 
-                               // event on the calendar day before bubbling up
-
                                 polyfillUI.chosen = parsedDate;
+                                polyfillUI.view = parsedDate;
                             }
                         }
                         else{

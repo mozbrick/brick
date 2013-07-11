@@ -59,6 +59,14 @@
                 console.log("input, value=", this.value, "submitValue=", this.submitValue);
             });
 
+            xtag.addEvent(document, "focus:delegate(x-datepicker)", function(e){
+                console.log("focus", e);
+            });
+
+            xtag.addEvent(document, "blur:delegate(x-datepicker)", function(e){
+                console.log("blur", e);
+            });
+
         }, false);
     </script>
 </body>

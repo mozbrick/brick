@@ -254,12 +254,25 @@
         return d;
     }
 
+    // find nearest succeeding Saturday
+    function findNextSaturday(d){
+        while (d.getUTCDay() < 6){
+            d = nextDay(d);
+        }
+        return d;
+    }
+
     // Find the first of the date's month.
     function findFirst(d) {
         while(getDate(d) > 1) {
           d = prevDay(d);
         }
         return d;
+    }
+
+    // find the last of the date's month
+    function findLast(d){
+        return prevDay(relOffset(d, 0, 1, 0));
     }
 
     // Return the next day.
@@ -550,17 +563,30 @@
         }
     };
 
-    Calendar.prototype.hasDate = function(dateObj){
+    Calendar.prototype.hasChosenDate = function(dateObj){
         return dateMatches(dateObj, this._chosenRanges);
     };
 
+    Calendar.prototype.hasVisibleDate = function(dateObj, excludeBadMonths){
+        var startDate = this.firstVisibleMonth;
+        if(!excludeBadMonths) startDate = findSunday(startDate);
+
+        var endDate = findLast(this.lastVisibleMonth);
+        if(!excludeBadMonths) endDate = findNextSaturday(endDate);
+
+        return dateMatches(dateObj, [[startDate, endDate]]);
+    };
+
+    /* note that throwing away nodes during an event handler kills the 
+       propagation chain
+    */
     Calendar.prototype.render = function(preserveNodes){
         var span = this._span;
         var i;
         if(!preserveNodes){
             this.el.innerHTML = "";
             // get first month of the span of months centered on the view
-            var ref = relOffset(this._viewDate, 0, -Math.floor(span/2), 0);
+            var ref = this.firstVisibleMonth;
             for (i = 0; i < span; i++) {
                 appendChild(this.el, makeMonth(ref, this._chosenRanges));
                 // get next month's date
@@ -604,6 +630,22 @@
     };
 
     Object.defineProperties(Calendar.prototype, {
+        // get first month of the span of months centered on the view
+        "firstVisibleMonth": {
+            get: function(){
+                return findFirst(
+                         relOffset(this.view, 0, -Math.floor(this.span/2), 0)
+                       );  
+            }
+        },
+
+        "lastVisibleMonth": {
+            get: function(){
+                return relOffset(this.firstVisibleMonth, 0, 
+                                 Math.max(0, this.span-1), 0);
+            }
+        },
+
         "multiple": {
             get: function(){
                 return this._multiple;
@@ -619,7 +661,13 @@
                 return this._span;
             },
             set: function(newSpan){
-                this._span = newSpan;
+                var parsedSpan = parseInt(newSpan, 10);
+                if(!isNaN(parsedSpan) && parsedSpan >= 0){
+                    this._span = parsedSpan;
+                }
+                else{
+                    this._span = 0;
+                }
                 this.render(false);
             }
         },
@@ -634,8 +682,8 @@
                 var oldViewDate = this._viewDate;
                 this._viewDate = newViewDate;
 
-                // preserve nodes if month does not change
-                this.render(getMonth(oldViewDate) === getMonth(newViewDate));
+                this.render(getMonth(oldViewDate) === getMonth(newViewDate) &&
+                            getYear(oldViewDate) === getYear(newViewDate));
             }
         },
 
@@ -733,7 +781,6 @@
 
             // start drag
             "tapstart:delegate(.day)": function(e){
-                console.log("cal tapstart", e);
                 var xCalendar = e.currentTarget;
                 var day = this;
                 var isoDate = day.getAttribute("data-date");
@@ -784,7 +831,6 @@
             },
 
             "tap:delegate(.day)": function(e){
-                console.log("cal tap");
                 var xCalendar = e.currentTarget;
                 var day = this;
                 var isoDate = day.getAttribute("data-date");
@@ -826,7 +872,7 @@
                     return this.xtag.calObj.span;
                 },
                 set: function(newCalSpan){
-                    this.xtag.calObj.span = newCalSpan;
+                    this.xtag.calObj.span = newCalSpan;   
                 }
             },
             view: {
@@ -883,6 +929,16 @@
                         this.removeAttribute("chosen");
                     }
                 }
+            },
+            firstVisibleMonth:{
+                get: function(){
+                    return this.xtag.calObj.firstVisibleMonth;
+                }
+            },
+            lastVisibleMonth:{
+                get: function(){
+                    return this.xtag.calObj.lastVisibleMonth;
+                }
             }
         },
         methods: { 
@@ -911,12 +967,17 @@
             },
 
             toggleDate: function(dateObj, appendIfAdd){
-                if(this.xtag.calObj.hasDate(dateObj)){
+                if(this.xtag.calObj.hasChosenDate(dateObj)){
                     this.toggleDateOff(dateObj);
                 }
                 else{
                     this.toggleDateOn(dateObj, appendIfAdd);
                 }
+            },
+
+            hasVisibleDate: function(dateObj, excludeBadMonths){
+                return this.xtag.calObj.hasVisibleDate(dateObj, 
+                                                       excludeBadMonths);
             }
         }
     });
