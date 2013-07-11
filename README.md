@@ -13,7 +13,7 @@ Positions/appearances will likely differ on larger displays or with different in
 
 ## Structural Components
 
-### ['View'](https://github.com/x-tag/view)
+### ['Layout'](https://github.com/x-tag/layout)
 
 * Primary layout container, holds app structure.
 * Allows whole "app" space to have layout properties like flexbox without affecting <body>
