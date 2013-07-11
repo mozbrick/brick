@@ -1,6 +1,3 @@
-[submodule "layout"]
-	path = layout
-	url = https://github.com/x-tag/layout.git
 [submodule "slidebox"]
 	path = slidebox
 	url = https://github.com/x-tag/slidebox.git
@@ -13,3 +10,6 @@
 [submodule "toggle"]
 	path = toggle
 	url = git@github.com:x-tag/toggle.git
+[submodule "layout"]
+	path = layout
+	url = git@github.com:x-tag/layout.git
