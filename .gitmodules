@@ -1,6 +1,6 @@
-[submodule "view"]
-	path = view
-	url = https://github.com/x-tag/view.git
+[submodule "layout"]
+	path = layout
+	url = https://github.com/x-tag/layout.git
 [submodule "slidebox"]
 	path = slidebox
 	url = https://github.com/x-tag/slidebox.git
