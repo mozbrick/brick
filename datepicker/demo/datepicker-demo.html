@@ -54,6 +54,11 @@
                     e.preventDefault();
                 }
             });
+
+            xtag.addEvent(document, "input:delegate(x-datepicker)", function(e){
+                console.log("input, value=", this.value, "submitValue=", this.submitValue);
+            });
+
         }, false);
     </script>
 </body>

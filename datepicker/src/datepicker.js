@@ -102,6 +102,7 @@
         },
         events: {
             "datetoggleon:delegate(x-calendar)": function(e){
+                console.log("datepicker toggleon");
                 var xCal = this;
                 var datepicker = e.currentTarget;
 
@@ -115,11 +116,13 @@
             },
 
             "datetoggleoff:delegate(x-calendar)": function(e){
+                console.log("datepicker toggleoff");
                 var datepicker = e.currentTarget;
                 datepicker.value = null; // workaround until skip:true works
             },
 
             "focus": function(e){
+                console.log("focus");
                 e.currentTarget.setAttribute("focused", true); 
             },
 
@@ -128,9 +131,20 @@
             },
 
             "blur:delegate(.x-datepicker-polyfill-input)": function(e){
+                console.log("blur", e);
                 var datepicker = e.currentTarget;
                 _updateDatepicker(datepicker, true);
-                datepicker.removeAttribute("focused"); // TODO: catch case where we click on calendar and prevent premature fade
+                datepicker.removeAttribute("focused");
+            },
+
+            "tapstart:delegate(x-calendar)": function(e){
+                console.log("datepicker tapstart");
+                e.preventDefault(); // prevent blurring of polyfill input
+            },
+
+            "tapend:delegate(x-calendar)": function(e){
+                console.log("datepicker tapend");
+                e.preventDefault(); // prevent blurring of polyfill input
             },
 
             "keypress:delegate(.x-datepicker-polyfill-input)": function(e){
@@ -168,6 +182,7 @@
                                              this.xtag.dateInput.value;
                 },
                 set: function(rawDateVal){
+                    console.log("value set=", rawDateVal);
                     var parsedDate = parseSingleDate(rawDateVal);
                     var isoStr = (parsedDate) ? iso(parsedDate) : null;
                     var dateInput = this.xtag.dateInput;
@@ -206,8 +221,12 @@
                         if(isoStr){
                             dateInput.value = isoStr;
                             if(polyfillUI){
+                                polyfillUI.view = parsedDate; 
+                               // TODO: fix issue where clicking on a gray node
+                               //  re-paints the calendar and throws away the 
+                               // event on the calendar day before bubbling up
+
                                 polyfillUI.chosen = parsedDate;
-                                polyfillUI.view = parsedDate;
                             }
                         }
                         else{
@@ -221,8 +240,6 @@
                     }
 
                     _validateDatepicker(this);
-
-                    console.log("new value=", this.value, "value attr=", this.getAttribute("value"), "submitval=", this.submitValue);
                 }
             },
 
