@@ -325,7 +325,8 @@
             // function to call when the polyfill slider receives key inputs,
             // allowing keyboard controls
             "onKeyDown": function(e){
-                if(e.keyCode in KEYCODES){
+                var keyCode = e.key || e.keyCode;
+                if(keyCode in KEYCODES){
                     var oldVal = this.value;
                     var min = this.min;
                     var max = this.max;
@@ -333,7 +334,7 @@
                     var rangeSize = Math.max(0, max - min);
                     var largeStep = Math.max(rangeSize / 10, step);
                     
-                    switch(KEYCODES[e.keyCode]){
+                    switch(KEYCODES[keyCode]){
                         case "LEFT_ARROW":
                         case "DOWN_ARROW":
                             this.value = Math.max(oldVal - step, min);

@@ -482,11 +482,11 @@
         else if(isArray(chosenRanges)){
             cleanRanges = chosenRanges;
         }
-        else if(viewDate){
-            cleanRanges = [viewDate];
+        else if(chosenRanges === null || chosenRanges === undefined || !viewDate){
+            cleanRanges = [];
         }
         else{
-            cleanRanges = [];
+            cleanRanges = [viewDate];
         }
 
         var collapsedRanges = _collapseRanges(cleanRanges);
@@ -553,10 +553,10 @@
         return dateMatches(dateObj, this._chosenRanges);
     };
 
-    Calendar.prototype.render = function(preserveStructure){
+    Calendar.prototype.render = function(preserveNodes){
         var span = this._span;
 
-        if(!preserveStructure){
+        if(!preserveNodes){
             this.el.innerHTML = "";
             // get first month of the span of months centered on the view
             var ref = relOffset(this._viewDate, 0, -Math.floor(span/2), 0);
@@ -567,7 +567,7 @@
             }
         }
         // if we want to maintain the original elements without completely
-        // wiping and rewriting nodes
+        // wiping and rewriting nodes (ex: when the visible dates don't change)
         else{
             var days = xtag.query(this.el, ".day");
             var day;
@@ -863,6 +863,9 @@
                     if(parsedDateRanges){
                         this.xtag.calObj.chosen = parsedDateRanges;
                     }
+                    else{
+                        this.xtag.calObj.chosen = null;
+                    }
 
                     if(this.xtag.calObj.chosenString){
                         // override attribute with auto-generated string
@@ -876,8 +879,8 @@
             }
         },
         methods: { 
-            render: function(preserveStructure){
-                this.xtag.calObj.render(preserveStructure);
+            render: function(preserveNodes){
+                this.xtag.calObj.render(preserveNodes);
             },
             // Go back one month.
             prevMonth: function(){

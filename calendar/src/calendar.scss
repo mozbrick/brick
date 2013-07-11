@@ -61,8 +61,8 @@ x-calendar {
         }
 
         &.today{
-            border: 1px solid blue;
-            color: blue;
+            border: 1px solid limegreen;
+            font-weight: bold;
         }
 
         &.chosen{
@@ -79,7 +79,7 @@ x-calendar {
             }
 
             &.today{
-                border-color: lighten(blue, 25%);
+                border-color: lighten(limegreen, 25%);
             }
         }
 

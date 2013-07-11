@@ -56,8 +56,8 @@ x-calendar {
     x-calendar .day:first-child {
       margin: 0; }
     x-calendar .day.today {
-      border: 1px solid blue;
-      color: blue; }
+      border: 1px solid limegreen;
+      font-weight: bold; }
     x-calendar .day.chosen {
       background: #444;
       color: #fff; }
@@ -67,7 +67,7 @@ x-calendar {
       x-calendar .day.badmonth.chosen {
         background: #ddd; }
       x-calendar .day.badmonth.today {
-        border-color: #8080ff; }
+        border-color: #99e699; }
     x-calendar .day[active] {
       border-color: orange; }
   x-calendar .controls {

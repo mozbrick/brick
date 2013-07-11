@@ -1,4 +1,6 @@
 (function(){
+    var ENTER_KEYCODE = 13;
+
     // Date utils
 
     function getYear(d) {
@@ -49,8 +51,42 @@
             if(!isNaN(parsedMs)){
                 return new Date(parsedMs);
             }
-
             return null;
+        }
+    }
+
+    function _validateDatepicker(datepicker){
+        var polyfillInput = datepicker.xtag.polyfillInput;
+        if(!polyfillInput){
+            datepicker.removeAttribute("invalid");
+            return;
+        }
+
+        var rawVal = polyfillInput.value;
+        var inputDate = parseSingleDate(rawVal);
+        if(inputDate)
+        {
+            console.log("ajfldsa")
+            datepicker.removeAttribute("invalid");
+        }
+        else{
+            console.log("whowhowoho")
+            datepicker.setAttribute("invalid", true);
+        }
+
+        return !!inputDate;
+    }
+
+    function _updateDatepicker(datepicker){
+        if(!datepicker.xtag.polyfillInput) return;
+
+        var origVal = datepicker.xtag.polyfillInput.value;
+        if(_validateDatepicker(datepicker)){
+            datepicker.value = parseSingleDate(origVal);
+        }
+        else{
+            datepicker.value = null;
+            datepicker.xtag.polyfillInput.value = origVal;
         }
     }
 
@@ -91,14 +127,36 @@
                 else{
                     datepicker.value = "";
                 }
-            } 
+            },
+
+            "datetoggleoff:delegate(x-calendar)": function(e){
+                var datepicker = e.currentTarget;
+                datepicker.value = null; // workaround until skip:true works
+            },
+
+            "blur:delegate(.x-datepicker-polyfill-input)": function(e){
+                _updateDatepicker(e.currentTarget);
+            },
+
+            "keyup:delegate(.x-datepicker-polyfill-input)": function(e){
+                var keyCode = e.key || e.keyCode;
+                if(keyCode === ENTER_KEYCODE){
+                    _updateDatepicker(e.currentTarget);
+                }
+            },
+
+            "input:delegate(.x-datepicker-polyfill-input)": function(e){
+                _validateDatepicker(e.currentTarget);
+            }
         },
         accessors: {
             "name": {
                 attribute: {selector: ".x-datepicker-input"}
             },
             "value": {
-                attribute: {skip: true},
+                attribute: {
+                    skip: true
+                },
                 get: function(){
                     return this.xtag.dateInput.value;
                 },
@@ -115,6 +173,11 @@
                             this.xtag.polyfillInput.setAttribute("value", isoStr);
                             this.xtag.polyfillInput.value = isoStr;
                         }
+
+                        if(this.xtag.polyfillUI){
+                            this.xtag.polyfillUI.chosen = parsedDate;
+                            this.xtag.polyfillUI.view = parsedDate;
+                        }
                     }
                     else{
                         this.removeAttribute("value");
@@ -125,7 +188,12 @@
                             this.xtag.polyfillInput.removeAttribute("value");
                             this.xtag.polyfillInput.value = "";
                         }
+
+                        if(this.xtag.polyfillUI){
+                            this.xtag.polyfillUI.chosen = null;
+                        }
                     }
+                    _validateDatepicker(this);
                 }
             },
 
@@ -142,6 +210,7 @@
                             polyfillInput.setAttribute("type", "text");
                             xtag.addClass(polyfillInput, "x-datepicker-polyfill-input");
                             polyfillInput.setAttribute("value", this.value);
+                            polyfillInput.setAttribute("placeholder", "YYYY-MM-DD");
                             polyfillInput.value = this.value;
 
                             this.xtag.polyfillInput = polyfillInput;
@@ -153,7 +222,8 @@
                         if(!this.xtag.polyfillUI){
                             // TODO: make this also use x-reel when implemented
                             var polyfillUI = document.createElement("x-calendar");
-                            polyfillUI.selected = this.value;
+                            polyfillUI.chosen = this.value;
+                            polyfillUI.view = this.value;
                             polyfillUI.controls = true;
                             this.xtag.polyfillUI = polyfillUI;
                             this.appendChild(polyfillUI);

@@ -11,7 +11,6 @@ x-datepicker {
     margin: 0; }
   x-datepicker > .x-datepicker-polyfill-input {
     margin: 0;
-    background-color: orange;
     border: 1px solid grey;
     padding: .25em;
     font-family: Courier, monospace;
@@ -27,6 +26,30 @@ x-datepicker {
     margin-top: -1px; }
   x-datepicker[polyfill] > .x-datepicker-input {
     display: none; }
+  x-datepicker[polyfill] > x-calendar {
+    transition-property: opacity, visibility;
+    -webkit-transition-property: opacity, visibility;
+    -moz-transition-property: opacity, visibility;
+    -o-transition-property: opacity, visibility;
+    transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease-in;
+    -moz-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    -o-transition-delay: 0s;
+    transition-delay: 0s; }
+  x-datepicker[polyfill]:focus > .x-datepicker-polyfill-input, x-datepicker[polyfill][focused] > .x-datepicker-polyfill-input {
+    box-shadow: 1px 1px 4px green; }
+    x-datepicker[polyfill]:focus > .x-datepicker-polyfill-input + x-calendar, x-datepicker[polyfill][focused] > .x-datepicker-polyfill-input + x-calendar {
+      opacity: 1;
+      visibility: visible; }
+  x-datepicker[polyfill][invalid] > .x-datepicker-polyfill-input {
+    background-color: tomato; }
   x-datepicker:not([polyfill]) > .x-datepicker-polyfill-input {
     display: none; }
   x-datepicker:not([polyfill]) > x-calendar {
