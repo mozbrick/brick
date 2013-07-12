@@ -420,11 +420,24 @@
         return foundMatch;
     }
 
+    /** dateInRange: (Date, Date, Date) => Boolean
+
+    returns true if the date of the given d date (without time information)
+    is in between the start and end days
+    **/
     function dateInRange(start, end, d) {
         // convert to strings for easier comparison
         return iso(start) <= iso(d) && iso(d) <= iso(end);
     }
 
+
+    /** sortRanges: Date/(Date Array)  Array
+
+    given a list of singular dates / 2-item date range lists (ie: the
+    same format as returned by parseMultipleDates and used by 
+    Calendar._chosenRanges), destructively sorts the list to have
+    earlier dates come first
+    **/
     function sortRanges(ranges){
         ranges.sort(function(rangeA, rangeB){
             var dateA = (isValidDateObj(rangeA)) ? rangeA : rangeA[0];
@@ -433,8 +446,8 @@
         });
     }
 
-    // creates the html elements for a given date, highlighting the
-    // given chosen date ranges
+    // creates the html elements for a given date, adding classes to 
+    // highlight the given chosen date ranges
     function makeMonth(d, chosen) {
         if (!isValidDateObj(d)) throw 'Invalid view date!';
         var month = getMonth(d);
@@ -840,9 +853,29 @@
         }
     });
 
+    function _onDragStart(xCalendar, day){
+        var isoDate = day.getAttribute("data-date");
+        var dateObj = parseSingleDate(isoDate);
+        var toggleEventName;
+        if(hasClass(day, CHOSEN_CLASS)){
+            xCalendar.xtag.dragType = DRAG_REMOVE;
+            toggleEventName = "datetoggleoff";
+        }
+        else{
+            xCalendar.xtag.dragType = DRAG_ADD;
+            toggleEventName = "datetoggleon";
+        }
 
-    // added on the body to delegate dragends to all x-calendars
-    xtag.addEvent(document, "tapend", function(e){
+        if(!xCalendar.noToggle){
+            xtag.fireEvent(xCalendar, toggleEventName,
+                           {detail: {date: dateObj}});
+        }
+
+        xCalendar.setAttribute("active", true);
+        day.setAttribute("active", true);
+    }
+
+    function _onDragEnd(){
         var xCalendars = xtag.query(document, "x-calendar");
         for(var i = 0; i < xCalendars.length; i++){
             var xCalendar = xCalendars[i];
@@ -850,11 +883,15 @@
             xCalendar.removeAttribute("active");
         }
 
-        var days = xtag.query(document, "x-calendar .day");
+        var days = xtag.query(document, "x-calendar .day[active]");
         for(var j=0; j < days.length; j++){
             days[j].removeAttribute("active");
         }
-    });
+    }
+
+    // added on the body to delegate dragends to all x-calendars
+    xtag.addEvent(document, "mouseup", _onDragEnd);
+    xtag.addEvent(document, "touchend", _onDragEnd);
 
     xtag.register("x-calendar", {
         lifecycle: {
@@ -882,22 +919,13 @@
             }
         },
         events: {
-            // prevent mobile drag scroll
-            "touchstart": function(e){
-                e.preventDefault();
-            },
-
-            "touchenter": function(e){
-                console.log(e.target);
-                alert(e.target);
-            },
-
             "tap:delegate(.next)": function(e){
                 var xCalendar = e.currentTarget;
                 xCalendar.nextMonth();
 
                 xtag.fireEvent(xCalendar, "nextmonth");
             },
+
             "tap:delegate(.prev)": function(e){
                 var xCalendar = e.currentTarget;
                 xCalendar.prevMonth();
@@ -905,41 +933,27 @@
                 xtag.fireEvent(xCalendar, "prevmonth");
             },
 
-            // start drag
-            "tapstart:delegate(.day)": function(e){
+            // tapstart is split into mousedown and touchstart to work around
+            // issue where tapstart doesn't fire when tapping a different day
+            "mousedown:delegate(.day)": function(e){
                 // prevent firing on right click
                 if(e.button && e.button !== LEFT_MOUSE_BTN){
                     return;
                 }
+                _onDragStart(e.currentTarget, this);
+            },
+
+            "touchstart:delegate(.day)": function(e){
+                // prevent mobile drag-scroll
                 e.preventDefault();
-                var xCalendar = e.currentTarget;
-                var day = this;
-
-                var isoDate = day.getAttribute("data-date");
-                var dateObj = parseSingleDate(isoDate);
-                var toggleEventName;
-                if(hasClass(day, CHOSEN_CLASS)){
-                    xCalendar.xtag.dragType = DRAG_REMOVE;
-                    toggleEventName = "datetoggleoff";
-                }
-                else{
-                    xCalendar.xtag.dragType = DRAG_ADD;
-                    toggleEventName = "datetoggleon";
-                }
-
-                if(!xCalendar.noToggle){
-                    xtag.fireEvent(xCalendar, toggleEventName,
-                                   {detail: {date: dateObj}});
-                }
-
-                xCalendar.setAttribute("active", true);
-                day.setAttribute("active", true);
+                _onDragStart(e.currentTarget, this);
             },
 
             // drag move
             "tapenter:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
+
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
                 if(!xCalendar.noToggle){
@@ -990,7 +1004,6 @@
 
                 xCalendar.toggleDateOff(e.detail.date);
             }
-
         },
         accessors: {
             controls: {
