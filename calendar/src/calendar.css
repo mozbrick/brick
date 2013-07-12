@@ -60,8 +60,9 @@ x-calendar {
       font-weight: bold; }
     x-calendar .day.chosen {
       background: #444;
-      color: #fff;
-      text-decoration: underline; }
+      color: #fff; }
+  x-calendar[active] {
+    cursor: default; }
   x-calendar .badmonth {
     color: #aaa; }
     x-calendar .badmonth.chosen {

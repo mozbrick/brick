@@ -2,7 +2,7 @@
     var ENTER_KEYCODE = 13;
 
     // Date utils
-    
+
     // is valid date object?
     function isValidDateObj(d) {
         return (d instanceof Date) && !!(d.getTime) && !isNaN(d.getTime());
@@ -124,11 +124,6 @@
                 this.xtag.polyfillInput = null;
                 this.xtag.polyfillUI = null;
 
-                // note that changing the calendar's view stops the propagation
-                // of any event fired on the old calendar's node, so this
-                // variable is used as a flag to avoid an unprevented blur
-                this.xtag._skipBlur = false;
-
                 this.polyfill = (this.hasAttribute("polyfill") || 
                                  this.xtag.dateInput.type.toLowerCase() !== "date");
             },
@@ -144,9 +139,6 @@
                 }
 
                 var selectedDate = parseSingleDate(e.detail.date);
-
-                datepicker.xtag._skipBlur = 
-                      selectedDate && !xCal.hasVisibleDate(selectedDate, true);
 
                 datepicker.value = (selectedDate) ? iso(selectedDate) : "";
 
@@ -169,16 +161,6 @@
 
             "blur:delegate(.x-datepicker-polyfill-input)": function(e){
                 var datepicker = e.currentTarget;
-                if(datepicker.xtag._skipBlur){
-                    var refocusTarget = (datepicker.polyfill) ? 
-                                            datepicker.xtag.polyfillInput :
-                                            datepicker.xtag.dateInput;
-                    refocusTarget.focus();
-                    datepicker.xtag._skipBlur = false;
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
 
                 _updateDatepicker(datepicker, true);
                 datepicker.removeAttribute("focused");

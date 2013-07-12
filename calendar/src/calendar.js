@@ -911,11 +911,9 @@
                 if(e.button && e.button !== LEFT_MOUSE_BTN){
                     return;
                 }
-
+                e.preventDefault();
                 var xCalendar = e.currentTarget;
                 var day = this;
-
-                day.style.color = randomColor();
 
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
