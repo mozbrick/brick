@@ -1,5 +1,7 @@
 @import "../../custommixins";
 
+$todayBorder: orange;
+
 x-calendar {
     position: relative;
     font-size: 1em;
@@ -10,13 +12,13 @@ x-calendar {
     display: inline-block;
     margin: 0;
     padding: 0;
+    background-color: #fff;
 
     @include unhighlightable;
     @include boxSizing(border-box);
 
     .calendar{
         position: relative;
-        background: #fff;
         color: #fff;
         overflow: hidden;
         display: inline-block;
@@ -24,19 +26,18 @@ x-calendar {
 
     .month{
         display: inline-block;
-        padding: 2px;
         margin: 0;
+        padding: 0;
         vertical-align: top;
         white-space: nowrap;
     }
 
     .week{
-        margin-top: 1px;
+        margin: 1px 2px;
         overflow: hidden;
     }
 
     .label, .day, .prev, .next{
-        background: #fff;
         color: #444;
         height: 2em;
         line-height: 2em;
@@ -60,8 +61,12 @@ x-calendar {
             margin: 0;
         }
 
+        &[active]{
+            border-color: $todayBorder;
+        }
+
         &.today{
-            border: 1px solid limegreen;
+            border: 1px solid #93aed1;
             font-weight: bold;
         }
 
@@ -69,22 +74,17 @@ x-calendar {
             background: #444;
             color: #fff;
         }
+    }
 
-        &.badmonth{
-            background: #fff;
-            color: #aaa;
+    .badmonth{
+        color: #aaa;
 
-            &.chosen{
-                background: #ddd;
-            }
-
-            &.today{
-                border-color: lighten(limegreen, 25%);
-            }
+        &.chosen{
+            background: #ccc;
         }
 
-        &[active]{
-            border-color: orange;
+        &.today{
+            border-color: lighten($todayBorder, 25%);
         }
     }
 
@@ -99,15 +99,15 @@ x-calendar {
     .prev, .next{
         color: #444;
         position: absolute;
-        top: 2px;
+        top: 0px;
     }
 
     .prev{
-        left: 2px;
+        left: 0px;
     }
 
     .next{
-        right: 2px;
+        right: 0px;
     }
 
     &:not([active]){
@@ -116,7 +116,8 @@ x-calendar {
         }
 
         .prev:hover, .next:hover{
-            background: #efefef;
+            background-color: #efefef;
+            opacity: 0.7;
         }
 
         .day:not(.chosen){

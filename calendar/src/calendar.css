@@ -8,6 +8,7 @@ x-calendar {
   display: inline-block;
   margin: 0;
   padding: 0;
+  background-color: #fff;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -24,21 +25,19 @@ x-calendar {
   box-sizing: border-box; }
   x-calendar .calendar {
     position: relative;
-    background: #fff;
     color: #fff;
     overflow: hidden;
     display: inline-block; }
   x-calendar .month {
     display: inline-block;
-    padding: 2px;
     margin: 0;
+    padding: 0;
     vertical-align: top;
     white-space: nowrap; }
   x-calendar .week {
-    margin-top: 1px;
+    margin: 1px 2px;
     overflow: hidden; }
   x-calendar .label, x-calendar .day, x-calendar .prev, x-calendar .next {
-    background: #fff;
     color: #444;
     height: 2em;
     line-height: 2em;
@@ -55,21 +54,20 @@ x-calendar {
     border: 1px solid transparent; }
     x-calendar .day:first-child {
       margin: 0; }
+    x-calendar .day[active] {
+      border-color: orange; }
     x-calendar .day.today {
-      border: 1px solid limegreen;
+      border: 1px solid #93aed1;
       font-weight: bold; }
     x-calendar .day.chosen {
       background: #444;
       color: #fff; }
-    x-calendar .day.badmonth {
-      background: #fff;
-      color: #aaa; }
-      x-calendar .day.badmonth.chosen {
-        background: #ddd; }
-      x-calendar .day.badmonth.today {
-        border-color: #99e699; }
-    x-calendar .day[active] {
-      border-color: orange; }
+  x-calendar .badmonth {
+    color: #aaa; }
+    x-calendar .badmonth.chosen {
+      background: #ccc; }
+    x-calendar .badmonth.today {
+      border-color: #ffd280; }
   x-calendar .controls {
     display: none; }
   x-calendar[controls] .controls {
@@ -77,15 +75,16 @@ x-calendar {
   x-calendar .prev, x-calendar .next {
     color: #444;
     position: absolute;
-    top: 2px; }
+    top: 0px; }
   x-calendar .prev {
-    left: 2px; }
+    left: 0px; }
   x-calendar .next {
-    right: 2px; }
+    right: 0px; }
   x-calendar:not([active]) .day:hover, x-calendar:not([active]) .prev:hover, x-calendar:not([active]) .next:hover {
     cursor: pointer; }
   x-calendar:not([active]) .prev:hover, x-calendar:not([active]) .next:hover {
-    background: #efefef; }
+    background-color: #efefef;
+    opacity: 0.7; }
   x-calendar:not([active]) .day:not(.chosen):not(.badmonth):hover {
     background: #999;
     color: #fff; }

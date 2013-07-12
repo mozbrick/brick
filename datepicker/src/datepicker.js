@@ -109,8 +109,11 @@
             "datetoggleon:delegate(x-calendar)": function(e){
                 var xCal = this;
                 var datepicker = e.currentTarget;
+                if((!e.detail) || (!e.detail.date)){
+                    return;
+                }
 
-                var selectedDate = parseSingleDate(e.date);
+                var selectedDate = parseSingleDate(e.detail.date);
 
                 datepicker.xtag._skipBlur = 
                       selectedDate && !xCal.hasVisibleDate(selectedDate, true);

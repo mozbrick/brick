@@ -1,4 +1,5 @@
 (function(){
+    var LEFT_MOUSE_BTN = 0;
     var LABELS = {
         prev: '<',
         next: '>',
@@ -781,6 +782,10 @@
 
             // start drag
             "tapstart:delegate(.day)": function(e){
+                if(e.button && e.button !== LEFT_MOUSE_BTN){
+                    return;
+                }
+
                 var xCalendar = e.currentTarget;
                 var day = this;
                 var isoDate = day.getAttribute("data-date");
@@ -796,7 +801,8 @@
                 }
 
                 if(!xCalendar.noToggle){
-                    xtag.fireEvent(xCalendar, toggleEventName, {date: dateObj});
+                    xtag.fireEvent(xCalendar, toggleEventName,
+                                   {detail: {date: dateObj}});
                 }
 
                 xCalendar.setAttribute("active", true);
@@ -815,14 +821,16 @@
                     if(xCalendar.xtag.dragType === DRAG_ADD && 
                        !(xtag.hasClass(day, CHOSEN_CLASS)))
                     {
-                        xtag.fireEvent(xCalendar, "datetoggleon", {date: dateObj});
+                        xtag.fireEvent(xCalendar, "datetoggleon", 
+                                       {detail: {date: dateObj}});
                     }
                     // trigger a remove if we enter a chosen day while in
                     // removal mode
                     else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
                             xtag.hasClass(day, CHOSEN_CLASS))
                     {
-                        xtag.fireEvent(xCalendar, "datetoggleoff", {date: dateObj});
+                        xtag.fireEvent(xCalendar, "datetoggleoff", 
+                                       {detail: {date: dateObj}});
                     }
                 }
                 if(xCalendar.xtag.dragType){
@@ -841,19 +849,19 @@
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
                 
-                xtag.fireEvent(xCalendar, "datetap", {date: dateObj});
+                xtag.fireEvent(xCalendar, "datetap", {detail: {date: dateObj}});
             },
 
             "datetoggleon": function(e){
                 var xCalendar = this;
 
-                xCalendar.toggleDateOn(e.date, xCalendar.multiple);
+                xCalendar.toggleDateOn(e.detail.date, xCalendar.multiple);
             },
 
             "datetoggleoff": function(e){
                 var xCalendar = this;
 
-                xCalendar.toggleDateOff(e.date);
+                xCalendar.toggleDateOff(e.detail.date);
             }
 
         },
