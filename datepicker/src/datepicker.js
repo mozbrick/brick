@@ -2,6 +2,11 @@
     var ENTER_KEYCODE = 13;
 
     // Date utils
+    
+    // is valid date object?
+    function isValidDateObj(d) {
+        return (d instanceof Date) && !!(d.getTime) && !isNaN(d.getTime());
+    }
 
     function getYear(d) {
         return d.getUTCFullYear();
@@ -13,33 +18,58 @@
         return d.getUTCDate();
     }
 
-    // Pad a single digit with preceding zeros to be padSize digits long
+    /** pad: (Number, Number) => String
+    
+    Pads a number with preceding zeros to be padSize digits long
+
+    If given a number with more than padSize digits, truncates the leftmost
+    digits to get to a padSize length
+    **/
     function pad(n, padSize) {
         var str = n.toString();
         var padZeros = (new Array(padSize)).join('0');
         return (padZeros + str).substr(-padSize);
     }
 
-    // ISO Date formatting (YYYY-MM-DD)
+    /** iso: Date => String 
+
+    returns the ISO format representation of a date ("YYYY-MM-DD")
+    **/
     function iso(d) {
         return [pad(getYear(d), 4),
                 pad(getMonth(d)+1, 2),
                 pad(getDate(d), 2)].join('-');
     }
 
-    // parse for YYYY-MM-DD format
-    var isoDateRegex = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
+    /** fromIso: String => Date/null
+
+    Given a string, attempts to parse out a date in YYYY-MM-DD format
+
+    If successful, returns the corresponding Date object, otherwise return null
+    **/
+    var ISO_DATE_REGEX = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
     function fromIso(s){
-        if (s instanceof Date) return s;
-        var d = isoDateRegex.exec(s);
+        if (isValidDateObj(s)) return s;
+        var d = ISO_DATE_REGEX.exec(s);
         if (d) {
           return new Date(d[1],d[2]-1,d[3]);
         }
+        else{
+            return null;
+        }
     }
 
-    // returns actual date if parsable, otherwise null
+    /** parseSingleDate: String => Date/null
+
+    attempts to parse out the given string as a Date
+
+    If successful, returns the corresponding Date object, otherwise return null
+
+    Valid input formats include any format with a YYYY-MM-DD format or 
+    is parseable by Date.parse
+    **/
     function parseSingleDate(dateStr){
-        if(dateStr instanceof Date) return dateStr;
+        if(isValidDateObj(dateStr)) return dateStr;
 
         // cross-browser check for ISO format that is not 
         // supported by Date.parse without implicit time zone

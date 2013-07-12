@@ -7,19 +7,21 @@
                  'August', 'September', 'October', 'November', 'December']
     };
     var TODAY = new Date();
+    // remove all time information from date
     TODAY.setUTCHours(0);
     TODAY.setUTCMinutes(0);
     TODAY.setUTCSeconds(0);
     TODAY.setUTCMilliseconds(0);
 
-    /* define constants for parsing multi-date attributes */
-
+    // constants used in tracking the type of the current drag/paint operation 
     var DRAG_ADD = "add";
     var DRAG_REMOVE = "remove";
 
+    // constant representing the class of a day that has been 
+    // chosen/toggled/selected/whatever
     var CHOSEN_CLASS = "chosen";
 
-    //minifier-friendly strings
+    // minifier-friendly strings
     var className = 'className';
 
     // dom helpers
@@ -31,9 +33,13 @@
 
     // is valid date object?
     function isValidDateObj(d) {
-        return !!(d.getTime) && !isNaN(d.getTime());
+        return (d instanceof Date)  && !!(d.getTime) && !isNaN(d.getTime());
     }
 
+    /** isArray: * => Boolean
+
+    simplys returns true if the given parameter is an array
+    **/
     function isArray(a){
         if(a && a.isArray){
             return a.isArray();
@@ -43,25 +49,26 @@
         }
     }
 
-    // Takes a string 'div.foo' and returns the Node <div class="foo">.
+    /** makeEl: String => DOM Element
+
+    Takes a string in the format of "tag.classname.classname2" (etc) and
+    returns a DOM element of that type with the given classes
+
+    For example, makeEl('div.foo') returns the Node <div class="foo">
+    **/
     function makeEl(s) {
         var a = s.split('.');
         var tag = a.shift();
         var el = document.createElement(tag);
-        if (tag == 'a') {
-          el.href = 'javascript:void(0);';
-        }
         el[className] = a.join(' ');
         return el;
-    }
+    } 
 
-    // places e1 below e2
-    function attachTo(e1, e2) {
-        e1.style.left = getLeft(e2) + 'px';
-        e1.style.top = getTop(e2) + e2.offsetHeight + 'px';
-    }   
+    /** getLeft: DOM element => Number
 
-    // Recursively determine offsetLeft.
+    returns the absolute left X coordinate of the given element in relation to 
+    the document page
+    **/
     function getLeft(el) {
         if(el.getBoundingClientRect){
           return el.getBoundingClientRect().left;
@@ -73,7 +80,11 @@
         }
     }
 
-    // Recursively determine offsetTop.
+    /** getLeft: DOM element => Number
+
+    returns the absolute top Y coordinate of the given element in relation to 
+    the document page
+    **/
     function getTop(el) {
         if(el.getBoundingClientRect){
           return el.getBoundingClientRect().top;
@@ -85,14 +96,26 @@
         }   
     }
 
+    /** addClass: (DOM element, string)
+
+    minification-friendly wrapper of xtag.addClass
+    **/
     function addClass(el, c) {
         xtag.addClass(el, c);
     }
 
+    /** removeClass: (DOM element, string)
+
+    minification-friendly wrapper of xtag.removeClass
+    **/
     function removeClass(el, c) {
         xtag.removeClass(el, c);
     }
 
+    /** hasClass: (DOM element, string)
+
+    minification-friendly wrapper of xtag.hasClass
+    **/
     function hasClass(el, c) {
         return xtag.hasClass(el, c);
     }
@@ -109,34 +132,93 @@
         return d.getUTCDate();
     }
 
-    // Pad a single digit with preceding zeros to be padSize digits long
+    /** pad: (Number, Number) => String
+    
+    Pads a number with preceding zeros to be padSize digits long
+
+    If given a number with more than padSize digits, truncates the leftmost
+    digits to get to a padSize length
+    **/
     function pad(n, padSize) {
         var str = n.toString();
         var padZeros = (new Array(padSize)).join('0');
         return (padZeros + str).substr(-padSize);
     }
 
-    // ISO Date formatting (YYYY-MM-DD)
+    /** iso: Date => String 
+
+    returns the ISO format representation of a date ("YYYY-MM-DD")
+    **/
     function iso(d) {
         return [pad(getYear(d), 4),
                 pad(getMonth(d)+1, 2),
                 pad(getDate(d), 2)].join('-');
     }
 
-    // parse for YYYY-MM-DD format
-    var isoDateRegex = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
+    /** fromIso: String => Date/null
+
+    Given a string, attempts to parse out a date in YYYY-MM-DD format
+
+    If successful, returns the corresponding Date object, otherwise return null
+    **/
+    var ISO_DATE_REGEX = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
     function fromIso(s){
-        if (s instanceof Date) return s;
-        var d = isoDateRegex.exec(s);
+        if (isValidDateObj(s)) return s;
+        var d = ISO_DATE_REGEX.exec(s);
         if (d) {
           return new Date(d[1],d[2]-1,d[3]);
         }
+        else{
+            return null;
+        }
     }
 
-    // returns a list of chosen dates/ranges
-    // returns null if any parsing error
+    /** parseSingleDate: String => Date/null
+
+    attempts to parse out the given string as a Date
+
+    If successful, returns the corresponding Date object, otherwise return null
+
+    Valid input formats include any format with a YYYY-MM-DD format or 
+    is parseable by Date.parse
+    **/
+    function parseSingleDate(dateStr){
+        if(isValidDateObj(dateStr)) return dateStr;
+
+        // cross-browser check for ISO format that is not 
+        // supported by Date.parse without implicit time zone
+        var isoParsed = fromIso(dateStr);
+        if(isoParsed){
+            return isoParsed;
+        }
+        else{
+            var parsedMs = Date.parse(dateStr);
+            if(!isNaN(parsedMs)){
+                return new Date(parsedMs);
+            }
+            return null;
+        }
+    }
+
+
+    /** parseMultiDates: Array/String => Array/null
+    
+    Given either an array or a JSON string, attempts to parse out the input into
+    the given array format:
+     - An array whose elements fall into one of the following two formats
+        - A Date object representing a single day
+          (if the input uses a string instead, this parser will attempt to 
+           parseSingleDate it)
+        - A two element list of Date objects representing the start and
+          end dates of a range (if the inputs use strings instead, the parser
+          will attempt to parseSingleDate them)
+
+    If the input is parseable into this format, return the resulting 2d array
+    Otherwise, return null and console.log the parsing error
+
+    If given an array that already follows this format, will simply return it
+    **/
     function parseMultiDates(multiDateStr){
-        // if necessary, split the input into a list of unparsed ranges
         var ranges;
         if(isArray(multiDateStr)){
             ranges = multiDateStr;
@@ -157,10 +239,14 @@
                     return [parsedSingle];
                 }
                 else{
-                    console.log("unable to parse", multiDateStr, "as JSON or single date");
+                    console.log("unable to parse", multiDateStr, 
+                                "as JSON or single date");
                     return null;
                 }
             }
+        }
+        else if(isValidDateObj(multiDateStr)){
+            return [multiDateStr];
         }
         else{
             return null;
@@ -173,7 +259,7 @@
             var range = ranges[i];
 
             var components;
-            if(range instanceof Date){
+            if(isValidDateObj(range)){
                 continue;
             }
             else if(typeof(range) === "string"){
@@ -188,18 +274,21 @@
                 var parsedStartDate = parseSingleDate(range[0]);
 
                 if(!parsedStartDate){
-                    console.log("unable to parse start date", range[0], "in range", range);
+                    console.log("unable to parse start date", range[0], 
+                                "from range", range);
                     return null;
                 }
 
                 var parsedEndDate = parseSingleDate(range[1]);
                 if(!parsedEndDate){
-                    console.log("unable to parse end date", range[1], "in range", range);
+                    console.log("unable to parse end date", range[1], 
+                                "from range", range);
                     return null;
                 }
 
                 if(parsedStartDate.valueOf() > parsedEndDate.valueOf()){
-                    console.log("invalid range", range, ": start date is after end date");
+                    console.log("invalid range", range, 
+                                ": start date is after end date");
                     return null;
                 }
                 ranges[i] = [parsedStartDate, parsedEndDate];
@@ -210,25 +299,6 @@
             }
         }
         return ranges;
-    }
-
-    // returns actual date if parsable, otherwise null
-    function parseSingleDate(dateStr){
-        if(dateStr instanceof Date) return dateStr;
-
-        // cross-browser check for ISO format that is not 
-        // supported by Date.parse without implicit time zone
-        var isoParsed = fromIso(dateStr);
-        if(isoParsed){
-            return isoParsed;
-        }
-        else{
-            var parsedMs = Date.parse(dateStr);
-            if(!isNaN(parsedMs)){
-                return new Date(parsedMs);
-            }
-            return null;
-        }
     }
 
     // Create a new date based on the provided date.
@@ -312,8 +382,8 @@
 
     function sortRanges(ranges){
         ranges.sort(function(rangeA, rangeB){
-            var dateA = (rangeA instanceof Date) ? rangeA : rangeA[0];
-            var dateB = (rangeB instanceof Date) ? rangeB : rangeB[0];
+            var dateA = (isValidDateObj(rangeA)) ? rangeA : rangeA[0];
+            var dateB = (isValidDateObj(rangeB)) ? rangeB : rangeB[0];
             return dateA.valueOf() - dateB.valueOf();
         });
     }
@@ -404,18 +474,18 @@
                             this.chosen : chosenRanges;
 
         // if given a valid viewDate, return it
-        if(viewDate instanceof Date){
+        if(isValidDateObj(viewDate)){
            return viewDate;
         }
         // otherwise if given a single date for chosenRanges, use it
-        else if(chosenRanges instanceof Date){
+        else if(isValidDateObj(chosenRanges)){
             return chosenRanges;
         }
         // otherwise, if given a valid chosenRanges, return the first date in
         // the range as the view date
         else if(isArray(chosenRanges) && chosenRanges.length > 0){
             var firstRange = chosenRanges[0];
-            if(firstRange instanceof Date){
+            if(isValidDateObj(firstRange)){
                 return firstRange;
             }
             else{
@@ -441,7 +511,7 @@
             var currStart, currEnd;
             var prevStart, prevEnd;
 
-            if(currRange instanceof Date){
+            if(isValidDateObj(currRange)){
                 currStart = currEnd = currRange;
             }
             else{
@@ -451,7 +521,7 @@
             currRange = (dateMatches(currStart, currEnd)) ? 
                              currStart : [currStart, currEnd];
 
-            if(prevRange instanceof Date){
+            if(isValidDateObj(prevRange)){
                 prevStart = prevEnd = prevRange;
             }
             else if(prevRange){
@@ -491,7 +561,7 @@
         viewDate = (viewDate === undefined) ? this.view : viewDate;
 
         var cleanRanges;
-        if(chosenRanges instanceof Date){
+        if(isValidDateObj(chosenRanges)){
             cleanRanges = [chosenRanges];
         }
         else if(isArray(chosenRanges)){
@@ -508,7 +578,7 @@
         if((!this.multiple) && collapsedRanges.length > 0){
             var firstRange = collapsedRanges[0];
 
-            if(firstRange instanceof Date){
+            if(isValidDateObj(firstRange)){
                 return [firstRange];
             }
             else{
@@ -521,7 +591,7 @@
     };
 
     Calendar.prototype.addDate = function(dateObj, append){
-        if(dateObj instanceof Date){
+        if(isValidDateObj(dateObj)){
             if(append){
                 this.chosen.push(dateObj);
                 // trigger setter
@@ -534,7 +604,7 @@
     };
 
     Calendar.prototype.removeDate = function(dateObj){
-        if(!(dateObj instanceof Date)){
+        if(!isValidDateObj(dateObj)){
             return;
         }
 
@@ -706,7 +776,7 @@
 
                     for(var i=0; i < isoDates.length; i++){
                         var range = isoDates[i];
-                        if(range instanceof Date){
+                        if(isValidDateObj(range)){
                             isoDates[i] = iso(range);
                         }
                         else{
@@ -791,7 +861,7 @@
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
                 var toggleEventName;
-                if(xtag.hasClass(day, CHOSEN_CLASS)){
+                if(hasClass(day, CHOSEN_CLASS)){
                     xCalendar.xtag.dragType = DRAG_REMOVE;
                     toggleEventName = "datetoggleoff";
                 }
@@ -819,7 +889,7 @@
                     // trigger a selection if we enter a nonchosen day while in
                     // addition mode
                     if(xCalendar.xtag.dragType === DRAG_ADD && 
-                       !(xtag.hasClass(day, CHOSEN_CLASS)))
+                       !(hasClass(day, CHOSEN_CLASS)))
                     {
                         xtag.fireEvent(xCalendar, "datetoggleon", 
                                        {detail: {date: dateObj}});
@@ -827,7 +897,7 @@
                     // trigger a remove if we enter a chosen day while in
                     // removal mode
                     else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
-                            xtag.hasClass(day, CHOSEN_CLASS))
+                            hasClass(day, CHOSEN_CLASS))
                     {
                         xtag.fireEvent(xCalendar, "datetoggleoff", 
                                        {detail: {date: dateObj}});
@@ -908,7 +978,7 @@
                     if(!this.multiple){
                         if(chosenRanges.length > 0){
                             var firstRange = chosenRanges[0];
-                            if(firstRange instanceof Date){
+                            if(isValidDateObj(firstRange)){
                                 return firstRange;
                             }
                             else{
