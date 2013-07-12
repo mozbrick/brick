@@ -49,11 +49,10 @@ x-calendar {
     border-radius: 4px;
     color: #444;
     display: inline-block;
-    margin-left: 1px;
     white-space: nowrap;
     border: 1px solid transparent; }
-    x-calendar .day:first-child {
-      margin: 0; }
+    x-calendar .day:not(:first-child) {
+      margin-left: 1px; }
     x-calendar .day[active] {
       border-color: orange; }
     x-calendar .day.today {
@@ -61,7 +60,8 @@ x-calendar {
       font-weight: bold; }
     x-calendar .day.chosen {
       background: #444;
-      color: #fff; }
+      color: #fff;
+      text-decoration: underline; }
   x-calendar .badmonth {
     color: #aaa; }
     x-calendar .badmonth.chosen {

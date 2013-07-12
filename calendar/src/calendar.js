@@ -221,7 +221,10 @@
     function parseMultiDates(multiDateStr){
         var ranges;
         if(isArray(multiDateStr)){
-            ranges = multiDateStr;
+            ranges = multiDateStr.slice(0); // so that this is nondestructive
+        }
+        else if(isValidDateObj(multiDateStr)){
+            return [multiDateStr];
         }
         else if(typeof(multiDateStr) === "string" && multiDateStr.length > 0){
             // check if this is a JSON representing a range of dates
@@ -245,9 +248,6 @@
                 }
             }
         }
-        else if(isValidDateObj(multiDateStr)){
-            return [multiDateStr];
-        }
         else{
             return null;
         }
@@ -262,6 +262,7 @@
             if(isValidDateObj(range)){
                 continue;
             }
+            // parse out as single date
             else if(typeof(range) === "string"){
                 var parsedDate = parseSingleDate(range);
                 if(!parsedDate){
@@ -270,7 +271,8 @@
                 }
                 ranges[i] = parsedDate;
             }
-            else if(isArray(range)){
+            // parse out as 2-item list/range of start/end date
+            else if(isArray(range) && range.length === 2){
                 var parsedStartDate = parseSingleDate(range[0]);
 
                 if(!parsedStartDate){
@@ -301,7 +303,11 @@
         return ranges;
     }
 
-    // Create a new date based on the provided date.
+    /* from: (Date, number, number, number) => Date
+
+    Create a new date based on the provided date, but with any given 
+    year/month/date parameters in place of the base date's
+    */
     function from(base, y, m, d) {
         if (y === undefined) y = getYear(base);
         if (m === undefined) m = getMonth(base);
@@ -309,7 +315,13 @@
         return new Date(y,m,d);
     }
 
-    // get the date with the given offsets from the base date
+    /* relOffset: (Date, number, number. number) => Date
+
+    get the date with the given offsets from the base date
+
+    ex: relOffset(foo, 0, -1, 0) returns the date that is exactly one month
+        behind foo
+    */
     function relOffset(base, y, m, d) {
         return from(base,
                     getYear(base) + y,
@@ -317,7 +329,10 @@
                     getDate(base) + d);
     }
 
-    // Find the nearest preceding Sunday.
+    /** findSunday: Date => Date
+
+    Find the nearest preceding Sunday that is on or earlier than the given date
+    **/
     function findSunday(d) {
         while(d.getUTCDay() > 0) {
           d = prevDay(d);
@@ -325,7 +340,10 @@
         return d;
     }
 
-    // find nearest succeeding Saturday
+    /** findNextSaturday: Date => Date
+
+    Find the nearest succeeding Saturday that is on or later than the given date
+    **/
     function findNextSaturday(d){
         while (d.getUTCDay() < 6){
             d = nextDay(d);
@@ -333,7 +351,10 @@
         return d;
     }
 
-    // Find the first of the date's month.
+    /** findFirst: Date => Date
+
+    Find the first day of the date's month.
+    **/
     function findFirst(d) {
         while(getDate(d) > 1) {
           d = prevDay(d);
@@ -341,22 +362,46 @@
         return d;
     }
 
-    // find the last of the date's month
+    /** findLast: Date => Date
+
+    Find the last day of the date's month.
+    **/
     function findLast(d){
         return prevDay(relOffset(d, 0, 1, 0));
     }
 
-    // Return the next day.
+    /** nextDay: Date => Date
+
+    Return the day that comes after the given date's
+    **/
     function nextDay(d) {
         return relOffset(d, 0, 0, 1);
     }
 
-    // Return the previous day.
+    /** prevDay: Date => Date
+
+    Return the day that comes before the given date's
+    **/
     function prevDay(d) {
         return relOffset(d, 0, 0, -1);
     }
 
-    // Check whether Date `d` is in the list of Date/Date ranges in `matches`.
+    /** dateMatches: (Date, Date/range Array) => Boolean
+
+    Check whether Date `d` is in the list of Date/Date ranges in `matches`.
+
+    If given a single date to check, will check if the two dates fall on the 
+    same date
+
+    If given an array of Dates/2-item Dateranges (ie: the same format returned 
+    by parseMultipleDates and used for Calendar._chosenRanges)
+
+    params:
+        d                   the date to compare
+        matches             if given as a singular date, will check if d is
+                            in the same date
+                            Otherwise, 
+    **/
     function dateMatches(d, matches) {
         if (!matches) return;
         matches = (matches.length === undefined) ? [matches] : matches;
@@ -837,6 +882,16 @@
             }
         },
         events: {
+            // prevent mobile drag scroll
+            "touchstart": function(e){
+                e.preventDefault();
+            },
+
+            "touchenter": function(e){
+                console.log(e.target);
+                alert(e.target);
+            },
+
             "tap:delegate(.next)": function(e){
                 var xCalendar = e.currentTarget;
                 xCalendar.nextMonth();
@@ -852,12 +907,16 @@
 
             // start drag
             "tapstart:delegate(.day)": function(e){
+                // prevent firing on right click
                 if(e.button && e.button !== LEFT_MOUSE_BTN){
                     return;
                 }
 
                 var xCalendar = e.currentTarget;
                 var day = this;
+
+                day.style.color = randomColor();
+
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
                 var toggleEventName;

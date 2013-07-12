@@ -53,12 +53,11 @@ x-calendar {
         @include rounded;
         color: #444;
         display: inline-block;
-        margin-left: 1px;
         white-space: nowrap;
         border: 1px solid transparent;
 
-        &:first-child{
-            margin: 0;
+        &:not(:first-child){
+            margin-left: 1px;
         }
 
         &[active]{
@@ -73,6 +72,7 @@ x-calendar {
         &.chosen{
             background: #444;
             color: #fff;
+            text-decoration: underline;
         }
     }
 
