@@ -1,13 +1,17 @@
 (function(){
+    // used in mouse events
     var LEFT_MOUSE_BTN = 0;
+
+    // used during creating calendar elements
     var LABELS = {
         prev: '<',
         next: '>',
         months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                  'August', 'September', 'October', 'November', 'December']
     };
+
+    // the current date, without any time information
     var TODAY = new Date();
-    // remove all time information from date
     TODAY.setUTCHours(0);
     TODAY.setUTCMinutes(0);
     TODAY.setUTCSeconds(0);
@@ -31,14 +35,17 @@
         parent.appendChild(child);
     }
 
-    // is valid date object?
+    /** isValidDateObj: (*) => Boolean
+
+    simply checks if the given parameter is a valid date object
+    **/
     function isValidDateObj(d) {
         return (d instanceof Date)  && !!(d.getTime) && !isNaN(d.getTime());
     }
 
-    /** isArray: * => Boolean
+    /** isArray: (*) => Boolean
 
-    simplys returns true if the given parameter is an array
+    simply checks if the given parameter is an array
     **/
     function isArray(a){
         if(a && a.isArray){
@@ -201,7 +208,7 @@
     }
 
 
-    /** parseMultiDates: Array/String => Array/null
+    /** parseMultiDates: Array/String => (Date/[Date, Date]) array/null
     
     Given either an array or a JSON string, attempts to parse out the input into
     the given array format:
@@ -386,7 +393,7 @@
         return relOffset(d, 0, 0, -1);
     }
 
-    /** dateMatches: (Date, Date/range Array) => Boolean
+    /** dateMatches: (Date, (Date/[Date, Date]) array) => Boolean
 
     Check whether Date `d` is in the list of Date/Date ranges in `matches`.
 
@@ -431,7 +438,7 @@
     }
 
 
-    /** sortRanges: Date/(Date Array)  Array
+    /** sortRanges: (Date/[Date, Date]) array
 
     given a list of singular dates / 2-item date range lists (ie: the
     same format as returned by parseMultipleDates and used by 
@@ -446,8 +453,19 @@
         });
     }
 
-    // creates the html elements for a given date, adding classes to 
-    // highlight the given chosen date ranges
+    /** makeMonth: (Date, (Date/[Date, Date]) array) => DOM element
+
+    For the given view/cursor date's month, creates the HTML DOM elements 
+    needed to represent this month in the calendar
+
+    Days are created with a data-date attribute containing the ISO string
+    representing their date
+
+    For any date that is contained by the given chosen ranges, sets 'chosen'
+    classes so that they are marked as chosen for styling
+
+    Also marks the current date with the 'today' class
+    **/
     function makeMonth(d, chosen) {
         if (!isValidDateObj(d)) throw 'Invalid view date!';
         var month = getMonth(d);
@@ -455,16 +473,13 @@
         var sDate = findSunday(findFirst(d));
 
         var monthEl = makeEl('div.month');
-
         var label = makeEl('div.label');
         label.textContent = LABELS.months[month] + ' ' + getYear(d);
 
         appendChild(monthEl, label);
 
         var week = makeEl('div.week');
-
         var cDate = sDate;
-
         var done = false;
 
         while(!done) {
@@ -485,11 +500,14 @@
 
           appendChild(week, day);
           cDate = nextDay(cDate);
+          // if the next day is a sunday, append finished week and see if
+          // we are done drawing the month
           if (cDate.getUTCDay() < 1) {
             appendChild(monthEl, week);
             week = makeEl('div.week');
             // Are we finished drawing the month?
             // Checks month rollover and year rollover
+            // (ie: if month or year are after the current ones)
             done = (getMonth(cDate) > month || 
                     (getMonth(cDate) < month && getYear(cDate) > getYear(sDate))
                    );
@@ -499,6 +517,11 @@
         return monthEl;
     }
 
+    /** makeControls: () => DOM element
+
+    creates and returns the HTML element used to hold the 
+    navigation controls of the calendar
+    **/
     function makeControls() {
         var controls = makeEl('div.controls');
         var prev = makeEl('span.prev');
@@ -510,6 +533,32 @@
         return controls;
     }
 
+
+    /** Calendar: datamap
+
+    A representation of the currently displayed calendar's attributes
+
+    Initialized with an optional data map containing any of the following:
+
+     -  "span"  :       The number of months to display at once
+                        (default = 1)
+    -  "multiple"  :   Whether or not multiple dates are allowed to be chosen
+                        at once
+                        (default = false)
+    -   "view"  :       The cursor date to center the calendar display on 
+                        For example, a view of Dec 2013 and span 3 will show
+                        a calendar encompassing Nov 2013, Dec 2013, and Jan 2014
+                        (default = the first date given in data.chosen, or
+                                   the current date if data.chosen is 
+                                   unavailable)
+    -   "chosen"  :     A Date/[Date, Date] array, similar to the format of 
+                        parseMultipleDates' return value
+                        Elements consist of both singular Dates and 2-element
+                        arrays of Dates representing the start and end dates
+                        of a date range
+                        (default: [data.view], or [], 
+                                  if data.view is unavailable)
+    **/
     function Calendar(data) {
         data = data || {};
         this._span = data.span || 1;
@@ -518,13 +567,31 @@
         this._viewDate = this._getSanitizedViewDate(data.view, data.chosen);
         this._chosenRanges = this._getSanitizedChosenRanges(data.chosen, 
                                                                 data.view);
-        this.el = makeEl('div.calendar');
+        this._el = makeEl('div.calendar');
 
         this.render(true);
     }
 
-    // given a view Date and a parsed selection range list, return the
-    // Date to use as the view, depending on what information is given
+
+    /** Calendar._getSanitizedViewDate: 
+                (Date, (Date/[Date,Date]) array / Date) => Date
+
+    given a view Date and an optional chosen range list or chosen date, 
+    return the Date to use as the view, depending on what information is given
+
+    returns the given view if valid
+
+    otherwise, return the given chosenDate, if it is a single date, or
+    the first date in the range, if it is a date/daterange array
+
+    otherwise default to the current date
+
+    params:
+        viewDate                    the proposed view date to sanitize
+        chosenRanges                (optional) either a single date or a 
+                                    list of Date/[Date,Date]  ranges
+                                    (defaults to this.chosen)
+    **/
     Calendar.prototype._getSanitizedViewDate = function(viewDate, 
                                                         chosenRanges)
     {
@@ -557,8 +624,15 @@
         }
     };
 
+    /** _collapseRanges: (Date/[Date,Date]) array => (Date/[Date,Date]) array
+
+    given a list of dates/dateranges, nondestructively sort by ascending date, 
+    then collapse/merge any consecutive dates into date ranges and return the
+    resulting list
+    **/
     function _collapseRanges(ranges){
-        sortRanges(ranges);
+        ranges = ranges.slice(0); // nondestructive sort
+        sortRanges(ranges)
 
         var collapsed = [];
         for(var i = 0; i < ranges.length; i++){
@@ -576,6 +650,7 @@
                 currStart = currRange[0];
                 currEnd = currRange[1];
             }
+            // collapse extraneous range into a singular date
             currRange = (dateMatches(currStart, currEnd)) ? 
                              currStart : [currStart, currEnd];
 
@@ -587,6 +662,7 @@
                 prevEnd = prevRange[1];
             }
             else{
+                // if no previous range, just add the current range to the list
                 collapsed.push(currRange);
                 continue;
             }
@@ -609,10 +685,32 @@
                 collapsed.push(currRange);
             }
         }
-
         return collapsed;
     }
 
+
+    /** Calendar._getSanitizedChosenRanges: 
+            ((Date/[Date,Date]) array, Date) => (Date/[Date,Date]) array
+
+    given a chosen range list or chosen date and an optional view date
+    return the range list as the chosen date range, 
+    depending on what information is given
+
+    if chosenrange is given as a valid date, return it as a singleton list
+    if chosenrange is given as a valid date/daterange list, return it
+
+    otherwise, return the given view date in a singleton list, or an empty list
+    if the view is invalid or chosen is specifically set to nothing
+
+    params:
+        chosenRanges                either a single date or a list of 
+                                    Date/[Date,Date] ranges to sanitize
+                                    if set to null or undefined, this is 
+                                    interpreted as an empty list
+
+        viewDate                    (optional) the current cursor date
+                                    (default = this.view)
+    **/        
     Calendar.prototype._getSanitizedChosenRanges = function(chosenRanges, 
                                                               viewDate)
     {
@@ -625,7 +723,9 @@
         else if(isArray(chosenRanges)){
             cleanRanges = chosenRanges;
         }
-        else if(chosenRanges === null || chosenRanges === undefined || !viewDate){
+        else if(chosenRanges === null || chosenRanges === undefined || 
+                !viewDate)
+        {
             cleanRanges = [];
         }
         else{
@@ -633,6 +733,8 @@
         }
 
         var collapsedRanges = _collapseRanges(cleanRanges);
+        // if multiple is not active, only get the first date of the chosen
+        // ranges for the sanitize range list
         if((!this.multiple) && collapsedRanges.length > 0){
             var firstRange = collapsedRanges[0];
 
@@ -648,6 +750,14 @@
         }
     };
 
+
+    /** Calendar.addDate: (Date, Boolean)
+
+    if append is falsy/not given, replaces the calendar's chosen ranges with 
+    the given date
+
+    if append is truthy, adds the given date to the stored list of date ranges
+    **/
     Calendar.prototype.addDate = function(dateObj, append){
         if(isValidDateObj(dateObj)){
             if(append){
@@ -661,27 +771,36 @@
         }
     };
 
+    /** Calendar.removeDate: (Date)
+
+    removes the given date from the Calendar's stored chosen date ranges
+    **/
     Calendar.prototype.removeDate = function(dateObj){
         if(!isValidDateObj(dateObj)){
             return;
         }
-
+        // search stored chosen ranges for the given date to remove
         var ranges = this.chosen.slice(0);
         for(var i = 0; i < ranges.length; i++){
             var range = ranges[i];
             if(dateMatches(dateObj, [range])){
+                // remove the item the date was found in
                 ranges.splice(i, 1);
 
+                // if the date was located in a 2-item date range, split the
+                // range into separate ranges/dates as needed
                 if(isArray(range)){
                     var rangeStart = range[0];
                     var rangeEnd = range[1];
                     var prevDate = prevDay(dateObj);
                     var nextDate = nextDay(dateObj);
 
+                    // if we should keep the preceding section of the range
                     if(dateMatches(prevDate, [range])){
                         ranges.push([rangeStart, prevDate]);
                     }
 
+                    // if we should keep the succeeding section of the range
                     if(dateMatches(nextDate, [range])){
                         ranges.push([nextDate, rangeEnd]);
                     }
@@ -692,10 +811,25 @@
         }
     };
 
+    /** Calendar.hasChosenDate: (Date) => Boolean 
+
+    returns true if the given date is one of the dates stored as chosen
+    **/
     Calendar.prototype.hasChosenDate = function(dateObj){
         return dateMatches(dateObj, this._chosenRanges);
     };
 
+
+    /** Calendar.hasVisibleDate: (Date, Boolean)
+
+    if excludeBadMonths is falsy/not given, return true if the given date is
+    at all visible in the calendar element, including the remnants of 
+    months visible on the edges of the current span
+
+    if excludeBadMonths is truthy, return true if the given date is contained
+    within the current visible span of dates, ignoring those in months not
+    actually within the span
+    **/
     Calendar.prototype.hasVisibleDate = function(dateObj, excludeBadMonths){
         var startDate = this.firstVisibleMonth;
         if(!excludeBadMonths) startDate = findSunday(startDate);
@@ -706,9 +840,21 @@
         return dateMatches(dateObj, [[startDate, endDate]]);
     };
 
-    /* note that throwing away nodes during an event handler kills the 
-       propagation chain
-    */
+
+    /** Calendar.render: (Boolean)
+
+    Updates the DOM nodes stored in the current calendar
+
+    if preserveNodes is falsy/not given, removes all existing nodes and 
+    completely recreates the calendar
+       - use this when switching calendar displays, such as when changing span
+         or using view to switch months
+       - NOTE: throwing away nodes during an event handler kills the 
+         propagation chain, so account for this
+    
+    if preserveNodes is truthy, only update the status/classes of the currently
+    displayed day nodes
+    **/
     Calendar.prototype.render = function(preserveNodes){
         var span = this._span;
         var i;
@@ -759,22 +905,21 @@
     };
 
     Object.defineProperties(Calendar.prototype, {
-        // get first month of the span of months centered on the view
-        "firstVisibleMonth": {
+        /** Calendar.el: (readonly)
+
+        the DOM element representing the calendar's contianer element
+        **/
+        "el": {
             get: function(){
-                return findFirst(
-                         relOffset(this.view, 0, -Math.floor(this.span/2), 0)
-                       );  
+                return this._el;
             }
         },
 
-        "lastVisibleMonth": {
-            get: function(){
-                return relOffset(this.firstVisibleMonth, 0, 
-                                 Math.max(0, this.span-1), 0);
-            }
-        },
+        /** Calendar.multiple: (read-writeable)
 
+        a boolean value determining if multiple dates can be chosen 
+        simultaneously
+        **/
         "multiple": {
             get: function(){
                 return this._multiple;
@@ -785,6 +930,11 @@
                 this.render(true);
             }
         },
+
+        /** Calendar.span: (read-writeable)
+
+        the number of months to show in the calendar display
+        **/
         "span":{
             get: function(){
                 return this._span;
@@ -801,6 +951,10 @@
             }
         },
 
+        /** Calendar.view: (read-writeable)
+
+        the cursor date to center the calendar display on 
+        **/
         "view":{
             attribute: {},
             get: function(){
@@ -816,6 +970,14 @@
             }
         },
 
+        /** Calendar.chosen: (read-writeable)
+
+        the Date/[Date,Date] array representing the dates currently marked
+        as chosen
+
+        setter can take a date or a Date/[Date,Date] array
+        (null is interpreted as an empty array)
+        **/
         "chosen": {
             get: function(){
                 return this._chosenRanges;
@@ -827,6 +989,11 @@
             }
         },
 
+        /** Calendar.chosenString: (readonly)
+
+        an attribute safe string representing the currently chosen range of
+        dates (ie: the JSON string representing it)
+        **/
         "chosenString":{
             get: function(){
                 if(this.multiple){
@@ -850,9 +1017,40 @@
                     return "";
                 }
             }
+        },
+
+        /** Calendar.firstVisibleMonth: (readonly) 
+
+        gets the Date of the first day in the 
+        first month out of those included in the calendar span
+        **/
+        "firstVisibleMonth": {
+            get: function(){
+                return findFirst(
+                         relOffset(this.view, 0, -Math.floor(this.span/2), 0)
+                       );  
+            }
+        },
+
+        /** Calendar.lastVisibleMonth: (readonly)
+
+        gets the Date of the first day in the
+        last month out of those included in the calendar span
+        **/
+        "lastVisibleMonth": {
+            get: function(){
+                return relOffset(this.firstVisibleMonth, 0, 
+                                 Math.max(0, this.span-1), 0);
+            }
         }
     });
 
+    /** _onDragStart: (x-calendar DOM, Date)
+
+    when called, sets xCalendar to begin tracking a drag operation
+
+    also toggles the given day if allowed
+    **/
     function _onDragStart(xCalendar, day){
         var isoDate = day.getAttribute("data-date");
         var dateObj = parseSingleDate(isoDate);
@@ -875,6 +1073,10 @@
         day.setAttribute("active", true);
     }
 
+    /** _onDragEnd
+
+    when called, ends any drag operations of any x-calendars in the document
+    **/
     function _onDragEnd(){
         var xCalendars = xtag.query(document, "x-calendar");
         for(var i = 0; i < xCalendars.length; i++){
@@ -912,6 +1114,8 @@
                 // instead of needing explicit z-index
                 appendChild(this, makeControls());
 
+                // used to track if we are currently in a dragging operation, 
+                // and if so, what type
                 this.xtag.dragType = null;
             },
             inserted: function(){
@@ -919,6 +1123,7 @@
             }
         },
         events: {
+            // when clicking the 'next' control button
             "tap:delegate(.next)": function(e){
                 var xCalendar = e.currentTarget;
                 xCalendar.nextMonth();
@@ -926,6 +1131,7 @@
                 xtag.fireEvent(xCalendar, "nextmonth");
             },
 
+            // when clicking the 'previous' control button
             "tap:delegate(.prev)": function(e){
                 var xCalendar = e.currentTarget;
                 xCalendar.prevMonth();
@@ -934,7 +1140,8 @@
             },
 
             // tapstart is split into mousedown and touchstart to work around
-            // issue where tapstart doesn't fire when tapping a different day
+            // issue where tapstart doesn't fire when drag-gesturing on
+            // mobile devices
             "mousedown:delegate(.day)": function(e){
                 // prevent firing on right click
                 if(e.button && e.button !== LEFT_MOUSE_BTN){
@@ -949,7 +1156,7 @@
                 _onDragStart(e.currentTarget, this);
             },
 
-            // drag move
+            // drag move, firing toggles on newly entered dates if needed
             "tapenter:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
@@ -984,6 +1191,7 @@
                 day.removeAttribute("active");
             },
 
+            // if day is actually tapped, fire a datetap event
             "tap:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
@@ -1006,9 +1214,13 @@
             }
         },
         accessors: {
+            // handles if the x-calendar should display navigation controls or
+            // not
             controls: {
                 attribute: {boolean: true}
             },
+            // handles if the x-calendar should allow multiple dates to be 
+            // chosen at once
             multiple: {
                 attribute: {boolean: true},
                 get: function(){
@@ -1019,6 +1231,7 @@
                     this.chosen = this.chosen;
                 }
             },
+            // handles how many months the x-calendar displays at once
             span: {
                 attribute: {},
                 get: function(){
@@ -1028,6 +1241,7 @@
                     this.xtag.calObj.span = newCalSpan;   
                 }
             },
+            // handles where the x-calendar's display is focused
             view: {
                 attribute: {},
                 get: function(){
@@ -1040,6 +1254,9 @@
                     }
                 }
             },
+            // handles which dates are marked as chosen in the x-calendar
+            // setter can take a parseable string, a singular date, or a range
+            // of dates/dateranges
             chosen: {
                 attribute: {skip: true},
                 get: function(){
@@ -1084,6 +1301,7 @@
                 }
             },
 
+            // handles if the x-calendar allows dates to be chosen or not
             noToggle:{
                 attribute: {boolean: true, name: "notoggle"},
                 set: function(toggleDisabled){
@@ -1093,6 +1311,7 @@
                 }
             },
 
+            // (readonly) retrieves the
             firstVisibleMonth:{
                 get: function(){
                     return this.xtag.calObj.firstVisibleMonth;
@@ -1105,6 +1324,8 @@
             }
         },
         methods: { 
+            // updates the x-calendar display, recreating nodes if preserveNodes
+            // if falsy or not given
             render: function(preserveNodes){
                 this.xtag.calObj.render(preserveNodes);
             },
@@ -1118,6 +1339,10 @@
                 var calObj = this.xtag.calObj;
                 calObj.view = relOffset(calObj.view, 0, 1, 0);
             },
+
+            // sets the given date as chosen, either overriding the current
+            // chosen dates if append is falsy or not given, or adding to the
+            // list of chosen dates, if append is truthy
             toggleDateOn: function(newDateObj, append){
                 if(!this.noToggle){
                     this.xtag.calObj.addDate(newDateObj, append);
@@ -1125,6 +1350,8 @@
                     this.chosen = this.chosen;
                 }
             },
+
+            // removes the given date from the chosen list
             toggleDateOff: function(dateObj){
                 if(!this.noToggle){
                     this.xtag.calObj.removeDate(dateObj);
@@ -1133,6 +1360,9 @@
                 }
             },
 
+            // switches the chosen status of the given date
+            // 'appendIfAdd' specifies how the date is added to the list of 
+            // chosen dates if toggled on 
             toggleDate: function(dateObj, appendIfAdd){
                 if(this.xtag.calObj.hasChosenDate(dateObj)){
                     this.toggleDateOff(dateObj);
@@ -1142,6 +1372,9 @@
                 }
             },
 
+            // returns whether or not the given date is in the visible
+            // calendar display, optionally ignoring dates outside of the
+            // month span
             hasVisibleDate: function(dateObj, excludeBadMonths){
                 return this.xtag.calObj.hasVisibleDate(dateObj, 
                                                        excludeBadMonths);

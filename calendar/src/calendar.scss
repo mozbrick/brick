@@ -47,6 +47,7 @@ x-calendar {
 
     .label{
         width: 100%;
+        border-bottom: 1px dashed grey;
     }
 
     .day{
@@ -65,8 +66,9 @@ x-calendar {
         }
 
         &.today{
-            border: 1px solid #93aed1;
+            border-color: tomato;
             font-weight: bold;
+            font-style: italic;
         }
 
         &.chosen{
