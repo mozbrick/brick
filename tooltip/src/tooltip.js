@@ -634,6 +634,7 @@
                     rect.top <= y && y <= rect.bottom);
         };
         
+        // coords relative to window
         var absCoordsA = elemA.getBoundingClientRect();
         var absCoordsB = elemB.getBoundingClientRect();
         var rectA = {
@@ -764,10 +765,10 @@
             arrow.style.left = "";
         }
         
-        // coordinates of the target element, relative to the page
+        // coordinates of the target element, relative to the window
         var targetPageOffset = targetElem.getBoundingClientRect();
         
-        // coordinates of the tooltip's container element, relative to the page
+        // coordinates of the tooltip's container element, relative to the window
         var containerPageOffset = offsetContainer.getBoundingClientRect();
         
         // coordinates of the target element, relative to the tooltip's container

@@ -74,11 +74,13 @@
     /** getLeft: DOM element => Number
 
     returns the absolute left X coordinate of the given element in relation to 
-    the document page
+    the document
     **/
     function getLeft(el) {
         if(el.getBoundingClientRect){
-          return el.getBoundingClientRect().left;
+          var documentScrollLeft = (document.documentElement.scrollLeft ||
+                                    document.body.scrollLeft || 0);
+          return el.getBoundingClientRect().left + documentScrollLeft;
         }
         else if (el.offsetParent) {
           return getLeft(el.offsetParent) + el.offsetLeft;
@@ -90,11 +92,13 @@
     /** getLeft: DOM element => Number
 
     returns the absolute top Y coordinate of the given element in relation to 
-    the document page
+    the document
     **/
     function getTop(el) {
         if(el.getBoundingClientRect){
-          return el.getBoundingClientRect().top;
+          var documentScrollTop = (document.documentElement.scrollTop ||
+                                   document.body.scrollTop || 0);
+          return el.getBoundingClientRect().top + documentScrollTop;
         }
         else if (el.offsetParent) {
           return getTop(el.offsetParent) + el.offsetTop;
@@ -104,22 +108,23 @@
     }
 
      /** getRect: DOM element => {top: number, left: number, 
-                                 width: number, height: number}
+                                  right: number, bottom: number,
+                                  width: number, height: number}
 
-    returns the absolute metrics of the given DOM element
+    returns the absolute metrics of the given DOM element in relation to the
+    document
     **/
     function getRect(el){
-        if(el.getBoundingClientRect){
-            return el.getBoundingClientRect();
-        }
-        else{
-            return {
-                top: getTop(el),
-                left: getLeft(el),
-                width: el.offsetWidth,
-                height: el.offsetHeight
-            };
-        }
+        var baseRect = {
+            top: getTop(el),
+            left: getLeft(el),
+            width: el.offsetWidth,
+            height: el.offsetHeight,
+        };
+
+        baseRect.right = baseRect.left + baseRect.width;
+        baseRect.bottom = baseRect.top + baseRect.height;
+        return baseRect;
     }
 
     /** addClass: (DOM element, string)
@@ -1094,6 +1099,13 @@
         day.setAttribute("active", true);
     }
 
+    /** _onDragMove: (x-calendar DOM, Date)
+
+    when called, handles toggling behavior for the given day when drag-painted
+    over
+
+    sets active attribute for the given day as well, if currently dragging
+    **/
     function _onDragMove(xCalendar, day){
         var isoDate = day.getAttribute("data-date");
         var dateObj = parseSingleDate(isoDate);
@@ -1144,6 +1156,9 @@
         }
     }
 
+    /* _pointIsInRect: (Number, Number, {left: number, top: number, 
+                                         right: number, bottom: number})
+    */
     function _pointIsInRect(x, y, rect){
         return (rect.left <= x && x <= rect.right && 
                 rect.top <= y && y <= rect.bottom);
