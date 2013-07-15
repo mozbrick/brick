@@ -595,6 +595,8 @@
 
         this._customRenderFn = null;
 
+        this._renderRecursionFlag = false;
+
         this.render(true);
     }
 
@@ -935,15 +937,25 @@
     // date, and the iso representation of the date
     Calendar.prototype._callCustomRenderer = function(){
         if(!this._customRenderFn) return;
+        if(this._renderRecursionFlag){
+            throw ("Error: customRenderFn causes recursive loop of "+
+                   "rendering calendar; make sure your custom rendering "+
+                   "function doesn't modify attributes of the x-calendar that "+
+                   "would require a re-render of the calendar!");
+        }
 
         var days = xtag.query(this.el, ".day");
         for (var i = 0; i < days.length; i++) {
             var day = days[i];
             var dateIso = day.getAttribute("data-date");
             var parsedDate = fromIso(dateIso);
+
+            this._renderRecursionFlag = true;
             this._customRenderFn(day, 
                                  (parsedDate) ? parsedDate : null, 
                                  dateIso);
+
+            this._renderRecursionFlag = false;
         }
     };
 
