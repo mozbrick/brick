@@ -103,6 +103,25 @@
         }   
     }
 
+     /** getRect: DOM element => {top: number, left: number, 
+                                 width: number, height: number}
+
+    returns the absolute metrics of the given DOM element
+    **/
+    function getRect(el){
+        if(el.getBoundingClientRect){
+            return el.getBoundingClientRect();
+        }
+        else{
+            return {
+                top: getTop(el),
+                left: getLeft(el),
+                width: el.offsetWidth,
+                height: el.offsetHeight
+            };
+        }
+    }
+
     /** addClass: (DOM element, string)
 
     minification-friendly wrapper of xtag.addClass
@@ -1063,6 +1082,8 @@
             xCalendar.xtag.dragType = DRAG_ADD;
             toggleEventName = "datetoggleon";
         }
+        xCalendar.xtag.dragStartEl = day;
+        xCalendar.xtag.dragAllowTap = true;
 
         if(!xCalendar.noToggle){
             xtag.fireEvent(xCalendar, toggleEventName,
@@ -1073,15 +1094,47 @@
         day.setAttribute("active", true);
     }
 
+    function _onDragMove(xCalendar, day){
+        var isoDate = day.getAttribute("data-date");
+        var dateObj = parseSingleDate(isoDate);
+        if(day !== xCalendar.xtag.dragStartEl){
+            xCalendar.xtag.dragAllowTap = false;
+        }
+
+        if(!xCalendar.noToggle){
+            // trigger a selection if we enter a nonchosen day while in
+            // addition mode
+            if(xCalendar.xtag.dragType === DRAG_ADD && 
+               !(hasClass(day, CHOSEN_CLASS)))
+            {
+                xtag.fireEvent(xCalendar, "datetoggleon", 
+                               {detail: {date: dateObj}});
+            }
+            // trigger a remove if we enter a chosen day while in
+            // removal mode
+            else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
+                    hasClass(day, CHOSEN_CLASS))
+            {
+                xtag.fireEvent(xCalendar, "datetoggleoff", 
+                               {detail: {date: dateObj}});
+            }
+        }
+        if(xCalendar.xtag.dragType){
+            day.setAttribute("active", true);
+        }
+    }
+
     /** _onDragEnd
 
     when called, ends any drag operations of any x-calendars in the document
     **/
-    function _onDragEnd(){
+    function _onDragEnd(e){
         var xCalendars = xtag.query(document, "x-calendar");
         for(var i = 0; i < xCalendars.length; i++){
             var xCalendar = xCalendars[i];
             xCalendar.xtag.dragType = null;
+            xCalendar.xtag.dragStartEl = null;
+            xCalendar.xtag.dragAllowTap = false;
             xCalendar.removeAttribute("active");
         }
 
@@ -1089,6 +1142,11 @@
         for(var j=0; j < days.length; j++){
             days[j].removeAttribute("active");
         }
+    }
+
+    function _pointIsInRect(x, y, rect){
+        return (rect.left <= x && x <= rect.right && 
+                rect.top <= y && y <= rect.bottom);
     }
 
     // added on the body to delegate dragends to all x-calendars
@@ -1117,6 +1175,10 @@
                 // used to track if we are currently in a dragging operation, 
                 // and if so, what type
                 this.xtag.dragType = null;
+                // used to track if we've entered any other elements
+                // so that "tap" isn't fired on a drag
+                this.xtag.dragStartEl = null;
+                this.xtag.dragAllowTap = false;
             },
             inserted: function(){
                 this.render();
@@ -1156,37 +1218,39 @@
                 _onDragStart(e.currentTarget, this);
             },
 
+            "touchmove": function(e){
+                if(!(e.touches && e.touches.length > 0)){
+                    return;
+                }
+
+                var xCalendar = e.currentTarget;
+                if(!xCalendar.xtag.dragType){
+                    return;
+                }
+
+                var touch = e.touches[0];
+
+                var days = xtag.query(xCalendar, ".day");
+                for (var i = 0; i < days.length; i++) {
+                    var day = days[i];
+                    if(_pointIsInRect(touch.pageX, touch.pageY, getRect(day))){
+                        _onDragMove(xCalendar, day);
+                    }
+                    else{
+                        day.removeAttribute("active");
+                    }
+                };
+            },
+
             // drag move, firing toggles on newly entered dates if needed
-            "tapenter:delegate(.day)": function(e){
+            "mouseover:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
 
-                var isoDate = day.getAttribute("data-date");
-                var dateObj = parseSingleDate(isoDate);
-                if(!xCalendar.noToggle){
-                    // trigger a selection if we enter a nonchosen day while in
-                    // addition mode
-                    if(xCalendar.xtag.dragType === DRAG_ADD && 
-                       !(hasClass(day, CHOSEN_CLASS)))
-                    {
-                        xtag.fireEvent(xCalendar, "datetoggleon", 
-                                       {detail: {date: dateObj}});
-                    }
-                    // trigger a remove if we enter a chosen day while in
-                    // removal mode
-                    else if(xCalendar.xtag.dragType === DRAG_REMOVE && 
-                            hasClass(day, CHOSEN_CLASS))
-                    {
-                        xtag.fireEvent(xCalendar, "datetoggleoff", 
-                                       {detail: {date: dateObj}});
-                    }
-                }
-                if(xCalendar.xtag.dragType){
-                    day.setAttribute("active", true);
-                }
+                _onDragMove(xCalendar, day);
             },
 
-            "tapleave:delegate(.day)": function(e){
+            "mouseout:delegate(.day)": function(e){
                 var day = this;
                 day.removeAttribute("active");
             },
@@ -1194,6 +1258,17 @@
             // if day is actually tapped, fire a datetap event
             "tap:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
+
+                // note that touch version of the 'tap' event polyfill always 
+                // fires because touchend always fires, even if the gesture left 
+                // the original element, so make sure that we can actually
+                // consider this a tap
+                // also only consider for touch version, because click fires
+                // after the body mouseup, while touchend on day fires after
+                // body touchend (TODO: make this cleaner)
+                if(e.touches && !xCalendar.xtag.dragAllowTap){
+                    return;
+                }
                 var day = this;
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
