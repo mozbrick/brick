@@ -656,7 +656,7 @@
     **/
     function _collapseRanges(ranges){
         ranges = ranges.slice(0); // nondestructive sort
-        sortRanges(ranges)
+        sortRanges(ranges);
 
         var collapsed = [];
         for(var i = 0; i < ranges.length; i++){
@@ -1254,7 +1254,7 @@
                     else{
                         day.removeAttribute("active");
                     }
-                };
+                }
             },
 
             // drag move, firing toggles on newly entered dates if needed
