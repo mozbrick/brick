@@ -117,8 +117,8 @@
     </figure>
 
     <figure class="cal-demo">
-        <header>notoggle (see console to see how toggle events no longer occur either)</header>
-        <x-calendar controls notoggle></x-calendar>
+        <header>disable-ui-toggle (see console to see how toggle events no longer occur due to UI interaction)</header>
+        <x-calendar controls disable-ui-toggle></x-calendar>
     </figure>
 
     <figure class="cal-demo">
@@ -128,7 +128,7 @@
 
     <figure id="custom-events-demo" class="cal-demo">
         <header>Demo of using API hooks to handle displaying event data (see source for setup JS):</header>
-        <x-calendar controls notoggle></x-calendar>
+        <x-calendar controls disable-ui-toggle></x-calendar>
         <div>
             <header>Selected Date: <span id="custom-events-date">None</span></header>
             <textarea id="custom-events-info"></textarea>
@@ -190,6 +190,7 @@
 
             // respond to calendar taps
             xtag.addEvent(eventsCal, "datetap", function(e){
+                var date = e.detail.date;
                 var dateStr = e.detail.iso;
                 var content = (dateStr && dateStr in DATE_INFO) ? 
                                                 DATE_INFO[dateStr] : "";
@@ -198,6 +199,7 @@
                 eventsSaveButton.disabled = !dateStr;
                 CURR_ISO = dateStr;
                 eventsDateHeader.textContent = (dateStr) ? dateStr : "None";
+                eventsCal.toggleDateOn(date);
                 eventsCal.render();
             });
 

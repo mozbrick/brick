@@ -903,7 +903,7 @@
                 day = days[i];
 
                 if(!day.hasAttribute("data-date")){
-                    continute;
+                    continue;
                 }
 
                 var dateIso = day.getAttribute("data-date");
@@ -928,19 +928,23 @@
                 }
             }
         }
+        this._callCustomRenderer();
+    };
 
-        // call custom renderer on each day, passing in the element, the
-        // date, and the iso representation of the date
-        if(!this._customRenderFn){
-            return;
-        }
+    // call custom renderer on each day, passing in the element, the
+    // date, and the iso representation of the date
+    Calendar.prototype._callCustomRenderer = function(){
+        if(!this._customRenderFn) return;
+
         var days = xtag.query(this.el, ".day");
         for (var i = 0; i < days.length; i++) {
             var day = days[i];
             var dateIso = day.getAttribute("data-date");
             var parsedDate = fromIso(dateIso);
-            this._customRenderFn(day, (parsedDate) ? parsedDate : null, dateIso);
-        };
+            this._customRenderFn(day, 
+                                 (parsedDate) ? parsedDate : null, 
+                                 dateIso);
+        }
     };
 
     Object.defineProperties(Calendar.prototype, {
@@ -1121,9 +1125,9 @@
         xCalendar.xtag.dragStartEl = day;
         xCalendar.xtag.dragAllowTap = true;
 
-        if(!xCalendar.noToggle){
+        if(!xCalendar.disableUIToggle){
             xtag.fireEvent(xCalendar, toggleEventName,
-                           {detail: {date: dateObj, iso: iso(dateObj)}});
+                           {detail: {date: dateObj, iso: isoDate}});
         }
 
         xCalendar.setAttribute("active", true);
@@ -1144,14 +1148,14 @@
             xCalendar.xtag.dragAllowTap = false;
         }
 
-        if(!xCalendar.noToggle){
+        if(!xCalendar.disableUIToggle){
             // trigger a selection if we enter a nonchosen day while in
             // addition mode
             if(xCalendar.xtag.dragType === DRAG_ADD && 
                !(hasClass(day, CHOSEN_CLASS)))
             {
                 xtag.fireEvent(xCalendar, "datetoggleon", 
-                               {detail: {date: dateObj, iso: iso(dateObj)}});
+                               {detail: {date: dateObj, iso: isoDate}});
             }
             // trigger a remove if we enter a chosen day while in
             // removal mode
@@ -1159,7 +1163,7 @@
                     hasClass(day, CHOSEN_CLASS))
             {
                 xtag.fireEvent(xCalendar, "datetoggleoff", 
-                               {detail: {date: dateObj, iso: iso(dateObj)}});
+                               {detail: {date: dateObj, iso: isoDate}});
             }
         }
         if(xCalendar.xtag.dragType){
@@ -1327,17 +1331,13 @@
             },
 
             // if day is actually tapped, fire a datetap event
-            "tap:delegate(.day)": function(e){
+            "tapend:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
 
-                // note that touch version of the 'tap' event polyfill always 
-                // fires because touchend always fires, even if the gesture left 
-                // the original element, so make sure that we can actually
-                // consider this a tap
-                // also only consider for touch version, because click fires
-                // after the body mouseup, while touchend on day fires after
-                // body touchend (TODO: make this cleaner)
-                if(e.touches && !xCalendar.xtag.dragAllowTap){
+                // make sure that we can actually consider this a tap
+                // (note that this delegated version fires before the 
+                //  mouseup/touchend events assigned to the document)
+                if(!xCalendar.xtag.dragAllowTap){
                     return;
                 }
                 var day = this;
@@ -1345,7 +1345,7 @@
                 var dateObj = parseSingleDate(isoDate);
                 
                 xtag.fireEvent(xCalendar, "datetap", 
-                               {detail: {date: dateObj, iso: iso(dateObj)}});
+                               {detail: {date: dateObj, iso: isoDate}});
             },
 
             "datetoggleon": function(e){
@@ -1429,8 +1429,10 @@
                     }
                 },
                 set: function(newDates){
-                    var parsedDateRanges = (this.multiple) ? parseMultiDates(newDates) : parseSingleDate(newDates);
-                    if(parsedDateRanges && !this.noToggle){
+                    var parsedDateRanges = (this.multiple) ? 
+                                            parseMultiDates(newDates) : 
+                                            parseSingleDate(newDates);
+                    if(parsedDateRanges){
                         this.xtag.calObj.chosen = parsedDateRanges;
                     }
                     else{
@@ -1449,9 +1451,9 @@
             },
 
             // handles if the x-calendar allows dates to be chosen or not
-            // ie: if set, overrides default chosen-toggling behavior
-            noToggle: {
-                attribute: {boolean: true, name: "notoggle"},
+            // ie: if set, overrides default chosen-toggling behavior of the UI
+            disableUIToggle: {
+                attribute: {boolean: true, name: "disable-ui-toggle"},
                 set: function(toggleDisabled){
                     if(toggleDisabled){
                         this.chosen = null;
@@ -1483,6 +1485,9 @@
             this custom function is called whenever the calendar needs to be
             rendered, and is used to provide more flexibility in dynamically
             styling days of the calendar
+
+            IMPORTANT NOTE: because this is called whenever the calendar is
+            rendered, and because most calendar attribute changes
             **/
             customRenderFn: {
                 get: function(){
@@ -1500,12 +1505,14 @@
                 this.xtag.calObj.render(preserveNodes);
             },
 
-            // Go back one month.
+            // Go back one month by updating the view attribute of the calendar
             prevMonth: function(){
                 var calObj = this.xtag.calObj;
                 calObj.view = relOffset(calObj.view, 0, -1, 0);
             },
-            // Advance one month forward.
+
+            // Advance one month forward by updating the view attribute 
+            // of the calendar
             nextMonth: function(){
                 var calObj = this.xtag.calObj;
                 calObj.view = relOffset(calObj.view, 0, 1, 0);
@@ -1514,26 +1521,25 @@
             // sets the given date as chosen, either overriding the current
             // chosen dates if append is falsy or not given, or adding to the
             // list of chosen dates, if append is truthy
+            // also updates the chosen attribute of the calendar
             toggleDateOn: function(newDateObj, append){
-                if(!this.noToggle){
-                    this.xtag.calObj.addDate(newDateObj, append);
-                    // trigger setter
-                    this.chosen = this.chosen;
-                }
+                this.xtag.calObj.addDate(newDateObj, append);
+                // trigger setter
+                this.chosen = this.chosen;
             },
 
             // removes the given date from the chosen list
+            // also updates the chosen attribute of the calendar
             toggleDateOff: function(dateObj){
-                if(!this.noToggle){
-                    this.xtag.calObj.removeDate(dateObj);
-                    // trigger setter
-                    this.chosen = this.chosen;
-                }
+                this.xtag.calObj.removeDate(dateObj);
+                // trigger setter
+                this.chosen = this.chosen;
             },
 
             // switches the chosen status of the given date
             // 'appendIfAdd' specifies how the date is added to the list of 
             // chosen dates if toggled on 
+            // also updates the chosen attribute of the calendar
             toggleDate: function(dateObj, appendIfAdd){
                 if(this.xtag.calObj.hasChosenDate(dateObj)){
                     this.toggleDateOff(dateObj);

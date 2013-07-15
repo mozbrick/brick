@@ -18,10 +18,25 @@
 	},
 	"documentation": {
 		"description": "A port of Potch's fortnight.js calendar UI in component form",
-		"attributes": {},
-		"events": {},
-		"methods": {},
-		"getters": {},
-		"setters": {}
+		"attributes": {
+			"controls": "Controls the visibility of the calendar's navigation controls; usage is similar to the 'controls' attribute of <video> elements",
+			"multiple": "Controls whether or not multiple calendar dates can be chosen simultaneously",
+			"span": "Specifies the number of months displayed at once by the calendar",
+			"view": "Specifies the Date to focus the calendar display on. For example, a view of Dec 25 2013 and a span of 3 would result in a calendar displaying the months of Nov 2013, Dec 2013, and Jan 2014",
+			"chosen": "Specifies the date or dates that are toggled as chosen on the calendar. Can be specified as either a singular parsable date string or as a JSON string representing a list of both singular dates and [Date, Date] lists of the start and end date for a range of dates",
+			"disable-ui-toggle": "If set, the default date-toggling behavior of the UI is disabled. However, dates can still be programmatically chosen/toggled."
+		},
+		"events": {
+			
+		},
+		"methods": {
+
+		},
+		"getters": {
+
+		},
+		"setters": {
+
+		}
 	}
 }

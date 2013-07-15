@@ -183,8 +183,7 @@
 
             "input:delegate(.x-datepicker-polyfill-input)": function(e){
                 _updateDatepicker(e.currentTarget, false);
-            },
-
+            }
         },
         accessors: {
             "name": {

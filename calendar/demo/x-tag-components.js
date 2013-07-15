@@ -2134,7 +2134,8 @@ if (document.readyState === 'complete') {
       };
 
     })(),
-    matchSelector = Element.prototype.matchesSelector || Element.prototype[prefix.lowercase + 'MatchesSelector'];
+    matchSelector = Element.prototype.matchesSelector || Element.prototype[prefix.lowercase + 'MatchesSelector'],
+    mutation = win.MutationObserver || win[prefix.js + 'MutationObserver'];
 
 /*** Functions ***/
 
@@ -2269,9 +2270,9 @@ if (document.readyState === 'complete') {
     while (index--) nodes[index][method](name, value);
   }
   
-  function updateTemplate(element, name, value){
-    if (element.template){
-      element.xtag.template.updateBindingValue(element, name, value);
+  function updateView(element, name, value){
+    if (element.__view__){
+      element.__view__.updateBindingValue(element, name, value);
     }
   }
 
@@ -2288,11 +2289,11 @@ if (document.readyState === 'complete') {
         if (!this.xtag._skipAttr) modAttr(this, attr, name, value);
         if (this.xtag._skipAttr && attr.skip) delete this.xtag._skipAttr;
         accessor[z].call(this, attr.boolean ? !!value : value);
-        updateTemplate(this, name, value);
+        updateView(this, name, value);
         delete this.xtag._skipSet;
       } : accessor[z] ? function(value){
         accessor[z].call(this, value);
-        updateTemplate(this, name, value);
+        updateView(this, name, value);
       } : null, tag.pseudos);
       
       if (attr) attr.setter = setter;
@@ -2318,7 +2319,7 @@ if (document.readyState === 'complete') {
       }
       if (!tag.prototype[prop].set) tag.prototype[prop].set = function(value){
         modAttr(this, attr, name, value);
-        updateTemplate(this, name, value);
+        updateView(this, name, value);
       };
     }
   }
