@@ -593,6 +593,8 @@
                                                                 data.view);
         this._el = makeEl('div.calendar');
 
+        this._customRenderFn = null;
+
         this.render(true);
     }
 
@@ -901,13 +903,13 @@
                 day = days[i];
 
                 if(!day.hasAttribute("data-date")){
-                    return;
+                    continute;
                 }
 
                 var dateIso = day.getAttribute("data-date");
                 var parsedDate = fromIso(dateIso);
                 if(!parsedDate){
-                    return;
+                    continue;
                 }
                 else{
                     if(dateMatches(parsedDate, this._chosenRanges)){
@@ -926,6 +928,19 @@
                 }
             }
         }
+
+        // call custom renderer on each day, passing in the element, the
+        // date, and the iso representation of the date
+        if(!this._customRenderFn){
+            return;
+        }
+        var days = xtag.query(this.el, ".day");
+        for (var i = 0; i < days.length; i++) {
+            var day = days[i];
+            var dateIso = day.getAttribute("data-date");
+            var parsedDate = fromIso(dateIso);
+            this._customRenderFn(day, (parsedDate) ? parsedDate : null, dateIso);
+        };
     };
 
     Object.defineProperties(Calendar.prototype, {
@@ -1013,6 +1028,22 @@
             }
         },
 
+        /** Calendar.customRenderFn: (read-writable)
+
+        a function taking in a day element, its corresponding Date object,
+        and the iso string corresponding to this date 
+        used to apply any user-defined rendering to the days in the element
+        **/
+        "customRenderFn": {
+            get: function(){
+                return this._customRenderFn;
+            },
+            set: function(newRenderFn){
+                this._customRenderFn = newRenderFn;
+                this.render(true);
+            }
+        },
+
         /** Calendar.chosenString: (readonly)
 
         an attribute safe string representing the currently chosen range of
@@ -1092,7 +1123,7 @@
 
         if(!xCalendar.noToggle){
             xtag.fireEvent(xCalendar, toggleEventName,
-                           {detail: {date: dateObj}});
+                           {detail: {date: dateObj, iso: iso(dateObj)}});
         }
 
         xCalendar.setAttribute("active", true);
@@ -1101,8 +1132,8 @@
 
     /** _onDragMove: (x-calendar DOM, Date)
 
-    when called, handles toggling behavior for the given day when drag-painted
-    over
+    when called, handles toggling behavior for the given day if needed
+    when drag-painted over
 
     sets active attribute for the given day as well, if currently dragging
     **/
@@ -1120,7 +1151,7 @@
                !(hasClass(day, CHOSEN_CLASS)))
             {
                 xtag.fireEvent(xCalendar, "datetoggleon", 
-                               {detail: {date: dateObj}});
+                               {detail: {date: dateObj, iso: iso(dateObj)}});
             }
             // trigger a remove if we enter a chosen day while in
             // removal mode
@@ -1128,7 +1159,7 @@
                     hasClass(day, CHOSEN_CLASS))
             {
                 xtag.fireEvent(xCalendar, "datetoggleoff", 
-                               {detail: {date: dateObj}});
+                               {detail: {date: dateObj, iso: iso(dateObj)}});
             }
         }
         if(xCalendar.xtag.dragType){
@@ -1165,8 +1196,8 @@
     }
 
     // added on the body to delegate dragends to all x-calendars
-    xtag.addEvent(document, "mouseup", _onDragEnd);
-    xtag.addEvent(document, "touchend", _onDragEnd);
+    var DOC_MOUSEUP_LISTENER = null;
+    var DOC_TOUCHEND_LISTENER = null;
 
     xtag.register("x-calendar", {
         lifecycle: {
@@ -1195,8 +1226,31 @@
                 this.xtag.dragStartEl = null;
                 this.xtag.dragAllowTap = false;
             },
+
             inserted: function(){
-                this.render();
+                if(!DOC_MOUSEUP_LISTENER){
+                    DOC_MOUSEUP_LISTENER = xtag.addEvent(document, "mouseup", 
+                                                         _onDragEnd);
+                }
+                if(!DOC_TOUCHEND_LISTENER){
+                    DOC_TOUCHEND_LISTENER = xtag.addEvent(document, "touchend", 
+                                                          _onDragEnd);
+                }
+                this.render(false);
+            },
+            removed: function(){
+                if(xtag.query(document, "x-calendar").length === 0){
+                    if(DOC_MOUSEUP_LISTENER){
+                        xtag.removeEvent(document, "mouseup", 
+                                         DOC_MOUSEUP_LISTENER);
+                        DOC_MOUSEUP_LISTENER = null;
+                    }
+                    if(DOC_TOUCHEND_LISTENER){
+                        xtag.removeEvent(document, "touchend", 
+                                         DOC_TOUCHEND_LISTENER);
+                        DOC_TOUCHEND_LISTENER = null;
+                    }
+                }
             }
         },
         events: {
@@ -1224,6 +1278,8 @@
                 if(e.button && e.button !== LEFT_MOUSE_BTN){
                     return;
                 }
+                // prevent dragging around existing selections
+                e.preventDefault();
                 _onDragStart(e.currentTarget, this);
             },
 
@@ -1233,6 +1289,7 @@
                 _onDragStart(e.currentTarget, this);
             },
 
+            // touch drag move, firing toggles on newly entered dates if needed
             "touchmove": function(e){
                 if(!(e.touches && e.touches.length > 0)){
                     return;
@@ -1244,7 +1301,6 @@
                 }
 
                 var touch = e.touches[0];
-
                 var days = xtag.query(xCalendar, ".day");
                 for (var i = 0; i < days.length; i++) {
                     var day = days[i];
@@ -1257,7 +1313,7 @@
                 }
             },
 
-            // drag move, firing toggles on newly entered dates if needed
+            // mouse drag move, firing toggles on newly entered dates if needed
             "mouseover:delegate(.day)": function(e){
                 var xCalendar = e.currentTarget;
                 var day = this;
@@ -1288,7 +1344,8 @@
                 var isoDate = day.getAttribute("data-date");
                 var dateObj = parseSingleDate(isoDate);
                 
-                xtag.fireEvent(xCalendar, "datetap", {detail: {date: dateObj}});
+                xtag.fireEvent(xCalendar, "datetap", 
+                               {detail: {date: dateObj, iso: iso(dateObj)}});
             },
 
             "datetoggleon": function(e){
@@ -1392,7 +1449,8 @@
             },
 
             // handles if the x-calendar allows dates to be chosen or not
-            noToggle:{
+            // ie: if set, overrides default chosen-toggling behavior
+            noToggle: {
                 attribute: {boolean: true, name: "notoggle"},
                 set: function(toggleDisabled){
                     if(toggleDisabled){
@@ -1401,15 +1459,37 @@
                 }
             },
 
-            // (readonly) retrieves the
-            firstVisibleMonth:{
+            // (readonly) retrieves the first day in the first fully-visible 
+            // month of the calendar
+            firstVisibleMonth: {
                 get: function(){
                     return this.xtag.calObj.firstVisibleMonth;
                 }
             },
-            lastVisibleMonth:{
+
+            // (readonly) retrieves the first day in the last fully-visible 
+            // month of the calendar
+            lastVisibleMonth: {
                 get: function(){
                     return this.xtag.calObj.lastVisibleMonth;
+                }
+            },
+
+            /** a function taking the following parameters:
+               - a html element representing a day in the calendar
+               - its corresponding Date object
+               - the iso string corresponding to this Date
+            
+            this custom function is called whenever the calendar needs to be
+            rendered, and is used to provide more flexibility in dynamically
+            styling days of the calendar
+            **/
+            customRenderFn: {
+                get: function(){
+                    return this.xtag.calObj.customRenderFn;
+                },
+                set: function(newRenderFn){
+                    this.xtag.calObj.customRenderFn = newRenderFn;
                 }
             }
         },
@@ -1419,6 +1499,7 @@
             render: function(preserveNodes){
                 this.xtag.calObj.render(preserveNodes);
             },
+
             // Go back one month.
             prevMonth: function(){
                 var calObj = this.xtag.calObj;

@@ -17,7 +17,7 @@
 		"ios": 4
 	},
 	"documentation": {
-		"description": "",
+		"description": "A port of Potch's fortnight.js calendar UI in component form",
 		"attributes": {},
 		"events": {},
 		"methods": {},

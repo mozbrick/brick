@@ -36,7 +36,7 @@ x-calendar {
     white-space: nowrap; }
   x-calendar .week {
     margin: 1px 2px;
-    overflow: hidden; }
+    overflow: visible; }
   x-calendar .label, x-calendar .day, x-calendar .prev, x-calendar .next {
     color: #444;
     height: 2em;
@@ -47,6 +47,7 @@ x-calendar {
     width: 100%;
     border-bottom: 1px dashed grey; }
   x-calendar .day {
+    position: relative;
     border-radius: 4px;
     color: #444;
     display: inline-block;

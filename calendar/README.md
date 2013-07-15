@@ -1,6 +1,6 @@
 # Overview
 
-A work in progress
+A component acting as a simple calendar widget 
 
 # Usage
 

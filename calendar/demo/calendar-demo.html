@@ -44,6 +44,32 @@
             margin-bottom: .2em;
             background-image: url("cream_pixels.png");
         }
+
+        #custom-events-demo .current{
+            box-shadow: inset 1px 1px 4px grey;
+            
+            background-color: rgba(0, 255, 255, 0.2);
+        }
+
+        #custom-events-demo [has-info]{
+            border-color: cyan;
+            border-style: dashed;
+        }
+
+        #custom-events-demo [has-info]:after{
+            content: "";
+            position: absolute;
+            background-color: cyan;
+            right: 0%;
+            bottom: 0%;
+            width: 25%;
+            height: 25%;
+            border-radius: 50%;
+            -webkit-transform: translate(50%, 50%);
+            -moz-transform: translate(50%, 50%);
+            -o-transform: translate(50%, 50%);
+            transform: translate(50%, 50%);
+        }
     </style>
 </head>
 <body>
@@ -100,6 +126,16 @@
         <x-calendar class="custom-styles-demo" controls multiple></x-calendar>
     </figure>
 
+    <figure id="custom-events-demo" class="cal-demo">
+        <header>Demo of using API hooks to handle displaying event data (see source for setup JS):</header>
+        <x-calendar controls notoggle></x-calendar>
+        <div>
+            <header>Selected Date: <span id="custom-events-date">None</span></header>
+            <textarea id="custom-events-info"></textarea>
+            <button id="custom-events-save" disabled>Update info</button>
+        </div>
+    </figure>
+
     <script>
         document.addEventListener('DOMComponentsLoaded', function(){
             xtag.addEvent(document, "prevmonth:delegate(x-calendar)", function(e){
@@ -120,6 +156,56 @@
 
             xtag.addEvent(document, "datetap:delegate(x-calendar)", function(e){
                 console.log("datetap detected on", this);
+            });
+
+            /** set up custom event handling demo using provided API hooks **/
+
+            // the dictionary of iso string keys mapped to event data
+            var DATE_INFO = {};
+            var CURR_ISO = null;
+
+            // aliases for DOM manipulation
+            var eventsDemoStage = document.getElementById("custom-events-demo");
+            var eventsCal = eventsDemoStage.querySelector("x-calendar");
+            var eventsDateHeader = document.getElementById("custom-events-date");
+            var eventsInfo = document.getElementById("custom-events-info");
+            var eventsSaveButton = document.getElementById("custom-events-save");
+
+            // define extra styling information for day elements
+            eventsCal.customRenderFn = function(dayEl, date, isoStr){
+                if(isoStr === CURR_ISO){
+                    xtag.addClass(dayEl, "current");
+                }
+                else{
+                    xtag.removeClass(dayEl, "current");
+                }
+
+                if(isoStr in DATE_INFO){
+                    dayEl.setAttribute("has-info", true);
+                }
+                else{
+                    dayEl.removeAttribute("has-info");
+                }
+            }
+
+            // respond to calendar taps
+            xtag.addEvent(eventsCal, "datetap", function(e){
+                var dateStr = e.detail.iso;
+                var content = (dateStr && dateStr in DATE_INFO) ? 
+                                                DATE_INFO[dateStr] : "";
+                eventsInfo.value = content;
+                eventsInfo.disabled = !dateStr;
+                eventsSaveButton.disabled = !dateStr;
+                CURR_ISO = dateStr;
+                eventsDateHeader.textContent = (dateStr) ? dateStr : "None";
+                eventsCal.render();
+            });
+
+            xtag.addEvent(eventsSaveButton, "click", function(e){
+                if(CURR_ISO){
+                    DATE_INFO[CURR_ISO] = eventsInfo.value;
+                }
+                eventsCal.render();
             });
 
         }, false);
