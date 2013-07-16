@@ -957,7 +957,6 @@
             this._customRenderFn(day, 
                                  (parsedDate) ? parsedDate : null, 
                                  dateIso);
-
             this._renderRecursionFlag = false;
         }
     };

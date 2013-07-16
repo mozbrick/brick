@@ -3,7 +3,10 @@
 
     // Date utils
 
-    // is valid date object?
+    /** isValidDateObj: (*) => Boolean
+
+    simply checks if the given parameter is a valid date object
+    **/
     function isValidDateObj(d) {
         return (d instanceof Date) && !!(d.getTime) && !isNaN(d.getTime());
     }
@@ -86,6 +89,13 @@
         }
     }
 
+    /** _validateDatepicker: DOM element => Boolean
+
+    checks the value of the datepicker and toggles the datepicker's "invalid"
+    attribute depending on if the value is a valid parsable date string or not
+
+    also returns true if the date passes validation and false otherwise
+    **/
     function _validateDatepicker(datepicker){
         var input = (datepicker.polyfill) ? 
                       datepicker.xtag.polyfillInput : datepicker.xtag.dateInput;
@@ -100,8 +110,17 @@
         return !!inputDate;
     }
 
-    // if sendParsed is true, we send the preparsed version, otherwise,
-    // send the original value
+
+    /** _updateDatepicker: (DOM element, boolean)
+
+    based on the value of the datepicker's input elements, update the value
+    attribute/property of the datepicker itself
+
+    if sendParsed is true, we preparse the value before assigning to
+    value, otherwise, send the original value
+    - (ie: if this is true, update the text value of the inputs with the
+           parsed version as well)
+    **/
     function _updateDatepicker(datepicker, sendParsed){
         var origVal = (datepicker.polyfill) ? 
                             datepicker.xtag.polyfillInput.value : 
@@ -124,13 +143,14 @@
                 this.xtag.polyfillInput = null;
                 this.xtag.polyfillUI = null;
 
+                // initialize polyfill with detected support
                 this.polyfill = (this.hasAttribute("polyfill") || 
-                                 this.xtag.dateInput.type.toLowerCase() !== "date");
-            },
-            inserted: function(){
+                                 this.xtag.dateInput.type.toLowerCase() 
+                                    !== "date");
             }
         },
         events: {
+            // handle calendar UI input
             "datetoggleon:delegate(x-calendar)": function(e){
                 var xCal = this;
                 var datepicker = e.currentTarget;
@@ -162,6 +182,7 @@
             "blur:delegate(.x-datepicker-polyfill-input)": function(e){
                 var datepicker = e.currentTarget;
 
+                // send parsed version to ensure that text of input matches
                 _updateDatepicker(datepicker, true);
                 datepicker.removeAttribute("focused");
             },
@@ -173,15 +194,23 @@
             "keypress:delegate(.x-datepicker-polyfill-input)": function(e){
                 var keyCode = e.key || e.keyCode;
                 if(keyCode === ENTER_KEYCODE){
+                     // send parsed version to ensure that text of input matches
                     _updateDatepicker(e.currentTarget, true);
                 }
             },
 
+            // handle UI changes to the native date input
             "input:delegate(.x-datepicker-input)": function(e){
+                // send parsed version to ensure that value of native
+                // input matches
                 _updateDatepicker(e.currentTarget, true);
             },
 
+            // handles UI changes to the polyfill input
             "input:delegate(.x-datepicker-polyfill-input)": function(e){
+                // _DONT_ send parsed verison when using polyfill in order to 
+                // prevent the input from constnatly overriding the user's
+                // text as they are typing
                 _updateDatepicker(e.currentTarget, false);
             }
         },
@@ -191,12 +220,23 @@
                 set: function(){} // without this, the selector doesnt sync
             },
 
+            // returns the value that should be submitted to a form
+            // note: even if no name attribute is present, still return what 
+            // should be subnmitted (with a logged warning) in cases of 
+            // dynamic submission
             "submitValue":{
                 get: function(){
-                    return this.xtag.dateInput.value;
+                    var dateInput = this.xtag.dateInput;
+                    if(!dateInput.hasAttribute("name")){
+                        console.log("warning: no name is specified for the "+
+                                    "datepicker, so the submitValue will not "+
+                                    "submitted by default");
+                    }
+                    return dateInput.value;
                 }
             },
 
+            // handles the currently displayed value of the datepicker
             "value": {
                 attribute: {
                     skip: true
@@ -205,6 +245,13 @@
                     return (this.polyfill) ? this.xtag.polyfillInput.value :
                                              this.xtag.dateInput.value;
                 },
+                // if given null/undefined, deletes the value;
+                // always saves either the date in ISO-format or empty 
+                // if the input date is invalid to the dateinput 
+                // (this is what actually gets submitted);
+                // if given a value different than the user-input-box value, 
+                // updates the input's value to the parsed ISO date, otherwise 
+                // leaves it alone (this is what the user sees)
                 set: function(rawDateVal){
                     var parsedDate = parseSingleDate(rawDateVal);
                     var isoStr = (parsedDate) ? iso(parsedDate) : null;
@@ -229,16 +276,26 @@
                     else{
                         var finalVal = (isoStr) ? isoStr : rawDateVal;
                         
-                        this.setAttribute("value", finalVal);
-                        // only override text value if given something 
+                        // only override input's text value if given something 
                         // different, in order to prevent having us override
                         // text as the user types
-                        if(polyfillInput && rawDateVal !== polyfillInput.value){
-                            polyfillInput.value = finalVal;
+                        if(polyfillInput){
+                            if(rawDateVal !== polyfillInput.value){
+                                polyfillInput.value = finalVal;
+                                this.setAttribute("value", finalVal);
+                            }
+                            // otherwise, match the value attribute to whats
+                            // displayed
+                            else{
+                                this.setAttribute("value", rawDateVal);
+                            }
+                        } 
+                        else{
+                            this.setAttribute("value", finalVal);
                         }
 
                         // make sure the date input (ie: what actually 
-                        //  submits in a form) either contains a valid date
+                        // would submit in a form) either contains a valid date
                         // or is blanked; also make sure calendar displays
                         // a valid date
                         if(isoStr){
@@ -253,28 +310,41 @@
                             if(polyfillUI){
                                 polyfillUI.chosen = null;
                             }
-                            // don't reset calendar view, we may want to choose
-                            // from where we left off
+                            // note that we don't reset calendar view, as we
+                            // may want to choose from where we left off
                         }
                     }
-
+                    // update the "invalid" class of the datepicker
                     _validateDatepicker(this);
                 }
             },
 
+            // handles whether to display as a polyfill or not
+            // note: in polyfill mode, we essentially keep the original 
+            // input, but as a hidden input that receives parsed dates only.
+            // In order to allow user-input, we show a second text input
+            // (which is nameless to prevent form submission) that is tied to 
+            // a calendar UI element
             "polyfill": {
                 attribute: {boolean: true},
                 set: function(isPolyfill){
                     var dateInput = this.xtag.dateInput;
+                    // turn on polyfill elements (creating them if they 
+                    // aren't initialized yet)
                     if(isPolyfill){
+                        // hide the "true" submitted input from UI view
                         dateInput.setAttribute("type", "hidden");
                         dateInput.setAttribute("readonly", true);
 
+                        // create the "fake" input to act as a middleman 
+                        // between user input and the parsed-date-only input
                         if(!this.xtag.polyfillInput){
                             var polyfillInput = document.createElement("input");
-                            xtag.addClass(polyfillInput, "x-datepicker-polyfill-input");
+                            xtag.addClass(polyfillInput, 
+                                          "x-datepicker-polyfill-input");
                             polyfillInput.setAttribute("type", "text");
-                            polyfillInput.setAttribute("placeholder", "YYYY-MM-DD");
+                            polyfillInput.setAttribute("placeholder", 
+                                                        "YYYY-MM-DD");
                             polyfillInput.value = this.xtag.dateInput.value;
 
                             this.xtag.polyfillInput = polyfillInput;
@@ -283,10 +353,12 @@
                         }
                         this.xtag.polyfillInput.removeAttribute("disabled");
 
+                        // creates the calendar UI element to associate with
+                        // the datepicker
                         if(!this.xtag.polyfillUI){
-                            // TODO: make this also use x-reel when implemented
-                            var polyfillUI = document.createElement("x-calendar");
-                            xtag.addClass(polyfillUI, "x-datepicker-polyfill-ui");
+                            var polyfillUI=document.createElement("x-calendar");
+                            xtag.addClass(polyfillUI, 
+                                          "x-datepicker-polyfill-ui");
                             polyfillUI.chosen = this.value;
                             polyfillUI.view = this.xtag.dateInput.value;
                             polyfillUI.controls = true;
@@ -294,19 +366,18 @@
                             this.appendChild(polyfillUI);
                         }
                     }
+                    // turn off polyfill elements (but don't remove them)
                     else{
                         dateInput.setAttribute("type", "date");
                         dateInput.removeAttribute("readonly");
 
                         if(this.xtag.polyfillInput){
-                            this.xtag.polyfillInput.setAttribute("disabled", true);
+                            this.xtag.polyfillInput.setAttribute("disabled", 
+                                                                 true);
                         }
                     }
-
                 }
             }
-        },
-        methods: { 
         }
     });
 

@@ -107,11 +107,11 @@ Positions/appearances will likely differ on larger displays or with different in
 * A calendar widget based on/extended from [fortnight.js](https://github.com/potch/fortnight.js), but as an x-tag component form
 * Simple instantiation, with API hooks to allow flexible use cases such as an event-managing calendar (see demo)
 
-### Date Selection
+### [Date Selection](https://github.com/mozilla/app-components/tree/master/datepicker)
 
-* triggered by an input type='date'
-* Ability to select a date.
-* Currently uses a calendar view, but 'reels' are planned in a future version
+* Triggered by an input type='date'
+* Ability to select a date and submit its ISO string to a server
+* Extends upon x-calendar to provide a calendar view
 
 ### [Map](https://github.com/x-tag/map)
 

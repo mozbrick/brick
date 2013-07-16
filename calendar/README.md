@@ -231,3 +231,8 @@ The event also receives the following custom datamap in `e.detail`:
     - Similarly, to style the day that is being hovered over during a drag, use `x-calendar[active] .day[active]`
 
 (See demo/calendar-demo.html for an example of applying custom styles.)
+
+
+## Misc
+
+Note that when the calendar is rerendered in a manner that would require changing the displayed dates, such as when the span changes or the view switches months, the calendar's elements are repainted. This interrupts the event propagation chain of events fired on these repainted nodes, so be careful of full re-renders when attaching event handlers to individual nodes instead of the x-calendar itself.
