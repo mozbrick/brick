@@ -6,40 +6,48 @@ x-datepicker {
     position: relative;
     display: inline-block;
     overflow: visible;
-    @include boxSizing(border-box);
+    border: 1px solid grey;
+    height: 1.4em; // default
 
     & > .x-datepicker-input {
+        @include boxSizing(border-box);
+        vertical-align: top;
         margin: 0;
+        border: 0px solid transparent;
     }
 
     & > .x-datepicker-polyfill-input{
+        @include boxSizing(border-box);
+        vertical-align: top;
         position: relative;
         margin: 0;
         border: $polyfillInputBorderWidth solid grey;
         padding: .25em;
         font-family: Courier, monospace;
-        @include boxSizing(border-box);
+        border: 0px solid transparent;
     }
 
-    & > .x-datepicker-polyfillUI{
+    & > .x-datepicker-polyfill-ui{
         position: absolute;
         left: 0;
         top: 100%;
         margin-top: -$polyfillInputBorderWidth; // offset to merge with polyfill input's border
         box-shadow: 1px 1px 4px grey;
+        z-index: 1;
     }
 
 
     &[polyfill]{
         & > .x-datepicker-input {
-            display: none;
+            display: none!important;
         }
 
         & > .x-datepicker-polyfill-input{
-
+            width: 100%;
+            height: 100%;
         }
 
-        & > .x-datepicker-polyfillUI{
+        & > .x-datepicker-polyfill-ui{
             @include animated((opacity, visibility), 0.2s);
             opacity: 0;
             visibility: hidden;
@@ -48,7 +56,7 @@ x-datepicker {
         &:focus, &[focused]{
             box-shadow: 1px 1px 4px orange;
 
-            & > .x-datepicker-polyfillUI{
+            & > .x-datepicker-polyfill-ui{
                 opacity: 1;
                 visibility: visible;
             }
@@ -63,15 +71,16 @@ x-datepicker {
 
     &:not([polyfill]){
         & > .x-datepicker-input {
-
+            width: 100%;
+            height: 100%;
         }
 
         & > .x-datepicker-polyfill-input{
-            display: none;
+            display: none!important;
         }
 
-        & > .x-datepicker-polyfillUI{
-            display: none;
+        & > .x-datepicker-polyfill-ui{
+            display: none!important;
         }
     }
 }

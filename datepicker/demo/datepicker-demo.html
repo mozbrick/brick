@@ -12,17 +12,48 @@
     <script type="text/javascript" src="../src/datepicker.js"></script>
     
     <style>
+        .styles-demo {
+            width: 300px;
+            box-shadow: 1px 1px 4px grey;
+            margin-top: 1em;
+        }
+
+        .styles-demo > input{
+            background: #bbf0c6 url("retina_wood.png") repeat center;
+        }
+
+        .styles-demo[invalid] > input{
+            text-decoration: line-through;
+        }
+
+        .styles-demo > .x-datepicker-polyfill-ui{
+            background-color: #eee;
+        }
+
+        .styles-demo > .x-datepicker-polyfill-ui .day{
+            border-radius: 50%;
+            box-shadow: inset 1px 1px 4px grey;
+            background-color: white;
+        }
+
+        .styles-demo > .x-datepicker-polyfill-ui .day.chosen{
+            background-color: orange;
+        }
     </style>
 </head>
 <body>
     <h1>x-datepicker demo</h1>
-   <form method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
+    <form method="POST" action="http://www.hashemian.com/tools/form-post-tester.php">
         <x-datepicker name="datepicker-demo"></x-datepicker>
         <button class="toggle" type="button">Toggle polyfill</button>
         <br/><br/>
         <input type="submit"></input>
     </form>
 
+    <hr/>
+    Custom Styles Demo: <br/>
+    Non polyfill: <x-datepicker class="styles-demo"></x-datepicker><br/>
+    Polyfill: <x-datepicker class="styles-demo" polyfill></x-datepicker>
     <script>
         var ENTER_KEYCODE = 13;
 

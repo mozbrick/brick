@@ -78,6 +78,17 @@ x-calendar {
         }
     }
 
+    .today{
+        border-color: tomato;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .chosen{
+        background: #444;
+        color: #fff;
+    }
+
     .badmonth{
         color: #aaa;
 

@@ -273,7 +273,7 @@
                             xtag.addClass(polyfillInput, "x-datepicker-polyfill-input");
                             polyfillInput.setAttribute("type", "text");
                             polyfillInput.setAttribute("placeholder", "YYYY-MM-DD");
-                            polyfillInput.value = this.value;
+                            polyfillInput.value = this.xtag.dateInput.value;
 
                             this.xtag.polyfillInput = polyfillInput;
 
@@ -284,9 +284,9 @@
                         if(!this.xtag.polyfillUI){
                             // TODO: make this also use x-reel when implemented
                             var polyfillUI = document.createElement("x-calendar");
-                            xtag.addClass(polyfillUI, "x-datepicker-polyfillUI");
+                            xtag.addClass(polyfillUI, "x-datepicker-polyfill-ui");
                             polyfillUI.chosen = this.value;
-                            polyfillUI.view = this.value;
+                            polyfillUI.view = this.xtag.dateInput.value;
                             polyfillUI.controls = true;
                             this.xtag.polyfillUI = polyfillUI;
                             this.appendChild(polyfillUI);

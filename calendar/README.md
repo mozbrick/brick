@@ -55,11 +55,15 @@ Controls whether or not multiple calendar dates can be chosen simultaneously
 
 Can also be programmatically manipulated with the `multiple` property.
 
+**Note:** Changing this rerenders the calendar
+
 ## ___span___
 
 Specifies the number of months displayed at once by the calendar.
 
 Can also be programmatically manipulated with the `span` property.
+
+**Note:** Changing this rerenders the calendar
 
 ## ___view___
 
@@ -69,6 +73,8 @@ Can also be programmatically manipulated with the `view` property.
 
 **(getter)** Returns the view as a JS Date object (or null if not available)
 **(setter)** Can be set with either a JS Date object or a parsable string representing a date.
+
+**Note:** Changing this rerenders the calendar
 
 ## ___chosen___
 
@@ -87,6 +93,8 @@ Can also be programmatically manipulated with the `chosen` property.
 Can always be set with either a JS Date object or a parsable string representing a date.
 
 In addition, if `multiple` is set, can take either a list in the same format that the getter returns (parsable date strings can be used instead of JS Date objects), or a JSON string corresponding to the same format.
+
+**Note:** Changing this rerenders the calendar
 
 ## ___disable-ui-toggle___ / ___disableUIToggle___
 
@@ -136,9 +144,13 @@ Optionally takes a preserveNodes parameter to indicate that the existing DOM ele
 
 Go back one month by updating the 'view' attribute of the calendar.
 
+**Note:** This rerenders the calendar
+
 ## ___nextMonth___()
 
 Advance one month forward by updating the 'view' attribute of the calendar.
+
+**Note:** This rerenders the calendar
 
 ## ___toggleDateOn___(dateToToggle, [append])
 
@@ -146,17 +158,23 @@ Sets the given date as chosen. Depending on what is given for the append paramet
 
 Also updates the `chosen` attribute of the calendar.
 
+**Note:** This rerenders the calendar
+
 ## ___toggleDateOff___(dateToToggle)
 
 Removes the given date from the calendar's list of chosen dates. 
 
 Also updates the 'chosen' attribute of the calendar.
 
+**Note:** This rerenders the calendar
+
 ## ___toggleDate___(dateToToggle, [appendIfAdd])
 
 Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled to on. 
 
 Also updates the 'chosen' attribute of the calendar.
+
+**Note:** This rerenders the calendar
 
 ## ___hasVisibleDate___(dateToCheck, [excludeBadMonths])
 
