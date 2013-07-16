@@ -27,16 +27,38 @@
 			"disable-ui-toggle": "If set, the default date-toggling behavior of the UI is disabled. However, dates can still be programmatically chosen/toggled."
 		},
 		"events": {
-			
+			"datetoggleon": "Fired when the UI sets a day as chosen. Passes the following extra datamap in e.detail: 'date' is the actual Date object corresponding to the chosen day, and 'iso' is the ISO-formatted string representation of the date",
+			"datetoggleoff": "Fired when the UI sets a day as unchosen. Passes the following extra datamap in e.detail: 'date' is the actual Date object corresponding to the unchosen day, and 'iso' is the ISO-formatted string representation of the date",
+			"datetap": "Fired when the user taps a day without starting a drag-paint over other dates. Passes the following extra datamap in e.detail: 'date' is the actual Date object corresponding to the unchosen day, and 'iso' is the ISO-formatted string representation of the date"
 		},
 		"methods": {
-
+			"render": "Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)",
+			"prevMonth": "Go back one month by updating the 'view' attribute of the calendar.",
+			"nextMonth": "Advance one month forward by updating the 'view' attribute of the calendar.",
+			"toggleDateOn": "Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar",
+			"toggleDateOff": "Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar",
+			"toggleDate": "Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar",
+			"hasVisibleDate": "Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months."
 		},
 		"getters": {
-
+			"controls": "Returns true if the 'controls' attribute is set and false otherwise",
+			"multiple": "Returns true if the 'multiple' attribute is set and false otherwise",
+			"span": "Returns the value of the 'span' attribute",
+			"view": "Returns the value of the 'view' attribute in form of a Date object if available and null of otherwise",
+			"chosen": "Returns the value of the 'chosen' attribute as a Date object/null if the 'multiple' attribute is false, and as a list of singular dates and [Date,Date] ranges of dates if the 'multiple' attribute is true",
+			"disableUIToggle": "Returns true if the 'disable-ui-toggle' attribute is set and false otherwise",
+			"firstVisibleMonth": "Returns the Date corresponding to the first day in the first fully-visible month displayed by the calendar",
+			"lastVisibleMonth": "Returns the Date corresponding to the first day in the last fully-visible month displayed by the calendar",
+			"customRenderFn": "Returns the currently set custom rendering function, if any is set. (See 'customRenderFn' setter documentation for further details)"
 		},
 		"setters": {
-
+			"controls": "If true, sets the 'controls' attribute. Otherwise, removes the 'controls' attribute.",
+			"multiple": "If true, sets the 'multiple' attribute. Otherwise, removes the 'multiple' attribute.",
+			"span": "Sets the value of the 'span' attribute",
+			"view": "Sets the value of the 'view' attribute. Can be given either a JS Date object or a parsable string corresponding to a date",
+			"chosen": "Sets the value of the 'chosen' attribute. Can always take either a JS Date Object or a parsable date string. If multiple is true, can also take a list of singular Dates/parasable date string and [Date, Date] lists of the start and end points of a range of date, as well a JSON string corresponding to such a list.",
+			"disableUIToggle": "If true, sets the 'disable-ui-toggle' attribute. Otherwise, removes the 'disable-ui-toggle' attribute.",
+			"customRenderFn": "Sets an additional function to call on individual days when rendering the calendar. Will be called with three parameters: the day's DOM element, the JS Date corresponding to the day, and the ISO-formatted string version of the date. This is useful when styles need to be more dynamically flexible than the default. IMPORTANT NOTE: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render, or infinite recursion can result."
 		}
 	}
 }

@@ -102,11 +102,16 @@ Positions/appearances will likely differ on larger displays or with different in
 * Designed to appear as a cohesive set
 * Essentially several Toggles with the appearance of option buttons
 
+### [Calendar](https://github.com/mozilla/app-components/tree/master/calendar)
+
+* A calendar widget based on/extended from [fortnight.js](https://github.com/potch/fortnight.js), but as an x-tag component form
+* Simple instantiation, with API hooks to allow flexible use cases such as an event-managing calendar (see demo)
+
 ### Date Selection
 
 * triggered by an input type='date'
 * Ability to select a date.
-* appearance is not yet determined ('reels' vs a calendar view)
+* Currently uses a calendar view, but 'reels' are planned in a future version
 
 ### [Map](https://github.com/x-tag/map)
 

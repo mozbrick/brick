@@ -937,11 +937,14 @@
     // date, and the iso representation of the date
     Calendar.prototype._callCustomRenderer = function(){
         if(!this._customRenderFn) return;
+
+        // prevent infinite recursion of custom rendering requiring a rerender
+        // of the calendar
         if(this._renderRecursionFlag){
             throw ("Error: customRenderFn causes recursive loop of "+
                    "rendering calendar; make sure your custom rendering "+
                    "function doesn't modify attributes of the x-calendar that "+
-                   "would require a re-render of the calendar!");
+                   "would require a re-render!");
         }
 
         var days = xtag.query(this.el, ".day");
@@ -1243,6 +1246,7 @@
                 this.xtag.dragAllowTap = false;
             },
 
+            // add the global listeners only once
             inserted: function(){
                 if(!DOC_MOUSEUP_LISTENER){
                     DOC_MOUSEUP_LISTENER = xtag.addEvent(document, "mouseup", 
@@ -1254,6 +1258,8 @@
                 }
                 this.render(false);
             },
+            // remove the global listeners only if no calendars exist in the
+            // document anymore
             removed: function(){
                 if(xtag.query(document, "x-calendar").length === 0){
                     if(DOC_MOUSEUP_LISTENER){
@@ -1336,7 +1342,6 @@
 
                 _onDragMove(xCalendar, day);
             },
-
             "mouseout:delegate(.day)": function(e){
                 var day = this;
                 day.removeAttribute("active");
@@ -1362,13 +1367,11 @@
 
             "datetoggleon": function(e){
                 var xCalendar = this;
-
                 xCalendar.toggleDateOn(e.detail.date, xCalendar.multiple);
             },
 
             "datetoggleoff": function(e){
                 var xCalendar = this;
-
                 xCalendar.toggleDateOff(e.detail.date);
             }
         },
