@@ -9,7 +9,7 @@
 	url = https://github.com/x-tag/appbar.git
 [submodule "toggle"]
 	path = toggle
-	url = git@github.com:x-tag/toggle.git
+	url = https://github.com/x-tag/toggle.git
 [submodule "layout"]
 	path = layout
-	url = git@github.com:x-tag/layout.git
+	url = https://github.com/x-tag/layout.git
