@@ -187,8 +187,10 @@
         },
         accessors: {
             "name": {
-                attribute: {selector: ".x-datepicker-input"}
+                attribute: {selector: ".x-datepicker-input"},
+                set: function(){} // without this, the selector doesnt sync
             },
+
             "submitValue":{
                 get: function(){
                     return this.xtag.dateInput.value;
