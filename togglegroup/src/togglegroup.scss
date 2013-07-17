@@ -18,6 +18,7 @@ x-togglegroup{
         border-top-color: #aaa;
         border-bottom-color: #777;
         text-align: center;
+        overflow: hidden;
 
         @include animated((background-position, background-color, box-shadow), 0.1s);
 

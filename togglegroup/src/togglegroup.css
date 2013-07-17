@@ -21,6 +21,8 @@ x-togglegroup {
   x-togglegroup > x-toggle {
     display: block;
     padding: .25em 0;
+    min-width: auto;
+    min-height: auto;
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
     -webkit-flex: 1;
@@ -40,6 +42,7 @@ x-togglegroup {
     border-top-color: #aaa;
     border-bottom-color: #777;
     text-align: center;
+    overflow: hidden;
     transition-property: background-position, background-color, box-shadow;
     -webkit-transition-property: background-position, background-color, box-shadow;
     -moz-transition-property: background-position, background-color, box-shadow;

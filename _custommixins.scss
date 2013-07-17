@@ -170,20 +170,22 @@ $FONTS_FOLDER: "../fonts/";
 
 //from here: http://css-tricks.com/snippets/css/a-guide-to-flexbox/
 @mixin flexbox() {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
 }
 
 @mixin flex($values) {
-  -webkit-box-flex: $values;
-  -moz-box-flex:  $values;
-  -webkit-flex:  $values;
-  -ms-flex:  $values;
-  box-flex: $values;
-  flex:  $values;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: $values;
+    -moz-box-flex:  $values;
+    -webkit-flex:  $values;
+    -ms-flex:  $values;
+    box-flex: $values;
+    flex:  $values;
 }
 
 @mixin align-items($align){
