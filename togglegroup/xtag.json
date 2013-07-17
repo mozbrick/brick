@@ -3,7 +3,7 @@
 	"tagName": "x-togglegroup",
 	"version": "0.1.0",
 	"author": "Leon Zhang",
-	"description": "togglegroups are used to display a set of clickable options, of which only one can be chosen at a time.",
+	"description": "Togglegroups are used to display a set of clickable option buttons, which can be either independently or mutual-exclusively toggled.",
 	"demo": "demo/togglegroup-demo.html",
 	"categories": [
         "ui"

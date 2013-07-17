@@ -1,1 +1,1 @@
-do not use; not fully implemented
+documentation coming soon; see demo/togglegroup-demo.html for now
