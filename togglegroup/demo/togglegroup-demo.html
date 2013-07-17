@@ -4,8 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+    <!-- Note: copy the x-toggle files to local demo folder when testing for simulator -->
     <link rel="stylesheet" type="text/css" href="../../toggle/src/toggle.css"/>
     <link rel="stylesheet" type="text/css" href="../src/togglegroup.css"/>
+
+    <script type="text/javascript" src="x-tag-components.js"></script>
+    <script type="text/javascript" src="../../toggle/src/toggle.js"></script>
+    <script type="text/javascript" src="../src/togglegroup.js"></script>
 
     <style>
         .add-opt-button{
@@ -55,8 +60,8 @@
             opacity: 0.7;
         }
 
-        #fancy-demo > x-toggle:after{
-            position:absolute;
+        #fancy-demo > x-toggle .x-toggle-content{
+            position: absolute;
             left: 50%;
             top: 50%;
             -webkit-transform: translate(-50%, -50%);
@@ -67,10 +72,6 @@
         }
 
     </style>
-
-    <script type="text/javascript" src="x-tag-components.js"></script>
-    <script type="text/javascript" src="../../toggle/src/toggle.js"></script>
-    <script type="text/javascript" src="../src/togglegroup.js"></script>
 </head>
 <body>
     <h1>x-togglegroup demo</h1>
@@ -81,8 +82,6 @@
          <x-toggle label="Date"></x-toggle>
          <x-toggle label="Publisher"></x-toggle>
          <x-toggle label="ISBN"></x-toggle>
-         <x-toggle label="City of Publication"></x-toggle>
-         <x-toggle label="Editor"></x-toggle>
     </x-togglegroup>
     <button class="add-opt-button">Add option</button>
 

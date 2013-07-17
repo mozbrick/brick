@@ -1,0 +1,10 @@
+{
+    "name": "Togglegroup Demo",
+    "description": "A demo of the x-togglegroup component.",
+    "developer": {
+        "name": "Mozilla",
+        "url": "http://github.com/mozilla/app-components/"
+    },
+    "launch_path": "demo/togglegroup-demo.html",
+    "default_locale": "en"
+}
