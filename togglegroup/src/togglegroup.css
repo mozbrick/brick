@@ -20,7 +20,7 @@ x-togglegroup {
   width: 100%; }
   x-togglegroup > x-toggle {
     display: block;
-    padding: .25em .5em;
+    padding: .25em 0;
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
     -webkit-flex: 1;

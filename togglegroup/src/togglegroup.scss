@@ -8,7 +8,7 @@ x-togglegroup{
 
     & > x-toggle{
         display: block; // required for old flexbox syntax
-        padding: .25em .5em;
+        padding: .25em 0;
 
         @include flex(1);
         @include simplegradient;
