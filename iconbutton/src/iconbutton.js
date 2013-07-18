@@ -8,7 +8,8 @@
     var DEFAULT_TEXT_SETTER = function(iconButton, newText){
                                   iconButton.xtag.labelEl.textContent = newText;
                               };
-    
+    var SPACE_KEYCODE = 32;
+    var ENTER_KEYCODE = 13;
     
     // hides/unhides parts of the button depending on if they have any content, 
     // also removes image source if explicitly given a null/empty src
@@ -104,6 +105,8 @@
 
                 updatePartsOrder(this);
                 updatePartsVisibility(this);
+
+                this.setAttribute("tabindex", 0);
             },
             inserted: function() {
                 if(!DOC_LISTENER_FNS){
@@ -134,6 +137,14 @@
         events: {
             "tapstart": function(e){
                 e.currentTarget.setAttribute("active", true);
+            },
+            // allow 'clicking' with enter/space keys when focused
+            "keypress": function(e){
+                var keyCode = e.key || e.keyCode;
+                if(keyCode === SPACE_KEYCODE || keyCode === ENTER_KEYCODE){
+                    e.currentTarget.click();
+                    e.preventDefault();
+                }
             }
         },
         accessors: {

@@ -281,6 +281,18 @@
             
             customLabelIconButton.textGetter = customGetter;
             customLabelIconButton.textSetter = customSetter;
+
+            xtag.addEvents(document, {
+                "click:delegate(x-iconbutton)": function(e){
+                    console.log(e.type, this);
+                },
+                "focus:delegate(x-iconbutton)": function(e){
+                    console.log(e.type, this);
+                },
+                "blur:delegate(x-iconbutton)": function(e){
+                    console.log(e.type, this);
+                }
+            });
         }, false);
         
     </script>

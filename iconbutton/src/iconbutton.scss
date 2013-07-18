@@ -6,6 +6,7 @@ $defaultSpacing: .2em;
 x-iconbutton{
     @include component-ui-background;
     @include boxSizing(border-box);
+    @include unhighlightable;
     color: $COMPONENT_UI_TEXT_COLOR;
     font-family: $COMPONENT_UI_FONT_FAMILY;
 
@@ -60,7 +61,7 @@ x-iconbutton{
       }
     }
 
-    &[icon-anchor=left]{
+    &[icon-anchor=left], &:not([icon-anchor]){
         & .x-iconbutton-icon{
           margin-right: $defaultSpacing;
         }

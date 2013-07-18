@@ -15,6 +15,15 @@ x-iconbutton {
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
   color: #d4d4d4;
   font-family: "OpenSans-Semibold", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   white-space: nowrap;
@@ -59,7 +68,7 @@ x-iconbutton {
   x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-label {
     margin: 0 auto;
     display: block; }
-  x-iconbutton[icon-anchor=left] .x-iconbutton-icon {
+  x-iconbutton[icon-anchor=left] .x-iconbutton-icon, x-iconbutton:not([icon-anchor]) .x-iconbutton-icon {
     margin-right: 0.2em; }
   x-iconbutton[icon-anchor=right] .x-iconbutton-icon {
     margin-left: 0.2em; }
