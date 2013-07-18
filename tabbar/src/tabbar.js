@@ -7,13 +7,13 @@
         },
         events: {
             "tap:delegate(x-tabbar-tab)": function(e) {
-                var activeTab = xtag.query(this.parentNode, "x-tabbar-tab[data-active]");
+                var activeTab = xtag.query(this.parentNode, "x-tabbar-tab[active]");
                 if (activeTab.length) {
                     activeTab.forEach(function(t) {
-                        t.removeAttribute('data-active');
+                        t.removeAttribute('active');
                     });
                 }
-                e.target.setAttribute('data-active', true);
+                e.target.setAttribute('active', true);
             }
         },
         accessors: {

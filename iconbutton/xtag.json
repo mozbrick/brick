@@ -36,8 +36,6 @@
 		"setters": {
             "src" : "Sets the image source used as the button's icon. Only does something if the icon is a <img> element (which is the default behavior)",
             "icon-anchor" : "Sets the location of the icon relative to the label. Valid options are 'left', 'top', 'right', 'bottom'",
-            "icon" : "Replaces the DOM element representing the button's icon with the given DOM element",
-            "label" : "Replaces the DOM element representing the button's label with the given DOM element",
             "text" : "Replaces the text content of the button, as defined by the textSetter",
             "textGetter" : "Replaces the function used to calculate how to read the button's text contents",
             "textSetter" : "Replaces the function used to calculate how to change the button's text contents"

@@ -1,8 +1,31 @@
+/*Backgrounds */
+/* Text */
 x-tabbar {
-  width: 100%;
+  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
+  font-family: OpenSans-Semibold, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  color: #d4d4d4;
   display: block;
+  width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap; }
+  white-space: nowrap;
+  text-align: center; }
   x-tabbar > x-tabbar-tab {
-    display: inline-block; }
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    height: 100%;
+    padding: 0;
+    vertical-align: middle; }
+    x-tabbar > x-tabbar-tab:first-child {
+      border-left-width: 0px; }
+    x-tabbar > x-tabbar-tab > * {
+      height: 100%;
+      width: 100%; }

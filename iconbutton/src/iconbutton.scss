@@ -1,28 +1,60 @@
 @import "../../custommixins";
+@import "../../component-ui-defaults";
+
+$iconSpacing: .25em;
 
 x-iconbutton{
+    @include component-ui-background;
+    @include component-ui-text-color;
+    @include component-ui-text-font;
     @include boxSizing(border-box);
+    white-space: nowrap;
     display: inline-block;
+    border: 1px solid grey;
     margin: 0;
-    padding: 0;
-    
-    & .button {
-       cursor: inherit;
-       height: inherit;
-       width: inherit;
+    padding: .25em;
+    @include component-ui-text-font-size;
+
+    cursor: pointer;
+
+    & > .x-iconbutton-icon, & > .x-iconbutton-label{
        margin: 0;
-        & > *{
-           margin: 0;
-           padding: 0;
-           vertical-align: middle;
-           display: inline-block;
-        }
+       padding: 0;
+       vertical-align: middle;
+       display: inline-block;
     }
-    
+
+    & > .x-iconbutton-label{
+      @include component-ui-text-font-size;
+    }
+
+    &:hover{
+      @include component-ui-background-hover;
+      @include component-ui-text-color-hover;
+    }
+
+    &[active]{
+      @include component-ui-background-selected;
+      @include component-ui-text-color-selected;
+    }
+
     &[icon-anchor=top], &[icon-anchor=bottom]{
-        & .button > *{
+        text-align: center;
+        & > .x-iconbutton-icon, & > .x-iconbutton-label{
             margin: 0 auto;
             display: block;
+        }
+    }
+
+    &[icon-anchor=left], &:not([icon-anchor]){
+        & > .x-iconbutton-icon{
+          margin-right: $iconSpacing;
+        }
+    }
+
+    &[icon-anchor=right]{
+        & > .x-iconbutton-icon{
+          margin-left: $iconSpacing;
         }
     }
 }

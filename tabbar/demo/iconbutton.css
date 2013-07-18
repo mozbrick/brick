@@ -1,22 +1,52 @@
+/*Backgrounds */
+/* Text */
 x-iconbutton {
+  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
+  background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
+  color: #d4d4d4;
+  font-family: OpenSans-Semibold, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
+  white-space: nowrap;
   display: inline-block;
+  border: 1px solid grey;
   margin: 0;
-  padding: 0; }
-  x-iconbutton .button {
-    cursor: inherit;
-    height: inherit;
-    width: inherit;
-    margin: 0; }
-    x-iconbutton .button > * {
-      margin: 0;
-      padding: 0;
-      vertical-align: middle;
-      display: inline-block; }
-  x-iconbutton[icon-anchor=top] .button > *, x-iconbutton[icon-anchor=bottom] .button > * {
-    margin: 0 auto;
-    display: block; }
+  padding: .25em;
+  font-size: 14px;
+  cursor: pointer; }
+  x-iconbutton > .x-iconbutton-icon, x-iconbutton > .x-iconbutton-label {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    display: inline-block; }
+  x-iconbutton > .x-iconbutton-label {
+    font-size: 14px; }
+  x-iconbutton:hover {
+    background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #929292 100%);
+    background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #929292 100%);
+    background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #929292 100%);
+    background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #929292 100%);
+    background-image: linear-gradient(-180deg, #a0a0a0 14%, #929292 100%);
+    color: #e1e1e1; }
+  x-iconbutton[active] {
+    background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
+    background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
+    background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
+    background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
+    background-image: linear-gradient(-180deg, #a0a0a0 14%, #e1e1e1 100%);
+    color: #f2f2f2; }
+  x-iconbutton[icon-anchor=top], x-iconbutton[icon-anchor=bottom] {
+    text-align: center; }
+    x-iconbutton[icon-anchor=top] > .x-iconbutton-icon, x-iconbutton[icon-anchor=top] > .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] > .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] > .x-iconbutton-label {
+      margin: 0 auto;
+      display: block; }
+  x-iconbutton[icon-anchor=left] > .x-iconbutton-icon, x-iconbutton:not([icon-anchor]) > .x-iconbutton-icon {
+    margin-right: 0.25em; }
+  x-iconbutton[icon-anchor=right] > .x-iconbutton-icon {
+    margin-left: 0.25em; }

@@ -56,47 +56,32 @@
             position: absolute;
             color: white;
             text-shadow: 1px 1px 10px black;
-            left: 25%;
-            top: 40%;
-            width: 50%;
+            left: 50%;
+            top: 50%;
             text-align: center;
             
             font-size: 3em;
+
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
         }
         
         x-tabbar{
             height: 15%;
-            background-color: orange;
         }
         
         x-tabbar-tab{
             height: 100%;
         }
         
-        x-iconbutton{
-            margin: 0;
-            padding: 0;
-            cursor: pointer;
-            
-            height: 100%;
-        }
-        
-        x-iconbutton .button{
-            border: 1px solid transparent;
-            background-color: goldenrod;
-            color: white;
-        }
-        
-        x-iconbutton .button:hover{
-            background-color: #e6be5a;
-        }
-        
-        x-iconbutton .icon{
+        x-iconbutton .x-iconbutton-icon{
             max-width: 40px;
             max-height: 40px;
         }
         
-        x-iconbutton .label{
+        x-iconbutton .x-iconbutton-label{
             padding: 5px;
         }
     </style>

@@ -1,14 +1,33 @@
 @import "../../custommixins";
+@import "../../component-ui-defaults";
 
 x-tabbar{
-    width: 100%;
+    @include component-ui-background;
+    @include component-ui-text-font;
+    @include component-ui-text-color;
+
     display: block;
+    width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
+    text-align: center;
     
     & > x-tabbar-tab{
+        @include boxSizing(border-box);
         display: inline-block;
+        height: 100%;
+        padding: 0;
+
+        vertical-align: middle;
+
+        &:first-child{
+            border-left-width: 0px;
+        }
+
+        & > *{
+            height: 100%;
+            width: 100%;
+        }
     }
 }
-

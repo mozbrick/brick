@@ -1,0 +1,61 @@
+$bgBaseColor: #858585;
+$bgSelectBaseColor: #E1E1E1;
+$bgHoverBaseColor: lighten($bgBaseColor, 5%);
+
+$bgHighlightColor: #A0A0A0;
+
+$textColor: #D4D4D4;
+$textHoverColor: lighten($textColor, 5%);
+$textSelectColor: #F2F2F2;
+
+/*Backgrounds */
+@mixin component-ui-background{
+    background-image: -o-linear-gradient(-90deg, $bgHighlightColor 14%, $bgBaseColor 100%);
+    background-image: -moz-linear-gradient(-90deg, $bgHighlightColor 14%, $bgBaseColor 100%);
+    background-image: -webkit-linear-gradient(-90deg, $bgHighlightColor 14%, $bgBaseColor 100%);
+    background-image: -ms-linear-gradient(-90deg, $bgHighlightColor 14%, $bgBaseColor 100%);
+    background-image: linear-gradient(-180deg, $bgHighlightColor 14%, $bgBaseColor 100%);
+}
+
+@mixin component-ui-background-hover{
+    background-image: -o-linear-gradient(-90deg, $bgHighlightColor 14%, $bgHoverBaseColor 100%);
+    background-image: -moz-linear-gradient(-90deg, $bgHighlightColor 14%, $bgHoverBaseColor 100%);
+    background-image: -webkit-linear-gradient(-90deg, $bgHighlightColor 14%, $bgHoverBaseColor 100%);
+    background-image: -ms-linear-gradient(-90deg, $bgHighlightColor 14%, $bgHoverBaseColor 100%);
+    background-image: linear-gradient(-180deg, $bgHighlightColor 14%, $bgHoverBaseColor 100%);
+}
+
+// Selected Item Background
+@mixin component-ui-background-selected{
+    background-image: -o-linear-gradient(-90deg, $bgHighlightColor 14%, $bgSelectBaseColor 100%);
+    background-image: -moz-linear-gradient(-90deg, $bgHighlightColor 14%, $bgSelectBaseColor 100%);
+    background-image: -webkit-linear-gradient(-90deg, $bgHighlightColor 14%, $bgSelectBaseColor 100%);
+    background-image: -ms-linear-gradient(-90deg, $bgHighlightColor 14%, $bgSelectBaseColor 100%);
+    background-image: linear-gradient(-180deg, $bgHighlightColor 14%, $bgSelectBaseColor 100%);
+}
+
+/* Text */
+@mixin component-ui-text-font-size{
+    font-size: 14px;
+}
+
+@mixin component-ui-text-line-height{
+    line-height: 19px;
+}
+
+@mixin component-ui-text-font{
+    font-family: OpenSans-Semibold, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+@mixin component-ui-text-color{
+    color: $textColor;
+}
+
+@mixin component-ui-text-color-hover{
+    color: $textHoverColor;
+}
+
+// Selected text
+@mixin component-ui-text-color-selected{
+    color: $textSelectColor;
+}
