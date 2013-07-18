@@ -11,7 +11,6 @@ x-tabbar {
   background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
   font-family: "OpenSans-Semibold", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-  color: #d4d4d4;
   line-height: 19px;
   display: block;
   width: 100%;

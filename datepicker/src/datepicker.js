@@ -217,7 +217,14 @@
         accessors: {
             "name": {
                 attribute: {selector: ".x-datepicker-input"},
-                set: function(){} // without this, the selector doesnt sync
+                set: function(newName){
+                    if(newName === null || newName === undefined){
+                        this.xtag.dateInput.removeAttribute("name");
+                    }
+                    else{
+                        this.xtag.dateInput.setAttribute("name", newName);
+                    }
+                }
             },
 
             // returns the value that should be submitted to a form

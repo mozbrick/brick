@@ -2,6 +2,93 @@
 
 window.Platform = {};
 var logFlags = {};
+
+
+
+// DOMTokenList polyfill fir IE9
+(function () {
+
+if (typeof window.Element === "undefined" || "classList" in document.documentElement) return;
+
+var prototype = Array.prototype,
+    indexOf = prototype.indexOf,
+    slice = prototype.slice,
+    push = prototype.push,
+    splice = prototype.splice,
+    join = prototype.join;
+
+function DOMTokenList(el) {
+  this._element = el;
+  if (el.className != this._classCache) {
+    this._classCache = el.className;
+
+    if (!this._classCache) return;
+
+      // The className needs to be trimmed and split on whitespace
+      // to retrieve a list of classes.
+      var classes = this._classCache.replace(/^\s+|\s+$/g,'').split(/\s+/),
+        i;
+    for (i = 0; i < classes.length; i++) {
+      push.call(this, classes[i]);
+    }
+  }
+};
+
+function setToClassName(el, classes) {
+  el.className = classes.join(' ');
+}
+
+DOMTokenList.prototype = {
+  add: function(token) {
+    if(this.contains(token)) return;
+    push.call(this, token);
+    setToClassName(this._element, slice.call(this, 0));
+  },
+  contains: function(token) {
+    return indexOf.call(this, token) !== -1;
+  },
+  item: function(index) {
+    return this[index] || null;
+  },
+  remove: function(token) {
+    var i = indexOf.call(this, token);
+     if (i === -1) {
+       return;
+     }
+    splice.call(this, i, 1);
+    setToClassName(this._element, slice.call(this, 0));
+  },
+  toString: function() {
+    return join.call(this, ' ');
+  },
+  toggle: function(token) {
+    if (indexOf.call(this, token) === -1) {
+      this.add(token);
+    } else {
+      this.remove(token);
+    }
+  }
+};
+
+window.DOMTokenList = DOMTokenList;
+
+function defineElementGetter (obj, prop, getter) {
+  if (Object.defineProperty) {
+    Object.defineProperty(obj, prop,{
+      get : getter
+    })
+  } else {
+    obj.__defineGetter__(prop, getter);
+  }
+}
+
+defineElementGetter(Element.prototype, 'classList', function () {
+  return new DOMTokenList(this);
+});
+
+})();
+
+
 /*
  * Copyright 2012 The Polymer Authors. All rights reserved.
  * Use of this source code is goverened by a BSD-style
@@ -37,565 +124,6 @@ if (typeof WeakMap !== 'undefined' && navigator.userAgent.indexOf('Firefox/') < 
     }
   })();
 }
-
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
- */
-(function() {
-  
-  // poor man's adapter for template.content on various platform scenarios
-  window.templateContent = window.templateContent || function(inTemplate) {
-    return inTemplate.content;
-  };
-
-  // so we can call wrap/unwrap without testing for ShadowDOMPolyfill
-
-  window.wrap = window.unwrap = function(n){
-    return n;
-  }
-
-  window.createShadowRoot = function(inElement) {
-    return inElement.webkitCreateShadowRoot();
-  };
-
-  window.templateContent = function(inTemplate) {
-    // if MDV exists, it may need to boostrap this template to reveal content
-    if (window.HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
-      HTMLTemplateElement.bootstrap(inTemplate);
-    }
-    // fallback when there is no Shadow DOM polyfill, no MDV polyfill, and no
-    // native template support
-    if (!inTemplate.content && !inTemplate._content) {
-      var frag = document.createDocumentFragment();
-      while (inTemplate.firstChild) {
-        frag.appendChild(inTemplate.firstChild);
-      }
-      inTemplate._content = frag;
-    }
-    return inTemplate.content || inTemplate._content;
-  };
-
-})();
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
- */
-
-(function(scope) {
-
-// Old versions of iOS do not have bind.
-
-if (!Function.prototype.bind) {
-  Function.prototype.bind = function(scope) {
-    var self = this;
-    var args = Array.prototype.slice.call(arguments, 1);
-    return function() {
-      var args2 = args.slice();
-      args2.push.apply(args2, arguments);
-      return self.apply(scope, args2);
-    };
-  };
-}
-
-// namespace an import from CustomElements
-// TODO(sjmiles): clean up this global
-scope.mixin = window.mixin;
-
-})(window.Platform);
-// Copyright 2011 Google Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-(function(scope) {
-
-  'use strict';
-
-  // polyfill DOMTokenList
-  // * add/remove: allow these methods to take multiple classNames
-  // * toggle: add a 2nd argument which forces the given state rather
-  //  than toggling.
-
-  var add = DOMTokenList.prototype.add;
-  var remove = DOMTokenList.prototype.remove;
-  DOMTokenList.prototype.add = function() {
-    for (var i = 0; i < arguments.length; i++) {
-      add.call(this, arguments[i]);
-    }
-  };
-  DOMTokenList.prototype.remove = function() {
-    for (var i = 0; i < arguments.length; i++) {
-      remove.call(this, arguments[i]);
-    }
-  };
-  DOMTokenList.prototype.toggle = function(name, bool) {
-    if (arguments.length == 1) {
-      bool = !this.contains(name);
-    }
-    bool ? this.add(name) : this.remove(name);
-  };
-  DOMTokenList.prototype.switch = function(oldName, newName) {
-    oldName && this.remove(oldName);
-    newName && this.add(newName);
-  };
-  
-  // make forEach work on NodeList
-
-  NodeList.prototype.forEach = function(cb, context) {
-    Array.prototype.slice.call(this).forEach(cb, context);
-  };
-
-  HTMLCollection.prototype.forEach = function(cb, context) {
-    Array.prototype.slice.call(this).forEach(cb, context);
-  };
-
-  // polyfill performance.now
-
-  if (!window.performance) {
-    var start = Date.now();
-    // only at millisecond precision
-    window.performance = {now: function(){ return Date.now() - start }};
-  }
-
-  // polyfill for requestAnimationFrame
-
-  if (!window.requestAnimationFrame) {
-    window.requestAnimationFrame = (function() {
-      var nativeRaf = window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame;
-
-      return nativeRaf ?
-        function(callback) {
-          return nativeRaf(function() {
-            callback(performance.now());
-          });
-        } :
-        function( callback ){
-          return window.setTimeout(callback, 1000 / 60);
-        };
-    })();
-  }
-
-  if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = (function() {
-      return  window.webkitCancelAnimationFrame ||
-        window.mozCancelAnimationFrame ||
-        function(id) {
-          clearTimeout(id);
-        };
-    })();
-  }
-
-  // utility
-
-  function createDOM(inTagOrNode, inHTML, inAttrs) {
-    var dom = typeof inTagOrNode == 'string' ? 
-        document.createElement(inTagOrNode) : inTagOrNode.cloneNode(true);
-    dom.innerHTML = inHTML;
-    if (inAttrs) {
-      for (var n in inAttrs) {
-        dom.setAttribute(n, inAttrs[n]);
-      }
-    }
-    return dom;
-  }
-
-  // exports
-
-  scope.createDOM = createDOM;
-
-})(window.Platform);
-
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
- */
-
-// poor man's adapter for template.content on various platform scenarios
-window.templateContent = window.templateContent || function(inTemplate) {
-  return inTemplate.content;
-};
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
- */
-
-(function(scope) {
-
-if (!scope) {
-  scope = window.HTMLImports = {flags:{}};
-}
-
-var IMPORT_LINK_TYPE = 'import';
-
-// highlander object represents a primary document (the argument to 'parse')
-// at the root of a tree of documents
-
-var importer = {
-  documents: {},
-  cache: {},
-  preloadSelectors: [
-    'link[rel=' + IMPORT_LINK_TYPE + ']',
-    'script[src]',
-    'link[rel=stylesheet]'
-  ].join(','),
-  load: function(inDocument, inNext) {
-    // construct a loader instance
-    loader = new Loader(importer.loaded, inNext);
-    // alias the loader cache (for debugging)
-    loader.cache = importer.cache;
-    // add nodes from document into loader queue
-    importer.preload(inDocument);
-  },
-  preload: function(inDocument) {
-    // all preloadable nodes in inDocument
-    var nodes = inDocument.querySelectorAll(importer.preloadSelectors);
-    // only load imports from the main document
-    // TODO(sjmiles): do this by altering the selector list instead
-    if (inDocument === document) {
-      nodes = Array.prototype.filter.call(nodes, function(n) {
-        return isDocumentLink(n);
-      });
-    }
-    // add these nodes to loader's queue
-    loader.addNodes(nodes);
-  },
-  loaded: function(inUrl, inElt, inResource) {
-    if (isDocumentLink(inElt)) {
-      var document = importer.documents[inUrl];
-      // if we've never seen a document at this url
-      if (!document) {
-        // generate an HTMLDocument from data
-        document = makeDocument(inResource, inUrl);
-        // resolve resource paths relative to host document
-        path.resolvePathsInHTML(document);
-        // cache document
-        importer.documents[inUrl] = document;
-        // add nodes from this document to the loader queue
-        importer.preload(document);
-      }
-      // store document resource
-      inElt.content = inElt.__resource = document;
-    } else {
-      inElt.__resource = inResource;
-      // resolve stylesheet resource paths relative to host document
-      if (isStylesheetLink(inElt)) {
-        path.resolvePathsInStylesheet(inElt);
-      }
-    }
-  }
-};
-
-function isDocumentLink(inElt) {
-  return isLinkRel(inElt, IMPORT_LINK_TYPE);
-}
-
-function isStylesheetLink(inElt) {
-  return isLinkRel(inElt, 'stylesheet');
-}
-
-function isLinkRel(inElt, inRel) {
-  return (inElt.localName === 'link' && inElt.getAttribute('rel') === inRel);
-}
-
-function inMainDocument(inElt) {
-  return inElt.ownerDocument === document ||
-    // TODO(sjmiles): ShadowDOMPolyfill intrusion
-    inElt.ownerDocument.impl === document;
-}
-
-function makeDocument(inHTML, inUrl) {
-  // create a new HTML document
-  var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
-  // cache the new document's source url
-  doc._URL = inUrl;
-  // establish a relative path via <base>
-  var base = doc.createElement('base');
-  base.setAttribute('href', document.baseURI);
-  doc.head.appendChild(base);
-  // install html
-  doc.body.innerHTML = inHTML;
-  return doc;
-}
-
-var loader;
-
-var Loader = function(inOnLoad, inOnComplete) {
-  this.onload = inOnLoad;
-  this.oncomplete = inOnComplete;
-  this.inflight = 0;
-  this.pending = {};
-  this.cache = {};
-};
-
-Loader.prototype = {
-  addNodes: function(inNodes) {
-    // number of transactions to complete
-    this.inflight += inNodes.length;
-    // commence transactions
-    forEach(inNodes, this.require, this);
-    // anything to do?
-    this.checkDone();
-  },
-  require: function(inElt) {
-    var url = path.nodeUrl(inElt);
-    // TODO(sjmiles): ad-hoc
-    inElt.__nodeUrl = url;
-    // deduplication
-    if (!this.dedupe(url, inElt)) {
-      // fetch this resource
-      this.fetch(url, inElt);
-    }
-  },
-  dedupe: function(inUrl, inElt) {
-    if (this.pending[inUrl]) {
-      // add to list of nodes waiting for inUrl
-      this.pending[inUrl].push(inElt);
-      // don't need fetch
-      return true;
-    }
-    if (this.cache[inUrl]) {
-      // complete load using cache data
-      this.onload(inUrl, inElt, loader.cache[inUrl]);
-      // finished this transaction
-      this.tail();
-      // don't need fetch
-      return true;
-    }
-    // first node waiting for inUrl
-    this.pending[inUrl] = [inElt];
-    // need fetch (not a dupe)
-    return false;
-  },
-  fetch: function(inUrl, inElt) {
-    xhr.load(inUrl, function(err, resource) {
-      this.receive(inUrl, inElt, err, resource);
-    }.bind(this));
-  },
-  receive: function(inUrl, inElt, inErr, inResource) {
-    if (!inErr) {
-      loader.cache[inUrl] = inResource;
-    }
-    loader.pending[inUrl].forEach(function(e) {
-      if (!inErr) {
-        this.onload(inUrl, e, inResource);
-      }
-      this.tail();
-    }, this);
-    loader.pending[inUrl] = null;
-  },
-  tail: function() {
-    --this.inflight;
-    this.checkDone();
-  },
-  checkDone: function() {
-    if (!this.inflight) {
-      this.oncomplete();
-    }
-  }
-};
-
-var path = {
-  nodeUrl: function(inNode) {
-    return path.resolveUrl(path.getDocumentUrl(document), path.hrefOrSrc(inNode));
-  },
-  hrefOrSrc: function(inNode) {
-    return inNode.getAttribute("href") || inNode.getAttribute("src");
-  },
-  documentUrlFromNode: function(inNode) {
-    var url = path.getDocumentUrl(inNode.ownerDocument);
-    // take only the left side if there is a #
-    url = url.split('#')[0];
-    return url;
-  },
-  getDocumentUrl: function(inDocument) {
-    return inDocument &&
-        // TODO(sjmiles): ShadowDOMPolyfill intrusion
-        (inDocument._URL || (inDocument.impl && inDocument.impl._URL)
-            || inDocument.baseURI || inDocument.URL)
-                || '';
-  },
-  resolveUrl: function(inBaseUrl, inUrl, inRelativeToDocument) {
-    if (this.isAbsUrl(inUrl)) {
-      return inUrl;
-    }
-    var url = this.compressUrl(this.urlToPath(inBaseUrl) + inUrl);
-    if (inRelativeToDocument) {
-      url = path.makeRelPath(path.getDocumentUrl(document), url);
-    }
-    return url;
-  },
-  isAbsUrl: function(inUrl) {
-    return /(^data:)|(^http[s]?:)|(^\/)/.test(inUrl);
-  },
-  urlToPath: function(inBaseUrl) {
-    var parts = inBaseUrl.split("/");
-    parts.pop();
-    parts.push('');
-    return parts.join("/");
-  },
-  compressUrl: function(inUrl) {
-    var parts = inUrl.split("/");
-    for (var i=0, p; i<parts.length; i++) {
-      p = parts[i];
-      if (p === "..") {
-        parts.splice(i-1, 2);
-        i -= 2;
-      }
-    }
-    return parts.join("/");
-  },
-  // make a relative path from source to target
-  makeRelPath: function(inSource, inTarget) {
-    var s, t;
-    s = this.compressUrl(inSource).split("/");
-    t = this.compressUrl(inTarget).split("/");
-    while (s.length && s[0] === t[0]){
-      s.shift();
-      t.shift();
-    }
-    for(var i = 0, l = s.length-1; i < l; i++) {
-      t.unshift("..");
-    }
-    var r = t.join("/");
-    return r;
-  },
-  resolvePathsInHTML: function(inRoot) {
-    var docUrl = path.documentUrlFromNode(inRoot.body);
-    // TODO(sorvell): MDV Polyfill Intrusion
-    if (window.HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
-      HTMLTemplateElement.bootstrap(inRoot);
-    }
-    var node = inRoot.body;
-    path._resolvePathsInHTML(node, docUrl);
-  },
-  _resolvePathsInHTML: function(inRoot, inUrl) {
-    path.resolveAttributes(inRoot, inUrl);
-    path.resolveStyleElts(inRoot, inUrl);
-    // handle templates, if supported
-    if (window.templateContent) {
-      var templates = inRoot.querySelectorAll('template');
-      if (templates) {
-        forEach(templates, function(t) {
-          path._resolvePathsInHTML(templateContent(t), inUrl);
-        });
-      }
-    }
-  },
-  resolvePathsInStylesheet: function(inSheet) {
-    var docUrl = path.nodeUrl(inSheet);
-    inSheet.__resource = path.resolveCssText(inSheet.__resource, docUrl);
-  },
-  resolveStyleElts: function(inRoot, inUrl) {
-    var styles = inRoot.querySelectorAll('style');
-    if (styles) {
-      forEach(styles, function(style) {
-        style.textContent = path.resolveCssText(style.textContent, inUrl);
-      });
-    }
-  },
-  resolveCssText: function(inCssText, inBaseUrl) {
-    return inCssText.replace(/url\([^)]*\)/g, function(inMatch) {
-      // find the url path, ignore quotes in url string
-      var urlPath = inMatch.replace(/["']/g, "").slice(4, -1);
-      urlPath = path.resolveUrl(inBaseUrl, urlPath, true);
-      return "url(" + urlPath + ")";
-    });
-  },
-  resolveAttributes: function(inRoot, inUrl) {
-    // search for attributes that host urls
-    var nodes = inRoot && inRoot.querySelectorAll(URL_ATTRS_SELECTOR);
-    if (nodes) {
-      forEach(nodes, function(n) {
-        this.resolveNodeAttributes(n, inUrl);
-      }, this);
-    }
-  },
-  resolveNodeAttributes: function(inNode, inUrl) {
-    URL_ATTRS.forEach(function(v) {
-      var attr = inNode.attributes[v];
-      if (attr && attr.value &&
-         (attr.value.search(URL_TEMPLATE_SEARCH) < 0)) {
-        var urlPath = path.resolveUrl(inUrl, attr.value, true);
-        attr.value = urlPath;
-      }
-    });
-  }
-};
-
-var URL_ATTRS = ['href', 'src', 'action'];
-var URL_ATTRS_SELECTOR = '[' + URL_ATTRS.join('],[') + ']';
-var URL_TEMPLATE_SEARCH = '{{.*}}';
-
-var xhr = {
-  async: true,
-  ok: function(inRequest) {
-    return (inRequest.status >= 200 && inRequest.status < 300)
-        || (inRequest.status === 304);
-  },
-  load: function(url, next, nextContext) {
-    var request = new XMLHttpRequest();
-    if (scope.flags.debug || scope.flags.bust) {
-      url += '?' + Math.random();
-    }
-    request.open('GET', url, xhr.async);
-    request.addEventListener('readystatechange', function(e) {
-      if (request.readyState === 4) {
-        next.call(nextContext, !xhr.ok(request) && request,
-          request.response, url);
-      }
-    });
-    request.send();
-  }
-};
-
-var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
-
-// exports
-
-scope.importer = importer;
-scope.getDocumentUrl = path.getDocumentUrl;
-
-// bootstrap
-
-// IE shim for CustomEvent
-if (typeof window.CustomEvent !== 'function') {
-  window.CustomEvent = function(inType) {
-     var e = document.createEvent('HTMLEvents');
-     e.initEvent(inType, true, true);
-     return e;
-  };
-}
-
-window.addEventListener('load', function() {
-  // preload document resource trees
-  importer.load(document, function() {
-    // TODO(sjmiles): ShadowDOM polyfill pollution
-    var doc = window.ShadowDOMPolyfill ? ShadowDOMPolyfill.wrap(document)
-        : document;
-    HTMLImports.readyTime = new Date().getTime();
-    // send HTMLImportsLoaded when finished
-    doc.body.dispatchEvent(
-      new CustomEvent('HTMLImportsLoaded', {bubbles: true})
-    );
-  });
-});
-
-})(window.HTMLImports);
 
 /*
  * Copyright 2012 The Polymer Authors. All rights reserved.
@@ -1262,16 +790,16 @@ function register(inName, inOptions) {
   // some platforms require modifications to the user-supplied prototype
   // chain
   resolvePrototypeChain(definition);
-  // overrides to implement callbacks
-  // TODO(sjmiles): should support access via .attributes NamedNodeMap
-  definition.prototype.setAttribute = setAttribute;
-  definition.prototype.removeAttribute = removeAttribute;
+  // overrides to implement attributeChanged callback
+  overrideAttributeApi(definition.prototype);
   // 7.1.5: Register the DEFINITION with DOCUMENT
   registerDefinition(inName, definition);
   // 7.1.7. Run custom element constructor generation algorithm with PROTOTYPE
   // 7.1.8. Return the output of the previous step.
   definition.ctor = generateConstructor(definition);
   definition.ctor.prototype = definition.prototype;
+  // force our .constructor to be our actual constructor
+  definition.prototype.constructor = definition.ctor;
   // if initial parsing is complete
   if (scope.ready) {
     // upgrade any pre-existing nodes of this type
@@ -1309,13 +837,12 @@ function resolvePrototypeChain(inDefinition) {
   // if we don't support __proto__ we need to locate the native level
   // prototype for precise mixing in
   if (!Object.__proto__) {
+    // default prototype
+    var native = HTMLElement.prototype;
+    // work out prototype when using type-extension
     if (inDefinition.is) {
-      // for non-trivial extensions, work out both prototypes
       var inst = document.createElement(inDefinition.tag);
-      var native = Object.getPrototypeOf(inst);
-    } else {
-      // otherwise, use the default
-      native = HTMLElement.prototype;
+      native = Object.getPrototypeOf(inst);
     }
   }
   // cache this in case of mixin
@@ -1398,15 +925,18 @@ function ready(inElement) {
 
 // attribute watching
 
-var originalSetAttribute = HTMLElement.prototype.setAttribute;
-var originalRemoveAttribute = HTMLElement.prototype.removeAttribute;
-
-function setAttribute(name, value) {
-  changeAttribute.call(this, name, value, originalSetAttribute);
-}
-
-function removeAttribute(name, value) {
-  changeAttribute.call(this, name, value, originalRemoveAttribute);
+function overrideAttributeApi(prototype) {
+  // overrides to implement callbacks
+  // TODO(sjmiles): should support access via .attributes NamedNodeMap
+  // TODO(sjmiles): preserves user defined overrides, if any
+  var setAttribute = prototype.setAttribute;
+  prototype.setAttribute = function(name, value) {
+    changeAttribute.call(this, name, value, setAttribute);
+  }
+  var removeAttribute = prototype.removeAttribute;
+  prototype.removeAttribute = function(name, value) {
+    changeAttribute.call(this, name, value, removeAttribute);
+  }
 }
 
 function changeAttribute(name, value, operation) {
@@ -1447,14 +977,27 @@ function upgradeElement(inElement) {
     return definition && upgrade(inElement, definition);
   }
 }
+
+function cloneNode(deep) {
+  // call original clone
+  var n = domCloneNode.call(this, deep);
+  // upgrade the element and subtree
+  scope.upgradeAll(n);
+  return n;
+}
 // capture native createElement before we override it
 
 var domCreateElement = document.createElement.bind(document);
+
+// capture native cloneNode before we override it
+
+var domCloneNode = Node.prototype.cloneNode;
 
 // exports
 
 document.register = register;
 document.createElement = createElement; // override
+Node.prototype.cloneNode = cloneNode; // override
 
 scope.registry = registry;
 
@@ -1767,7 +1310,7 @@ scope.takeRecords = takeRecords;
  */
 
 (function(){
-  
+
 var HTMLElementElement = function(inElement) {
   inElement.register = HTMLElementElement.prototype.register;
   parseElementElement(inElement);
@@ -1811,7 +1354,7 @@ function parseElementElement(inElement) {
   // install options
   inElement.options = options;
   // locate user script
-  var script = inElement.querySelector('script,scripts');
+  var script = inElement.querySelector('script:not([type]),script[type="text/javascript"],scripts');
   if (script) {
     // execute user script in 'inElement' context
     executeComponentScript(script.textContent, inElement, options.name);
@@ -1825,7 +1368,7 @@ function parseElementElement(inElement) {
     window[refName] = ctor;
   }
 }
-  
+
 // each property in inDictionary takes a value
 // from the matching attribute in inElement, if any
 function takeAttributes(inElement, inDictionary) {
@@ -1843,7 +1386,7 @@ function executeComponentScript(inScript, inContext, inName) {
   context = inContext;
   // source location
   var owner = context.ownerDocument;
-  var url = (owner._URL || owner.URL || owner.impl 
+  var url = (owner._URL || owner.URL || owner.impl
       && (owner.impl._URL || owner.impl.URL));
   // ensure the component has a unique source map so it can be debugged
   // if the name matches the filename part of the owning document's url,
@@ -1859,7 +1402,7 @@ function executeComponentScript(inScript, inContext, inName) {
     + "', function(){"
     + inScript
     + "});"
-    + "\n//@ sourceURL=" + url + "\n"
+    + "\n//# sourceURL=" + url + "\n"
   ;
   // inject script
   eval(code);
@@ -1874,41 +1417,24 @@ window.__componentScript = function(inName, inFunc) {
 
 // utility
 
-// copy all properties from inProps (et al) to inObj
-function mixin(inObj/*, inProps, inMoreProps, ...*/) {
-  var obj = inObj || {};
-  for (var i = 1; i < arguments.length; i++) {
-    var p = arguments[i];
-    try {
-      for (var n in p) {
-        copyProperty(n, p, obj);
+// copy top level properties from props to obj
+function mixin(obj, props) {
+  obj = obj || {};
+  try {
+    Object.getOwnPropertyNames(props).forEach(function(n) {
+      var pd = Object.getOwnPropertyDescriptor(props, n);
+      if (pd) {
+        Object.defineProperty(obj, n, pd);
       }
-    } catch(x) {
-    }
+    });
+  } catch(x) {
   }
   return obj;
-}
-
-// copy property inName from inSource object to inTarget object
-function copyProperty(inName, inSource, inTarget) {
-  var pd = getPropertyDescriptor(inSource, inName);
-  Object.defineProperty(inTarget, inName, pd);
-}
-
-// get property descriptor for inName on inObject, even if
-// inName exists on some link in inObject's prototype chain
-function getPropertyDescriptor(inObject, inName) {
-  if (inObject) {
-    var pd = Object.getOwnPropertyDescriptor(inObject, inName);
-    return pd || getPropertyDescriptor(Object.getPrototypeOf(inObject), inName);
-  }
 }
 
 // exports
 
 window.HTMLElementElement = HTMLElementElement;
-// TODO(sjmiles): completely ad-hoc, used by Polymer.register
-window.mixin = mixin;
 
 })();
 
@@ -1918,109 +1444,511 @@ window.mixin = mixin;
  * license that can be found in the LICENSE file.
  */
 
-(function() {
+(function(scope) {
+
+if (!scope) {
+  scope = window.HTMLImports = {flags:{}};
+}
+
+// imports
+
+var xhr = scope.xhr;
+
+// importer
 
 var IMPORT_LINK_TYPE = 'import';
+var STYLE_LINK_TYPE = 'stylesheet';
 
-// highlander object for parsing a document tree
+// highlander object represents a primary document (the argument to 'load')
+// at the root of a tree of documents
 
-var componentParser = {
-  selectors: [
+// for any document, importer:
+// - loads any linked documents (with deduping), modifies paths and feeds them back into importer
+// - loads text of external script tags
+// - loads text of external style tags inside of <element>, modifies paths
+
+// when importer 'modifies paths' in a document, this includes
+// - href/src/action in node attributes
+// - paths in inline stylesheets
+// - all content inside templates
+
+// linked style sheets in an import have their own path fixed up when their containing import modifies paths
+// linked style sheets in an <element> are loaded, and the content gets path fixups
+// inline style sheets get path fixups when their containing import modifies paths
+
+var importer = {
+  documents: {},
+  cache: {},
+  preloadSelectors: [
     'link[rel=' + IMPORT_LINK_TYPE + ']',
-    'link[rel=stylesheet]',
+    'element link[rel=' + STYLE_LINK_TYPE + ']',
+    'template',
     'script[src]',
-    'script',
-    'style',
-    'element'
-  ],
-  map: {
-    link: 'parseLink',
-    script: 'parseScript',
-    element: 'parseElement',
-    style: 'parseStyle'
+    'script:not([type])',
+    'script[type="text/javascript"]'
+  ].join(','),
+  loader: function(inNext) {
+    // construct a loader instance
+    loader = new Loader(importer.loaded, inNext);
+    // alias the loader cache (for debugging)
+    loader.cache = importer.cache;
+    return loader;
   },
-  parse: function(inDocument) {
-    if (!inDocument.__parsed) {
-      // only parse once
-      inDocument.__parsed = true;
-      // all parsable elements in inDocument (depth-first pre-order traversal)
-      var elts = inDocument.querySelectorAll(cp.selectors);
-      // for each parsable node type, call the mapped parsing method
-      forEach(elts, function(e) {
-        //console.log(map[e.localName] + ":", path.nodeUrl(e));
-        cp[cp.map[e.localName]](e);
+  load: function(inDocument, inNext) {
+    // construct a loader instance
+    loader = importer.loader(inNext);
+    // add nodes from document into loader queue
+    importer.preload(inDocument);
+  },
+  preload: function(inDocument) {
+    // all preloadable nodes in inDocument
+    var nodes = inDocument.querySelectorAll(importer.preloadSelectors);
+    // from the main document, only load imports
+    // TODO(sjmiles): do this by altering the selector list instead
+    nodes = this.filterMainDocumentNodes(inDocument, nodes);
+    // extra link nodes from templates, filter templates out of the nodes list
+    nodes = this.extractTemplateNodes(nodes);
+    // add these nodes to loader's queue
+    loader.addNodes(nodes);
+  },
+  filterMainDocumentNodes: function(inDocument, nodes) {
+    if (inDocument === document) {
+      nodes = Array.prototype.filter.call(nodes, function(n) {
+        return !isScript(n);
       });
-      // upgrade all upgradeable static elements, anything dynamically
-      // created should be caught by observer
-      CustomElements.upgradeDocument(inDocument);
-      // observe document for dom changes
-      CustomElements.observeDocument(inDocument);
     }
+    return nodes;
   },
-  parseLink: function(inLinkElt) {
-    // imports
-    if (isDocumentLink(inLinkElt)) {
-      if (inLinkElt.content) {
-        cp.parse(inLinkElt.content);
+  extractTemplateNodes: function(nodes) {
+    var extra = [];
+    nodes = Array.prototype.filter.call(nodes, function(n) {
+      if (n.localName === 'template') {
+        if (n.content) {
+          var l$ = n.content.querySelectorAll('link[rel=' + STYLE_LINK_TYPE +
+            ']');
+          if (l$.length) {
+            extra = extra.concat(Array.prototype.slice.call(l$, 0));
+          }
+        }
+        return false;
       }
-    } else if (!inMainDocument(inLinkElt)
-        && inLinkElt.parentNode
-        && !isElementElementChild(inLinkElt)) {
-      document.head.appendChild(inLinkElt);
+      return true;
+    });
+    if (extra.length) {
+      nodes = nodes.concat(extra);
     }
+    return nodes;
   },
-  parseScript: function(inScriptElt) {
-    // ignore scripts in primary document, they are already loaded
-    if (inMainDocument(inScriptElt)) {
-      return;
+  loaded: function(url, elt, resource) {
+    if (isDocumentLink(elt)) {
+      var document = importer.documents[url];
+      // if we've never seen a document at this url
+      if (!document) {
+        // generate an HTMLDocument from data
+        document = makeDocument(resource, url);
+        // resolve resource paths relative to host document
+        path.resolvePathsInHTML(document.body);
+        // cache document
+        importer.documents[url] = document;
+        // add nodes from this document to the loader queue
+        importer.preload(document);
+      }
+      // store import record
+      elt.import = {
+        href: url,
+        ownerNode: elt,
+        content: document
+      };
+      // store document resource
+      elt.content = resource = document;
     }
-    // ignore scripts inside <element>
-    if (isElementElementChild(inScriptElt)) {
-      return;
+    // store generic resource
+    // TODO(sorvell): fails for nodes inside <template>.content
+    // see https://code.google.com/p/chromium/issues/detail?id=249381.
+    elt.__resource = resource;
+    // css path fixups
+    if (isStylesheetLink(elt)) {
+      path.resolvePathsInStylesheet(elt);
     }
-    // otherwise, evaluate now
-    var code = inScriptElt.__resource || inScriptElt.textContent;
-    if (code) {
-      code += "\n//@ sourceURL=" + inScriptElt.__nodeUrl + "\n";
-      eval.call(window, code);
-    }
-  },
-  parseStyle: function(inStyleElt) {
-    if (!inMainDocument(inStyleElt) && !isElementElementChild(inStyleElt)) {
-      document.querySelector('head').appendChild(inStyleElt);
-    }
-  },
-  parseElement: function(inElementElt) {
-    new HTMLElementElement(inElementElt);
   }
 };
 
-var cp = componentParser;
-
-function inMainDocument(inElt) {
-  return inElt.ownerDocument === document ||
-    // TODO(sjmiles): ShadowDOMPolyfill intrusion
-    inElt.ownerDocument.impl === document;
+function isDocumentLink(elt) {
+  return isLinkRel(elt, IMPORT_LINK_TYPE);
 }
 
-function isDocumentLink(inElt) {
-  return (inElt.localName === 'link'
-      && inElt.getAttribute('rel') === IMPORT_LINK_TYPE);
+function isStylesheetLink(elt) {
+  return isLinkRel(elt, STYLE_LINK_TYPE);
 }
 
-function isElementElementChild(inElt) {
-  if (inElt.parentNode && inElt.parentNode.localName === 'element') {
-    return true;
+function isLinkRel(elt, rel) {
+  return elt.localName === 'link' && elt.getAttribute('rel') === rel;
+}
+
+function isScript(elt) {
+  return elt.localName === 'script';
+}
+
+function makeDocument(inHTML, inUrl) {
+  // create a new HTML document
+  var doc = document.implementation.createHTMLDocument(IMPORT_LINK_TYPE);
+  // cache the new document's source url
+  doc._URL = inUrl;
+  // establish a relative path via <base>
+  var base = doc.createElement('base');
+  base.setAttribute('href', document.baseURI);
+  doc.head.appendChild(base);
+  // install html
+  doc.body.innerHTML = inHTML;
+  // TODO(sorvell): MDV Polyfill intrusion: boostrap template polyfill
+  if (window.HTMLTemplateElement && HTMLTemplateElement.bootstrap) {
+    HTMLTemplateElement.bootstrap(doc);
   }
+  return doc;
 }
+
+var loader;
+
+var Loader = function(inOnLoad, inOnComplete) {
+  this.onload = inOnLoad;
+  this.oncomplete = inOnComplete;
+  this.inflight = 0;
+  this.pending = {};
+  this.cache = {};
+};
+
+Loader.prototype = {
+  addNodes: function(inNodes) {
+    // number of transactions to complete
+    this.inflight += inNodes.length;
+    // commence transactions
+    forEach(inNodes, this.require, this);
+    // anything to do?
+    this.checkDone();
+  },
+  require: function(inElt) {
+    var url = path.nodeUrl(inElt);
+    // TODO(sjmiles): ad-hoc
+    inElt.__nodeUrl = url;
+    // deduplication
+    if (!this.dedupe(url, inElt)) {
+      // fetch this resource
+      this.fetch(url, inElt);
+    }
+  },
+  dedupe: function(inUrl, inElt) {
+    if (this.pending[inUrl]) {
+      // add to list of nodes waiting for inUrl
+      this.pending[inUrl].push(inElt);
+      // don't need fetch
+      return true;
+    }
+    if (this.cache[inUrl]) {
+      // complete load using cache data
+      this.onload(inUrl, inElt, loader.cache[inUrl]);
+      // finished this transaction
+      this.tail();
+      // don't need fetch
+      return true;
+    }
+    // first node waiting for inUrl
+    this.pending[inUrl] = [inElt];
+    // need fetch (not a dupe)
+    return false;
+  },
+  fetch: function(url, elt) {
+    var receiveXhr = function(err, resource) {
+      this.receive(url, elt, err, resource);
+    }.bind(this);
+    xhr.load(url, receiveXhr);
+  },
+  receive: function(inUrl, inElt, inErr, inResource) {
+    if (!inErr) {
+      loader.cache[inUrl] = inResource;
+    }
+    loader.pending[inUrl].forEach(function(e) {
+      if (!inErr) {
+        this.onload(inUrl, e, inResource);
+      }
+      this.tail();
+    }, this);
+    loader.pending[inUrl] = null;
+  },
+  tail: function() {
+    --this.inflight;
+    this.checkDone();
+  },
+  checkDone: function() {
+    if (!this.inflight) {
+      this.oncomplete();
+    }
+  }
+};
+
+var URL_ATTRS = ['href', 'src', 'action'];
+var URL_ATTRS_SELECTOR = '[' + URL_ATTRS.join('],[') + ']';
+var URL_TEMPLATE_SEARCH = '{{.*}}';
+
+var path = {
+  nodeUrl: function(inNode) {
+    return path.resolveUrl(path.getDocumentUrl(document), path.hrefOrSrc(inNode));
+  },
+  hrefOrSrc: function(inNode) {
+    return inNode.getAttribute("href") || inNode.getAttribute("src");
+  },
+  documentUrlFromNode: function(inNode) {
+    return path.getDocumentUrl(inNode.ownerDocument);
+  },
+  getDocumentUrl: function(inDocument) {
+    var url = inDocument &&
+        // TODO(sjmiles): ShadowDOMPolyfill intrusion
+        (inDocument._URL || (inDocument.impl && inDocument.impl._URL)
+            || inDocument.baseURI || inDocument.URL)
+                || '';
+    // take only the left side if there is a #
+    return url.split('#')[0];
+  },
+  resolveUrl: function(inBaseUrl, inUrl, inRelativeToDocument) {
+    if (this.isAbsUrl(inUrl)) {
+      return inUrl;
+    }
+    var url = this.compressUrl(this.urlToPath(inBaseUrl) + inUrl);
+    if (inRelativeToDocument) {
+      url = path.makeRelPath(path.getDocumentUrl(document), url);
+    }
+    return url;
+  },
+  isAbsUrl: function(inUrl) {
+    return /(^data:)|(^http[s]?:)|(^\/)/.test(inUrl);
+  },
+  urlToPath: function(inBaseUrl) {
+    var parts = inBaseUrl.split("/");
+    parts.pop();
+    parts.push('');
+    return parts.join("/");
+  },
+  compressUrl: function(inUrl) {
+    var parts = inUrl.split("/");
+    for (var i=0, p; i<parts.length; i++) {
+      p = parts[i];
+      if (p === "..") {
+        parts.splice(i-1, 2);
+        i -= 2;
+      }
+    }
+    return parts.join("/");
+  },
+  // make a relative path from source to target
+  makeRelPath: function(inSource, inTarget) {
+    var s, t;
+    s = this.compressUrl(inSource).split("/");
+    t = this.compressUrl(inTarget).split("/");
+    while (s.length && s[0] === t[0]){
+      s.shift();
+      t.shift();
+    }
+    for(var i = 0, l = s.length-1; i < l; i++) {
+      t.unshift("..");
+    }
+    var r = t.join("/");
+    return r;
+  },
+  resolvePathsInHTML: function(root, url) {
+    url = url || path.documentUrlFromNode(root)
+    path.resolveAttributes(root, url);
+    path.resolveStyleElts(root, url);
+    // handle template.content
+    var templates = root.querySelectorAll('template');
+    if (templates) {
+      forEach(templates, function(t) {
+        if (t.content) {
+          path.resolvePathsInHTML(t.content, url);
+        }
+      });
+    }
+  },
+  resolvePathsInStylesheet: function(inSheet) {
+    var docUrl = path.nodeUrl(inSheet);
+    inSheet.__resource = path.resolveCssText(inSheet.__resource, docUrl);
+  },
+  resolveStyleElts: function(inRoot, inUrl) {
+    var styles = inRoot.querySelectorAll('style');
+    if (styles) {
+      forEach(styles, function(style) {
+        style.textContent = path.resolveCssText(style.textContent, inUrl);
+      });
+    }
+  },
+  resolveCssText: function(inCssText, inBaseUrl) {
+    return inCssText.replace(/url\([^)]*\)/g, function(inMatch) {
+      // find the url path, ignore quotes in url string
+      var urlPath = inMatch.replace(/["']/g, "").slice(4, -1);
+      urlPath = path.resolveUrl(inBaseUrl, urlPath, true);
+      return "url(" + urlPath + ")";
+    });
+  },
+  resolveAttributes: function(inRoot, inUrl) {
+    // search for attributes that host urls
+    var nodes = inRoot && inRoot.querySelectorAll(URL_ATTRS_SELECTOR);
+    if (nodes) {
+      forEach(nodes, function(n) {
+        this.resolveNodeAttributes(n, inUrl);
+      }, this);
+    }
+  },
+  resolveNodeAttributes: function(inNode, inUrl) {
+    URL_ATTRS.forEach(function(v) {
+      var attr = inNode.attributes[v];
+      if (attr && attr.value &&
+         (attr.value.search(URL_TEMPLATE_SEARCH) < 0)) {
+        var urlPath = path.resolveUrl(inUrl, attr.value, true);
+        attr.value = urlPath;
+      }
+    });
+  }
+};
+
+xhr = xhr || {
+  async: true,
+  ok: function(inRequest) {
+    return (inRequest.status >= 200 && inRequest.status < 300)
+        || (inRequest.status === 304)
+        || (inRequest.status === 0);
+  },
+  load: function(url, next, nextContext) {
+    var request = new XMLHttpRequest();
+    if (scope.flags.debug || scope.flags.bust) {
+      url += '?' + Math.random();
+    }
+    request.open('GET', url, xhr.async);
+    request.addEventListener('readystatechange', function(e) {
+      if (request.readyState === 4) {
+        next.call(nextContext, !xhr.ok(request) && request,
+          request.response, url);
+      }
+    });
+    request.send();
+  }
+};
 
 var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
 
 // exports
 
-CustomElements.parser = componentParser;
+scope.path = path;
+scope.xhr = xhr;
+scope.importer = importer;
+scope.getDocumentUrl = path.getDocumentUrl;
+scope.IMPORT_LINK_TYPE = IMPORT_LINK_TYPE;
 
-})();
+})(window.HTMLImports);
+
+/*
+ * Copyright 2013 The Polymer Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+(function(scope) {
+
+var IMPORT_LINK_TYPE = 'import';
+
+// highlander object for parsing a document tree
+
+var importParser = {
+  selectors: [
+    'link[rel=' + IMPORT_LINK_TYPE + ']',
+    'link[rel=stylesheet]',
+    'style',
+    'script'
+  ],
+  map: {
+    link: 'parseLink',
+    script: 'parseScript',
+    style: 'parseGeneric'
+  },
+  parse: function(inDocument) {
+    if (!inDocument.__importParsed) {
+      // only parse once
+      inDocument.__importParsed = true;
+      // all parsable elements in inDocument (depth-first pre-order traversal)
+      var elts = inDocument.querySelectorAll(importParser.selectors);
+      // for each parsable node type, call the mapped parsing method
+      forEach(elts, function(e) {
+        importParser[importParser.map[e.localName]](e);
+      });
+    }
+  },
+  parseLink: function(linkElt) {
+    if (isDocumentLink(linkElt)) {
+      if (linkElt.content) {
+        importParser.parse(linkElt.content);
+      }
+    } else {
+      this.parseGeneric(linkElt);
+    }
+  },
+  parseGeneric: function(elt) {
+    if (needsMainDocumentContext(elt)) {
+      document.head.appendChild(elt);
+    }
+  },
+  parseScript: function(scriptElt) {
+    if (needsMainDocumentContext(scriptElt)) {
+      // acquire code to execute
+      var code = (scriptElt.__resource || scriptElt.textContent).trim();
+      if (code) {
+        // calculate source map hint
+        var moniker = scriptElt.__nodeUrl;
+        if (!moniker) {
+          var moniker = scope.path.documentUrlFromNode(scriptElt);
+          // there could be more than one script this url
+          var tag = '[' + Math.floor((Math.random()+1)*1000) + ']';
+          // TODO(sjmiles): Polymer hack, should be pluggable if we need to allow 
+          // this sort of thing
+          var matches = code.match(/Polymer\(['"]([^'"]*)/);
+          tag = matches && matches[1] || tag;
+          // tag the moniker
+          moniker += '/' + tag + '.js';
+        }
+        // source map hint
+        code += "\n//# sourceURL=" + moniker + "\n";
+        // evaluate the code
+        eval.call(window, code);
+      }
+    }
+  }
+};
+
+var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
+
+function isDocumentLink(elt) {
+  return elt.localName === 'link'
+      && elt.getAttribute('rel') === IMPORT_LINK_TYPE;
+}
+
+function needsMainDocumentContext(node) {
+  // nodes can be moved to the main document:
+  // if they are in a tree but not in the main document and not children of <element>
+  return node.parentNode && !inMainDocument(node) 
+      && !isElementElementChild(node);
+}
+
+function inMainDocument(elt) {
+  return elt.ownerDocument === document ||
+    // TODO(sjmiles): ShadowDOMPolyfill intrusion
+    elt.ownerDocument.impl === document;
+}
+
+function isElementElementChild(elt) {
+  return elt.parentNode && elt.parentNode.localName === 'element';
+}
+
+// exports
+
+scope.parser = importParser;
+
+})(HTMLImports);
 /*
  * Copyright 2013 The Polymer Authors. All rights reserved.
  * Use of this source code is governed by a BSD-style
@@ -2028,7 +1956,7 @@ CustomElements.parser = componentParser;
  */
 (function(){
 
-// bootstrap parsing
+// bootstrap
 
 // IE shim for CustomEvent
 if (typeof window.CustomEvent !== 'function') {
@@ -2040,30 +1968,21 @@ if (typeof window.CustomEvent !== 'function') {
 }
 
 function bootstrap() {
-  // go async so call stack can unwind
-  setTimeout(function() {
-    // parse document
-    CustomElements.parser.parse(document);
-    // set internal flag
-    CustomElements.ready = true;
-    CustomElements.readyTime = new Date().getTime();
-    if (window.HTMLImports) {
-      CustomElements.elapsed = CustomElements.readyTime - HTMLImports.readyTime;
-    }
-    // notify system
-    document.body.dispatchEvent(
-      new CustomEvent('WebComponentsReady', {bubbles: true})
+  // preload document resource trees
+  HTMLImports.importer.load(document, function() {
+    HTMLImports.parser.parse(document);
+    HTMLImports.readyTime = new Date().getTime();
+    // send HTMLImportsLoaded when finished
+    document.dispatchEvent(
+      new CustomEvent('HTMLImportsLoaded', {bubbles: true})
     );
-  }, 0);
-}
+  });
+};
 
-// TODO(sjmiles): 'window' has no wrappability under ShadowDOM polyfill, so
-// we are forced to split into two versions
-
-if (window.HTMLImports) {
-  document.addEventListener('HTMLImportsLoaded', bootstrap);
+if (document.readyState === 'complete') {
+  bootstrap();
 } else {
-  window.addEventListener('load', bootstrap);
+  window.addEventListener('DOMContentLoaded', bootstrap);
 }
 
 })();
@@ -2073,36 +1992,114 @@ if (window.HTMLImports) {
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
+
 (function() {
 
-// inject style sheet
-document.write('<style>element {display: none;} /* injected by platform.js */</style>');
+// import
 
-if (window.ShadowDOMPolyfill) {
+var IMPORT_LINK_TYPE = window.HTMLImports ? HTMLImports.IMPORT_LINK_TYPE : 'none';
 
-  function nop() {};
+// highlander object for parsing a document tree
 
-  // disable shadow dom watching
-  CustomElements.watchShadow = nop;
-  CustomElements.watchAllShadows = nop;
+var parser = {
+  selectors: [
+    'link[rel=' + IMPORT_LINK_TYPE + ']',
+    'element'
+  ],
+  map: {
+    link: 'parseLink',
+    element: 'parseElement'
+  },
+  parse: function(inDocument) {
+    if (!inDocument.__parsed) {
+      // only parse once
+      inDocument.__parsed = true;
+      // all parsable elements in inDocument (depth-first pre-order traversal)
+      var elts = inDocument.querySelectorAll(parser.selectors);
+      // for each parsable node type, call the mapped parsing method
+      forEach(elts, function(e) {
+        parser[parser.map[e.localName]](e);
+      });
+      // upgrade all upgradeable static elements, anything dynamically
+      // created should be caught by observer
+      CustomElements.upgradeDocument(inDocument);
+      // observe document for dom changes
+      CustomElements.observeDocument(inDocument);
+    }
+  },
+  parseLink: function(linkElt) {
+    // imports
+    if (isDocumentLink(linkElt)) {
+      this.parseImport(linkElt);
+    }
+  },
+  parseImport: function(linkElt) {
+    if (linkElt.content) {
+      parser.parse(linkElt.content);
+    }
+  },
+  parseElement: function(inElementElt) {
+    new HTMLElementElement(inElementElt);
+  }
+};
 
-  // ensure wrapped inputs for these functions
-  var fns = ['upgradeAll', 'upgradeSubtree', 'observeDocument',
-      'upgradeDocument'];
+function isDocumentLink(inElt) {
+  return (inElt.localName === 'link'
+      && inElt.getAttribute('rel') === IMPORT_LINK_TYPE);
+}
 
-  // cache originals
-  var original = {};
-  fns.forEach(function(fn) {
-    original[fn] = CustomElements[fn];
-  });
+var forEach = Array.prototype.forEach.call.bind(Array.prototype.forEach);
 
-  // override
-  fns.forEach(function(fn) {
-    CustomElements[fn] = function(inNode) {
-      return original[fn](wrap(inNode));
-    };
-  });
+// exports
 
+CustomElements.parser = parser;
+
+})();
+/*
+ * Copyright 2013 The Polymer Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+(function(){
+
+// bootstrap parsing
+
+function bootstrap() {
+  // go async so call stack can unwind
+  setTimeout(function() {
+    // parse document
+    CustomElements.parser.parse(document);
+    // one more pass before register is 'live'
+    CustomElements.upgradeDocument(document);  
+    // set internal 'ready' flag, now document.register will trigger 
+    // synchronous upgrades
+    CustomElements.ready = true;
+    // capture blunt profiling data
+    CustomElements.readyTime = Date.now();
+    if (window.HTMLImports) {
+      CustomElements.elapsed = CustomElements.readyTime - HTMLImports.readyTime;
+    }
+    // notify the system that we are bootstrapped
+    document.body.dispatchEvent(
+      new CustomEvent('WebComponentsReady', {bubbles: true})
+    );
+  }, 0);
+}
+
+// CustomEvent shim for IE
+if (typeof window.CustomEvent !== 'function') {
+  window.CustomEvent = function(inType) {
+     var e = document.createEvent('HTMLEvents');
+     e.initEvent(inType, true, true);
+     return e;
+  };
+}
+
+if (document.readyState === 'complete') {
+  bootstrap();
+} else {
+  var loadEvent = window.HTMLImports ? 'HTMLImportsLoaded' : 'DOMContentLoaded';
+  window.addEventListener(loadEvent, bootstrap);
 }
 
 })();
@@ -2137,7 +2134,8 @@ if (window.ShadowDOMPolyfill) {
       };
 
     })(),
-    matchSelector = Element.prototype.matchesSelector || Element.prototype[prefix.lowercase + 'MatchesSelector'];
+    matchSelector = Element.prototype.matchesSelector || Element.prototype[prefix.lowercase + 'MatchesSelector'],
+    mutation = win.MutationObserver || win[prefix.js + 'MutationObserver'];
 
 /*** Functions ***/
 
@@ -2230,12 +2228,14 @@ if (window.ShadowDOMPolyfill) {
 // Events
 
   function touchFilter(custom, event) {
-    if (custom.listener.touched) {
-      return custom.listener.touched = false;
+    if (event.type.match('touch')){
+      custom.listener.touched = true;
     }
-    else if (event.type.match('touch')){
-     custom.listener.touched = true;
+    else if (custom.listener.touched && event.type.match('mouse')){
+      custom.listener.touched = false;
+      return false;
     }
+    return true;
   }
 
   function createFlowEvent(type) {
@@ -2271,10 +2271,10 @@ if (window.ShadowDOMPolyfill) {
         index = nodes.length;
     while (index--) nodes[index][method](name, value);
   }
-  
-  function updateTemplate(element, name, value){
-    if (element.template){
-      element.xtag.template.updateBindingValue(element, name, value);
+
+  function updateView(element, name, value){
+    if (element.__view__){
+      element.__view__.updateBindingValue(element, name, value);
     }
   }
 
@@ -2285,19 +2285,19 @@ if (window.ShadowDOMPolyfill) {
       tag.prototype[prop].get = xtag.applyPseudos(key.join(':'), accessor[z], tag.pseudos);
     }
     else if (type == 'set') {
-      key[0] = prop; 
+      key[0] = prop;
       var setter = tag.prototype[prop].set = xtag.applyPseudos(key.join(':'), attr ? function(value){
         this.xtag._skipSet = true;
         if (!this.xtag._skipAttr) modAttr(this, attr, name, value);
         if (this.xtag._skipAttr && attr.skip) delete this.xtag._skipAttr;
         accessor[z].call(this, attr.boolean ? !!value : value);
-        updateTemplate(this, name, value);
+        updateView(this, name, value);
         delete this.xtag._skipSet;
       } : accessor[z] ? function(value){
         accessor[z].call(this, value);
-        updateTemplate(this, name, value);
+        updateView(this, name, value);
       } : null, tag.pseudos);
-      
+
       if (attr) attr.setter = setter;
     }
     else tag.prototype[prop][z] = accessor[z];
@@ -2309,7 +2309,11 @@ if (window.ShadowDOMPolyfill) {
         attr = accessor.attribute,
         name = attr && attr.name ? attr.name.toLowerCase() : prop;
 
-    if (attr) tag.attributes[name] = attr;
+    if (attr) {
+      attr.key = prop;
+      tag.attributes[name] = attr;
+    }
+    
     for (var z in accessor) attachProperties(tag, prop, z, accessor, attr, name);
 
     if (attr) {
@@ -2321,7 +2325,7 @@ if (window.ShadowDOMPolyfill) {
       }
       if (!tag.prototype[prop].set) tag.prototype[prop].set = function(value){
         modAttr(this, attr, name, value);
-        updateTemplate(this, name, value);
+        updateView(this, name, value);
       };
     }
   }
@@ -2390,8 +2394,8 @@ if (window.ShadowDOMPolyfill) {
           for (var name in tag.attributes) {
             var attr = tag.attributes[name],
                 hasAttr = this.hasAttribute(name);
-            if (attr.setter && (attr.boolean || hasAttr)) {
-              attr.setter.call(this, attr.boolean ? hasAttr : this.getAttribute(name));
+            if (hasAttr || attr.boolean) {
+              this[attr.key] = attr.boolean ? hasAttr : this.getAttribute(name);
             }
           }
           tag.pseudos.forEach(function(obj){
@@ -2423,7 +2427,7 @@ if (window.ShadowDOMPolyfill) {
           delete this.xtag._skipAttr;
         }
       };
-      
+
       var removeAttribute = tag.prototype.removeAttribute || HTMLElement.prototype.removeAttribute;
       tag.prototype.removeAttribute = {
         writable: true,
@@ -2613,7 +2617,6 @@ if (window.ShadowDOMPolyfill) {
 
     toggleClass: function (element, klass) {
       return xtag[xtag.hasClass(element, klass) ? 'removeClass' : 'addClass'].call(null, element, klass);
-
     },
 
     queryChildren: function (element, selector) {

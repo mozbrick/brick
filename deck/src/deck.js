@@ -111,7 +111,7 @@
         * the default maximum cap on the number of states in the stack 
         **/
         "DEFAULT_CAP": {
-            value: 50
+            value: 10
         },
         /** itemCap
         *

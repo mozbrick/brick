@@ -465,6 +465,7 @@
                             this.xtag.polyFillSliderThumb = sliderThumb;
                             this.appendChild(sliderThumb);
                         }
+                        _redraw(this);
                         this.addEventListener("mousedown", 
                                               callbackFns.onMouseDragStart);
                         this.addEventListener("touchstart", 
@@ -517,7 +518,15 @@
                 attribute:{
                     selector: "input[type=range]"
                 },
-                set: function(){}
+                set: function(newName){
+                    var input = this.xtag.rangeInputEl;
+                    if(newName === null || newName === undefined){
+                        input.removeAttribute("name");
+                    }
+                    else{
+                        input.setAttribute("name", newName);
+                    }
+                }
             },
             // simple interface with the actual input element
             "value": {

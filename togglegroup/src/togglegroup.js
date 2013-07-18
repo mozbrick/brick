@@ -21,10 +21,20 @@
         },
         accessors: {
             "name": {
-                attribute: {}
+                attribute: {selector: "x-toggle"},
+                set: function(newName){
+                    this.options.forEach(function(toggle){
+                        toggle.name = newName;
+                    });
+                }
             },
             "group": {
-                attribute: {}
+                attribute: {selector: "x-toggle"},
+                set: function(newGroup){
+                    this.options.forEach(function(toggle){
+                        toggle.group = newGroup;
+                    });
+                }
             },
             "options": {
                 get: function(){

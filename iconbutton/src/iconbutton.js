@@ -106,7 +106,9 @@
                 updatePartsOrder(this);
                 updatePartsVisibility(this);
 
-                this.setAttribute("tabindex", 0);
+                if(!this.hasAttribute("tabindex")){
+                    this.setAttribute("tabindex", 0);
+                }
             },
             inserted: function() {
                 if(!DOC_LISTENER_FNS){

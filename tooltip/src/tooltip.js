@@ -23,6 +23,63 @@
         return orient in TIP_ORIENT_ARROW_DIR_MAP;
     }
     
+
+    /** getLeft: DOM element => Number
+
+    returns the absolute left X coordinate of the given element in relation to 
+    the document
+    **/
+    function getLeft(el) {
+        if(el.getBoundingClientRect){
+          var documentScrollLeft = (document.documentElement.scrollLeft ||
+                                    document.body.scrollLeft || 0);
+          return el.getBoundingClientRect().left + documentScrollLeft;
+        }
+        else if (el.offsetParent) {
+          return getLeft(el.offsetParent) + el.offsetLeft;
+        } else {
+          return el.offsetLeft;
+        }
+    }
+
+    /** getLeft: DOM element => Number
+
+    returns the absolute top Y coordinate of the given element in relation to 
+    the document
+    **/
+    function getTop(el) {
+        if(el.getBoundingClientRect){
+          var documentScrollTop = (document.documentElement.scrollTop ||
+                                   document.body.scrollTop || 0);
+          return el.getBoundingClientRect().top + documentScrollTop;
+        }
+        else if (el.offsetParent) {
+          return getTop(el.offsetParent) + el.offsetTop;
+        } else {
+          return el.offsetTop;
+        }   
+    }
+
+    /** getRect: DOM element => {top: number, left: number, 
+                                  right: number, bottom: number,
+                                  width: number, height: number}
+
+    returns the absolute metrics of the given DOM element in relation to the
+    document
+    **/
+    function getRect(el){
+        var baseRect = {
+            top: getTop(el),
+            left: getLeft(el),
+            width: el.offsetWidth,
+            height: el.offsetHeight,
+        };
+
+        baseRect.right = baseRect.left + baseRect.width;
+        baseRect.bottom = baseRect.top + baseRect.height;
+        return baseRect;
+    }
+
     
     /** CachedListener : (DOM, string, Function)
     * a simple struct to store all information needed to add and remove
@@ -634,9 +691,9 @@
                     rect.top <= y && y <= rect.bottom);
         };
         
-        // coords relative to window
-        var absCoordsA = elemA.getBoundingClientRect();
-        var absCoordsB = elemB.getBoundingClientRect();
+        // coords relative to document
+        var absCoordsA = getRect(elemA);
+        var absCoordsB = getRect(elemB);
         var rectA = {
             left: absCoordsA.left,
             top: absCoordsA.top,
@@ -753,7 +810,7 @@
             return;
         }
         
-        var offsetContainer = (tooltip.offsetParent) ? 
+        var tipContainer = (tooltip.offsetParent) ? 
                                 tooltip.offsetParent : tooltip.parentNode;
         
         // only position if NOT currently recursing to get a more stable
@@ -765,20 +822,21 @@
             arrow.style.left = "";
         }
         
-        // coordinates of the target element, relative to the window
-        var targetPageOffset = targetElem.getBoundingClientRect();
+        // coordinates of the target element, relative to the document
+        var targetPageOffset = getRect(targetElem);
         
-        // coordinates of the tooltip's container element, relative to the window
-        var containerPageOffset = offsetContainer.getBoundingClientRect();
-        
+        // coordinates of the tooltip's container element, relative to the document
+        var tipContainerPageOffset = getRect(tipContainer);
+        console.log(targetPageOffset, tipContainerPageOffset);
+        console.log(tipContainer.scrollTop, tipContainer.scrollLeft);
         // coordinates of the target element, relative to the tooltip's container
         var targetContainerOffset = {
-            "top": targetPageOffset.top - containerPageOffset.top + offsetContainer.scrollTop,
-            "left": targetPageOffset.left - containerPageOffset.left + offsetContainer.scrollLeft
+            "top": targetPageOffset.top - tipContainerPageOffset.top + tipContainer.scrollTop,
+            "left": targetPageOffset.left - tipContainerPageOffset.left + tipContainer.scrollLeft
         };
         
-        var containerWidth = offsetContainer.scrollWidth;
-        var containerHeight = offsetContainer.scrollHeight;
+        var containerWidth = tipContainer.scrollWidth;
+        var containerHeight = tipContainer.scrollHeight;
         var targetWidth = targetElem.offsetWidth;
         var targetHeight = targetElem.offsetHeight;
         var origTooltipWidth = tooltip.offsetWidth;

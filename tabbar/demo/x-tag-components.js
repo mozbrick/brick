@@ -2134,7 +2134,8 @@ if (document.readyState === 'complete') {
       };
 
     })(),
-    matchSelector = Element.prototype.matchesSelector || Element.prototype[prefix.lowercase + 'MatchesSelector'];
+    matchSelector = Element.prototype.matchesSelector || Element.prototype[prefix.lowercase + 'MatchesSelector'],
+    mutation = win.MutationObserver || win[prefix.js + 'MutationObserver'];
 
 /*** Functions ***/
 
@@ -2227,15 +2228,14 @@ if (document.readyState === 'complete') {
 // Events
 
   function touchFilter(custom, event) {
-    var retVal;
-    if (custom.listener.touched) {
+    if (event.type.match('touch')){
+      custom.listener.touched = true;
+    }
+    else if (custom.listener.touched && event.type.match('mouse')){
       custom.listener.touched = false;
-      retVal = false;
+      return false;
     }
-    else if (event.type.match('touch')){
-     custom.listener.touched = true;
-    }
-    return retVal;
+    return true;
   }
 
   function createFlowEvent(type) {
@@ -2257,44 +2257,24 @@ if (document.readyState === 'complete') {
   function getArgs(attr, value){
     return {
       value: attr.boolean ? '' : value,
-      method: attr.boolean && (value === false || value === null) ? 'removeAttribute' : 'setAttribute'
+      method: attr.boolean && !value ? 'removeAttribute' : 'setAttribute'
     };
   }
 
-  function setAttr(attr, name, value){
+  function modAttr(element, attr, name, value){
     var args = getArgs(attr, value);
-    this[args.method](name, args.value);
+    element[args.method](name, args.value);
   }
 
-  function syncAttr(attr, name, value){
-    var args = getArgs(attr, value),
-        nodes = attr.property ? [this.xtag[attr.property]] : attr.selector ? xtag.query(this, attr.selector) : [],
+  function syncAttr(element, attr, name, value, method){
+    var nodes = attr.property ? [element.xtag[attr.property]] : attr.selector ? xtag.query(element, attr.selector) : [],
         index = nodes.length;
-    while (index--) nodes[index][args.method](name, args.value);
+    while (index--) nodes[index][method](name, value);
   }
 
-  function wrapAttr(tag, method){
-    var original = tag.prototype[method] || HTMLElement.prototype[method];
-    tag.prototype[method] = {
-      writable: true,
-      enumberable: true,
-      value: function (name, value, skip){
-        var attr = tag.attributes[name.toLowerCase()];
-        original.call(this, name, attr && attr.boolean ? '' : value);
-        if (attr) {
-          syncAttr.call(this, attr, name, value);
-          if (!attr.skip && !this.xtag._skipAttr) {
-            attr.setter.call(this, attr.boolean ? method == 'setAttribute' : this.getAttribute(name));
-          }
-          delete this.xtag._skipAttr;
-        }
-      }
-    };
-  }
-
-  function updateTemplate(element, name, value){
-    if (element.template){
-      element.xtag.template.updateBindingValue(element, name, value);
+  function updateView(element, name, value){
+    if (element.__view__){
+      element.__view__.updateBindingValue(element, name, value);
     }
   }
 
@@ -2306,20 +2286,19 @@ if (document.readyState === 'complete') {
     }
     else if (type == 'set') {
       key[0] = prop;
-      if (attr) attr.setter = accessor[z];
-      tag.prototype[prop].set = xtag.applyPseudos(key.join(':'), attr ? function(value, skip){
-        syncAttr.call(this, attr, name, value);
-        accessor[z].call(this, value);
-        if (!skip && !attr.skip) {
-          this.xtag._skipAttr = true;
-          setAttr.call(this, attr, name, value);
-        }
-        updateTemplate(this, name, value);
-
+      var setter = tag.prototype[prop].set = xtag.applyPseudos(key.join(':'), attr ? function(value){
+        this.xtag._skipSet = true;
+        if (!this.xtag._skipAttr) modAttr(this, attr, name, value);
+        if (this.xtag._skipAttr && attr.skip) delete this.xtag._skipAttr;
+        accessor[z].call(this, attr.boolean ? !!value : value);
+        updateView(this, name, value);
+        delete this.xtag._skipSet;
       } : accessor[z] ? function(value){
         accessor[z].call(this, value);
-        updateTemplate(this, name, value);
+        updateView(this, name, value);
       } : null, tag.pseudos);
+
+      if (attr) attr.setter = setter;
     }
     else tag.prototype[prop][z] = accessor[z];
   }
@@ -2330,7 +2309,11 @@ if (document.readyState === 'complete') {
         attr = accessor.attribute,
         name = attr && attr.name ? attr.name.toLowerCase() : prop;
 
-    if (attr) tag.attributes[name] = attr;
+    if (attr) {
+      attr.key = prop;
+      tag.attributes[name] = attr;
+    }
+    
     for (var z in accessor) attachProperties(tag, prop, z, accessor, attr, name);
 
     if (attr) {
@@ -2341,9 +2324,8 @@ if (document.readyState === 'complete') {
         };
       }
       if (!tag.prototype[prop].set) tag.prototype[prop].set = function(value){
-        this.xtag._skipAttr = true;
-        setAttr.call(this, attr, name, value);
-        updateTemplate(this, name, value);
+        modAttr(this, attr, name, value);
+        updateView(this, name, value);
       };
     }
   }
@@ -2411,11 +2393,9 @@ if (document.readyState === 'complete') {
           var output = ready ? ready.apply(this, toArray(arguments)) : null;
           for (var name in tag.attributes) {
             var attr = tag.attributes[name],
-                hasAttr = this.hasAttribute(name),
-                value = attr.boolean ? hasAttr : this.getAttribute(name);
-            if (attr.boolean || hasAttr) {
-              syncAttr.call(this, attr, name, value);
-              if (attr.setter) attr.setter.call(this, value, true);
+                hasAttr = this.hasAttribute(name);
+            if (hasAttr || attr.boolean) {
+              this[attr.key] = attr.boolean ? hasAttr : this.getAttribute(name);
             }
           }
           tag.pseudos.forEach(function(obj){
@@ -2429,8 +2409,42 @@ if (document.readyState === 'complete') {
       if (tag.lifecycle.removed) tag.prototype.removedCallback = { value: tag.lifecycle.removed, enumerable: true };
       if (tag.lifecycle.attributeChanged) tag.prototype.attributeChangedCallback = { value: tag.lifecycle.attributeChanged, enumerable: true };
 
-      wrapAttr(tag, 'setAttribute');
-      wrapAttr(tag, 'removeAttribute');
+      var setAttribute = tag.prototype.setAttribute || HTMLElement.prototype.setAttribute;
+      tag.prototype.setAttribute = {
+        writable: true,
+        enumberable: true,
+        value: function (name, value){
+          var attr = tag.attributes[name.toLowerCase()];
+          if (!this.xtag._skipAttr) setAttribute.call(this, name, attr && attr.boolean ? '' : value);
+          if (attr) {
+            if (attr.setter && !this.xtag._skipSet) {
+              this.xtag._skipAttr = true;
+              attr.setter.call(this, attr.boolean ? true : value);
+            }
+            value = attr.skip ? attr.boolean ? this.hasAttribute(name) : this.getAttribute(name) : value;
+            syncAttr(this, attr, name, attr.boolean ? '' : value, 'setAttribute');
+          }
+          delete this.xtag._skipAttr;
+        }
+      };
+
+      var removeAttribute = tag.prototype.removeAttribute || HTMLElement.prototype.removeAttribute;
+      tag.prototype.removeAttribute = {
+        writable: true,
+        enumberable: true,
+        value: function (name){
+          var attr = tag.attributes[name.toLowerCase()];
+          if (!this.xtag._skipAttr) removeAttribute.call(this, name);
+          if (attr) {
+            if (attr.setter && !this.xtag._skipSet) {
+              this.xtag._skipAttr = true;
+              attr.setter.call(this, attr.boolean ? false : undefined);
+            }
+            syncAttr(this, attr, name, undefined, 'removeAttribute');
+          }
+          delete this.xtag._skipAttr;
+        }
+      };
 
       if (element){
         element.register({
@@ -2451,7 +2465,7 @@ if (document.readyState === 'complete') {
     mixins: {},
     prefix: prefix,
     templates: {},
-    captureEvents: ['focus', 'blur'],
+    captureEvents: ['focus', 'blur', 'scroll', 'underflow', 'overflow', 'overflowchanged'],
     customEvents: {
       overflow: createFlowEvent('over'),
       underflow: createFlowEvent('under'),
@@ -2603,7 +2617,6 @@ if (document.readyState === 'complete') {
 
     toggleClass: function (element, klass) {
       return xtag[xtag.hasClass(element, klass) ? 'removeClass' : 'addClass'].call(null, element, klass);
-
     },
 
     queryChildren: function (element, selector) {
@@ -2746,12 +2759,19 @@ if (document.readyState === 'complete') {
       for (var z in listeners) xtag.removeEvent(element, z, listeners[z]);
     },
 
-    fireEvent: function(element, type, data, options){
-      options = options || {};
-      var event = doc.createEvent('Event');
-      event.initEvent(type, 'bubbles' in options ? options.bubbles : true, 'cancelable' in options ? options.cancelable : true);
-      for (var z in data) event[z] = data[z];
-      element.dispatchEvent(event);
+    fireEvent: function(element, type, options, warn){
+      var options = options || {},
+          event = doc.createEvent('CustomEvent');
+      if (warn) console.warn('fireEvent has been modified, more info here: ');
+      event.initCustomEvent(type,
+        options.bubbles == false ? false : true,
+        options.cancelable == false ? false : true,
+        options.detail
+      );
+      try { element.dispatchEvent(event); }
+      catch (e) {
+        console.warn('This error may have been caused by a change in the fireEvent method, more info here: ', e);
+      }
     },
 
     addObserver: function(element, type, fn){
