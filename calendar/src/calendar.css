@@ -77,8 +77,8 @@ x-calendar {
       background: #ccc; }
     x-calendar .badmonth.today {
       border-color: #ffd280; }
-  x-calendar .controls {
-    display: none; }
+  x-calendar:not([controls]) .controls {
+    display: none !important; }
   x-calendar[controls] .controls {
     display: block; }
   x-calendar .prev, x-calendar .next {

@@ -26,6 +26,6 @@ x-tabbar {
     vertical-align: middle; }
     x-tabbar > x-tabbar-tab:first-child {
       border-left-width: 0px; }
-    x-tabbar > x-tabbar-tab > * {
+    x-tabbar > x-tabbar-tab > *:only-child {
       height: 100%;
       width: 100%; }

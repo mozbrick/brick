@@ -1230,11 +1230,9 @@
                     chosen: parseMultiDates(chosenRange),
                     multiple: multiple
                 });
-
                 appendChild(this, this.xtag.calObj.el);
-                // append controls AFTER calendar to use natural stack order 
-                // instead of needing explicit z-index
-                appendChild(this, makeControls());
+
+                this.xtag.calControls = null;
 
                 // used to track if we are currently in a dragging operation, 
                 // and if so, what type
@@ -1378,7 +1376,15 @@
             // handles if the x-calendar should display navigation controls or
             // not
             controls: {
-                attribute: {boolean: true}
+                attribute: {boolean: true},
+                set: function(hasControls){
+                    if(hasControls && !this.xtag.calControls){
+                        this.xtag.calControls = makeControls();
+                        // append controls AFTER calendar to use natural stack 
+                        // order instead of needing explicit z-index
+                        appendChild(this, this.xtag.calControls);
+                    }
+                }
             },
             // handles if the x-calendar should allow multiple dates to be 
             // chosen at once

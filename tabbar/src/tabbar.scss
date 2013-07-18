@@ -25,7 +25,7 @@ x-tabbar{
             border-left-width: 0px;
         }
 
-        & > *{
+        & > *:only-child{
             height: 100%;
             width: 100%;
         }

@@ -96,7 +96,7 @@ Positions/appearances will likely differ on larger displays or with different in
 
 * Unifies checkboxes and radios - devs just code, we figure out the shiz
 
-### Option Bar (aka Radio Bar)
+### [Togglegroup (aka Option Bar)](https://github.com/mozilla/app-components/tree/master/togglegroup)
 
 * A set of associated options of which only one can be selected at a time
 * Designed to appear as a cohesive set

@@ -17,7 +17,7 @@ x-iconbutton {
   display: inline-block;
   border: 1px solid grey;
   margin: 0;
-  padding: .25em;
+  padding: 0.25em 0.5em;
   cursor: pointer;
   text-align: center;
   /* content is wrapped so that it is always centered */
@@ -37,8 +37,7 @@ x-iconbutton {
     background-image: linear-gradient(-180deg, #a0a0a0 14%, #e1e1e1 100%);
     color: #f2f2f2; }
   x-iconbutton > .x-iconbutton-content-wrap {
-    display: inline-block !important;
-    vertical-align: middle !important; }
+    display: inline-block !important; }
   x-iconbutton > .x-iconbutton-ghost {
     display: inline-block !important;
     vertical-align: middle !important;
@@ -50,12 +49,12 @@ x-iconbutton {
     margin: 0;
     padding: 0;
     vertical-align: middle;
-    display: inline-block !important; }
+    display: inline-block; }
   x-iconbutton .x-iconbutton-label {
     font-size: 14px; }
   x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-label {
     margin: 0 auto;
-    display: block !important; }
+    display: block; }
   x-iconbutton[icon-anchor=left] .x-iconbutton-icon, x-iconbutton:not([icon-anchor]) .x-iconbutton-icon {
     margin-right: 0.25em; }
   x-iconbutton[icon-anchor=right] .x-iconbutton-icon {

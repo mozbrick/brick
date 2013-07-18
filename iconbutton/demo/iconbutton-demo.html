@@ -226,18 +226,6 @@
     </ul>
     
     <script>
-        function makeFancyIcon(){
-            var icon = document.createDocumentFragment();
-            icon.innerHTML = "<figure class='fancy-html-icon'><span></span><div></div></figure>";
-            return icon;
-        }
-
-        function makeFancyLabel(){
-            var label = document.createDocumentFragment();
-            label.innerHTML = "<p class='fancy-html-label'><div class='circle'</div> Carpe diem! <div class='circle'></div></p>";
-            return label;
-        }
-
         function randomColor(){
             var _randomVal = function(){
                 return Math.floor(Math.random() * 256);
@@ -282,12 +270,13 @@
         document.addEventListener('DOMComponentsLoaded', function(){
             var customLabelIconButton = document.getElementById("custom-accessor-demo");
             
-            var customGetter = function(iconButton){
-                return iconButton.querySelector("strong").textContent;
+            /** custom textGetter/Setters defined here **/
+            var customGetter = function(iconButtonEl){
+                return iconButtonEl.label.querySelector("strong").textContent;
             }
             
-            var customSetter = function(iconButton, newText){
-                iconButton.querySelector("strong").textContent = newText;
+            var customSetter = function(iconButtonEl, newText){
+                iconButtonEl.label.querySelector("strong").textContent = newText;
             }
             
             customLabelIconButton.textGetter = customGetter;

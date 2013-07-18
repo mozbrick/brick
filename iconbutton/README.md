@@ -67,14 +67,14 @@ You can use the `.text` attribute to view and modify the text contents of your b
 
 Defines how to change label text.
 
-If your label's structure differs such that the default behavior of reading the `.textContent` of your label is not suficient, you can also
+If your label's structure differs such that the default behavior of reading the `.textContent` of your label is not sufficient, you can also
 override the getter and setter behaviors for text by modifying the `.textGetter` and `.textSetter` attributes, respectively.
 
-    fooIconButton.textGetter = function(){
+    fooIconButton.textGetter = function(iconButtonEl){
         // custom text getting behavior
     }
     
-    fooIconButton.textSetter = function(newText){
+    fooIconButton.textSetter = function(iconButtonEl, newText){
         // custom text setting behavior
     }
 
@@ -91,3 +91,5 @@ the following CSS selectors, assuming that `"foo"` represents an `x-iconbutton` 
 
 * applying styles to `x-iconbutton > .x-iconbutton-label` applies styles to the label of the
   button
+
+***Known issue:*** applying a `font-size` to the `x-iconbutton` itself can sometimes cause extra top-padding to appear, due to the way vertical-align's baselines work. To work around this issue, make sure to only apply `font-size` to the `x-iconbutton > .x-iconbutton-label` selector.

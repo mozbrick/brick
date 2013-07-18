@@ -64,7 +64,6 @@
     }
     
     function _deactivateButtons(e){
-        console.log(e.type);
         xtag.query(document, "x-iconbutton[active]").forEach(function(button){
             button.removeAttribute("active");
         });
