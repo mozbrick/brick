@@ -13,20 +13,8 @@ x-iconbutton{
     border: 1px solid grey;
     margin: 0;
     padding: .25em;
-    @include component-ui-text-font-size;
-
     cursor: pointer;
-
-    & > .x-iconbutton-icon, & > .x-iconbutton-label{
-       margin: 0;
-       padding: 0;
-       vertical-align: middle;
-       display: inline-block;
-    }
-
-    & > .x-iconbutton-label{
-      @include component-ui-text-font-size;
-    }
+    text-align: center;
 
     &:hover{
       @include component-ui-background-hover;
@@ -38,22 +26,48 @@ x-iconbutton{
       @include component-ui-text-color-selected;
     }
 
+    /* content is wrapped so that it is always centered */
+    & > .x-iconbutton-content-wrap{
+      display: inline-block !important;
+      vertical-align: middle !important;
+    }
+
+    /* spacer div used to ensure centering */
+    & > .x-iconbutton-ghost{
+      display: inline-block !important;
+      vertical-align: middle !important;
+      height: 100% !important;
+      width: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    & .x-iconbutton-icon, & .x-iconbutton-label{
+       margin: 0;
+       padding: 0;
+       vertical-align: middle;
+       display: inline-block !important;
+    }
+
+    & .x-iconbutton-label{
+      @include component-ui-text-font-size;
+    }
+
     &[icon-anchor=top], &[icon-anchor=bottom]{
-        text-align: center;
-        & > .x-iconbutton-icon, & > .x-iconbutton-label{
-            margin: 0 auto;
-            display: block;
-        }
+      & .x-iconbutton-icon, & .x-iconbutton-label{
+          margin: 0 auto;
+          display: block !important;
+      }
     }
 
     &[icon-anchor=left], &:not([icon-anchor]){
-        & > .x-iconbutton-icon{
+        & .x-iconbutton-icon{
           margin-right: $iconSpacing;
         }
     }
 
     &[icon-anchor=right]{
-        & > .x-iconbutton-icon{
+        & .x-iconbutton-icon{
           margin-left: $iconSpacing;
         }
     }

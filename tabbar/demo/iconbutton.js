@@ -14,7 +14,6 @@
     // also removes image source if explicitly given a null/empty src
     function updatePartsVisibility(elem, iconSrc){
         // if the icon is an img tag, modify based on its img src
-        
         if(elem.xtag.iconEl.nodeName === IMG_NODE_NAME){
             iconSrc = (iconSrc !== undefined) ? iconSrc : elem.xtag.iconEl.src;
             // replace image with empty source if given an empty source
@@ -42,19 +41,24 @@
         var icon = elem.xtag.iconEl;
         var label = elem.xtag.labelEl;
         if(!(label && icon)) return;
-        
+
+        var parent = icon.parentNode;
+        if((!parent) || label.parentNode !== parent){
+            throw "invalid parent node of iconbutton's icon / label";
+        }
+
         switch(elem.iconAnchor){
             // icon goes after label
             case "right":
             case "bottom":
-                elem.insertBefore(label, icon);
+                parent.insertBefore(label, icon);
                 break;
             
             //icon goes before label
             //case "left":
             //case "top":
             default:
-                elem.insertBefore(icon, label);
+                parent.insertBefore(icon, label);
                 break;
         }
     }
@@ -78,13 +82,17 @@
             // the icon's <img> element
             // and a <span> element for the label
             created: function(){
-                this.xtag.iconEl = document.createElement('img');
-                this.xtag.labelEl = document.createElement('span');
-                
-                // provide classes to expose certain elements and allow
-                // users to hook in their own styles
-                xtag.addClass(this.xtag.iconEl, "x-iconbutton-icon");
-                xtag.addClass(this.xtag.labelEl, "x-iconbutton-label");
+                var content = this.innerHTML;
+                this.innerHTML = "<div class='x-iconbutton-content-wrap'>"+
+                                   "<img class='x-iconbutton-icon' "+
+                                   "     src='"+EMPTY_SRC+"'/>"+
+                                   "<span class='x-iconbutton-label'></span>"+
+                                 "</div>"+
+                                 "<div class='x-iconbutton-ghost'></div>";
+                this.xtag.iconEl = this.querySelector(".x-iconbutton-icon");
+                this.xtag.labelEl = this.querySelector(".x-iconbutton-label");
+                // don't forget to insert content here
+                this.xtag.labelEl.innerHTML = content;
                 
                 // set up default getter and setters for modifying text content
                 // default behavior: modify text directly
@@ -94,15 +102,7 @@
                 if(!this.textSetter){
                     this.textSetter = DEFAULT_TEXT_SETTER;
                 }
-                
-                // remove content and put into the label
-                this.xtag.labelEl.innerHTML = this.innerHTML;
-                this.innerHTML = "";
-                
-                // actually create the button
-                this.appendChild(this.xtag.iconEl);
-                this.appendChild(this.xtag.labelEl);
-                
+
                 updatePartsOrder(this);
                 updatePartsVisibility(this);
             },
