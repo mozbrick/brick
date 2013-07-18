@@ -2,4 +2,5 @@
 components
 node_modules
 .DS_Store
+brick-*
 /test
