@@ -1,13 +1,18 @@
-/*Backgrounds */
-/* Text */
+@font-face {
+  font-family: "OpenSans-Semibold";
+  font-weight: normal;
+  font-style: normal;
+  src: url("OpenSans-Semibold.ttf") format("truetype"); }
+
 x-tabbar {
   background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
-  font-family: OpenSans-Semibold, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "OpenSans-Semibold", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   color: #d4d4d4;
+  line-height: 19px;
   display: block;
   width: 100%;
   overflow-x: auto;

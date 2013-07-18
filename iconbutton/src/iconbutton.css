@@ -1,23 +1,27 @@
-/*Backgrounds */
-/* Text */
+@font-face {
+  font-family: "OpenSans-Semibold";
+  font-weight: normal;
+  font-style: normal;
+  src: url("OpenSans-Semibold.ttf") format("truetype"); }
+
 x-iconbutton {
   background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
-  color: #d4d4d4;
-  font-family: OpenSans-Semibold, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
+  color: #d4d4d4;
+  font-family: "OpenSans-Semibold", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   white-space: nowrap;
   display: inline-block;
   border: 1px solid grey;
   margin: 0;
-  padding: 0.25em 0.5em;
+  padding: 0.2em 0.35em;
   cursor: pointer;
   text-align: center;
   /* content is wrapped so that it is always centered */
@@ -55,7 +59,7 @@ x-iconbutton {
   x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-label {
     margin: 0 auto;
     display: block; }
-  x-iconbutton[icon-anchor=left] .x-iconbutton-icon, x-iconbutton:not([icon-anchor]) .x-iconbutton-icon {
-    margin-right: 0.25em; }
+  x-iconbutton[icon-anchor=left] .x-iconbutton-icon {
+    margin-right: 0.2em; }
   x-iconbutton[icon-anchor=right] .x-iconbutton-icon {
-    margin-left: 0.25em; }
+    margin-left: 0.2em; }

@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
-    <link rel="stylesheet" type="text/css" href="deck.css"/>
-    <link rel="stylesheet" type="text/css" href="iconbutton.css"/>
-    <link rel="stylesheet" type="text/css" href="slidebox.css"/>
-    <link rel="stylesheet" type="text/css" href="flipbox.css"/>
+    <link rel="stylesheet" type="text/css" href="deck/deck.css"/>
+    <link rel="stylesheet" type="text/css" href="iconbutton/iconbutton.css"/>
+    <link rel="stylesheet" type="text/css" href="slidebox/slidebox.css"/>
+    <link rel="stylesheet" type="text/css" href="flipbox/flipbox.css"/>
     <link rel="stylesheet" type="text/css" href="../src/tabbar.css"/>
     
     <script type="text/javascript" src="x-tag-components.js"></script>
-    <script type="text/javascript" src="deck.js"></script>
-    <script type="text/javascript" src="iconbutton.js"></script>
-    <script type="text/javascript" src="slidebox.js"></script>
-    <script type="text/javascript" src="flipbox.js"></script>
+    <script type="text/javascript" src="deck/deck.js"></script>
+    <script type="text/javascript" src="iconbutton/iconbutton.js"></script>
+    <script type="text/javascript" src="slidebox/slidebox.js"></script>
+    <script type="text/javascript" src="flipbox/flipbox.js"></script>
     <script type="text/javascript" src="../src/tabbar.js"></script>
     <style>
         body, html{
@@ -68,17 +68,16 @@
             transform: translate(-50%, -50%);
         }
         
-        x-tabbar{
-            height: 15%;
-        }
-        
         x-tabbar-tab{
             height: 100%;
+        }
+
+        x-iconbutton{
         }
         
         x-iconbutton .x-iconbutton-icon{
             max-width: 40px;
-            max-height: 40px;
+            max-height: 1.5em;
         }
         
         x-iconbutton .x-iconbutton-label{
@@ -102,19 +101,19 @@
         
         <x-tabbar>
             <x-tabbar-tab target-selector="x-deck x-card:first-child">
-                <x-iconbutton src="dog1.png">One</x-iconbutton>
+                <x-iconbutton src="dog1.png" icon-anchor="top">One</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
-                <x-iconbutton src="dog2.png">Two</x-iconbutton>
+                <x-iconbutton src="dog2.png" icon-anchor="top">Two</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
-                <x-iconbutton src="dog3.png">Three</x-iconbutton>
+                <x-iconbutton src="dog3.png" icon-anchor="top">Three</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
-                <x-iconbutton src="dog4.png">Four</x-iconbutton>
+                <x-iconbutton src="dog4.png" icon-anchor="top">Four</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
-                <x-iconbutton src="dog5.png">Five</x-iconbutton>
+                <x-iconbutton src="dog5.png" icon-anchor="top">Five</x-iconbutton>
             </x-tabbar-tab>
         </x-tabbar>
     </div>
@@ -164,10 +163,10 @@
         </x-flipbox>
         <x-tabbar>
             <x-tabbar-tab target-selector="x-flipbox > *:first-child">
-                <x-iconbutton src="Card_front.svg" icon-anchor="top">Front</x-iconbutton>
+                <x-iconbutton src="Card_front.svg">Front</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab target-selector="x-flipbox > *:last-child">
-                <x-iconbutton src="Card_back.svg" icon-anchor="top">Back</x-iconbutton>
+                <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
             </x-tabbar-tab>
         </x-tabbar>
         </div>

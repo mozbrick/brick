@@ -1,29 +1,30 @@
 @import "../../custommixins";
 @import "../../component-ui-defaults";
 
-$defaultSpacing: .25em;
+$defaultSpacing: .2em;
 
 x-iconbutton{
     @include component-ui-background;
-    @include component-ui-text-color;
-    @include component-ui-text-font;
     @include boxSizing(border-box);
+    color: $COMPONENT_UI_TEXT_COLOR;
+    font-family: $COMPONENT_UI_FONT_FAMILY;
+
     white-space: nowrap;
     display: inline-block;
     border: 1px solid grey;
     margin: 0;
-    padding: $defaultSpacing $defaultSpacing*2;
+    padding: $defaultSpacing $defaultSpacing*1.75;
     cursor: pointer;
     text-align: center;
 
     &:hover{
       @include component-ui-background-hover;
-      @include component-ui-text-color-hover;
+      color: $COMPONENT_UI_TEXT_COLOR_HOVER;
     }
 
     &[active]{
       @include component-ui-background-selected;
-      @include component-ui-text-color-selected;
+      color: $COMPONENT_UI_TEXT_COLOR_SELECTED;
     }
 
     /* content is wrapped so that it is always centered */
@@ -49,7 +50,7 @@ x-iconbutton{
     }
 
     & .x-iconbutton-label{
-      @include component-ui-text-font-size;
+      font-size: $COMPONENT_UI_FONT_SIZE;
     }
 
     &[icon-anchor=top], &[icon-anchor=bottom]{
@@ -59,7 +60,7 @@ x-iconbutton{
       }
     }
 
-    &[icon-anchor=left], &:not([icon-anchor]){
+    &[icon-anchor=left]{
         & .x-iconbutton-icon{
           margin-right: $defaultSpacing;
         }

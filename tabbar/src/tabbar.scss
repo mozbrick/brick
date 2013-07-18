@@ -3,8 +3,9 @@
 
 x-tabbar{
     @include component-ui-background;
-    @include component-ui-text-font;
-    @include component-ui-text-color;
+    font-family: $COMPONENT_UI_FONT_FAMILY;
+    color: $COMPONENT_UI_TEXT_COLOR;
+    line-height: $COMPONENT_UI_LINE_HEIGHT;
 
     display: block;
     width: 100%;

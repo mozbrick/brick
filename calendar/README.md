@@ -71,8 +71,10 @@ Specifies the Date to focus the calendar display on. For example, a view of Dec 
 
 Can also be programmatically manipulated with the `view` property.
 
-**(getter)** Returns the view as a JS Date object (or null if not available)
-**(setter)** Can be set with either a JS Date object or a parsable string representing a date.
+###(getter)
+ Returns the view as a JS Date object (or null if not available)
+###(setter) 
+Can be set with either a JS Date object or a parsable string representing a date.
 
 **Note:** Changing this rerenders the calendar
 
@@ -82,17 +84,27 @@ Specifies the date or dates that are toggled as chosen on the calendar.
 
 Can also be programmatically manipulated with the `chosen` property.
 
-**(getter)** 
+###(getter)
 
 - If `multiple` is not set, returns a single JS Date object (or null if not available). 
 - If `multiple` is set, returns as a sorted list with elements as either of the following formats:
   - a singular JS Date object for individual chosen dates
   - a [Date, Date] list of the start and end points of a consecutive range of dates
 
-**(setter)** 
+###(setter)
 Can always be set with either a JS Date object or a parsable string representing a date.
 
 In addition, if `multiple` is set, can take either a list in the same format that the getter returns (parsable date strings can be used instead of JS Date objects), or a JSON string corresponding to the same format.
+
+If using a JSON string, note that JSON string require **double quotes** for strings, **NOT single quotes!**
+
+Valid:
+    
+    chosen='[["2013-07-10", "2013-07-11"]]'
+
+Invalid:
+    
+    chosen="[['2013-07-10', '2013-07-11']]"
 
 **Note:** Changing this rerenders the calendar
 
@@ -118,8 +130,6 @@ Allows an additional callback function to be applied to days when the calendar i
 
 Will be called with three parameters: the day's DOM element, the JS Date corresponding to the day, and the ISO-formatted string version of the date. This is useful when styles need to be more dynamically flexible than the default. 
 
-***IMPORTANT NOTE***: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render, or infinite recursion can result.
-
 For example:
 
     foo.customRenderFn = function(dayEl, date, iso){
@@ -130,7 +140,9 @@ For example:
 
 will color all days after the current date red.
 
-(See demo/calendar-demo.html for an example of using this to draw data indicators on days.)
+(See [demo/calendar-demo.html](demo/calendar-demo.html) for an example of using this to draw data indicators on days.)
+
+***IMPORTANT NOTE***: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render, or infinite recursion can result.
 
 # Methods
 
@@ -230,7 +242,7 @@ The event also receives the following custom datamap in `e.detail`:
 - To style how elements appear when the calendar is being dragged on, use the `x-calendar[active]` selector.
     - Similarly, to style the day that is being hovered over during a drag, use `x-calendar[active] .day[active]`
 
-(See demo/calendar-demo.html for an example of applying custom styles.)
+(See [demo/calendar-demo.html](demo/calendar-demo.html) for an example of applying custom styles.)
 
 
 ## Misc
