@@ -173,7 +173,7 @@
 </figure>    
 
 <figure class="container">
-    <h2>Fire custom event types</h2>
+    <h2>Fire custom event types (see html source's <code>target-event</code> attribute)</h2>
     <div class="demo-container">  
     <div id="color-box" class="component-demo">
         <span>NIC CAGE</span>
@@ -191,9 +191,11 @@
 
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
+    // demonstrate dynamic tab-target handling in slidebox demo
     var slideBox = document.querySelector('x-slidebox');
     var slideBoxTabbar = document.querySelector('x-slidebox + x-tabbar');
     
+    // assign each tab to its respective slide in the slidebox
     var tabs = slideBoxTabbar.tabs;
     var slides = xtag.query(slideBox, 'x-slide');
     for(var i=0; i < slides.length && i < tabs.length; i++){
@@ -203,6 +205,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
         tab.targetElems = [slide];
     }
     
+    // handle custom events demo
     document.querySelector("#color-box > span").addEventListener("danceparty", function(e){
         alert("The text received danceparty!");
     });

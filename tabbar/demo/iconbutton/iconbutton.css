@@ -30,7 +30,7 @@ x-iconbutton {
   display: inline-block;
   border: 1px solid grey;
   margin: 0;
-  padding: 0.2em 0.35em;
+  padding: 5px 8.75px;
   cursor: pointer;
   text-align: center;
   /* content is wrapped so that it is always centered */
@@ -69,6 +69,6 @@ x-iconbutton {
     margin: 0 auto;
     display: block; }
   x-iconbutton[icon-anchor=left] .x-iconbutton-icon, x-iconbutton:not([icon-anchor]) .x-iconbutton-icon {
-    margin-right: 0.2em; }
+    margin-right: 5px; }
   x-iconbutton[icon-anchor=right] .x-iconbutton-icon {
-    margin-left: 0.2em; }
+    margin-left: 5px; }

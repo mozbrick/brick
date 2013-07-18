@@ -1,4 +1,67 @@
 (function(){
+   /** getLeft: DOM element => Number
+
+    returns the absolute left X coordinate of the given element in relation to 
+    the document
+    **/
+    function getLeft(el) {
+        if(el.getBoundingClientRect){
+          var documentScrollLeft = (document.documentElement.scrollLeft ||
+                                    document.body.scrollLeft || 0);
+          return el.getBoundingClientRect().left + documentScrollLeft;
+        }
+        else if (el.offsetParent) {
+          return getLeft(el.offsetParent) + el.offsetLeft;
+        } else {
+          return el.offsetLeft;
+        }
+    }
+
+    /** getLeft: DOM element => Number
+
+    returns the absolute top Y coordinate of the given element in relation to 
+    the document
+    **/
+    function getTop(el) {
+        if(el.getBoundingClientRect){
+          var documentScrollTop = (document.documentElement.scrollTop ||
+                                   document.body.scrollTop || 0);
+          return el.getBoundingClientRect().top + documentScrollTop;
+        }
+        else if (el.offsetParent) {
+          return getTop(el.offsetParent) + el.offsetTop;
+        } else {
+          return el.offsetTop;
+        }   
+    }
+
+    /** getRect: DOM element => {top: number, left: number, 
+                                  right: number, bottom: number,
+                                  width: number, height: number}
+
+    returns the absolute metrics of the given DOM element in relation to the
+    document
+    **/
+    function getRect(el){
+        var baseRect = {
+            top: getTop(el),
+            left: getLeft(el),
+            width: el.offsetWidth,
+            height: el.offsetHeight,
+        };
+
+        baseRect.right = baseRect.left + baseRect.width;
+        baseRect.bottom = baseRect.top + baseRect.height;
+        return baseRect;
+    }
+    /* _pointIsInRect: (Number, Number, {left: number, top: number, 
+                                         right: number, bottom: number})
+    */
+    function _pointIsInRect(x, y, rect){
+        return (rect.left <= x && x <= rect.right && 
+                rect.top <= y && y <= rect.bottom);
+    }
+
     xtag.register("x-tabbar", {
         lifecycle: {
             created: function(){
@@ -36,6 +99,18 @@
         methods: {}
     });
 
+    function _onTabbarTabTap(tabEl){
+        if(tabEl.parentNode.nodeName.toLowerCase() === "x-tabbar"){
+            var targetEvent = tabEl.targetEvent; // getter handles casing
+        
+            var targets = tabEl.targetElems;
+            for(var i = 0; i < targets.length; i++){
+                var target = targets[i];
+                xtag.fireEvent(target, targetEvent);
+            }
+        }
+    }
+
     xtag.register("x-tabbar-tab", {
         lifecycle: {
             created: function(){
@@ -48,14 +123,23 @@
         },
         events: {
             "tap": function(e){
-                if(this.parentNode.nodeName.toLowerCase() === "x-tabbar"){
-                    var targetEvent = this.targetEvent; // getter handles casing
-                
-                    var targets = this.targetElems;
-                    for(var i = 0; i < targets.length; i++){
-                        var target = targets[i];
-                        xtag.fireEvent(target, targetEvent);
+                var tabEl = e.currentTarget;
+                // for touchend, ensure that we actually tapped and didn't drag 
+                // off
+                if(e.changedTouches){
+                    if(!e.changedTouches.length) return;
+
+                    var releasedTouch = e.changedTouches[0];
+                    var tabRect = getRect(tabEl);
+
+                    if(_pointIsInRect(releasedTouch.pageX, releasedTouch.pageY, 
+                                      tabRect))
+                    {
+                        _onTabbarTabTap(tabEl);
                     }
+                }
+                else{
+                   _onTabbarTabTap(tabEl);
                 }
             }
         },

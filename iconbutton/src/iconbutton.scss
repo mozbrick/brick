@@ -1,7 +1,7 @@
 @import "../../custommixins";
 @import "../../component-ui-defaults";
 
-$defaultSpacing: .2em;
+$defaultSpacing: 5px;
 
 x-iconbutton{
     @include component-ui-background;
