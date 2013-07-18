@@ -1,0 +1,136 @@
+
+* {
+  -moz-box-sizing: border-box;
+}
+
+body {
+  font: normal 16px "Open Sans", sans-serif;
+  line-height: 1.5em;
+  color: #222;
+}
+
+article {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em;
+  position: relative;
+  overflow: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  margin: 1.5rem 0;
+}
+
+h1 {
+  line-height: 1.5em;
+  font-size: 250%;
+}
+
+h2 {
+  line-height: 1.5rem;
+}
+
+.moz {
+  height: 32px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+header h1 {
+  font-size: 400%;
+}
+
+.logo {
+  width: 64px;
+  margin: 0 8px -8px 0;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+header small {
+  font-size: 1rem;
+  color: #888;
+  margin: 0;
+  margin-left: 4px;
+}
+
+header {
+  text-align: center;
+}
+
+section {
+  clear: left;
+  margin: 3em 0 3em;
+}
+
+.two-up {
+  clear: none;
+  width: 50%;
+  float: left;
+  padding: 0 1em;
+  margin: 0em -1em;
+}
+.two-up + .two-up {
+  margin-left: 3em;
+}
+.two-up h2 {
+  text-align: center;
+}
+
+@media screen and (max-width: 800px) {
+  .two-up {
+    float: none;
+    width: 100%;
+    margin: 3em 0;
+    padding: 0;
+  }
+  .two-up + .two-up {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  header {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  article {
+    max-width: 800px;
+  }
+}
+
+figure {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  width: 320px;
+  height: 480px;
+  margin: 0 auto;
+  border: 10px solid #eee;
+  border-width: 50px 20px 70px;
+  border-radius: 20px;
+  position: relative;
+  transform: scale(.75);
+  margin: -80px auto;
+}
+
+figure:after {
+  position: absolute;
+  content: '';
+  bottom: -50px;
+  left: 140px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: #ddd;
+}
+
+figure iframe {
+  border: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+}
