@@ -1,5 +1,8 @@
 @import "../../custommixins";
+@import "../../component-ui-defaults";
 
+// generate a selector for an element without any of the given values in the
+// specified attribute
 @function attrValNotInList($attrName, $invalidList){
     $finalSelector: "";
     
@@ -13,6 +16,7 @@
 // responsible for positioning;
 // the only user styling that should be applied here is border
 x-tooltip{
+    @include animated((visibility, transform, opacity), 0.2s);
     display: block; // needed to favor horizontal tips, 
                     // use inline-block to favor vertical
     position: absolute;
@@ -31,8 +35,9 @@ x-tooltip{
     border: 1px solid grey;
     background-color: #eee;
     border-radius: 4px;
-    
-    @include animated((visibility, transform, opacity), 0.2s);
+
+    font-family: $COMPONENT_UI_FONT_FAMILY; 
+    box-shadow: 1px 1px 4px grey;
     
     &[ignore-tooltip-pointer-events]{
         pointer-events: none;
@@ -87,24 +92,24 @@ x-tooltip{
 
 // let user style this to style the balloon
 x-tooltip > .tooltip-content{
-    position: relative;
-    z-index: 2;
-    display: block;
-    overflow: auto;
-    padding: .5em;
     @include boxSizing(border-box);
+    position: relative;
+    display: block;
+    padding: .5em;
+    overflow: auto;
+
+    z-index: 2;
 }
 
 x-tooltip > .tooltip-arrow{
-    z-index: 1;
     @include boxSizing(border-box);
     position: absolute;
+    display: block;
     
     margin: 0px;
     padding: 0px;
     
     vertical-align: top;
-    display: block;
     
     // override arrow size by modifying these together;
     // may also need to mess with transforms to line things up
@@ -116,6 +121,8 @@ x-tooltip > .tooltip-arrow{
     // can be overridden directly by using .tooltip-arrow class as well
     border: inherit; 
     background: inherit;
+
+    z-index: 1;
     
     // default to pointing down
     &#{attrValNotInList(arrow-direction, (up, left, right))}{

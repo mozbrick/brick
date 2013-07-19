@@ -4,7 +4,7 @@ $_bgBaseColor: #858585;
 $_bgSelectBaseColor: #E1E1E1;
 $_bgHighlightColor: #A0A0A0;
 
-$_textCustomFont: "OpenSans-Semibold";
+$_textCustomFont: "OpenSans";
 
 $COMPONENT_UI_FONT_FAMILY: $_textCustomFont, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 $COMPONENT_UI_LINE_HEIGHT: 19px;
@@ -15,8 +15,7 @@ $COMPONENT_UI_TEXT_COLOR: #D4D4D4;
 $COMPONENT_UI_TEXT_COLOR_SELECTED: #F2F2F2;
 $COMPONENT_UI_TEXT_COLOR_HOVER: mix($COMPONENT_UI_TEXT_COLOR, $COMPONENT_UI_TEXT_COLOR_SELECTED, 25%);
 
-
-@include customFont($_textCustomFont, $fontFolder:"");
+@include customFont($_textCustomFont+"-SemiBold", $fontFolder: "", $fontFamily: $_textCustomFont);
 
 // Backgrounds
 @mixin component-ui-background{

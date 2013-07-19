@@ -1,27 +1,30 @@
 @import "../../custommixins";
+@import "../../component-ui-defaults";
 
 $todayBorder: orange;
 
 x-calendar {
+    @include unhighlightable;
+    @include boxSizing(border-box);
     position: relative;
-    font-size: 1em;
-    font-family: sans-serif;
-    text-align: center;
-    overflow: hidden;
-    border: 2px solid #888;
     display: inline-block;
     margin: 0;
     padding: 0;
-    background-color: #fff;
 
-    @include unhighlightable;
-    @include boxSizing(border-box);
+    border: 2px solid #888;
+
+    font-size: 1em;
+    font-family: $COMPONENT_UI_FONT_FAMILY;
+    text-align: center;
+
+    overflow: hidden;
+    background-color: #fff;
 
     .calendar{
         position: relative;
+        display: inline-block;
         color: #fff;
         overflow: hidden;
-        display: inline-block;
     }
 
     .month{
@@ -38,11 +41,11 @@ x-calendar {
     }
 
     .label, .day, .prev, .next{
+        width: 2em;
         color: #444;
         height: 2em;
         line-height: 2em;
         text-decoration: none;
-        width: 2em;
     }
 
     .label{
@@ -51,11 +54,11 @@ x-calendar {
     }
 
     .day{
-        position: relative;
         @include rounded;
-        color: #444;
+        position: relative;
         display: inline-block;
         white-space: nowrap;
+        color: #444;
         border: 1px solid transparent;
 
         &:not(:first-child){
@@ -66,27 +69,14 @@ x-calendar {
             border-color: $todayBorder;
         }
 
-        &.today{
-            border-color: tomato;
-            font-weight: bold;
-            font-style: italic;
-        }
-
         &.chosen{
             background: #444;
             color: #fff;
         }
-    }
-
-    .today{
-        border-color: tomato;
-        font-weight: bold;
-        font-style: italic;
-    }
-
-    .chosen{
-        background: #444;
-        color: #fff;
+        &.today{
+            border-color: tomato;
+            font-weight: bold;
+        }
     }
 
     .badmonth{
@@ -110,9 +100,10 @@ x-calendar {
     }
 
     .prev, .next{
-        color: #444;
         position: absolute;
         top: 0px;
+        
+        color: #444;
     }
 
     .prev{

@@ -1,31 +1,38 @@
+@font-face {
+  font-family: "OpenSans";
+  font-weight: normal;
+  font-style: normal;
+  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
+
 x-datepicker {
   position: relative;
   display: inline-block;
+  height: 1.4em;
   overflow: visible;
   border: 1px solid grey;
-  height: 1.4em; }
+  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
   x-datepicker > .x-datepicker-input {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    vertical-align: top;
     margin: 0;
-    border: 0px solid transparent; }
+    border: 0px solid transparent;
+    vertical-align: top;
+    font: inherit; }
   x-datepicker > .x-datepicker-polyfill-input {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    vertical-align: top;
     position: relative;
     margin: 0;
-    border: 1px solid grey;
     padding: .25em;
-    font-family: Courier, monospace;
-    border: 0px solid transparent; }
+    border: 0px solid transparent;
+    vertical-align: top;
+    font: inherit; }
   x-datepicker > .x-datepicker-polyfill-ui {
     position: absolute;
     left: 0;

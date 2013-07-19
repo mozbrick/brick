@@ -1,14 +1,10 @@
+@font-face {
+  font-family: "OpenSans";
+  font-weight: normal;
+  font-style: normal;
+  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
+
 x-calendar {
-  position: relative;
-  font-size: 1em;
-  font-family: sans-serif;
-  text-align: center;
-  overflow: hidden;
-  border: 2px solid #888;
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-  background-color: #fff;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -22,12 +18,22 @@ x-calendar {
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  border: 2px solid #888;
+  font-size: 1em;
+  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  text-align: center;
+  overflow: hidden;
+  background-color: #fff; }
   x-calendar .calendar {
     position: relative;
+    display: inline-block;
     color: #fff;
-    overflow: hidden;
-    display: inline-block; }
+    overflow: hidden; }
   x-calendar .month {
     display: inline-block;
     margin: 0;
@@ -38,39 +44,31 @@ x-calendar {
     margin: 1px 2px;
     overflow: visible; }
   x-calendar .label, x-calendar .day, x-calendar .prev, x-calendar .next {
+    width: 2em;
     color: #444;
     height: 2em;
     line-height: 2em;
-    text-decoration: none;
-    width: 2em; }
+    text-decoration: none; }
   x-calendar .label {
     width: 100%;
     border-bottom: 1px dashed grey; }
   x-calendar .day {
-    position: relative;
     border-radius: 4px;
-    color: #444;
+    position: relative;
     display: inline-block;
     white-space: nowrap;
+    color: #444;
     border: 1px solid transparent; }
     x-calendar .day:not(:first-child) {
       margin-left: 1px; }
     x-calendar .day[active] {
       border-color: orange; }
-    x-calendar .day.today {
-      border-color: tomato;
-      font-weight: bold;
-      font-style: italic; }
     x-calendar .day.chosen {
       background: #444;
       color: #fff; }
-  x-calendar .today {
-    border-color: tomato;
-    font-weight: bold;
-    font-style: italic; }
-  x-calendar .chosen {
-    background: #444;
-    color: #fff; }
+    x-calendar .day.today {
+      border-color: tomato;
+      font-weight: bold; }
   x-calendar .badmonth {
     color: #aaa; }
     x-calendar .badmonth.chosen {
@@ -82,9 +80,9 @@ x-calendar {
   x-calendar[controls] .controls {
     display: block; }
   x-calendar .prev, x-calendar .next {
-    color: #444;
     position: absolute;
-    top: 0px; }
+    top: 0px;
+    color: #444; }
   x-calendar .prev {
     left: 0px; }
   x-calendar .next {

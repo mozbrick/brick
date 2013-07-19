@@ -311,7 +311,7 @@
             // for synchronization purposes, only set these attributes if 
             // the newCard is actually the currently selected card;
             // otherwise, older animations interrupt newer animations and
-            // remove attributes, causingf graphical flicker
+            // remove attributes, causing graphical flicker
             if(newCard === deck.xtag._selectedCard){
                 _sanitizeCardAttrs(deck);
             }
@@ -641,6 +641,7 @@
                                     
                 this.xtag._selectedCard = (this.xtag._selectedCard) ? 
                                            this.xtag._selectedCard : null; 
+                //this.xtag._lastAnimTimestamp = null;
                 this.xtag.transitionType = "scrollLeft";
                 
                 _sanitizeCardAttrs(this);

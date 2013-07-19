@@ -3,11 +3,12 @@
 
 x-tabbar{
     @include component-ui-background;
+    display: block;
+    width: 100%;
+    
     font-family: $COMPONENT_UI_FONT_FAMILY;
     line-height: $COMPONENT_UI_LINE_HEIGHT;
 
-    display: block;
-    width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;

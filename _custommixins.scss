@@ -97,8 +97,8 @@ $FONTS_FOLDER: "../fonts/";
     -o-transform:$transform; // Opera
 }
 
-@mixin shadowed($color:$shadowColor){
-    box-shadow: 0 1px 4px $color;
+@mixin shadowed($color:grey){
+    box-shadow: 1px 1px 4px $color;
 }
 
 @mixin clickable{

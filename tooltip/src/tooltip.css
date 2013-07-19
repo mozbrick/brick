@@ -1,17 +1,10 @@
+@font-face {
+  font-family: "OpenSans";
+  font-weight: normal;
+  font-style: normal;
+  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
+
 x-tooltip {
-  display: block;
-  position: absolute;
-  margin: 0;
-  padding: 0;
-  z-index: 999;
-  overflow: visible;
-  visibility: hidden;
-  opacity: 0;
-  max-width: 100%;
-  max-height: 100%;
-  border: 1px solid grey;
-  background-color: #eee;
-  border-radius: 4px;
   transition-property: visibility, transform, opacity;
   -webkit-transition-property: visibility, -webkit-transform, opacity;
   -moz-transition-property: visibility, -moz-transform, opacity;
@@ -27,7 +20,22 @@ x-tooltip {
   -webkit-transition-delay: 0s;
   -moz-transition-delay: 0s;
   -o-transition-delay: 0s;
-  transition-delay: 0s; }
+  transition-delay: 0s;
+  display: block;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  z-index: 999;
+  overflow: visible;
+  visibility: hidden;
+  opacity: 0;
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid grey;
+  background-color: #eee;
+  border-radius: 4px;
+  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  box-shadow: 1px 1px 4px grey; }
   x-tooltip[ignore-tooltip-pointer-events] {
     pointer-events: none; }
   x-tooltip[orientation=top] {
@@ -94,33 +102,33 @@ x-tooltip {
     -o-transform: none; }
 
 x-tooltip > .tooltip-content {
-  position: relative;
-  z-index: 2;
-  display: block;
-  overflow: auto;
-  padding: .5em;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  padding: .5em;
+  overflow: auto;
+  z-index: 2; }
 
 x-tooltip > .tooltip-arrow {
-  z-index: 1;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
   position: absolute;
+  display: block;
   margin: 0px;
   padding: 0px;
   vertical-align: top;
-  display: block;
   width: 1em;
   height: 1em;
   border: inherit;
-  background: inherit; }
+  background: inherit;
+  z-index: 1; }
   x-tooltip > .tooltip-arrow:not([arrow-direction=up]):not([arrow-direction=left]):not([arrow-direction=right]) {
     top: 100%;
     left: 50%;

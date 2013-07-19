@@ -1,8 +1,8 @@
 @font-face {
-  font-family: "OpenSans-Semibold";
+  font-family: "OpenSans";
   font-weight: normal;
   font-style: normal;
-  src: url("OpenSans-Semibold.ttf") format("truetype"); }
+  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
 
 x-iconbutton {
   background-color: #a0a0a0;
@@ -27,15 +27,15 @@ x-iconbutton {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
-  color: #d4d4d4;
-  font-family: "OpenSans-Semibold", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   white-space: nowrap;
   display: inline-block;
-  border: 1px solid grey;
   margin: 0;
   padding: 5px 8.75px;
-  cursor: pointer;
+  border: 1px solid grey;
+  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   text-align: center;
+  color: #d4d4d4;
+  cursor: pointer;
   /* content is wrapped so that it is always centered */
   /* spacer div used to ensure centering */ }
   x-iconbutton:hover {
@@ -68,10 +68,10 @@ x-iconbutton {
     padding: 0 !important;
     margin: 0 !important; }
   x-iconbutton .x-iconbutton-icon, x-iconbutton .x-iconbutton-label {
-    margin: 0;
-    padding: 0;
+    display: inline-block;
     vertical-align: middle;
-    display: inline-block; }
+    margin: 0;
+    padding: 0; }
   x-iconbutton .x-iconbutton-label {
     font-size: 14px; }
   x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-label {

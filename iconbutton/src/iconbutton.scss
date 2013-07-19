@@ -7,16 +7,19 @@ x-iconbutton{
     @include component-ui-background;
     @include boxSizing(border-box);
     @include unhighlightable;
-    color: $COMPONENT_UI_TEXT_COLOR;
-    font-family: $COMPONENT_UI_FONT_FAMILY;
 
     white-space: nowrap;
     display: inline-block;
-    border: 1px solid grey;
     margin: 0;
     padding: $defaultSpacing $defaultSpacing*1.75;
-    cursor: pointer;
+
+    border: 1px solid grey;
+
+    font-family: $COMPONENT_UI_FONT_FAMILY;
     text-align: center;
+
+    color: $COMPONENT_UI_TEXT_COLOR;
+    cursor: pointer;
 
     &:hover{
       @include component-ui-background-hover;
@@ -44,10 +47,10 @@ x-iconbutton{
     }
 
     & .x-iconbutton-icon, & .x-iconbutton-label{
+       display: inline-block;
+       vertical-align: middle;
        margin: 0;
        padding: 0;
-       vertical-align: middle;
-       display: inline-block;
     }
 
     & .x-iconbutton-label{
