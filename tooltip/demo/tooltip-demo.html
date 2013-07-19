@@ -320,7 +320,7 @@ function updateStatuses(){
     }
     
     
-    var buttons = document.querySelectorAll("#demo-tip-controls button");
+    var buttons = xtag.query(document, "#demo-tip-controls button");
     buttons.forEach(function(button){
         if(demoTip.parentNode){
             button.removeAttribute("disabled");

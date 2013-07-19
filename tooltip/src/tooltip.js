@@ -130,8 +130,9 @@
     
     /** OuterTriggerEventStruct: (string)
     * 
-    *  an object maintaining a CachedListener for a single event type to handle
-    *  dismissing tooltips when the event is triggered outside of it.
+    *  an object maintaining a single CachedListener for each of a single event 
+    *  type to handle dismissing all tooltips corresponding to that event type
+    *  when the event is triggered outside of it.
     *  Maintains a list of tooltips to which this listener applies
     *
     *  constructor params:
@@ -237,7 +238,9 @@
     * adds a tooltip to the event dictionary and sets it to be handled by the
     * struct for the given type
     **/
-    OuterTriggerManager.prototype.registerTooltip = function(eventType, tooltip){
+    OuterTriggerManager.prototype.registerTooltip = function(eventType, 
+                                                             tooltip)
+    {
         // if event already in dict, just make the existing struct responsible
         // for the tooltip
         if(eventType in this.eventStructDict){
@@ -248,7 +251,8 @@
         }
         // if event does not yet exist, set up new struct for it
         else{
-            this.eventStructDict[eventType] = new OuterTriggerEventStruct(eventType);
+            this.eventStructDict[eventType] = 
+                new OuterTriggerEventStruct(eventType);
             this.eventStructDict[eventType].addTooltip(tooltip);
         }
     };
@@ -258,7 +262,9 @@
     * removes a tooltip from the event dictionary and unsets it from being 
     * handled by the struct for the given event type
     **/
-    OuterTriggerManager.prototype.unregisterTooltip = function(eventType, tooltip){
+    OuterTriggerManager.prototype.unregisterTooltip = function(eventType, 
+                                                               tooltip)
+    {
         if(eventType in this.eventStructDict && 
            this.eventStructDict[eventType].containsTooltip(tooltip))
         {
@@ -825,16 +831,25 @@
         // coordinates of the target element, relative to the document
         var targetPageOffset = getRect(targetElem);
         
-        // coordinates of the tooltip's container element, relative to the document
+        // coordinates of the tooltip's container element, rel to the document
         var tipContainerPageOffset = getRect(tipContainer);
-        console.log(targetPageOffset, tipContainerPageOffset);
-        console.log(tipContainer.scrollTop, tipContainer.scrollLeft);
-        // coordinates of the target element, relative to the tooltip's container
+
+        // coordinates of the target element, relative to tooltip's container
         var targetContainerOffset = {
-            "top": targetPageOffset.top - tipContainerPageOffset.top + tipContainer.scrollTop,
-            "left": targetPageOffset.left - tipContainerPageOffset.left + tipContainer.scrollLeft
+            "top": targetPageOffset.top - tipContainerPageOffset.top,
+            "left": targetPageOffset.left - tipContainerPageOffset.left
         };
         
+        // add in scroll offset if the container is not the body 
+        // (we don't add scroll if the container is the body because our 
+        //  getRect calculations were already in relation to the body)
+        if(tipContainer !== document.body && 
+           hasParentNode(tipContainer, document.body))
+        {
+            targetContainerOffset.top += tipContainer.scrollTop;
+            targetContainerOffset.left += tipContainer.scrollLeft;
+        }
+
         var containerWidth = tipContainer.scrollWidth;
         var containerHeight = tipContainer.scrollHeight;
         var targetWidth = targetElem.offsetWidth;
@@ -1023,7 +1038,9 @@
      * if newTargetSelector is not given, uses previously existing selector
      * if newTriggerStyle is not given, uses the previously used trigger style
     **/
-    function _updateTriggerListeners(tooltip, newTargetSelector, newTriggerStyle){
+    function _updateTriggerListeners(tooltip, newTargetSelector, 
+                                     newTriggerStyle)
+    {
         // dont update listeners if tooltip is not yet actually in the document
         if(!tooltip.parentNode){
             return;
@@ -1057,7 +1074,8 @@
             listeners = getListenersFn(tooltip, newTargetSelector);
         }
         else{
-            listeners = mkGenericListeners(tooltip, newTargetSelector, newTriggerStyle);
+            listeners = mkGenericListeners(tooltip, newTargetSelector, 
+                                           newTriggerStyle);
             OUTER_TRIGGER_MANAGER.registerTooltip(newTriggerStyle, tooltip);
         }
         
