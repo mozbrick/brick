@@ -2,7 +2,6 @@
 
 $_bgBaseColor: #858585;
 $_bgSelectBaseColor: #E1E1E1;
-$_bgHoverBaseColor: lighten($_bgBaseColor, 5%);
 $_bgHighlightColor: #A0A0A0;
 
 $_textCustomFont: "OpenSans-Semibold";
@@ -10,15 +9,20 @@ $_textCustomFont: "OpenSans-Semibold";
 $COMPONENT_UI_FONT_FAMILY: $_textCustomFont, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 $COMPONENT_UI_LINE_HEIGHT: 19px;
 $COMPONENT_UI_FONT_SIZE: 14px;
+$COMPONENT_UI_HEADER_FONT_SIZE: 20px;
+$COMPONENT_UI_LINE_PADDING: ($COMPONENT_UI_LINE_HEIGHT - $COMPONENT_UI_FONT_SIZE) / 2; // for when you don't want to specify line-height
 $COMPONENT_UI_TEXT_COLOR: #D4D4D4;
-$COMPONENT_UI_TEXT_COLOR_HOVER: lighten($COMPONENT_UI_TEXT_COLOR, 5%);
 $COMPONENT_UI_TEXT_COLOR_SELECTED: #F2F2F2;
+$COMPONENT_UI_TEXT_COLOR_HOVER: mix($COMPONENT_UI_TEXT_COLOR, $COMPONENT_UI_TEXT_COLOR_SELECTED, 25%);
 
 
 @include customFont($_textCustomFont, $fontFolder:"");
 
 // Backgrounds
 @mixin component-ui-background{
+    background-color: $_bgHighlightColor;
+    background-repeat: no-repeat;
+    background-position: 0 0;
     background-image: -o-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
     background-image: -moz-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
     background-image: -webkit-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
@@ -27,15 +31,21 @@ $COMPONENT_UI_TEXT_COLOR_SELECTED: #F2F2F2;
 }
 
 @mixin component-ui-background-hover{
-    background-image: -o-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgHoverBaseColor 100%);
-    background-image: -moz-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgHoverBaseColor 100%);
-    background-image: -webkit-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgHoverBaseColor 100%);
-    background-image: -ms-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgHoverBaseColor 100%);
-    background-image: linear-gradient(-180deg, $_bgHighlightColor 14%, $_bgHoverBaseColor 100%);
+    background-color: $_bgHighlightColor;
+    background-repeat: no-repeat;
+    background-position: 0 1em;
+    background-image: -o-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
+    background-image: -moz-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
+    background-image: -webkit-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
+    background-image: -ms-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
+    background-image: linear-gradient(-180deg, $_bgHighlightColor 14%, $_bgBaseColor 100%);
 }
 
 // Selected Item Background
 @mixin component-ui-background-selected{
+    background-color: $_bgHighlightColor;
+    background-repeat: no-repeat;
+    background-position: 0 0;
     background-image: -o-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgSelectBaseColor 100%);
     background-image: -moz-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgSelectBaseColor 100%);
     background-image: -webkit-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgSelectBaseColor 100%);

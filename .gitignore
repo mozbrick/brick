@@ -4,3 +4,4 @@ node_modules
 .DS_Store
 brick-*
 /test
+_component-ui-defaults.css

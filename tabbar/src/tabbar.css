@@ -5,6 +5,9 @@
   src: url("OpenSans-Semibold.ttf") format("truetype"); }
 
 x-tabbar {
+  background-color: #a0a0a0;
+  background-repeat: no-repeat;
+  background-position: 0 0;
   background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
