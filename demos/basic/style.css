@@ -13,9 +13,6 @@ body, html {
   background: #fff;
   border: 0 none;
 }
-x-appbar, x-tabbar {
-  background: #ddd;
-}
 #app x-deck {
   width: 100%;
   height: 100%;

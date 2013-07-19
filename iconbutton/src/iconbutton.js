@@ -68,10 +68,17 @@
         xtag.query(document, "x-iconbutton[active]").forEach(function(button){
             button.removeAttribute("active");
         });
+    }
 
+    function _unfocusButtons(){
         xtag.query(document, "x-iconbutton:focus").forEach(function(button){
             button.blur();
         });
+    }
+
+    function _unselectAllButtons(e){
+        _deactivateButtons(e);
+        _unfocusButtons();
     }
 
     var DOC_LISTENER_FNS = null;
@@ -114,9 +121,11 @@
                 if(!DOC_LISTENER_FNS){
                     DOC_LISTENER_FNS = {
                         "tapend": xtag.addEvent(document, "tapend", 
-                                                _deactivateButtons),
+                                                _unselectAllButtons),
                         "dragend": xtag.addEvent(document, "dragend", 
-                                                _deactivateButtons)
+                                                _unselectAllButtons),
+                        "keyup": xtag.addEvent(document, "keyup", 
+                                                _deactivateButtons),
                     };
                 }
                 updatePartsOrder(this);
@@ -145,7 +154,12 @@
                 var keyCode = e.key || e.keyCode;
                 if(keyCode === SPACE_KEYCODE || keyCode === ENTER_KEYCODE){
                     e.currentTarget.click();
-                    e.preventDefault();
+                }
+            },
+            "keydown": function(e){
+                var keyCode = e.key || e.keyCode;
+                if(keyCode === SPACE_KEYCODE || keyCode === ENTER_KEYCODE){
+                    e.currentTarget.setAttribute("active", true);
                 }
             }
         },
@@ -160,6 +174,9 @@
                     this.xtag.iconEl.src = newSrc;
                     updatePartsVisibility(this, newSrc);
                 }
+            },
+            "active":{
+                attribute:{}
             },
             "iconAnchor": {
                 attribute: {name: "icon-anchor"},

@@ -26,7 +26,7 @@ x-iconbutton{
       color: $COMPONENT_UI_TEXT_COLOR_HOVER;
     }
 
-    &[active]{
+    &:active, &[active]{
       @include component-ui-background-selected;
       color: $COMPONENT_UI_TEXT_COLOR_SELECTED;
     }

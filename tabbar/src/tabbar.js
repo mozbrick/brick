@@ -70,13 +70,13 @@
         },
         events: {
             "tap:delegate(x-tabbar-tab)": function(e) {
-                var activeTab = xtag.query(this.parentNode, "x-tabbar-tab[active]");
+                var activeTab = xtag.query(this.parentNode, "x-tabbar-tab[selected]");
                 if (activeTab.length) {
                     activeTab.forEach(function(t) {
-                        t.removeAttribute('active');
+                        t.removeAttribute('selected');
                     });
                 }
-                e.target.setAttribute('active', true);
+                this.setAttribute('selected', true);
             }
         },
         accessors: {
@@ -141,7 +141,6 @@
                 else{
                    _onTabbarTabTap(tabEl);
                 }
-                e.preventDefault();
             }
         },
         accessors: {

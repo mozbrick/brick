@@ -7,28 +7,62 @@ x-tabbar{
     width: 100%;
     
     font-family: $COMPONENT_UI_FONT_FAMILY;
-    line-height: $COMPONENT_UI_LINE_HEIGHT;
+    color: $COMPONENT_UI_TEXT_COLOR;
 
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     text-align: center;
+
+    // hack to remove inline spacing
+    letter-spacing: -0.31em;
     
     & > x-tabbar-tab{
+        letter-spacing: normal;
+
+        @include component-ui-background;
         @include boxSizing(border-box);
         display: inline-block;
         height: 100%;
-        padding: 0;
 
         vertical-align: middle;
 
+        border-right: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
+        border-left: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
+
+        padding-top: $COMPONENT_UI_LINE_PADDING;
+        padding-bottom: $COMPONENT_UI_LINE_PADDING;
+
+        &:hover{
+            @include component-ui-background-hover;
+            color: $COMPONENT_UI_TEXT_COLOR_HOVER;
+        }
+
+        &:active{
+            @include component-ui-background-selected;
+            color: $COMPONENT_UI_TEXT_COLOR_SELECTED;
+        }
+
         &:first-child{
-            border-left-width: 0px;
+            border-left-width: 2px;
+        }
+
+        &:last-child{
+            border-right-width: 2px;
         }
 
         & > *:only-child{
+            vertical-align: top;
             height: 100%;
             width: 100%;
+            // prevent padding from giving the child a unselectable border area
+            margin-top: -$COMPONENT_UI_LINE_PADDING;
+            margin-bottom: -$COMPONENT_UI_LINE_PADDING;
+        }
+
+        // special overrides with x-iconbutton
+        & > x-iconbutton:only-child{
+            border: 0;
         }
     }
 }
