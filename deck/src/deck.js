@@ -304,15 +304,17 @@
     function _animateCardReplacement(deck, oldCard, newCard, 
                                       cardAnimName, isReverse){
         deck.xtag._selectedCard = newCard;
+        var animTimeStamp = new Date();
+        deck.xtag._lastAnimTimestamp = animTimeStamp;
                                       
         // set up an attribute-cleaning up function and callback caller function
         // that will be fired when the animation is completed
         var _onComplete = function(){
-            // for synchronization purposes, only set these attributes if 
-            // the newCard is actually the currently selected card;
+            // for synchronization purposes, only set these attributes if this
+            // is actually the most recently fired timestamp
             // otherwise, older animations interrupt newer animations and
             // remove attributes, causing graphical flicker
-            if(newCard === deck.xtag._selectedCard){
+            if(animTimeStamp === deck.xtag._lastAnimTimestamp){
                 _sanitizeCardAttrs(deck);
             }
             xtag.fireEvent(deck, "shuffleend");
@@ -499,8 +501,6 @@
     **/
     function _replaceCurrCard(deck, newCard, transitionType, 
                               progressType, ignoreHistory){
-        _sanitizeCardAttrs(deck);
-        
         var oldCard = deck.xtag._selectedCard;
         
         // avoid redundant call that doesnt actually change anything
@@ -511,6 +511,10 @@
             return;
         }
         
+        // only call sanitize if we don't abort redundant call to avoid issue
+        // where doubletap on trigger causes graphical flicker
+        _sanitizeCardAttrs(deck);
+
         if(transitionType === undefined){
             console.log("defaulting to none transition");
             transitionType = "none";
@@ -641,7 +645,7 @@
                                     
                 this.xtag._selectedCard = (this.xtag._selectedCard) ? 
                                            this.xtag._selectedCard : null; 
-                //this.xtag._lastAnimTimestamp = null;
+                this.xtag._lastAnimTimestamp = null;
                 this.xtag.transitionType = "scrollLeft";
                 
                 _sanitizeCardAttrs(this);

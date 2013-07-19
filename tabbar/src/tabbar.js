@@ -141,6 +141,7 @@
                 else{
                    _onTabbarTabTap(tabEl);
                 }
+                e.preventDefault();
             }
         },
         accessors: {

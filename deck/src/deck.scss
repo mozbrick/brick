@@ -38,7 +38,6 @@ $newCardZIndex: 2;
     @include transformed(translate3d(0%,0%,1px));
 }
 
-
 x-deck{
     display: block; //can be overridden with anything non-inline
     position: relative;
