@@ -54,7 +54,7 @@
     </article>
 
     <script>
-      var demos = document.querySelectorAll('.demo');
+      var demos = document.querySelectorAll('.demo[data-src]');
       for (var i=0; i<demos.length; i++) {
         var fig = demos[i];
         var iframe = document.createElement('iframe');
