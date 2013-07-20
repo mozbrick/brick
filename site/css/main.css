@@ -78,7 +78,7 @@ section, footer {
   width: calc(50% - 1em);
   float: left;
 }
-.two-up + .two-up {
+.two-up:nth-child(2n+1) {
   margin-left: 2em;
 }
 .two-up h2 {

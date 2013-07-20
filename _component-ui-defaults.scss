@@ -45,6 +45,7 @@ $COMPONENT_UI_TEXT_COLOR_HOVER: mix($COMPONENT_UI_TEXT_COLOR, $COMPONENT_UI_TEXT
     background-color: $_bgHighlightColor;
     background-repeat: no-repeat;
     background-position: 0 0;
+    background-position: 0 1em;
     background-image: -o-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgSelectBaseColor 100%);
     background-image: -moz-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgSelectBaseColor 100%);
     background-image: -webkit-linear-gradient(-90deg, $_bgHighlightColor 14%, $_bgSelectBaseColor 100%);

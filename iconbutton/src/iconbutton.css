@@ -52,6 +52,7 @@ x-iconbutton {
     background-color: #a0a0a0;
     background-repeat: no-repeat;
     background-position: 0 0;
+    background-position: 0 1em;
     background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
     background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
     background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);

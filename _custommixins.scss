@@ -19,11 +19,14 @@ $FONTS_FOLDER: "../fonts/";
     -webkit-backface-visibility: $value;
     -moz-backface-visibility: $value;
     -ms-backface-visibility: $value;
+    -o-backface-visibility: $value;
+    backface-visibility: $value;
 }
 
 @mixin perspective($val){
     -webkit-perspective: $val;
     -moz-perspective: $val;
+    -o-perspective: $val;
     -ms-perspective: $val;
     perspective: $val;
 }

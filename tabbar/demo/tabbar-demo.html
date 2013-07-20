@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
-    <script type="text/javascript" src="../../dist/brick.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
     
     <style>
         body, html{
@@ -15,7 +15,7 @@
             padding: 0;
         }
         
-        body > figure{
+        figure{
             position: relative;
             display: inline-block;
             margin: 0;
@@ -77,9 +77,10 @@
     </style>
 </head>
 <body>
-<h1>X-TabBar demos</h1>
+<article>
+<header><h1>X-TabBar demos</h1></header>
 
-<figure>
+<figure class="two-up">
     <h2>With deck</h2>
     <div class="demo-container">    
         <x-deck class="component-demo" transition-type="coverDown">
@@ -110,7 +111,7 @@
     </div>
 </figure>
 
-<figure>
+<figure class="two-up">
     <h2>With slidebox <br/>(also dynamically assigned tab targets)</h2>
     <div class="demo-container">
         <x-slidebox class="component-demo" orientation="x">
@@ -140,7 +141,7 @@
     </div>
 </figure>
 
-<figure class="container">
+<figure class="two-up">
     <h2>With flipbox</h2>
         <div class="demo-container">  
         <x-flipbox class="component-demo">
@@ -162,7 +163,7 @@
         </div>
 </figure>    
 
-<figure class="container">
+<figure class="two-up">
     <h2>Fire custom event types (see html source's <code>target-event</code> attribute)</h2>
     <div class="demo-container">  
     <div id="color-box" class="component-demo">
@@ -179,7 +180,8 @@
     </x-tabbar>
     </div>
 </figure>
-
+</article>
+<script type="text/javascript" src="../../dist/brick.js"></script>
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
     // demonstrate dynamic tab-target handling in slidebox demo

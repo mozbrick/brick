@@ -4,13 +4,13 @@
 x-tabbar{
     @include component-ui-background;
     display: block;
+    @include flexbox();
     width: 100%;
     
     font-family: $COMPONENT_UI_FONT_FAMILY;
     color: $COMPONENT_UI_TEXT_COLOR;
 
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden;
     white-space: nowrap;
     text-align: center;
 
@@ -18,8 +18,9 @@ x-tabbar{
     letter-spacing: -0.31em;
     
     & > x-tabbar-tab{
+        @include flex(1);
         letter-spacing: normal;
-
+        overflow: hidden;
         @include component-ui-background;
         @include boxSizing(border-box);
         display: inline-block;
