@@ -22,13 +22,7 @@
             vertical-align: bottom;
             width: 320px;
         }
-        
-        .demo-container{
-            position: relative;
-            width: 100%;
-            height: 480px;
-        }
-        
+
         .component-demo{
             position: relative;
             width: 100%;
@@ -50,6 +44,7 @@
             left: 50%;
             top: 50%;
             text-align: center;
+            line-height: 1.2em;
             
             font-size: 3em;
 
@@ -58,31 +53,28 @@
             -o-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+
+        x-tabbar{
+            height: 15%;
+        }
         
         x-tabbar-tab{
             height: 100%;
         }
-
-        x-iconbutton{
-        }
         
         x-iconbutton .x-iconbutton-icon{
-            max-width: 40px;
+            max-width: 30px;
             max-height: 1.5em;
-        }
-        
-        x-iconbutton .x-iconbutton-label{
-            padding: 5px;
         }
     </style>
 </head>
 <body>
 <article>
-<header><h1>X-TabBar demos</h1></header>
+<header><h1>X-Tabbar demos</h1></header>
 
 <figure class="two-up">
     <h2>With deck</h2>
-    <div class="demo-container">    
+    <div class="demo">    
         <x-deck class="component-demo" transition-type="coverDown">
             <x-card><img src="dog1.png"/><span>One</span></x-card>
             <x-card><img src="dog2.png"/><span>Two</span></x-card>
@@ -113,7 +105,7 @@
 
 <figure class="two-up">
     <h2>With slidebox <br/>(also dynamically assigned tab targets)</h2>
-    <div class="demo-container">
+    <div class="demo">
         <x-slidebox class="component-demo" orientation="x">
             <x-slides>
               <x-slide><img src="birnimal-calendar.png" /></x-slide>
@@ -126,16 +118,16 @@
         <!-- see javascript to see demo of dynamically assigning targets -->
         <x-tabbar>
             <x-tabbar-tab>
-                <x-iconbutton src="birnimal-calendar.png">Calendar</x-iconbutton>
+                <x-iconbutton src="birnimal-calendar.png">A</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab>
-                <x-iconbutton src="birnimal-graph.png">Graph</x-iconbutton>
+                <x-iconbutton src="birnimal-graph.png">B</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab>
-                <x-iconbutton src="birnimal-detail.png">Detail</x-iconbutton>
+                <x-iconbutton src="birnimal-detail.png">C</x-iconbutton>
             </x-tabbar-tab>
             <x-tabbar-tab>
-                <x-iconbutton src="birnimal-settings.png">Settings</x-iconbutton>
+                <x-iconbutton src="birnimal-settings.png">D</x-iconbutton>
             </x-tabbar-tab>
         </x-tabbar>
     </div>
@@ -143,7 +135,7 @@
 
 <figure class="two-up">
     <h2>With flipbox</h2>
-        <div class="demo-container">  
+        <div class="demo">  
         <x-flipbox class="component-demo">
           <div>
             <img src="Card_front.svg"/>
@@ -165,17 +157,17 @@
 
 <figure class="two-up">
     <h2>Fire custom event types (see html source's <code>target-event</code> attribute)</h2>
-    <div class="demo-container">  
+    <div class="demo">  
     <div id="color-box" class="component-demo">
         <span>NIC CAGE</span>
         <img src="http://placecage.com/c/300/325"/>
     </div>
     <x-tabbar target-event="danceparty">
         <x-tabbar-tab target-selector="#color-box > span">
-            <x-iconbutton src="http://placecage.com/100/100">Fire 'danceparty' on text</x-iconbutton>
+            <x-iconbutton src="http://placecage.com/100/100">danceparty</x-iconbutton>
         </x-tabbar-tab>
         <x-tabbar-tab target-selector="#color-box > img" target-event="override">
-            <x-iconbutton src="http://placecage.com/c/100/100">Fire 'override' on img</x-iconbutton>
+            <x-iconbutton src="http://placecage.com/c/100/100">override</x-iconbutton>
         </x-tabbar-tab>
     </x-tabbar>
     </div>

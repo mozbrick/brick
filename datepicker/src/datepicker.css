@@ -38,8 +38,7 @@ x-datepicker {
     left: 0;
     top: 100%;
     margin-top: -1px;
-    box-shadow: 1px 1px 4px grey;
-    z-index: 1; }
+    box-shadow: 1px 1px 4px grey; }
   x-datepicker[polyfill] > .x-datepicker-input {
     display: none !important; }
   x-datepicker[polyfill] > .x-datepicker-polyfill-input {

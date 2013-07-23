@@ -31,9 +31,6 @@ x-tabbar{
         border-right: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
         border-left: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
 
-        padding-top: $COMPONENT_UI_LINE_PADDING;
-        padding-bottom: $COMPONENT_UI_LINE_PADDING;
-
         &:hover{
             @include component-ui-background-hover;
             color: $COMPONENT_UI_TEXT_COLOR_HOVER;
@@ -56,9 +53,7 @@ x-tabbar{
             vertical-align: top;
             height: 100%;
             width: 100%;
-            // prevent padding from giving the child a unselectable border area
-            margin-top: -$COMPONENT_UI_LINE_PADDING;
-            margin-bottom: -$COMPONENT_UI_LINE_PADDING;
+            margin: 0 !important;
         }
 
         // special overrides with x-iconbutton

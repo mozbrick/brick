@@ -38,7 +38,6 @@ x-slider {
       background: transparent;
       border: 0px solid transparent;
       color: transparent;
-      z-index: 1;
       display: inline-block;
       background-color: transparent;
       /* use CSS to draw a trackbar in the background of the input */
@@ -85,7 +84,6 @@ x-slider {
       border-radius: 4px;
       border: 1px solid grey;
       box-shadow: 0px 1px 4px #ddd;
-      z-index: 2;
       background-color: white;
       background-repeat: no-repeat;
       background-image: -o-linear-gradient(top, white, white 25%, #d9d9d9);

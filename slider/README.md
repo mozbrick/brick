@@ -55,7 +55,7 @@ Polyfill is automatically set on x-slider creation depending on if range inputs 
 
 ## ___change___
 
-Fired by the slider when its value is changed
+Fired by the slider when its value is changed (ie: at the end of a drag that changes the value)
 
 ## ___input___
 

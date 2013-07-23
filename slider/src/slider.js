@@ -210,9 +210,6 @@
         
         // fire events
         xtag.fireEvent(inputEl, "input");
-        if(oldValue !== slider.value){
-            xtag.fireEvent(inputEl, "change");
-        }
         _redraw(slider);
     }
     
@@ -238,6 +235,8 @@
         if(thumb){
             thumb.setAttribute("active", true);
         }
+
+        slider.xtag.dragInitVal = slider.value;
     }
     
     
@@ -319,6 +318,12 @@
                 if(thumb){
                     thumb.removeAttribute("active");
                 }
+
+                if(slider.value !== slider.xtag.dragInitVal){
+                    xtag.fireEvent(slider.xtag.rangeInputEl, "change");
+                }
+                slider.xtag.dragInitVal = null;
+
                 e.preventDefault();
             },
             
@@ -373,7 +378,7 @@
         lifecycle: {
             created: function(){
                 this.xtag.callbackFns = _makeCallbackFns(this);
-            
+                this.xtag.dragInitVal = null;
                 /** create and initialize attributes of input **/
                 var input = document.createElement("input");
                 xtag.addClass(input, "input");

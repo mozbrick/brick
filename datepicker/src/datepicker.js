@@ -175,6 +175,14 @@
                 datepicker.setAttribute("focused", true);
             },
 
+            "focus:delegate(.x-datepicker-input)": function(e){
+                e.preventDefault(); // prevent mobile keyboard from popping up
+            },
+
+            "focus:delegate(.x-datepicker-polyfill-input)": function(e){
+                e.preventDefault(); // prevent mobile keyboard from popping up
+            },
+
             "blur:delegate(.x-datepicker-input)": function(e){
                 e.currentTarget.removeAttribute("focused");
             },

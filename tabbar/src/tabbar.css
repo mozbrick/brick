@@ -54,9 +54,7 @@ x-tabbar {
     height: 100%;
     vertical-align: middle;
     border-right: 1px solid #aeaeae;
-    border-left: 1px solid #aeaeae;
-    padding-top: 2.5px;
-    padding-bottom: 2.5px; }
+    border-left: 1px solid #aeaeae; }
     x-tabbar > x-tabbar-tab:hover {
       background-color: #a0a0a0;
       background-repeat: no-repeat;
@@ -86,7 +84,6 @@ x-tabbar {
       vertical-align: top;
       height: 100%;
       width: 100%;
-      margin-top: -2.5px;
-      margin-bottom: -2.5px; }
+      margin: 0 !important; }
     x-tabbar > x-tabbar-tab > x-iconbutton:only-child {
       border: 0; }

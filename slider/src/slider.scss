@@ -34,7 +34,6 @@ x-slider{
             border: 0px solid transparent;
             color: transparent;
             
-            z-index: 1;
             display: inline-block;
             
             background-color: transparent;
@@ -90,7 +89,6 @@ x-slider{
             border: 1px solid grey;
             box-shadow: 0px 1px 4px #ddd;
             
-            z-index: 2;
             
             @include simplegradient;
             &:hover{
