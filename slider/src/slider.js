@@ -221,6 +221,7 @@
     * sets up callbacks functions for handling the rest of the drag
     **/
     function _onDragStart(slider, pageX, pageY){
+        slider.xtag.dragInitVal = slider.value;
         _onMouseInput(slider, pageX, pageY);
         
         var callbacks = slider.xtag.callbackFns;
@@ -235,8 +236,6 @@
         if(thumb){
             thumb.setAttribute("active", true);
         }
-
-        slider.xtag.dragInitVal = slider.value;
     }
     
     
