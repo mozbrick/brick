@@ -1289,21 +1289,13 @@
                 xtag.fireEvent(xCalendar, "prevmonth");
             },
 
-            // tapstart is split into mousedown and touchstart to work around
-            // issue where tapstart doesn't fire when drag-gesturing on
-            // mobile devices
-            "mousedown:delegate(.day)": function(e){
+            "tapstart:delegate(.day)": function(e){
                 // prevent firing on right click
-                if(e.button && e.button !== LEFT_MOUSE_BTN){
+                if((!e.touches) && e.button && e.button !== LEFT_MOUSE_BTN){
                     return;
                 }
-                // prevent dragging around existing selections
-                e.preventDefault();
-                _onDragStart(e.currentTarget, this);
-            },
-
-            "touchstart:delegate(.day)": function(e){
-                // prevent mobile drag-scroll
+                 // prevent dragging around existing selections
+                 // also prevent mobile drag scroll
                 e.preventDefault();
                 _onDragStart(e.currentTarget, this);
             },
@@ -1350,7 +1342,7 @@
 
                 // make sure that we can actually consider this a tap
                 // (note that this delegated version fires before the 
-                //  mouseup/touchend events assigned to the document)
+                //  mouseup/touchend events we assigned to the document)
                 if(!xCalendar.xtag.dragAllowTap){
                     return;
                 }

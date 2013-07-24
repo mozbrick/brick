@@ -145,15 +145,15 @@
             });
 
             xtag.addEvent(document, "datetoggleon:delegate(x-calendar)", function(e){
-                console.log("datetoggleon detected on", this);
+                console.log("datetoggleon detected on", this, e.detail);
             });
 
             xtag.addEvent(document, "datetoggleoff:delegate(x-calendar)", function(e){
-                console.log("datetoggleoff detected on", this);
+                console.log("datetoggleoff detected on", this, e.detail);
             });
 
             xtag.addEvent(document, "datetap:delegate(x-calendar)", function(e){
-                console.log("datetap detected on", this);
+                console.log("datetap detected on", this, e.detail);
             });
 
             /** set up custom event handling demo using provided API hooks **/

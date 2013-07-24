@@ -93,7 +93,7 @@ x-calendar {
     background-color: #efefef;
     opacity: 0.7; }
   x-calendar:not([active]) .day:not(.chosen):not(.badmonth):hover {
-    background: #999;
+    background: #aaa;
     color: #fff; }
   x-calendar:not([active]) .day:not(.chosen).badmonth:hover {
     background: #efefef; }
