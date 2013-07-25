@@ -40,6 +40,8 @@ x-datepicker {
         top: 100%;
         margin-top: -$polyfillInputBorderWidth; // offset to merge with polyfill input's border
         box-shadow: 1px 1px 4px grey;
+
+        z-index: 1;
     }
 
 
