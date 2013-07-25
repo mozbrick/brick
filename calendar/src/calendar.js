@@ -512,107 +512,17 @@
         });
     }
 
-    /** makeMonth: (Date, (Date/[Date, Date]) array) => DOM element
-
-    For the given view/cursor date's month, creates the HTML DOM elements 
-    needed to represent this month in the calendar
-
-    Days are created with a data-date attribute containing the ISO string
-    representing their date
-
-    For any date that is contained by the given chosen ranges, sets 'chosen'
-    classes so that they are marked as chosen for styling
-
-    Also marks the current date with the 'today' class
-
-    params:
-        d               the date whose month we will be rendering
-        chosen          an array of all chosen dates/dateranges to mark as such
-        firstWeekday    the day of the week, 0-6, (0=Sundday, 1=Monday, etc)
-                        that should be used as the first day of the week
-                        (useful for regional differences)
-                        default: 0 (ie: Sunday)
-    **/
-    function makeMonth(d, chosen, firstWeekday) {
-        if (!isValidDateObj(d)) throw 'Invalid view date!';
-        firstWeekday = parseIntDec(firstWeekday);
-        if(!isWeekdayNum(firstWeekday)){
-            firstWeekday = 0;
-        }
-
-        var month = getMonth(d);
-        var sDate = findWeekStart(findFirst(d), firstWeekday);
-
-        var monthEl = makeEl('div.month');
-        // create month label
-        var label = makeEl('div.label');
-        label.textContent = DEFAULT_LABELS.months[month] + ' ' + getYear(d);
-
-        /*
-        // create weekday labels
-        var weekdayLabels = makeEl('div.weekday-labels');
-        for (var step = 0; step < 7; step++) {
-            var weekday = (firstWeekday + step) % 7;
-            var weekdayEl = makeEl('span.weekday');
-            weekdayEl.textContent = DEFAULT_LABELS.weekdays[weekday];
-            appendChild(weekdayLabels, weekdayEl)
-        }
-        appendChild(label, weekdayLabels);
-        */
-
-        appendChild(monthEl, label);
-
-        // create each week of days in the month
-        var week = makeEl('div.week');
-        var cDate = sDate;
-        var done = false;
-
-        while(!done) {
-          var day = makeEl('span.day');
-          day.setAttribute('data-date', iso(cDate));
-          day.textContent = getDate(cDate);
-          if (getMonth(cDate) !== month) {
-            addClass(day, 'badmonth');
-          }
-
-          if (dateMatches(cDate, chosen)) {
-            addClass(day, CHOSEN_CLASS);
-          }
-
-          if(dateMatches(cDate, TODAY)){
-            addClass(day, "today");
-          }
-
-          appendChild(week, day);
-          cDate = nextDay(cDate);
-          // if the next day starts a new week, append finished week and see if
-          // we are done drawing the month
-          if (cDate.getUTCDay() === firstWeekday) {
-            appendChild(monthEl, week);
-            week = makeEl('div.week');
-            // Are we finished drawing the month?
-            // Checks month rollover and year rollover
-            // (ie: if month or year are after the current ones)
-            done = (getMonth(cDate) > month || 
-                    (getMonth(cDate) < month && getYear(cDate) > getYear(sDate))
-                   );
-          }
-        }
-
-        return monthEl;
-    }
-
-    /** makeControls: () => DOM element
+    /** makeControls: (data map) => DOM element
 
     creates and returns the HTML element used to hold the 
     navigation controls of the calendar
     **/
-    function makeControls() {
+    function makeControls(labelData) {
         var controls = makeEl('div.controls');
         var prev = makeEl('span.prev');
         var next = makeEl('span.next');
-        prev.innerHTML = DEFAULT_LABELS.prev;
-        next.innerHTML = DEFAULT_LABELS.next;
+        prev.innerHTML = labelData.prev;
+        next.innerHTML = labelData.next;
         appendChild(controls, prev);
         appendChild(controls, next);
         return controls;
@@ -658,13 +568,86 @@
         this._chosenRanges = this._getSanitizedChosenRanges(data.chosen, 
                                                                 data.view);
         this._firstWeekdayNum = data.firstWeekdayNum || 0;
-        this._el = makeEl('div.calendar');
+        // Note that this is the .calendar child div, NOT the x-calendar itself
+        this._el = makeEl('div.calendar'); 
+        this._labels = DEFAULT_LABELS;
 
         this._customRenderFn = null;
 
         this._renderRecursionFlag = false;
 
         this.render(true);
+    }
+
+    /** makeMonth: (Date) => DOM element
+
+    For the given view/cursor date's month, creates the HTML DOM elements 
+    needed to represent this month in the calendar
+
+    Days are created with a data-date attribute containing the ISO string
+    representing their date
+
+    For any date that is contained by the given chosen ranges, sets 'chosen'
+    classes so that they are marked as chosen for styling
+
+    Also marks the current date with the 'today' class
+
+    params:
+        d               the date whose month we will be rendering
+    **/
+    Calendar.prototype.makeMonth = function(d) {
+        if (!isValidDateObj(d)) throw 'Invalid view date!';
+        var firstWeekday = this.firstWeekdayNum;
+        var chosen = this.chosen;
+        var labels = this.labels;
+
+        var month = getMonth(d);
+        var sDate = findWeekStart(findFirst(d), firstWeekday);
+
+        var monthEl = makeEl('div.month');
+        // create month label
+        var label = makeEl('div.label');
+        label.textContent = labels.months[month] + ' ' + getYear(d);
+
+        appendChild(monthEl, label);
+
+        // create each week of days in the month
+        var week = makeEl('div.week');
+        var cDate = sDate;
+        var done = false;
+
+        while(!done) {
+          var day = makeEl('span.day');
+          day.setAttribute('data-date', iso(cDate));
+          day.textContent = getDate(cDate);
+          if (getMonth(cDate) !== month) {
+            addClass(day, 'badmonth');
+          }
+
+          if (dateMatches(cDate, chosen)) {
+            addClass(day, CHOSEN_CLASS);
+          }
+
+          if(dateMatches(cDate, TODAY)){
+            addClass(day, "today");
+          }
+
+          appendChild(week, day);
+          cDate = nextDay(cDate);
+          // if the next day starts a new week, append finished week and see if
+          // we are done drawing the month
+          if (cDate.getUTCDay() === firstWeekday) {
+            appendChild(monthEl, week);
+            week = makeEl('div.week');
+            // Are we finished drawing the month?
+            // Checks month rollover and year rollover
+            // (ie: if month or year are after the current ones)
+            done = (getMonth(cDate) > month || 
+                    (getMonth(cDate) < month && getYear(cDate) > getYear(sDate))
+                   );
+          }
+        }
+        return monthEl;
     }
 
 
@@ -953,6 +936,9 @@
     
     if preserveNodes is truthy, only update the status/classes of the currently
     displayed day nodes
+
+    NOTE: this doesn't update the navigation controls, as they are separate from
+    the calendar element
     **/
     Calendar.prototype.render = function(preserveNodes){
         var span = this._span;
@@ -962,8 +948,7 @@
             // get first month of the span of months centered on the view
             var ref = this.firstVisibleMonth;
             for (i = 0; i < span; i++) {
-                appendChild(this.el, makeMonth(ref, this._chosenRanges,
-                                               this._firstWeekdayNum));
+                appendChild(this.el, this.makeMonth(ref));
                 // get next month's date
                 ref = relOffset(ref, 0, 1, 0);
             }
@@ -1002,6 +987,8 @@
                 }
             }
         }
+
+        // finally call the custom renderer
         this._callCustomRenderer();
     };
 
@@ -1037,6 +1024,11 @@
         /** Calendar.el: (readonly)
 
         the DOM element representing the calendar's contianer element
+
+        Note that this is the .calendar child div, NOT the x-calendar itself!
+
+        (Controls are separated in order to prevent the need for constant 
+         layout repositioning due to z-indexing)
         **/
         "el": {
             get: function(){
@@ -1206,6 +1198,49 @@
             get: function(){
                 return relOffset(this.firstVisibleMonth, 0, 
                                  Math.max(0, this.span-1), 0);
+            }
+        },
+
+        "labels": {
+            get: function(){
+                return this._labels;
+            },
+            set: function(newLabelData){
+                var oldLabelData = this.labels;
+                for(var labelType in oldLabelData){
+                    if(!(labelType in newLabelData)) continue;
+
+                    var oldLabel = this._labels[labelType];
+                    var newLabel = newLabelData[labelType];
+                    // if the old label data used an array of labels for a 
+                    // certain type of label, ensure that 
+                    // the replacement labels are also an array of the same
+                    // number of labels
+                    if(isArray(oldLabel)){
+                        if(isArray(newLabel) && 
+                           oldLabel.length === newLabel.length)
+                        {
+                            newLabel = newLabel.slice(0);
+                            for (var i = 0; i < newLabel.length; i++) {
+                                // check for existing builtin toString for
+                                // string casting optimization
+                                newLabel[i] = (newLabel[i].toString) ? 
+                                                newLabel[i].toString() : 
+                                                String(newLabel[i]);
+                            }
+                        }
+                        else{
+                            throw("invalid label given for '"+labelType+
+                                  "': expected array of "+ oldLabel.length + 
+                                  " labels, got " + JSON.stringify(newLabel));
+                        }
+                    } 
+                    else{
+                        newLabel = String(newLabel);
+                    }
+                    oldLabelData[labelType] = newLabel;
+                }
+                this.render(false);
             }
         }
     });
@@ -1463,7 +1498,7 @@
                 attribute: {boolean: true},
                 set: function(hasControls){
                     if(hasControls && !this.xtag.calControls){
-                        this.xtag.calControls = makeControls();
+                        this.xtag.calControls = makeControls(this.xtag.calObj.labels);
                         // append controls AFTER calendar to use natural stack 
                         // order instead of needing explicit z-index
                         appendChild(this, this.xtag.calControls);
@@ -1667,6 +1702,22 @@
             hasVisibleDate: function(dateObj, excludeBadMonths){
                 return this.xtag.calObj.hasVisibleDate(dateObj, 
                                                        excludeBadMonths);
+            },
+
+            // if given a datamap of labels whose keys match those in 
+            // DEFAULT_LABELS, reassign the labels using those in the given
+            // newLabelData. Ensures that labels that were initially strings
+            // stay strings, and that labels that were initially arrays of 
+            // strings stay arrays of strings (with the same # of elements)
+            editLabels: function(newLabelData){
+                this.xtag.calObj.labels = newLabelData;
+                var labels = this.xtag.calObj.labels;
+                // also update the control labels, if available
+                var prevControl = this.querySelector(".controls > .prev");
+                if(prevControl) prevControl.textContent = labels.prev;
+
+                var nextControl = this.querySelector(".controls > .next");
+                if(nextControl) nextControl.textContent = labels.next;
             }
         }
     });

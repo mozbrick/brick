@@ -41,7 +41,7 @@ x-calendar {
     }
 
     .day, .prev, .next{
-        width: 2em;
+        min-width: 2em;
     }
 
     .label, .day, .prev, .next{

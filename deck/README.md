@@ -158,6 +158,8 @@ the two cards are in position to start animating, but have not yet begun the act
 
 A `shuffleend` event is fired by the &lt;x-deck&gt; element when a cycle from one card to another has been completed.
 
+**Note:** Much like the `transitionend` event, this is not guaranteed to fire after every transition that fires a shufflestart. For example, if two transitions are queued up, with the second occurring during the first transition, only the second transition's `shuffleend` will fire, due to the first transition being interrupted.
+
 ##  x-card: ___show___
 
 If an &lt;x-card&gt; element receives a `show` event, the deck will transition to the card that received the event using the currently set transition type.

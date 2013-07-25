@@ -158,6 +158,19 @@ will color all days after the current date red.
 
 # Methods
 
+## ___editLabels___(newLabelData)
+
+When called, will edit the labels of the calendar. This can be useful for translations/localizations.
+
+`newLabelData` is a JS object that can contain any of the following key:value pairs:
+- `prev`: a string to display on the previous-month navigation button
+- `next`: a string to display on the next-month navigation button
+` `months`: a array of 12 strings, where the first string corresponds to January, the second to February, etc all the way up to December
+
+If not given any of these keys, that corresponding label will remain unchanged.
+
+**Note:** Calling this will rerender the calendar.
+
 ## ___render___([preserveNodes])
 
 Can be called to manually force a refresh of the calendar's HTML elements. 
@@ -203,6 +216,7 @@ Also updates the 'chosen' attribute of the calendar.
 ## ___hasVisibleDate___(dateToCheck, [excludeBadMonths])
 
 Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months.
+
 
 # Events
 
