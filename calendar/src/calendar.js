@@ -3,12 +3,14 @@
     var LEFT_MOUSE_BTN = 0;
 
     // used during creating calendar elements
-    var DEFAULT_LABELS = {
-        prev: '<',
-        next: '>',
-        months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                 'August', 'September', 'October', 'November', 'December'],
-        weekdays: ['Su', "M", "Tu", "W", "Th", "F", "Sa"]
+    var GET_DEFAULT_LABELS = function(){
+        return {
+            prev: '<',
+            next: '>',
+            months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                     'August', 'September', 'October', 'November', 'December'],
+            weekdays: ['Su', "M", "Tu", "W", "Th", "F", "Sa"]
+        };
     };
 
     // the current date, without any time information
@@ -570,7 +572,7 @@
         this._firstWeekdayNum = data.firstWeekdayNum || 0;
         // Note that this is the .calendar child div, NOT the x-calendar itself
         this._el = makeEl('div.calendar'); 
-        this._labels = DEFAULT_LABELS;
+        this._labels = GET_DEFAULT_LABELS();
 
         this._customRenderFn = null;
 
