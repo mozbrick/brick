@@ -16,6 +16,7 @@ x-iconbutton{
     border: 1px solid grey;
 
     font-family: $COMPONENT_UI_FONT_FAMILY;
+    font-size: $COMPONENT_UI_FONT_SIZE;
     text-align: center;
 
     color: $COMPONENT_UI_TEXT_COLOR;
@@ -59,7 +60,6 @@ x-iconbutton{
     }
 
     & .x-iconbutton-label{
-      font-size: $COMPONENT_UI_FONT_SIZE;
     }
 
     &[icon-anchor=top], &[icon-anchor=bottom]{

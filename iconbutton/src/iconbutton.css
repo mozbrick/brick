@@ -33,6 +33,7 @@ x-iconbutton {
   padding: 0.1em 0.175em;
   border: 1px solid grey;
   font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
   text-align: center;
   color: #d4d4d4;
   cursor: pointer;
@@ -78,8 +79,6 @@ x-iconbutton {
     padding: 0;
     max-height: 100%;
     max-width: 100%; }
-  x-iconbutton .x-iconbutton-label {
-    font-size: 14px; }
   x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-label {
     margin: 0 auto;
     display: block; }
