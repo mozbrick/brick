@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   font-weight: normal;
   font-style: normal;
   src: url("OpenSans-SemiBold.ttf") format("truetype"); }
@@ -30,9 +30,9 @@ x-iconbutton {
   white-space: nowrap;
   display: inline-block;
   margin: 0;
-  padding: 5px 8.75px;
+  padding: 0.1em 0.175em;
   border: 1px solid grey;
-  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   text-align: center;
   color: #d4d4d4;
   cursor: pointer;
@@ -60,7 +60,10 @@ x-iconbutton {
     background-image: linear-gradient(-180deg, #a0a0a0 14%, #e1e1e1 100%);
     color: #f2f2f2; }
   x-iconbutton > .x-iconbutton-content-wrap {
-    display: inline-block !important; }
+    display: inline-block !important;
+    vertical-align: middle !important;
+    max-width: 100%;
+    max-height: 100%; }
   x-iconbutton > .x-iconbutton-ghost {
     display: inline-block !important;
     vertical-align: middle !important;
@@ -72,13 +75,15 @@ x-iconbutton {
     display: inline-block;
     vertical-align: middle;
     margin: 0;
-    padding: 0; }
+    padding: 0;
+    max-height: 100%;
+    max-width: 100%; }
   x-iconbutton .x-iconbutton-label {
     font-size: 14px; }
   x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-label {
     margin: 0 auto;
     display: block; }
   x-iconbutton[icon-anchor=left] .x-iconbutton-icon, x-iconbutton:not([icon-anchor]) .x-iconbutton-icon {
-    margin-right: 5px; }
+    margin-right: 0.1em; }
   x-iconbutton[icon-anchor=right] .x-iconbutton-icon {
-    margin-left: 5px; }
+    margin-left: 0.1em; }

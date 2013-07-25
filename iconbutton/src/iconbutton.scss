@@ -1,7 +1,7 @@
 @import "../../custommixins";
 @import "../../component-ui-defaults";
 
-$defaultSpacing: 5px;
+$defaultSpacing: .1em;
 
 x-iconbutton{
     @include component-ui-background;
@@ -34,6 +34,9 @@ x-iconbutton{
     /* content is wrapped so that it is always centered */
     & > .x-iconbutton-content-wrap{
       display: inline-block !important;
+      vertical-align: middle !important;
+      max-width: 100%;
+      max-height: 100%;
     }
 
     /* spacer div used to ensure centering */
@@ -51,6 +54,8 @@ x-iconbutton{
        vertical-align: middle;
        margin: 0;
        padding: 0;
+       max-height: 100%;
+       max-width: 100%;
     }
 
     & .x-iconbutton-label{
