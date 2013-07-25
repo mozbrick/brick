@@ -45,7 +45,7 @@
         this.sanitizeStack();
         
         // remove oldest items to cap number of items in history
-        if(this._itemCap != "none" && 
+        if(this._itemCap !== "none" && 
            this._historyStack.length > this._itemCap)
         {
             var len = this._historyStack.length;
@@ -316,8 +316,10 @@
             // remove attributes, causing graphical flicker
             if(animTimeStamp === deck.xtag._lastAnimTimestamp){
                 _sanitizeCardAttrs(deck);
+                xtag.fireEvent(deck, "shuffleend", 
+                               {detail: {oldCard: oldCard,
+                                         newCard: newCard}});
             }
-            xtag.fireEvent(deck, "shuffleend");
         };
         
         // abort redundant transitions
@@ -347,7 +349,9 @@
                     oldCard.setAttribute("reverse", true);
                     newCard.setAttribute("reverse", true);
                 }
-                xtag.fireEvent(deck, "shufflestart");
+                xtag.fireEvent(deck, "shufflestart", 
+                               {detail: {oldCard: oldCard,
+                                         newCard: newCard}});
             }
         };
         
@@ -506,8 +510,10 @@
         // avoid redundant call that doesnt actually change anything
         // about the cards
         if(oldCard === newCard){
-            xtag.fireEvent(deck, "shufflestart");
-            xtag.fireEvent(deck, "shuffleend");
+            xtag.fireEvent(deck, "shufflestart", {detail: {oldCard: oldCard,
+                                                           newCard: newCard}});
+            xtag.fireEvent(deck, "shuffleend", {detail: {oldCard: oldCard,
+                                                         newCard: newCard}});
             return;
         }
         
@@ -738,6 +744,18 @@
             "currHistoryIndex": {
                 get: function(){
                     return this.xtag.history.currIndex;
+                }
+            },
+
+            "cards": {
+                get: function(){
+                    return this.getAllCards();
+                }
+            },
+
+            "selectedCard": {
+                get: function(){
+                    return this.getSelectedCard();
                 }
             }
         },

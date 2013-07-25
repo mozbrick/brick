@@ -138,12 +138,12 @@
             demoBox = document.getElementById("demo-box");
             
             demoBox.addEventListener('shufflestart', function(e){
-                console.log("shufflestart");
+                console.log("shufflestart", e);
                 updateStatuses();
             });
             
             demoBox.addEventListener('shuffleend', function(e){
-                console.log("shuffleend");
+                console.log("shuffleend", e);
                 updateStatuses();
             });
             

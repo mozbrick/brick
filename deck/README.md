@@ -75,7 +75,11 @@ Valid options are the same as the x-deck's `transition-type` attribute.
 
 # Accessors
 
-## ___numCards___
+## ___cards___ (getter only)
+
+Returns a list of all x-card DOM elements belonging to the deck
+
+## ___numCards___ (getter only)
 
 Gets the number of cards currently stored in the deck
 
@@ -83,6 +87,10 @@ Example:
 ```
     var foo = document.querySelector('x-deck').numCards;
 ```
+
+## ___selectedCard___ (getter only)
+
+Returns the x-card DOM element that is currently displayed by the deck. Returns null if no such card exists.
 
 ## ___currHistorySize___
 
@@ -117,11 +125,11 @@ See ___shuffleTo___ for details on the progressType parameter
 
 ## ___getAllCards___()
 
-Returns a list of all x-card DOM elements belonging to the deck
+See the `cards` accessor documentation
 
 ## ___getSelectedCard___()
 
-Returns the x-card DOM element that is currently displayed by the deck. Returns null if no such card exists.
+See the `selectedCard` accessor documentation
 
 ## ___getCardIndex___(card)
 
@@ -154,11 +162,25 @@ Forces the deck to display the card who called this method
 A `shufflestart` event is fired by the &lt;x-deck&gt; element when, during the process of transitioning between cards,
 the two cards are in position to start animating, but have not yet begun the actual animation.
 
+The event also receives the following custom datamap in `e.detail`:
+
+    {
+        'oldCard': the previously selected x-card node that the transition is animating away from,
+        'newCard': the x-card node that the transition is animating towards
+    }
+
 ## ___shuffleend___
 
 A `shuffleend` event is fired by the &lt;x-deck&gt; element when a cycle from one card to another has been completed.
 
 **Note:** Much like the `transitionend` event, this is not guaranteed to fire after every transition that fires a shufflestart. For example, if two transitions are queued up, with the second occurring during the first transition, only the second transition's `shuffleend` will fire, due to the first transition being interrupted.
+
+The event also receives the following custom datamap in `e.detail`:
+
+    {
+        'oldCard': the previously selected x-card node that the transition is animating away from,
+        'newCard': the x-card node that the transition is animating towards
+    }
 
 ##  x-card: ___show___
 
