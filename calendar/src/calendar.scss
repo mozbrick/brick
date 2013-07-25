@@ -40,10 +40,13 @@ x-calendar {
         overflow: visible;
     }
 
-    .label, .day, .prev, .next{
+    .day, .prev, .next{
         width: 2em;
+    }
+
+    .label, .day, .prev, .next{
         color: #444;
-        height: 2em;
+        min-height: 2em;
         line-height: 2em;
         text-decoration: none;
     }

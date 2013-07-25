@@ -108,6 +108,18 @@ Invalid:
 
 **Note:** Changing this rerenders the calendar
 
+## ___firstWeekDayNum___ / ___first-weekday-num___
+
+Specifies a number, 0-6, (where 0=Sunday, 1=Monday, etc) indicating which day should be the first day of the week
+
+For example, to declare Monday as the first day of the week:
+
+    <x-calendar first-weekday-num=1></x-calendar>
+
+If not given, defaults to 0 (ie: Sunday).
+
+**Note:** Changing this rerenders the calendar
+
 ## ___disable-ui-toggle___ / ___disableUIToggle___
 
 If set, the default date-toggling behavior of the UI is disabled. However, dates can still be programmatically chosen/toggled.

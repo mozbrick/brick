@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   font-weight: normal;
   font-style: normal;
   src: url("OpenSans-SemiBold.ttf") format("truetype"); }
@@ -25,7 +25,7 @@ x-calendar {
   padding: 0;
   border: 2px solid #888;
   font-size: 1em;
-  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   text-align: center;
   overflow: hidden;
   background-color: #fff; }
@@ -43,10 +43,11 @@ x-calendar {
   x-calendar .week {
     margin: 1px 2px;
     overflow: visible; }
+  x-calendar .day, x-calendar .prev, x-calendar .next {
+    width: 2em; }
   x-calendar .label, x-calendar .day, x-calendar .prev, x-calendar .next {
-    width: 2em;
     color: #444;
-    height: 2em;
+    min-height: 2em;
     line-height: 2em;
     text-decoration: none; }
   x-calendar .label {

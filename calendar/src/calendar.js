@@ -3,11 +3,12 @@
     var LEFT_MOUSE_BTN = 0;
 
     // used during creating calendar elements
-    var LABELS = {
+    var DEFAULT_LABELS = {
         prev: '<',
         next: '>',
         months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                 'August', 'September', 'October', 'November', 'December']
+                 'August', 'September', 'October', 'November', 'December'],
+        weekdays: ['Su', "M", "Tu", "W", "Th", "F", "Sa"]
     };
 
     // the current date, without any time information
@@ -33,6 +34,23 @@
     // minification wrapper for appendChild
     function appendChild(parent, child) {
         parent.appendChild(child);
+    }
+
+    // wrapper for parseInt(*, 10) to make jshint happy about radix params
+    // also minification-friendly
+    function parseIntDec(num){
+        return parseInt(num, 10);
+    }
+
+    /** isWeekdayNum: (*) => Boolean
+
+    Checks if the given parameter is a valid weekday number 0-6 
+    (0=Sunday, 1=Monday, etc)
+    **/
+    function isWeekdayNum(dayNum){
+        var dayInt = parseIntDec(dayNum);
+        return (dayInt === dayNum && (!isNaN(dayInt)) && 
+                dayInt >= 0 && dayInt <= 6);
     }
 
     /** isValidDateObj: (*) => Boolean
@@ -289,7 +307,6 @@
         for(var i = 0; i < ranges.length; i++){
             var range = ranges[i];
 
-            var components;
             if(isValidDateObj(range)){
                 continue;
             }
@@ -360,23 +377,41 @@
                     getDate(base) + d);
     }
 
-    /** findSunday: Date => Date
+    /** findWeekStart: Date => Date
 
-    Find the nearest preceding Sunday that is on or earlier than the given date
+    Find the date that is the beginning of the given date's week.
+
+    This defaults to finding the nearest Sunday before or on the given date,
+    but if firstWeekday is given as a number 0-6 (0=Sunday, 1=Monday, etc),
+    that day will be used instead
     **/
-    function findSunday(d) {
-        while(d.getUTCDay() > 0) {
+    function findWeekStart(d, firstWeekday) {
+        firstWeekday = parseIntDec(firstWeekday);
+        if(!isWeekdayNum(firstWeekday)){
+            firstWeekday = 0;
+        }
+
+        while(d.getUTCDay() !== firstWeekday) {
           d = prevDay(d);
         }
         return d;
     }
 
-    /** findNextSaturday: Date => Date
+    /** findWeekEnd: Date => Date
 
-    Find the nearest succeeding Saturday that is on or later than the given date
+    Find the date that is the beginning of the given date's week.
+
+    This defaults to finding the nearest Saturday after or on the given date,
+    but if lastWeekday is given as a number 0-6 (0=Sunday, 1=Monday, etc),
+    that day will be used instead
     **/
-    function findNextSaturday(d){
-        while (d.getUTCDay() < 6){
+    function findWeekEnd(d, lastWeekDay){
+        lastWeekDay = parseIntDec(lastWeekDay);
+        if(!isWeekdayNum(lastWeekDay)){
+            lastWeekDay = 6;
+        }
+
+        while (d.getUTCDay() !== lastWeekDay){
             d = nextDay(d);
         }
         return d;
@@ -438,12 +473,12 @@
         matches = (matches.length === undefined) ? [matches] : matches;
         var foundMatch = false;
         matches.forEach(function(match) {
-          if (match.length == 2) {
+          if (match.length === 2) {
             if (dateInRange(match[0], match[1], d)) {
               foundMatch = true;
             }
           } else {
-            if (iso(match) == iso(d)) {
+            if (iso(match) === iso(d)) {
               foundMatch = true;
             }
           }
@@ -489,19 +524,45 @@
     classes so that they are marked as chosen for styling
 
     Also marks the current date with the 'today' class
+
+    params:
+        d               the date whose month we will be rendering
+        chosen          an array of all chosen dates/dateranges to mark as such
+        firstWeekday    the day of the week, 0-6, (0=Sundday, 1=Monday, etc)
+                        that should be used as the first day of the week
+                        (useful for regional differences)
+                        default: 0 (ie: Sunday)
     **/
-    function makeMonth(d, chosen) {
+    function makeMonth(d, chosen, firstWeekday) {
         if (!isValidDateObj(d)) throw 'Invalid view date!';
+        firstWeekday = parseIntDec(firstWeekday);
+        if(!isWeekdayNum(firstWeekday)){
+            firstWeekday = 0;
+        }
+
         var month = getMonth(d);
-        var tdate = getDate(d);
-        var sDate = findSunday(findFirst(d));
+        var sDate = findWeekStart(findFirst(d), firstWeekday);
 
         var monthEl = makeEl('div.month');
+        // create month label
         var label = makeEl('div.label');
-        label.textContent = LABELS.months[month] + ' ' + getYear(d);
+        label.textContent = DEFAULT_LABELS.months[month] + ' ' + getYear(d);
+
+        /*
+        // create weekday labels
+        var weekdayLabels = makeEl('div.weekday-labels');
+        for (var step = 0; step < 7; step++) {
+            var weekday = (firstWeekday + step) % 7;
+            var weekdayEl = makeEl('span.weekday');
+            weekdayEl.textContent = DEFAULT_LABELS.weekdays[weekday];
+            appendChild(weekdayLabels, weekdayEl)
+        }
+        appendChild(label, weekdayLabels);
+        */
 
         appendChild(monthEl, label);
 
+        // create each week of days in the month
         var week = makeEl('div.week');
         var cDate = sDate;
         var done = false;
@@ -510,7 +571,7 @@
           var day = makeEl('span.day');
           day.setAttribute('data-date', iso(cDate));
           day.textContent = getDate(cDate);
-          if (getMonth(cDate) != month) {
+          if (getMonth(cDate) !== month) {
             addClass(day, 'badmonth');
           }
 
@@ -524,9 +585,9 @@
 
           appendChild(week, day);
           cDate = nextDay(cDate);
-          // if the next day is a sunday, append finished week and see if
+          // if the next day starts a new week, append finished week and see if
           // we are done drawing the month
-          if (cDate.getUTCDay() < 1) {
+          if (cDate.getUTCDay() === firstWeekday) {
             appendChild(monthEl, week);
             week = makeEl('div.week');
             // Are we finished drawing the month?
@@ -550,8 +611,8 @@
         var controls = makeEl('div.controls');
         var prev = makeEl('span.prev');
         var next = makeEl('span.next');
-        prev.innerHTML = LABELS.prev;
-        next.innerHTML = LABELS.next;
+        prev.innerHTML = DEFAULT_LABELS.prev;
+        next.innerHTML = DEFAULT_LABELS.next;
         appendChild(controls, prev);
         appendChild(controls, next);
         return controls;
@@ -566,7 +627,7 @@
 
      -  "span"  :       The number of months to display at once
                         (default = 1)
-    -  "multiple"  :   Whether or not multiple dates are allowed to be chosen
+    -  "multiple"  :    Whether or not multiple dates are allowed to be chosen
                         at once
                         (default = false)
     -   "view"  :       The cursor date to center the calendar display on 
@@ -582,6 +643,11 @@
                         of a date range
                         (default: [data.view], or [], 
                                   if data.view is unavailable)
+    - "firstWeekdayNum" :  A number 0-6 (where 0=Sunday, 1=Monday, etc) 
+                           indicating which day should be used as the start of
+                           any given week 
+                           (this is useful for regions whose weeks start with
+                            Monday instead of Sunday)
     **/
     function Calendar(data) {
         data = data || {};
@@ -591,6 +657,7 @@
         this._viewDate = this._getSanitizedViewDate(data.view, data.chosen);
         this._chosenRanges = this._getSanitizedChosenRanges(data.chosen, 
                                                                 data.view);
+        this._firstWeekdayNum = data.firstWeekdayNum || 0;
         this._el = makeEl('div.calendar');
 
         this._customRenderFn = null;
@@ -860,10 +927,14 @@
     **/
     Calendar.prototype.hasVisibleDate = function(dateObj, excludeBadMonths){
         var startDate = this.firstVisibleMonth;
-        if(!excludeBadMonths) startDate = findSunday(startDate);
+        if(!excludeBadMonths){ 
+            startDate = findWeekStart(startDate, this.firstWeekdayNum);
+        }
 
         var endDate = findLast(this.lastVisibleMonth);
-        if(!excludeBadMonths) endDate = findNextSaturday(endDate);
+        if(!excludeBadMonths){
+            endDate = findWeekEnd(endDate, this.lastWeekdayNum);
+        } 
 
         return dateMatches(dateObj, [[startDate, endDate]]);
     };
@@ -891,7 +962,8 @@
             // get first month of the span of months centered on the view
             var ref = this.firstVisibleMonth;
             for (i = 0; i < span; i++) {
-                appendChild(this.el, makeMonth(ref, this._chosenRanges));
+                appendChild(this.el, makeMonth(ref, this._chosenRanges,
+                                               this._firstWeekdayNum));
                 // get next month's date
                 ref = relOffset(ref, 0, 1, 0);
             }
@@ -997,7 +1069,7 @@
                 return this._span;
             },
             set: function(newSpan){
-                var parsedSpan = parseInt(newSpan, 10);
+                var parsedSpan = parseIntDec(newSpan);
                 if(!isNaN(parsedSpan) && parsedSpan >= 0){
                     this._span = parsedSpan;
                 }
@@ -1043,6 +1115,26 @@
                 this._chosenRanges = 
                         this._getSanitizedChosenRanges(newChosenRanges);
                 this.render(true);
+            }
+        },
+
+        "firstWeekdayNum": {
+            get: function(){
+                return this._firstWeekdayNum;
+            },
+            set: function(weekdayNum){
+                weekdayNum = parseIntDec(weekdayNum);
+                if(!isWeekdayNum(weekdayNum)){
+                    weekdayNum = 0;
+                }
+                this._firstWeekdayNum = weekdayNum;
+                this.render(false);
+            }
+        },
+
+        "lastWeekdayNum": {
+            get: function(){
+                return (this._firstWeekdayNum + 6) % 7;
             }
         },
 
@@ -1222,13 +1314,13 @@
             created: function(){
                 this.innerHTML = "";
 
-                var multiple = this.hasAttribute("multiple");
                 var chosenRange = this.getAttribute("chosen");
                 this.xtag.calObj = new Calendar({
                     span: this.getAttribute("span"),
                     view: parseSingleDate(this.getAttribute("view")),
                     chosen: parseMultiDates(chosenRange),
-                    multiple: multiple
+                    multiple: this.hasAttribute("multiple"),
+                    firstWeekdayNum : this.getAttribute("first-weekday-num")
                 });
                 appendChild(this, this.xtag.calObj.el);
 
@@ -1459,6 +1551,14 @@
                     else{
                         this.removeAttribute("chosen");
                     }
+                }
+            },
+
+            // handles which day to use as the first day of the week
+            firstWeekdayNum: {
+                attribute: {name: "first-weekday-num"},
+                set: function(weekdayNum){
+                    this.xtag.calObj.firstWeekdayNum = weekdayNum;
                 }
             },
 
