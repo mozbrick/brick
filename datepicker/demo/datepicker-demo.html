@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
-    <script type="text/javascript" src="../../dist/brick.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
     
     <style>
         .styles-demo {
             width: 300px;
             box-shadow: 1px 1px 4px grey;
-            margin-top: 1em;
         }
 
         .styles-demo > input{
@@ -34,22 +34,45 @@
         .styles-demo > .x-datepicker-polyfill-ui .day.chosen{
             background-color: orange;
         }
+
+        code{
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <h1>x-datepicker demo</h1>
-    <form action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi" method="POST">
-        <x-datepicker name="datepicker-demo"></x-datepicker><br/>
-        <x-slider polyfill></x-slider>
-        <button class="toggle" type="button">Toggle polyfill</button>
-        <br/><br/>
-        <input type="submit"></input>
-    </form>
+    <article>
+        <header><h1>x-datepicker demo</h1></header>
+        <form action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi" method="POST">
+            <x-datepicker name="datepicker-demo"></x-datepicker>
+            <button class="toggle" type="button">Toggle polyfill</button>
+            <code class="prettyprint">
+                &lt;x-datepicker name="datepicker-demo"&gt;&lt;/x-datepicker&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+        <hr/>
+        <h2>Forcing polyfill UI at all times</h2>
+        <x-datepicker polyfill></x-datepicker>
+        <code class="prettyprint">
+            &lt;x-datepicker polyfill&gt;&lt;/x-datepicker&gt;
+        </code>
+        <hr/>
+        <h2>Custom Styles Demo:</h2>
+        <h3>Non polyfill:</h3>
+        <x-datepicker class="styles-demo"></x-datepicker>
+        <code class="prettyprint">
+            &lt;x-datepicker class="styles-demo"&gt;&lt;/x-datepicker&gt;
+        </code>
+        <h3>Polyfill:</h3>
+        <x-datepicker class="styles-demo" polyfill></x-datepicker>
+        <code class="prettyprint">
+            &lt;x-datepicker class="styles-demo" polyfill&gt;&lt;/x-datepicker&gt;
+        </code>
+    </article>
 
-    <hr/>
-    Custom Styles Demo: <br/>
-    Non polyfill: <x-datepicker class="styles-demo"></x-datepicker><br/>
-    Polyfill: <x-datepicker class="styles-demo" polyfill></x-datepicker>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="../../dist/brick.js"></script>
     <script>
         var ENTER_KEYCODE = 13;
 

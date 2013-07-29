@@ -63,6 +63,10 @@
             -o-transform: translate(50%, 50%);
             transform: translate(50%, 50%);
         }
+
+        figure code{
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -74,51 +78,81 @@
         <figure class="two-up">
             <header><h2>Default:</h2></header>
             <x-calendar></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
             <header><h2>Default with controls:</h2></header>
             <x-calendar controls></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar controls&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure>
             <header><h2>With custom span:</h2></header>
             <x-calendar span=3 controls></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar span=3 controls&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
             <header><h2>Starting the week with Monday instead:</h2></header>
             <x-calendar controls first-weekday-num=1></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar controls first-weekday-num=1&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
             <header><h2>With initial view (June) only:</h2></header>
             <x-calendar view="Jun 9, 2013" controls></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar view=&quot;Jun 9, 2013&quot; controls&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
             <header><h2>With initial chosen (July) only:</h2></header>
             <x-calendar chosen="Jun 4, 2013" controls></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar chosen=&quot;Jun 4, 2013&quot; controls&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
             <header><h2>With both initial view (June) and chosen (July):</h2></header>
             <x-calendar view="Jun 9, 2013" chosen="Jul 4, 2013" controls></x-calendar>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>init with multi chosen (without multiple attribute):</h2></header>
-            <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar view=&quot;Jun 9, 2013&quot; chosen=&quot;Jul 4, 2013&quot; controls&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
             <header><h2>init with multi chosen (with multiple attribute):</h2></header>
-            <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 22 2013", ["2013-06-20", "Jun 20, 2013"], ["Jun 24, 2013","06/26/2013"]]' controls multiple></x-calendar>
+            <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 17 2013", ["Jun 24, 2013","06/26/2013"]]' controls multiple></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar chosen='[[&quot;Jun 4 2013&quot;, &quot;Jun 10, 2013&quot;], &quot;June 17 2013&quot;, [&quot;Jun 24, 2013&quot;,&quot;06/26/2013&quot;]]' controls multiple&gt;&lt;/x-calendar&gt;
+            </code>
+        </figure>
+
+        <figure class="two-up">
+            <header><h2>init with multi chosen (without multiple attribute):</h2></header>
+            <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 17 2013",  ["Jun 24, 2013","06/26/2013"]]' controls></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar chosen='[[&quot;Jun 4 2013&quot;, &quot;Jun 10, 2013&quot;], &quot;June 17 2013&quot;, [&quot;Jun 24, 2013&quot;,&quot;06/26/2013&quot;]]' controls&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
             <header><h2>disable-ui-toggle (see console to see how toggle events no longer occur due to UI interaction)</h2></header>
             <x-calendar controls disable-ui-toggle></x-calendar>
+            <code class="prettyprint">
+                &lt;x-calendar controls disable-ui-toggle&gt;&lt;/x-calendar&gt;
+            </code>
         </figure>
 
         <figure class="two-up">
@@ -142,6 +176,7 @@
         </figure>
     </article>
 
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
     <script type="text/javascript" src="../../dist/brick.js"></script>
     <script>
         document.addEventListener('DOMComponentsLoaded', function(){

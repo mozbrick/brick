@@ -633,6 +633,7 @@
           var day = makeEl('span.day');
           day.setAttribute('data-date', iso(cDate));
           day.textContent = getDate(cDate);
+
           if (getMonth(cDate) !== month) {
             addClass(day, 'badmonth');
           }

@@ -391,6 +391,13 @@
                     }
                 }
             }
+        },
+        methods: {
+            editLabels: function(newLabelData){
+                if(this.xtag.polyfillUI && this.xtag.polyfillUI.editLabels){
+                    this.xtag.polyfillUI.editLabels(newLabelData);
+                }
+            }
         }
     });
 

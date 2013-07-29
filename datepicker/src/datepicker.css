@@ -7,7 +7,6 @@
 x-datepicker {
   position: relative;
   display: inline-block;
-  height: 1.4em;
   overflow: visible;
   border: 1px solid grey;
   font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
@@ -39,7 +38,7 @@ x-datepicker {
     top: 100%;
     margin-top: -1px;
     box-shadow: 1px 1px 4px grey;
-    z-index: 1; }
+    z-index: 999999999; }
   x-datepicker[polyfill] > .x-datepicker-input {
     display: none !important; }
   x-datepicker[polyfill] > .x-datepicker-polyfill-input {

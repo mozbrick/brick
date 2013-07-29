@@ -46,6 +46,12 @@ For example, if the user is currently typing `July 4, 2013` and hasn't left focu
 
 Also note that unless the datepicker has a `name` attribute, this does not guarantee that this will actually be submitted to a form.
 
+# Methods
+
+## ___editLabels___(newLabelData)
+
+See `x-calendar`'s `editLabels` method.
+
 # Styling
 
 - To style the datepicker's container, apply styles to `x-datepicker`.
