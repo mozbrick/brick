@@ -9,7 +9,7 @@
             next: '>',
             months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                      'August', 'September', 'October', 'November', 'December'],
-            weekdays: ['Su', "M", "Tu", "W", "Th", "F", "Sa"]
+            weekdays: ['Sun', "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         };
     };
 
@@ -608,10 +608,21 @@
 
         var monthEl = makeEl('div.month');
         // create month label
-        var label = makeEl('div.label');
-        label.textContent = labels.months[month] + ' ' + getYear(d);
+        var monthLabel = makeEl('div.month-label');
+        monthLabel.textContent = labels.months[month] + ' ' + getYear(d);
 
-        appendChild(monthEl, label);
+        appendChild(monthEl, monthLabel);
+
+        // create the weekday labels
+        var weekdayLabels = makeEl('div.weekday-labels');
+        for(var step = 0; step < 7; step++){
+            var weekdayNum = (firstWeekday + step)  % 7;
+            var weekdayLabel = makeEl('span.weekday-label');
+            weekdayLabel.textContent = labels.weekdays[weekdayNum];
+            appendChild(weekdayLabels, weekdayLabel);
+        }
+        appendChild(monthEl, weekdayLabels);
+
 
         // create each week of days in the month
         var week = makeEl('div.week');

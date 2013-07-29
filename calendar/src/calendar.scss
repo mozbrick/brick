@@ -2,8 +2,17 @@
 @import "../../component-ui-defaults";
 
 $todayBorder: orange;
+$defaultMonthWidthEm: 2.5em * 7;
+$oneEmPxVal: 16px;
+$defaultMonthWidthPx: strip-units($defaultMonthWidthEm) * $oneEmPxVal;
+$dayMarginPx: 1px;
+$dayWidthPx: ($defaultMonthWidthPx - ($dayMarginPx*8)) / 7;
 
 x-calendar {
+    & *{
+        @include boxSizing(border-box);
+    }
+
     @include unhighlightable;
     @include boxSizing(border-box);
     position: relative;
@@ -33,25 +42,35 @@ x-calendar {
         padding: 0;
         vertical-align: top;
         white-space: nowrap;
+        width: $defaultMonthWidthEm;
     }
 
-    .week{
-        margin: 1px 2px;
+    .week, .weekday-labels{
+        margin: 1px 0;
         overflow: visible;
+        width: 100%;
+        white-space: nowrap;
     }
 
-    .day, .prev, .next{
-        min-width: 2em;
+    .day, .prev, .next, .weekday-label{
+        display: inline-block;
+        width: percentage($dayWidthPx / $defaultMonthWidthPx);
     }
 
-    .label, .day, .prev, .next{
+    .month-label, .weekday-label, .day, .prev, .next{
         color: #444;
         min-height: 2em;
         line-height: 2em;
         text-decoration: none;
     }
 
-    .label{
+    .weekday-label{
+        color: lighten(#444, 10%);
+        font-size: .8em;
+        margin: 0 (percentage($dayMarginPx / $defaultMonthWidthPx) / 2);
+    }
+
+    .month-label{
         width: 100%;
         border-bottom: 1px dashed grey;
     }
@@ -59,14 +78,9 @@ x-calendar {
     .day{
         @include rounded;
         position: relative;
-        display: inline-block;
         white-space: nowrap;
-        color: #444;
         border: 1px solid transparent;
-
-        &:not(:first-child){
-            margin-left: 1px;
-        }
+        margin: 0 (percentage($dayMarginPx / $defaultMonthWidthPx) / 2);
 
         &[active]{
             border-color: $todayBorder;

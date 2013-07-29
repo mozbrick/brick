@@ -1,6 +1,11 @@
 $IMG_FOLDER: "../images/";
 $FONTS_FOLDER: "../fonts/";
 
+// http://stackoverflow.com/a/12335841
+@function strip-units($number) {
+    @return $number / ($number * 0 + 1);
+}
+
 @mixin mobileMediaOverride{
     @media only screen and (max-device-width : 1024px){
         @content;

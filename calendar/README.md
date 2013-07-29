@@ -165,7 +165,8 @@ When called, will edit the labels of the calendar. This can be useful for transl
 `newLabelData` is a JS object that can contain any of the following key:value pairs:
 - `prev`: a string to display on the previous-month navigation button
 - `next`: a string to display on the next-month navigation button
-` `months`: a array of 12 strings, where the first string corresponds to January, the second to February, etc all the way up to December
+` `months`: an array of 12 strings, where the first string corresponds to January, the second to February, etc all the way up to December
+- `weekdays`: an array of 7 strings, where the first string corresponds to Sunday, the second to Monday, etc all the way up to Saturday
 
 If not given any of these keys, that corresponding label will remain unchanged.
 
@@ -257,10 +258,13 @@ The event also receives the following custom datamap in `e.detail`:
 # Styling
 
 - To style the calendar's container, apply styles to `x-calendar`.
-- To style the month label, apply styles to `x-calendar .label`.
+- To style the month label, apply styles to `x-calendar .month-label`.
 - To style individual months, apply styles to `x-calendar .month`.
+  - Note: to change how wide months are, apply the style here, as the width of days and weeks are percentages in relation to this width
 - To style individual weeks, apply styles to `x-calendar .week`.
 - To style individual days, apply styles to `x-calendar .day`.
+- To style the row of weekday labels, apply styles to `x-calendar .weekday-labels`.
+- To style individual weekday labels, apply styles to `x-calendar .weekday-label`.
 - To style the current day, apply styles to `x-calendar .day.today`.
 - To style days that are not in the current month, apply styles to `x-calendar .day.badmonth`
 - To style chosen days, apply styles to `x-calendar .day.chosen`

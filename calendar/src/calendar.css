@@ -29,6 +29,12 @@ x-calendar {
   text-align: center;
   overflow: hidden;
   background-color: #fff; }
+  x-calendar * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box; }
   x-calendar .calendar {
     position: relative;
     display: inline-block;
@@ -39,29 +45,34 @@ x-calendar {
     margin: 0;
     padding: 0;
     vertical-align: top;
+    white-space: nowrap;
+    width: 17.5em; }
+  x-calendar .week, x-calendar .weekday-labels {
+    margin: 1px 0;
+    overflow: visible;
+    width: 100%;
     white-space: nowrap; }
-  x-calendar .week {
-    margin: 1px 2px;
-    overflow: visible; }
-  x-calendar .day, x-calendar .prev, x-calendar .next {
-    min-width: 2em; }
-  x-calendar .label, x-calendar .day, x-calendar .prev, x-calendar .next {
+  x-calendar .day, x-calendar .prev, x-calendar .next, x-calendar .weekday-label {
+    display: inline-block;
+    width: 13.87755%; }
+  x-calendar .month-label, x-calendar .weekday-label, x-calendar .day, x-calendar .prev, x-calendar .next {
     color: #444;
     min-height: 2em;
     line-height: 2em;
     text-decoration: none; }
-  x-calendar .label {
+  x-calendar .weekday-label {
+    color: #5e5e5e;
+    font-size: .8em;
+    margin: 0 0.17857%; }
+  x-calendar .month-label {
     width: 100%;
     border-bottom: 1px dashed grey; }
   x-calendar .day {
     border-radius: 4px;
     position: relative;
-    display: inline-block;
     white-space: nowrap;
-    color: #444;
-    border: 1px solid transparent; }
-    x-calendar .day:not(:first-child) {
-      margin-left: 1px; }
+    border: 1px solid transparent;
+    margin: 0 0.17857%; }
     x-calendar .day[active] {
       border-color: orange; }
     x-calendar .day.chosen {
