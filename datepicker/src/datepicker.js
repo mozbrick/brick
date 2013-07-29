@@ -175,14 +175,6 @@
                 datepicker.setAttribute("focused", true);
             },
 
-            "focus:delegate(.x-datepicker-input)": function(e){
-                e.preventDefault(); // prevent mobile keyboard from popping up
-            },
-
-            "focus:delegate(.x-datepicker-polyfill-input)": function(e){
-                e.preventDefault(); // prevent mobile keyboard from popping up
-            },
-
             "blur:delegate(.x-datepicker-input)": function(e){
                 e.currentTarget.removeAttribute("focused");
             },
@@ -193,6 +185,12 @@
                 // send parsed version to ensure that text of input matches
                 _updateDatepicker(datepicker, true);
                 datepicker.removeAttribute("focused");
+            },
+
+            // force readonly state as soon as touch event is detected
+            // to prevent mobile keyboard from popping up from now on
+            "touchstart:delegate(.x-datepicker-polyfill-input)": function(e){
+                this.setAttribute("readonly", true);
             },
 
             "tapstart:delegate(x-calendar)": function(e){
