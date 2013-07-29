@@ -1,6 +1,10 @@
 
 * {
+  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -75,10 +79,11 @@ section, footer {
 
 .two-up {
   clear: none;
+  width: 48%;
   width: calc(50% - 1em);
   float: left;
 }
-.two-up:nth-child(2n+1) {
+.two-up:nth-child(2n) {
   margin-left: 2em;
 }
 .two-up h2 {

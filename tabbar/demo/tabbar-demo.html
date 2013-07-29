@@ -71,107 +71,109 @@
 <body>
 <article>
 <header><h1>X-Tabbar demos</h1></header>
+    <div>
+    <figure class="two-up">
+        <h2>With deck</h2>
+        <div>
+        <div class="demo">    
+            <x-deck class="component-demo" transition-type="coverDown">
+                <x-card><img src="dog1.png"/><span>One</span></x-card>
+                <x-card><img src="dog2.png"/><span>Two</span></x-card>
+                <x-card><img src="dog3.png"/><span>Three</span></x-card>
+                <x-card><img src="dog4.png"/><span>Four</span></x-card>
+                <x-card><img src="dog5.png"/><span>Five</span></x-card>
+            </x-deck>
+            
+            <x-tabbar>
+                <x-tabbar-tab target-selector="x-deck x-card:first-child">
+                    <x-iconbutton src="dog1.png" icon-anchor="top">One</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
+                    <x-iconbutton src="dog2.png" icon-anchor="top">Two</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
+                    <x-iconbutton src="dog3.png" icon-anchor="top">Three</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
+                    <x-iconbutton src="dog4.png" icon-anchor="top">Four</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
+                    <x-iconbutton src="dog5.png" icon-anchor="top">Five</x-iconbutton>
+                </x-tabbar-tab>
+            </x-tabbar>
+        </div>
+    </figure>
 
-<figure class="two-up">
-    <h2>With deck</h2>
-    <div class="demo">    
-        <x-deck class="component-demo" transition-type="coverDown">
-            <x-card><img src="dog1.png"/><span>One</span></x-card>
-            <x-card><img src="dog2.png"/><span>Two</span></x-card>
-            <x-card><img src="dog3.png"/><span>Three</span></x-card>
-            <x-card><img src="dog4.png"/><span>Four</span></x-card>
-            <x-card><img src="dog5.png"/><span>Five</span></x-card>
-        </x-deck>
-        
-        <x-tabbar>
-            <x-tabbar-tab target-selector="x-deck x-card:first-child">
-                <x-iconbutton src="dog1.png" icon-anchor="top">One</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
-                <x-iconbutton src="dog2.png" icon-anchor="top">Two</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
-                <x-iconbutton src="dog3.png" icon-anchor="top">Three</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
-                <x-iconbutton src="dog4.png" icon-anchor="top">Four</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
-                <x-iconbutton src="dog5.png" icon-anchor="top">Five</x-iconbutton>
-            </x-tabbar-tab>
-        </x-tabbar>
-    </div>
-</figure>
+    <figure class="two-up">
+        <h2>With slidebox <br/>(also dynamically assigned tab targets)</h2>
+        <div class="demo">
+            <x-slidebox class="component-demo" orientation="x">
+                <x-slides>
+                  <x-slide><img src="birnimal-calendar.png" /></x-slide>
+                  <x-slide><img src="birnimal-graph.png" /></x-slide>
+                  <x-slide><img src="birnimal-detail.png" /></x-slide>
+                  <x-slide><img src="birnimal-settings.png" /></x-slide>
+                </x-slides>
+            </x-slidebox>
+            
+            <!-- see javascript to see demo of dynamically assigning targets -->
+            <x-tabbar>
+                <x-tabbar-tab>
+                    <x-iconbutton src="birnimal-calendar.png">Calendar</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab>
+                    <x-iconbutton src="birnimal-graph.png">Graph</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab>
+                    <x-iconbutton src="birnimal-detail.png">Detail</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab>
+                    <x-iconbutton src="birnimal-settings.png">Settings</x-iconbutton>
+                </x-tabbar-tab>
+            </x-tabbar>
+        </div>
+    </figure>
 
-<figure class="two-up">
-    <h2>With slidebox <br/>(also dynamically assigned tab targets)</h2>
-    <div class="demo">
-        <x-slidebox class="component-demo" orientation="x">
-            <x-slides>
-              <x-slide><img src="birnimal-calendar.png" /></x-slide>
-              <x-slide><img src="birnimal-graph.png" /></x-slide>
-              <x-slide><img src="birnimal-detail.png" /></x-slide>
-              <x-slide><img src="birnimal-settings.png" /></x-slide>
-            </x-slides>
-        </x-slidebox>
-        
-        <!-- see javascript to see demo of dynamically assigning targets -->
-        <x-tabbar>
-            <x-tabbar-tab>
-                <x-iconbutton src="birnimal-calendar.png">Calendar</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab>
-                <x-iconbutton src="birnimal-graph.png">Graph</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab>
-                <x-iconbutton src="birnimal-detail.png">Detail</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab>
-                <x-iconbutton src="birnimal-settings.png">Settings</x-iconbutton>
-            </x-tabbar-tab>
-        </x-tabbar>
-    </div>
-</figure>
+    <figure class="two-up">
+        <h2>With flipbox</h2>
+            <div class="demo">  
+            <x-flipbox class="component-demo">
+              <div>
+                <img src="Card_front.svg"/>
+              </div>
+              <div>
+                <img src="Card_back.svg"/>
+              </div>
+            </x-flipbox>
+            <x-tabbar>
+                <x-tabbar-tab target-selector="x-flipbox > *:first-child">
+                    <x-iconbutton src="Card_front.svg">Front</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab target-selector="x-flipbox > *:last-child">
+                    <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
+                </x-tabbar-tab>
+            </x-tabbar>
+            </div>
+    </figure>    
 
-<figure class="two-up">
-    <h2>With flipbox</h2>
+    <figure class="two-up">
+        <h2>Fire custom event types (see html source's <code>target-event</code> attribute)</h2>
         <div class="demo">  
-        <x-flipbox class="component-demo">
-          <div>
-            <img src="Card_front.svg"/>
-          </div>
-          <div>
-            <img src="Card_back.svg"/>
-          </div>
-        </x-flipbox>
-        <x-tabbar>
-            <x-tabbar-tab target-selector="x-flipbox > *:first-child">
-                <x-iconbutton src="Card_front.svg">Front</x-iconbutton>
+        <div id="color-box" class="component-demo">
+            <span>NIC CAGE</span>
+            <img src="http://placecage.com/c/300/325"/>
+        </div>
+        <x-tabbar target-event="danceparty">
+            <x-tabbar-tab target-selector="#color-box > span">
+                <x-iconbutton src="http://placecage.com/100/100">danceparty</x-iconbutton>
             </x-tabbar-tab>
-            <x-tabbar-tab target-selector="x-flipbox > *:last-child">
-                <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
+            <x-tabbar-tab target-selector="#color-box > img" target-event="override">
+                <x-iconbutton src="http://placecage.com/c/100/100">override</x-iconbutton>
             </x-tabbar-tab>
         </x-tabbar>
         </div>
-</figure>    
-
-<figure class="two-up">
-    <h2>Fire custom event types (see html source's <code>target-event</code> attribute)</h2>
-    <div class="demo">  
-    <div id="color-box" class="component-demo">
-        <span>NIC CAGE</span>
-        <img src="http://placecage.com/c/300/325"/>
-    </div>
-    <x-tabbar target-event="danceparty">
-        <x-tabbar-tab target-selector="#color-box > span">
-            <x-iconbutton src="http://placecage.com/100/100">danceparty</x-iconbutton>
-        </x-tabbar-tab>
-        <x-tabbar-tab target-selector="#color-box > img" target-event="override">
-            <x-iconbutton src="http://placecage.com/c/100/100">override</x-iconbutton>
-        </x-tabbar-tab>
-    </x-tabbar>
-    </div>
-</figure>
+    </figure>
+</div>
 </article>
 <script type="text/javascript" src="../../dist/brick.js"></script>
 <script>
