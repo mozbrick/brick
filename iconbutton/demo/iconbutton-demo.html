@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
-    <script type="text/javascript" src="../../dist/brick.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
     
     <style>
     /* applying styles to x-iconbutton applies styles as if it were to the button
@@ -19,6 +19,7 @@
     
     x-iconbutton{
         vertical-align: middle;
+        line-height: normal;
     }
     
     .custom-style-iconbutton{
@@ -60,8 +61,8 @@
         text-shadow: -1px -1px #ddd;
     }
     
-    .demo .x-iconbutton-label{
-        font-size: 3em;
+    .demo-button .x-iconbutton-label{
+        font-size: 2em;
     }
     
     .fancy-html-icon{
@@ -104,125 +105,155 @@
         height: 20px;
         display: inline-block;
     }
+
+    code{
+        display: block;
+        margin-bottom: .5em;
+    }
     </style>
 </head>
 <body>
-    <h1>X-Iconbutton demos</h1>
-    
-    <ul id="default-demos">
-      <li>
-        <span>Left icon (default):</span>
-        <x-iconbutton src="http://placecage.com/30/30">Hello</x-iconbutton>
-      </li> 
-      <li>
-        <span>Left icon (specified):</span>
-        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="left">Hello</x-iconbutton>
-      </li>
-      <li>
-        <span>Right icon:</span>
-        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="right">Hello</x-iconbutton>
-      </li> 
-      <li>
-        <span>Top icon:</span>
-        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="top">Hello</x-iconbutton>
-      </li> 
-      <li>
-        <span>Bottom icon:</span>
-        <x-iconbutton src="http://placecage.com/30/30" icon-anchor="bottom" >Hello</x-iconbutton>
-      </li>  
-      <li>
-        <span>No label:</span>
-        <x-iconbutton src="http://placecage.com/30/30"></x-iconbutton>
-      </li>
-      <li>
-        <span>No Icon (ie: normal button):</span>
-        <x-iconbutton>Hello</x-iconbutton>
-      </li>
-      <li>
-        <span>No content at all:</span>
-        <x-iconbutton></x-iconbutton>
-      </li>
-    </ul>
+    <article>
+        <header><h1>X-Iconbutton demos</h1></header>
+        <h2>Basic initialization</h2>
+        <ul>
+          <li>
+            <span>Left icon (default):</span>
+            <x-iconbutton src="http://placecage.com/30/30">Hello</x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot;&gt;Hello&lt;/x-iconbutton&gt;
+            </code>
+          </li> 
+          <li>
+            <span>Left icon (specified):</span>
+            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="left">Hello</x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;left&quot;&gt;Hello&lt;/x-iconbutton&gt;
+            </code>
+          </li>
+          <li>
+            <span>Right icon:</span>
+            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="right">Hello</x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;right&quot;&gt;Hello&lt;/x-iconbutton&gt;
+            </code>
+          </li> 
+          <li>
+            <span>Top icon:</span>
+            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="top">Hello</x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;top&quot;&gt;Hello&lt;/x-iconbutton&gt;
+            </code>
+          </li> 
+          <li>
+            <span>Bottom icon:</span>
+            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="bottom">Hello</x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;bottom&quot;&gt;Hello&lt;/x-iconbutton&gt;
+            </code>
+          </li>  
+          <li>
+            <span>No label:</span>
+            <x-iconbutton src="http://placecage.com/30/30"></x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot;&gt;&lt;/x-iconbutton&gt;
+            </code>
+          </li>
+          <li>
+            <span>No Icon (ie: normal button):</span>
+            <x-iconbutton>Hello</x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton&gt;Hello&lt;/x-iconbutton&gt;
+            </code>
+          </li>
+          <li>
+            <span>No content at all:</span>
+            <x-iconbutton></x-iconbutton>
+            <code class="prettyprint">
+                &lt;x-iconbutton&gt;&lt;/x-iconbutton&gt;
+            </code>
+          </li>
+        </ul>
 
-    <ul id="custom-style-demo">
-      <li>
-        <span>Custom Stylings:</span>
+        <h2>Custom styling:</h2>
         <x-iconbutton class="custom-style-iconbutton" icon-anchor="left">No Icon</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="left">Left</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="right">Right</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="top">Top</x-iconbutton>
         <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="bottom">Bottom</x-iconbutton>
-      </li>
-    </ul>
 
-    <ul id="attr-demos">
-      <li>
-        <span>Anchor editing:</span>
-        <x-iconbutton id="anchor-demo"  class="demo" src="http://placecage.com/40/40">Lorem Ipsum</x-iconbutton>
-        <button onclick="changeAnchor(this, 'left')">Left</button>
-        <button onclick="changeAnchor(this, 'right')">Right</button>
-        <button onclick="changeAnchor(this, 'top')">Top</button>
-        <button onclick="changeAnchor(this, 'bottom')">Bottom</button>
-        <button onclick="changeAnchor(this, '')">Default (left)</button>
-      </li>
-      <li>
-        <span>Icon Src editing:</span>
-        <x-iconbutton id="icon-demo" class="demo" src="http://placecage.com/39/39">Icons</x-iconbutton>
-        <button onclick="changeSrc(this, 'http://placecage.com/39/39')">
-            Nic Cage (url)
-        </button>
-        <button onclick="changeSrc(this, 'firefox.png')">
-            Firefox (local)
-        </button>
-        <button onclick="changeSrc(this, '')">
-            None (empty string)
-        </button>
-        <button onclick="changeSrc(this, null)">
-            None (null)
-        </button>
-      </li>
-    </ul>
+        <h2>Dynamic editing:</h2>
+        <ul id="attr-demos">
+          <li>
+            <span>Anchor editing:</span>
+            <x-iconbutton id="anchor-demo"  class="demo-button" src="http://placecage.com/40/40">Lorem Ipsum</x-iconbutton>
+            <button onclick="changeAnchor(this, 'left')">Left</button>
+            <button onclick="changeAnchor(this, 'right')">Right</button>
+            <button onclick="changeAnchor(this, 'top')">Top</button>
+            <button onclick="changeAnchor(this, 'bottom')">Bottom</button>
+            <button onclick="changeAnchor(this, '')">Default (left)</button>
+          </li>
+          <li>
+            <span>Icon Src editing:</span>
+            <x-iconbutton id="icon-demo" class="demo-button" src="http://placecage.com/39/39">Icons</x-iconbutton>
+            <button onclick="changeSrc(this, 'http://placecage.com/39/39')">
+                Nic Cage (url)
+            </button>
+            <button onclick="changeSrc(this, 'firefox.png')">
+                Firefox (local)
+            </button>
+            <button onclick="changeSrc(this, '')">
+                None (empty string)
+            </button>
+            <button onclick="changeSrc(this, null)">
+                None (null)
+            </button>
+          </li>
+        </ul>
 
-    <ul id="dom-edit-demo">
-      <li>
-         <span>Parts editing (see source)</span>
-         <x-iconbutton id="parts-demo" class="demo" 
-                       src="firefox.png">Parts</x-iconbutton>
-         <button onclick="editButton(this, function(iconButton){
-            iconButton.icon.style.backgroundColor = randomColor();
-         })">
-            Edit Icon
-         </button>
-         <button onclick="editButton(this, function(iconButton){
-           iconButton.label.style.backgroundColor = randomColor();
-         })">
-            Edit Label
-         </button>
-      </li>
-    </ul>
+        <ul id="dom-edit-demo">
+          <li>
+             <span>Parts editing (see source)</span>
+             <x-iconbutton id="parts-demo" class="demo-button" 
+                           src="firefox.png">Parts</x-iconbutton>
+             <button onclick="editButton(this, function(iconButton){
+                iconButton.icon.style.backgroundColor = randomColor();
+             })">
+                Edit Icon
+             </button>
+             <button onclick="editButton(this, function(iconButton){
+               iconButton.label.style.backgroundColor = randomColor();
+             })">
+                Edit Label
+             </button>
+          </li>
+        </ul>
 
-    <ul id="text-demos">
-      <li>
-        <span>Text Modification (default accessors)</span>
-        <x-iconbutton class="demo" 
-                      src="firefox.png" icon-anchor="right">Default text</x-iconbutton>
-        <button onclick="showText(this)">Show Text</button>
-        <button onclick="changeText(this)">Change Text</button>
-      </li>
-      <li>
-        <!-- custom getter/setters are defined in the DOMComponentsLoaded
-             listener -->
-        <span>Text Modification (custom accessors)</span>
-        <x-iconbutton class="demo" id="custom-accessor-demo" icon-anchor="bottom">
-            <strong>Change me!</strong>
-            <div class="circle"></div>
-            <em>Ignore me!</em>         
-        </x-iconbutton>
-        <button onclick="showText(this)">Show Text</button>
-        <button onclick="changeText(this)">Change Text</button>
-      </li>
-    </ul>
-    
+        <ul id="text-demos">
+          <li>
+            <span>Text Modification (default accessors)</span>
+            <x-iconbutton class="demo-button" 
+                          src="firefox.png" icon-anchor="right">Default text</x-iconbutton>
+            <button onclick="showText(this)">Show Text</button>
+            <button onclick="changeText(this)">Change Text</button>
+          </li>
+          <li>
+            <!-- custom getter/setters are defined in the DOMComponentsLoaded
+                 listener -->
+            <span>Text Modification (custom accessors)</span>
+            <x-iconbutton class="demo-button" id="custom-accessor-demo" icon-anchor="bottom">
+                <strong>Change me!</strong>
+                <div class="circle"></div>
+                <em>Ignore me!</em>         
+            </x-iconbutton>
+            <button onclick="showText(this)">Show Text</button>
+            <button onclick="changeText(this)">Change Text</button>
+          </li>
+        </ul>
+    </article>
+
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="../../dist/brick.js"></script>
     <script>
         function randomColor(){
             var _randomVal = function(){

@@ -114,6 +114,8 @@ x-calendar {
     .prev, .next{
         position: absolute;
         top: 0px;
+
+        max-width: 3em;
     }
 
     .prev{
@@ -130,7 +132,7 @@ x-calendar {
         }
 
         .prev:hover, .next:hover{
-            background-color: #efefef;
+            background-color: #f9f9f9;
             opacity: 0.7;
         }
 

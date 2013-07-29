@@ -7,7 +7,7 @@ x-iconbutton{
     @include component-ui-background;
     @include boxSizing(border-box);
     @include unhighlightable;
-
+    line-height: normal;
     white-space: nowrap;
     display: inline-block;
     margin: 0;

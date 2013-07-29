@@ -27,6 +27,7 @@ x-iconbutton {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+  line-height: normal;
   white-space: nowrap;
   display: inline-block;
   margin: 0;

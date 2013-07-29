@@ -89,7 +89,8 @@ x-calendar {
     display: block; }
   x-calendar .prev, x-calendar .next {
     position: absolute;
-    top: 0px; }
+    top: 0px;
+    max-width: 3em; }
   x-calendar .prev {
     left: 0px; }
   x-calendar .next {
@@ -97,7 +98,7 @@ x-calendar {
   x-calendar:not([active]) .day:hover, x-calendar:not([active]) .prev:hover, x-calendar:not([active]) .next:hover {
     cursor: pointer; }
   x-calendar:not([active]) .prev:hover, x-calendar:not([active]) .next:hover {
-    background-color: #efefef;
+    background-color: #f9f9f9;
     opacity: 0.7; }
   x-calendar:not([active]) .day:not(.chosen):hover {
     background: #ccc; }
