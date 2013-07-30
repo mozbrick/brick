@@ -95,11 +95,25 @@
             padding: .5em;
             padding-right: 1.5em;
             text-align: left;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -ms-box-sizing: border-box;
-            -o-box-sizing: border-box;
-            box-sizing: border-box;
+        }
+
+        #property-wrap{
+            overflow: auto;
+            display: inline-block;
+            display: inline-block;
+            max-height: 15em;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin: 0;
+            padding: .5em;
+            padding-right: 1.5em;
+
+            border: 1px solid grey;
+        }
+
+        #property-wrap code{
+            display: block;
+            text-align: left;
         }
     </style>
 </head>
@@ -123,13 +137,19 @@
             <button onclick="addCard(true)">Add card with transition-override</button>
             <button onclick="removeCard(0)">Remove first card</button>
             <button onclick="removeCard()">Remove last card</button>
-            <p>num cards = <code id="count-label"></code></p>
-            <p>selected index = <code id="selected-index-label"></code></p>
-
             <div id="code-wrap">
-                <h3>markup</h3>
+                <h3>Markup for recreating this deck:</h3>
                 <pre id="code-box" class="prettyprint"></pre>
             </div>
+            <div>
+                <h3>(some) Properties:</h3>
+                <div id="property-wrap">
+                    <code id="selected-index-label" class="prettyprint"></code>
+                    <code id="transition-type-label" class="prettyprint"></code>
+                    <code id="count-label" class="prettyprint"></code>
+                </div>
+            </div>
+            
             <br/>
             <button onclick="getDemoBox().shuffleTo(2)">shuffleTo 2 (default)</button>
             <button onclick="getDemoBox().shuffleTo(2, 'auto')">shuffleTo 2 (auto)</button>
@@ -148,7 +168,7 @@
     <script type="text/javascript" src="prettify.js"></script>
     <script type="text/javascript" src="../../dist/brick.js"></script>
     <script>
-        function updateCodeBox(){
+        function updateCodeBox(isInit){
             var demoBox = getDemoBox();
             var codeBox = document.getElementById("code-box");
 
@@ -156,7 +176,14 @@
 
             var newHtml = demoBox.outerHTML;
             // remove attribute properties not intended for api exposure
-            newHtml = newHtml.replace(/(style|card-anim-type|before-animation|reverse)=".*?"/g, "");
+            newHtml = newHtml.replace(/(style|card-anim-type|before-animation|reverse|selected|leaving)=".*?"/g, "");
+
+            // also remove selected-index attribute form initial code display to
+            // signify that selected-index isn't required
+            if(isInit){
+                newHtml = newHtml.replace(/selected-index=".*?"/g, "");
+            }
+
             // remove errant spacing
             newHtml = newHtml.replace(/\s*>/g, ">");
             newHtml = newHtml.replace(/\s+/g, " ");
@@ -165,7 +192,6 @@
             newHtml = newHtml.replace(/>(\s*)<\/x-deck/g, ">\n</x-deck");
             codeBox.textContent = newHtml;
             xtag.removeClass(codeBox, "prettyprinted");
-            prettyPrint();
         }
 
         function randomColor(alpha){
@@ -212,7 +238,7 @@
                     updateStatuses();
                 });
             });
-            updateStatuses();
+            updateStatuses(true);
         }, false);
         
         function editSelectedIndex(index){
@@ -234,17 +260,32 @@
             card.show();
         }
         
-        function updateStatuses(){
+        function updateStatuses(isInit){
             updateCountBox();
             updateHistoryControls();
             updateSelectedStatus();
-            updateCodeBox();
+            updateTypeStatus();
+            updateCodeBox(isInit);
+            prettyPrint();
+        }
+
+        function updateTypeStatus(){
+            var demoBox = getDemoBox();
+            var typeStatus = document.getElementById("transition-type-label");
+            typeStatus.textContent = '.transitionType -> "'+demoBox.transitionType+'"';
+            xtag.removeClass(typeStatus, "prettyprinted");
         }
         
         function updateSelectedStatus(){
             var demoBox = getDemoBox();
             var statusBox = document.getElementById("selected-index-label");
-            statusBox.textContent = demoBox.selectedIndex;
+            statusBox.textContent = ".selectedIndex -> " + demoBox.selectedIndex;
+            xtag.removeClass(statusBox, "prettyprinted");
+        }
+
+        function updateCountBox(){
+            var demoBox = getDemoBox();
+            document.getElementById("count-label").textContent = ".numCards -> "+demoBox.getAllCards().length;
         }
         
         function updateHistoryControls(){
@@ -288,11 +329,6 @@
             demoBox.setAttribute("transition-type", newType);
             
             demoBox.shuffleNext("forward");
-        }
-        
-        function updateCountBox(){
-            var demoBox = getDemoBox();
-            document.getElementById("count-label").textContent = demoBox.getAllCards().length;
         }
         
         function addCard(addOverride){

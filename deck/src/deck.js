@@ -345,6 +345,7 @@
                 oldCard.setAttribute("leaving", true);
                 newCard.setAttribute("selected", true);
                 deck.xtag._selectedCard = newCard;
+                deck.selectedIndex = _getCardIndex(deck, newCard);
                 if(isReverse){
                     oldCard.setAttribute("reverse", true);
                     newCard.setAttribute("reverse", true);
@@ -639,6 +640,7 @@
         });
         
         deck.xtag._selectedCard = currCard;
+        deck.selectedIndex = _getCardIndex(deck, currCard);
     }
     
     
@@ -696,12 +698,19 @@
              * to performing a "none" type transition
             **/
             "selectedIndex":{
-                attribute: {name: "selected-index"},
+                attribute: {
+                    skip: true,
+                    name: "selected-index"
+                },
                 get: function(){
                     return _getCardIndex(this, this.xtag._selectedCard);
                 },
                 set: function(newIndex){
-                    _replaceWithIndex(this, newIndex, "none");
+                    if(this.selectedIndex !== newIndex){
+                        console.log(this.selectedIndex, newIndex);
+                        _replaceWithIndex(this, newIndex, "none");
+                    }
+                    this.setAttribute("selected-index", newIndex);
                 }
             },
             
