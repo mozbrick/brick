@@ -16,5 +16,17 @@
 		"android": 2.1,
 		"ios": 4
 	},
-	"documentation": {}
+	"documentation": {
+		"description": "Togglegroups are used to display a set of clickable option buttons, which can be either independently or mutual-exclusively toggled.",
+		"attributes": {
+			"name": "Indicates the name to use for the group of buttons. This is the default keyname that will be submitted if submitted through a form.",
+			"group": "Indicates the name of the the button's grouping."
+		},
+		"events": {},
+		"methods": {},
+		"getters": {
+			"options": "Returns an array of the option button DOM elements in this togglegroup"	
+		},
+		"setters": {}
+	}
 }
