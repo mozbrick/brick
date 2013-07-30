@@ -645,9 +645,12 @@
     xtag.register("x-deck", {
         lifecycle:{
             created: function(){
-                this.xtag.history = new HistoryStack(function(card){
-                                        return card.parentNode === this;
-                                    }.bind(this), HistoryStack.DEFAULT_CAP);
+                var self = this;
+                var _historyValidator = function(card){
+                                            return card.parentNode === self;
+                                        };
+                this.xtag.history = new HistoryStack(_historyValidator, 
+                                                     HistoryStack.DEFAULT_CAP);
                                     
                 this.xtag._selectedCard = (this.xtag._selectedCard) ? 
                                            this.xtag._selectedCard : null; 

@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" type="text/css" href="prettify.css"/>
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
-    <script type="text/javascript" src="../../dist/brick.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
     
     <style>
         /** Defining custom styles:
@@ -22,6 +24,10 @@
             width: 100%;
             height: 100%;
         }
+
+        article{
+            height: 100%;
+        }
         
         #demo-controls{
             text-align: center;
@@ -30,7 +36,7 @@
         #demo-box{
             margin: 0 auto;
             
-            width: 30%;
+            width: 70%;
             height: 20%;
             border: 4px solid grey;
             background-color: #333;
@@ -39,6 +45,7 @@
         #demo-box x-card{
             text-align:center;
             font-size: 5em;
+            line-height: 1em;
         }
        
         #demo-box x-card[transition-override]:after{
@@ -72,45 +79,95 @@
             background-image: url("retina_wood.png");
             background-repeat: repeat;
         }
+
+        #code-wrap{
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+
+        #code-box{
+            display: inline-block;
+            max-height: 15em;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin: 0;
+            padding: .5em;
+            padding-right: 1.5em;
+            text-align: left;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -ms-box-sizing: border-box;
+            -o-box-sizing: border-box;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
-    <h1>x-deck demo</h1>
-    <x-deck id="demo-box">
-        <x-card>0</x-card>
-        <x-card>1</x-card>
-        <x-card>2</x-card>
-        <x-card>3</x-card>
-        <x-card>4</x-card>
-    </x-deck>
-    <div id="demo-controls">
-        <button onclick="demoBox.shufflePrev('reverse')"><-- Shuffle Prev</button>
-        <button onclick="demoBox.shuffleNext('forward')">Shuffle Next --></button>
-        <br/>
-        <button onclick="nextType()">change transition type</button>
-        <button onclick="addCard()">Add card</button>
-        <button onclick="addCard(true)">Add card with transition-override</button>
-        <button onclick="removeCard(0)">Remove first card</button>
-        <button onclick="removeCard()">Remove last card</button>
-        <p id="transition-label"></p>
-        <p id="count-label"></p>
-        <p id="selected-index-label"></p>
-        <br/>
-        <button onclick="demoBox.shuffleTo(2)">shuffleTo 2 (default)</button>
-        <button onclick="demoBox.shuffleTo(2, 'auto')">shuffleTo 2 (auto)</button>
-        <button onclick="demoBox.shuffleTo(2, 'forward')">shuffleTo 2 (always forwards)</button>
-        <button onclick="demoBox.shuffleTo(2, 'reverse')">shuffleTo 2 (always reverse)</button>
-        <button onclick="triggerShow(2)">Trigger show event on 2</button>
-        <button onclick="callShow(2)">Call .show() on 2</button>
-        <button onclick="editSelectedIndex(2)">Set selected index to 2</button>
-        <br/>
-        <button onclick="demoBox.historyBack()"><-- Back in History</button>
-        <span id="history-status"></span>
-        <button onclick="demoBox.historyForward()">Forward in History --></button>
-    </div>
+    <article>
+        <header><h1>x-deck demo</h1></header>
+        <x-deck id="demo-box">
+            <x-card>0</x-card>
+            <x-card>1</x-card>
+            <x-card>2</x-card>
+            <x-card>3</x-card>
+            <x-card>4</x-card>
+        </x-deck>
+
+        <div id="demo-controls">
+            <button onclick="getDemoBox().shufflePrev('reverse')"><-- Shuffle Prev</button>
+            <button onclick="getDemoBox().shuffleNext('forward')">Shuffle Next --></button>
+            <br/>
+            <button onclick="nextType()">change transition type</button>
+            <button onclick="addCard()">Add card</button>
+            <button onclick="addCard(true)">Add card with transition-override</button>
+            <button onclick="removeCard(0)">Remove first card</button>
+            <button onclick="removeCard()">Remove last card</button>
+            <p>num cards = <code id="count-label"></code></p>
+            <p>selected index = <code id="selected-index-label"></code></p>
+
+            <div id="code-wrap">
+                <h3>markup</h3>
+                <pre id="code-box" class="prettyprint"></pre>
+            </div>
+            <br/>
+            <button onclick="getDemoBox().shuffleTo(2)">shuffleTo 2 (default)</button>
+            <button onclick="getDemoBox().shuffleTo(2, 'auto')">shuffleTo 2 (auto)</button>
+            <button onclick="getDemoBox().shuffleTo(2, 'forward')">shuffleTo 2 (always forwards)</button>
+            <button onclick="getDemoBox().shuffleTo(2, 'reverse')">shuffleTo 2 (always reverse)</button>
+            <button onclick="triggerShow(2)">Trigger show event on 2</button>
+            <button onclick="callShow(2)">Call .show() on 2</button>
+            <button onclick="editSelectedIndex(2)">Set selected index to 2</button>
+            <br/>
+            <button onclick="getDemoBox().historyBack()"><-- Back in History</button>
+            <span id="history-status"></span>
+            <button onclick="getDemoBox().historyForward()">Forward in History --></button>
+        </div>
+    </article>
     
-    
+    <script type="text/javascript" src="prettify.js"></script>
+    <script type="text/javascript" src="../../dist/brick.js"></script>
     <script>
+        function updateCodeBox(){
+            var demoBox = getDemoBox();
+            var codeBox = document.getElementById("code-box");
+
+            codeBox.innerHTML = "";
+
+            var newHtml = demoBox.outerHTML;
+            // remove attribute properties not intended for api exposure
+            newHtml = newHtml.replace(/(style|card-anim-type|before-animation|reverse)=".*?"/g, "");
+            // remove errant spacing
+            newHtml = newHtml.replace(/\s*>/g, ">");
+            newHtml = newHtml.replace(/\s+/g, " ");
+            // prettify html spacing
+            newHtml = newHtml.replace(/>(\s*)<x-card/g, ">\n    <x-card");
+            newHtml = newHtml.replace(/>(\s*)<\/x-deck/g, ">\n</x-deck");
+            codeBox.textContent = newHtml;
+            xtag.removeClass(codeBox, "prettyprinted");
+            prettyPrint();
+        }
+
         function randomColor(alpha){
             var _randomVal = function(){
                 return Math.floor(Math.random() * 256);
@@ -121,7 +178,10 @@
             return type+"("+_randomVal()+","+_randomVal()+","+_randomVal()+alphaStr+")";
         }
         
-        var demoBox;
+        function getDemoBox(){
+            return document.getElementById("demo-box");
+        }
+
         var transitionTypes = [
             "scrollLeft", "scrollUp", "scrollRight", "scrollDown",
             "flipX", "flipY", 
@@ -135,7 +195,7 @@
                 card.style.backgroundColor = randomColor();
             });
             
-            demoBox = document.getElementById("demo-box");
+            var demoBox = getDemoBox();
             
             demoBox.addEventListener('shufflestart', function(e){
                 console.log("shufflestart", e);
@@ -156,34 +216,39 @@
         }, false);
         
         function editSelectedIndex(index){
+            var demoBox = getDemoBox();
             demoBox.selectedIndex = index;
             updateStatuses();
         }
     
         function triggerShow(index){
+            var demoBox = getDemoBox();
             var card = demoBox.getCardAt(index);
             xtag.fireEvent(card, "show");
             updateStatuses();
         }
     
         function callShow(index){
+            var demoBox = getDemoBox();
             var card = demoBox.getCardAt(index);
             card.show();
         }
         
         function updateStatuses(){
-            updateTypeBox();
             updateCountBox();
             updateHistoryControls();
             updateSelectedStatus();
+            updateCodeBox();
         }
         
         function updateSelectedStatus(){
+            var demoBox = getDemoBox();
             var statusBox = document.getElementById("selected-index-label");
-            statusBox.textContent = "selected index = "+demoBox.selectedIndex;
+            statusBox.textContent = demoBox.selectedIndex;
         }
         
         function updateHistoryControls(){
+            var demoBox = getDemoBox();
             var statusBox = document.getElementById("history-status");
             var backButton = statusBox.previousElementSibling;
             var nextButton = statusBox.nextElementSibling;
@@ -205,6 +270,7 @@
         
         // changes the transition type of deck
         function nextType(){
+            var demoBox = getDemoBox();
             var oldType = demoBox.transitionType;
             
             var types = transitionTypes;
@@ -224,17 +290,13 @@
             demoBox.shuffleNext("forward");
         }
         
-        function updateTypeBox(){
-            document.getElementById("transition-label").textContent = 
-                    "transition-type = "+demoBox.transitionType;
-        }
-        
         function updateCountBox(){
-            document.getElementById("count-label").textContent = 
-                    "num cards = "+demoBox.getAllCards().length;
+            var demoBox = getDemoBox();
+            document.getElementById("count-label").textContent = demoBox.getAllCards().length;
         }
         
         function addCard(addOverride){
+            var demoBox = getDemoBox();
             var numCards = demoBox.getAllCards().length;
             
             var newCard = document.createElement("x-card");
@@ -260,6 +322,7 @@
         }
         
         function removeCard(index){
+            var demoBox = getDemoBox();
             var allCards = demoBox.getAllCards();
             if(index !== undefined && index < allCards.length){
                 var removeCard = demoBox.getCardAt(index);
