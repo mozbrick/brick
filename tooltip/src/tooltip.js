@@ -32,9 +32,21 @@
     document (includes border, but not margin)
     **/
     function getRect(el){
-        return el.getBoundingClientRect();
-    }
+        var rect = el.getBoundingClientRect();
 
+        var documentScrollTop = (document.documentElement.scrollTop ||
+                                   document.body.scrollTop || 0);
+        var documentScrollLeft = (document.documentElement.scrollLeft ||
+                                    document.body.scrollLeft || 0);
+        return {
+            "left": rect.left + documentScrollLeft,
+            "right": rect.right + documentScrollLeft,
+            "top": rect.top + documentScrollTop,
+            "bottom": rect.bottom + documentScrollTop,
+            "width": rect.width,
+            "height": rect.height
+        };
+    }
     
     /** CachedListener : (DOM, string, Function)
     * a simple struct to store all information needed to add and remove
@@ -650,21 +662,8 @@
         };
         
         // coords relative to document
-        var absCoordsA = getRect(elemA);
-        var absCoordsB = getRect(elemB);
-        var rectA = {
-            left: absCoordsA.left,
-            top: absCoordsA.top,
-            right: absCoordsA.left+elemA.offsetWidth,
-            bottom: absCoordsA.top + elemA.offsetHeight
-        };
-        
-        var rectB = {
-            left: absCoordsB.left,
-            top: absCoordsB.top,
-            right: absCoordsB.left+elemB.offsetWidth,
-            bottom: absCoordsB.top + elemB.offsetHeight
-        };
+        var rectA = getRect(elemA);
+        var rectB = getRect(elemB);
         
         // checks if any corner of one rect is contained in the other rect
         var _cornersOverlapBox = function(rectA, rectB){
@@ -723,29 +722,29 @@
     }    
     
     function _pickBestTooltipOrient(tooltip, validPositionDataList){
-        var container = tooltip.parentNode;
-        var containerWidth = container.scrollWidth;
-        var containerHeight = container.scrollHeight;
+        var context = tooltip.parentNode;
+        var contextWidth = context.scrollWidth;
+        var contextHeight = context.scrollHeight;
 
         // first, partition data into two categories: those that leave the
-        // container's boundaries and those who don't
-        var inContainerData = [];
-        var notInContainerData = [];
+        // context's boundaries and those who don't
+        var inContextData = [];
+        var notInContextData = [];
         for(var i = 0; i < validPositionDataList.length; i++){
             var data = validPositionDataList[i];
             var rect = data.rect;
             if(rect.left < 0 || rect.top < 0 || 
-               rect.right > containerWidth || rect.bottom > containerHeight)
+               rect.right > contextWidth || rect.bottom > contextHeight)
             {
-                notInContainerData.push(data);
+                notInContextData.push(data);
             }
             else{
-                inContainerData.push(data);
+                inContextData.push(data);
             }
         }
         
-        var filterDataList = (inContainerData.length > 0) ? inContainerData :
-                                                             notInContainerData;
+        var filterDataList = (inContextData.length > 0) ? inContextData :
+                                                             notInContextData;
         // TODO: pick the position with the least tooltip offset from the 
         // target
         // for now, just pick the first one that is filtered
@@ -868,7 +867,7 @@
             return _autoPositionTooltip(tooltip, targetElem);
         }
         
-        var tipContainer = (tooltip.offsetParent) ? 
+        var tipContext = (tooltip.offsetParent) ? 
                                 tooltip.offsetParent : tooltip.parentNode;
         
         // only position if NOT currently recursing to get a more stable
@@ -881,12 +880,12 @@
         }
         
         // coordinates of the target element, relative to the tooltip's 
-        // container (ie: in the container's coordinate system)
-        var targetContainerOffset = _getCoordsRelativeToContext(targetElem, 
-                                                                tipContainer);
+        // context (ie: in the context's coordinate system)
+        var targetContextOffset = _getCoordsRelativeToContext(targetElem, 
+                                                                tipContext);
 
-        var containerWidth = tipContainer.scrollWidth;
-        var containerHeight = tipContainer.scrollHeight;
+        var contextWidth = tipContext.scrollWidth;
+        var contextHeight = tipContext.scrollHeight;
         var targetWidth = targetElem.offsetWidth;
         var targetHeight = targetElem.offsetHeight;
 
@@ -906,11 +905,11 @@
         
         // coords for if we need to either vertically or horizontally center the
         // tooltip on the target element;
-        // coords are relative to the tooltip's container
+        // coords are relative to the tooltip's context
         var centerAlignCoords = {
-            "left": targetContainerOffset.left + 
+            "left": targetContextOffset.left + 
                     (targetWidth - origTooltipWidth)/2,
-            "top": targetContainerOffset.top + 
+            "top": targetContextOffset.top + 
                    (targetHeight - origTooltipHeight)/2
         };
         
@@ -921,9 +920,9 @@
         var _getAlignedArrowCoords = function(tooltipTop, tooltipLeft){
             return {
                 "left": (targetWidth - arrowWidth)/2 + 
-                        targetContainerOffset.left - tooltipLeft,
+                        targetContextOffset.left - tooltipLeft,
                 "top":  (targetHeight - arrowHeight)/2 + 
-                         targetContainerOffset.top - newTop
+                         targetContextOffset.top - newTop
             };
         };
         
@@ -935,31 +934,31 @@
         if(orientation === "top"){
             arrowHeight /= 2; // remember that the arrow is translated to 
                               // overlap the balloon
-            newTop =targetContainerOffset.top - origTooltipHeight - arrowHeight;
+            newTop =targetContextOffset.top - origTooltipHeight - arrowHeight;
             newLeft = centerAlignCoords.left;
-            maxTop = containerHeight - origTooltipHeight - arrowHeight;
-            maxLeft = containerWidth - origTooltipWidth;
+            maxTop = contextHeight - origTooltipHeight - arrowHeight;
+            maxLeft = contextWidth - origTooltipWidth;
         }
         else if(orientation === "bottom"){
             arrowHeight /= 2; //remember that the arrow is translated to overlap
-            newTop = targetContainerOffset.top + targetHeight + arrowHeight;
+            newTop = targetContextOffset.top + targetHeight + arrowHeight;
             newLeft = centerAlignCoords.left;
-            maxTop = containerHeight - origTooltipHeight;
-            maxLeft = containerWidth - origTooltipWidth;
+            maxTop = contextHeight - origTooltipHeight;
+            maxLeft = contextWidth - origTooltipWidth;
         }
         else if(orientation === "left"){
             arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
-            newLeft =targetContainerOffset.left - origTooltipWidth - arrowWidth;
-            maxTop = containerHeight - origTooltipHeight;
-            maxLeft = containerWidth - origTooltipWidth - arrowWidth;
+            newLeft =targetContextOffset.left - origTooltipWidth - arrowWidth;
+            maxTop = contextHeight - origTooltipHeight;
+            maxLeft = contextWidth - origTooltipWidth - arrowWidth;
         }
         else if(orientation === "right"){
             arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
-            newLeft = targetContainerOffset.left + targetWidth + arrowWidth;
-            maxTop = containerHeight - origTooltipHeight;
-            maxLeft = containerWidth - origTooltipWidth;
+            newLeft = targetContextOffset.left + targetWidth + arrowWidth;
+            maxTop = contextHeight - origTooltipHeight;
+            maxLeft = contextWidth - origTooltipWidth;
         }
         else{
             throw "invalid orientation " + orientation;
@@ -971,8 +970,11 @@
             newLeft = constrainNum(newLeft, 0, maxLeft);
         }
 
-        var newTopPercent = (containerHeight) ? (newTop / containerHeight) : 0;
-        var newLeftPercent = (containerWidth) ? (newLeft / containerWidth) : 0;
+        // calculate percentage in regards to viewport
+        var newTopPercent = (tipContext.clientHeight) ? 
+                                (newTop / tipContext.clientHeight) : 0;
+        var newLeftPercent = (tipContext.clientWidth) ? 
+                                (newLeft / tipContext.clientWidth) : 0;
         tooltip.style.top = newTopPercent*100 + "%";
         tooltip.style.left = newLeftPercent*100 + "%";
         
@@ -1000,8 +1002,8 @@
         // in this orientation
         var recursionLimit = 0;
         if(reattemptDepth < recursionLimit &&
-           (origTooltipWidth !== tooltip.offsetWidth || 
-            origTooltipHeight !== tooltip.offsetHeight))
+           (origTooltipWidth !== newTooltipWidth || 
+            origTooltipHeight !== newTooltipHeight))
         {
             return _positionTooltip(tooltip, targetElem, orientation, 
                                     reattemptDepth+1);
