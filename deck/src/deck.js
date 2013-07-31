@@ -707,7 +707,6 @@
                 },
                 set: function(newIndex){
                     if(this.selectedIndex !== newIndex){
-                        console.log(this.selectedIndex, newIndex);
                         _replaceWithIndex(this, newIndex, "none");
                     }
                     this.setAttribute("selected-index", newIndex);

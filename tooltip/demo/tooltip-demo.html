@@ -4,7 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
-    <script type="text/javascript" src="../../dist/brick.js"></script>
+
+    <script type="text/javascript" src="../../core/src/core.js"></script>
+    <script type="text/javascript" src="../src/tooltip.js"></script>
 
     <style>
         body, html{
@@ -118,7 +120,7 @@
             <img src="http://placecage.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" target-selector=".fancy-selector">
+    <x-tooltip id="demoTip">
         <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placecage.com/30/30"/>
         <br/><a href="http://google.com">Check out this link!</a>
     </x-tooltip>
@@ -142,6 +144,7 @@
         <button onClick="toggleIgnoreOuter()">Toggle ignore-outer-trigger</button>
         <button onClick="changeContents()">Change tooltip contents</button>
         <button onClick="toggleTooltipPointerEvents()">Toggle tooltip pointer events</button>
+        <button onClick="toggleNoOverflow()">Toggle no-overflow</button>
     </div>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
@@ -153,6 +156,8 @@
     <span>Outer triggering = <span id="outer-trigger-status"></span></span>
     <br/>
     <span>Tooltip pointer events = <span id="tooltip-pointer-events-status"></span></span>
+    <br/>
+    <span>no-overflow = <span id="no-overflow-status"></span></span>
     <br/>
     <button onClick="addFancySpan()">Add fancy-selector box</span>
     <button onClick="addRemoveMainTooltip()">Add / remove main tooltip</button>
@@ -299,12 +304,18 @@ function toggleTriggerStyle(){
     updateStatuses();
 }
 
+function toggleNoOverflow(){
+    demoTip.noOverflow = !demoTip.noOverflow;
+    updateStatuses();
+}
+
 function updateStatuses(){
     updateSelectorBox();
     updateOrientationBox();
     updateTriggerStyleBox();
     updateIgnoreOuterStatus();
     updateTooltipPointerEventsStatus();
+    updateNoOverflowStatus();
     
     var oldTargets = xtag.query(document, ".demo-targeted");
     var targets = demoTip.targetElems;
@@ -329,6 +340,11 @@ function updateStatuses(){
             button.setAttribute("disabled", true);
         }
     });
+}
+
+function updateNoOverflowStatus(){
+    var statusBox = document.getElementById("no-overflow-status");
+    statusBox.textContent = demoTip.noOverflow;
 }
 
 function updateTooltipPointerEventsStatus(){

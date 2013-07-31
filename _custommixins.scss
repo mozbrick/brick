@@ -78,21 +78,26 @@ $FONTS_FOLDER: "../fonts/";
                                              -webkit-transform);
     -moz-transition-property: replaceItem($properties, transform, 
                                           -moz-transform);
+    -ms-transition-property: replaceItem($properties, transform, 
+                                        -o-transform);
     -o-transition-property: replaceItem($properties, transform, 
                                         -o-transform);
     
     transition-duration: $durations;
     -webkit-transition-duration: $durations;
     -moz-transition-duration: $durations;
+    -ms-transition-duration: $durations;
     -o-transition-duration: $durations;
     
     -webkit-transition-timing-function:$timings;
     -moz-transition-timing-function:$timings;
+    -ms-transition-timing-function:$timings;
     -o-transition-timing-function:$timings;
     transition-timing-function:$timings;
     
     -webkit-transition-delay:$delays;
     -moz-transition-delay:$delays;
+    -ms-transition-delay:$delays;
     -o-transition-delay:$delays;
     transition-delay:$delays;
 }

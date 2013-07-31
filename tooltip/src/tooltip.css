@@ -1,40 +1,39 @@
-@font-face {
-  font-family: "OpenSans";
-  font-weight: normal;
-  font-style: normal;
-  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
-
 x-tooltip {
   transition-property: visibility, transform, opacity;
   -webkit-transition-property: visibility, -webkit-transform, opacity;
   -moz-transition-property: visibility, -moz-transform, opacity;
+  -ms-transition-property: visibility, -o-transform, opacity;
   -o-transition-property: visibility, -o-transform, opacity;
   transition-duration: 0.2s;
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;
+  -ms-transition-duration: 0.2s;
   -o-transition-duration: 0.2s;
   -webkit-transition-timing-function: ease-in;
   -moz-transition-timing-function: ease-in;
+  -ms-transition-timing-function: ease-in;
   -o-transition-timing-function: ease-in;
   transition-timing-function: ease-in;
   -webkit-transition-delay: 0s;
   -moz-transition-delay: 0s;
+  -ms-transition-delay: 0s;
   -o-transition-delay: 0s;
   transition-delay: 0s;
-  display: block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
   position: absolute;
   margin: 0;
   padding: 0;
-  z-index: 999;
+  display: block;
+  z-index: 99999999999999;
   overflow: visible;
-  visibility: hidden;
-  opacity: 0;
-  max-width: 100%;
-  max-height: 100%;
   border: 1px solid grey;
   background-color: #eee;
   border-radius: 4px;
-  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   box-shadow: 1px 1px 4px grey; }
   x-tooltip[ignore-tooltip-pointer-events] {
     pointer-events: none; }
@@ -62,6 +61,9 @@ x-tooltip {
     -moz-transform: translateX(-10px);
     -webkit-transform: translateX(-10px);
     -o-transform: translateX(-10px); }
+  x-tooltip:not([visible]) {
+    visibility: hidden !important;
+    opacity: 0 !important; }
   x-tooltip[visible] {
     visibility: visible;
     opacity: 1;
@@ -70,6 +72,9 @@ x-tooltip {
     -moz-transform: none;
     -webkit-transform: none;
     -o-transform: none; }
+  x-tooltip[no-overflow] {
+    max-width: 100%;
+    max-height: 100%; }
   x-tooltip:not([orientation=top]):not([orientation=bottom]):not([orientation=left]):not([orientation=right])[auto-orientation=top] {
     transform: translateY(10px);
     -ms-transform: translateY(10px);
@@ -111,6 +116,9 @@ x-tooltip > .tooltip-content {
   display: block;
   padding: .5em;
   overflow: auto;
+  white-space: nowrap;
+  max-width: inherit;
+  max-height: inherit;
   z-index: 2; }
 
 x-tooltip > .tooltip-arrow {

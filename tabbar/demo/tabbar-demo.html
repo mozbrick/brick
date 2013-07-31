@@ -21,6 +21,7 @@
             margin: 0;
             vertical-align: bottom;
             width: 320px;
+
         }
 
         .component-demo{
@@ -66,6 +67,18 @@
             max-width: 30px;
             max-height: 1.5em;
         }
+
+        pre{
+            font-size: .9em;
+            overflow: auto;
+            max-height: 25em;
+        }
+
+        .toggle-source-button{
+            margin: 0 auto;
+            width: 50%;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -74,7 +87,6 @@
     <div>
     <figure class="two-up">
         <h2>With deck</h2>
-        <div>
         <div class="demo">    
             <x-deck class="component-demo" transition-type="coverDown">
                 <x-card><img src="dog1.png"/><span>One</span></x-card>
@@ -102,6 +114,11 @@
                 </x-tabbar-tab>
             </x-tabbar>
         </div>
+        <x-iconbutton class="toggle-source-button" src="eye.png">Show source</x-iconbutton>
+        <x-tooltip target-selector="_previousSibling" orientation="bottom" trigger-style="click">
+            <h4>HTML markup:</h4>
+            <pre class="prettyprint">&lt;!-- the target element; the actual structure is unimportant and is <br/>     only provided to demo what the tabbar's tabs are targeting --&gt;<br/>&lt;x-deck class=&quot;component-demo&quot; transition-type=&quot;coverDown&quot;&gt;<br/>    &lt;x-card&gt;&lt;img src=&quot;dog1.png&quot;/&gt;&lt;span&gt;One&lt;/span&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;img src=&quot;dog2.png&quot;/&gt;&lt;span&gt;Two&lt;/span&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;img src=&quot;dog3.png&quot;/&gt;&lt;span&gt;Three&lt;/span&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;img src=&quot;dog4.png&quot;/&gt;&lt;span&gt;Four&lt;/span&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;img src=&quot;dog5.png&quot;/&gt;&lt;span&gt;Five&lt;/span&gt;&lt;/x-card&gt;<br/>&lt;/x-deck&gt;<br/><br/>&lt;!-- the tabbar itself --&gt;<br/>&lt;x-tabbar&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:first-child&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(2)&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(3)&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(4)&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(5)&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
+        </x-tooltip>
     </figure>
 
     <figure class="two-up">
@@ -117,7 +134,7 @@
             </x-slidebox>
             
             <!-- see javascript to see demo of dynamically assigning targets -->
-            <x-tabbar>
+            <x-tabbar id="slide-box-tabbar">
                 <x-tabbar-tab>
                     <x-iconbutton src="birnimal-calendar.png">Calendar</x-iconbutton>
                 </x-tabbar-tab>
@@ -132,11 +149,18 @@
                 </x-tabbar-tab>
             </x-tabbar>
         </div>
+        <x-iconbutton class="toggle-source-button" src="eye.png">Show source</x-iconbutton>
+        <x-tooltip target-selector="_previousSibling" orientation="bottom" trigger-style="click">
+            <h4>HTML markup:</h4>
+            <pre class="prettyprint">&lt;!-- the target element; the actual structure is unimportant and is <br/>     only provided to demo what the tabbar's tabs are targeting --&gt;<br/>&lt;x-slidebox class=&quot;component-demo&quot; orientation=&quot;x&quot;&gt;<br/>    &lt;x-slides&gt;<br/>      &lt;x-slide&gt;&lt;img src=&quot;birnimal-calendar.png&quot; /&gt;&lt;/x-slide&gt;<br/>      &lt;x-slide&gt;&lt;img src=&quot;birnimal-graph.png&quot; /&gt;&lt;/x-slide&gt;<br/>      &lt;x-slide&gt;&lt;img src=&quot;birnimal-detail.png&quot; /&gt;&lt;/x-slide&gt;<br/>      &lt;x-slide&gt;&lt;img src=&quot;birnimal-settings.png&quot; /&gt;&lt;/x-slide&gt;<br/>    &lt;/x-slides&gt;<br/>&lt;/x-slidebox&gt;<br/><br/>&lt;!-- the tabbar itself --&gt;<br/>&lt;x-tabbar id=&quot;slide-box-tabbar&quot;&gt;<br/>    &lt;x-tabbar-tab&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
+            <h4>JavaScript</h4>
+            <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>    // demonstrate dynamic tab-target handling in slidebox demo<br/>    var slideBox = document.querySelector('x-slidebox');<br/>    var slideBoxTabbar = document.getElementById(&quot;slide-box-tabbar&quot;);<br/><br/>    // assign each tab to its respective slide in the slidebox<br/>    var tabs = slideBoxTabbar.tabs;<br/>    var slides = xtag.query(slideBox, 'x-slide');<br/>    for(var i=0; i &lt; slides.length &amp;&amp; i &lt; tabs.length; i++){<br/>        var tab = tabs[i];<br/>        var slide = slides[i];<br/>        <br/>        // assign each slide to its respective tabbar tab<br/>        tab.targetElems = [slide];<br/>    }<br/>});</pre>
+        </x-tooltip>
     </figure>
 
     <figure class="two-up">
         <h2>With flipbox</h2>
-            <div class="demo">  
+        <div class="demo">  
             <x-flipbox class="component-demo">
               <div>
                 <img src="Card_front.svg"/>
@@ -153,34 +177,48 @@
                     <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
                 </x-tabbar-tab>
             </x-tabbar>
-            </div>
+        </div>
+        <x-iconbutton class="toggle-source-button" src="eye.png">Show source</x-iconbutton>
+        <x-tooltip target-selector="_previousSibling" orientation="bottom" trigger-style="click">
+            <h4>HTML markup:</h4>
+            <pre class="prettyprint">&lt;!-- the target element; the actual structure is unimportant and is <br/>     only provided to demo what the tabbar's tabs are targeting --&gt;<br/>&lt;x-flipbox class=&quot;component-demo&quot;&gt;<br/>  &lt;div&gt;<br/>    &lt;img src=&quot;Card_front.svg&quot;/&gt;<br/>  &lt;/div&gt;<br/>  &lt;div&gt;<br/>    &lt;img src=&quot;Card_back.svg&quot;/&gt;<br/>  &lt;/div&gt;<br/>&lt;/x-flipbox&gt;<br/><br/>&lt;!-- the tabbar itself --&gt;<br/>&lt;x-tabbar&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:first-child&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:last-child&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
+        </x-tooltip>
     </figure>    
 
     <figure class="two-up">
-        <h2>Fire custom event types (see html source's <code>target-event</code> attribute)</h2>
+        <h2>Fire custom event types (using <code>target-event</code> attributes)</h2>
         <div class="demo">  
-        <div id="color-box" class="component-demo">
-            <span>NIC CAGE</span>
-            <img src="http://placecage.com/c/300/325"/>
+            <div id="color-box" class="component-demo">
+                <span>NIC CAGE</span>
+                <img src="http://placecage.com/c/300/325"/>
+            </div>
+            <x-tabbar target-event="danceparty">
+                <x-tabbar-tab target-selector="#color-box > span">
+                    <x-iconbutton src="http://placecage.com/100/100">danceparty</x-iconbutton>
+                </x-tabbar-tab>
+                <x-tabbar-tab target-selector="#color-box > img" target-event="override">
+                    <x-iconbutton src="http://placecage.com/c/100/100">override</x-iconbutton>
+                </x-tabbar-tab>
+            </x-tabbar>
         </div>
-        <x-tabbar target-event="danceparty">
-            <x-tabbar-tab target-selector="#color-box > span">
-                <x-iconbutton src="http://placecage.com/100/100">danceparty</x-iconbutton>
-            </x-tabbar-tab>
-            <x-tabbar-tab target-selector="#color-box > img" target-event="override">
-                <x-iconbutton src="http://placecage.com/c/100/100">override</x-iconbutton>
-            </x-tabbar-tab>
-        </x-tabbar>
-        </div>
+        <x-iconbutton class="toggle-source-button" src="eye.png">Show source</x-iconbutton>
+        <x-tooltip target-selector="_previousSibling" orientation="bottom" trigger-style="click">
+            <h4>HTML markup</h4>
+            <pre class="prettyprint">&lt;!-- the element we want to target --&gt;<br/>&lt;div id=&quot;color-box&quot; class=&quot;component-demo&quot;&gt;<br/>    &lt;span&gt;NIC CAGE&lt;/span&gt;<br/>    &lt;img src=&quot;http://placecage.com/c/300/325&quot;/&gt;<br/>&lt;/div&gt;<br/><br/>&lt;!-- The tabbar itself --&gt;<br/>&lt;x-tabbar target-event=&quot;danceparty&quot;&gt;<br/>    &lt;!-- this tab will fire a 'danceparty' event on the <br/>         selected element, due to inheriting it from the tabbar --&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;#color-box &gt; span&quot;&gt;<br/>        &lt;!-- tab 1 content --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;!-- this tab will fire a 'override' event on the <br/>         selected element, due to having an override specified on the tab --&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;#color-box &gt; img&quot; target-event=&quot;override&quot;&gt;<br/>        &lt;!-- tab 2 content --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
+            <h4>JavaScript</h4>
+            <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>    // demonstrate that events specified by the tabbar are fired<br/>    document.querySelector(&quot;#color-box &gt; span&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br/>        alert(&quot;The text received danceparty!&quot;);<br/>    });<br/>    <br/>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br/>        alert(&quot;The image received danceparty!&quot;);<br/>    });<br/>    <br/>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;override&quot;, function(e){<br/>        alert(&quot;The image received override!&quot;);<br/>    });<br/>});</pre>
+        </x-tooltip>
     </figure>
 </div>
 </article>
+
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 <script type="text/javascript" src="../../dist/brick.js"></script>
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
     // demonstrate dynamic tab-target handling in slidebox demo
     var slideBox = document.querySelector('x-slidebox');
-    var slideBoxTabbar = document.querySelector('x-slidebox + x-tabbar');
+    var slideBoxTabbar = document.getElementById("slide-box-tabbar");
     
     // assign each tab to its respective slide in the slidebox
     var tabs = slideBoxTabbar.tabs;

@@ -17,19 +17,16 @@
 // the only user styling that should be applied here is border
 x-tooltip{
     @include animated((visibility, transform, opacity), 0.2s);
-    display: block; // needed to favor horizontal tips, 
-                    // use inline-block to favor vertical
+    @include boxSizing(border-box);
     position: absolute;
     margin: 0;
     padding: 0;
     
-    z-index: 999;
+    display: block; // needed to favor horizontal tips, 
+                // use inline-block to favor vertical
+
+    z-index: 99999999999999;
     overflow: visible;
-    
-    visibility: hidden;
-    opacity: 0;
-    max-width: 100%;
-    max-height: 100%;
     
     // default styling
     border: 1px solid grey;
@@ -59,10 +56,23 @@ x-tooltip{
         @include transformed(translateX(-10px));
     }
     
+    &:not([visible]){
+        visibility: hidden!important;
+        opacity: 0!important;
+        // while the tooltip is not displayed, prevent it from stretching the
+        // scrollWidth/Height of the containing element
+        // TODO: actually doing this correctly
+    }
+
     &[visible]{
         visibility: visible;
         opacity: 1;
         @include transformed(none);
+    }
+
+    &[no-overflow]{
+        max-width: 100%;
+        max-height: 100%;
     }
     
     // hackery to have auto orientation have the same transform animations
@@ -97,6 +107,9 @@ x-tooltip > .tooltip-content{
     display: block;
     padding: .5em;
     overflow: auto;
+    white-space: nowrap;
+    max-width: inherit;
+    max-height: inherit;
 
     z-index: 2;
 }

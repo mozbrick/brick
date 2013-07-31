@@ -85,6 +85,12 @@ If not given, this defaults to `hover`.
 
 Can be set with the `trigger-style` HTML attribute or the `triggerStyle` JavaScript property.
 
+## ___no-overflow___ / ___noOverflow___
+
+By default, the tooltip will always try to place the tooltip offset from the targeted element, even if it causes the tooltip to overflow the container.
+
+If `no-overflow` set, this will instead force the tooltip to always be constrained by the container, overlapping the target element if placement necessitates it.
+
 ## ___ignore-outer-trigger___ / ___ignoreOuterTrigger___
 
 If present and `trigger-style` is not set to a preset style, this will indicate that we should **not** hide the tooltip when the triggering event is fired outside of the tooltip's target.

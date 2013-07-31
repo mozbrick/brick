@@ -22,7 +22,6 @@
     function isValidOrientation(orient){
         return orient in TIP_ORIENT_ARROW_DIR_MAP;
     }
-    
 
     /** getLeft: DOM element => Number
 
@@ -222,8 +221,6 @@
         }
     });
     
-    
-    
     /** OuterTriggerManager
     *
     * manages a dictionary of event types mapped to OuterTriggerEventStruct objs
@@ -231,7 +228,6 @@
     function OuterTriggerManager(){
         this.eventStructDict = {};
     }
-    
     
    /** OuterTriggerManager.registerTooltip : (string, DOM)
     *
@@ -610,7 +606,7 @@
      * - for mouseover events, only fires callback when
      *   the mouse first enters the element that has the mouseover event 
      *   listener attached to it and ignores any mouseovers between children
-     *   elements in this same continer element; essentially emulates jQuery's
+     *   elements in this same container element; essentially emulates jQuery's
      *   mouseenter polyfill
      * - for mouseout events, only fires callback when the mouse actually
      *   completely exits the element that has the mouseleave event 
@@ -770,7 +766,64 @@
         return output;
     }    
     
-    
+    function _pickBestTooltipOrient(tooltip, validPositionDataList){
+        var container = tooltip.parentNode;
+        var containerWidth = container.scrollWidth;
+        var containerHeight = container.scrollHeight;
+
+        // first, partition data into two categories: those that leave the
+        // container's boundaries and those who don't
+        var inContainerData = [];
+        var notInContainerData = [];
+        for(var i = 0; i < validPositionDataList.length; i++){
+            var data = validPositionDataList[i];
+            var rect = data.rect;
+            if(rect.left < 0 || rect.top < 0 || 
+               rect.right > containerWidth || rect.bottom > containerHeight)
+            {
+                notInContainerData.push(data);
+            }
+            else{
+                inContainerData.push(data);
+            }
+        }
+        
+        var filterDataList = (inContainerData.length > 0) ? inContainerData :
+                                                             notInContainerData;
+        // TODO: pick the position with the least tooltip offset from the 
+        // target
+        // for now, just pick the first one that is filtered
+        return (filterDataList.length > 0) ? filterDataList[0].orient : null;
+    }
+
+    // return the coordinates of the target element, relative to the given 
+    // context element (ie: within the context element's offsetParent 
+    // coordinate system)
+    function _getCoordsRelativeToContext(targetElem, contextElem){
+        // coordinates of the target element, relative to the document
+        var targetPageOffset = getRect(targetElem);
+        
+        // coordinates of the context element, rel to the document
+        var contextPageOffset = getRect(contextElem);
+
+        // coordinates of the target element, relative to context element
+        var targetContextOffset = {
+            "top": targetPageOffset.top - contextPageOffset.top,
+            "left": targetPageOffset.left - contextPageOffset.left
+        };
+        
+        // add in scroll offset if the context is not the body 
+        // (we don't add scroll if the context is the body because our 
+        //  getRect calculations were already in relation to the body)
+        if(contextElem !== document.body && 
+           hasParentNode(contextElem, document.body))
+        {
+            targetContextOffset.top += contextElem.scrollTop;
+            targetContextOffset.left += contextElem.scrollLeft;
+        }
+        return targetContextOffset;
+    }
+
     /** _positionTooltip: (x-tooltip, DOM, string)
      *
      * when called, attempts to reposition the tooltip so that it is centered
@@ -781,39 +834,59 @@
      * targeted elements
      **/
     function _positionTooltip(tooltip, targetElem, orientation, reattemptDepth){
+        reattemptDepth = (reattemptDepth === undefined) ? 0 : reattemptDepth;
+
         // ignore attempts to position when not yet in document
         if(!tooltip.parentNode){
             tooltip.left = "";
             tooltip.top = "";
             return;
         }
-        reattemptDepth = (reattemptDepth === undefined) ? 0 : reattemptDepth;
         
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
         if(!(isValidOrientation(orientation))){
+            // store information on any valid positionings so that we can
+            // check for the best one after we've run through all directions
+            var validOrientDataList = [];
+
             for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
                 // ensure arrow is pointing in correct direction
                 arrow.setAttribute("arrow-direction", 
                                    TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
                 // recursively attempt a valid positioning
-                _positionTooltip(tooltip, targetElem, tmpOrient);
-                                   
-                // found a good position, so finalize and stop checking
+                var positionRect = _positionTooltip(tooltip, targetElem, 
+                                                    tmpOrient);
+                // found a good position, so save data
                 if(!overlaps(tooltip, targetElem)){
-                    /* set the auto-orientation attribute so that CSS animations
-                     * still apply even though orientation attribute is not
-                     * valid
-                     */
-                    tooltip.setAttribute("auto-orientation", tmpOrient);
-                    return;
+                    validOrientDataList.push({
+                        orient: tmpOrient,
+                        rect: positionRect
+                    });
                 }
             }
-            // if we get to this point, we didn't find any good spots, 
-            // just go with the last possible orientation
-            tooltip.setAttribute("auto-orientation", tmpOrient);
-            return;
+            var bestOrient = _pickBestTooltipOrient(tooltip, 
+                                                    validOrientDataList);
+            /* set the auto-orientation attribute so that CSS animations
+             * still apply even though orientation attribute is not
+             * one of 'top', 'left', 'bottom', or 'right'
+             */
+            tooltip.setAttribute("auto-orientation", bestOrient);
+
+            // ensure arrow is pointing in correct direction
+            arrow.setAttribute("arrow-direction", 
+                               TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
+
+            // if best orient exists and isn't what was the last position 
+            // attempted, set that position again
+            if(isValidOrientation(bestOrient) && bestOrient !== tmpOrient){
+                return _positionTooltip(tooltip, targetElem, bestOrient);
+            }
+            // otherwise return the last rect to be checked
+            else{
+                return positionRect;
+            }
         }
         
         var tipContainer = (tooltip.offsetParent) ? 
@@ -828,42 +901,28 @@
             arrow.style.left = "";
         }
         
-        // coordinates of the target element, relative to the document
-        var targetPageOffset = getRect(targetElem);
-        
-        // coordinates of the tooltip's container element, rel to the document
-        var tipContainerPageOffset = getRect(tipContainer);
-
-        // coordinates of the target element, relative to tooltip's container
-        var targetContainerOffset = {
-            "top": targetPageOffset.top - tipContainerPageOffset.top,
-            "left": targetPageOffset.left - tipContainerPageOffset.left
-        };
-        
-        // add in scroll offset if the container is not the body 
-        // (we don't add scroll if the container is the body because our 
-        //  getRect calculations were already in relation to the body)
-        if(tipContainer !== document.body && 
-           hasParentNode(tipContainer, document.body))
-        {
-            targetContainerOffset.top += tipContainer.scrollTop;
-            targetContainerOffset.left += tipContainer.scrollLeft;
-        }
+        // coordinates of the target element, relative to the tooltip's 
+        // container (ie: in the container's coordinate system)
+        var targetContainerOffset = _getCoordsRelativeToContext(targetElem, 
+                                                                tipContainer);
 
         var containerWidth = tipContainer.scrollWidth;
         var containerHeight = tipContainer.scrollHeight;
         var targetWidth = targetElem.offsetWidth;
         var targetHeight = targetElem.offsetHeight;
+
         var origTooltipWidth = tooltip.offsetWidth;
         var origTooltipHeight = tooltip.offsetHeight;
+        var arrowWidth = arrow.offsetWidth;
+        var arrowHeight = arrow.offsetHeight;
         
         // TODO: needs more intelligent rotation angle calculation; currently
         // just assumes rotation is 45 degrees
         var arrowRotationDegs = 45;
-        var arrowDims = getRotationDims(arrow.offsetWidth, arrow.offsetHeight, 
+        var arrowDims = getRotationDims(arrowWidth, arrowHeight, 
                                         arrowRotationDegs);                                
-        var arrowWidth = arrowDims.width;
-        var arrowHeight = arrowDims.height;
+        arrowWidth = arrowDims.width;
+        arrowHeight = arrowDims.height;
         
         // coords for if we need to either vertically or horizontally center the
         // tooltip on the target element;
@@ -927,8 +986,10 @@
         }
         
         // finally, constrain and position the tooltip
-        newTop = constrainNum(newTop, 0, maxTop);
-        newLeft = constrainNum(newLeft, 0, maxLeft);
+        if(tooltip.noOverflow){
+            newTop = constrainNum(newTop, 0, maxTop);
+            newLeft = constrainNum(newLeft, 0, maxLeft);
+        }
         tooltip.style.top = newTop + "px";
         tooltip.style.left = newLeft + "px";
         
@@ -946,16 +1007,31 @@
                                 origTooltipHeight - arrowHeight
                               ) + "px";
         }
-        
+            
+        var newTooltipWidth = tooltip.offsetWidth;
+        var newTooltipHeight = tooltip.offsetHeight;
+
         // if the tooltip window changed size in its placement, recurse
-        // once to try to get a more stable placement
+        // using the same orientation to try to get a more stable placement
+        // in this orientation
         var recursionLimit = 1;
         if(reattemptDepth < recursionLimit &&
            (origTooltipWidth !== tooltip.offsetWidth || 
             origTooltipHeight !== tooltip.offsetHeight))
         {
-            _positionTooltip(tooltip, targetElem, orientation, 
-                             reattemptDepth+1);
+            return _positionTooltip(tooltip, targetElem, orientation, 
+                                    reattemptDepth+1);
+        }
+        else{
+            // return bounding rectangle of finalized position
+            return {
+                "left": newLeft,
+                "top": newTop,
+                "width": newTooltipWidth,
+                "height": newTooltipHeight,
+                "right": newLeft + newTooltipWidth,
+                "bottom": newTop + newTooltipHeight
+            };
         }
     }
     
@@ -1213,6 +1289,16 @@
                 attribute: {
                     boolean: true, 
                     name: "ignore-tooltip-pointer-events"
+                }
+            },
+
+            "noOverflow":{
+                attribute: {
+                    boolean: true,
+                    name: "no-overflow"
+                },
+                set: function(noOverflow){
+                    this.refreshPosition();
                 }
             },
             
