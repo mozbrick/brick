@@ -13,3 +13,6 @@
 [submodule "layout"]
 	path = layout
 	url = https://github.com/x-tag/layout.git
+[submodule "modal"]
+	path = modal
+	url = https://github.com/x-tag/modal.git

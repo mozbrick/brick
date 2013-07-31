@@ -7,126 +7,20 @@
     <link rel="stylesheet" type="text/css" href="prettify.css"/>
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
     <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
-    
-    <style>
-        /** Defining custom styles:
-        
-            Besides applying custom styles to the x-deck and x-cards
-            themselves, you can define styles for the following selectors to 
-            determine how the widget appears during animations
-            
-            x-card[leaving]  => defines how a card looks when in the middle
-                                 of transitioning out of frame
-            x-card[selected] => defines how the currently selected card looks
-        **/
-    
-        html, body{
-            width: 100%;
-            height: 100%;
-        }
-
-        article{
-            height: 100%;
-        }
-        
-        #demo-controls{
-            text-align: center;
-        }
-        
-        #demo-box{
-            margin: 0 auto;
-            
-            width: 70%;
-            height: 20%;
-            border: 4px solid grey;
-            background-color: #333;
-        }
-        
-        #demo-box x-card{
-            text-align:center;
-            font-size: 5em;
-            line-height: 1em;
-        }
-       
-        #demo-box x-card[transition-override]:after{
-            content: "(transition-override = " attr(transition-override) ")";
-            font-size: .25em;
-            display: block;
-            white-space:nowrap;
-        }
-       
-        #demo-box x-card[leaving]:before{
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.3);
-        }
-        
-        #demo-box x-card[selected]{
-            color: white;
-            text-shadow: 1px 1px 10px black;
-        }
-        
-        #demo-box x-card:nth-child(odd){
-            background-image: url("cream_pixels.png");
-            background-repeat: repeat;
-        }
-        
-        #demo-box x-card:nth-child(even){
-            background-image: url("retina_wood.png");
-            background-repeat: repeat;
-        }
-
-        #code-wrap{
-            width: 100%;
-            display: block;
-            text-align: center;
-        }
-
-        #code-box{
-            display: inline-block;
-            max-height: 15em;
-            overflow-x: hidden;
-            overflow-y: auto;
-            margin: 0;
-            padding: .5em;
-            padding-right: 1.5em;
-            text-align: left;
-        }
-
-        #property-wrap{
-            overflow: auto;
-            display: inline-block;
-            display: inline-block;
-            max-height: 15em;
-            overflow-x: hidden;
-            overflow-y: auto;
-            margin: 0;
-            padding: .5em;
-            padding-right: 1.5em;
-
-            border: 1px solid grey;
-        }
-
-        #property-wrap code{
-            display: block;
-            text-align: left;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="demo.css"/>
 </head>
 <body>
     <article>
         <header><h1>x-deck demo</h1></header>
-        <x-deck id="demo-box">
-            <x-card>0</x-card>
-            <x-card>1</x-card>
-            <x-card>2</x-card>
-            <x-card>3</x-card>
-            <x-card>4</x-card>
-        </x-deck>
+        <figure class="demo">
+            <x-deck id="demo-box">
+                <x-card>0</x-card>
+                <x-card>1</x-card>
+                <x-card>2</x-card>
+                <x-card>3</x-card>
+                <x-card>4</x-card>
+            </x-deck>
+        </figure>
 
         <div id="demo-controls">
             <button onclick="getDemoBox().shufflePrev('reverse')"><-- Shuffle Prev</button>
@@ -137,17 +31,13 @@
             <button onclick="addCard(true)">Add card with transition-override</button>
             <button onclick="removeCard(0)">Remove first card</button>
             <button onclick="removeCard()">Remove last card</button>
-            <div id="code-wrap">
-                <h3>Markup for recreating this deck:</h3>
-                <pre id="code-box" class="prettyprint"></pre>
-            </div>
-            <div>
-                <h3>(some) Properties:</h3>
-                <div id="property-wrap">
-                    <code id="selected-index-label" class="prettyprint"></code>
-                    <code id="transition-type-label" class="prettyprint"></code>
-                    <code id="count-label" class="prettyprint"></code>
-                </div>
+            <h3>Markup for recreating this deck:</h3>
+            <pre id="markup-box" class="prettyprint codebox"></pre>
+            <h3>(some) Properties:</h3>
+            <div id="property-wrap" class="codebox">
+                <code id="selected-index-label" class="prettyprint"></code>
+                <code id="transition-type-label" class="prettyprint"></code>
+                <code id="count-label" class="prettyprint"></code>
             </div>
             
             <br/>
@@ -170,9 +60,9 @@
     <script>
         function updateCodeBox(isInit){
             var demoBox = getDemoBox();
-            var codeBox = document.getElementById("code-box");
+            var sourceBox = document.getElementById("markup-box");
 
-            codeBox.innerHTML = "";
+            sourceBox.innerHTML = "";
 
             var newHtml = demoBox.outerHTML;
             // remove attribute properties not intended for api exposure
@@ -190,8 +80,8 @@
             // prettify html spacing
             newHtml = newHtml.replace(/>(\s*)<x-card/g, ">\n    <x-card");
             newHtml = newHtml.replace(/>(\s*)<\/x-deck/g, ">\n</x-deck");
-            codeBox.textContent = newHtml;
-            xtag.removeClass(codeBox, "prettyprinted");
+            sourceBox.textContent = newHtml;
+            xtag.removeClass(sourceBox, "prettyprinted");
         }
 
         function randomColor(alpha){

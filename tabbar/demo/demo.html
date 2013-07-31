@@ -7,13 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
     <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
     
-    <style>/*
-        html{
-            background: pink;
-        }
-        body{
-            background: white
-        }*/
+    <style>
         body, html{
             display: block;
             min-width: 100%;
@@ -22,6 +16,10 @@
             padding: 0;
         }
         
+        article{
+            overflow: visible;
+        }
+
         figure{
             position: relative;
             display: inline-block;
@@ -214,6 +212,7 @@
                 <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>    // demonstrate that events specified by the tabbar are fired<br/>    document.querySelector(&quot;#color-box &gt; span&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br/>        alert(&quot;The text received danceparty!&quot;);<br/>    });<br/>    <br/>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br/>        alert(&quot;The image received danceparty!&quot;);<br/>    });<br/>    <br/>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;override&quot;, function(e){<br/>        alert(&quot;The image received override!&quot;);<br/>    });<br/>});</pre>
             </x-tooltip>
         </figure>
+        <div style="clear:both"></div>
     </article>
 
     <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>

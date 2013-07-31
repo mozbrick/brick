@@ -20,7 +20,7 @@ article {
   margin: 0 auto;
   padding: 0 1em;
   position: relative;
-  /*overflow: hidden;*/
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -126,6 +126,12 @@ a:hover {
   position: relative;
 }
 
+.demo > *:only-child{
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+
 .demo:after {
   background: #d8d8d8;
   border-radius: 20px;
@@ -151,15 +157,6 @@ a:hover {
   -webkit-transition: .5s opacity ease-out;
   transition: .5s opacity ease-out;
   width: 320px;
-}
-
-.demo a {
-  bottom: 0;
-  display: block;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
 }
 
 @media screen and (max-width: 800px) {

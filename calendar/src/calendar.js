@@ -91,42 +91,6 @@
         return el;
     } 
 
-    /** getLeft: DOM element => Number
-
-    returns the absolute left X coordinate of the given element in relation to 
-    the document
-    **/
-    function getLeft(el) {
-        if(el.getBoundingClientRect){
-          var documentScrollLeft = (document.documentElement.scrollLeft ||
-                                    document.body.scrollLeft || 0);
-          return el.getBoundingClientRect().left + documentScrollLeft;
-        }
-        else if (el.offsetParent) {
-          return getLeft(el.offsetParent) + el.offsetLeft;
-        } else {
-          return el.offsetLeft;
-        }
-    }
-
-    /** getLeft: DOM element => Number
-
-    returns the absolute top Y coordinate of the given element in relation to 
-    the document
-    **/
-    function getTop(el) {
-        if(el.getBoundingClientRect){
-          var documentScrollTop = (document.documentElement.scrollTop ||
-                                   document.body.scrollTop || 0);
-          return el.getBoundingClientRect().top + documentScrollTop;
-        }
-        else if (el.offsetParent) {
-          return getTop(el.offsetParent) + el.offsetTop;
-        } else {
-          return el.offsetTop;
-        }   
-    }
-
     /** getRect: DOM element => {top: number, left: number, 
                                   right: number, bottom: number,
                                   width: number, height: number}
@@ -135,16 +99,7 @@
     document
     **/
     function getRect(el){
-        var baseRect = {
-            top: getTop(el),
-            left: getLeft(el),
-            width: el.offsetWidth,
-            height: el.offsetHeight,
-        };
-
-        baseRect.right = baseRect.left + baseRect.width;
-        baseRect.bottom = baseRect.top + baseRect.height;
-        return baseRect;
+        return el.getBoundingClientRect();
     }
 
     /** addClass: (DOM element, string)

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
+
+    <style>
+        body, html{
+            min-width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .demo{
+            background: goldenrod url("retina_wood.png") repeat;
+        }
+
+        .demo > div:first-child{
+            position: absolute;
+
+            border-radius: 4px;
+            background: tomato;
+            color: white;
+            display: inline-block;
+            width: 80%;
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 1px 1px 4px grey;
+        }
+
+        .demo > div:first-child:before{
+            content: "";
+            display: block;
+            padding-top: 75%; /* 4:3 ratio */;
+        }
+
+        .demo > div:first-child, 
+        .demo > div:first-child > *
+        {
+            position:absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        x-tooltip .tooltip-content > *{
+            vertical-align: middle;
+        }
+
+        .markup pre{
+            margin: 0;
+            width: 100%;
+
+            overflow: auto;
+        }
+    </style>
+</head>
+<body><!--
+<article>
+    <header><h1>x-tooltip demo</h1></header>
+    <header><h2>Basic usage</h2></header>
+    <div class="two-up"> -->
+        <figure class="demo" style="margin:0;-webkit-transform: scale(0.6);">
+            <div>
+                <span>Hover this div to see a tooltip!</span>
+            </div>
+            <x-tooltip>
+                <img src="http://placecage.com/c/35/35"/> Wow!
+                (<a href="grounds_keeping_it_real.gif" target="_blank">You can include any markup here!</a>)
+            </x-tooltip>
+        </figure>
+    </div>
+    <!--
+    <div class="markup two-up">
+        <h3>Markup</h3>
+        <pre class="prettyprint">&lt;div&gt;<br/>    &lt;span&gt;Hover this div to see a tooltip!&lt;/span&gt;<br/>&lt;/div&gt;<br/>&lt;x-tooltip&gt;<br/>    &lt;img src=&quot;http://placecage.com/c/35/35&quot;/&gt;Wow!<br/>&lt;/x-tooltip&gt;</pre>
+    </div>
+</article>-->
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<script type="text/javascript" src="../../dist/brick.js"></script>
+<script>
+document.addEventListener('DOMComponentsLoaded', function(){
+    xtag.addEvent(document, "tooltipshown:delegate(x-tooltip)", function(e){
+        console.log("\ntooltip shown!", this);
+    });
+
+    xtag.addEvent(document, "tooltiphidden:delegate(x-tooltip)", function(e){
+        console.log("\ntooltip hidden!", this);
+    });
+});
+
+</script>
+</body>
+</html>

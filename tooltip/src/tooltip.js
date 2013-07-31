@@ -23,60 +23,16 @@
         return orient in TIP_ORIENT_ARROW_DIR_MAP;
     }
 
-    /** getLeft: DOM element => Number
-
-    returns the absolute left X coordinate of the given element in relation to 
-    the document
-    **/
-    function getLeft(el) {
-        if(el.getBoundingClientRect){
-          var documentScrollLeft = (document.documentElement.scrollLeft ||
-                                    document.body.scrollLeft || 0);
-          return el.getBoundingClientRect().left + documentScrollLeft;
-        }
-        else if (el.offsetParent) {
-          return getLeft(el.offsetParent) + el.offsetLeft;
-        } else {
-          return el.offsetLeft;
-        }
-    }
-
-    /** getLeft: DOM element => Number
-
-    returns the absolute top Y coordinate of the given element in relation to 
-    the document
-    **/
-    function getTop(el) {
-        if(el.getBoundingClientRect){
-          var documentScrollTop = (document.documentElement.scrollTop ||
-                                   document.body.scrollTop || 0);
-          return el.getBoundingClientRect().top + documentScrollTop;
-        }
-        else if (el.offsetParent) {
-          return getTop(el.offsetParent) + el.offsetTop;
-        } else {
-          return el.offsetTop;
-        }   
-    }
 
     /** getRect: DOM element => {top: number, left: number, 
                                   right: number, bottom: number,
                                   width: number, height: number}
 
     returns the absolute metrics of the given DOM element in relation to the
-    document
+    document (includes border, but not margin)
     **/
     function getRect(el){
-        var baseRect = {
-            top: getTop(el),
-            left: getLeft(el),
-            width: el.offsetWidth,
-            height: el.offsetHeight,
-        };
-
-        baseRect.right = baseRect.left + baseRect.width;
-        baseRect.bottom = baseRect.top + baseRect.height;
-        return baseRect;
+        return el.getBoundingClientRect();
     }
 
     
@@ -807,9 +763,14 @@
         var contextPageOffset = getRect(contextElem);
 
         // coordinates of the target element, relative to context element
+        // remember to subtract client top/left (ie border size) in order to 
+        // account for fact that 0,0 coordinate for position is top left of
+        // content area EXCLUDING border 
+        var borderTop = contextElem.clientTop;
+        var borderLeft = contextElem.clientLeft;
         var targetContextOffset = {
-            "top": targetPageOffset.top - contextPageOffset.top,
-            "left": targetPageOffset.left - contextPageOffset.left
+            "top": targetPageOffset.top - contextPageOffset.top - borderTop,
+            "left": targetPageOffset.left - contextPageOffset.left - borderLeft
         };
         
         // add in scroll offset if the context is not the body 
@@ -832,6 +793,7 @@
         elem.removeAttribute("_force-display");
     }
 
+    // attempts positioning in all directions
     function _autoPositionTooltip(tooltip, targetElem){
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
@@ -1008,8 +970,11 @@
             newTop = constrainNum(newTop, 0, maxTop);
             newLeft = constrainNum(newLeft, 0, maxLeft);
         }
-        tooltip.style.top = newTop + "px";
-        tooltip.style.left = newLeft + "px";
+
+        var newTopPercent = (containerHeight) ? (newTop / containerHeight) : 0;
+        var newLeftPercent = (containerWidth) ? (newLeft / containerWidth) : 0;
+        tooltip.style.top = newTopPercent*100 + "%";
+        tooltip.style.left = newLeftPercent*100 + "%";
         
         // position the arrow in the tooltip to center on the target element
         var arrowCoords = _getAlignedArrowCoords(newTop, newLeft);
