@@ -824,6 +824,65 @@
         return targetContextOffset;
     }
 
+    function _forceDisplay(elem){
+        elem.setAttribute("_force-display", true);
+    }
+
+    function _unforceDisplay(elem){
+        elem.removeAttribute("_force-display");
+    }
+
+    function _autoPositionTooltip(tooltip, targetElem){
+        var arrow = tooltip.xtag.arrowEl;
+        // if not given a valid placement, recursively attempt valid placements
+        // until getting something that doesn't overlap the target element
+        // store information on any valid positionings so that we can
+        // check for the best one after we've run through all directions
+        var validOrientDataList = [];
+
+        for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
+            // ensure arrow is pointing in correct direction
+            arrow.setAttribute("arrow-direction", 
+                               TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
+            // recursively attempt a valid positioning
+            var positionRect = _positionTooltip(tooltip, targetElem, 
+                                                tmpOrient);
+            if(!positionRect){
+                continue;
+            }
+
+            _forceDisplay(tooltip);
+            // found a good position, so save data
+            if(!overlaps(tooltip, targetElem)){
+                validOrientDataList.push({
+                    orient: tmpOrient,
+                    rect: positionRect
+                });
+            }
+            _unforceDisplay(tooltip);
+        }
+        var bestOrient = _pickBestTooltipOrient(tooltip, 
+                                                validOrientDataList);
+        /* set the _auto-orientation attribute so that CSS animations
+         * still apply even though orientation attribute is not
+         * one of 'top', 'left', 'bottom', or 'right'
+         */
+        tooltip.setAttribute("_auto-orientation", bestOrient);
+
+        // ensure arrow is pointing in correct direction
+        arrow.setAttribute("arrow-direction", 
+                           TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
+        // if best orient exists and isn't what was the last position 
+        // attempted, set that position again
+        if(isValidOrientation(bestOrient) && bestOrient !== tmpOrient){
+            return _positionTooltip(tooltip, targetElem, bestOrient);
+        }
+        // otherwise return the last rect to be checked
+        else{
+            return positionRect;
+        }
+    }
+
     /** _positionTooltip: (x-tooltip, DOM, string)
      *
      * when called, attempts to reposition the tooltip so that it is centered
@@ -834,59 +893,17 @@
      * targeted elements
      **/
     function _positionTooltip(tooltip, targetElem, orientation, reattemptDepth){
-        reattemptDepth = (reattemptDepth === undefined) ? 0 : reattemptDepth;
-
-        // ignore attempts to position when not yet in document
-        if(!tooltip.parentNode){
+        if((!tooltip.parentNode)){
             tooltip.left = "";
             tooltip.top = "";
-            return;
+            return null;
         }
-        
+        reattemptDepth = (reattemptDepth === undefined) ? 0 : reattemptDepth;
         var arrow = tooltip.xtag.arrowEl;
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
         if(!(isValidOrientation(orientation))){
-            // store information on any valid positionings so that we can
-            // check for the best one after we've run through all directions
-            var validOrientDataList = [];
-
-            for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
-                // ensure arrow is pointing in correct direction
-                arrow.setAttribute("arrow-direction", 
-                                   TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
-                // recursively attempt a valid positioning
-                var positionRect = _positionTooltip(tooltip, targetElem, 
-                                                    tmpOrient);
-                // found a good position, so save data
-                if(!overlaps(tooltip, targetElem)){
-                    validOrientDataList.push({
-                        orient: tmpOrient,
-                        rect: positionRect
-                    });
-                }
-            }
-            var bestOrient = _pickBestTooltipOrient(tooltip, 
-                                                    validOrientDataList);
-            /* set the auto-orientation attribute so that CSS animations
-             * still apply even though orientation attribute is not
-             * one of 'top', 'left', 'bottom', or 'right'
-             */
-            tooltip.setAttribute("auto-orientation", bestOrient);
-
-            // ensure arrow is pointing in correct direction
-            arrow.setAttribute("arrow-direction", 
-                               TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
-
-            // if best orient exists and isn't what was the last position 
-            // attempted, set that position again
-            if(isValidOrientation(bestOrient) && bestOrient !== tmpOrient){
-                return _positionTooltip(tooltip, targetElem, bestOrient);
-            }
-            // otherwise return the last rect to be checked
-            else{
-                return positionRect;
-            }
+            return _autoPositionTooltip(tooltip, targetElem);
         }
         
         var tipContainer = (tooltip.offsetParent) ? 
@@ -911,6 +928,7 @@
         var targetWidth = targetElem.offsetWidth;
         var targetHeight = targetElem.offsetHeight;
 
+        _forceDisplay(tooltip);
         var origTooltipWidth = tooltip.offsetWidth;
         var origTooltipHeight = tooltip.offsetHeight;
         var arrowWidth = arrow.offsetWidth;
@@ -1007,14 +1025,15 @@
                                 origTooltipHeight - arrowHeight
                               ) + "px";
         }
-            
+
         var newTooltipWidth = tooltip.offsetWidth;
         var newTooltipHeight = tooltip.offsetHeight;
+        _unforceDisplay(tooltip);
 
         // if the tooltip window changed size in its placement, recurse
         // using the same orientation to try to get a more stable placement
         // in this orientation
-        var recursionLimit = 1;
+        var recursionLimit = 0;
         if(reattemptDepth < recursionLimit &&
            (origTooltipWidth !== tooltip.offsetWidth || 
             origTooltipHeight !== tooltip.offsetHeight))
@@ -1048,11 +1067,13 @@
             console.log("The tooltip's target element is the tooltip itself!" +
                         " Is this intentional?");
         }
+
         var arrow = tooltip.xtag.arrowEl;
         var targetOrient = tooltip.orientation;
-        
+
         // fire this when preparation for showing the tooltip is complete
         var _readyToShowFn = function(){
+            _unforceDisplay(tooltip);
             tooltip.setAttribute("visible", true);
             
             xtag.fireEvent(tooltip, "tooltipshown", {
@@ -1089,12 +1110,20 @@
     function _hideTooltip(tooltip){
         // remove remnant attribute used for auto placement animations
         if(isValidOrientation(tooltip.orientation)){
-            tooltip.removeAttribute("auto-orientation");
+            tooltip.removeAttribute("_auto-orientation");
         }
         
         if(tooltip.hasAttribute("visible")){
-            tooltip.removeAttribute("visible");
-            xtag.fireEvent(tooltip, "tooltiphidden");
+            // force display until transition is done to allow fade out 
+            // animation
+            xtag.skipTransition(tooltip, function(){
+                _forceDisplay(tooltip)
+                tooltip.xtag._hideTransitionFlag = true;
+
+                return function(){
+                    tooltip.removeAttribute("visible");
+                };
+            })
         }
     }
     
@@ -1199,6 +1228,10 @@
                 
                 // remember what event listeners are still active
                 this.xtag.cachedListeners = [];
+
+                // flag variable to indicate whether transitionend listener
+                // should do anything
+                this.xtag._hideTransitionFlag = false;
             },
             inserted: function(){
                 _updateTriggerListeners(this, this.xtag._targetSelector, 
@@ -1210,6 +1243,18 @@
         },
         events: {
             // tooltipshown and tooltiphidden are fired manually
+            "transitionend": function(e){
+                var tooltip = e.currentTarget;
+
+                if(tooltip.xtag._hideTransitionFlag && 
+                   !tooltip.hasAttribute("visible"))
+                {
+                    tooltip.xtag._hideTransitionFlag = false;
+                    xtag.fireEvent(tooltip, "tooltiphidden");
+                }
+                // in any case, avoid having a forced display linger around
+                _unforceDisplay(tooltip);
+            }
         },
         accessors: {
             // sets the placement of the tooltip in relation to a target element
@@ -1228,7 +1273,7 @@
                     if(isValidOrientation(newOrientation)){
                         newArrowDir = TIP_ORIENT_ARROW_DIR_MAP[newOrientation];
                         arrow.setAttribute("arrow-direction", newArrowDir);
-                        this.removeAttribute("auto-orientation");
+                        this.removeAttribute("_auto-orientation");
                     }
                     else{
                         // when auto placing, we will determine arrow direction

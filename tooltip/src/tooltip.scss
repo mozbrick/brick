@@ -21,9 +21,11 @@ x-tooltip{
     position: absolute;
     margin: 0;
     padding: 0;
+    left: 0px;
+    top: 0px;
     
-    display: block; // needed to favor horizontal tips, 
-                // use inline-block to favor vertical
+    display: block; // needed to favor horizontal tooltips, 
+                    // use inline-block to favor vertical
 
     z-index: 99999999999999;
     overflow: visible;
@@ -38,6 +40,11 @@ x-tooltip{
     
     &[ignore-tooltip-pointer-events]{
         pointer-events: none;
+    }
+
+    &[no-overflow]{
+        max-width: 100%;
+        max-height: 100%;
     }
     
     &[orientation=top]{
@@ -61,7 +68,14 @@ x-tooltip{
         opacity: 0!important;
         // while the tooltip is not displayed, prevent it from stretching the
         // scrollWidth/Height of the containing element
-        // TODO: actually doing this correctly
+        // however, if _force-display is set on a hidden tooltip, ignore
+        // constraints (this allows measurement of metrics)
+        &:not([_force-display]){
+            width: 0px !important;
+            height: 0px !important;
+            overflow:hidden!important;
+            border-width: 0!important;
+        }
     }
 
     &[visible]{
@@ -69,28 +83,23 @@ x-tooltip{
         opacity: 1;
         @include transformed(none);
     }
-
-    &[no-overflow]{
-        max-width: 100%;
-        max-height: 100%;
-    }
     
     // hackery to have auto orientation have the same transform animations
     $autoOrientationSelector: attrValNotInList(orientation, (top, bottom, left, right));
     &#{$autoOrientationSelector}{
-        &[auto-orientation=top]{
+        &[_auto-orientation=top]{
             @include transformed(translateY(10px));
         }
         
-        &[auto-orientation=bottom]{
+        &[_auto-orientation=bottom]{
             @include transformed(translateY(-10px));
         }
             
-        &[auto-orientation=left]{
+        &[_auto-orientation=left]{
             @include transformed(translateX(10px));
         }
             
-        &[auto-orientation=right]{
+        &[_auto-orientation=right]{
             @include transformed(translateX(-10px));
         }
         
@@ -107,11 +116,14 @@ x-tooltip > .tooltip-content{
     display: block;
     padding: .5em;
     overflow: auto;
-    white-space: nowrap;
     max-width: inherit;
     max-height: inherit;
 
     z-index: 2;
+}
+
+x-tooltip:not([no-overflow]){
+    white-space: nowrap;
 }
 
 x-tooltip > .tooltip-arrow{
