@@ -47,6 +47,17 @@
             "height": rect.height
         };
     }
+
+    // return the scaling difference between the raw size and the transformed
+    // size of the element
+    function getScale(el){
+        // the raw offset values (without accounting for css transform)
+        var rect = getRect(el);
+        return {
+            "x" : ((el.offsetWidth) ? (rect.width / el.offsetWidth) : 1),
+            "y" : ((el.offsetHeight) ? (rect.height / el.offsetHeight) : 1)
+        };
+    }
     
     /** CachedListener : (DOM, string, Function)
     * a simple struct to store all information needed to add and remove
@@ -115,22 +126,18 @@
         // dismissal of tooltips
         var outerTriggerListener = function(e){
             struct._tooltips.forEach(function(tooltip){
-                // check if the tooltip is even dismissable, and if not,
-                // skip dismissing it
-                if((!tooltip.hasAttribute("visible")) ||
-                   tooltip.hasAttribute("ignore-outer-trigger"))
-                {  
-                    return;
-                }
-                // otherwise, check if we are clicking inside the tooltip,
-                // and if so, also skip dismissal
-                else if(hasParentNode(e.target, tooltip)){
-                    return;
-                }
-                // otherwise, finally dismiss the tooltip
-                else{
+                // only dismiss the tooltip if:
+                // - we have not flagged this outer trigger as skipped
+                // - the tooltip is even dismissable by outer triggers
+                // - we are not triggering inside the tooltip itself
+                if((!tooltip.xtag._skipOuterClick) && 
+                   tooltip.hasAttribute("visible") &&
+                   (!tooltip.hasAttribute("ignore-outer-trigger")) &&
+                   (!hasParentNode(e.target, tooltip)))
+                {
                     _hideTooltip(tooltip);
                 }
+                tooltip.xtag._skipOuterClick = false;
             });
         };
         this._cachedListener = new CachedListener(document, eventType, 
@@ -520,12 +527,23 @@
         // elements
         var targetTriggerFn = function(e){
             var delegatedElem = this;
-            if(tooltip.hasAttribute("visible") && 
-               delegatedElem === tooltip.xtag.lastTargetElem)
-            {
-                _hideTooltip(tooltip);
+            if(tooltip.hasAttribute("visible")){
+                // case where we are toggling the tooltip off by triggering the
+                // same element that turned it on
+                if(delegatedElem === tooltip.xtag.lastTargetElem){
+                    tooltip.xtag._skipOuterClick = false;
+                    _hideTooltip(tooltip);
+                }
+                // case where we are clicking over to another target of the same
+                // element while the tooltip is still visible
+                else{
+                    tooltip.xtag._skipOuterClick = true;
+                    _showTooltip(tooltip, delegatedElem);
+                }
             }
+            // case where we are simply showing a hidden tooltip
             else{
+                tooltip.xtag._skipOuterClick = false;
                 // note: while e.target is the literally clicked element, and
                 // e.currentTarget is wherever the delegated event was bound,
                 // this is the the element that actually matches the delegation
@@ -693,7 +711,6 @@
     * returns the height and width of the given dimensions rotated by the
     * given number of degrees
     * see: http://stackoverflow.com/a/9793197 for base inspiration of calc
-    *   
     **/
     function getRotationDims(width, height, degrees){
         var radians = degrees * (Math.PI / 180);
@@ -702,7 +719,6 @@
                             height * Math.cos(radians);
         var rotatedWidth = width * Math.cos(radians) + 
                            height * Math.sin(radians);
-        
         return {
             "height": rotatedHeight,
             "width": rotatedWidth
@@ -765,8 +781,9 @@
         // remember to subtract client top/left (ie border size) in order to 
         // account for fact that 0,0 coordinate for position is top left of
         // content area EXCLUDING border 
-        var borderTop = contextElem.clientTop;
-        var borderLeft = contextElem.clientLeft;
+        var contextScale = getScale(contextElem); 
+        var borderTop = contextElem.clientTop * contextScale.y;
+        var borderLeft = contextElem.clientLeft * contextScale.x;
         var targetContextOffset = {
             "top": targetPageOffset.top - contextPageOffset.top - borderTop,
             "left": targetPageOffset.left - contextPageOffset.left - borderLeft
@@ -778,8 +795,8 @@
         if(contextElem !== document.body && 
            hasParentNode(contextElem, document.body))
         {
-            targetContextOffset.top += contextElem.scrollTop;
-            targetContextOffset.left += contextElem.scrollLeft;
+            targetContextOffset.top += contextElem.scrollTop * contextScale.y,
+            targetContextOffset.left += contextElem.scrollLeft * contextScale.x
         }
         return targetContextOffset;
     }
@@ -868,7 +885,7 @@
         }
         
         var tipContext = (tooltip.offsetParent) ? 
-                                tooltip.offsetParent : tooltip.parentNode;
+                            tooltip.offsetParent : tooltip.parentNode;
         
         // only position if NOT currently recursing to get a more stable
         // position, or final size will never match up to initial size
@@ -884,16 +901,21 @@
         var targetContextOffset = _getCoordsRelativeToContext(targetElem, 
                                                                 tipContext);
 
-        var contextWidth = tipContext.scrollWidth;
-        var contextHeight = tipContext.scrollHeight;
-        var targetWidth = targetElem.offsetWidth;
-        var targetHeight = targetElem.offsetHeight;
+        var contextScale = getScale(tipContext);
+        var contextWidth = tipContext.scrollWidth * contextScale.x;
+        var contextHeight = tipContext.scrollHeight * contextScale.y;
+
+        var targetScale = getScale(targetElem);
+        var targetWidth = targetElem.offsetWidth * targetScale.x;
+        var targetHeight = targetElem.offsetHeight * targetScale.y;
 
         _forceDisplay(tooltip);
-        var origTooltipWidth = tooltip.offsetWidth;
-        var origTooltipHeight = tooltip.offsetHeight;
-        var arrowWidth = arrow.offsetWidth;
-        var arrowHeight = arrow.offsetHeight;
+        var origTooltipScale = getScale(tooltip);
+        var origTooltipWidth = tooltip.offsetWidth * origTooltipScale.x;
+        var origTooltipHeight = tooltip.offsetHeight * origTooltipScale.y;
+        var arrowScale = getScale(arrow);
+        var arrowWidth = arrow.offsetWidth * arrowScale.x;
+        var arrowHeight = arrow.offsetHeight * arrowScale.y;
         
         // TODO: needs more intelligent rotation angle calculation; currently
         // just assumes rotation is 45 degrees
@@ -908,9 +930,9 @@
         // coords are relative to the tooltip's context
         var centerAlignCoords = {
             "left": targetContextOffset.left + 
-                    (targetWidth - origTooltipWidth)/2,
+                    ((targetWidth - origTooltipWidth)/2),
             "top": targetContextOffset.top + 
-                   (targetHeight - origTooltipHeight)/2
+                   ((targetHeight - origTooltipHeight)/2)
         };
         
         // given the final top and left of the tooltip, this helper function
@@ -922,7 +944,7 @@
                 "left": (targetWidth - arrowWidth)/2 + 
                         targetContextOffset.left - tooltipLeft,
                 "top":  (targetHeight - arrowHeight)/2 + 
-                         targetContextOffset.top - newTop
+                         targetContextOffset.top - tooltipTop
             };
         };
         
@@ -971,33 +993,42 @@
         }
 
         // calculate percentage in regards to viewport
-        var newTopPercent = (tipContext.clientHeight) ? 
-                                (newTop / tipContext.clientHeight) : 0;
-        var newLeftPercent = (tipContext.clientWidth) ? 
-                                (newLeft / tipContext.clientWidth) : 0;
-        tooltip.style.top = newTopPercent*100 + "%";
-        tooltip.style.left = newLeftPercent*100 + "%";
+        var contextViewWidth = tipContext.clientWidth * contextScale.x;
+        var contextViewHeight = tipContext.clientHeight * contextScale.y;
+        var newTopFrac = (contextViewHeight) ? 
+                                (newTop / contextViewHeight) : 0;
+        var newLeftFrac = (contextViewWidth) ? 
+                                (newLeft / contextViewWidth) : 0;
+        tooltip.style.top = newTopFrac*100 + "%";
+        tooltip.style.left = newLeftFrac*100 + "%";
         
         // position the arrow in the tooltip to center on the target element
         var arrowCoords = _getAlignedArrowCoords(newTop, newLeft);
+        var arrowVal;
+        var arrowBaseSize;
+        var arrowStyleProp;
         if(orientation === "top" || orientation === "bottom"){
-            arrow.style.left = constrainNum(
-                                 arrowCoords.left, 0, 
-                                 origTooltipWidth - arrowWidth
-                               ) + "px";
+            arrowVal = constrainNum(arrowCoords.left, 0, 
+                                    origTooltipWidth - arrowWidth);
+            arrowBaseSize = origTooltipWidth;
+            arrowStyleProp = "left";
         }
         else{
-            arrow.style.top = constrainNum(
-                                arrowCoords.top, 0, 
-                                origTooltipHeight - arrowHeight
-                              ) + "px";
+            arrowVal = constrainNum(arrowCoords.top, 0, 
+                                    origTooltipHeight - arrowHeight);
+            arrowBaseSize = origTooltipHeight;
+            arrowStyleProp = "top";
         }
+        var arrowFrac = (arrowBaseSize) ? (arrowVal / arrowBaseSize) : 0;
+        arrow.style[arrowStyleProp] = arrowFrac*100 + "%";
 
-        var newTooltipWidth = tooltip.offsetWidth;
-        var newTooltipHeight = tooltip.offsetHeight;
+        // check the finalized size of the tooltip
+        var newTooltipScale = getScale(tooltip);
+        var newTooltipWidth = tooltip.offsetWidth * newTooltipScale.x;
+        var newTooltipHeight = tooltip.offsetHeight * newTooltipScale.y;
         _unforceDisplay(tooltip);
 
-        // if the tooltip window changed size in its placement, recurse
+        // if the tooltip changed size during its placement, recurse
         // using the same orientation to try to get a more stable placement
         // in this orientation
         var recursionLimit = 0;
@@ -1199,6 +1230,10 @@
                 // flag variable to indicate whether transitionend listener
                 // should do anything
                 this.xtag._hideTransitionFlag = false;
+                // flag variable for if we should ignore an outer click hide
+                // trigger (used when clicking between two target elements of 
+                // the same tooltip)
+                this.xtag._skipOuterClick = false;
             },
             inserted: function(){
                 _updateTriggerListeners(this, this.xtag._targetSelector, 
