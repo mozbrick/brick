@@ -17,7 +17,6 @@
         
         #container{
             border: 1px solid grey;
-            border-width: 30px 20px 10px 5px;
             margin: 0 auto;
             width: 20%;
             height: 50%;
@@ -37,7 +36,6 @@
         }
         
         #next-sib{
-            margin-top: 10em;
             background-color: cyan; 
             position: relative;
         }
@@ -67,7 +65,7 @@
         }
         
         .demo-targeted{
-            box-shadow: 1px 1px 10px goldenrod;
+            border: 2px solid orange;
         }
         
         .demo-targeted:after{
@@ -79,7 +77,6 @@
             color: white;
             font-size: 1.1em;
             border: 1px solid white;
-            box-shadow: 1px 1px 4px grey;
             border-radius: 100%;
             width: 20px;
             height: 20px;
@@ -448,7 +445,7 @@ var changeContents = (function(){
         var container = document.createElement("div");
         container.innerHTML = newHtml;
         
-        var imgs = container.querySelectorAll("img");
+        var imgs = xtag.query(container, "img");
         var numImgs = imgs.length;
         var loadedImgs = 0;
         
