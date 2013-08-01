@@ -3,10 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
-
-    <script type="text/javascript" src="../../core/src/core.js"></script>
-    <script type="text/javascript" src="../src/tooltip.js"></script>
 
     <style>
         body, html{
@@ -19,6 +17,7 @@
         
         #container{
             border: 1px solid grey;
+            border-width: 30px 20px 10px 5px;
             margin: 0 auto;
             width: 20%;
             height: 50%;
@@ -109,6 +108,15 @@
             font-family: Courier, monospace;
             position:relative;
         }
+
+        #fancy-selector-zone{
+            position: relative; 
+            background-color: lavender;
+        }
+
+        #fancy-selector-zone .fancy-selector{
+            margin: 1px 2px;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +135,7 @@
     <div id="next-sib">
         <h1>Next sibling</h1>
     </div>
-    <div style="position: relative; background-color: lavender">    
+    <div id="fancy-selector-zone">    
         <span class="fancy-selector">".fancy-selector" box1</span>
         <span class="fancy-selector">box2 <img src="http://placecage.com/c/50/25"/></span>
     </div>
@@ -177,6 +185,11 @@
 <h1>Loremipsum</h1>
 <h1>Loremipsum</h1>
 <h1>Loremipsum</h1>
+
+<script type="text/javascript" src="../../core/src/core.js"></script>
+<script type="text/javascript" src="../src/tooltip.js"></script>
+<!--<script type="text/javascript" src="../../dist/brick.js"></script>-->
+
 <script>
 var demoTip;
 
@@ -252,7 +265,7 @@ function randomWord(len){
 }
 
 function addFancySpan(){
-    var container = document.getElementById("container");
+    var container = document.getElementById("fancy-selector-zone");
     
     var newSpan = document.createElement("span");
     xtag.addClass(newSpan, "fancy-selector");

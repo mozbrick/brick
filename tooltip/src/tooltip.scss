@@ -13,6 +13,22 @@
     @return $finalSelector;
 }
 
+%orientTopStartLoc{
+    @include transformed(translate3d(0, 10px, 1px));
+}
+
+%orientBottomStartLoc{
+    @include transformed(translate3d(0, -10px, 1px));
+}
+
+%orientLeftStartLoc{
+    @include transformed(translate3d(10px, 0, 1px));
+}
+
+%orientRightStartLoc{
+    @include transformed(translate3d(-10px, 0, 1px));
+}
+
 // responsible for positioning;
 // the only user styling that should be applied here is border
 x-tooltip{
@@ -48,19 +64,19 @@ x-tooltip{
     }
     
     &[orientation=top]{
-        @include transformed(translateY(10px));
+        @extend %orientTopStartLoc;
     }
     
     &[orientation=bottom]{
-        @include transformed(translateY(-10px));
+        @extend %orientBottomStartLoc;
     }
         
     &[orientation=left]{
-        @include transformed(translateX(10px));
+        @extend %orientLeftStartLoc;
     }
         
     &[orientation=right]{
-        @include transformed(translateX(-10px));
+        @extend %orientRightStartLoc;
     }
     
     &:not([visible]){
@@ -74,37 +90,36 @@ x-tooltip{
             width: 0px !important;
             height: 0px !important;
             overflow:hidden!important;
-            border-width: 0!important;
         }
     }
 
     &[visible]{
         visibility: visible;
         opacity: 1;
-        @include transformed(none);
+        @include transformed(translate3d(0,0,1px));
     }
     
     // hackery to have auto orientation have the same transform animations
     $autoOrientationSelector: attrValNotInList(orientation, (top, bottom, left, right));
     &#{$autoOrientationSelector}{
         &[_auto-orientation=top]{
-            @include transformed(translateY(10px));
+            @extend %orientTopStartLoc;
         }
         
         &[_auto-orientation=bottom]{
-            @include transformed(translateY(-10px));
+            @extend %orientBottomStartLoc;
         }
             
         &[_auto-orientation=left]{
-            @include transformed(translateX(10px));
+            @extend %orientLeftStartLoc;
         }
             
         &[_auto-orientation=right]{
-            @include transformed(translateX(-10px));
+            @extend %orientRightStartLoc;
         }
         
         &[visible]{
-            @include transformed(none);
+            @include transformed(translate3d(0,0,1px));
         }
     }
 }
