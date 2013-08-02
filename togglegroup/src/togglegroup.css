@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "OpenSans";
+  font-family: "_OpenSansBrick";
   font-weight: normal;
   font-style: normal;
   src: url("OpenSans-SemiBold.ttf") format("truetype"); }
@@ -24,7 +24,7 @@ x-togglegroup {
   -ms-align-content: center;
   align-content: center;
   width: 100%;
-  font-family: "OpenSans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
+  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
   x-togglegroup > x-toggle {
     min-width: auto;
     min-height: auto;
@@ -44,17 +44,21 @@ x-togglegroup {
     transition-property: background-position, background-color, box-shadow;
     -webkit-transition-property: background-position, background-color, box-shadow;
     -moz-transition-property: background-position, background-color, box-shadow;
+    -ms-transition-property: background-position, background-color, box-shadow;
     -o-transition-property: background-position, background-color, box-shadow;
     transition-duration: 0.1s;
     -webkit-transition-duration: 0.1s;
     -moz-transition-duration: 0.1s;
+    -ms-transition-duration: 0.1s;
     -o-transition-duration: 0.1s;
     -webkit-transition-timing-function: ease-in;
     -moz-transition-timing-function: ease-in;
+    -ms-transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
     transition-timing-function: ease-in;
     -webkit-transition-delay: 0s;
     -moz-transition-delay: 0s;
+    -ms-transition-delay: 0s;
     -o-transition-delay: 0s;
     transition-delay: 0s;
     display: block;

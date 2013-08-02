@@ -5,6 +5,6 @@
         "name": "Mozilla",
         "url": "http://github.com/mozilla/app-components/"
     },
-    "launch_path": "demo/demo.html",
+    "launch_path": "demo/index.html",
     "default_locale": "en"
 }

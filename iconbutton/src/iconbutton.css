@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Open Sans";
+  font-family: "_OpenSansBrick";
   font-weight: normal;
   font-style: normal;
   src: url("OpenSans-SemiBold.ttf") format("truetype"); }
@@ -33,7 +33,7 @@ x-iconbutton {
   margin: 0;
   padding: 0.1em 0.175em;
   border: 1px solid grey;
-  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   font-size: 14px;
   text-align: center;
   color: #d4d4d4;

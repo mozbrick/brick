@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "_OpenSansBrick";
+  font-weight: normal;
+  font-style: normal;
+  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
+
 x-tooltip[orientation=top], x-tooltip[_auto-orientation=top]:not([orientation=top]):not([orientation=bottom]):not([orientation=left]):not([orientation=right]) {
   transform: translate3d(0, 10px, 1px);
   -ms-transform: translate3d(0, 10px, 1px);
@@ -63,7 +69,6 @@ x-tooltip {
   border: 1px solid grey;
   background-color: #eee;
   border-radius: 4px;
-  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   box-shadow: 1px 1px 4px grey; }
   x-tooltip[ignore-tooltip-pointer-events] {
     pointer-events: none; }
@@ -76,7 +81,8 @@ x-tooltip {
     x-tooltip:not([visible]):not([_force-display]) {
       width: 0px !important;
       height: 0px !important;
-      overflow: hidden !important; }
+      overflow: hidden !important;
+      border-width: 0px !important; }
   x-tooltip[visible] {
     visibility: visible;
     opacity: 1;

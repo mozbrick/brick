@@ -47,7 +47,7 @@ $FONTS_FOLDER: "../fonts/";
         }
         font-weight: $fontWeight;
         font-style: $fontStyle;
-        src: url($fontFolder + $fileName + $fontExt) format($format);
+        src: url("#{$fontFolder}#{$fileName}#{$fontExt}") format($format);
     }
 }
 
@@ -160,7 +160,7 @@ $FONTS_FOLDER: "../fonts/";
 }
 
 @mixin spriteIcon($imgName, $width:auto, $height:auto, $fill:true, $imgFolder: $IMG_FOLDER){
-    background-image: url($imgFolder + $imgName);
+    background-image: url("#{$imgFolder}#{$imgName}");
     background-repeat: no-repeat;
     background-position: center center;
     width: $width;

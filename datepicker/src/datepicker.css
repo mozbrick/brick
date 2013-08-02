@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Open Sans";
+  font-family: "_OpenSansBrick";
   font-weight: normal;
   font-style: normal;
   src: url("OpenSans-SemiBold.ttf") format("truetype"); }
@@ -9,7 +9,7 @@ x-datepicker {
   display: inline-block;
   overflow: visible;
   border: 1px solid grey;
-  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
+  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
   x-datepicker > .x-datepicker-input {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -49,17 +49,21 @@ x-datepicker {
     transition-property: opacity, visibility;
     -webkit-transition-property: opacity, visibility;
     -moz-transition-property: opacity, visibility;
+    -ms-transition-property: opacity, visibility;
     -o-transition-property: opacity, visibility;
     transition-duration: 0.2s;
     -webkit-transition-duration: 0.2s;
     -moz-transition-duration: 0.2s;
+    -ms-transition-duration: 0.2s;
     -o-transition-duration: 0.2s;
     -webkit-transition-timing-function: ease-in;
     -moz-transition-timing-function: ease-in;
+    -ms-transition-timing-function: ease-in;
     -o-transition-timing-function: ease-in;
     transition-timing-function: ease-in;
     -webkit-transition-delay: 0s;
     -moz-transition-delay: 0s;
+    -ms-transition-delay: 0s;
     -o-transition-delay: 0s;
     transition-delay: 0s;
     opacity: 0;

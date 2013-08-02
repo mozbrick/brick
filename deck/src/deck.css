@@ -6,6 +6,7 @@ x-deck {
   height: 100%;
   -webkit-perspective: 2000px;
   -moz-perspective: 2000px;
+  -o-perspective: 2000px;
   -ms-perspective: 2000px;
   perspective: 2000px; }
   x-deck > x-card {
@@ -22,22 +23,28 @@ x-deck {
     transition-property: transform;
     -webkit-transition-property: -webkit-transform;
     -moz-transition-property: -moz-transform;
+    -ms-transition-property: -o-transform;
     -o-transition-property: -o-transform;
     transition-duration: 0.5s;
     -webkit-transition-duration: 0.5s;
     -moz-transition-duration: 0.5s;
+    -ms-transition-duration: 0.5s;
     -o-transition-duration: 0.5s;
     -webkit-transition-timing-function: ease;
     -moz-transition-timing-function: ease;
+    -ms-transition-timing-function: ease;
     -o-transition-timing-function: ease;
     transition-timing-function: ease;
     -webkit-transition-delay: 0s;
     -moz-transition-delay: 0s;
+    -ms-transition-delay: 0s;
     -o-transition-delay: 0s;
     transition-delay: 0s;
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
     transform: translate3d(0%, 0%, 1px);
     -ms-transform: translate3d(0%, 0%, 1px);
     -moz-transform: translate3d(0%, 0%, 1px);
@@ -86,18 +93,20 @@ x-deck {
       -moz-transform: rotateX(-180deg);
       -webkit-transform: rotateX(-180deg);
       -o-transform: rotateX(-180deg); }
-    x-deck > x-card[card-anim-type=flipY]:not([reverse])[selected][before-animation] {
-      transform: rotateY(180deg);
-      -ms-transform: rotateY(180deg);
-      -moz-transform: rotateY(180deg);
-      -webkit-transform: rotateY(180deg);
-      -o-transform: rotateY(180deg); }
-    x-deck > x-card[card-anim-type=flipY]:not([reverse])[leaving]:not([before-animation]) {
-      transform: rotateY(-180deg);
-      -ms-transform: rotateY(-180deg);
-      -moz-transform: rotateY(-180deg);
-      -webkit-transform: rotateY(-180deg);
-      -o-transform: rotateY(-180deg); }
+    x-deck > x-card[card-anim-type=flipY]:not([reverse]) {
+      /* initial positions for animation */ }
+      x-deck > x-card[card-anim-type=flipY]:not([reverse])[selected][before-animation] {
+        transform: rotateY(180deg);
+        -ms-transform: rotateY(180deg);
+        -moz-transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+        -o-transform: rotateY(180deg); }
+      x-deck > x-card[card-anim-type=flipY]:not([reverse])[leaving]:not([before-animation]) {
+        transform: rotateY(-180deg);
+        -ms-transform: rotateY(-180deg);
+        -moz-transform: rotateY(-180deg);
+        -webkit-transform: rotateY(-180deg);
+        -o-transform: rotateY(-180deg); }
     x-deck > x-card[card-anim-type=flipY][reverse][selected][before-animation] {
       transform: rotateY(-180deg);
       -ms-transform: rotateY(-180deg);

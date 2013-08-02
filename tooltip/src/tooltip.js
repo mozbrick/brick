@@ -881,6 +881,7 @@
         }
         reattemptDepth = (reattemptDepth === undefined) ? 0 : reattemptDepth;
         var arrow = tooltip.xtag.arrowEl;
+
         // if not given a valid placement, recursively attempt valid placements
         // until getting something that doesn't overlap the target element
         if(!(isValidOrientation(orientation))){
@@ -1079,11 +1080,18 @@
      **/
     function _showTooltip(tooltip, triggerElem){
         if(triggerElem === tooltip){
-            console.log("The tooltip's target element is the tooltip itself!" +
+            console.warn("The tooltip's target element is the tooltip itself!" +
                         " Is this intentional?");
         }
 
         var arrow = tooltip.xtag.arrowEl;
+        if(!arrow.parentNode){
+            console.warn("The inner component DOM of the tooltip "+
+                        "appears to be missing. Make sure to edit tooltip"+ 
+                        " contents through the .contentEl property instead of" +
+                        "directly on the x-tooltip to avoid "+
+                        "clobbering the component's internals.");
+        }
         var targetOrient = tooltip.orientation;
 
         // fire this when preparation for showing the tooltip is complete

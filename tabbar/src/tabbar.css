@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Open Sans";
+  font-family: "_OpenSansBrick";
   font-weight: normal;
   font-style: normal;
   src: url("OpenSans-SemiBold.ttf") format("truetype"); }
@@ -20,7 +20,7 @@ x-tabbar {
   display: -webkit-flex;
   display: flex;
   width: 100%;
-  font-family: "Open Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   color: #d4d4d4;
   overflow: hidden;
   white-space: nowrap;

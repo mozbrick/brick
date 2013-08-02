@@ -115,7 +115,7 @@ x-deck{
         
         &[card-anim-type=flipY]{
             &:not([reverse]){
-                // initial positions for animation
+                /* initial positions for animation */
                 &#{$newStartingSelector}{
                     @include transformed(rotateY(180deg));
                 }
