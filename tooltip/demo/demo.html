@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
 
     <style>
@@ -16,11 +17,15 @@
             position: relative;
         }
 
+        header{
+            clear:both;
+        }
+
         .demo{
             background: goldenrod url("retina_wood.png") repeat;
         }
 
-        .demo > div:first-child{
+        .demo .target-button{
             position: absolute;
 
             border-radius: 4px;
@@ -68,24 +73,45 @@
 <article>
     <header><h1>x-tooltip demo</h1></header>
     <header><h2>Basic usage</h2></header>
-    <div class="two-up">
-        <figure class="demo">
-            <div>
-                <span>Hover this div to see a tooltip!</span>
-            </div>
-            <x-tooltip style="" orientation="top">
-                <img src="http://placecage.com/c/35/35"/> Wow!
-                (<a href="grounds_keeping_it_real.gif" target="_blank">You can include any markup here!</a>)
-            </x-tooltip>
-        </figure>
-    </div>
-    <div class="markup two-up">
-        <h3>Markup</h3>
-        <pre class="prettyprint">&lt;div&gt;<br/>    &lt;span&gt;Hover this div to see a tooltip!&lt;/span&gt;<br/>&lt;/div&gt;<br/>&lt;x-tooltip&gt;<br/>    &lt;img src=&quot;http://placecage.com/c/35/35&quot;/&gt; Wow!<br/>    (&lt;a href=&quot;grounds_keeping_it_real.gif&quot; target=&quot;_blank&quot;&gt;You can include any markup here!&lt;/a&gt;)<br/>&lt;/x-tooltip&gt;</pre>
-    </div>
+    <figure>
+        <div class="two-up">
+            <figure class="demo">
+                <div class="target-button">
+                    <span>Hover this div to see a tooltip!</span>
+                </div>
+                <x-tooltip>
+                    <img src="http://placecage.com/c/35/35"/> Wow!
+                    (<a href="grounds_keeping_it_real.gif" target="_blank">You can include any markup here!</a>)
+                </x-tooltip>
+            </figure>
+        </div>
+        <div class="markup two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint">&lt;div class=&quot;target-button&quot;&gt;<br/>    &lt;span&gt;Hover this div to see a tooltip!&lt;/span&gt;<br/>&lt;/div&gt;<br/>&lt;x-tooltip&gt;<br/>    &lt;img src=&quot;http://placecage.com/c/35/35&quot;/&gt; Wow!<br/>    (&lt;a href=&quot;grounds_keeping_it_real.gif&quot; target=&quot;_blank&quot;&gt;You can include any markup here!&lt;/a&gt;)<br/>&lt;/x-tooltip&gt;</pre>
+        </div>
+    </figure>
+    <figure id="orientation-edit-demo">
+        <header><h2>Specifying different orientations</h2></header>
+        <div class="two-up">
+            <figure class="demo">
+                <div class="target-button">
+                    <span>Hover this div to see a tooltip!</span>
+                </div>
+                <x-tooltip orientation="top"></x-tooltip>
+            </figure>
+        </div>
+        <div class="markup two-up">
+            <button id="orientation-edit-button">Toggle orientation</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint"></pre>
+        </div>
+    </figure>
+
 </article>
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-<script type="text/javascript" src="../../dist/brick.js"></script>
+
+<script type="text/javascript" src="../../core/src/core.js"></script>
+<script type="text/javascript" src="../src/tooltip.js"></script>
+<script type="text/javascript" src="../../site/js/prettify.js"></script>
 <script>
 document.addEventListener('DOMComponentsLoaded', function(){
     xtag.addEvent(document, "tooltipshown:delegate(x-tooltip)", function(e){
@@ -96,6 +122,89 @@ document.addEventListener('DOMComponentsLoaded', function(){
         console.log("\ntooltip hidden!", this);
     });
 });
+</script>
+<script>
+function cleanHtmlSource(html, ignoreAttrs){
+    // remove any attributes given in parameter, but only if they are
+    // actually in a tag
+    if(ignoreAttrs && ignoreAttrs.length){
+        // no global flag, or we will over-skip through string
+        var attrIgnoreRegex = new RegExp("(<[^>]*?\\s)(("+
+                                         ignoreAttrs.join("|")+
+                                         ")=\".*?\"\\s?)([^<]*?>)");
+        var match = attrIgnoreRegex.exec(html);
+        while(match){
+            html = html.substr(0, match.index) + match[1] + match[4] + 
+                   html.substr(match.index + match[0].length);
+            match = attrIgnoreRegex.exec(html);
+        }
+        html = html.replace(/\s*>/g, ">");
+    }
+    
+    // find the least amount of tabbing and dedent each line by that much
+    var tabRegex = /\n(\s*?)(\S|\n)/g;
+    var spacing = tabRegex.exec(html);
+    if(spacing){
+        var shortest = spacing[1].length;
+        while(spacing){
+            if(spacing[1].length < shortest){
+                shortest = spacing[1].length;
+            }
+            spacing = tabRegex.exec(html);
+        }
+        if(shortest > 0){
+            var dedentRegex = new RegExp("\\n\\s{"+shortest+"}", "g");
+            html = html.replace(dedentRegex, "\n");
+        }
+    }
+    // trim spacing from start/end of markup
+    html = html.replace(/^\s*\n/, "");
+    html = html.replace(/\n\s*$/, "");
+    return html;
+}
+
+function initOrientationDemo(){
+    var orientationDemo = document.getElementById("orientation-edit-demo");
+    var orientationToggleButton = document.getElementById("orientation-edit-button");
+    var demoContext = orientationDemo.querySelector(".demo");
+    var demoTip = orientationDemo.querySelector("x-tooltip");
+    var markupEl = orientationDemo.querySelector(".markup .prettyprint");
+    var orients = ["auto", "top", "left", "bottom", "right"];
+
+    var _updateMarkup = function(){
+        demoTip.contentEl.innerHTML = '<code>orientation="'+demoTip.orientation+'"</code>';
+        var tooltipContentMarkup = demoTip.contentEl.innerHTML;
+        var origTooltipMarkup = demoTip.outerHTML;
+        var tooltipMarkup = origTooltipMarkup.replace(demoTip.innerHTML, 
+                                                      tooltipContentMarkup);
+        var markup = demoContext.innerHTML.replace(origTooltipMarkup, 
+                                                   tooltipMarkup);
+        markup = cleanHtmlSource(markup, ["style", "_auto-orientation"]);
+        markup = markup.replace("><code", ">\n    <code");
+        markup = markup.replace("</code><", "</code>\n<");
+        markupEl.textContent = markup;
+        xtag.removeClass(markupEl, "prettyprinted");
+        prettyPrint();
+    };
+
+    orientationToggleButton.addEventListener("click", function(e){
+        var currOrient = demoTip.orientation;
+        console.log(currOrient);
+        var nextOrient = orients[
+                            (orients.indexOf(currOrient)+1) % orients.length
+                         ];
+        demoTip.orientation = nextOrient;
+        _updateMarkup();
+    });
+    _updateMarkup();
+}
+
+document.addEventListener('DOMComponentsLoaded', function(){
+    initOrientationDemo();
+
+    prettyPrint();
+});
+    
 
 </script>
 </body>

@@ -20,7 +20,6 @@ article {
   margin: 0 auto;
   padding: 0 1em;
   position: relative;
-  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -83,7 +82,7 @@ section, footer {
   width: calc(50% - 1em);
   float: left;
 }
-.two-up:nth-child(2n) {
+.two-up:nth-of-type(2n) {
   margin-left: 2em;
 }
 .two-up h2 {
@@ -127,7 +126,6 @@ a:hover {
 }
 
 .demo > *:only-child{
-  overflow: auto;
   width: 100%;
   height: 100%;
 }

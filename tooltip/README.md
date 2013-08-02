@@ -77,7 +77,7 @@ Defines the type of interaction used to trigger the tooltip show/hide.
 
 Valid options:
 * If set to the preset `hover`, the tooltip will appear any time the user mouses over the target element, and will disappear upon mousing off the target and tooltip.
-* If set to the preset `none`, no handlers to show or hide the tooltip will be automatically applied. This is useful when the user wants to define a custom style of triggering the tooltip, but doesn't want any default behaviors getting in the way.
+* If set to the preset `custom`, no handlers to show or hide the tooltip will be automatically applied. This is useful when the user wants to define a custom style of triggering the tooltip, but doesn't want any default behaviors getting in the way.
 * If set to anything else, the tooltip will appear when the target element has the given trigger-style occur as an event, and will persist until the user dismisses it by triggering the same event outside of the tooltip.
     - This allows us to specify a wide variety of event triggers, such as 'tap', 'click', or 'mousedown'
 
@@ -109,17 +109,17 @@ Can be set with the `ignore-tooltip-pointer-events` HTML attribute or the `ignor
 
 # Accessors (getters/setters)
 
-## ___content___
+## contentEl
 
-Provides access to the the DOM element used to represent the content of the given tooltip
+Provides access to the the DOM element used to represent the content of the given tooltip. **Note that it you want to edit the `innerHTML` or `textContent` of the tooltip, you'll need to edit the element returned by contentEl!**
 
 ### (getter) Retrieving the content DOM
 
-Accessing a tooltip's `.content` property provides access to the DOM element used to represent the tooltip's content. This allows the user to dynamically modify the contents of the tooltip.
+Accessing a tooltip's `.contentEl` property provides access to the DOM element used to represent the tooltip's content. This allows the user to dynamically modify the contents of the tooltip.
 
 ### (setter) Replacing the content DOM
 
-The user can also completely replace the content DOM of the tooltip with their custom DOM node by assigning it to the tooltip's `.content` property.
+The user can also completely replace the content DOM of the tooltip with their custom DOM node by assigning it to the tooltip's `.contentEl` property.
 
 ## ___presetTriggerStyles___ (getter only)
 

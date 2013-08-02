@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
-    <link rel="stylesheet" type="text/css" href="prettify.css"/>
     <link rel="stylesheet" type="text/css" href="../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../site/css/prettify.css"/>
     <link rel="stylesheet" type="text/css" href="../../site/css/main.css"/>
     <link rel="stylesheet" type="text/css" href="demo.css"/>
 </head>
@@ -55,31 +55,66 @@
         </div>
     </article>
     
-    <script type="text/javascript" src="prettify.js"></script>
     <script type="text/javascript" src="../../dist/brick.js"></script>
+    <script type="text/javascript" src="../../site/js/prettify.js"></script>
     <script>
+        function cleanHtmlSource(html, ignoreAttrs){
+            // remove any attributes given in parameter, but only if they are
+            // actually in a tag
+            if(ignoreAttrs && ignoreAttrs.length){
+                // no global flag, or we will over-skip through string
+                var attrIgnoreRegex = new RegExp("(<[^>]*?\\s)(("+
+                                                 ignoreAttrs.join("|")+
+                                                 ")=\".*?\"\\s?)([^<]*?>)");
+                var match = attrIgnoreRegex.exec(html);
+                while(match){
+                    html = html.substr(0, match.index) + match[1] + match[4] + 
+                           html.substr(match.index + match[0].length);
+                    match = attrIgnoreRegex.exec(html);
+                }
+                html = html.replace(/\s*>/g, ">");
+            }
+            
+            // find the least amount of tabbing and dedent each line by that much
+            var tabRegex = /\n(\s*?)(\S|\n)/g;
+            var spacing = tabRegex.exec(html);
+            if(spacing){
+                var shortest = spacing[1].length;
+                while(spacing){
+                    if(spacing[1].length < shortest){
+                        shortest = spacing[1].length;
+                    }
+                    spacing = tabRegex.exec(html);
+                }
+                if(shortest > 0){
+                    var dedentRegex = new RegExp("\\n\\s{"+shortest+"}", "g");
+                    html = html.replace(dedentRegex, "\n");
+                }
+            }
+            // trim spacing from start/end of markup
+            html = html.replace(/^\s*\n/, "");
+            html = html.replace(/\n\s*$/, "");
+            return html;
+        }
+
         function updateCodeBox(isInit){
             var demoBox = getDemoBox();
             var sourceBox = document.getElementById("markup-box");
 
             sourceBox.innerHTML = "";
-
-            var newHtml = demoBox.outerHTML;
-            // remove attribute properties not intended for api exposure
-            newHtml = newHtml.replace(/(style|card-anim-type|before-animation|reverse|selected|leaving)=".*?"/g, "");
-
-            // also remove selected-index attribute form initial code display to
-            // signify that selected-index isn't required
+            var ignoreAttrs = ["style","card-anim-type","before-animation",
+                                "reverse","selected","leaving"];
+            // let markup reflect fact that selected-index isn't required for
+            // initialization
             if(isInit){
-                newHtml = newHtml.replace(/selected-index=".*?"/g, "");
+                ignoreAttrs.push("selected-index");
             }
 
-            // remove errant spacing
-            newHtml = newHtml.replace(/\s*>/g, ">");
-            newHtml = newHtml.replace(/\s+/g, " ");
-            // prettify html spacing
+            var newHtml = cleanHtmlSource(demoBox.outerHTML, ignoreAttrs);
+            // prettify html spacing for dynamically added elements
             newHtml = newHtml.replace(/>(\s*)<x-card/g, ">\n    <x-card");
             newHtml = newHtml.replace(/>(\s*)<\/x-deck/g, ">\n</x-deck");
+
             sourceBox.textContent = newHtml;
             xtag.removeClass(sourceBox, "prettyprinted");
         }

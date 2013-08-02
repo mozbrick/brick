@@ -13,6 +13,9 @@
     // a mapping of preset trigger styles to callback functions returning
     // CachedListener lists
     var PRESET_STYLE_LISTENERFNS;
+
+    var PREV_SIB_SELECTOR = "_previousSibling";
+    var NEXT_SIB_SELECTOR = "_nextSibling";
     
     /** isValidOrientation: (string)
     *
@@ -29,11 +32,10 @@
                                   width: number, height: number}
 
     returns the absolute metrics of the given DOM element in relation to the
-    document (includes border, but not margin)
+    document
     **/
     function getRect(el){
         var rect = el.getBoundingClientRect();
-
         var documentScrollTop = (document.documentElement.scrollTop ||
                                    document.body.scrollTop || 0);
         var documentScrollLeft = (document.documentElement.scrollLeft ||
@@ -358,11 +360,11 @@
     function _getTargetDelegatedListener(tooltip, targetSelector, eventName, 
                                          targetCallback)
     {
-        if(targetSelector === "_previousSibling"){
+        if(targetSelector === PREV_SIB_SELECTOR){
             return _mkPrevSiblingTargetListener(tooltip, eventName, 
                                                targetCallback);
         }
-        else if(targetSelector === "_nextSibling"){
+        else if(targetSelector === NEXT_SIB_SELECTOR){
             return _mkNextSiblingTargetListener(tooltip, eventName, 
                                                targetCallback);
         }
@@ -397,10 +399,10 @@
      * NOTE: DO NOT ATTACH LISTENERS HERE, LET THE CALLER DO IT
     **/
     PRESET_STYLE_LISTENERFNS = {
-        /* the "none" style provides no default event listener functionality;
+        /* the "custom" style provides no default event listener functionality;
          * this is useful if the user wishes to do their own custom triggerstyle
          */
-        "none": function(tooltip, targetSelector){
+        "custom": function(tooltip, targetSelector){
             return [];
         },
         /* the "hover" style allows the tooltip to be shown upon hovering over
@@ -633,17 +635,17 @@
      * returns list of DOM elements selected by the given selector string 
      * in relation to the tooltip
      *
-     * If given "_previousSibling", returns the previous sibling of the tooltip
-     * If given "_nextSibling", returns the next sibling of the tooltip
+     * If given PREV_SIB_SELECTOR, returns the previous sibling of the tooltip
+     * If given NEXT_SIB_SELECTOR, returns the next sibling of the tooltip
      * Otherwise, applies the selector as a CSS query selector on the document
      */
     function _selectorToElems(tooltip, selector){
         var elems = [];
-        if(selector === "_previousSibling"){
+        if(selector === PREV_SIB_SELECTOR){
             elems = (tooltip.previousElementSibling) ? 
                       [tooltip.previousElementSibling] : [];
         }
-        else if(selector === "_nextSibling"){
+        else if(selector === NEXT_SIB_SELECTOR){
             elems = (tooltip.nextElementSibling) ? 
                       [tooltip.nextElementSibling] : [];
         }
@@ -1219,7 +1221,7 @@
                 
                 // default trigger variables
                 this.xtag._orientation = "auto";
-                this.xtag._targetSelector = "_previousSibling";
+                this.xtag._targetSelector = PREV_SIB_SELECTOR;
                 this.xtag._triggerStyle = "hover";
                 // remember who the last element that triggered the tip was
                 // (ie: who we should be pointing to if suddenly told to show
@@ -1296,7 +1298,7 @@
             },
             
             // selects the style of tooltip trigger to use
-            // can choose from presets or set to "none" in order to define
+            // can choose from presets or set to "custom" in order to define
             // custom trigger
             "triggerStyle": {
                 attribute: {name: "trigger-style"},
@@ -1391,7 +1393,6 @@
                     return _selectorToElems(this, this.targetSelector);
                 }
             }
-            
         },
         methods: {
             // called when the position of the tooltip needs to be manually
