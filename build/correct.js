@@ -1,10 +1,8 @@
 
-var cleancss = require('clean-css');
 var fs = require('fs');
 var path = require('path');
 var promise = require('promisesaplus');
 var uglifyjs = require('uglify-js');
-
 
 loadComponentList().then(minify, err('Unable to read component list.'))
                    .then(writeComponents, err('minification failed.'));
@@ -18,7 +16,7 @@ function err(s) {
 
 function loadComponentList() {
     var p = promise();
-    fs.readFile(path.join('build','components.json'), function(err, res) {
+    fs.readFile('build/components.json', function(err, res) {
         if (err) {
             p.reject(err);
         } else {
@@ -56,46 +54,20 @@ function minify(components) {
 
 function minifyComponent(name) {
     var p = promise();
+    console.log('  ' + name);
 
-    var distDir = path.join('dist', name);
-    console.log(distDir);
+    var js = uglifyjs.minify(path.join(name, 'src', name + '.js'));
 
-    // make dist directory if necessary
-    if (!fs.existsSync(distDir)) {
-        fs.mkdirSync(distDir);
-    }
+    var css = fs.readFileSync(path.join(name, 'src', name + '.css')).toString();
 
-    var jsPath = path.join(distDir, name + '.min.js');
-    console.log(jsPath);
-    try {
-        var js = uglifyjs.minify(path.join('component', name, 'src', name + '.js'));
-        fs.writeFileSync(jsPath, js.code);
-    } catch (e) {
-        p.reject(e);
-        return p;
-    }
+    css = cleancss.process(css);
 
-    var cssPath = path.join(distDir, name + '.min.css');
-    console.log(cssPath);
-    try {
-        var css = fs.readFileSync(path.join('component', name, 'src', name + '.css')).toString();
-        css = cleancss.process(css);
-        fs.writeFileSync(cssPath, css);
-    } catch (e) {
-        p.reject(e);
-        return p;
-    }
-
-    if (typeof js !== 'undefined' && typeof css !== 'undefined') {
-        p.fulfill({css: css, js: js.code});
-    } else {
-        throw "missing resulting source";
-    }
+    p.fulfill({css: css, js: js.code});
     return p;
 }
 
 function writeComponents(data) {
-    console.log('writing bundle files...');
+    console.log('writing files...');
 
     fs.writeFileSync('dist/brick.js', data.js);
     fs.writeFileSync('dist/brick.css', data.css);

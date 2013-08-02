@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
+
+    <style>
+        body, html{
+            min-width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        
+        #container{
+            border: 1px solid grey;
+            margin: 0 auto;
+            width: 20%;
+            height: 50%;
+            min-width: 180px;
+            min-height: 330px;
+            max-width: 320px;
+            max-height: 480px;
+            position: relative;
+            overflow: auto;
+        }
+        
+        #prev-sib{
+            position: relative;
+            margin: 1em;
+            border: 1px solid grey;
+            overflow: visible;
+        }
+        
+        #next-sib{
+            background-color: cyan; 
+            position: relative;
+
+            margin: 1em 0;
+        }
+        #next-sib h1{
+            margin: 0;
+        }
+        
+        .fancy-selector{
+            position: relative;
+            display: inline-block;
+            background-color: lightsteelblue;
+            font-size: 1.2em;
+            margin:.15em;
+        }
+        
+        /* arrow is always in relation to content, so modify borders here instead
+           of in the content element
+           
+           any border or background styles here will be inherited by the tooltip arrow
+        */
+        #demoTip{
+            border-radius: 4px;
+            border: 2px solid black;
+            background: orange url('cream_pixels.png') center repeat repeat;
+        }
+        
+        #demoTip > .tooltip-content{
+            padding: .5em;
+            font-family: Courier;
+        }
+        
+        .demo-targeted{
+            border: 2px solid orange;
+        }
+        
+        .demo-targeted:after{
+            content: "!";
+            position: absolute;
+            right: -7px;
+            bottom: -7px;
+            background-color: red;
+            color: white;
+            font-size: 1.1em;
+            border: 1px solid white;
+            border-radius: 100%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+        }
+        
+        #controls{
+            text-align: center;
+        }
+        
+        #dummy-tooltips{
+            padding: .5em;
+            background-color: #eee;   
+        }
+        
+        #dummy-tooltips:empty{
+            display: none;
+        }
+        
+        #dummy-tooltips:before{
+            content: "Dummy tooltips (click to remove):";
+            display: block;
+        }
+        
+        #dummy-tooltips button{
+            font-family: Courier, monospace;
+            position:relative;
+        }
+
+        #fancy-selector-zone{
+            position: relative; 
+            background-color: lavender;
+        }
+
+        #fancy-selector-zone .fancy-selector{
+            margin: 1px 2px;
+        }
+    </style>
+</head>
+<body>
+<h1>X-ToolTip demo</h1>
+<div id="container">
+    parent node
+    <button id="prev-sib">
+        <p style="background-color: tomato; float:right;">prev sibling
+            <img src="http://placecage.com/100/50"/>
+        </p>
+    </button>
+    <x-tooltip id="demoTip" orientation="top" target-selector=".fancy-selector" trigger-style="click">
+        <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placecage.com/30/30"/>
+        <br/><a href="http://google.com">Check out this link!</a>
+    </x-tooltip>
+    <div id="next-sib">
+        <h1>Next sibling</h1>
+    </div>
+    <div id="fancy-selector-zone">    
+        <span class="fancy-selector">".fancy-selector" box1</span>
+        <span class="fancy-selector">box2 <img src="http://placecage.com/c/50/25"/></span>
+    </div>
+</div>
+
+
+<div id="controls">
+    <div id="demo-tip-controls">
+        Main tooltip: 
+        <button onClick="changeOrientation()">Change orientation</button>
+        <button onClick="toggleTooltip()">Toggle tooltip</button>
+        <button onClick="toggleSelector()">Toggle selector</button>
+        <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
+        <button onClick="toggleIgnoreOuter()">Toggle ignore-outer-trigger</button>
+        <button onClick="changeContents()">Change tooltip contents</button>
+        <button onClick="toggleTooltipPointerEvents()">Toggle tooltip pointer events</button>
+        <button onClick="toggleNoOverflow()">Toggle no-overflow</button>
+    </div>
+    <br/>
+    <span>Current selector = <span id="curr-selector-status"></span></span>
+    <br/>
+    <span>Current orientation = <span id="curr-orient-status"></span></span>
+    <br/>
+    <span>Current trigger style = <span id="curr-trigger-style-status"></span></span>
+    <br/>
+    <span>Outer triggering = <span id="outer-trigger-status"></span></span>
+    <br/>
+    <span>Tooltip pointer events = <span id="tooltip-pointer-events-status"></span></span>
+    <br/>
+    <span>no-overflow = <span id="no-overflow-status"></span></span>
+    <br/>
+    <button onClick="addFancySpan()">Add fancy-selector box</span>
+    <button onClick="addRemoveMainTooltip()">Add / remove main tooltip</button>
+    <button onClick="addDummyTooltip()">Add random dummy tooltip</button>
+</div>
+<div id="dummy-tooltips"></div>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+<h1>Loremipsum</h1>
+
+<script type="text/javascript" src="../../core/src/core.js"></script>
+<script type="text/javascript" src="../src/tooltip.js"></script>
+<!--<script type="text/javascript" src="../../../dist/brick.js"></script>-->
+
+<script>
+var demoTip;
+
+document.addEventListener('DOMComponentsLoaded', function(){
+    demoTip = document.getElementById("demoTip");
+    updateStatuses();
+    
+    demoTip.addEventListener("tooltipshown", function(e){
+        console.log("main tooltip shown!");
+    });
+    
+    demoTip.addEventListener("tooltiphidden", function(e){
+        console.log("main tooltip hidden!");
+    });
+
+    for(var step=0; step < 100; step++){
+        addFancySpan();
+    }
+});
+
+function addDummyTooltip(){
+    var cssSelectors = [".fancy-selector", ".fancy-selector img",
+                         "#container"];
+    var orients = ["auto", "top", "right", "bottom", "left"];
+    var styles = ["tap", "click", "hover"];
+    
+    var selector = cssSelectors[Math.floor(Math.random() * cssSelectors.length)];
+    var style = styles[Math.floor(Math.random() * styles.length)];
+    var orientation = orients[Math.floor(Math.random() * orients.length)];
+    
+    var dummyTooltip = document.createElement("x-tooltip");
+    dummyTooltip.contentEl.textContent = [selector, style, orientation].join(" | ");
+    
+    dummyTooltip.targetSelector = selector;
+    dummyTooltip.triggerStyle = style;
+    dummyTooltip.orientation = orientation;
+    
+    var button = document.createElement("button");
+    button.textContent = dummyTooltip.contentEl.textContent;
+    button.addEventListener("click", function(e){
+        dummyTooltip.parentNode.removeChild(dummyTooltip);
+        button.parentNode.removeChild(button);
+    });
+    document.body.appendChild(dummyTooltip);
+    document.getElementById("dummy-tooltips").appendChild(button);    
+}
+
+function addRemoveMainTooltip(){
+    var container = document.getElementById("container");
+    var nextSib = document.getElementById("next-sib");
+    if(document.getElementById("demoTip")){
+        container.removeChild(demoTip);
+    }
+    else{
+        container.insertBefore(demoTip, nextSib);
+    }
+    updateStatuses();
+}
+
+function randomWord(len){
+    var output = "";
+    var aCode = "A".charCodeAt(0);
+    for(var i=0; i < len; i++){
+        var letterCode = aCode + Math.floor(Math.random() * 26);
+        var letter = String.fromCharCode(letterCode);
+        
+        if(Math.random() > 0.5){
+            letter = letter.toLowerCase();
+        }
+        output += letter;
+    }
+    return output;
+}
+
+function addFancySpan(){
+    var container = document.getElementById("fancy-selector-zone");
+    
+    var newSpan = document.createElement("span");
+    xtag.addClass(newSpan, "fancy-selector");
+    newSpan.textContent = randomWord(6);
+    
+    container.appendChild(newSpan);
+    
+    updateStatuses();
+}
+
+function toggleTooltipPointerEvents(){
+    demoTip.ignoreTooltipPointerEvents = !demoTip.ignoreTooltipPointerEvents;
+    updateStatuses();
+}
+
+function changeOrientation(){
+    var orients = ["auto", "top", "right", "bottom", "left"];
+    var currOrient = demoTip.orientation;
+    
+    var currIndex = orients.indexOf(currOrient);
+    
+    demoTip.orientation = orients[(currIndex+1) % orients.length];
+    updateStatuses();
+}
+
+function toggleTooltip(){
+    demoTip.toggle();
+}
+
+function toggleIgnoreOuter(){
+    demoTip.ignoreOuterTrigger = !demoTip.ignoreOuterTrigger;
+    updateStatuses();
+}
+
+function toggleSelector(){
+    var selectors = ["_previousSibling", "_nextSibling", ".fancy-selector"];
+    var currSelector = demoTip.targetSelector;
+    
+    var currIndex = selectors.indexOf(currSelector);
+    
+    demoTip.targetSelector = selectors[(currIndex+1) % selectors.length];
+    updateStatuses();
+}
+
+function toggleTriggerStyle(){
+    var styles = ["hover", "click", "touchstart", "tap", "custom"];
+    var currStyle = demoTip.triggerStyle;
+    
+    var currIndex = styles.indexOf(currStyle);
+    
+    demoTip.triggerStyle = styles[(currIndex+1) % styles.length];
+    
+    updateStatuses();
+}
+
+function toggleNoOverflow(){
+    demoTip.noOverflow = !demoTip.noOverflow;
+    updateStatuses();
+}
+
+function updateStatuses(){
+    updateSelectorBox();
+    updateOrientationBox();
+    updateTriggerStyleBox();
+    updateIgnoreOuterStatus();
+    updateTooltipPointerEventsStatus();
+    updateNoOverflowStatus();
+    
+    var oldTargets = xtag.query(document, ".demo-targeted");
+    var targets = demoTip.targetElems;
+    
+    oldTargets.forEach(function(oldTarg){
+        xtag.removeClass(oldTarg, "demo-targeted");
+    });
+    
+    if(demoTip.parentNode){
+        targets.forEach(function(targ){
+            xtag.addClass(targ, "demo-targeted");
+        });
+    }
+    
+    
+    var buttons = xtag.query(document, "#demo-tip-controls button");
+    buttons.forEach(function(button){
+        if(demoTip.parentNode){
+            button.removeAttribute("disabled");
+        }
+        else{
+            button.setAttribute("disabled", true);
+        }
+    });
+}
+
+function updateNoOverflowStatus(){
+    var statusBox = document.getElementById("no-overflow-status");
+    statusBox.textContent = demoTip.noOverflow;
+}
+
+function updateTooltipPointerEventsStatus(){
+    var statusBox = document.getElementById("tooltip-pointer-events-status");
+    if(demoTip.parentNode){
+        statusBox.textContent = (demoTip.ignoreTooltipPointerEvents) ? "ignored" : "enabled";
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
+}
+
+function updateIgnoreOuterStatus(){
+    var statusBox = document.getElementById("outer-trigger-status");
+    if(demoTip.parentNode){
+        statusBox.textContent = (demoTip.ignoreOuterTrigger) ? "ignored" : "active";
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
+}
+
+function updateSelectorBox(){
+    var statusBox = document.getElementById("curr-selector-status");
+    if(demoTip.parentNode){
+        statusBox.textContent = demoTip.targetSelector;
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
+}
+
+function updateOrientationBox(){
+    var statusBox = document.getElementById("curr-orient-status");
+    if(demoTip.parentNode){
+        statusBox.textContent = demoTip.orientation;
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
+}
+
+function updateTriggerStyleBox(){
+    var statusBox = document.getElementById("curr-trigger-style-status");
+    if(demoTip.parentNode){
+        statusBox.textContent = demoTip.triggerStyle;
+        
+        if(demoTip.presetTriggerStyles.indexOf(demoTip.triggerStyle) !== -1){
+            statusBox.textContent += "  (preset style)";
+        }
+    }
+    else{
+        statusBox.textContent = "N/A";
+    }
+}
+
+var changeContents = (function(){
+    var currIndex = 0;
+    var htmlStrs = [
+        document.getElementById("demoTip").innerHTML,
+        "Text text text text",
+        "<img src='test.png'/>",
+        "<img src='test.gif'/>",
+        (function(){
+            var aCode = "A".charCodeAt(0);
+            var letters = [];
+            for(var i=0; i < 10; i++){
+                letters.push(String.fromCharCode(aCode+i));
+            }
+            return letters.join("<hr/>");
+        })()
+    ];
+    
+    return function(newIndex){
+        var contentEl = demoTip.contentEl;
+        
+        if(newIndex == undefined){
+            newIndex = (currIndex+1) % htmlStrs.length;
+        }
+        currIndex = newIndex;
+        var newHtml = htmlStrs[newIndex];
+        
+        // set up a temporary holding element to load images in
+        var container = document.createElement("div");
+        container.innerHTML = newHtml;
+        
+        var imgs = xtag.query(container, "img");
+        var numImgs = imgs.length;
+        var loadedImgs = 0;
+        
+        // copy over html from the temp container to the content element and
+        // trigger a refresh
+        var _onContainerReady = function(){
+            contentEl.innerHTML = container.innerHTML;
+            demoTip.refreshPosition();
+        };
+        
+        if(numImgs === 0){
+            _onContainerReady();
+        }
+        else{
+            // wait for any images to load before setting the content's html
+            var _onImgLoaded = function(){
+                loadedImgs += 1;
+                if(loadedImgs === numImgs){
+                    _onContainerReady();
+                }
+            };
+        
+            imgs.forEach(function(img){
+                if(img.complete){
+                    _onImgLoaded();
+                }
+                else{
+                    img.onload = _onImgLoaded;
+                }
+            });
+        }
+    }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="../../../site/css/main.css"/>
+
+    <style>
+        body, html{
+            min-width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        header{
+            clear:both;
+        }
+
+        .demo{
+            background: goldenrod url("retina_wood.png") repeat;
+        }
+
+        .demo .target-button{
+            position:relative;
+            border-radius: 4px;
+            background: tomato;
+            color: white;
+            box-shadow: 1px 1px 4px grey;
+
+            width: 80%;
+            padding: 5%;
+            margin: 0 auto;
+
+            text-align: center;
+        }
+
+        .demo .target-button:only-of-type
+        {
+            margin: 0;
+            position:absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        x-tooltip .tooltip-content > *{
+            vertical-align: middle;
+        }
+
+        .markup pre{
+            margin: 0;
+            width: 100%;
+
+            overflow: auto;
+            font-size: .9em;
+        }
+
+        .target-button.sibling-demo{
+            margin-top: 15%;
+        }
+    </style>
+</head>
+<body>
+<article>
+    <header><h1>x-tooltip demo</h1></header>
+    <header><h2>Basic usage</h2></header>
+    <figure>
+        <div class="two-up">
+            <figure class="demo">
+                <div class="target-button">
+                    Hover this div to see a tooltip!
+                </div>
+                <x-tooltip>
+                    <img src="http://placecage.com/c/35/35"/> Wow!
+                    (<a href="grounds_keeping_it_real.gif" target="_blank">You can include any markup here!</a>)
+                </x-tooltip>
+            </figure>
+        </div>
+        <div class="markup two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;div class=&quot;target-button&quot;&gt;<br/>    &lt;span&gt;Hover this div to see a tooltip!&lt;/span&gt;<br/>&lt;/div&gt;<br/>&lt;x-tooltip&gt;<br/>    &lt;img src=&quot;http://placecage.com/c/35/35&quot;/&gt; Wow!<br/>    (&lt;a href=&quot;grounds_keeping_it_real.gif&quot; target=&quot;_blank&quot;&gt;You can include any markup here!&lt;/a&gt;)<br/>&lt;/x-tooltip&gt;</pre>
+        </div>
+    </figure>
+    <!-- orientation demo -->
+    <figure id="orientation-edit-demo">
+        <header><h2><code>orientation</code>: Specifying different positions</h2></header>
+        <div class="two-up">
+            <figure class="demo">
+                <div class="target-button">
+                    Hover this div to see a tooltip!
+                </div>
+                <x-tooltip orientation="top"></x-tooltip>
+            </figure>
+        </div>
+        <div class="markup two-up">
+            <button id="orientation-edit-button">Toggle orientation</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+        </div>
+    </figure>
+    <!-- target-selector demo -->
+    <figure id="target-edit-demo">
+        <header><h2><code>target-selector</code>: Specifying different targets</h2></header>
+        <p><code>target-selector</code> defines which elements a tooltip attaches to. Valid options:
+        </p>
+        <ul>
+            <li><code>_previousSibling</code> (default): This indicates that the tooltip is attached to the element directly preceding it in the HTML markup.
+            </li>
+            <li><code>_nextSibling</code>: This indicates that the tooltip is attached to the element directly following it in the HTML markup.
+            </li>
+            <li>CSS selectors relative to the <code>document</code> can also be used instead to specify a wider range of elements.
+            </li>
+        </ul>
+        <div class="two-up">
+            <figure class="demo">
+                <div class="sibling-demo target-button">
+                    <img src="http://placecage.com/100/30"/><br/>
+                    I would be selected by _previousSibling!
+                </div>
+                <x-tooltip target-selector="_previousSibling"><code>target-selector="_previousSibling"</code></x-tooltip>
+                <div class="sibling-demo target-button">
+                    <img src="http://placecage.com/c/100/30"/><br/>
+                    I would be selected by _nextSibling!
+                </div>
+            </figure>
+        </div>
+        <div class="markup two-up">
+            <button id="target-edit-button">Toggle target-selector</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+        </div>
+    </figure>
+    <!-- trigger-style demo -->
+    <figure id="trigger-style-edit-demo">
+        <header><h2><code>trigger-style</code>: Specifying how to trigger a tooltip</h2></header>
+        <p>This specifies what kind of interaction with a target element will
+           trigger the element. You can either specify <code>hover</code> or 
+           any native event type.
+        </p>
+        <p>You can also specify <code class="prettyprint">trigger-style="custom"</code> to turn off built-in handlers and use the tooltip's <code>.show</code>, <code>.hide</code>, and <code>.toggle</code> methods to build your own triggers.</p>
+        <div class="two-up">
+            <figure class="demo">
+                <div class="target-button">
+                    <span>Hover this button!</span>
+                </div>
+                <x-tooltip trigger-style="hover">Hover somewhere off this to hide!</x-tooltip>
+            </figure>
+        </div>
+        <div class="markup two-up">
+            <button id="trigger-style-edit-button">Toggle trigger-style</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+            <div class="js-wrap" hidden>
+                <h3>JavaScript</h3>
+                <pre class="prettyprint javascript"></pre>
+            </div>
+        </div>
+    </figure>
+
+</article>
+
+<script type="text/javascript" src="../../../dist/brick.js"></script>
+<script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="demo.js"></script>
+<script>
+document.addEventListener('DOMComponentsLoaded', function(){
+    xtag.addEvent(document, "tooltipshown:delegate(x-tooltip)", function(e){
+        console.log("\ntooltip shown!", this);
+    });
+
+    xtag.addEvent(document, "tooltiphidden:delegate(x-tooltip)", function(e){
+        console.log("\ntooltip hidden!", this);
+    });
+});
+</script>
+</body>
+</html>
