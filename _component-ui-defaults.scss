@@ -14,7 +14,20 @@ $COMPONENT_UI_TEXT_COLOR: #D4D4D4;
 $COMPONENT_UI_TEXT_COLOR_SELECTED: #F2F2F2;
 $COMPONENT_UI_TEXT_COLOR_HOVER: mix($COMPONENT_UI_TEXT_COLOR, $COMPONENT_UI_TEXT_COLOR_SELECTED, 25%);
 
-@include customFont("OpenSans-SemiBold", $fontFolder: "", $fontFamily: $_textCustomFont);
+$imported-once-files: ();
+
+@function import-once($name) {
+    @if index($imported-once-files, $name) {
+        @return false;
+    }
+    $imported-once-files: append($imported-once-files, $name);
+    @return true;
+}
+
+
+@if import-once("_component-ui-defaults.scss") {
+    @include customFont("OpenSans-SemiBold", $fontFolder: "", $fontFamily: $_textCustomFont);
+}
 
 // Backgrounds
 @mixin component-ui-background{

@@ -1,0 +1,39 @@
+.demo{
+    background: #f2d6b9 url("../../../site/img/retina_wood.png") repeat;
+}
+
+.demo > .target-button{
+    position:relative;
+    border-radius: 4px;
+    background: tomato;
+    color: white;
+    box-shadow: 1px 1px 4px grey;
+
+    width: 80%;
+    padding: 5%;
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+.demo > .target-button:only-of-type
+{
+    margin: 0;
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.target-button.sibling-demo{
+    margin-top: 15%;
+}
+
+.target-button.sibling-demo img{
+    display: block;
+    margin: 0 auto;
+}

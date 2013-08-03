@@ -54,6 +54,7 @@ function lineBreakTooltip(markup){
 function getTooltipMarkup(tooltip, contextEl, markupEl){
     var tooltipContentMarkup = tooltip.contentEl.innerHTML;
     var origTooltipMarkup = tooltip.outerHTML;
+    // hide shadow DOM to display initializing markup
     var tooltipMarkup = origTooltipMarkup.replace(tooltip.innerHTML, 
                                                   tooltipContentMarkup);
     var markup = contextEl.innerHTML.replace(origTooltipMarkup, 
@@ -63,10 +64,10 @@ function getTooltipMarkup(tooltip, contextEl, markupEl){
     return markup;
 }
 
-function updateMarkupElem(markupEl, markup){
+function updateMarkupElem(markupEl, markup, skipPrettyprint){
     markupEl.textContent = markup;
     xtag.removeClass(markupEl, "prettyprinted");
-    prettyPrint();
+    if(!skipPrettyprint) prettyPrint();
 }
 
 // defaults to first item if given item is not in list
@@ -76,26 +77,35 @@ function nextItem(items, prevItem){
     return items[(index+1) % items.length];
 }
 
+function initBasicDemo(){
+    var demoContext = document.querySelector("#basic-demo .demo");
+    var tooltip = document.querySelector("#basic-demo x-tooltip");
+    var markupEl = document.querySelector("#basic-demo .markup-wrap .html");
+    updateMarkupElem(markupEl, 
+                     getTooltipMarkup(tooltip, demoContext, markupEl));
+}
+
 function initOrientationDemo(){
     var demoEl = document.getElementById("orientation-edit-demo");
     var toggleButton = document.getElementById("orientation-edit-button");
     var demoContext = demoEl.querySelector(".demo");
     var demoTip = demoEl.querySelector("x-tooltip");
-    var markupEl = demoEl.querySelector(".markup .html");
+    var markupEl = demoEl.querySelector(".markup-wrap .html");
     var orients = ["auto", "top", "left", "bottom", "right"];
 
-    var _updateMarkup = function(){
+    var _updateDemo = function(skipPrettyprint){
         demoTip.contentEl.innerHTML = '<code>orientation="'+
                                       demoTip.orientation+'"</code>';
         updateMarkupElem(markupEl, 
-                         getTooltipMarkup(demoTip, demoContext, markupEl));
+                         getTooltipMarkup(demoTip, demoContext, markupEl),
+                         skipPrettyprint);
     };
 
     toggleButton.addEventListener("click", function(e){
         demoTip.orientation = nextItem(orients, demoTip.orientation)
-        _updateMarkup();
+        _updateDemo();
     });
-    _updateMarkup();
+    _updateDemo(true);
 }
 
 function initTargetSelectorDemo(){
@@ -103,23 +113,24 @@ function initTargetSelectorDemo(){
     var toggleButton = document.getElementById("target-edit-button");
     var demoContext = demoEl.querySelector(".demo");
     var demoTip = demoEl.querySelector("x-tooltip");
-    var markupEl = demoEl.querySelector(".markup .html");
+    var markupEl = demoEl.querySelector(".markup-wrap .html");
     var selectors = ["_previousSibling", "_nextSibling", ".sibling-demo img"];
 
-    var _updateMarkup = function(){
+    var _updateDemo = function(skipPrettyprint){
         demoTip.contentEl.innerHTML = '<code>target-selector="'+
                                        demoTip.targetSelector+
                                        '"</code>';
         updateMarkupElem(markupEl, 
-                         getTooltipMarkup(demoTip, demoContext, markupEl));
+                         getTooltipMarkup(demoTip, demoContext, markupEl),
+                         skipPrettyprint);
     };
 
     toggleButton.addEventListener("click", function(){
         demoTip.targetSelector = nextItem(selectors, demoTip.targetSelector);
-        _updateMarkup();
+        _updateDemo();
     });
 
-    _updateMarkup();
+    _updateDemo(true);
 }
 
 function initTriggerStyleDemo(){
@@ -127,9 +138,9 @@ function initTriggerStyleDemo(){
     var toggleButton = document.getElementById("trigger-style-edit-button");
     var demoContext = demoEl.querySelector(".demo");
     var demoTip = demoEl.querySelector("x-tooltip");
-    var markupEl = demoEl.querySelector(".markup .html");
+    var markupEl = demoEl.querySelector(".markup-wrap .html");
     var jsWrapEl = demoEl.querySelector(".js-wrap");
-    var jsMarkupEl = demoEl.querySelector(".markup .javascript");
+    var jsMarkupEl = demoEl.querySelector(".markup-wrap .javascript");
     var styles = ["hover", "click", "touchstart", "custom"];
 
     var _toggleListener = function(){
@@ -138,7 +149,7 @@ function initTriggerStyleDemo(){
     };
     var _customToggleButton = null;
 
-    var _updateMarkup = function(){
+    var _updateDemo = function(skipPrettyprint){
         if(_customToggleButton){
             _customToggleButton.removeEventListener('click', _toggleListener);
             _customToggleButton.parentNode.removeChild(_customToggleButton);
@@ -163,22 +174,23 @@ function initTriggerStyleDemo(){
         }
 
         var markup = getTooltipMarkup(demoTip, demoContext, markupEl);
-        updateMarkupElem(markupEl, markup);     
+        updateMarkupElem(markupEl, markup, skipPrettyprint);     
         var jsSource = dedentAll(_toggleListener.toString());
         jsSource = "document.getElementById('custom-toggle-button')"+
                     ".addEventListener('click', " + jsSource;
-        updateMarkupElem(jsMarkupEl, jsSource);
+        updateMarkupElem(jsMarkupEl, jsSource, skipPrettyprint);
     };
 
     toggleButton.addEventListener("click", function(e){
         demoTip.triggerStyle = nextItem(styles, demoTip.triggerStyle)
-        _updateMarkup();
+        _updateDemo();
     });
-    _updateMarkup();
+    _updateDemo(true);
 }
 
 
 document.addEventListener('DOMComponentsLoaded', function(){
+    initBasicDemo();
     initOrientationDemo();
     initTargetSelectorDemo();
     initTriggerStyleDemo();

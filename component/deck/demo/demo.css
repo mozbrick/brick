@@ -58,12 +58,12 @@ html, body{
 }
 
 #demo-box x-card:nth-child(odd){
-    background-image: url("cream_pixels.png");
+    background-image: url("../../../site/img/cream_pixels_overlay.png");
     background-repeat: repeat;
 }
 
 #demo-box x-card:nth-child(even){
-    background-image: url("retina_wood.png");
+    background-image: url("../../../site/img/retina_wood_overlay.png");
     background-repeat: repeat;
 }
 

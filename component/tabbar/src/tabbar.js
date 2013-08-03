@@ -103,11 +103,12 @@
         if(tabEl.parentNode.nodeName.toLowerCase() === "x-tabbar"){
             var targetEvent = tabEl.targetEvent; // getter handles casing
         
-            var targets = tabEl.targetElems;
-            for(var i = 0; i < targets.length; i++){
-                var target = targets[i];
-                xtag.fireEvent(target, targetEvent);
-            }
+            var targets = (tabEl.targetSelector) ? 
+                              xtag.query(document, tabEl.targetSelector) : 
+                              tabEl.targetElems;
+            targets.forEach(function(targ){
+                xtag.fireEvent(targ, targetEvent);
+            });
         }
     }
 

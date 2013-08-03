@@ -209,7 +209,7 @@
         slider.value = newValue;
         
         // fire events
-        xtag.fireEvent(inputEl, "input");
+        xtag.fireEvent(slider, "input");
         _redraw(slider);
     }
     
@@ -319,7 +319,7 @@
                 }
 
                 if(slider.value !== slider.xtag.dragInitVal){
-                    xtag.fireEvent(slider.xtag.rangeInputEl, "change");
+                    xtag.fireEvent(slider, "change");
                 }
                 slider.xtag.dragInitVal = null;
 
@@ -426,8 +426,14 @@
             }
         },
         events: {
-            'change:delegate(input[type=range])': function(e){},
-            'input:delegate(input[type=range])': function(e){},
+            'change:delegate(input[type=range])': function(e){
+                e.stopPropagation();
+                xtag.fireEvent(e.currentTarget, "input");
+            },
+            'input:delegate(input[type=range])': function(e){
+                e.stopPropagation();
+                xtag.fireEvent(e.currentTarget, "change");
+            },
             // note that focus/blur events don't bubble by default, so 
             // in order for users to attach listeners to the x-slider focus
             // instead of the input's, fake one level of bubbling

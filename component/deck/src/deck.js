@@ -257,17 +257,17 @@
         return xtag.queryChildren(elem, "x-card");
     }
     
-    /** _getTargetCard : (DOM, Number) => DOM/null
+    /** _getCardAt : (DOM, Number) => DOM/null
      *
-     * return the card at the current index in the given deck DOM
+     * return the card at the given index in the given deck DOM
      *
      * returns null if no such card exists
     **/
-    function _getTargetCard(deck, targetIndex){
+    function _getCardAt(deck, targetIndex){
         var cards = _getAllCards(deck);
         
-        return (targetIndex < 0 || targetIndex >= cards.length) ? 
-                    null : cards[targetIndex];
+        return (isNaN(parseInt(targetIndex)) || targetIndex < 0 || 
+                targetIndex >= cards.length) ? null : cards[targetIndex];
     }
     
     /** _getCardIndex: (DOM, DOM) => Number
@@ -583,7 +583,7 @@
                                 parameter
     **/
     function _replaceWithIndex(deck, targetIndex, transitionType, progressType){
-        var newCard = _getTargetCard(deck, targetIndex);
+        var newCard = _getCardAt(deck, targetIndex);
         
         if(!newCard){
             throw "no card at index " + targetIndex;
@@ -601,6 +601,10 @@
     also removes any temp-attributes used for animation
     **/
     function _sanitizeCardAttrs(deck){
+        // prevent sanitizer from clobbering attributes before the deck is
+        // ready, as cards sometimes insert before deck
+        if(!deck.xtag._initialized) return;
+
         var cards = _getAllCards(deck);
         
         var currCard = deck.xtag._selectedCard;
@@ -647,6 +651,7 @@
     xtag.register("x-deck", {
         lifecycle:{
             created: function(){
+                this.xtag._initialized = true;
                 var self = this;
                 var _historyValidator = function(card){
                                             return card.parentNode === self;
@@ -658,13 +663,19 @@
                                            this.xtag._selectedCard : null; 
                 this.xtag._lastAnimTimestamp = null;
                 this.xtag.transitionType = "scrollLeft";
-                
+
+                // grab card at selected index and set initial card, 
+                // if available
+                var initCard = this.getCardAt(
+                                  this.getAttribute("selected-index")
+                               );
+                if(initCard){
+                    this.xtag._selectedCard = initCard;
+                }
+
                 _sanitizeCardAttrs(this);
-                
                 var currCard = this.xtag._selectedCard;
-                // only add if we aren't going to initialize with some other
-                // card instead
-                if((!this.hasAttribute("selected-index")) && currCard){
+                if(currCard){
                     this.xtag.history.pushState(currCard);
                 }
             }
@@ -784,7 +795,7 @@
                                 it is farther behind (default option)
             **/
             shuffleTo: function(index, progressType){
-                var targetCard = _getTargetCard(this, index);
+                var targetCard = _getCardAt(this, index);
                 if(!targetCard){
                     throw "invalid shuffleTo index " + index;
                 }
@@ -872,14 +883,7 @@
             *  returns null if no such card exists
             **/
             getCardAt: function(index){
-                var cards = this.getAllCards();
-                
-                if(0 <= index && index < cards.length){
-                    return cards[index];
-                }
-                else{
-                    return null;
-                }
+                return _getCardAt(this, index);
             },
 
             
@@ -948,7 +952,6 @@
                 if (deckContainer && 
                         deckContainer.tagName.toLowerCase() === 'x-deck')
                 {
-                    _sanitizeCardAttrs(deckContainer);
                     this.xtag.parentDeck = deckContainer;
                 }
             },

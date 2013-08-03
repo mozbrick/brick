@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Brick: x-slider demos</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="../../../site/css/main.css"/>
+    <style>
+        x-slider{
+            width: 70%;
+            max-width: 500px;
+            margin: 0 auto;
+            display: inline-block;
+            position: relative;
+        }
+
+        .slider-wrap{
+            padding: 1em;
+        }
+
+        .slider-wrap h4{
+            margin-top: 0;
+        }
+
+        .slider-wrap:nth-child(4n), .slider-wrap:nth-child(4n+1){
+            background-color: #eee;
+        }
+
+        .default-init-val{
+            font-weight: bold;
+        }
+
+        .default-init-val.passed{
+            color: green;
+        }
+
+        .default-init-val.failed{
+            color: red;
+            font-size: 1.5em;
+        }
+
+        code{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<article>
+    <header><h1>x-slider demo</h1></header>
+    <h3>
+        <code class="prettyprint">&lt;input type="range"&gt;</code> is <em id="native-support-status"></em> natively supported by this browser!
+        <button id="toggle-all-button">Toggle all polyfills</button>
+    </h3>
+    <div>
+        <form class="slider-wrap two-up" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi" method="POST">
+            <h4>Default (default step = 1, default init value should be <span class="default-init-val">50</span>)</h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo"></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot;&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Custom range (default step = 1, default init value should be <span class="default-init-val">0</span>)</h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min="-50" max=50></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; min=&quot;-50&quot; max=50&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Custom step (step = 10, default init value should be <span class="default-init-val">0</span>)</h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min="-50" max=50 step=10></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; min=&quot;-50&quot; max=50 step=10&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Fractional step (step = 0.5, default init value should be <span class="default-init-val">2.5</span>)</h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min=0 max=5 step=0.5></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+               &lt;x-slider name=&quot;sliderdemo&quot; min=0 max=5 step=0.5&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Custom init value (step = 2, init value = 8)</h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min=-10 max=10 step=2 value=8></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; min=-10 max=10 step=2 value=8&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Custom invalid init value (min = 0, max = 10, step = 5, init value = 3, but should be rounded to <span class="default-init-val">5</span>)</h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min=0 max=10 step=5 value=3></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; min=0 max=10 step=5 value=3&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Pos offset range step (min = 3, max = 13, step = 5, default init value should be <span class="default-init-val">8</span>) </h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min=3 max=13 step=5></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; min=3 max=13 step=5&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Neg offset range step (min = -1, max = 100, step = 10, default init value should be <span class="default-init-val">49</span>) </h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min=-1 max=100 step=10></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; min=-1 max=100 step=10&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Uncontainable step (min = 1, max = 4, step = 5, default init value should be <span class="default-init-val">1</span>) </h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" min=1 max=4 step=5></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+                <button type="button">Toggle polyfill (Currently <span class="polyfill-status"></span>)</button>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; min=1 max=4 step=5&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+
+        <form id="force-polyfill-demo" class="slider-wrap two-up" method="POST" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi">
+            <h4>Force polyfill UI at all times</h4>
+            <span class="min"></span>
+
+            <x-slider name="sliderdemo" polyfill></x-slider>
+
+            <span class="max"></span>
+            <p>Value = <span class="slider-val-status"></span>
+            </p>
+            <code class="prettyprint">
+                &lt;x-slider name=&quot;sliderdemo&quot; polyfill&gt;&lt;/x-slider&gt;
+            </code>
+            <input type="submit"></input>
+        </form>
+    </div>
+</article>
+
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<script type="text/javascript" src="../../../dist/brick.js"></script>
+<script>
+document.addEventListener('DOMComponentsLoaded', function(){
+    var nativeSupportStatus = document.getElementById("native-support-status");
+    nativeSupportStatus.textContent = (hasNativeRangeSupport()) ? "" : "not";
+
+    var demoSliders = xtag.query(document, "x-slider");
+
+    demoSliders.forEach(function(demoSlider){
+        var minSpan = demoSlider.parentNode.querySelector(".min");
+        var maxSpan = demoSlider.parentNode.querySelector(".max");
+
+        minSpan.textContent = (demoSlider.min != undefined) ? demoSlider.min : 0;
+        maxSpan.textContent = (demoSlider.max != undefined) ? demoSlider.max : 100;
+
+        updatePolyfillStatus(demoSlider);
+        updateSliderValStatus(demoSlider);
+
+        demoSlider.addEventListener("change", function(e){
+            console.log("slider change");
+            updateSliderValStatus(demoSlider);
+        });
+
+        demoSlider.addEventListener("input", function(e){
+            console.log("slider input");
+            updateSliderValStatus(demoSlider);
+        });
+
+        demoSlider.addEventListener("focus", function(e){
+            console.log("slider focus");
+            updateSliderValStatus(demoSlider);
+        });
+
+        demoSlider.addEventListener("blur", function(e){
+            console.log("slider blur");
+            updateSliderValStatus(demoSlider);
+        });
+
+        var togglePolyFillButton = demoSlider.parentNode.querySelector("button");
+        if(togglePolyFillButton){
+            togglePolyFillButton.addEventListener("click", function(e){
+                togglePolyfill(demoSlider);
+            });
+        }
+    });
+
+    var toggleAllButton = document.getElementById("toggle-all-button");
+    toggleAllButton.addEventListener("click", function(e){
+        xtag.query(document, "form:not(#force-polyfill-demo) x-slider").forEach(function(slider){
+            togglePolyfill(slider);
+        });
+    });
+
+    // test each init val
+    var targetDefaults = xtag.query(document, ".default-init-val");
+    targetDefaults.forEach(function(targetElem){
+        var slider = targetElem.parentNode.parentNode.querySelector("x-slider");
+
+        if(slider.value !== +targetElem.textContent){
+            xtag.addClass(targetElem, "failed");
+            console.log("expected init value to be", targetElem.textContent,
+                        "but received", slider.value, slider);
+            targetElem.textContent += " but saw " + slider.value + " instead!";
+        }
+        else{
+            xtag.addClass(targetElem, "passed");
+        }
+    });
+});
+
+function updatePolyfillStatus(slider){
+    var status = slider.parentNode.querySelector(".polyfill-status");
+    if(status) status.textContent = (slider.polyfill) ? "on" : "off";
+}
+
+function togglePolyfill(slider){
+    slider.polyfill = !slider.polyfill;
+
+    updatePolyfillStatus(slider);
+}
+
+function updateSliderValStatus(slider){
+    var sliderStatus = slider.parentNode.querySelector(".slider-val-status");
+    sliderStatus.textContent = slider.value;
+}
+
+function hasNativeRangeSupport(){
+    rangeInput = document.createElement("input");
+    rangeInput.setAttribute("type", "range");
+
+    return (rangeInput.type.toLowerCase() === "range");
+}
+</script>
+</body>
+</html>

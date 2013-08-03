@@ -73,18 +73,6 @@ Positions/appearances will likely differ on larger displays or with different in
 * Does not necessarily block interaction with underlying content
 * Interacting with underlying content would dismiss the tooltip.
 
-## Navigation-like Components
-
-### ['Action Bar' (responsive action menu)](https://github.com/x-tag/actionbar)
-
-* Automatically detects available space and eats actions that overflow
-
-### 'Select Menu'
-
-* Menu that slides in from below/above with options and a confirm button (UX/UI folks wanted this)
-    Is this necessary? Many systems provide this on their own. Was trying to avoid replacing system &lt;select&gt;
-
-
 ## Content Components
 
 ### [Switch](https://github.com/x-tag/switch)
