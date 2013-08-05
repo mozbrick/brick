@@ -92,7 +92,7 @@
                 <strong>Important note:</strong> Native implementation of input vs change events differs from browser to broswer, so when using the native non-polyfill version of the UI, input and change events will fire in different circumstances than specified.
             </p>
             <p>
-                While the polyfill UI and Firefox follow the <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#common-event-behaviors">current</a> <a href="http://html5.org/tools/web-apps-tracker?from=7786&to=7787">standards</a> regarding these events, Webkit and Internet Explorer native implementations are <a href="https://code.google.com/p/chromium/issues/detail?id=155747">not yet guaranteed</a> to follow these specs. As a workaround, force the <code>polyfill</code> attribute on the <code class="prettyprint">&lt;x-slider&gt;</code> if the <code>input</code>/<code>change</code> difference is crucial.
+                While Firefox23+ and the <code class="prettyprint">&lt;x-slider&gt;</code> polyfill UI follow the <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#common-event-behaviors">current</a> <a href="http://html5.org/tools/web-apps-tracker?from=7786&to=7787">standards</a> regarding these events, Webkit and Internet Explorer native implementations are <a href="https://code.google.com/p/chromium/issues/detail?id=155747">not yet guaranteed</a> to follow these specs. As a workaround, force the <code>polyfill</code> attribute on the <code class="prettyprint">&lt;x-slider&gt;</code> if the <code>input</code>/<code>change</code> difference is crucial.
             </p>
             <div class="two-up">
                 <figure class="demo">

@@ -1,19 +1,46 @@
-app-components
+Brick / App-components
 ==============
 
-Set of web components for use in building Open Web App UIs
+Brick is a bundle of re-usable UI components for quickly and flexibly building mobile HTML5 apps. Brick adds new HTML tags- widgets that allow developers to express the structure of an application in a clearer, more concise manner.
 
+In other words, Brick provides minimal-markup, cross-browser implementations of common user interface designs, from calendars to slidebars to cycleable galleries, taking care of most of the under-the-hood boilerplate for you.
 
-# Web Components
+For example, this is all the markup that would be needed to implement a mobile-friendly, cross-browser calendar widget:
 
-First Draft- Names are not necessarily final.
+```
+<x-calendar></x-calendar>
+```
 
-For the purposes of this document, layout terminology assumes a small-screen handheld phone.
-Positions/appearances will likely differ on larger displays or with different input techniques.
+That's it! It really is that easy.
+
+#Installation
+
+Prebuilt versions of the entire library are provided in <code>dist/brick.css</code> and <code>dist/brick.js</code>, and be included in your project like any other CSS/JavaScript file.
+
+In the near future, compartmentalized releases of specific components will be released in their respective folders under <code>dist</code>, allowing you to pick and choose what components you want. (Do not use these yet, as dependencies have not been created yet.)
+
+## Building from the repository source 
+
+If you wish to build the library yourself, first have <code>npm</code> installed. You'll also need the ability to run <code>make</code>, so Windows users may need to install Cygwin, [making sure to install the <code>make</code> package](http://superuser.com/questions/154418/where-do-i-get-make-for-cygwin).
+
+Then, run the following:
+
+```
+git clone git@github.com:mozilla/app-components.git
+cd app-components
+npm install
+make
+```
+
+The built files should be output to <code>dist/brick.css</code> and <code>dist/brick.js</code>.
+
+# Components
+
+This is a list of the currently bundled components provided in the library. (Click to view subfolder with readme and demo page)
 
 ## Structural Components
 
-### ['Layout'](https://github.com/x-tag/layout)
+### ['Layout'](component/layout)
 
 * Primary layout container, holds app structure.
 * Allows whole "app" space to have layout properties like flexbox without affecting <body>
@@ -23,7 +50,7 @@ Positions/appearances will likely differ on larger displays or with different in
 * Contains top-level information and UI
 * Similar to a toolbar or roughly equivalent to Android's action bar
 
-### ['Tab Bar' (navigation, footer)](https://github.com/mozilla/app-components/tree/master/tabbar)
+### ['Tab Bar' (navigation, footer)](component/tabbar)
 
 * Used to display an app-level navigation at the bottom of the UI
 * Usually a series of icons with labels.
@@ -33,89 +60,63 @@ Positions/appearances will likely differ on larger displays or with different in
         - Slidebox
         - Flipbox
         - Shuffledeck
-
-### ['Panel'](https://github.com/x-tag/panel)
-
-* Content container
-* Allows for dynamic content population
+* Can also fire user-defined events
 
 ### ['Slidebox'](https://github.com/x-tag/slidebox)
 
-* Allows a 'slide' effect between two views or panels
+* Allows a 'slide' filmstrip effect between views or panels
 
 ### ['Flipbox'](https://github.com/x-tag/flipbox)
 
 * Similar to slidebox, but with a perspective flip effect.
 * May be combinable with slidebox and accessed via an option
 
-### ['Shiftbox' ('Hamburger')](https://github.com/x-tag/shiftbox)
+### ['Deck' ('Cycle'/'Gallery')](component/deck)
 
-* When triggered (via a swipe or button), content slides to reveal a menu.
-* Content does not fully slide out of the viewport.
-* May contain top level navigation
-
-### ['Shuffledeck' ('Cycle'/'Gallery')](https://github.com/mozilla/app-components/tree/master/shuffledeck)
-
-* Somewhat like a combination of slidebox and flipbox
-* A box in which slides can be cycled independently of order with a variety of different transitions
+* Like a combination of slidebox and flipbox
+* A gallery box in which slides can be cycled in and out independently, with a variety of different transitions
 * Transition types can be switched and overridden on the fly, allowing for a 
   variety of different entrance/exits
 
 ### ['Modal' (Overlay)](https://github.com/x-tag/modal)
 
-* Content container that appears over current view context
-* Blocks interaction with underlying content
+* Content container that appears over current view context, similar to a popup overlay.
+* Blocks interaction with underlying content, but can be dismissed by clicking outside the modal
 
-### ['Tooltip' (Callout)](https://github.com/mozilla/app-components/tree/master/tooltip)
+### ['Tooltip' (Callout)](component/tooltip)
 
 * Content container that appears over current view context
 * Associated with a trigger element in the underlying content
 * Does not necessarily block interaction with underlying content
-* Interacting with underlying content would dismiss the tooltip.
 
 ## Content Components
 
-### [Switch](https://github.com/x-tag/switch)
+### [Calendar](component/calendar)
 
-* Visual style/design for an important boolean option
-* e.g. on/off switch
+* A calendar widget based on/extended from [fortnight.js](https://github.com/potch/fortnight.js), but in a web component format
+* Simple instantiation, with API hooks to allow flexible use cases such as an event-managing calendar (see demo)
+
+### [Datepicker](component/datepicker)
+
+* A polyfill for &lt;input type='date'&gt;, regardless of native browser support for date inputs
+* Ability to select a date and submit its ISO string to a server
+* Extends upon x-calendar to provide a calendar view
+
+### [Icon Button](component/iconbutton)
+
+* A simple UI component that creates a button with both an icon and a label
+* Allows multiple anchor locations of the icon and saves the developer from the headache of correctly CSS-centering contents
+
+### [Slider](component/slider)
+
+* Polyfill on top of &lt;input type='range'&gt;, providing a consistent UI regardless of whether type="range" is supported or not.
 
 ### [Toggle](https://github.com/x-tag/toggle)
 
-* Unifies checkboxes and radios - devs just code, we figure out the shiz
+* Unifies checkboxes and radios into a single consistent UI component
 
-### [Togglegroup (aka Option Bar)](https://github.com/mozilla/app-components/tree/master/togglegroup)
+### [Togglegroup (aka Option Bar)](component/togglegroup)
 
 * A set of associated options of which only one can be selected at a time
 * Designed to appear as a cohesive set
 * Essentially several Toggles with the appearance of option buttons
-
-### [Calendar](https://github.com/mozilla/app-components/tree/master/calendar)
-
-* A calendar widget based on/extended from [fortnight.js](https://github.com/potch/fortnight.js), but as an x-tag component form
-* Simple instantiation, with API hooks to allow flexible use cases such as an event-managing calendar (see demo)
-
-### [Date Selection](https://github.com/mozilla/app-components/tree/master/datepicker)
-
-* Triggered by an input type='date'
-* Ability to select a date and submit its ISO string to a server
-* Extends upon x-calendar to provide a calendar view
-
-### [Map](https://github.com/x-tag/map)
-
-* An easy-to-instantiate HTML5 Map component, requiring only an API key to activate
-* propose using http://leafletjs.com/ to power it under the hood
-* This is a heavier component, requiring much more JS to include. May be an optional component for the set.
-
-### [Spinner](https://github.com/x-tag/spinner)
-
-* Simple indicator to show that an action is in progress
-
-### [Slider](https://github.com/mozilla/app-components/tree/master/slider)
-
-* Polyfill on top of input type='range', providing a consistent UI regardless of whether type="range" is supported or not.
-
-
-### [Icon Buttons](https://github.com/mozilla/app-components/tree/master/iconbutton)
-
-* Creates a button with both an icon and a label
