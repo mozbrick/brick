@@ -18,6 +18,8 @@ x-slider{
         
         width: 100%;
         min-height: 100%;
+
+        background: transparent;
     }
     
     &[polyfill]{
@@ -37,7 +39,6 @@ x-slider{
             display: inline-block;
             
             background-color: transparent;
-            
             /* use CSS to draw a trackbar in the background of the input */
             background-size: 100% 3px;
             background-repeat: no-repeat;

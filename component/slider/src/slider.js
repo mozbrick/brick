@@ -205,7 +205,6 @@
         var oldValue = slider.value;
         var newValue = _fractionToCorrectedVal(slider, 
                                               inputClickX / inputOffsets.width);
-        
         slider.value = newValue;
         
         // fire events
@@ -329,7 +328,7 @@
             // function to call when the polyfill slider receives key inputs,
             // allowing keyboard controls
             "onKeyDown": function(e){
-                var keyCode = e.key || e.keyCode;
+                var keyCode = e.keyCode;
                 if(keyCode in KEYCODES){
                     var oldVal = this.value;
                     var min = this.min;
@@ -428,11 +427,11 @@
         events: {
             'change:delegate(input[type=range])': function(e){
                 e.stopPropagation();
-                xtag.fireEvent(e.currentTarget, "input");
+                xtag.fireEvent(e.currentTarget, "change");
             },
             'input:delegate(input[type=range])': function(e){
                 e.stopPropagation();
-                xtag.fireEvent(e.currentTarget, "change");
+                xtag.fireEvent(e.currentTarget, "input");
             },
             // note that focus/blur events don't bubble by default, so 
             // in order for users to attach listeners to the x-slider focus

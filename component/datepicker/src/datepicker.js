@@ -198,7 +198,7 @@
             },
 
             "keypress:delegate(.x-datepicker-polyfill-input)": function(e){
-                var keyCode = e.key || e.keyCode;
+                var keyCode = e.keyCode;
                 if(keyCode === ENTER_KEYCODE){
                      // send parsed version to ensure that text of input matches
                     _updateDatepicker(e.currentTarget, true);

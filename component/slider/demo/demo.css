@@ -14,13 +14,16 @@
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    text-align: center;
+    background: inherit;
 }
 
-.demo > form{
+#form-demo .demo > form{
     box-shadow: 1px 1px 4px grey;
     background-color: rgba(255,255,255,0.5);
+    background-image: none;
     padding: 0.5em;
 }
-.demo > form > x-slider{
+#form-demo .demo > form > x-slider{
     width: 100%;
 }

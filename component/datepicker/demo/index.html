@@ -99,7 +99,7 @@
 
             xtag.addEvent(document, "keypress:delegate(x-datepicker)", function(e){
                 // for demo, prevent submitting form with enter
-                var keyCode = e.key || e.keyCode;
+                var keyCode = e.keyCode;
                 if(keyCode === ENTER_KEYCODE){
                     e.preventDefault();
                 }
