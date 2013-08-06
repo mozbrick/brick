@@ -39,6 +39,7 @@ x-datepicker {
     margin-top: -1px;
     box-shadow: 1px 1px 4px grey;
     min-width: 100%;
+    max-width: none;
     z-index: 999999999; }
   x-datepicker[polyfill] > .x-datepicker-input {
     display: none !important; }

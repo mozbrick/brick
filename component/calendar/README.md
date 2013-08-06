@@ -120,11 +120,11 @@ If not given, defaults to 0 (ie: Sunday).
 
 **Note:** Changing this rerenders the calendar
 
-## ___disable-ui-toggle___ / ___disableUIToggle___
+## ___notoggle___ / ___noToggle___
 
 If set, the default date-toggling behavior of the UI is disabled. However, dates can still be programmatically chosen/toggled.
 
-Can be set with the `disable-ui-toggle` attribute or programmatically with the `disableUIToggle` property.
+Can be set with the `notoggle` attribute or programmatically with the `noToggle` property.
 
 # Accessors
 

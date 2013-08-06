@@ -1235,7 +1235,7 @@
         xCalendar.xtag.dragStartEl = day;
         xCalendar.xtag.dragAllowTap = true;
 
-        if(!xCalendar.disableUIToggle){
+        if(!xCalendar.noToggle){
             xtag.fireEvent(xCalendar, toggleEventName,
                            {detail: {date: dateObj, iso: isoDate}});
         }
@@ -1258,7 +1258,7 @@
             xCalendar.xtag.dragAllowTap = false;
         }
 
-        if(!xCalendar.disableUIToggle){
+        if(!xCalendar.noToggle){
             // trigger a selection if we enter a nonchosen day while in
             // addition mode
             if(xCalendar.xtag.dragType === DRAG_ADD && 
@@ -1568,8 +1568,8 @@
 
             // handles if the x-calendar allows dates to be chosen or not
             // ie: if set, overrides default chosen-toggling behavior of the UI
-            disableUIToggle: {
-                attribute: {boolean: true, name: "disable-ui-toggle"},
+            noToggle: {
+                attribute: {boolean: true, name: "notoggle"},
                 set: function(toggleDisabled){
                     if(toggleDisabled){
                         this.chosen = null;
