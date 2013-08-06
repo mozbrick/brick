@@ -2,299 +2,211 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Brick: x-deck demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="../../../site/css/main.css"/>
     <link rel="stylesheet" type="text/css" href="demo.css"/>
 </head>
 <body>
-    <article>
-        <header><h1>x-deck demo</h1></header>
-        <figure class="demo">
-            <x-deck id="demo-box">
-                <x-card>0</x-card>
-                <x-card>1</x-card>
-                <x-card>2</x-card>
-                <x-card>3</x-card>
-                <x-card>4</x-card>
-            </x-deck>
-        </figure>
-
-        <div id="demo-controls">
-            <button onclick="getDemoBox().shufflePrev('reverse')"><-- Shuffle Prev</button>
-            <button onclick="getDemoBox().shuffleNext('forward')">Shuffle Next --></button>
-            <br/>
-            <button onclick="nextType()">change transition type</button>
-            <button onclick="addCard()">Add card</button>
-            <button onclick="addCard(true)">Add card with transition-override</button>
-            <button onclick="removeCard(0)">Remove first card</button>
-            <button onclick="removeCard()">Remove last card</button>
-            <h3>Markup for recreating this deck:</h3>
-            <pre id="markup-box" class="prettyprint codebox"></pre>
-            <h3>(some) Properties:</h3>
-            <div id="property-wrap" class="codebox">
-                <code id="selected-index-label" class="prettyprint"></code>
-                <code id="transition-type-label" class="prettyprint"></code>
-                <code id="count-label" class="prettyprint"></code>
-            </div>
-            
-            <br/>
-            <button onclick="getDemoBox().shuffleTo(2)">shuffleTo 2 (default)</button>
-            <button onclick="getDemoBox().shuffleTo(2, 'auto')">shuffleTo 2 (auto)</button>
-            <button onclick="getDemoBox().shuffleTo(2, 'forward')">shuffleTo 2 (always forwards)</button>
-            <button onclick="getDemoBox().shuffleTo(2, 'reverse')">shuffleTo 2 (always reverse)</button>
-            <button onclick="triggerShow(2)">Trigger show event on 2</button>
-            <button onclick="callShow(2)">Call .show() on 2</button>
-            <button onclick="editSelectedIndex(2)">Set selected index to 2</button>
-            <br/>
-            <button onclick="getDemoBox().historyBack()"><-- Back in History</button>
-            <span id="history-status"></span>
-            <button onclick="getDemoBox().historyForward()">Forward in History --></button>
+<article>
+    <header><h1>x-deck</h1></header>
+    <p><code class="prettyprint">&lt;x-deck&gt;</code>s are components that act similarly to slideshows or galleries where cards can be cycled independently of order with a variety of different transitions.</p>
+    <section class="demo-wrap">
+        <header><h2>Basic usage</h2></header>
+        <p>For basic transitions between <code class="prettyprint">&lt;x-card&gt;</code>s, simply call the <code class="prettyprint">.shufflePrev()</code> and <code class="prettyprint">.shuffleNext()</code> methods of the <code class="prettyprint">&lt;x-deck&gt;</code>.</p>
+        <p>Users can also call <code class="prettyprint">.shuffleTo(index)</code> if they already know the index of the target card in the deck.</p>
+        <div class="two-up">
+            <figure class="demo">
+                <x-deck>
+                    <x-card>
+                        0<span>I'm the first card!</span>
+                    </x-card>
+                    <x-card>
+                        1<code>These cards can contain any markup!<br/><img src="grounds_keeping_it_real_s3.gif"/><img src="grounds_keeping_it_real_s1.gif"/><img src="grounds_keeping_it_real_s2.gif"/></code>
+                    </x-card>
+                    <x-card>
+                        2<img src="thumbs_up.gif"/>
+                    </x-card>
+                </x-deck>
+            </figure>
         </div>
-    </article>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton prev">Previous card</button>
+            <button class="prettybutton next">Next card</button>
+            <button class="prettybutton shuffleto" target=1>Shuffle to card 1</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">// assume prevButton, nextButton, toButton, and deck<br/>//are already defined as their respective DOM elements<br/>prevButton.addEventListener(&quot;click&quot;, function(){<br/>    deck.shufflePrev();<br/>});<br/>nextButton.addEventListener(&quot;click&quot;, function(){<br/>    deck.shuffleNext();<br/>});<br/>toButton.addEventListener(&quot;click&quot;, function(){<br/>    deck.shuffleTo(1);<br/>});</pre>
+        </div>
+    </section>
+
+    <section class="demo-wrap">
+        <header><h2>Specifying animation direction</h2></header>
+        <p>The <code>.shufflePrev()</code>, <code>.shuffleNext()</code>, and <code>.shuffleTo()</code> methods can also be called with an optional direction parameter of either <code>"forward"</code> or <code>"reverse"</code> to specify how animations should progress. If this parameter is <code>"auto"</code> or not given, we automatically choose an animation direction depending on whether the new card is ahead of or behind the current card in the deck.</p>
+        <div class="two-up">
+            <figure class="demo">
+                <x-deck>
+                    <x-card>0<span>First</span></x-card>
+                    <x-card>1<span>Second</span></x-card>
+                    <x-card>2<span>Third</span></x-card>
+                    <x-card>3<span>Fourth</span></x-card>
+                    <x-card>4<span>Fifth</span></x-card>
+                </x-deck>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h4>Automatic animation direction</h4>
+            <button class="prettybutton prev"><code>.shufflePrev()</code></button>
+            <button class="prettybutton next"><code>.shuffleNext()</code></button>
+            <button class="prettybutton shuffleto" target=1><code>.shuffleTo(1)</code></button>
+            <h4>Reverse animation direction</h4>
+            <button class="prettybutton prev reverse"><code>.shufflePrev("reverse")</code></button>
+            <button class="prettybutton next reverse"><code>.shuffleNext("reverse")</code></button>
+            <button class="prettybutton shuffleto reverse" target=1><code>.shuffleTo(1, "reverse")</code></button>
+            <h4>Forward animation direction</h4>
+            <button class="prettybutton prev forward"><code>.shufflePrev("forward")</code></button>
+            <button class="prettybutton next forward"><code>.shuffleNext("forward")</code></button>
+            <button class="prettybutton shuffleto forward" target=1><code>.shuffleTo(1, "forward")</code></button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+        </div>
+    </section>
+
+    <section class="demo-wrap">
+        <header><h2>Specifying deck transitions: <code>transition-type</code></h2></header>
+        <p>The <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute controls how all cards in the deck animate in and out.</p>
+        <p>Valid options: 
+            <code>
+                scrollLeft,
+                scrollUp,
+                scrollRight,
+                scrollDown,
+                flipX,
+                flipY,
+                coverLeft,
+                coverUp,
+                coverRight,
+                coverDown,
+                uncoverLeft,
+                uncoverUp,
+                uncoverRight,
+                uncoverDown,
+                none
+            </code>
+        </p>
+
+        <div class="two-up">
+            <figure class="demo">
+                <x-deck class="simple-deck" transition-type="scrollLeft">
+                    <x-card>0</x-card>
+                    <x-card>1</x-card>
+                    <x-card>2</x-card>
+                    <x-card>3</x-card>
+                    <x-card>4</x-card>
+                </x-deck>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton prev">Previous card</button>
+            <button class="prettybutton transition-type">Change <code>transition-type</code></button>
+            <button class="prettybutton next">Next card</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">// assume transitionButton and deck are already<br/>// defined as their respective DOM elements<br/>var types = [<br/>    &quot;scrollLeft&quot;, &quot;scrollUp&quot;, &quot;scrollRight&quot;, &quot;scrollDown&quot;,<br/>    &quot;flipX&quot;, &quot;flipY&quot;, <br/>    &quot;coverLeft&quot;, &quot;coverUp&quot;, &quot;coverRight&quot;, &quot;coverDown&quot;,<br/>    &quot;uncoverLeft&quot;, &quot;uncoverUp&quot;, &quot;uncoverRight&quot;, &quot;uncoverDown&quot;,<br/>    &quot;none&quot;<br/>];<br/>transitionButton.addEventListener(&quot;click&quot;, function(){<br/>    var oldType = deck.transitionType;<br/>    deck.transitionType = types[(types.indexOf(oldType)+1) % type.length];<br/><br/>    // force animation to make visible for demo<br/>    deck.shuffleNext(&quot;forward&quot;);<br/>});</pre>
+        </div>
+    </section>
+
+    <section class="demo-wrap">
+        <header><h2>Specifying card-specific animations: <code>transition-override</code></h2></header>
+        <p>While the <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute changes the animation of all cards, it is also possible to specify how a specific <code class="prettyprint">&lt;x-card&gt;</code> animates when entering the deck with the <code>transition-override</code> attribute.</p>
+        <p>An <code class="prettyprint">&lt;x-card&gt;</code>'s <code>transition-override</code> attribute can take any of the same values as the <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute.
+        </p>
+
+        <div class="two-up">
+            <figure class="demo">
+                <x-deck class="simple-deck" transition-type="scrollLeft">
+                    <x-card>0</x-card>
+                    <x-card transition-override="flipX">1</x-card>
+                    <x-card>2</x-card>
+                </x-deck>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton prev">Previous card</button>
+            <button class="prettybutton next">Next card</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+        </div>
+    </section>
+
+    <section class="demo-wrap">
+        <header><h2>Adding and removing cards</h2></header>
+        <p>To add or remove <code class="prettyprint">&lt;x-card&gt;</code>s from a deck, simply use <code class="prettyprint">.appendChild()</code> or <code>.removeChild()</code> in the same way that any other DOM node would be added/removed.
+        </p>
+
+        <div class="two-up">
+            <figure class="demo">
+                <x-deck class="simple-deck">
+                    <x-card>0</x-card>
+                    <x-card>1</x-card>
+                    <x-card>2</x-card>
+                </x-deck>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton prev">Previous card</button>
+            <button class="prettybutton next">Next card</button>
+            <button class="prettybutton add">Add card</button>
+            <button class="prettybutton remove">Remove card</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+        </div>
+    </section>
+
+    <section class="demo-wrap">
+        <header><h2>Styling deck appearances</h2></header>
+        <p>Styling the <code class="prettyprint">&lt;x-deck&gt;</code> and <code class="prettyprint">&lt;x-card&gt;</code> elements can be done like any other DOM elements. However, the deck also provides some CSS selectors to customize how cards appear during animations.</p>
+        <p>To style how a card appears as it is transitioning out of the deck, apply styles to <code class="prettyprint">x-card[leaving]</code></p>
+        <p>To style how a card appears when it is specifically selected in the deck, apply styles to <code class="prettyprint">x-card[selected]</code></p>
+
+        <div class="two-up">
+            <figure class="demo">
+                <x-deck id="custom-styles" class="simple-deck">
+                    <x-card>0</x-card>
+                    <x-card>1</x-card>
+                    <x-card>2</x-card>
+                </x-deck>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton prev">Previous card</button>
+            <button class="prettybutton next">Next card</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+            <h3>Styling</h3>
+            <pre class="prettyprint css">#custom-styles x-card[leaving]{<br/>    text-shadow: none;<br/>    background-color: grey!important;<br/>    color: #ccc;<br/>    opacity: 0.6;<br/>}<br/><br/>#custom-styles x-card[selected]:after{<br/>    content: &quot;(selected)&quot;;<br/>    display: block;<br/>    font-size: .2em;<br/>}</pre>
+        </div>
+    </section>
+</article>
+
+<script type="text/javascript" src="../../../dist/brick.js"></script>
+<script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="demo.js"></script>
+<script>
+document.addEventListener('DOMComponentsLoaded', function(){
+    xtag.addEvent(document, 'shufflestart:delegate(x-deck)', function(e){
+        console.log("shufflestart", e, "detected on", this);
+    });
     
-    <script type="text/javascript" src="../../../dist/brick.js"></script>
-    <script type="text/javascript" src="../../../site/js/prettify.js"></script>
-    <script>
-        function cleanHtmlSource(html, ignoreAttrs){
-            // remove any attributes given in parameter, but only if they are
-            // actually in a tag
-            if(ignoreAttrs && ignoreAttrs.length){
-                // no global flag, or we will over-skip through string
-                var attrIgnoreRegex = new RegExp("(<[^>]*?\\s)(("+
-                                                 ignoreAttrs.join("|")+
-                                                 ")=\".*?\"\\s?)([^<]*?>)");
-                var match = attrIgnoreRegex.exec(html);
-                while(match){
-                    html = html.substr(0, match.index) + match[1] + match[4] + 
-                           html.substr(match.index + match[0].length);
-                    match = attrIgnoreRegex.exec(html);
-                }
-                html = html.replace(/\s*>/g, ">");
-            }
-            
-            // find the least amount of tabbing and dedent each line by that much
-            var tabRegex = /\n(\s*?)(\S|\n)/g;
-            var spacing = tabRegex.exec(html);
-            if(spacing){
-                var shortest = spacing[1].length;
-                while(spacing){
-                    if(spacing[1].length < shortest){
-                        shortest = spacing[1].length;
-                    }
-                    spacing = tabRegex.exec(html);
-                }
-                if(shortest > 0){
-                    var dedentRegex = new RegExp("\\n\\s{"+shortest+"}", "g");
-                    html = html.replace(dedentRegex, "\n");
-                }
-            }
-            // trim spacing from start/end of markup
-            html = html.replace(/^\s*\n/, "");
-            html = html.replace(/\n\s*$/, "");
-            return html;
-        }
-
-        function updateCodeBox(isInit){
-            var demoBox = getDemoBox();
-            var sourceBox = document.getElementById("markup-box");
-
-            sourceBox.innerHTML = "";
-            var ignoreAttrs = ["style","card-anim-type","before-animation",
-                                "reverse","selected","leaving"];
-            // let markup reflect fact that selected-index isn't required for
-            // initialization
-            if(isInit){
-                ignoreAttrs.push("selected-index");
-            }
-
-            var newHtml = cleanHtmlSource(demoBox.outerHTML, ignoreAttrs);
-            // prettify html spacing for dynamically added elements
-            newHtml = newHtml.replace(/>(\s*)<x-card/g, ">\n    <x-card");
-            newHtml = newHtml.replace(/>(\s*)<\/x-deck/g, ">\n</x-deck");
-
-            sourceBox.textContent = newHtml;
-            xtag.removeClass(sourceBox, "prettyprinted");
-        }
-
-        function randomColor(alpha){
-            var _randomVal = function(){
-                return Math.floor(Math.random() * 256);
-            }
-            var type = (alpha) ? "rgba" : "rgb";
-            var alphaStr = (alpha) ? ","+alpha : "";
-            
-            return type+"("+_randomVal()+","+_randomVal()+","+_randomVal()+alphaStr+")";
-        }
-        
-        function getDemoBox(){
-            return document.getElementById("demo-box");
-        }
-
-        var transitionTypes = [
-            "scrollLeft", "scrollUp", "scrollRight", "scrollDown",
-            "flipX", "flipY", 
-            "coverLeft", "coverUp", "coverRight", "coverDown",
-            "uncoverLeft", "uncoverUp", "uncoverRight", "uncoverDown",
-            "none"
-        ];
-        
-        document.addEventListener('DOMComponentsLoaded', function(){
-            xtag.query(document, "x-card").forEach(function(card){
-                card.style.backgroundColor = randomColor();
-            });
-            
-            var demoBox = getDemoBox();
-            
-            demoBox.addEventListener('shufflestart', function(e){
-                console.log("shufflestart", e);
-                updateStatuses();
-            });
-            
-            demoBox.addEventListener('shuffleend', function(e){
-                console.log("shuffleend", e);
-                updateStatuses();
-            });
-            
-            xtag.query(document, "button").forEach(function(button){
-                button.addEventListener("click", function(){
-                    updateStatuses();
-                });
-            });
-            updateStatuses(true);
-        }, false);
-        
-        function editSelectedIndex(index){
-            var demoBox = getDemoBox();
-            demoBox.selectedIndex = index;
-            updateStatuses();
-        }
-    
-        function triggerShow(index){
-            var demoBox = getDemoBox();
-            var card = demoBox.getCardAt(index);
-            xtag.fireEvent(card, "show");
-            updateStatuses();
-        }
-    
-        function callShow(index){
-            var demoBox = getDemoBox();
-            var card = demoBox.getCardAt(index);
-            card.show();
-        }
-        
-        function updateStatuses(isInit){
-            updateCountBox();
-            updateHistoryControls();
-            updateSelectedStatus();
-            updateTypeStatus();
-            updateCodeBox(isInit);
-            prettyPrint();
-        }
-
-        function updateTypeStatus(){
-            var demoBox = getDemoBox();
-            var typeStatus = document.getElementById("transition-type-label");
-            typeStatus.textContent = '.transitionType -> "'+demoBox.transitionType+'"';
-            xtag.removeClass(typeStatus, "prettyprinted");
-        }
-        
-        function updateSelectedStatus(){
-            var demoBox = getDemoBox();
-            var statusBox = document.getElementById("selected-index-label");
-            statusBox.textContent = ".selectedIndex -> " + demoBox.selectedIndex;
-            xtag.removeClass(statusBox, "prettyprinted");
-        }
-
-        function updateCountBox(){
-            var demoBox = getDemoBox();
-            document.getElementById("count-label").textContent = ".numCards -> "+demoBox.getAllCards().length;
-        }
-        
-        function updateHistoryControls(){
-            var demoBox = getDemoBox();
-            var statusBox = document.getElementById("history-status");
-            var backButton = statusBox.previousElementSibling;
-            var nextButton = statusBox.nextElementSibling;
-            
-            var size = demoBox.currHistorySize;
-            var currIndex = demoBox.currHistoryIndex;
-            
-            statusBox.textContent = "(index " + currIndex+") " + 
-                                    "State #" + (currIndex+1) +
-                                    " out of " + size +
-                                    " (max " + demoBox.historyCap + ")";
-            
-            (currIndex > 0) ? backButton.removeAttribute("disabled") : 
-                              backButton.setAttribute("disabled", true);
-                              
-            (currIndex < size-1) ? nextButton.removeAttribute("disabled") : 
-                                   nextButton.setAttribute("disabled", true);      
-        }
-        
-        // changes the transition type of deck
-        function nextType(){
-            var demoBox = getDemoBox();
-            var oldType = demoBox.transitionType;
-            
-            var types = transitionTypes;
-                         
-            var typeIndex = types.indexOf(oldType);
-
-            if(typeIndex < 0){
-                throw "invalid type " + oldType;
-                return;
-            }
-            
-            var newType = types[(typeIndex+1) % types.length];
-            
-            //demoBox.transitionType = newType;
-            demoBox.setAttribute("transition-type", newType);
-            
-            demoBox.shuffleNext("forward");
-        }
-        
-        function addCard(addOverride){
-            var demoBox = getDemoBox();
-            var numCards = demoBox.getAllCards().length;
-            
-            var newCard = document.createElement("x-card");
-            newCard.style.backgroundColor = randomColor();
-            
-            newCard.textContent = String(numCards);
-            
-            if(addOverride){
-                var overrideType = (transitionTypes.length) ?
-                                    transitionTypes[
-                                        Math.floor(Math.random() * 
-                                                   transitionTypes.length)
-                                    ] : "none";
-                newCard.transitionOverride = overrideType;
-            }
-            
-            demoBox.appendChild(newCard);
-            
-            var allCards = demoBox.getAllCards();
-            console.log("Added card labeled", allCards.indexOf(newCard));
-            
-            demoBox.shuffleTo(allCards.indexOf(newCard));
-        }
-        
-        function removeCard(index){
-            var demoBox = getDemoBox();
-            var allCards = demoBox.getAllCards();
-            if(index !== undefined && index < allCards.length){
-                var removeCard = demoBox.getCardAt(index);
-                demoBox.removeChild(removeCard);
-            }
-            else if (allCards.length > 0){
-                var lastCard = allCards[allCards.length - 1];
-                
-                demoBox.removeChild(lastCard);
-            }
-        }
-    </script>
+    xtag.addEvent(document, 'shuffleend:delegate(x-deck)', function(e){
+        console.log("shuffleend", e, "detected on", this);
+    });
+});
+</script>
 </body>
 </html>

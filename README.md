@@ -15,7 +15,7 @@ That's it! It really is that easy.
 
 #Installation
 
-Prebuilt versions of the entire library are provided in <code>dist/brick.css</code> and <code>dist/brick.js</code>, and be included in your project like any other CSS/JavaScript file.
+Prebuilt versions of the entire library are provided in <code>dist/brick.css</code> and <code>dist/brick.js</code>, and should be included in your project like any other CSS/JavaScript file.
 
 In the near future, compartmentalized releases of specific components will be released in their respective folders under <code>dist</code>, allowing you to pick and choose what components you want. (Do not use these yet, as dependencies have not been created yet.)
 

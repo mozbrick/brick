@@ -54,7 +54,7 @@ x-deck{
         display: block;
         
         overflow: hidden;
-        position: absolute;
+        position: absolute!important;
         
         @include animated(transform, 0.5s, ease, 0s);
         @include backfaceVisibility(hidden);
@@ -92,23 +92,23 @@ x-deck{
             &:not([reverse]){
                 // initial positions for animation
                 &#{$newStartingSelector}{
-                    @include transformed(rotateX(-180deg));
+                    @include transformed(rotateX(180deg)!important);
                 }
                 
                 // target positions for animation
                 &#{$oldEndingSelector}{
-                    @include transformed(rotateX(180deg));
+                    @include transformed(rotateX(-180deg)!important);
                 }
             }
             &[reverse]{
                 // initial positions for animation
                 &#{$newStartingSelector}{
-                    @include transformed(rotateX(180deg));
+                    @include transformed(rotateX(-180deg)!important);
                 }
                 
                 // target positions for animation
                 &#{$oldEndingSelector}{
-                    @include transformed(rotateX(-180deg));
+                    @include transformed(rotateX(180deg)!important);
                 }
             }
         }
@@ -117,23 +117,23 @@ x-deck{
             &:not([reverse]){
                 /* initial positions for animation */
                 &#{$newStartingSelector}{
-                    @include transformed(rotateY(180deg));
+                    @include transformed(rotateY(180deg)!important);
                 }
                 
                 // target positions for animation
                 &#{$oldEndingSelector}{
-                    @include transformed(rotateY(-180deg));
+                    @include transformed(rotateY(-180deg)!important);
                 }
             }
             &[reverse]{
                 // initial positions for animation
                 &#{$newStartingSelector}{
-                    @include transformed(rotateY(-180deg));
+                    @include transformed(rotateY(-180deg)!important);
                 }
                 
                 // target positions for animation
                 &#{$oldEndingSelector}{
-                    @include transformed(rotateY(180deg));
+                    @include transformed(rotateY(180deg)!important);
                 }
             }
         }
@@ -287,99 +287,99 @@ x-deck{
 %scrollLeftAnim{
     // initial positions for animation
     &#{$newStartingSelector}{
-        @include transformed(translateX(100%));
+        @include transformed(translateX(100%)!important);
     }
     
     // target positions for animation
     &#{$oldEndingSelector}{
-        @include transformed(translateX(-100%));
+        @include transformed(translateX(-100%)!important);
     }
 }
 
 %scrollRightAnim{
     // initial positions for animation
     &#{$newStartingSelector}{
-        @include transformed(translateX(-100%));
+        @include transformed(translateX(-100%)!important);
     }
 
     // target positions for animation
     &#{$oldEndingSelector}{
-        @include transformed(translateX(100%));
+        @include transformed(translateX(100%)!important);
     }
 }
 
 %scrollUpAnim{
     // initial positions for animation
     &#{$newStartingSelector}{
-        @include transformed(translateY(100%));
+        @include transformed(translateY(100%)!important);
     }
     
     // target positions for animation
     &#{$oldEndingSelector}{
-        @include transformed(translateY(-100%));
+        @include transformed(translateY(-100%)!important);
     }
 }
 
 %scrollDownAnim{
     // initial positions for animation
     &#{$newStartingSelector}{
-        @include transformed(translateY(-100%));
+        @include transformed(translateY(-100%)!important);
     }
 
     // target positions for animation
     &#{$oldEndingSelector}{
-        @include transformed(translateY(100%));
+        @include transformed(translateY(100%)!important);
     }
 }
 
 %coverLeftAnim{
     &#{$newStartingSelector}{
-        @include transformed(translateX(100%));
+        @include transformed(translateX(100%)!important);
     }
 }
 
 %coverRightAnim{
     &#{$newStartingSelector}{
-        @include transformed(translateX(-100%));
+        @include transformed(translateX(-100%)!important);
     }
 }
 
 %coverUpAnim{
     &#{$newStartingSelector}{
-        @include transformed(translateY(100%));
+        @include transformed(translateY(100%)!important);
     }
 }
 
 %coverDownAnim{
     &#{$newStartingSelector}{
-        @include transformed(translateY(-100%));
+        @include transformed(translateY(-100%)!important);
     }
 }
 
 %uncoverLeftAnim{
     @include swappedCardOrder;  
     &#{$oldEndingSelector}{
-        @include transformed(translateX(-100%));
+        @include transformed(translateX(-100%)!important);
     }
 }
 
 %uncoverRightAnim{
     @include swappedCardOrder;  
     &#{$oldEndingSelector}{
-        @include transformed(translateX(100%));
+        @include transformed(translateX(100%)!important);
     }
 }
 
 %uncoverUpAnim{
     @include swappedCardOrder;  
     &#{$oldEndingSelector}{
-        @include transformed(translateY(-100%));
+        @include transformed(translateY(-100%)!important);
     }
 }
 
 %uncoverDownAnim{
     @include swappedCardOrder;  
     &#{$oldEndingSelector}{
-        @include transformed(translateY(100%));
+        @include transformed(translateY(100%)!important);
     }
 }

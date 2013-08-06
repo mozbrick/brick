@@ -170,6 +170,7 @@ a:hover {
 
 .markup-wrap pre.prettyprint,
 .markup-wrap .code-box{
+    text-align: left;
     margin: 0;
     width: 100%;
     max-height: 20em;
@@ -240,6 +241,10 @@ a:hover {
 
   header h1{
     font-size: 300%;
+  }
+
+  .markup-wrap{
+    text-align: center;
   }
 }
 

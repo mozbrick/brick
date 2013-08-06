@@ -1,95 +1,62 @@
-/** Defining custom styles:
-
-    Besides applying custom styles to the x-deck and x-cards
-    themselves, you can define styles for the following selectors to 
-    determine how the widget appears during animations
-    
-    x-card[leaving]  => defines how a card looks when in the middle
-                         of transitioning out of frame
-    x-card[selected] => defines how the currently selected card looks
-**/
-
-html, body{
-    width: 100%;
-    height: 100%;
-    overflow: auto;
+x-deck{
+    background: #000;
 }
 
-#demo-controls{
-    text-align: center;
-}
-
-#demo-box{
-    margin: 0 auto;
-    
-    width: 100%;
-    height: 100%;
-    border: 4px solid grey;
-    background-color: #333;
-}
-
-#demo-box x-card{
-    text-align:center;
-    font-size: 5em;
+x-deck > x-card{
+    color: #fff;
+    font-size: 2em;
     line-height: 1em;
-    padding: 50% 0;
+    font-weight: bold;
+    text-shadow: 1px 1px 4px grey;
 }
 
-#demo-box x-card[transition-override]:after{
-    content: "transition-override = " attr(transition-override);
-    font-size: .25em;
-    line-height: 1em;
-    display: block;
-}
-
-#demo-box x-card[leaving]:before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.3);
-}
-
-#demo-box x-card[selected]{
-    color: white;
-    text-shadow: 1px 1px 10px black;
-}
-
-#demo-box x-card:nth-child(odd){
+x-card:nth-child(odd){
     background-image: url("../../../site/img/cream_pixels_overlay.png");
     background-repeat: repeat;
 }
 
-#demo-box x-card:nth-child(even){
+x-card:nth-child(even){
     background-image: url("../../../site/img/retina_wood_overlay.png");
     background-repeat: repeat;
 }
 
-body .codebox{
-    display: inline-block;
-    max-height: 15em;
-    max-width: 100%;
-    overflow:auto;
-    margin: 0 auto;
-    padding: .5em;
-    padding-right: 1.5em;
-    text-align: left;
+x-card > *:only-child{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
-#property-wrap{
-    border: 1px solid grey;
+x-card img{
+    border-radius: 4px;
+    margin: 1px;
 }
 
-#property-wrap code{
+.simple-deck x-card{
+    font-size: 6.5em;
+    padding-top: 50%;
+    text-align: center;
+}
+
+.simple-deck x-card[transition-override]:after{
+    content: 'transition-override = ' attr(transition-override);
+    font-size: .15em;
     display: block;
-    text-align: left;
-    white-space: nowrap;
 }
 
-@media screen and (max-width: 800px) {
-    .code-box{
-        font-size: .75em;
-    }
+#custom-styles x-card[leaving]{
+    text-shadow: none;
+    background-color: grey!important;
+    color: #ccc;
+    opacity: 0.6;
+}
+
+#custom-styles x-card[selected]:after{
+    content: "selected";
+    display: block;
+    font-size: .2em;
 }

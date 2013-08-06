@@ -5,9 +5,7 @@ window.addEventListener('DOMComponentsLoaded', function() {
         detail.show();
         detail.querySelector('p').innerHTML = e.target.innerHTML + " details";
     });
-    document.body.addEventListener('click', function(e) {
-        if (e.target.classList.contains('back')) {
-            deck.historyBack();
-        }
-    })
+    xtag.addEvent(document, "click:delegate(.back)", function(e){
+        deck.historyBack();
+    });
 });
