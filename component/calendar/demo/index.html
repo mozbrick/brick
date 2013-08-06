@@ -2,274 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Brick: x-calendar demos</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="../../../site/css/main.css"/>
-    
-    <style>
-        figure{ 
-            text-align: center;
-            margin: 0;
-            clear: both;
-        }
-
-        .custom-styles-demo{
-            background-color: #c5d4e6;
-            font-family: Courier, monospace;
-            font-size: 1.2em;
-        }
-
-        .custom-styles-demo .day{
-            border-radius: 50%;
-            border: 2px solid #fff;
-            background-color: #fff;
-            box-shadow: inset 1px 1px 4px grey;
-        }
-
-        .custom-styles-demo .day.today{
-            border-color: limegreen;
-        }
-
-        .custom-styles-demo .label{
-            font-weight: bold;
-            border-bottom: 1px solid grey;
-            box-shadow: 0 1px 4px grey;
-            margin-bottom: .2em;
-            background-image: url("cream_pixels.png");
-        }
-
-        #custom-events-demo .current{
-            box-shadow: inset 1px 1px 4px grey;
-            
-            background-color: rgba(0, 255, 255, 0.2);
-        }
-
-        #custom-events-demo [has-info]{
-            border-color: cyan;
-            border-style: dashed;
-        }
-
-        #custom-events-demo [has-info]:after{
-            content: "";
-            position: absolute;
-            background-color: cyan;
-            right: 0%;
-            bottom: 0%;
-            width: 25%;
-            height: 25%;
-            border-radius: 50%;
-            -webkit-transform: translate(50%, 50%);
-            -moz-transform: translate(50%, 50%);
-            -o-transform: translate(50%, 50%);
-            transform: translate(50%, 50%);
-        }
-
-        figure code{
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="demo.css"/>
 </head>
 <body>
-    <article>
-        <header>
-            <h1>x-calendar demo</h1>
-        </header>
+<article>
+    <header><h1>x-calendar</h1></header>
+    <p>Provides a simple calendar UI widget</p>
+    <section class="demo-wrap">
+        <header><h2>Basic usage</h2></header>
+        <div class="two-up">
+            <figure class="demo">
+                <x-calendar></x-calendar>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-calendar&gt;&lt;/x-calendar&gt;</pre>
+        </div>
+    </section>
+</article>
 
-        <figure class="two-up">
-            <header><h2>Default:</h2></header>
-            <x-calendar></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>Default with controls:</h2></header>
-            <x-calendar controls></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar controls&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure>
-            <header><h2>With custom span:</h2></header>
-            <x-calendar span=3 controls></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar span=3 controls&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>Starting the week with Monday instead:</h2></header>
-            <x-calendar controls first-weekday-num=1></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar controls first-weekday-num=1&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>With initial view (June) only:</h2></header>
-            <x-calendar view="Jun 9, 2013" controls></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar view=&quot;Jun 9, 2013&quot; controls&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>With initial chosen (July) only:</h2></header>
-            <x-calendar chosen="Jun 4, 2013" controls></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar chosen=&quot;Jun 4, 2013&quot; controls&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>With both initial view (June) and chosen (July):</h2></header>
-            <x-calendar view="Jun 9, 2013" chosen="Jul 4, 2013" controls></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar view=&quot;Jun 9, 2013&quot; chosen=&quot;Jul 4, 2013&quot; controls&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>init with multi chosen (with multiple attribute):</h2></header>
-            <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 17 2013", ["Jun 24, 2013","06/26/2013"]]' controls multiple></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar chosen='[[&quot;Jun 4 2013&quot;, &quot;Jun 10, 2013&quot;], &quot;June 17 2013&quot;, [&quot;Jun 24, 2013&quot;,&quot;06/26/2013&quot;]]' controls multiple&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>init with multi chosen (without multiple attribute):</h2></header>
-            <x-calendar chosen='[["Jun 4 2013", "Jun 10, 2013"], "June 17 2013",  ["Jun 24, 2013","06/26/2013"]]' controls></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar chosen='[[&quot;Jun 4 2013&quot;, &quot;Jun 10, 2013&quot;], &quot;June 17 2013&quot;, [&quot;Jun 24, 2013&quot;,&quot;06/26/2013&quot;]]' controls&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>disable-ui-toggle (see console to see how toggle events no longer occur due to UI interaction)</h2></header>
-            <x-calendar controls disable-ui-toggle></x-calendar>
-            <code class="prettyprint">
-                &lt;x-calendar controls disable-ui-toggle&gt;&lt;/x-calendar&gt;
-            </code>
-        </figure>
-
-        <figure class="two-up">
-            <header><h2>Custom stylings demo:</h2></header>
-            <x-calendar class="custom-styles-demo" controls multiple></x-calendar>
-        </figure>
-
-        <figure id="custom-events-demo" class="two-up">
-            <header><h2>Demo of using API hooks to handle displaying event data (see source for setup JS):</h2></header>
-            <x-calendar controls disable-ui-toggle></x-calendar>
-            <div>
-                <header>Selected Date: <span id="custom-events-date">None</span></h2></header>
-                <textarea id="custom-events-info"></textarea>
-                <button id="custom-events-save" disabled>Update info</button>
-            </div>
-        </figure>
-
-        <figure id="custom-labels-demo" class="two-up">
-            <header><h2>Demo of customizing labels (see source for setup JS):</h2></header>
-            <x-calendar controls first-weekday-num=1></x-calendar>
-        </figure>
-    </article>
-
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-    <script type="text/javascript" src="../../../dist/brick.js"></script>
-    <script>
-        document.addEventListener('DOMComponentsLoaded', function(){
-            xtag.addEvent(document, "prevmonth:delegate(x-calendar)", function(e){
-                console.log("prevmonth detected on", this);
-            });
-
-            xtag.addEvent(document, "nextmonth:delegate(x-calendar)", function(e){
-                console.log("nextmonth detected on", this);
-            });
-
-            xtag.addEvent(document, "datetoggleon:delegate(x-calendar)", function(e){
-                console.log("datetoggleon detected on", this, e.detail);
-            });
-
-            xtag.addEvent(document, "datetoggleoff:delegate(x-calendar)", function(e){
-                console.log("datetoggleoff detected on", this, e.detail);
-            });
-
-            xtag.addEvent(document, "datetap:delegate(x-calendar)", function(e){
-                console.log("datetap detected on", this, e.detail);
-            });
-
-            /** set up custom labels demo **/
-            var customLabelsCal = document.querySelector("#custom-labels-demo x-calendar");
-            customLabelsCal.editLabels({
-                prev: "<<",
-                next: ">>",
-                months: ["janvier", "f\u00E9vrier", "mars", "avril", "mai", 
-                         "juin", "juillet", "ao\u00FBt", "septembre", "octobre", 
-                         "novembre", "d\u00E9cembre"],
-                weekdays: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"]
-            });
-
-
-            /** set up custom event handling demo using provided API hooks **/
-
-            // the dictionary of iso string keys mapped to event data
-            var DATE_INFO = {};
-            var CURR_ISO = null;
-
-            // aliases for DOM manipulation
-            var eventsDemoStage = document.getElementById("custom-events-demo");
-            var eventsCal = eventsDemoStage.querySelector("x-calendar");
-            var eventsDateHeader = document.getElementById("custom-events-date");
-            var eventsInfo = document.getElementById("custom-events-info");
-            var eventsSaveButton = document.getElementById("custom-events-save");
-
-            // define extra styling information for day elements
-            eventsCal.customRenderFn = function(dayEl, date, isoStr){
-                if(isoStr === CURR_ISO){
-                    xtag.addClass(dayEl, "current");
-                }
-                else{
-                    xtag.removeClass(dayEl, "current");
-                }
-
-                if(isoStr in DATE_INFO){
-                    dayEl.setAttribute("has-info", true);
-                }
-                else{
-                    dayEl.removeAttribute("has-info");
-                }
-            }
-
-            // respond to calendar taps
-            xtag.addEvent(eventsCal, "datetap", function(e){
-                var date = e.detail.date;
-                var dateStr = e.detail.iso;
-                var content = (dateStr && dateStr in DATE_INFO) ? 
-                                                DATE_INFO[dateStr] : "";
-                eventsInfo.value = content;
-                eventsInfo.disabled = !dateStr;
-                eventsSaveButton.disabled = !dateStr;
-                CURR_ISO = dateStr;
-                eventsDateHeader.textContent = (dateStr) ? dateStr : "None";
-                eventsCal.toggleDateOn(date);
-                eventsCal.render();
-            });
-
-            xtag.addEvent(eventsSaveButton, "click", function(e){
-                if(CURR_ISO){
-                    if(eventsInfo.value){
-                        DATE_INFO[CURR_ISO] = eventsInfo.value;
-                    }
-                    else{
-                        delete DATE_INFO[CURR_ISO];
-                    }
-                }
-                eventsCal.render();
-            });
-
-        }, false);
-    </script>
+<script type="text/javascript" src="../../../dist/brick.js"></script>
+<script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="demo.js"></script>
+<script>
+document.addEventListener('DOMComponentsLoaded', function(){
+});
+</script>
 </body>
 </html>

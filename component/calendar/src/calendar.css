@@ -23,6 +23,7 @@ x-calendar {
   display: inline-block;
   margin: 0;
   padding: 0;
+  max-width: 100%;
   border: 2px solid #888;
   font-size: 1em;
   font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
@@ -39,14 +40,16 @@ x-calendar {
   x-calendar .calendar {
     position: relative;
     display: inline-block;
-    overflow: hidden; }
+    overflow: hidden;
+    width: 100%; }
   x-calendar .month {
     display: inline-block;
     margin: 0;
     padding: 0;
     vertical-align: top;
     white-space: nowrap;
-    width: 16.45em; }
+    width: 15.4em;
+    max-width: 100%; }
   x-calendar .week, x-calendar .weekday-labels {
     margin: 1px 0;
     overflow: visible;
@@ -54,7 +57,7 @@ x-calendar {
     white-space: nowrap; }
   x-calendar .day, x-calendar .prev, x-calendar .next, x-calendar .weekday-label {
     display: inline-block;
-    width: 13.8515%; }
+    width: 13.82189%; }
   x-calendar .month-label, x-calendar .weekday-labels, x-calendar .week, x-calendar .prev, x-calendar .next {
     height: 2em;
     line-height: 2em; }
@@ -64,7 +67,7 @@ x-calendar {
   x-calendar .weekday-label, x-calendar .day {
     height: 100%;
     line-height: inherit;
-    margin: 0 0.18997%; }
+    margin: 0 0.20292%; }
   x-calendar .month-label {
     width: 100%;
     border-bottom: 1px dashed grey; }

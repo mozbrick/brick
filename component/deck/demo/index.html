@@ -165,6 +165,8 @@
             <button class="prettybutton remove">Remove card</button>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">// assume addButton, removeButton, and deck<br/>//are already defined as their respective DOM elements<br/>// also assume that .randomColor simply returns a random color rgb string<br/>addButton.addEventListener(&quot;click&quot;, function(){<br/>    var newCard = document.createElement(&quot;x-card&quot;);<br/>    newCard.style.backgroundColor = randomColor();<br/>    newCard.textContent = deck.numCards;<br/>    deck.appendChild(newCard);<br/>});<br/>removeButton.addEventListener(&quot;click&quot;, function(){<br/>    if(deck.numCards &gt; 0){<br/>        var lastCard = deck.getCardAt(deck.numCards-1);<br/>        deck.removeChild(lastCard);            <br/>    }<br/>});</pre>
         </div>
     </section>
 
@@ -189,7 +191,32 @@
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>Styling</h3>
-            <pre class="prettyprint css">#custom-styles x-card[leaving]{<br/>    text-shadow: none;<br/>    background-color: grey!important;<br/>    color: #ccc;<br/>    opacity: 0.6;<br/>}<br/><br/>#custom-styles x-card[selected]:after{<br/>    content: &quot;(selected)&quot;;<br/>    display: block;<br/>    font-size: .2em;<br/>}</pre>
+            <pre class="prettyprint css">/* grey out leaving card */<br/>#custom-styles x-card[leaving]{<br/>    text-shadow: none;<br/>    background-color: grey!important;<br/>    color: #ccc;<br/>    opacity: 0.6;<br/>}<br/>/* add caption to selected card */<br/>#custom-styles x-card[selected]:after{<br/>    content: &quot;(selected)&quot;;<br/>    display: block;<br/>    font-size: .2em;<br/>}</pre>
+        </div>
+    </section>
+
+    <section id="shuffleevents-demo" class="demo-wrap">
+        <header><h2>Handling events: <code>shufflestart</code> and <code>shuffleend</code></h2></header>
+        <p>When the deck is transitioning cards, it fires events in order to signal different stages of the animation.</p>
+        <p>The <code class="prettyprint">&lt;x-deck&gt;</code> fires a <code>shufflestart</code> event when it has finished setting all attributes of the deck and is about to start a transition animation.</p>
+        <p>The <code class="prettyprint">&lt;x-deck&gt;</code> fires a <code>shuffleend</code> event when a transition animation has completed. Much like a <code>transitionend</code> event, the <code>shuffleend</code> event will not fire if interrupted by another transition, and will thus only fire on a full animation completion.</p>
+
+        <div class="two-up">
+            <figure class="demo">
+                <x-deck class="simple-deck">
+                    <x-card>0</x-card>
+                    <x-card>1</x-card>
+                    <x-card>2</x-card>
+                </x-deck>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton prev">Previous card</button>
+            <button class="prettybutton next">Next card</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html"></pre>
+            <h3>Events</h3>
+            <pre class="prettyprint events-tracker"></pre>
         </div>
     </section>
 </article>

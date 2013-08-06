@@ -3,7 +3,7 @@
 
 $textColor: #444;
 $todayBorderColor: orange;
-$defaultMonthWidthEm: 2.35em * 7;
+$defaultMonthWidthEm: 2.2em * 7;
 $oneEmPxVal: 16px;
 $defaultMonthWidthPx: strip-units($defaultMonthWidthEm) * $oneEmPxVal;
 $dayMarginPx: 1px;
@@ -20,6 +20,7 @@ x-calendar {
     display: inline-block;
     margin: 0;
     padding: 0;
+    max-width: 100%;
 
     border: 2px solid #888;
 
@@ -35,6 +36,7 @@ x-calendar {
         position: relative;
         display: inline-block;
         overflow: hidden;
+        width: 100%;
     }
 
     .month{
@@ -44,6 +46,7 @@ x-calendar {
         vertical-align: top;
         white-space: nowrap;
         width: $defaultMonthWidthEm;
+        max-width: 100%;
     }
 
     .week, .weekday-labels{

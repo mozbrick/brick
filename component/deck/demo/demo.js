@@ -82,6 +82,39 @@ function getMarkupEl(demoSect){
     return demoSect.querySelector(".markup-wrap .html");
 }
 
+function updateEventsTracker(trackerEl, eventData, isInit){
+    var events = [];
+    for(var eventName in eventData){
+        events.push(eventName + " fired " + eventData[eventName] + " times");
+    }
+
+    trackerEl.textContent = events.join("\n");
+    if(!isInit){
+        xtag.removeClass(trackerEl, "prettyprinted");
+        prettyPrint();
+    }
+}
+
+function initEventsDemo(){
+    var demoSect = document.getElementById("shuffleevents-demo");
+    var trackerEl = demoSect.querySelector(".events-tracker");
+    var counts = {
+        "shufflestart": 0,
+        "shuffleend": 0
+    };
+
+    xtag.addEvent(demoSect, "shufflestart:delegate(x-deck)", function(e){
+        counts.shufflestart++;
+        updateEventsTracker(trackerEl, counts);
+    });
+    xtag.addEvent(demoSect, "shuffleend:delegate(x-deck)", function(e){
+        counts.shuffleend++;
+        updateEventsTracker(trackerEl, counts);
+    });
+
+    updateEventsTracker(trackerEl, counts, true);
+}
+
 document.addEventListener('DOMComponentsLoaded', function(){
     xtag.query(document, "x-card").forEach(function(card){
         card.style.backgroundColor = randomColor();
@@ -207,6 +240,8 @@ document.addEventListener('DOMComponentsLoaded', function(){
         var markupEl = getMarkupEl(demoSect);
         updateHtmlMarkup(deck, markupEl, true);
     });
+
+    initEventsDemo();
 
     prettyPrint();
 });
