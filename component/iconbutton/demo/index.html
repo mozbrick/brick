@@ -2,328 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Brick: x-iconbutton demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="../../../site/css/main.css"/>
-
-    <style>
-    /* applying styles to x-iconbutton applies styles as if it were to the button
-
-       applying styles to x-iconbutton .x-iconbutton-icon applies styles to the icon of the
-       button
-
-       applying styles to x-iconbutton .x-iconbutton-label applies styles to the label of the
-       button
-    */
-
-    x-iconbutton{
-        vertical-align: middle;
-        line-height: normal;
-    }
-
-    .custom-style-iconbutton{
-        border: 1px solid grey;
-        border-radius: 4px;
-        box-shadow: 1px 1px grey;
-        padding: 5px;
-
-        background-color: #93bce0;
-        background-repeat: no-repeat;
-        background-image: -moz-linear-gradient(top, #93bce0, #93bce0 25%, #5897cf);
-        background-image: -webkit-linear-gradient(#93bce0, #93bce0 25%, #5897cf);
-        background-image: linear-gradient(#93bce0, #93bce0 25%, #5897cf);
-    }
-
-    .custom-style-iconbutton:hover{
-        background-color: #bbd5eb;
-        background-repeat: no-repeat;
-        background-image: -moz-linear-gradient(top, #bbd5eb, #bbd5eb 25%, #7fb0da);
-        background-image: -webkit-linear-gradient(#bbd5eb, #bbd5eb 25%, #7fb0da);
-        background-image: linear-gradient(#bbd5eb, #bbd5eb 25%, #7fb0da);
-    }
-
-    .custom-style-iconbutton[active]{
-        box-shadow: inset 1px 1px 4px grey;
-        background-color: #bbd5eb;
-        background-repeat: no-repeat;
-        background-image: -moz-linear-gradient(top, #bbd5eb, #bbd5eb 25%, #7fb0da);
-        background-image: -webkit-linear-gradient(#bbd5eb, #bbd5eb 25%, #7fb0da);
-        background-image: linear-gradient(#bbd5eb, #bbd5eb 25%, #7fb0da);
-    }
-
-    .custom-style-iconbutton .x-iconbutton-label{
-        font-family: font-family: ‘Lucida Sans Unicode’, ‘Lucida Grande’, sans-serif;
-        font-size: 2em;
-        letter-spacing: 1px;
-        padding: 0em;
-        color: white;
-        text-shadow: -1px -1px #ddd;
-    }
-
-    .demo-button .x-iconbutton-label{
-        font-size: 2em;
-    }
-
-    .fancy-html-icon{
-        margin: 0 auto;
-        padding: 0;
-        position: relative;
-        width: 40px;
-        height: 40px;
-        border: 4px solid #ccc;
-    }
-
-    .fancy-html-icon span{
-        position: absolute;
-        right: 10%;
-        bottom: 10%;
-
-        font-family: Georgia, serif;
-        z-index: 2;
-    }
-
-    .fancy-html-icon div{
-        position: absolute;
-        width: 70%;
-        height: 70%;
-        left: 10%;
-        right: 10%;
-        background-color: cyan;
-        border-radius: 4px;
-        z-index: 1;
-    }
-
-    .fancy-html-label{
-        font-family: Georgia, serif;
-    }
-
-    .circle{
-        border-radius: 100%;
-        border: 3px dotted red;
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-    }
-
-    code{
-        display: block;
-        margin-bottom: .5em;
-    }
-    </style>
+    <link rel="stylesheet" type="text/css" href="demo.css"/>
 </head>
 <body>
-    <article>
-        <header><h1>X-Iconbutton demos</h1></header>
-        <h2>Basic initialization</h2>
+<article>
+    <header><h1>x-iconbutton</h1></header>
+    <p><code class="prettyprint">&lt;x-iconbutton&gt;</code>s provide a simple way to declare buttons with icons by abstracting away the HTML layout and CSS styling that goes into properly anchoring and centering the contents.</p>
+    <section class="demo-wrap">
+        <header><h2>Basic usage</h2></header>
+        <div class="two-up">
+            <figure class="demo">
+                <x-iconbutton src="firefox.png">
+                    Put <code>any markup</code> here!
+                </x-iconbutton>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Initializing markup</h3>
+            <pre class="prettyprint html">&lt;x-iconbutton src=&quot;firefox.png&quot;&gt;<br/>  Put &lt;code&gt;any markup&lt;/code&gt; here!<br/>&lt;/x-iconbutton&gt;</pre>
+        </div>
+    </section>
+    <section id="icon-demo" class="demo-wrap">
+        <header><h2>Editing the icon with <code>icon-anchor</code> and <code>src</code></h2></header>
+        <div class="two-up">
+            <figure class="demo">
+                <x-iconbutton icon-anchor="left" src="firefox.png">
+                    Lorem ipsum
+                </x-iconbutton>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <button id="anchor-edit-button" class="prettybutton">Edit <code>icon-anchor</code></button>
+            <button id="src-edit-button" class="prettybutton">Edit <code>src</code></button>
+            <h3>Initializing markup</h3>
+            <pre class="prettyprint html"></pre>
+        </div>
+    </section>
+    <section id="dom-demo" class="demo-wrap">
+        <header><h2>Editing the button with <code>.contentEl</code> and <code>.iconEl</code></h2></header>
+        <p>When editing the actual contents of the iconbutton, in order to help preserve the underlying shadow DOM, we provide access to the content-label and icon DOM elements through <code>.contentEl</code> and <code>.iconEl</code>, respectively.</p>
+        <p><b>Important:</b> Edit these elements instead of directly editing <code>.innerHTML</code> or <code>.textContent</code> of an <code class="prettyprint">&lt;x-iconbutton&gt;</code>.</p>
+        <div class="two-up">
+            <figure class="demo">
+                <x-iconbutton id="dom-demo-button" src="firefox.png">Content</x-iconbutton>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <button id="iconel-edit-button" class="prettybutton">Edit <code>.iconEl</code></button>
+            <button id="contentel-edit-button" class="prettybutton">Edit <code>.contentEl</code></button>
+            <h3>Initializing markup</h3>
+            <pre class="prettyprint html"></pre>
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">// assume that randomColor and randomWord are already provided<br/>var iconElToggle = document.getElementById(&quot;iconel-edit-button&quot;);<br/>var contentElToggle = document.getElementById(&quot;contentel-edit-button&quot;);<br/>var iconButton = document.getElementById(&quot;dom-demo-button&quot;);<br/><br/>// &quot;edit .iconEl&quot; button<br/>iconElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.iconEl.style.backgroundColor = randomColor();<br/>});<br/><br/>// &quot;edit .contentEl&quot; button<br/>contentElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.contentEl.style.color = randomColor();<br/>    iconButton.contentEl.textContent = randomWord(7);<br/>});</pre>
+        </div>
+    </section>
+    <section id="dom-demo" class="demo-wrap">
+        <header><h2>Custom styling the button</h2></header></p>
         <ul>
-          <li>
-            <span>Left icon (default):</span>
-            <x-iconbutton src="http://placecage.com/30/30">Hello</x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot;&gt;Hello&lt;/x-iconbutton&gt;
-            </code>
-          </li>
-          <li>
-            <span>Left icon (specified):</span>
-            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="left">Hello</x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;left&quot;&gt;Hello&lt;/x-iconbutton&gt;
-            </code>
-          </li>
-          <li>
-            <span>Right icon:</span>
-            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="right">Hello</x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;right&quot;&gt;Hello&lt;/x-iconbutton&gt;
-            </code>
-          </li>
-          <li>
-            <span>Top icon:</span>
-            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="top">Hello</x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;top&quot;&gt;Hello&lt;/x-iconbutton&gt;
-            </code>
-          </li>
-          <li>
-            <span>Bottom icon:</span>
-            <x-iconbutton src="http://placecage.com/30/30" icon-anchor="bottom">Hello</x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot; icon-anchor=&quot;bottom&quot;&gt;Hello&lt;/x-iconbutton&gt;
-            </code>
-          </li>
-          <li>
-            <span>No label:</span>
-            <x-iconbutton src="http://placecage.com/30/30"></x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton src=&quot;http://placecage.com/30/30&quot;&gt;&lt;/x-iconbutton&gt;
-            </code>
-          </li>
-          <li>
-            <span>No Icon (ie: normal button):</span>
-            <x-iconbutton>Hello</x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton&gt;Hello&lt;/x-iconbutton&gt;
-            </code>
-          </li>
-          <li>
-            <span>No content at all:</span>
-            <x-iconbutton></x-iconbutton>
-            <code class="prettyprint">
-                &lt;x-iconbutton&gt;&lt;/x-iconbutton&gt;
-            </code>
-          </li>
+            <li>Applying styles to <code class="prettyprint">x-iconbutton</code> applies styles to the entire button 
+            </li>
+            <li>Applying styles to <code class="prettyprint">x-iconbutton .x-iconbutton-icon</code> applies styles to the icon only
+            </li>
+            <li>Applying styles to <code class="prettyprint">x-iconbutton .x-iconbutton-content</code> applies styles to the content label only
+            </li>
+            <li>Applying styles to <code class="prettyprint">x-iconbutton[active]</code> applies styles that only appear when the button is clicked
+            </li>
         </ul>
+        <div class="two-up">
+            <figure class="demo">
+                <x-iconbutton id="custom-style-iconbutton" src="firefox.png">
+                    How fancy!
+                </x-iconbutton>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Initializing markup</h3>
+            <pre class="prettyprint html">&lt;x-iconbutton id=&quot;custom-style-iconbutton&quot; src=&quot;firefox.png&quot;&gt;<br/>    How fancy!<br/>&lt;/x-iconbutton&gt;</pre>
+            <h3>CSS styling</h3>
+            <pre class="prettyprint css">#custom-style-iconbutton{<br/>    border: 1px solid grey;<br/>    border-radius: 4px;<br/>    box-shadow: 1px 1px grey;<br/>    padding: 5px;<br/><br/>    background-color: #93bce0;<br/>    background-image: none;<br/>}<br/><br/>#custom-style-iconbutton:hover{<br/>    background-color: #bbd5eb;<br/>    background-image: none;<br/>}<br/><br/>#custom-style-iconbutton[active]{<br/>    box-shadow: inset 1px 1px 4px grey;<br/>    background-color: #bbd5eb;<br/>    background-image: none;<br/>}<br/><br/>#custom-style-iconbutton &gt; .x-iconbutton-content{<br/>    font-family: font-family: &#x2018;Lucida Sans Unicode&#x2019;, &#x2018;Lucida Grande&#x2019;, sans-serif;<br/>    font-size: 2em;<br/>    color: white;<br/>    text-shadow: -1px -1px #ddd;<br/>}</pre>
+        </div>
+    </section>
+</article>
 
-        <h2>Custom styling:</h2>
-        <x-iconbutton class="custom-style-iconbutton" icon-anchor="left">No Icon</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="left">Left</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="right">Right</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="top">Top</x-iconbutton>
-        <x-iconbutton class="custom-style-iconbutton" src="firefox.png" icon-anchor="bottom">Bottom</x-iconbutton>
-
-        <h2>Dynamic editing:</h2>
-        <ul id="attr-demos">
-          <li>
-            <span>Anchor editing:</span>
-            <x-iconbutton id="anchor-demo"  class="demo-button" src="http://placecage.com/40/40">Lorem Ipsum</x-iconbutton>
-            <button onclick="changeAnchor(this, 'left')">Left</button>
-            <button onclick="changeAnchor(this, 'right')">Right</button>
-            <button onclick="changeAnchor(this, 'top')">Top</button>
-            <button onclick="changeAnchor(this, 'bottom')">Bottom</button>
-            <button onclick="changeAnchor(this, '')">Default (left)</button>
-          </li>
-          <li>
-            <span>Icon Src editing:</span>
-            <x-iconbutton id="icon-demo" class="demo-button" src="http://placecage.com/39/39">Icons</x-iconbutton>
-            <button onclick="changeSrc(this, 'http://placecage.com/39/39')">
-                Nic Cage (url)
-            </button>
-            <button onclick="changeSrc(this, 'firefox.png')">
-                Firefox (local)
-            </button>
-            <button onclick="changeSrc(this, '')">
-                None (empty string)
-            </button>
-            <button onclick="changeSrc(this, null)">
-                None (null)
-            </button>
-          </li>
-        </ul>
-
-        <ul id="dom-edit-demo">
-          <li>
-             <span>Parts editing (see source)</span>
-             <x-iconbutton id="parts-demo" class="demo-button"
-                           src="firefox.png">Parts</x-iconbutton>
-             <button onclick="editButton(this, function(iconButton){
-                iconButton.icon.style.backgroundColor = randomColor();
-             })">
-                Edit Icon
-             </button>
-             <button onclick="editButton(this, function(iconButton){
-               iconButton.label.style.backgroundColor = randomColor();
-             })">
-                Edit Label
-             </button>
-          </li>
-        </ul>
-
-        <ul id="text-demos">
-          <li>
-            <span>Text Modification (default accessors)</span>
-            <x-iconbutton class="demo-button"
-                          src="firefox.png" icon-anchor="right">Default text</x-iconbutton>
-            <button onclick="showText(this)">Show Text</button>
-            <button onclick="changeText(this)">Change Text</button>
-          </li>
-          <li>
-            <!-- custom getter/setters are defined in the DOMComponentsLoaded
-                 listener -->
-            <span>Text Modification (custom accessors)</span>
-            <x-iconbutton class="demo-button" id="custom-accessor-demo" icon-anchor="bottom">
-                <strong>Change me!</strong>
-                <div class="circle"></div>
-                <em>Ignore me!</em>
-            </x-iconbutton>
-            <button onclick="showText(this)">Show Text</button>
-            <button onclick="changeText(this)">Change Text</button>
-          </li>
-        </ul>
-    </article>
-
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-    <script type="text/javascript" src="../../../dist/brick.js"></script>
-    <script>
-        function randomColor(){
-            var _randomVal = function(){
-                return Math.floor(Math.random() * 256);
-            }
-
-            return "rgb("+_randomVal()+","+_randomVal()+","+_randomVal()+")";
-        }
-
-        function getUniqueString(){
-            return String(new Date().valueOf());
-        }
-
-        function changeAnchor(button, anchor){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-
-            iconButton.iconAnchor = anchor;
-        }
-
-        function changeSrc(button, imgSrc){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-
-            iconButton.src = imgSrc;
-        }
-
-        function showText(button){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-            console.log(iconButton.text);
-            alert(iconButton.text);
-        }
-
-        function changeText(button){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-
-            iconButton.text = getUniqueString();
-        }
-
-        function editButton(button, editFn){
-            var iconButton = button.parentNode.querySelector("x-iconbutton");
-            editFn(iconButton);
-        }
-
-        document.addEventListener('DOMComponentsLoaded', function(){
-            var customLabelIconButton = document.getElementById("custom-accessor-demo");
-
-            /** custom textGetter/Setters defined here **/
-            var customGetter = function(iconButtonEl){
-                return iconButtonEl.label.querySelector("strong").textContent;
-            }
-
-            var customSetter = function(iconButtonEl, newText){
-                iconButtonEl.label.querySelector("strong").textContent = newText;
-            }
-
-            customLabelIconButton.textGetter = customGetter;
-            customLabelIconButton.textSetter = customSetter;
-
-            xtag.addEvents(document, {
-                "click:delegate(x-iconbutton)": function(e){
-                    console.log(e.type, this);
-                },
-                "focus:delegate(x-iconbutton)": function(e){
-                    console.log(e.type, this);
-                },
-                "blur:delegate(x-iconbutton)": function(e){
-                    console.log(e.type, this);
-                }
-            });
-        }, false);
-
-    </script>
+<script type="text/javascript" src="../../../dist/brick.js"></script>
+<script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="demo.js"></script>
 </body>
 </html>

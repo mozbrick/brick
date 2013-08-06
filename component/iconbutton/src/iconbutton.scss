@@ -8,7 +8,6 @@ x-iconbutton{
     @include boxSizing(border-box);
     @include unhighlightable;
     line-height: normal;
-    white-space: nowrap;
     display: inline-block;
     margin: 0;
     padding: $defaultSpacing $defaultSpacing*1.75;
@@ -50,7 +49,7 @@ x-iconbutton{
       margin: 0 !important;
     }
 
-    & .x-iconbutton-icon, & .x-iconbutton-label{
+    & .x-iconbutton-icon, & .x-iconbutton-content{
        display: inline-block;
        vertical-align: middle;
        margin: 0;
@@ -59,14 +58,18 @@ x-iconbutton{
        max-width: 100%;
     }
 
-    & .x-iconbutton-label{
+    & .x-iconbutton-content{
     }
 
     &[icon-anchor=top], &[icon-anchor=bottom]{
-      & .x-iconbutton-icon, & .x-iconbutton-label{
+      & .x-iconbutton-icon, & .x-iconbutton-content{
           margin: 0 auto;
           display: block;
       }
+    }
+
+    &[icon-anchor]{
+      white-space: nowrap;
     }
 
     &[icon-anchor=left], &:not([icon-anchor]){

@@ -3,10 +3,10 @@
     var EMPTY_SRC = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
     var IMG_NODE_NAME = document.createElement("img").nodeName;
     var DEFAULT_TEXT_GETTER = function(iconButton){
-                                 return iconButton.xtag.labelEl.textContent;
+                                 return iconButton.xtag.contentEl.textContent;
                               };
     var DEFAULT_TEXT_SETTER = function(iconButton, newText){
-                                  iconButton.xtag.labelEl.textContent = newText;
+                                  iconButton.xtag.contentEl.textContent = newText;
                               };
     var SPACE_KEYCODE = 32;
     var ENTER_KEYCODE = 13;
@@ -32,15 +32,15 @@
                 (elem.xtag.iconEl.innerHTML) ? "" : "none";
         }
         
-        elem.xtag.labelEl.style.display = 
-            (elem.xtag.labelEl.innerHTML) ? "" : "none";
+        elem.xtag.contentEl.style.display = 
+            (elem.xtag.contentEl.innerHTML) ? "" : "none";
     }
     
     // updates the html layout order of the icon and label to match any given
     // anchors
     function updatePartsOrder(elem){
         var icon = elem.xtag.iconEl;
-        var label = elem.xtag.labelEl;
+        var label = elem.xtag.contentEl;
         if(!(label && icon)) return;
 
         var parent = icon.parentNode;
@@ -93,13 +93,13 @@
                 this.innerHTML = "<div class='x-iconbutton-content-wrap'>"+
                                    "<img class='x-iconbutton-icon' "+
                                    "     src='"+EMPTY_SRC+"'/>"+
-                                   "<span class='x-iconbutton-label'></span>"+
+                                   "<span class='x-iconbutton-content'></span>"+
                                  "</div>"+
                                  "<div class='x-iconbutton-ghost'></div>";
                 this.xtag.iconEl = this.querySelector(".x-iconbutton-icon");
-                this.xtag.labelEl = this.querySelector(".x-iconbutton-label");
+                this.xtag.contentEl = this.querySelector(".x-iconbutton-content");
                 // don't forget to insert content here
-                this.xtag.labelEl.innerHTML = content;
+                this.xtag.contentEl.innerHTML = content;
                 
                 // set up default getter and setters for modifying text content
                 // default behavior: modify text directly
@@ -141,6 +141,18 @@
                 }
             },
             attributeChanged: function(){
+                var iconEl = this.iconEl;
+                var contentEl = this.contentEl;
+                if(!(iconEl.parentNode && 
+                     iconEl.parentNode.parentNode === this &&
+                     contentEl.parentNode && 
+                     contentEl.parentNode.parentNode === this))
+                {
+                    console.warn("inner DOM of the iconbutton appears to be "+
+                                "out of sync; make sure that editing innerHTML"+
+                                " or textContent is done through .contentEl, "+
+                                "not directly on the iconbutton itself");
+                }
                 updatePartsOrder(this);
                 updatePartsVisibility(this);
             }
@@ -184,41 +196,14 @@
                     updatePartsOrder(this);
                 }
             },
-            "icon": {
+            "iconEl": {
                 get: function(){
                     return this.xtag.iconEl;
                 }
             },
-            "label": {
+            "contentEl": {
                 get: function(){
-                    return this.xtag.labelEl;
-                }
-            },
-            "text": {
-                get: function(){
-                    return this.textGetter(this);
-                },
-                set: function(newText){
-                    this.textSetter(this, newText);
-                }
-            },
-            // if the user defines a different label structure, it is up to them
-            // to provide callback functions to correctly interface with the 
-            // new label
-            "textGetter": {
-                get: function(){
-                    return this.xtag.textGetter;
-                },
-                set: function(newGetter){
-                    this.xtag.textGetter = newGetter;
-                }
-            },
-            "textSetter": {
-                get: function(){
-                    return this.xtag.textSetter;
-                },
-                set: function(newSetter){
-                    this.xtag.textSetter = newSetter;
+                    return this.xtag.contentEl;
                 }
             }
         }

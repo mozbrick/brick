@@ -28,7 +28,6 @@ x-iconbutton {
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
   line-height: normal;
-  white-space: nowrap;
   display: inline-block;
   margin: 0;
   padding: 0.1em 0.175em;
@@ -73,16 +72,18 @@ x-iconbutton {
     width: 0 !important;
     padding: 0 !important;
     margin: 0 !important; }
-  x-iconbutton .x-iconbutton-icon, x-iconbutton .x-iconbutton-label {
+  x-iconbutton .x-iconbutton-icon, x-iconbutton .x-iconbutton-content {
     display: inline-block;
     vertical-align: middle;
     margin: 0;
     padding: 0;
     max-height: 100%;
     max-width: 100%; }
-  x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-label, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-label {
+  x-iconbutton[icon-anchor=top] .x-iconbutton-icon, x-iconbutton[icon-anchor=top] .x-iconbutton-content, x-iconbutton[icon-anchor=bottom] .x-iconbutton-icon, x-iconbutton[icon-anchor=bottom] .x-iconbutton-content {
     margin: 0 auto;
     display: block; }
+  x-iconbutton[icon-anchor] {
+    white-space: nowrap; }
   x-iconbutton[icon-anchor=left] .x-iconbutton-icon, x-iconbutton:not([icon-anchor]) .x-iconbutton-icon {
     margin-right: 0.1em; }
   x-iconbutton[icon-anchor=right] .x-iconbutton-icon {

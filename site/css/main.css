@@ -129,6 +129,8 @@ a:hover {
   border-width: 40px 15px 60px;
   border-radius: 20px;
   position: relative;
+
+  background: #f2d6b9 url("../img/retina_wood.png") repeat;
 }
 
 .demo:after {
@@ -234,6 +236,10 @@ a:hover {
   }
   section {
     margin: 1em 0;
+  }
+
+  header h1{
+    font-size: 300%;
   }
 }
 

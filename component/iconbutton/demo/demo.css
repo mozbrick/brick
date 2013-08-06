@@ -1,0 +1,38 @@
+.demo > *:only-child{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#custom-style-iconbutton{
+    border: 1px solid grey;
+    border-radius: 4px;
+    box-shadow: 1px 1px grey;
+    padding: 5px;
+
+    background-color: #93bce0;
+    background-image: none;
+}
+
+#custom-style-iconbutton:hover{
+    background-color: #bbd5eb;
+    background-image: none;
+}
+
+#custom-style-iconbutton[active]{
+    box-shadow: inset 1px 1px 4px grey;
+    background-color: #bbd5eb;
+    background-image: none;
+}
+
+#custom-style-iconbutton .x-iconbutton-content{
+    font-family: font-family: ‘Lucida Sans Unicode’, ‘Lucida Grande’, sans-serif;
+    font-size: 2em;
+    color: white;
+    text-shadow: -1px -1px #ddd;
+}

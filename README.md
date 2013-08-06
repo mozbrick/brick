@@ -26,8 +26,9 @@ If you wish to build the library yourself, first have <code>npm</code> installed
 Then, run the following:
 
 ```
-git clone git@github.com:mozilla/app-components.git
-cd app-components
+git clone git@github.com:mozilla/brick.git
+cd brick
+git submodule update --init --recursive
 npm install
 make
 ```

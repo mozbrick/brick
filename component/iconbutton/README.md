@@ -1,13 +1,12 @@
 # Overview
 
-Iconbuttons are essentially buttons with an anchored icon in addition to a label.
+Iconbuttons are essentially buttons with an anchored icon in addition to a content label.
 
 # Usage
 
     <x-iconbutton src="http://placekitten.com/20" icon-anchor="right">Hello</x-iconbutton>
     
-Indicates that the browser should render a button with an icon of a kitten to the right of the
-button's label, which reads "Hello".
+Indicates that the browser should render a button with an icon of a kitten to the right of the button's content, which reads "Hello".
 
 
 # Attributes
@@ -45,39 +44,14 @@ the icon, you could do the following:
     fooIconButton.icon.style.display = "none";
     
 
-## ___label___
+## ___contentEl___
 
-Retrieves the DOM element representing the button's label.
+Retrieves the DOM element representing the button's content.
 
-You can then edit the DOM element directly. For example, if you wanted to dynamically change the label
+You can then edit the DOM element directly. For example, if you wanted to dynamically change the content
 color, you could do the following:
 
-    fooIconButton.label.style.color = "red";
-    
-_Note:_ If your custom DOM element's structure ever changes, make sure to update the `.textGetter`/`.textSetter` attributes so that you can still correctly use the `.text` attribute.
-    
-## ___text___
-Used for getting/setting the label text.
-
-You can use the `.text` attribute to view and modify the text contents of your button's label.
-
-    fooIconButton.text = "Hello world!";
-   
-### ___textGetter___ / ___textSetter___
-
-Defines how to change label text.
-
-If your label's structure differs such that the default behavior of reading the `.textContent` of your label is not sufficient, you can also
-override the getter and setter behaviors for text by modifying the `.textGetter` and `.textSetter` attributes, respectively.
-
-    fooIconButton.textGetter = function(iconButtonEl){
-        // custom text getting behavior
-    }
-    
-    fooIconButton.textSetter = function(iconButtonEl, newText){
-        // custom text setting behavior
-    }
-
+    fooIconButton.contentEl.style.color = "red";
     
 # Styling
 
@@ -89,7 +63,7 @@ the following CSS selectors, assuming that `"foo"` represents an `x-iconbutton` 
 * applying styles to `x-iconbutton > .x-iconbutton-icon` applies styles to the icon of the
   button
 
-* applying styles to `x-iconbutton > .x-iconbutton-label` applies styles to the label of the
+* applying styles to `x-iconbutton > .x-iconbutton-content` applies styles to the content of the
   button
 
-***Known issue:*** applying a `font-size` to the `x-iconbutton` itself can sometimes cause extra top-padding to appear, due to the way vertical-align's baselines work. To work around this issue, make sure to only apply `font-size` to the `x-iconbutton > .x-iconbutton-label` selector.
+***Known issue:*** applying a `font-size` to the `x-iconbutton` itself can sometimes cause extra top-padding to appear, due to the way vertical-align's baselines work. To work around this issue, make sure to only apply `font-size` to the `x-iconbutton > .x-iconbutton-content` selector.
