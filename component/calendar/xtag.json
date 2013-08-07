@@ -49,7 +49,8 @@
 			"disableUIToggle": "Returns true if the 'disable-ui-toggle' attribute is set and false otherwise",
 			"firstVisibleMonth": "Returns the Date corresponding to the first day in the first fully-visible month displayed by the calendar",
 			"lastVisibleMonth": "Returns the Date corresponding to the first day in the last fully-visible month displayed by the calendar",
-			"customRenderFn": "Returns the currently set custom rendering function, if any is set. (See 'customRenderFn' setter documentation for further details)"
+			"customRenderFn": "Returns the currently set custom rendering function, if any is set. (See 'customRenderFn' setter documentation for further details)",
+			"labels": "returns a deep copy of the labels datamap used in the calendar"
 		},
 		"setters": {
 			"controls": "If true, sets the 'controls' attribute. Otherwise, removes the 'controls' attribute.",
@@ -58,7 +59,8 @@
 			"view": "Sets the value of the 'view' attribute. Can be given either a JS Date object or a parsable string corresponding to a date",
 			"chosen": "Sets the value of the 'chosen' attribute. Can always take either a JS Date Object or a parsable date string. If multiple is true, can also take a list of singular Dates/parasable date string and [Date, Date] lists of the start and end points of a range of date, as well a JSON string corresponding to such a list.",
 			"disableUIToggle": "If true, sets the 'disable-ui-toggle' attribute. Otherwise, removes the 'disable-ui-toggle' attribute.",
-			"customRenderFn": "Sets an additional function to call on individual days when rendering the calendar. Will be called with three parameters: the day's DOM element, the JS Date corresponding to the day, and the ISO-formatted string version of the date. This is useful when styles need to be more dynamically flexible than the default. IMPORTANT NOTE: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render, or infinite recursion can result."
+			"customRenderFn": "Sets an additional function to call on individual days when rendering the calendar. Will be called with three parameters: the day's DOM element, the JS Date corresponding to the day, and the ISO-formatted string version of the date. This is useful when styles need to be more dynamically flexible than the default. IMPORTANT NOTE: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render, or infinite recursion can result.",
+			"labels": "edits the labels datamap used in the calendar"
 		}
 	}
 }

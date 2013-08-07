@@ -13,12 +13,12 @@
         };
     };
 
-    // the current date, without any time information
+    // the current date, set to midnight local time
     var TODAY = new Date();
-    TODAY.setUTCHours(0);
-    TODAY.setUTCMinutes(0);
-    TODAY.setUTCSeconds(0);
-    TODAY.setUTCMilliseconds(0);
+    TODAY.setHours(0);
+    TODAY.setMinutes(0);
+    TODAY.setSeconds(0);
+    TODAY.setMilliseconds(0);
 
     // constants used in tracking the type of the current drag/paint operation 
     var DRAG_ADD = "add";
@@ -220,7 +220,7 @@
           will attempt to parseSingleDate them)
 
     If the input is parseable into this format, return the resulting 2d array
-    Otherwise, return null and console.log the parsing error
+    Otherwise, return null and console.warn the parsing error
 
     If given an array that already follows this format, will simply return it
     **/
@@ -237,7 +237,7 @@
             try{
                 ranges = JSON.parse(multiDateStr);
                 if(!isArray(ranges)){
-                    console.log("invalid list of ranges", multiDateStr);
+                    console.warn("invalid list of ranges", multiDateStr);
                     return null;
                 }
             }
@@ -248,7 +248,7 @@
                     return [parsedSingle];
                 }
                 else{
-                    console.log("unable to parse", multiDateStr, 
+                    console.warn("unable to parse", multiDateStr, 
                                 "as JSON or single date");
                     return null;
                 }
@@ -271,7 +271,7 @@
             else if(typeof(range) === "string"){
                 var parsedDate = parseSingleDate(range);
                 if(!parsedDate){
-                    console.log("unable to parse date", range);
+                    console.warn("unable to parse date", range);
                     return null;
                 }
                 ranges[i] = parsedDate;
@@ -281,27 +281,27 @@
                 var parsedStartDate = parseSingleDate(range[0]);
 
                 if(!parsedStartDate){
-                    console.log("unable to parse start date", range[0], 
+                    console.warn("unable to parse start date", range[0], 
                                 "from range", range);
                     return null;
                 }
 
                 var parsedEndDate = parseSingleDate(range[1]);
                 if(!parsedEndDate){
-                    console.log("unable to parse end date", range[1], 
+                    console.warn("unable to parse end date", range[1], 
                                 "from range", range);
                     return null;
                 }
 
                 if(parsedStartDate.valueOf() > parsedEndDate.valueOf()){
-                    console.log("invalid range", range, 
+                    console.warn("invalid range", range, 
                                 ": start date is after end date");
                     return null;
                 }
                 ranges[i] = [parsedStartDate, parsedEndDate];
             }
             else{
-                console.log("invalid range value: ", range);
+                console.warn("invalid range value: ", range);
                 return null;
             }
         }
@@ -878,15 +878,10 @@
     actually within the span
     **/
     Calendar.prototype.hasVisibleDate = function(dateObj, excludeBadMonths){
-        var startDate = this.firstVisibleMonth;
-        if(!excludeBadMonths){ 
-            startDate = findWeekStart(startDate, this.firstWeekdayNum);
-        }
-
-        var endDate = findLast(this.lastVisibleMonth);
-        if(!excludeBadMonths){
-            endDate = findWeekEnd(endDate, this.lastWeekdayNum);
-        } 
+        var startDate = (excludeBadMonths) ? this.firstVisibleMonth :
+                                             this.firstVisibleDate;
+        var endDate = (excludeBadMonths) ? findLast(this.lastVisibleMonth) :
+                                           this.lastVisibleDate;
 
         return dateMatches(dateObj, [[startDate, endDate]]);
     };
@@ -1168,6 +1163,20 @@
                 return relOffset(this.firstVisibleMonth, 0, 
                                  Math.max(0, this.span-1), 0);
             }
+        },
+
+        "firstVisibleDate": {
+            get: function(){
+                return findWeekStart(this.firstVisibleMonth, 
+                                     this.firstWeekdayNum);
+            }
+        },
+
+        "lastVisibleDate": {
+            get: function(){
+                return findWeekEnd(findLast(this.lastVisibleMonth), 
+                                   this.lastWeekdayNum);
+            } 
         },
 
         "labels": {
@@ -1593,6 +1602,22 @@
                 }
             },
 
+            // (readonly) retrieves the first day in the calendar, even if it
+            // is not part of a fully visible month
+            firstVisibleDate: {
+                get: function(){
+                    return this.xtag.calObj.firstVisibleDate;
+                }
+            },
+
+            // (readonly) retrieves the last day in the calendar, even if it
+            // is not part of a fully visible month
+            lastVisibleDate: {
+                get: function(){
+                    return this.xtag.calObj.lastVisibleDate;
+                }
+            },
+
             /** a function taking the following parameters:
                - a html element representing a day in the calendar
                - its corresponding Date object
@@ -1611,6 +1636,28 @@
                 },
                 set: function(newRenderFn){
                     this.xtag.calObj.customRenderFn = newRenderFn;
+                }
+            },
+
+            labels: {
+                get: function(){
+                    // clone labels to prevent user from clobbering aliases
+                    return JSON.parse(JSON.stringify(this.xtag.calObj.labels));
+                },
+                // if given a datamap of labels whose keys match those in 
+                // DEFAULT_LABELS, reassign the labels using those in the given
+                // newLabelData. Ensures that labels that were initially strings
+                // stay strings, and that labels that were initially arrays of 
+                // strings stay arrays of strings (with the same # of elements)
+                set: function(newLabelData){
+                    this.xtag.calObj.labels = newLabelData;
+                    var labels = this.xtag.calObj.labels;
+                    // also update the control labels, if available
+                    var prevControl = this.querySelector(".controls > .prev");
+                    if(prevControl) prevControl.textContent = labels.prev;
+
+                    var nextControl = this.querySelector(".controls > .next");
+                    if(nextControl) nextControl.textContent = labels.next;
                 }
             }
         },
@@ -1671,22 +1718,6 @@
             hasVisibleDate: function(dateObj, excludeBadMonths){
                 return this.xtag.calObj.hasVisibleDate(dateObj, 
                                                        excludeBadMonths);
-            },
-
-            // if given a datamap of labels whose keys match those in 
-            // DEFAULT_LABELS, reassign the labels using those in the given
-            // newLabelData. Ensures that labels that were initially strings
-            // stay strings, and that labels that were initially arrays of 
-            // strings stay arrays of strings (with the same # of elements)
-            editLabels: function(newLabelData){
-                this.xtag.calObj.labels = newLabelData;
-                var labels = this.xtag.calObj.labels;
-                // also update the control labels, if available
-                var prevControl = this.querySelector(".controls > .prev");
-                if(prevControl) prevControl.textContent = labels.prev;
-
-                var nextControl = this.querySelector(".controls > .next");
-                if(nextControl) nextControl.textContent = labels.next;
             }
         }
     });

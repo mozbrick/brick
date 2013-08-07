@@ -136,6 +136,14 @@ Returns the JS Date corresponding to the first day of the first fully-visible mo
 
 Returns the JS Date corresponding to the first day of the last fully-visible month displayed on the calendar.
 
+## ___firstVisibleDate___ (getter only)
+
+Returns the JS Date corresponding to the first day displayed on the calendar, even if it is not part of a fully-visible month.
+
+## ___lastVisibleDate___ (getter only)
+
+Returns the JS Date corresponding to the last day displayed on the calendar, even if it is not part of a fully-visible month.
+
 ## __customRenderFn__ (getter/setter)
 
 Allows an additional callback function to be applied to days when the calendar is rendered. 
@@ -156,21 +164,30 @@ will color all days after the current date red.
 
 ***IMPORTANT NOTE***: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render, or infinite recursion can result.
 
-# Methods
+## ___labels___ (getter/setter)
 
-## ___editLabels___(newLabelData)
+The labels of the calendars are managed using a datamap of strings. This allows localizers/translators to 
+edit the labels of the calendar.
 
-When called, will edit the labels of the calendar. This can be useful for translations/localizations.
+## getter
 
-`newLabelData` is a JS object that can contain any of the following key:value pairs:
+Returns a **deep copy** of the datamap used to manage labels. To save any changes made to this returned value, the user should reassign this back to the labels setter.
+
+## setter
+
+When called, will edit the labels of the calendar. 
+
+The set value should be a JS object that can contain any of the following key:value pairs:
 - `prev`: a string to display on the previous-month navigation button
 - `next`: a string to display on the next-month navigation button
-` `months`: an array of 12 strings, where the first string corresponds to January, the second to February, etc all the way up to December
-- `weekdays`: an array of 7 strings, where the first string corresponds to Sunday, the second to Monday, etc all the way up to Saturday
+- `months`: an array of 12 strings, where the first string corresponds to January, the second to February, etc, all the way up to December.
+- `weekdays`: an array of 7 strings, where the first string corresponds to Sunday, the second to Monday, etc, all the way up to Saturday.
 
-If not given any of these keys, that corresponding label will remain unchanged.
+If the new data given does not have any of these keys, that corresponding label will remain unchanged.
 
-**Note:** Calling this will rerender the calendar.
+**Note:** Setting this will rerender the calendar.
+
+# Methods
 
 ## ___render___([preserveNodes])
 
@@ -253,6 +270,14 @@ The event also receives the following custom datamap in `e.detail`:
         'date': the Date object corresponding to the toggled date,
         'iso': the ISO-formatted string representing the toggled date
     }
+
+## ___prevMonth___
+
+Fired whenever the user navigates backward one month
+
+## ___nextMonth___
+
+Fired whenever the user navigates forward one month
 
 
 # Styling

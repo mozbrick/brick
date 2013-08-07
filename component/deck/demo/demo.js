@@ -195,10 +195,14 @@ document.addEventListener('DOMComponentsLoaded', function(){
         var deck = getDeck(demoSect);
         var markupEl = getMarkupEl(demoSect);
 
+        // deck.numCards retrieves the number of cards currently in the deck
+        var newIndex = deck.numCards;
         var newCard = document.createElement("x-card");
         newCard.style.backgroundColor = randomColor();
-        newCard.textContent = deck.numCards;
+        newCard.textContent = newIndex;
         deck.appendChild(newCard);
+        // for demo, shuffle to newly inserted card
+        deck.shuffleTo(newIndex);
     });
 
     xtag.addEvent(document, "click:delegate("+baseButtonSelector+".remove)", function(e){
@@ -208,6 +212,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
         var markupEl = getMarkupEl(demoSect);
 
         if(deck.numCards > 0){
+            // deck.getCardAt retrieves the <x-card> at the given index
             var lastCard = deck.getCardAt(deck.numCards-1);
             deck.removeChild(lastCard);            
         }

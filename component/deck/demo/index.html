@@ -77,8 +77,8 @@
     </section>
 
     <section class="demo-wrap">
-        <header><h2>Specifying deck transitions: <code>transition-type</code></h2></header>
-        <p>The <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute controls how all cards in the deck animate in and out.</p>
+        <header><h2>Specifying deck transitions: <code>transition-type/.transitionType</code></h2></header>
+        <p>The <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute (also accessible by the <code>.transitionType</code> property) controls how all cards in the deck animate in and out.</p>
         <p>Valid options: 
             <code>
                 scrollLeft,
@@ -122,8 +122,8 @@
     </section>
 
     <section class="demo-wrap">
-        <header><h2>Specifying card-specific animations: <code>transition-override</code></h2></header>
-        <p>While the <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute changes the animation of all cards, it is also possible to specify how a specific <code class="prettyprint">&lt;x-card&gt;</code> animates when entering the deck with the <code>transition-override</code> attribute.</p>
+        <header><h2>Specifying card-specific animations: <code>transition-override/.transitionOverride</code></h2></header>
+        <p>While the <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute changes the animation of all cards, it is also possible to specify how a specific <code class="prettyprint">&lt;x-card&gt;</code> animates when entering the deck with the <code>transition-override</code> attribute (also accessible through the <code>.transitionOverride</code> property.</p>
         <p>An <code class="prettyprint">&lt;x-card&gt;</code>'s <code>transition-override</code> attribute can take any of the same values as the <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute.
         </p>
 
@@ -166,7 +166,7 @@
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>JavaScript</h3>
-            <pre class="prettyprint javascript">// assume addButton, removeButton, and deck<br/>//are already defined as their respective DOM elements<br/>// also assume that .randomColor simply returns a random color rgb string<br/>addButton.addEventListener(&quot;click&quot;, function(){<br/>    var newCard = document.createElement(&quot;x-card&quot;);<br/>    newCard.style.backgroundColor = randomColor();<br/>    newCard.textContent = deck.numCards;<br/>    deck.appendChild(newCard);<br/>});<br/>removeButton.addEventListener(&quot;click&quot;, function(){<br/>    if(deck.numCards &gt; 0){<br/>        var lastCard = deck.getCardAt(deck.numCards-1);<br/>        deck.removeChild(lastCard);            <br/>    }<br/>});</pre>
+            <pre class="prettyprint javascript">// assume addButton, removeButton, and deck<br/>//are already defined as their respective DOM elements<br/>// also assume that .randomColor simply returns a random color rgb string<br/>addButton.addEventListener(&quot;click&quot;, function(){<br/>    // deck.numCards retrieves the number of cards currently in the deck<br/>    var newIndex = deck.numCards;<br/>    var newCard = document.createElement(&quot;x-card&quot;);<br/>    newCard.style.backgroundColor = randomColor();<br/>    newCard.textContent = newIndex;<br/>    deck.appendChild(newCard);<br/>    // for demo, shuffle to newly inserted card<br/>    deck.shuffleTo(newIndex);<br/>});<br/>removeButton.addEventListener(&quot;click&quot;, function(){<br/>    if(deck.numCards &gt; 0){<br/>        //deck.getCardAt retrieves the &lt;x-card&gt; at the given index<br/>        var lastCard = deck.getCardAt(deck.numCards-1);<br/>        deck.removeChild(lastCard);            <br/>    }<br/>});</pre>
         </div>
     </section>
 
@@ -191,7 +191,7 @@
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>Styling</h3>
-            <pre class="prettyprint css">/* grey out leaving card */<br/>#custom-styles x-card[leaving]{<br/>    text-shadow: none;<br/>    background-color: grey!important;<br/>    color: #ccc;<br/>    opacity: 0.6;<br/>}<br/>/* add caption to selected card */<br/>#custom-styles x-card[selected]:after{<br/>    content: &quot;(selected)&quot;;<br/>    display: block;<br/>    font-size: .2em;<br/>}</pre>
+            <pre class="prettyprint css">/* grey out leaving card */<br/>#custom-styles x-card[leaving]{<br/>    text-shadow: none;<br/>    background-color: grey!important;<br/>    color: #ccc;<br/>    opacity: 0.6;<br/>}<br/>/* add caption to selected card */<br/>#custom-styles x-card[selected]:after{<br/>    content: &quot;selected&quot;;<br/>    display: block;<br/>    font-size: .2em;<br/>}</pre>
         </div>
     </section>
 
@@ -224,16 +224,5 @@
 <script type="text/javascript" src="../../../dist/brick.js"></script>
 <script type="text/javascript" src="../../../site/js/prettify.js"></script>
 <script type="text/javascript" src="demo.js"></script>
-<script>
-document.addEventListener('DOMComponentsLoaded', function(){
-    xtag.addEvent(document, 'shufflestart:delegate(x-deck)', function(e){
-        console.log("shufflestart", e, "detected on", this);
-    });
-    
-    xtag.addEvent(document, 'shuffleend:delegate(x-deck)', function(e){
-        console.log("shuffleend", e, "detected on", this);
-    });
-});
-</script>
 </body>
 </html>
