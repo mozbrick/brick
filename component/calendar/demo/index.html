@@ -197,6 +197,43 @@
         </div>
     </section>
     <section class="demo-wrap">
+        <header><h2>Styling the calendar</h2></header>
+        <p>Due to the number of elements in the calendar, utilize any of the following CSS selectors to customize the calendar's appearance:
+            <ul>
+                <li>To style the calendar's container, apply styles to <code class="prettyprint">x-calendar</code>.</li>
+                <li>To style the month label, apply styles to <code class="prettyprint">x-calendar .month-label</code>.
+                <li>To style individual months, apply styles to <code class="prettyprint">x-calendar .month</code>.
+                    <ul>
+                      <li>Note that to change how wide months are, apply the style here, as the width of days and weeks are percentages in relation to this width</li>
+                      <li>Also note that a month's max-width is constrained by the width of the <code class="prettyprint">x-calendar</code>.</li>
+                    </ul>
+                </li>    
+                <li>To style individual weeks, apply styles to <code class="prettyprint">x-calendar .week</code>.</li>
+                <li>To style individual days, apply styles to <code class="prettyprint">x-calendar .day</code>.</li>
+                <li>To style the row of weekday labels, apply styles to <code class="prettyprint">x-calendar .weekday-labels</code>.</li>
+                <li>To style individual weekday labels, apply styles to <code class="prettyprint">x-calendar .weekday-label</code>.</li>
+                <li>To style the current day, apply styles to <code class="prettyprint">x-calendar .day.today</code>.</li>
+                <li>To style days that are not in the current month, apply styles to <code class="prettyprint">x-calendar .day.badmonth</code></li>
+                <li>To style chosen days, apply styles to <code class="prettyprint">x-calendar .day.chosen</code></li>
+                <li>To style the previous and next navigation control buttons, apply styles to <code class="prettyprint">x-calendar .prev</code> and <code class="prettyprint">x-calendar .next</code>.</li>
+                <li>To style how elements appear when the calendar is being dragged on, use the <code class="prettyprint">x-calendar[active]</code> selector.
+                    <ul>
+                      <li>Similarly, to style the day that is being hovered over during a drag, use <code class="prettyprint">x-calendar[active] .day[active]</code></li>
+                    </ul>
+            </ul>
+        </p>
+        <div class="two-up">
+            <figure class="demo">
+                <x-calendar id="custom-style-cal" controls></x-calendar>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-calendar id="custom-style-cal" controls&gt;&lt;/x-calendar&gt;</pre>
+            <h3>CSS styling</h3>
+            <pre class="prettyprint css">#custom-style-cal{<br/>    background-color: lightsteelblue;<br/>}<br/><br/>#custom-style-cal .month-label{<br/>    background-color: rgba(255,255,255,.3);<br/>}<br/><br/>/* use height and line-height to <br/>* modify the height of weeks */<br/>#custom-style-cal .week{<br/>    height: 1.9em;<br/>    line-height: 1.9em;<br/>}<br/><br/>#custom-style-cal .day{<br/>    font-size: .85em;<br/>    border-radius: 50%;<br/>    border: 1px solid #fff;<br/>    box-shadow: inset 1px 1px 4px grey;<br/>}<br/><br/>/* use :not selectors to let default colors <br/> * fall through in those cases */<br/>#custom-style-cal .day:not(:hover):not(.chosen){<br/>    background-color: #fff;<br/>}<br/><br/>#custom-style-cal .day.today{<br/>    border-color: limegreen;<br/>}</pre>
+    </section>
+    <section class="demo-wrap">
         <header><h2>Doing additional rendering with <code>.customRenderFn</code></h2></header>
         <p>In some cases, a developer may want additional ability to style the calendar dynamically beyond the default behavior. To help faciltate this, the <code class="prettyprint">x-calendar</code> can take an additional callback function through the <code>.customRenderFn</code> property to call on each displayed day whenever the calendar is rerendered.</p>
         <p>The callback function will be called with three parameters: the day's DOM element, the JavaScript Date object corresponding to the day, and the ISO-formatted string version of the date.</p>
@@ -218,8 +255,8 @@
         </div>
     </section>
     <section class="demo-wrap">
-        <header><h2>Putting it all together: creating simple event storage/manager</h2></header>
-        <p>This is a simple example of how to use the <code class="prettyprint">&lt;x-calendar&gt;</code> component's API to create a simple event scheduler/manager.</p>
+        <header><h2>Putting it all together: creating a simple event scheduler/manager</h2></header>
+        <p>This is a simple example of how to use the <code class="prettyprint">&lt;x-calendar&gt;</code> component's API to create a simple widget that can store and retrieve day-specific event data.</p>
         <div class="two-up">
             <figure class="demo">
                 <figure id="scheduler-demo">

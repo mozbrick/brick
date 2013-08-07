@@ -75,8 +75,14 @@ header {
 
 section, footer {
   clear: left;
-  overflow: hidden;
   margin: 3em 0;
+}
+
+/* clearfix */
+section:after, footer:after{
+  content: "";
+  display: block;
+  clear: left;
 }
 
 section.demo-wrap{

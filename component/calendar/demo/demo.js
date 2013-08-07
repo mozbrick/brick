@@ -217,28 +217,28 @@ document.addEventListener('DOMComponentsLoaded', function(){
         var demoSect = this;
         var contextEl = getContextEl(demoSect);
         var markupEl = getMarkupEl(demoSect);
-        updateHtmlMarkup(markupEl, contextEl);
+        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
     });
 
     xtag.addEvent(document, "datetoggleoff:delegate(.demo-wrap)", function(e){
         var demoSect = this;
         var contextEl = getContextEl(demoSect);
         var markupEl = getMarkupEl(demoSect);
-        updateHtmlMarkup(markupEl, contextEl);
+        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
     });
 
     xtag.addEvent(document, "datetap:delegate(.demo-wrap)", function(e){
         var demoSect = this;
         var contextEl = getContextEl(demoSect);
         var markupEl = getMarkupEl(demoSect);
-        updateHtmlMarkup(markupEl, contextEl);
+        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
     });
 
 
     xtag.query(document, '.demo-wrap').forEach(function(demoSect){
         var contextEl = getContextEl(demoSect);
         var markupEl = getMarkupEl(demoSect);
-        updateHtmlMarkup(markupEl, contextEl);
+        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
     });
 
 

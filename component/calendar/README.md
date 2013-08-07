@@ -297,7 +297,7 @@ Fired whenever the user navigates forward one month
 - To style how elements appear when the calendar is being dragged on, use the `x-calendar[active]` selector.
     - Similarly, to style the day that is being hovered over during a drag, use `x-calendar[active] .day[active]`
 
-(See [demo/calendar-demo.html](demo/calendar-demo.html) for an example of applying custom styles.)
+(See [demo/index.html](demo/index.html) for an example of applying custom styles.)
 
 
 ## Misc

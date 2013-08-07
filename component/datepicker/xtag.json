@@ -23,8 +23,13 @@
 			"value": "Indicates the currently displayed value of the datepicker. Can also be used to initialize a certain value.",
 			"polyfill": "Indicates whether or not the datepicker is using a polyfill UI or not. While this is set automatically, this can also be set in markup to force the datepicker to always use its polyfill UI version."
 		},
-		"events": {},
-		"methods": {},
+		"events": {
+			"input": "Fired by the <x-datepicker> any time the user selects a date. Also fired as the user types in a date.",
+			"change": "Fired by the <x-datepicker> whenever the submitValue of the datepicker changes or when the value is finalized. In other words, while input fires as the user types, change only fires if this changes the date selected by the datepicker, or if the user hits enter/leaves the datepicker's focus."	
+		},
+		"methods": {
+			"editLabels": "Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure."
+		},
 		"getters": {
 			"name": "Retrieves the current name of the datepicker element. This is required for a value to be submitted to a default form.",
 			"value": "Retrieves the currently displayed value of the datepicker element. Note that this may not necessarily be the value that would be submitted to a form. For example, if the user is currently typing 'July 4, 2013' and hasn't left focus yet, the value is 'July 4, 2013', not '2013-07-04'.",

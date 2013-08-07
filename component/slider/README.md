@@ -55,11 +55,11 @@ Polyfill is automatically set on x-slider creation depending on if range inputs 
 
 ## ___change___
 
-Fired by the slider when its value is changed (ie: at the end of a drag that changes the value)
+Fired by the slider when its value is finished changing (ie: at the end of a drag that changes the value)
 
 ## ___input___
 
-Fired by the slider when the user tries to input a new, whether by mouse or touch
+Fired by the slider when the user tries to input a new value, whether by mouse or touch. Will fire continuously as the user drags the slider.
 
 ## ___focus___
 

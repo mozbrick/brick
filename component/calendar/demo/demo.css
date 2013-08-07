@@ -11,6 +11,38 @@
     text-shadow: 1px 1px 4px grey;
 }
 
+#custom-style-cal{
+    background-color: lightsteelblue;
+}
+
+#custom-style-cal .month-label{
+    background-color: rgba(255,255,255,.3);
+}
+
+/* use height and line-height to 
+* modify the height of weeks */
+#custom-style-cal .week{
+    height: 1.9em;
+    line-height: 1.9em;
+}
+
+#custom-style-cal .day{
+    font-size: .85em;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    box-shadow: inset 1px 1px 4px grey;
+}
+
+/* use :not selectors to let default colors 
+ * fall through in those cases */
+#custom-style-cal .day:not(:hover):not(.chosen){
+    background-color: #fff;
+}
+
+#custom-style-cal .day.today{
+    border-color: limegreen;
+}
+
 #scheduler-demo > *:not(x-calendar){
     margin: 0 auto;
     display: block;

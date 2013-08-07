@@ -1,20 +1,20 @@
-function hasNativeRangeSupport(){
+function hasNativeDateSupport(){
     rangeInput = document.createElement("input");
-    rangeInput.setAttribute("type", "range");
+    rangeInput.setAttribute("type", "date");
 
-    return (rangeInput.type.toLowerCase() === "range");
+    return (rangeInput.type.toLowerCase() === "date");
 }
 
 function updatePropertyList(demoSect, skipPrettyprint){
-    var slider = demoSect.querySelector("x-slider");
+    var datepicker = demoSect.querySelector("x-datepicker");
     var proplist = demoSect.querySelector('.proplist');
-    if((!slider) || (!proplist)) return;
+    if((!datepicker) || (!proplist)) return;
 
-    var propNames = ["value", "min", "max", "step", "polyfill"];
+    var propNames = ["value", "submitValue", "polyfill"];
     var propKeys = [];
     for(var i = 0; i < propNames.length; i++){
         var propName = propNames[i];
-        var val = slider[propName];
+        var val = datepicker[propName];
         if(typeof(val) === "string") val = '"'+val+'"';
         propKeys.push("." + propName + " -> " + val);
     }
@@ -23,6 +23,7 @@ function updatePropertyList(demoSect, skipPrettyprint){
     xtag.removeClass(proplist, "prettyprinted");
     if(!skipPrettyprint) prettyPrint(); 
 }
+
 
 var updateEventsDemo = function(){
     var nativeCounters = {
@@ -35,41 +36,44 @@ var updateEventsDemo = function(){
     };
     var eventDemo = document.getElementById("event-demo");
     var markupEl = eventDemo.querySelector(".events");
-    var nativeElem = eventDemo.querySelector("x-slider:first-of-type");
-    var polyfillElem = eventDemo.querySelector("x-slider:last-of-type");
-    return function(slider, eventType){
+    var nativeElem = eventDemo.querySelector("x-datepicker:first-of-type");
+    var polyfillElem = eventDemo.querySelector("x-datepicker:last-of-type");
+    return function(datepicker, eventType){
         if(eventType !== undefined && 
-           (slider === nativeElem || slider === polyfillElem))
+           (datepicker === nativeElem || datepicker === polyfillElem))
         {
-            var isPolyfill = (slider === polyfillElem);
+            var isPolyfill = (datepicker === polyfillElem);
             var counters = (isPolyfill) ? polyfillCounters : nativeCounters;
             if(!(eventType in counters)){
                 return;
             }
             counters[eventType]++;
         }
-        markupEl.textContent = "<x-slider> input count: " + 
+        markupEl.textContent = "<x-datepicker> input count: " + 
                                 nativeCounters.input + 
-                                "\n<x-slider> change count: " + 
+                                "\n<x-datepicker> change count: " + 
                                 nativeCounters.change + 
-                                "\n<x-slider polyfill> input count: " + 
+                                "\n<x-datepicker polyfill> input count: " + 
                                 polyfillCounters.input + 
-                                "\n<x-slider polyfill> change count: " + 
+                                "\n<x-datepicker polyfill> change count: " + 
                                 polyfillCounters.change;
     }
 }();
 
 document.addEventListener('DOMComponentsLoaded', function(){
-    var supportsNative = hasNativeRangeSupport();
+    var supportsNative = hasNativeDateSupport();
     var msgEl = document.getElementById("native-support-msg");
     msgEl.innerHTML = "<code class='prettyprint'>" +
-                     "&lt;input type='range'&gt;</code> is <b>" + 
+                     "&lt;input type='date'&gt;</code> is <b>" + 
                      ((supportsNative) ? "" : " NOT") +
                      " natively</b> supported by this browser, so all "+
-                     "<code class='prettyprint'>&lt;x-slider&gt;</code>"+
+                     "<code class='prettyprint'>&lt;x-datepicker&gt;</code>"+
                      " demos will use a <b>" + 
                      ((supportsNative) ? "native" : "polyfill") + " UI</b>.";
 
+    xtag.query(document, ".demo-wrap").forEach(function(demoSect){
+        updatePropertyList(demoSect, true);
+    });
 
     xtag.addEvent(document, "input:delegate(.demo-wrap)", function(e){
         updateEventsDemo(e.target, "input");
@@ -81,13 +85,9 @@ document.addEventListener('DOMComponentsLoaded', function(){
         updatePropertyList(this);
     });
 
-    xtag.query(document, ".demo-wrap").forEach(function(demoSect){
-        updateEventsDemo();
-        updatePropertyList(demoSect, true);
-    });
-
     var form = document.querySelector("form");
     form.addEventListener("submit", function(e){
+        // retrieves all _actual_ <input> elements (ie: not fake polyfills)
         var inputElems = e.currentTarget.elements;
         var vals = "";
         for (var i = 0; i < inputElems.length; i++) {
@@ -101,5 +101,6 @@ document.addEventListener('DOMComponentsLoaded', function(){
         e.preventDefault();
         e.stopPropagation();
     });
+    updateEventsDemo();
     prettyPrint();
 });

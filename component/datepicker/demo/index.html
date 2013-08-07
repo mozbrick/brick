@@ -2,121 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Brick: x-datepicker demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="../../../site/css/main.css"/>
-
-    <style>
-        .styles-demo {
-            width: 300px;
-            box-shadow: 1px 1px 4px grey;
-        }
-
-        .styles-demo > input{
-            background: #bbf0c6 url("retina_wood.png") repeat center;
-        }
-
-        .styles-demo[invalid] > input{
-            text-decoration: line-through;
-        }
-
-        .styles-demo > .x-datepicker-polyfill-ui{
-            background-color: #eee;
-        }
-
-        .styles-demo > .x-datepicker-polyfill-ui .day{
-            border-radius: 50%;
-            box-shadow: inset 1px 1px 4px grey;
-            background-color: white;
-        }
-
-        .styles-demo > .x-datepicker-polyfill-ui .day.chosen{
-            background-color: orange;
-        }
-
-        code{
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="demo.css"/>
 </head>
 <body>
-    <article>
-        <header><h1>x-datepicker demo</h1></header>
-        <form action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi" method="POST">
-            <x-datepicker name="datepicker-demo"></x-datepicker>
-            <button class="toggle" type="button">Toggle polyfill</button>
-            <code class="prettyprint">
-                &lt;x-datepicker name="datepicker-demo"&gt;&lt;/x-datepicker&gt;
-            </code>
-            <input type="submit"></input>
-        </form>
-        <hr/>
-        <h2>Forcing polyfill UI at all times</h2>
-        <x-datepicker polyfill></x-datepicker>
-        <code class="prettyprint">
-            &lt;x-datepicker polyfill&gt;&lt;/x-datepicker&gt;
-        </code>
-        <hr/>
-        <h2>Custom Styles Demo:</h2>
-        <h3>Non polyfill:</h3>
-        <x-datepicker class="styles-demo"></x-datepicker>
-        <code class="prettyprint">
-            &lt;x-datepicker class="styles-demo"&gt;&lt;/x-datepicker&gt;
-        </code>
-        <h3>Polyfill:</h3>
-        <x-datepicker class="styles-demo" polyfill></x-datepicker>
-        <code class="prettyprint">
-            &lt;x-datepicker class="styles-demo" polyfill&gt;&lt;/x-datepicker&gt;
-        </code>
-    </article>
+<article>
+    <header><h1>x-datepicker</h1></header>
+    <p><code class="prettyprint">&lt;x-datepicker&gt;</code>'s are a polyfill for <code class="prettyprint">&lt;input type="date"&gt;</code>.</p>
+    <p>In fact, if <code class="prettyprint">&lt;input type="date"&gt;</code> elements are natively supported, <code class="prettyprint">&lt;x-datepicker&gt;</code>'s default to rendering them instead of a custom UI.</p>
+    <p id="native-support-msg"></p>
+    <section class="demo-wrap">
+        <header><h2>Basic usage</h2></header>
+        <div class="two-up">
+            <figure class="demo">
+                <x-datepicker></x-datepicker>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-datepicker&gt;&lt;/x-datepicker&gt;</pre>
+            <h3>Properties</h3>
+            <pre class="prettyprint proplist"></pre>
+        </div>
+    </section>
+    <section class="demo-wrap">
+        <header><h2>Forcing polyfill UI view with <code class="prettyprint">polyfill</code></h2></header>
+        <p>In some cases, you may wish for a consistent UI across all browsers, instead of selectively displaying native inputs. If this is the case, set the <code class="prettyprint">polyfill</code> attribute in the markup.</p>
+        <div class="two-up">
+            <figure class="demo">
+               <x-datepicker polyfill></x-datepicker>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-datepicker polyfill&gt;&lt;/x-datepicker&gt;</pre>
+            <h3>Properties</h3>
+            <pre class="prettyprint proplist"></pre>
+        </div>
+    </section>
+    <section id="form-demo" class="demo-wrap">
+        <header><h2>Submitting in forms with <code class="prettyprint">name</code>, using <code>.submitValue</code></h2></header>
+        <p>Much like any form input element, <code class="prettyprint">&lt;x-datepicker&gt;</code> elements require a <code>name</code> attribute to submit.</p>
+        <p>Note that the value submitted to the form will be equivalent to the <code>.submitValue</code> of the <code class="prettyprint">&lt;x-datepicker&gt;</code>, as <code>.submitValue</code> consists of the current <code>.value</code> of the <code class="prettyprint">&lt;x-datepicker&gt;</code>, but parsed into a string with the ISO date format of YYYY-MM-DD.</p>
+        <div class="two-up">
+            <figure class="demo">
+               <form>
+                  <x-datepicker name="ahoy-there-datey"></x-datepicker>
+                  <input type="submit"/>
+               </form>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;form&gt;<br/>  &lt;x-datepicker name=&quot;ahoy-there-datey&quot;&gt;&lt;/x-datepicker&gt;<br/>  &lt;input type=&quot;submit&quot;/&gt;<br/>&lt;/form&gt;</pre>
+            <h3>Properties</h3>
+            <pre class="prettyprint proplist"></pre>
+        </div>
+    </section>
+    <section id="event-demo" class="demo-wrap">
+        <header><h2>Listening for date changes</h2></header>
+        <p>In order to detect user input to the datepicker, two different events are fired by the <code class="prettyprint">&lt;x-datepicker&gt;</code>, which act in different ways:
+            <ul>
+                <li><code>input</code>: This event is fired when the user selects a date on the calendar, and is also fired continuously as the user enters a date.
+                </li>
+                <li><code>change</code>: This event is fired whenever the date corresponding to the datepicker (ie. the <code>.submitValue</code>) changes, or when the date is finalized by hitting the Enter key or leaving the datepicker's focus. 
+                </li>
+            </ul>
+        </p>
+        <div class="two-up">
+            <figure class="demo">
+                <div>
+                    <p>Without polyfill</p>
+                    <x-datepicker></x-datepicker>
+                    <p>With polyfill</p>
+                    <x-datepicker polyfill></x-datepicker>
+                </div>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Initial markup</h3>
+            <pre class="prettyprint html">&lt;p&gt;Without polyfill&lt;/p&gt;<br/>&lt;x-datepicker&gt;&lt;/x-datepicker&gt;<br/>&lt;p&gt;With polyfill&lt;/p&gt;<br/>&lt;x-datepicker polyfill&gt;&lt;/x-datepicker&gt;</pre>
+            <h3>Events</h3>
+            <pre class="events code-box"></pre>
+        </div>
+    </section>
+</article>
 
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-    <script type="text/javascript" src="../../../dist/brick.js"></script>
-    <script>
-        var ENTER_KEYCODE = 13;
-
-        document.addEventListener('DOMComponentsLoaded', function(){
-            xtag.query(document, "x-datepicker ~ button.toggle").forEach(function(button){
-                var datepicker = button.parentNode.querySelector("x-datepicker");
-                button.textContent = "Toggle polyfill (currently " +
-                                      ((datepicker.polyfill) ? "on" : "off") +
-                                    ")";
-            });
-
-            xtag.addEvent(document, "click:delegate(button.toggle)", function(e){
-                var button = this;
-                var datepicker = button.parentNode.querySelector("x-datepicker");
-                if(datepicker){
-                    datepicker.polyfill = !(datepicker.polyfill);
-
-                    button.textContent = "Toggle polyfill (currently " +
-                                    ((datepicker.polyfill) ? "on" : "off") +
-                                    ")";
-                }
-                e.preventDefault();
-            });
-
-            xtag.addEvent(document, "keypress:delegate(x-datepicker)", function(e){
-                // for demo, prevent submitting form with enter
-                var keyCode = e.keyCode;
-                if(keyCode === ENTER_KEYCODE){
-                    e.preventDefault();
-                }
-            });
-
-            xtag.addEvent(document, "input:delegate(x-datepicker)", function(e){
-                console.log("input, value=", this.value, "submitValue=", this.submitValue);
-            });
-
-            xtag.addEvent(document, "focus:delegate(x-datepicker)", function(e){
-                console.log("focus", e);
-            });
-
-            xtag.addEvent(document, "blur:delegate(x-datepicker)", function(e){
-                console.log("blur", e);
-            });
-        }, false);
-    </script>
+<script type="text/javascript" src="../../../dist/brick.js"></script>
+<script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="demo.js"></script>
+<script>
+document.addEventListener('DOMComponentsLoaded', function(){
+});
+</script>
 </body>
 </html>

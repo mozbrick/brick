@@ -14,7 +14,7 @@
     <article>
         <header><h1>x-slider demos</h1></header>
         <p><code class="prettyprint">&lt;x-slider&gt;</code>'s are a polyfill for <code class="prettyprint">&lt;input type="range"&gt;</code>, and as such, support most of the same attributes and events.</p>
-        <p>In fact, if <code class="prettyprint">&lt;input type="range"&gt;</code> elements are natively supported, <code class="prettyprint">&lt;x-slider&gt;</code>'s default to using them.</p>
+        <p>In fact, if <code class="prettyprint">&lt;input type="range"&gt;</code> elements are natively supported, <code class="prettyprint">&lt;x-slider&gt;</code>'s default to rendering them instead of a custom UI.</p>
         <p id="native-support-msg"></p>
         <section class="demo-wrap">
             <header><h2>Basic usage</h2></header>
@@ -89,7 +89,7 @@
                 </ul>
             </p>
             <p>
-                <strong>Important note:</strong> Native implementation of input vs change events differs from browser to broswer, so when using the native non-polyfill version of the UI, input and change events will fire in different circumstances than specified.
+                <strong>Important note:</strong> Native implementation of <code>input</code> vs <code>change</code> events differs from browser to broswer, so when using the native non-polyfill version of the UI, <code>input</code> and <code>change</code> events will fire in different circumstances than specified.
             </p>
             <p>
                 While Firefox23+ and the <code class="prettyprint">&lt;x-slider&gt;</code> polyfill UI follow the <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#common-event-behaviors">current</a> <a href="http://html5.org/tools/web-apps-tracker?from=7786&to=7787">standards</a> regarding these events, Webkit and Internet Explorer native implementations are <a href="https://code.google.com/p/chromium/issues/detail?id=155747">not yet guaranteed</a> to follow these specs. As a workaround, force the <code>polyfill</code> attribute on the <code class="prettyprint">&lt;x-slider&gt;</code> if the <code>input</code>/<code>change</code> difference is crucial.

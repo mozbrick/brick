@@ -50,7 +50,25 @@ Also note that unless the datepicker has a `name` attribute, this does not guara
 
 ## ___editLabels___(newLabelData)
 
-See `x-calendar`'s `editLabels` method.
+If a calendar is present, changes the labels of the calendar. See `x-calendar`'s `.labels` property for more details.
+
+# Events
+
+## ___input___
+
+Fired by the datepicker when the user tries to input a new value. In other words, this will fire if the user selects a date, and will also fire continuously as the user types in a new date.
+
+## ___change___
+
+Fired by the datepicker only when its final value (ie: `submitVal`) is changed or when the value is finalized. In other words, while `input` fires as the user types in a date, `change` only fires when the parsed date it corresponds to is changed, or when the user hits enter.
+
+## ___focus___
+
+Fired by the slider when it receives focus, such as when it is tabbed to.
+
+## ___blur___
+
+Fired by the slider when it loses focus, such as when it is tabbed off of.
 
 # Styling
 

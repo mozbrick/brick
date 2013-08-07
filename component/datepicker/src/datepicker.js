@@ -122,14 +122,31 @@
            parsed version as well)
     **/
     function _updateDatepicker(datepicker, sendParsed){
-        var origVal = (datepicker.polyfill) ? 
+        var rawVal = (datepicker.polyfill) ? 
                             datepicker.xtag.polyfillInput.value : 
                             datepicker.xtag.dateInput.value;
-        var parsedDate = parseSingleDate(origVal);
+        var parsedDate = parseSingleDate(rawVal);
 
-        datepicker.value = (sendParsed && parsedDate) ? parsedDate : origVal;
+        datepicker.value = (sendParsed && parsedDate) ? parsedDate : rawVal;
     }
 
+    // pass this a callback function to execute
+    // if the submit value of the datepicker is changed by the callback,
+    // fire the change event on the datepicker
+    // if alsoWatchRawVal is true, will also trigger a change event if the 
+    // .value changes, not just if the .submitValue changes
+    function _watchForChange(datepicker, callback, alsoWatchRawVal){
+        var oldVal = datepicker.submitValue;
+        var oldRawVal = datepicker.value;
+        callback();
+        var newVal = datepicker.submitValue;
+        var newRawVal = datepicker.value;
+
+        if(oldVal !== newVal || (alsoWatchRawVal && oldRawVal !== newRawVal)) 
+        {
+            xtag.fireEvent(datepicker, "change");
+        }
+    }
 
     xtag.register("x-datepicker", {
         lifecycle: {
@@ -160,9 +177,10 @@
 
                 var selectedDate = parseSingleDate(e.detail.date);
 
-                datepicker.value = (selectedDate) ? iso(selectedDate) : "";
-
-                xtag.fireEvent(datepicker.xtag.polyfillInput, "input");
+                _watchForChange(datepicker, function(){
+                    datepicker.value = (selectedDate) ? iso(selectedDate) : "";
+                    xtag.fireEvent(datepicker, "input");
+                });
             },
 
             "datetoggleoff:delegate(x-calendar)": function(e){
@@ -182,9 +200,12 @@
             "blur:delegate(.x-datepicker-polyfill-input)": function(e){
                 var datepicker = e.currentTarget;
 
-                // send parsed version to ensure that text of input matches
-                _updateDatepicker(datepicker, true);
                 datepicker.removeAttribute("focused");
+
+                // send parsed version to ensure that text of input matches
+                _watchForChange(datepicker, function(){
+                    _updateDatepicker(datepicker, true);
+                }, true);
             },
 
             // force readonly state as soon as touch event is detected
@@ -201,23 +222,55 @@
                 var keyCode = e.keyCode;
                 if(keyCode === ENTER_KEYCODE){
                      // send parsed version to ensure that text of input matches
-                    _updateDatepicker(e.currentTarget, true);
+                     _watchForChange(e.currentTarget, function(){
+                        _updateDatepicker(e.currentTarget, true);
+                    }, true);
                 }
             },
 
             // handle UI changes to the native date input
             "input:delegate(.x-datepicker-input)": function(e){
-                // send parsed version to ensure that value of native
-                // input matches
-                _updateDatepicker(e.currentTarget, true);
+                _watchForChange(e.currentTarget, function(){
+                    // send parsed version to ensure that value of native
+                    // input matches
+                     _updateDatepicker(e.currentTarget, true);
+
+                    // redirect event target
+                    e.stopPropagation();
+                    xtag.fireEvent(e.currentTarget, "input");
+                });
             },
 
             // handles UI changes to the polyfill input
             "input:delegate(.x-datepicker-polyfill-input)": function(e){
                 // _DONT_ send parsed verison when using polyfill in order to 
-                // prevent the input from constnatly overriding the user's
+                // prevent the input from constantly overriding the user's
                 // text as they are typing
-                _updateDatepicker(e.currentTarget, false);
+                _watchForChange(e.currentTarget, function(){
+                    _updateDatepicker(e.currentTarget, false);
+                    // redirect event target
+                    e.stopPropagation();
+                    xtag.fireEvent(e.currentTarget, "input");
+                });
+            },
+
+            // simply redirect change event target if native
+            "change:delegate(.x-datepicker-input)": function(e){
+                e.stopPropagation();
+                xtag.fireEvent(e.currentTarget, "change");
+            },
+
+            "change:delegate(.x-datepicker-polyfill-input)": function(e){
+                // change event is different for text input, 
+                // so prevent from bubbling
+                e.stopPropagation();
+
+                // _DONT_ send parsed verison when using polyfill in order to 
+                // prevent the input from constantly overriding the user's
+                // text as they are typing
+                _watchForChange(e.currentTarget, function(){
+                    _updateDatepicker(e.currentTarget, false);
+                });
             }
         },
         accessors: {
@@ -235,17 +288,10 @@
 
             // returns the value that should be submitted to a form
             // note: even if no name attribute is present, still return what 
-            // should be subnmitted (with a logged warning) in cases of 
-            // dynamic submission
+            // should be submitted for cases of dynamic submission
             "submitValue":{
                 get: function(){
-                    var dateInput = this.xtag.dateInput;
-                    if(!dateInput.hasAttribute("name")){
-                        console.log("warning: no name is specified for the "+
-                                    "datepicker, so the submitValue will not "+
-                                    "submitted by default");
-                    }
-                    return dateInput.value;
+                    return this.xtag.dateInput.value;
                 }
             },
 
@@ -394,8 +440,8 @@
         },
         methods: {
             editLabels: function(newLabelData){
-                if(this.xtag.polyfillUI && this.xtag.polyfillUI.editLabels){
-                    this.xtag.polyfillUI.editLabels(newLabelData);
+                if(this.xtag.polyfillUI && this.xtag.polyfillUI.labels){
+                    this.xtag.polyfillUI.labels = newLabelData;
                 }
             }
         }
