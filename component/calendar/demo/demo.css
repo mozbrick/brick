@@ -2,10 +2,44 @@
     overflow: auto;
     max-width: 100%;
     max-height: 100%;
+    margin: 0;
 }
 
 *[dance-time]{
     background-image: url("grounds_keeping_it_real_s1.gif");
     color: white;
     text-shadow: 1px 1px 4px grey;
+}
+
+#scheduler-demo > *:not(x-calendar){
+    margin: 0 auto;
+    display: block;
+}
+
+/* give the current day a sunken look */
+#scheduler-demo > x-calendar .scheduler-current{
+    box-shadow: inset 1px 1px 4px grey;
+    background-color: rgba(65,105,225,0.5);
+}
+
+/* days with data have a border */
+#scheduler-demo > x-calendar [scheduler-has-info]{
+    border-color: royalblue;
+    border-style: dashed;
+}
+
+/* days with data also have an icon */
+#scheduler-demo > x-calendar [scheduler-has-info]:after{
+    content: "";
+    position: absolute;
+    background-color: royalblue;
+    right: 0%;
+    bottom: 0%;
+    width: 25%;
+    height: 25%;
+    border-radius: 50%;
+    -webkit-transform: translate(50%, 50%);
+    -moz-transform: translate(50%, 50%);
+    -o-transform: translate(50%, 50%);
+    transform: translate(50%, 50%);
 }

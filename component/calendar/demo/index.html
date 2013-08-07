@@ -217,6 +217,28 @@
             <pre class="prettyprint javascript">var cal = document.getElementById(&quot;custom-render-simple&quot;);<br/>cal.customRenderFn = function(dayEl, date, iso){<br/>    // add selector to every 5th day in a month<br/>    if(date.getDate() % 5 === 0){<br/>        dayEl.setAttribute(&quot;dance-time&quot;, true);<br/>    }<br/>    else{<br/>        dayEl.removeAttribute(&quot;dance-time&quot;);<br/>    }<br/>};</pre>
         </div>
     </section>
+    <section class="demo-wrap">
+        <header><h2>Putting it all together: creating simple event storage/manager</h2></header>
+        <p>This is a simple example of how to use the <code class="prettyprint">&lt;x-calendar&gt;</code> component's API to create a simple event scheduler/manager.</p>
+        <div class="two-up">
+            <figure class="demo">
+                <figure id="scheduler-demo">
+                    <x-calendar controls notoggle></x-calendar>
+                    <span>Selected Date: <span id="scheduler-date">None</span></span>
+                    <textarea id="scheduler-info"></textarea>
+                    <button id="scheduler-save" disabled>Update info</button>
+                </figure>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;figure id=&quot;scheduler-demo&quot;&gt;<br/>    &lt;x-calendar controls notoggle&gt;&lt;/x-calendar&gt;<br/>    &lt;span&gt;Selected Date: &lt;span id=&quot;scheduler-date&quot;&gt;None&lt;/span&gt;&lt;/span&gt;<br/>    &lt;textarea id=&quot;scheduler-info&quot;&gt;&lt;/textarea&gt;<br/>    &lt;button id=&quot;scheduler-save&quot; disabled&gt;Update info&lt;/button&gt;<br/>&lt;/figure&gt;</pre>
+            <h3>CSS styling</h3>
+            <pre class="prettyprint css">#scheduler-demo &gt; *:not(x-calendar){<br/>    margin: 0 auto;<br/>    display: block;<br/>}<br/><br/>/* give the current day a sunken look */<br/>#scheduler-demo &gt; x-calendar .scheduler-current{<br/>    box-shadow: inset 1px 1px 4px grey;<br/>    background-color: rgba(65,105,225,0.5);<br/>}<br/><br/>/* days with data have a border */<br/>#scheduler-demo &gt; x-calendar [scheduler-has-info]{<br/>    border-color: royalblue;<br/>    border-style: dashed;<br/>}<br/><br/>/* days with data also have an icon */<br/>#scheduler-demo &gt; x-calendar [scheduler-has-info]:after{<br/>    content: &quot;&quot;;<br/>    position: absolute;<br/>    background-color: royalblue;<br/>    right: 0%;<br/>    bottom: 0%;<br/>    width: 25%;<br/>    height: 25%;<br/>    border-radius: 50%;<br/>    -webkit-transform: translate(50%, 50%);<br/>    -moz-transform: translate(50%, 50%);<br/>    -o-transform: translate(50%, 50%);<br/>    transform: translate(50%, 50%);<br/>}</pre>
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">/** set up custom event handling demo using provided API hooks **/<br/><br/>// the dictionary of iso datestring keys mapped to event data<br/>var DATE_INFO = {};<br/>// the currently displayed date<br/>var CURR_ISO = null;<br/><br/>// aliases for DOM manipulation<br/>var eventsStage = document.getElementById(&quot;scheduler-demo&quot;);<br/>var eventsCal = eventsStage.querySelector(&quot;x-calendar&quot;);<br/>var eventsDateHeader = document.getElementById(&quot;scheduler-date&quot;);<br/>var eventsInfo = document.getElementById(&quot;scheduler-info&quot;);<br/>var eventsSaveButton = document.getElementById(&quot;scheduler-save&quot;);<br/><br/>// define a .customRenderFn that provides extra styling <br/>// information for day elements with stored data<br/>eventsCal.customRenderFn = function(dayEl, date, isoStr){<br/>    if(isoStr === CURR_ISO){<br/>        xtag.addClass(dayEl, &quot;scheduler-current&quot;);<br/>    }<br/>    else{<br/>        xtag.removeClass(dayEl, &quot;scheduler-current&quot;);<br/>    }<br/><br/>    if(isoStr in DATE_INFO){<br/>        dayEl.setAttribute(&quot;scheduler-has-info&quot;, true);<br/>    }<br/>    else{<br/>        dayEl.removeAttribute(&quot;scheduler-has-info&quot;);<br/>    }<br/>}<br/><br/>// respond to calendar taps<br/>eventsCal.addEventListener(&quot;datetap&quot;, function(e){<br/>    // grab date info from event as both a Date and a string<br/>    var date = e.detail.date;<br/>    var dateStr = e.detail.iso;<br/>    // get dictionary content for this date<br/>    var content = (dateStr &amp;&amp; dateStr in DATE_INFO) ? <br/>                                    DATE_INFO[dateStr] : &quot;&quot;;<br/>    // set up text area                                                <br/>    eventsInfo.value = content;<br/>    eventsInfo.disabled = !dateStr;<br/>    eventsSaveButton.disabled = !dateStr;<br/>    // remember currently shown date<br/>    CURR_ISO = dateStr;<br/>    eventsDateHeader.textContent = (dateStr) ? dateStr : &quot;None&quot;;<br/>    // programmatically toggle date object with .toggleDateOn<br/>    eventsCal.toggleDateOn(date);<br/>    // forces rerender of calendar<br/>    eventsCal.render();<br/>});<br/><br/>// save button listener; simply adds textarea value to data<br/>eventsSaveButton.addEventListener(&quot;click&quot;, function(e){<br/>    if(CURR_ISO){<br/>        if(eventsInfo.value){<br/>            DATE_INFO[CURR_ISO] = eventsInfo.value;<br/>        }<br/>        else{<br/>            delete DATE_INFO[CURR_ISO];<br/>        }<br/>    }<br/>    eventsCal.render();<br/>});</pre>
+        </div>
+    </section>
 </article>
 
 <script type="text/javascript" src="../../../dist/brick.js"></script>
