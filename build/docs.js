@@ -41,7 +41,6 @@ var loadComponentList = avow(function (fulfill, reject) {
 
 var generateDocs = avow(function (fulfill, reject, components) {
     console.log('generating documentation');
-    var tmpl = env.getTemplate('docs-leaf.html');
     var docs = {};
     function processComponent(n) {
         if (n < components.length) {
