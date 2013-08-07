@@ -50,9 +50,12 @@ h2 {
   height: 34px;
 }
 
+#mark {
+  white-space: nowrap;
+}
+
 header h1 {
   font-size: 400%;
-  white-space: nowrap;
 }
 
 .logo {
@@ -294,8 +297,8 @@ a.top {
     margin: 1em 0;
   }
 
-  header h1{
-    font-size: 300%;
+  header h1 {
+    font-size: 250%;
   }
 
   .markup-wrap{

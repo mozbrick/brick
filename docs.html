@@ -3,605 +3,607 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-    <title>Brick - docs</title>
+    <title>Brick </title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" href="site/css/main.css">
   </head>
   <body>
     <article>
-      <header>
-        <h1>Documentation</h1>
-      </header>
-      <nav>
-        
-          <a href="#appbar">appbar</a>
-        
-          <a href="#calendar">calendar</a>
-        
-          <a href="#datepicker">datepicker</a>
-        
-          <a href="#deck">deck</a>
-        
-          <a href="#flipbox">flipbox</a>
-        
-          <a href="#iconbutton">iconbutton</a>
-        
-          <a href="#layout">layout</a>
-        
-          <a href="#modal">modal</a>
-        
-          <a href="#slidebox">slidebox</a>
-        
-          <a href="#slider">slider</a>
-        
-          <a href="#tabbar">tabbar</a>
-        
-          <a href="#toggle">toggle</a>
-        
-          <a href="#togglegroup">togglegroup</a>
-        
-          <a href="#tooltip">tooltip</a>
-        
-      </nav>
       
-        <section id="appbar">
-          <h1>appbar</h1>
-          <p>The Application Bar provides the standard top header and navigation layout that is typical for Web Applications on mobile devices.</p>
-          <h2>Attributes</h2>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+  <header>
+    <h1>Documentation</h1>
+  </header>
+  <nav>
+    
+      <a href="#appbar">appbar</a>
+    
+      <a href="#calendar">calendar</a>
+    
+      <a href="#datepicker">datepicker</a>
+    
+      <a href="#deck">deck</a>
+    
+      <a href="#flipbox">flipbox</a>
+    
+      <a href="#iconbutton">iconbutton</a>
+    
+      <a href="#layout">layout</a>
+    
+      <a href="#modal">modal</a>
+    
+      <a href="#slidebox">slidebox</a>
+    
+      <a href="#slider">slider</a>
+    
+      <a href="#tabbar">tabbar</a>
+    
+      <a href="#toggle">toggle</a>
+    
+      <a href="#togglegroup">togglegroup</a>
+    
+      <a href="#tooltip">tooltip</a>
+    
+  </nav>
+  
+    <section id="appbar">
+      <h1>appbar</h1>
+      <p>The Application Bar provides the standard top header and navigation layout that is typical for Web Applications on mobile devices.</p>
+      <h2>Attributes</h2>
       
-        <section id="calendar">
-          <h1>calendar</h1>
-          <p>A port of Potch&#39;s fortnight.js calendar UI in component form</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>controls</code></dt>
-            <dd>Controls the visibility of the calendar&#39;s navigation controls; usage is similar to the &#39;controls&#39; attribute of &lt;video&gt; elements</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>multiple</code></dt>
-            <dd>Controls whether or not multiple calendar dates can be chosen simultaneously</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>span</code></dt>
-            <dd>Specifies the number of months displayed at once by the calendar</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>view</code></dt>
-            <dd>Specifies the Date to focus the calendar display on. For example, a view of Dec 25 2013 and a span of 3 would result in a calendar displaying the months of Nov 2013, Dec 2013, and Jan 2014</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>chosen</code></dt>
-            <dd>Specifies the date or dates that are toggled as chosen on the calendar. Can be specified as either a singular parsable date string or as a JSON string representing a list of both singular dates and [Date, Date] lists of the start and end date for a range of dates</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>notoggle</code></dt>
-            <dd>If set, the default date-toggling behavior of the UI is disabled. However, dates can still be programmatically chosen/toggled.</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <dl>
-            <dt><code>render</code></dt>
-            <dd>Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>prevMonth</code></dt>
-            <dd>Go back one month by updating the 'view' attribute of the calendar.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>nextMonth</code></dt>
-            <dd>Advance one month forward by updating the 'view' attribute of the calendar.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleDateOn</code></dt>
-            <dd>Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleDateOff</code></dt>
-            <dd>Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleDate</code></dt>
-            <dd>Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>hasVisibleDate</code></dt>
-            <dd>Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months.</dd>
-          </dl>
-          
-          <h2>Events</h2>
-          
-          <dl>
-            <dt><code>render</code></dt>
-            <dd>Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>prevMonth</code></dt>
-            <dd>Go back one month by updating the 'view' attribute of the calendar.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>nextMonth</code></dt>
-            <dd>Advance one month forward by updating the 'view' attribute of the calendar.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleDateOn</code></dt>
-            <dd>Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleDateOff</code></dt>
-            <dd>Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleDate</code></dt>
-            <dd>Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>hasVisibleDate</code></dt>
-            <dd>Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months.</dd>
-          </dl>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <h2>Methods</h2>
       
-        <section id="datepicker">
-          <h1>datepicker</h1>
-          <p>A polyfill for &lt;input type=&#39;date&#39;&gt; utilizing the x-calendar component.</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>name</code></dt>
-            <dd>Indicates the name of the input to use. This is the default keyname that will be submitted if submitted through a form.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>value</code></dt>
-            <dd>Indicates the currently displayed value of the datepicker. Can also be used to initialize a certain value.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>polyfill</code></dt>
-            <dd>Indicates whether or not the datepicker is using a polyfill UI or not. While this is set automatically, this can also be set in markup to force the datepicker to always use its polyfill UI version.</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <dl>
-            <dt><code>editLabels</code></dt>
-            <dd>Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure.</dd>
-          </dl>
-          
-          <h2>Events</h2>
-          
-          <dl>
-            <dt><code>editLabels</code></dt>
-            <dd>Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure.</dd>
-          </dl>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <h2>Events</h2>
       
-        <section id="deck">
-          <h1>deck</h1>
-          <p>A box in which cards can be cycled independently of order with a variety of different transitions</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>transition-type</code></dt>
-            <dd>Defines the kind of transition animation that is used when cycling cards. Valid options: &#39;scrollLeft&#39;, &#39;scrollUp&#39;, &#39;scrollRight&#39;, &#39;scrollDown&#39;, &#39;flipX&#39;, &#39;flipY&#39;, &#39;none&#39;</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <dl>
-            <dt><code>shuffleTo</code></dt>
-            <dd>Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>shuffleNext</code></dt>
-            <dd>Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>shufflePrev</code></dt>
-            <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>getAllCards</code></dt>
-            <dd>Returns a list of all x-card elements in the deck.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>getSelectedCard</code></dt>
-            <dd>Returns the currently selected x-card in the deck.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>getCardIndex</code></dt>
-            <dd>Given an x-card element, returns its index in this deck, if it is a child element.</dd>
-          </dl>
-          
-          <h2>Events</h2>
-          
-          <dl>
-            <dt><code>shuffleTo</code></dt>
-            <dd>Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>shuffleNext</code></dt>
-            <dd>Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>shufflePrev</code></dt>
-            <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>getAllCards</code></dt>
-            <dd>Returns a list of all x-card elements in the deck.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>getSelectedCard</code></dt>
-            <dd>Returns the currently selected x-card in the deck.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>getCardIndex</code></dt>
-            <dd>Given an x-card element, returns its index in this deck, if it is a child element.</dd>
-          </dl>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="calendar">
+      <h1>calendar</h1>
+      <p>A port of Potch&#39;s fortnight.js calendar UI in component form</p>
+      <h2>Attributes</h2>
       
-        <section id="flipbox">
-          <h1>flipbox</h1>
-          <p>The flipbox tag allows you to flip a content element with a CSS Animation to the other side to view additional content. An example use of flipbox, would be to flip and app&#39;s content to reveal a settings panel</p>
-          <h2>Attributes</h2>
-          
-          <h2>Methods</h2>
-          
-          <dl>
-            <dt><code>toggle</code></dt>
-            <dd>Flips the card</dd>
-          </dl>
-          
-          <h2>Events</h2>
-          
-          <dl>
-            <dt><code>toggle</code></dt>
-            <dd>Flips the card</dd>
-          </dl>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>controls</code></dt>
+        <dd>Controls the visibility of the calendar&#39;s navigation controls; usage is similar to the &#39;controls&#39; attribute of &lt;video&gt; elements</dd>
+      </dl>
       
-        <section id="iconbutton">
-          <h1>iconbutton</h1>
-          <p>A button with an anchored icon in addition to a label</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>src</code></dt>
-            <dd>Defines the image source to use as the button&#39;s icon. Only does something if the icon is a &lt;img&gt; element (which is the default behavior)</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>icon-anchor</code></dt>
-            <dd>Defines the location of the icon relative to the label. Valid options are &#39;left&#39;, &#39;top&#39;, &#39;right&#39;, &#39;bottom&#39;</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>multiple</code></dt>
+        <dd>Controls whether or not multiple calendar dates can be chosen simultaneously</dd>
+      </dl>
       
-        <section id="layout">
-          <h1>layout</h1>
-          <p></p>
-          <h2>Attributes</h2>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>span</code></dt>
+        <dd>Specifies the number of months displayed at once by the calendar</dd>
+      </dl>
       
-        <section id="modal">
-          <h1>modal</h1>
-          <p>The modal element can be used to show notices or secondary content above the z-level of the page.</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>hidden</code></dt>
-            <dd>A boolean attribute that when present will hide the modal.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>overlay</code></dt>
-            <dd>A boolean attribute that when present will create a transparant overlay behind the modal.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>esc-hide</code></dt>
-            <dd>A boolean attribute that when present will allow the modal to be closed by pressed the escape key.</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>view</code></dt>
+        <dd>Specifies the Date to focus the calendar display on. For example, a view of Dec 25 2013 and a span of 3 would result in a calendar displaying the months of Nov 2013, Dec 2013, and Jan 2014</dd>
+      </dl>
       
-        <section id="slidebox">
-          <h1>slidebox</h1>
-          <p>A container that allows animated transitions between content panes. Slide Box supports horizontal and vertical transitions.</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>orientation</code></dt>
-            <dd>Slide axis.  &#39;x&#39; or &#39;y&#39;</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <dl>
-            <dt><code>slideTo</code></dt>
-            <dd>Slides to a specific element index.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>slideNext</code></dt>
-            <dd>Slides to next element.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>slidePrevious</code></dt>
-            <dd>Slides to the previous element.</dd>
-          </dl>
-          
-          <h2>Events</h2>
-          
-          <dl>
-            <dt><code>slideTo</code></dt>
-            <dd>Slides to a specific element index.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>slideNext</code></dt>
-            <dd>Slides to next element.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>slidePrevious</code></dt>
-            <dd>Slides to the previous element.</dd>
-          </dl>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>chosen</code></dt>
+        <dd>Specifies the date or dates that are toggled as chosen on the calendar. Can be specified as either a singular parsable date string or as a JSON string representing a list of both singular dates and [Date, Date] lists of the start and end date for a range of dates</dd>
+      </dl>
       
-        <section id="slider">
-          <h1>slider</h1>
-          <p>Polyfill on top of input type=&#39;range&#39;, providing a consistent UI regardless of whether type=&#39;range&#39; is supported or not.</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>polyfill</code></dt>
-            <dd>If set, the input is &#39;replaced&#39; with our polyfill slider&#39;s event handlers and graphics.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>max</code></dt>
-            <dd>Sets the maximum of the slider&#39;s range</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>min</code></dt>
-            <dd>Sets the minimum of the slider&#39;s range</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>step</code></dt>
-            <dd>Sets the step value of the slider&#39;s range</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>notoggle</code></dt>
+        <dd>If set, the default date-toggling behavior of the UI is disabled. However, dates can still be programmatically chosen/toggled.</dd>
+      </dl>
       
-        <section id="tabbar">
-          <h1>tabbar</h1>
-          <p>Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>target-event</code></dt>
-            <dd>Sets a custom event type for the tabbar to fire on selected elements, instead of the default of &#39;show&#39;. Can also be applied on x-tabbar-tabs instead to further provide granular control.</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <h2>Methods</h2>
       
-        <section id="toggle">
-          <h1>toggle</h1>
-          <p>A polyfill for radiobutton/checkbox inputs to provide a consistent UI and simplify markup</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>no-box</code></dt>
-            <dd>If set, hides the polyfill&#39;s checkbox/radio button.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>label</code></dt>
-            <dd>Contains the raw HTML to render as the toggle&#39;s label.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>name</code></dt>
-            <dd>Handles the name of the input. Follows the same rules as radio/checkbox input naming, and is required for form submissions to see the input.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>group</code></dt>
-            <dd>Checkboxes with the same group can be range-toggled by holding down the shift key while toggling checkboxes</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>active</code></dt>
-            <dd>Handles whether or not the toggle is the currently active toggle in of its group, if it has one.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>checked</code></dt>
-            <dd>Handles whether the toggle is checked or not</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>render</code></dt>
+        <dd>Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)</dd>
+      </dl>
       
-        <section id="togglegroup">
-          <h1>togglegroup</h1>
-          <p>Togglegroups are used to display a set of clickable option buttons, which can be either independently or mutual-exclusively toggled.</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>name</code></dt>
-            <dd>Indicates the name to use for the group of buttons. This is the default keyname that will be submitted if submitted through a form.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>group</code></dt>
-            <dd>Indicates the name of the the button&#39;s grouping.</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <h2>Events</h2>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>prevMonth</code></dt>
+        <dd>Go back one month by updating the 'view' attribute of the calendar.</dd>
+      </dl>
       
-        <section id="tooltip">
-          <h1>tooltip</h1>
-          <p>Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content</p>
-          <h2>Attributes</h2>
-          
-          <dl>
-            <dt><code>orientation</code></dt>
-            <dd>Determines where the tooltip appears in relation to the triggering element. Valid options are &#39;top&#39;, &#39;bottom&#39;, &#39;left&#39;, &#39;right&#39;. If not provided, or if invalid, defaults to auto placement of tooltip.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>trigger-style</code></dt>
-            <dd>Indicates how the tooltip is triggered. Valid presets are &#39;hover&#39; and &#39;none&#39; (defaults to &#39;hover&#39;). When set to &#39;hover&#39;, the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to &#39;none&#39;, no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the showTooltip and hideTooltip API calls without any default behaviors getting in the way. If set to anything else, the tooltip will use this as the event name to listen for on targeted elems to show the tooltip.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>trigger-selector</code></dt>
-            <dd>Indicates how to select elements that would trigger the tooltip. If given a selector of &#39;_previousSibling&#39;, the tooltip will use the immediately preceding sibling element in the DOM tree as its triggering element. Similarly, when set to &#39;_nextSibling&#39;, the tooltip will use its next DOM sibling as its triggering element. Otherwise, the selector will be applied to the tooltip&#39;s parent node as a search query, and any elements that are not part of the tooltip itself will act as triggering elements for the tooltip. (For example, if you were to provide &#39;.fancy-selector&#39; as this attribute&#39;s value, the elements you would get back would be those found from foo.parentNode.querySelectorAll(&#39;.fancy-selector&#39;), where foo is your tooltip element.)</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>ignore-outer-trigger</code></dt>
-            <dd>If present, for non-preset trigger styles, indicates whether an event firing outside of a targeting element should close the tooltip. Has no effect on preset trigger styles</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>ignore-tooltip-pointer-events</code></dt>
-            <dd>If present, pointer events on the tooltip will be ignored, keeping it from blocking interaction with underlying elements.</dd>
-          </dl>
-          
-          <h2>Methods</h2>
-          
-          <dl>
-            <dt><code>refreshPosition</code></dt>
-            <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>showTooltip</code></dt>
-            <dd>This method forces the tooltip to display (this will fire a 'tooltipshown' event).</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>hideTooltip</code></dt>
-            <dd>This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleTooltip</code></dt>
-            <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate).</dd>
-          </dl>
-          
-          <h2>Events</h2>
-          
-          <dl>
-            <dt><code>refreshPosition</code></dt>
-            <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>showTooltip</code></dt>
-            <dd>This method forces the tooltip to display (this will fire a 'tooltipshown' event).</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>hideTooltip</code></dt>
-            <dd>This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).</dd>
-          </dl>
-          
-          <dl>
-            <dt><code>toggleTooltip</code></dt>
-            <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate).</dd>
-          </dl>
-          
-          <a class="top" href="#">top</a>
-        </section>
+      <dl>
+        <dt><code>nextMonth</code></dt>
+        <dd>Advance one month forward by updating the 'view' attribute of the calendar.</dd>
+      </dl>
       
+      <dl>
+        <dt><code>toggleDateOn</code></dt>
+        <dd>Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>toggleDateOff</code></dt>
+        <dd>Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>toggleDate</code></dt>
+        <dd>Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>hasVisibleDate</code></dt>
+        <dd>Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months.</dd>
+      </dl>
+      
+      <h2>Events</h2>
+      
+      <dl>
+        <dt><code>render</code></dt>
+        <dd>Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>prevMonth</code></dt>
+        <dd>Go back one month by updating the 'view' attribute of the calendar.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>nextMonth</code></dt>
+        <dd>Advance one month forward by updating the 'view' attribute of the calendar.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>toggleDateOn</code></dt>
+        <dd>Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>toggleDateOff</code></dt>
+        <dd>Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>toggleDate</code></dt>
+        <dd>Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>hasVisibleDate</code></dt>
+        <dd>Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months.</dd>
+      </dl>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="datepicker">
+      <h1>datepicker</h1>
+      <p>A polyfill for &lt;input type=&#39;date&#39;&gt; utilizing the x-calendar component.</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>name</code></dt>
+        <dd>Indicates the name of the input to use. This is the default keyname that will be submitted if submitted through a form.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>value</code></dt>
+        <dd>Indicates the currently displayed value of the datepicker. Can also be used to initialize a certain value.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>polyfill</code></dt>
+        <dd>Indicates whether or not the datepicker is using a polyfill UI or not. While this is set automatically, this can also be set in markup to force the datepicker to always use its polyfill UI version.</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <dl>
+        <dt><code>editLabels</code></dt>
+        <dd>Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure.</dd>
+      </dl>
+      
+      <h2>Events</h2>
+      
+      <dl>
+        <dt><code>editLabels</code></dt>
+        <dd>Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure.</dd>
+      </dl>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="deck">
+      <h1>deck</h1>
+      <p>A box in which cards can be cycled independently of order with a variety of different transitions</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>transition-type</code></dt>
+        <dd>Defines the kind of transition animation that is used when cycling cards. Valid options: &#39;scrollLeft&#39;, &#39;scrollUp&#39;, &#39;scrollRight&#39;, &#39;scrollDown&#39;, &#39;flipX&#39;, &#39;flipY&#39;, &#39;none&#39;</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <dl>
+        <dt><code>shuffleTo</code></dt>
+        <dd>Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>shuffleNext</code></dt>
+        <dd>Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>shufflePrev</code></dt>
+        <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>getAllCards</code></dt>
+        <dd>Returns a list of all x-card elements in the deck.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>getSelectedCard</code></dt>
+        <dd>Returns the currently selected x-card in the deck.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>getCardIndex</code></dt>
+        <dd>Given an x-card element, returns its index in this deck, if it is a child element.</dd>
+      </dl>
+      
+      <h2>Events</h2>
+      
+      <dl>
+        <dt><code>shuffleTo</code></dt>
+        <dd>Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>shuffleNext</code></dt>
+        <dd>Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>shufflePrev</code></dt>
+        <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>getAllCards</code></dt>
+        <dd>Returns a list of all x-card elements in the deck.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>getSelectedCard</code></dt>
+        <dd>Returns the currently selected x-card in the deck.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>getCardIndex</code></dt>
+        <dd>Given an x-card element, returns its index in this deck, if it is a child element.</dd>
+      </dl>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="flipbox">
+      <h1>flipbox</h1>
+      <p>The flipbox tag allows you to flip a content element with a CSS Animation to the other side to view additional content. An example use of flipbox, would be to flip and app&#39;s content to reveal a settings panel</p>
+      <h2>Attributes</h2>
+      
+      <h2>Methods</h2>
+      
+      <dl>
+        <dt><code>toggle</code></dt>
+        <dd>Flips the card</dd>
+      </dl>
+      
+      <h2>Events</h2>
+      
+      <dl>
+        <dt><code>toggle</code></dt>
+        <dd>Flips the card</dd>
+      </dl>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="iconbutton">
+      <h1>iconbutton</h1>
+      <p>A button with an anchored icon in addition to a label</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>src</code></dt>
+        <dd>Defines the image source to use as the button&#39;s icon. Only does something if the icon is a &lt;img&gt; element (which is the default behavior)</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>icon-anchor</code></dt>
+        <dd>Defines the location of the icon relative to the label. Valid options are &#39;left&#39;, &#39;top&#39;, &#39;right&#39;, &#39;bottom&#39;</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <h2>Events</h2>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="layout">
+      <h1>layout</h1>
+      <p></p>
+      <h2>Attributes</h2>
+      
+      <h2>Methods</h2>
+      
+      <h2>Events</h2>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="modal">
+      <h1>modal</h1>
+      <p>The modal element can be used to show notices or secondary content above the z-level of the page.</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>hidden</code></dt>
+        <dd>A boolean attribute that when present will hide the modal.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>overlay</code></dt>
+        <dd>A boolean attribute that when present will create a transparant overlay behind the modal.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>esc-hide</code></dt>
+        <dd>A boolean attribute that when present will allow the modal to be closed by pressed the escape key.</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <h2>Events</h2>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="slidebox">
+      <h1>slidebox</h1>
+      <p>A container that allows animated transitions between content panes. Slide Box supports horizontal and vertical transitions.</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>orientation</code></dt>
+        <dd>Slide axis.  &#39;x&#39; or &#39;y&#39;</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <dl>
+        <dt><code>slideTo</code></dt>
+        <dd>Slides to a specific element index.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>slideNext</code></dt>
+        <dd>Slides to next element.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>slidePrevious</code></dt>
+        <dd>Slides to the previous element.</dd>
+      </dl>
+      
+      <h2>Events</h2>
+      
+      <dl>
+        <dt><code>slideTo</code></dt>
+        <dd>Slides to a specific element index.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>slideNext</code></dt>
+        <dd>Slides to next element.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>slidePrevious</code></dt>
+        <dd>Slides to the previous element.</dd>
+      </dl>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="slider">
+      <h1>slider</h1>
+      <p>Polyfill on top of input type=&#39;range&#39;, providing a consistent UI regardless of whether type=&#39;range&#39; is supported or not.</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>polyfill</code></dt>
+        <dd>If set, the input is &#39;replaced&#39; with our polyfill slider&#39;s event handlers and graphics.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>max</code></dt>
+        <dd>Sets the maximum of the slider&#39;s range</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>min</code></dt>
+        <dd>Sets the minimum of the slider&#39;s range</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>step</code></dt>
+        <dd>Sets the step value of the slider&#39;s range</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <h2>Events</h2>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="tabbar">
+      <h1>tabbar</h1>
+      <p>Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>target-event</code></dt>
+        <dd>Sets a custom event type for the tabbar to fire on selected elements, instead of the default of &#39;show&#39;. Can also be applied on x-tabbar-tabs instead to further provide granular control.</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <h2>Events</h2>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="toggle">
+      <h1>toggle</h1>
+      <p>A polyfill for radiobutton/checkbox inputs to provide a consistent UI and simplify markup</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>no-box</code></dt>
+        <dd>If set, hides the polyfill&#39;s checkbox/radio button.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>label</code></dt>
+        <dd>Contains the raw HTML to render as the toggle&#39;s label.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>name</code></dt>
+        <dd>Handles the name of the input. Follows the same rules as radio/checkbox input naming, and is required for form submissions to see the input.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>group</code></dt>
+        <dd>Checkboxes with the same group can be range-toggled by holding down the shift key while toggling checkboxes</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>active</code></dt>
+        <dd>Handles whether or not the toggle is the currently active toggle in of its group, if it has one.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>checked</code></dt>
+        <dd>Handles whether the toggle is checked or not</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <h2>Events</h2>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="togglegroup">
+      <h1>togglegroup</h1>
+      <p>Togglegroups are used to display a set of clickable option buttons, which can be either independently or mutual-exclusively toggled.</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>name</code></dt>
+        <dd>Indicates the name to use for the group of buttons. This is the default keyname that will be submitted if submitted through a form.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>group</code></dt>
+        <dd>Indicates the name of the the button&#39;s grouping.</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <h2>Events</h2>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+    <section id="tooltip">
+      <h1>tooltip</h1>
+      <p>Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content</p>
+      <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>orientation</code></dt>
+        <dd>Determines where the tooltip appears in relation to the triggering element. Valid options are &#39;top&#39;, &#39;bottom&#39;, &#39;left&#39;, &#39;right&#39;. If not provided, or if invalid, defaults to auto placement of tooltip.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>trigger-style</code></dt>
+        <dd>Indicates how the tooltip is triggered. Valid presets are &#39;hover&#39; and &#39;none&#39; (defaults to &#39;hover&#39;). When set to &#39;hover&#39;, the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to &#39;none&#39;, no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the showTooltip and hideTooltip API calls without any default behaviors getting in the way. If set to anything else, the tooltip will use this as the event name to listen for on targeted elems to show the tooltip.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>trigger-selector</code></dt>
+        <dd>Indicates how to select elements that would trigger the tooltip. If given a selector of &#39;_previousSibling&#39;, the tooltip will use the immediately preceding sibling element in the DOM tree as its triggering element. Similarly, when set to &#39;_nextSibling&#39;, the tooltip will use its next DOM sibling as its triggering element. Otherwise, the selector will be applied to the tooltip&#39;s parent node as a search query, and any elements that are not part of the tooltip itself will act as triggering elements for the tooltip. (For example, if you were to provide &#39;.fancy-selector&#39; as this attribute&#39;s value, the elements you would get back would be those found from foo.parentNode.querySelectorAll(&#39;.fancy-selector&#39;), where foo is your tooltip element.)</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>ignore-outer-trigger</code></dt>
+        <dd>If present, for non-preset trigger styles, indicates whether an event firing outside of a targeting element should close the tooltip. Has no effect on preset trigger styles</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>ignore-tooltip-pointer-events</code></dt>
+        <dd>If present, pointer events on the tooltip will be ignored, keeping it from blocking interaction with underlying elements.</dd>
+      </dl>
+      
+      <h2>Methods</h2>
+      
+      <dl>
+        <dt><code>refreshPosition</code></dt>
+        <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>showTooltip</code></dt>
+        <dd>This method forces the tooltip to display (this will fire a 'tooltipshown' event).</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>hideTooltip</code></dt>
+        <dd>This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>toggleTooltip</code></dt>
+        <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate).</dd>
+      </dl>
+      
+      <h2>Events</h2>
+      
+      <dl>
+        <dt><code>refreshPosition</code></dt>
+        <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>showTooltip</code></dt>
+        <dd>This method forces the tooltip to display (this will fire a 'tooltipshown' event).</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>hideTooltip</code></dt>
+        <dd>This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>toggleTooltip</code></dt>
+        <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate).</dd>
+      </dl>
+      
+      <a class="top" href="#">top</a>
+    </section>
+  
+
       <footer>
         <nav>
           <a href="index.html">Home</a>
@@ -610,8 +612,10 @@
           <a href="http://github.com/mozilla/brick/">GitHub</a>
           <a href="http://github.com/mozilla/brick/issues">Issues</a>
         </nav>
-        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="site/img/mozilla_wordmark.svg" alt="built by Mozilla"></a>
+        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
       </footer>
     </article>
+    
+    
   </body>
 </html>
