@@ -42,7 +42,7 @@ h2 {
 .moz {
   position: absolute;
   top: -1px;
-  right: 0px;
+  right: -8px;
   text-align: center;
 }
 .moz img {
@@ -74,9 +74,19 @@ header {
 }
 
 section, footer {
+  position: relative;
   clear: left;
   overflow: hidden;
   margin: 3em 0;
+}
+
+footer nav a {
+  margin-right: 2em;
+}
+
+footer {
+  min-height: 2em;
+  padding-right: 84px;
 }
 
 section.demo-wrap{
@@ -143,6 +153,10 @@ a:hover {
   left: 105px;
   position: absolute;
   width: 30px;
+}
+
+.demo[data-src] {
+  background: none;
 }
 
 .demo iframe {
@@ -238,7 +252,7 @@ progress {
 #buildBundle {
   background: #eee;
   border: 2px solid black;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: .5em 1em;
   font: inherit;
   cursor: pointer;
@@ -246,6 +260,10 @@ progress {
 }
 #buildBundle:hover {
   color: #a00;
+}
+
+a.top {
+  float: right;
 }
 
 @media screen and (max-width: 800px) {

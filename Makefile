@@ -4,6 +4,12 @@ VERSION = $(shell cat VERSION)
 compile: clean
 	@node build/minify.js
 
+docs: cleandocs
+	@node build/docs.js
+
+cleandocs:
+	@rm -f docs/*
+
 clean:
 	@rm -f dist/brick.js dist/brick.css
 
