@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>Brick - docs</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" href="site/css/main.css">
+  </head>
+  <body>
+    <article>
+      <header>
+        <h1>Documentation</h1>
+      </header>
+      <nav>
+        {% for tag, meh in tags %}
+          <a href="#{{ tag }}">{{ tag }}</a>
+        {% endfor %}
+      </nav>
+      {% for tag, info in tags %}
+        <section id="{{ tag }}">
+          <h1>{{ tag }}</h1>
+          <p>{{ info.description|escape }}</p>
+          <h2>Attributes</h2>
+          {% for key, value in info.documentation.attributes %}
+          <dl>
+            <dt><code>{{ key }}</code></dt>
+            <dd>{{ value|escape }}</dd>
+          </dl>
+          {% endfor %}
+          <h2>Methods</h2>
+          {% for key, value in info.documentation.methods %}
+          <dl>
+            <dt><code>{{ key }}</code></dt>
+            <dd>{{ value }}</dd>
+          </dl>
+          {% endfor %}
+          <h2>Events</h2>
+          {% for key, value in info.documentation.methods %}
+          <dl>
+            <dt><code>{{ key }}</code></dt>
+            <dd>{{ value }}</dd>
+          </dl>
+          {% endfor %}
+          <a class="top" href="#">top</a>
+        </section>
+      {% endfor %}
+      <footer>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="download.html">Download</a>
+          <a href="docs.html">Documentation</a>
+          <a href="http://github.com/mozilla/brick/">GitHub</a>
+          <a href="http://github.com/mozilla/brick/issues">Issues</a>
+        </nav>
+        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="site/img/mozilla_wordmark.svg" alt="built by Mozilla"></a>
+      </footer>
+    </article>
+  </body>
+</html>

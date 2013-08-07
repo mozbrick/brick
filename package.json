@@ -15,6 +15,7 @@
   "dependencies": {
     "uglify-js": "~2.3.6",
     "clean-css": "~1.0.11",
-    "promisesaplus": "~1.0.1"
+    "promisesaplus": "~1.0.1",
+    "nunjucks": "~0.1.9"
   }
 }
