@@ -47,6 +47,7 @@ $FONTS_FOLDER: "../fonts/";
         }
         font-weight: $fontWeight;
         font-style: $fontStyle;
+        font-variant: $fontStyle;
         src: url("#{$fontFolder}#{$fileName}#{$fontExt}") format($format);
     }
 }

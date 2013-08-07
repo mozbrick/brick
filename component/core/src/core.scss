@@ -1,0 +1,3 @@
+@import "../../../component-ui-defaults";
+
+@include customFont("OpenSans-SemiBold", $fontFolder: "", $fontFamily: $COMPONENT_CUSTOM_FONT_NAME);

@@ -1,9 +1,3 @@
-@font-face {
-  font-family: "_OpenSansBrick";
-  font-weight: normal;
-  font-style: normal;
-  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
-
 x-calendar {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

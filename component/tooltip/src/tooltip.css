@@ -1,9 +1,3 @@
-@font-face {
-  font-family: "_OpenSansBrick";
-  font-weight: normal;
-  font-style: normal;
-  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
-
 x-tooltip[orientation=top], x-tooltip[_auto-orientation=top]:not([orientation=top]):not([orientation=bottom]):not([orientation=left]):not([orientation=right]) {
   transform: translate3d(0, 10px, 1px);
   -ms-transform: translate3d(0, 10px, 1px);

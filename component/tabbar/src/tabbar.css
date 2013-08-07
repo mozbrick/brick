@@ -1,9 +1,3 @@
-@font-face {
-  font-family: "_OpenSansBrick";
-  font-weight: normal;
-  font-style: normal;
-  src: url("OpenSans-SemiBold.ttf") format("truetype"); }
-
 x-tabbar {
   background-color: #a0a0a0;
   background-repeat: no-repeat;
