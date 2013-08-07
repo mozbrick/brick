@@ -149,16 +149,19 @@ a:hover {
   background: #f2d6b9 url("../img/retina_wood.png") repeat;
 }
 
+/* fake iphone button */
 .demo:after {
-  background: #d8d8d8;
-  border-radius: 20px;
-  top: 103%;
-  box-shadow: 0 0 0 2px #222;
   content: '';
-  height: 30px;
-  left: 105px;
+
   position: absolute;
   width: 30px;
+  height: 30px;
+  top: 103%;
+  left: 43.75%;
+  left: calc(50% - 15px);
+  background: #d8d8d8;
+  border-radius: 20px;
+  box-shadow: 0 0 0 2px #222;
 }
 
 .demo[data-src] {

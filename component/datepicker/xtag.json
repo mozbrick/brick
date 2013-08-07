@@ -25,7 +25,7 @@
 		},
 		"events": {
 			"input": "Fired by the <x-datepicker> any time the user selects a date. Also fired as the user types in a date.",
-			"change": "Fired by the <x-datepicker> whenever the submitValue of the datepicker changes or when the value is finalized. In other words, while input fires as the user types, change only fires if this changes the date selected by the datepicker, or if the user hits enter/leaves the datepicker's focus."	
+			"change": "Fired by the <x-datepicker> whenever the submitValue of the datepicker changes or when the value is finalized. In other words, while input fires as the user types, change only fires if this changes the date selected by the datepicker, or if the user hits enter/leaves the datepicker's focus and the date gets parsed into ISO format."	
 		},
 		"methods": {
 			"editLabels": "Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure."

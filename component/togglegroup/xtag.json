@@ -3,7 +3,7 @@
 	"tagName": "x-togglegroup",
 	"version": "0.1.0",
 	"author": "Leon Zhang",
-	"description": "Togglegroups are used to display a set of clickable option buttons, which can be either independently or mutual-exclusively toggled.",
+	"description": "Togglegroups are used to display a set of clickable option buttons, which can be either toggle in an independent or mutually exclusive manner.",
 	"demo": "demo/togglegroup-demo.html",
 	"categories": [
         "ui"
@@ -17,7 +17,7 @@
 		"ios": 4
 	},
 	"documentation": {
-		"description": "Togglegroups are used to display a set of clickable option buttons, which can be either independently or mutual-exclusively toggled.",
+		"description": "Togglegroups are used to display a set of clickable option buttons, which can be either toggle in an independent or mutually exclusive manner.",
 		"attributes": {
 			"name": "Indicates the name to use for the group of buttons. This is the default keyname that will be submitted if submitted through a form.",
 			"group": "Indicates the name of the the button's grouping."

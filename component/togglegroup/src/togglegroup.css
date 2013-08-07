@@ -5,6 +5,11 @@
   src: url("OpenSans-SemiBold.ttf") format("truetype"); }
 
 x-togglegroup {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -24,16 +29,16 @@ x-togglegroup {
   -ms-align-content: center;
   align-content: center;
   width: 100%;
-  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
+  min-height: 0;
+  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  white-space: nowrap; }
+  x-togglegroup * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box; }
   x-togglegroup > x-toggle {
-    min-width: auto;
-    min-height: auto;
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    box-flex: 1;
-    flex: 1;
     background-color: white;
     background-repeat: no-repeat;
     background-image: -o-linear-gradient(top, white, white 25%, #d9d9d9);
@@ -62,10 +67,20 @@ x-togglegroup {
     -o-transition-delay: 0s;
     transition-delay: 0s;
     display: block;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
     padding: .25em 0;
-    border: 1px solid grey;
-    border-top-color: #aaa;
-    border-bottom-color: #777;
+    margin: 0;
+    border-width: 1px;
+    border-color: #aaa grey #777 grey;
+    border-style: solid;
+    text-shadow: 1px 1px white;
     vertical-align: middle;
     word-wrap: break-word;
     overflow: hidden;
@@ -77,14 +92,14 @@ x-togglegroup {
       background-image: none;
       background-color: #eee;
       box-shadow: inset 1px 1px 2px #888; }
-    x-togglegroup > x-toggle[type="radio"]:first-child {
+    x-togglegroup > x-toggle[type="radio"]:first-of-type {
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px; }
-    x-togglegroup > x-toggle[type="radio"]:last-child {
+    x-togglegroup > x-toggle[type="radio"]:last-of-type {
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px; }
-    x-togglegroup > x-toggle[type="radio"]:not(:first-child) {
-      border-left-width: 0px; }
+    x-togglegroup > x-toggle[type="radio"]:not(:first-of-type) {
+      margin-left: -1px; }
     x-togglegroup > x-toggle:not([type="radio"]) {
       border-radius: 4px;
       margin-left: .2em;

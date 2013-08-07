@@ -60,7 +60,7 @@ Fired by the datepicker when the user tries to input a new value. In other words
 
 ## ___change___
 
-Fired by the datepicker only when its final value (ie: `submitVal`) is changed or when the value is finalized. In other words, while `input` fires as the user types in a date, `change` only fires when the parsed date it corresponds to is changed, or when the user hits enter.
+Fired by the datepicker only when its final value (ie: `submitVal`) is changed or when the value is finalized. In other words, while `input` fires as the user types in a date, `change` only fires when the parsed date it corresponds to is changed, or when the user hits enter and the date parsed into ISO format.
 
 ## ___focus___
 

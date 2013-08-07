@@ -70,7 +70,7 @@
             <ul>
                 <li><code>input</code>: This event is fired when the user selects a date on the calendar, and is also fired continuously as the user enters a date.
                 </li>
-                <li><code>change</code>: This event is fired whenever the date corresponding to the datepicker (ie. the <code>.submitValue</code>) changes, or when the date is finalized by hitting the Enter key or leaving the datepicker's focus. 
+                <li><code>change</code>: This event is fired whenever the date corresponding to the datepicker (ie. the <code>.submitValue</code>) changes, or when the user hits the Enter key/leaves the datepicker's focus, causing the date to be parsed into ISO format. 
                 </li>
             </ul>
         </p>
@@ -96,9 +96,5 @@
 <script type="text/javascript" src="../../../dist/brick.js"></script>
 <script type="text/javascript" src="../../../site/js/prettify.js"></script>
 <script type="text/javascript" src="demo.js"></script>
-<script>
-document.addEventListener('DOMComponentsLoaded', function(){
-});
-</script>
 </body>
 </html>
