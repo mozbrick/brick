@@ -1,18 +1,18 @@
 [submodule "component/layout"]
 	path = component/layout
-	url = git@github.com:x-tag/layout.git
+	url = https://github.com/x-tag/layout.git
 [submodule "component/toggle"]
 	path = component/toggle
-	url = git@github.com:x-tag/toggle.git
+	url = https://github.com/x-tag/toggle.git
 [submodule "component/slidebox"]
 	path = component/slidebox
-	url = git@github.com:x-tag/slidebox.git
+	url = https://github.com/x-tag/slidebox.git
 [submodule "component/flipbox"]
 	path = component/flipbox
-	url = git@github.com:x-tag/flipbox.git
+	url = https://github.com/x-tag/flipbox.git
 [submodule "component/appbar"]
 	path = component/appbar
-	url = git@github.com:x-tag/appbar.git
+	url = https://github.com/x-tag/appbar.git
 [submodule "component/modal"]
 	path = component/modal
-	url = git@github.com:x-tag/modal.git
+	url = https://github.com/x-tag/modal.git

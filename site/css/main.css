@@ -217,6 +217,37 @@ a:hover {
     box-shadow: inset 1px 1px 2px #888;
 }
 
+progress {
+  display: none;
+}
+
+#zip {
+  display: none;
+}
+
+#byob label {
+  display: block;
+  padding: .5em 1em;
+  background: #f8f8f8;
+  cursor: pointer;
+  margin: 1em 0;
+}
+#byob input[type=checkbox] {
+  float: right;
+}
+#buildBundle {
+  background: #eee;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: .5em 1em;
+  font: inherit;
+  cursor: pointer;
+  color: #600;
+}
+#buildBundle:hover {
+  color: #a00;
+}
+
 @media screen and (max-width: 800px) {
   .two-up {
     float: none;
