@@ -1,18 +1,8 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-    <title>Brick </title>
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
-    <link rel="stylesheet" href="site/css/main.css">
-  </head>
-  <body>
-    <article>
-
+{% extends 'base.html' %}
+{% block content %}
   <header>
-    <h1><img class="logo" src="site/img/logo.svg">Brick<small> alpha</small></h1>
-    <h2>UI Web Components for Modern Web Apps</h2>
+    <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> alpha</small></h1>
+    <h2>UI Components for Modern Web Apps</h2>
   </header>
   <div id="page">
     <div>
@@ -52,19 +42,8 @@
       </div>
     </section>
   </div>
-
-      <footer>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="download.html">Download</a>
-          <a href="docs.html">Documentation</a>
-          <a href="http://github.com/mozilla/brick/">GitHub</a>
-          <a href="http://github.com/mozilla/brick/issues">Issues</a>
-        </nav>
-        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
-      </footer>
-    </article>
-
+{% endblock %}
+{% block script %}
   <script>
     var demos = document.querySelectorAll('.demo[data-src]');
     for (var i=0; i<demos.length; i++) {
@@ -80,6 +59,4 @@
       fig.appendChild(a);
     }
   </script>
-
-  </body>
-</html>
+{% endblock %}

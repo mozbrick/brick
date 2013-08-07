@@ -1,43 +1,13 @@
 
 var fs = require('fs');
 var path = require('path');
-var nunjucks = require('nunjucks');
+var site = require('./statictools');
 var promise = require('promisesaplus');
 
-var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('build/templates'));
-
-function avow(fn) {
-    return function() {
-        var p = promise();
-        var ret;
-        try {
-            Array.prototype.unshift.apply(arguments, [p.fulfill, p.reject]);
-            ret = fn.apply(this, arguments);
-        } catch (e) {
-            p.reject(e);
-        }
-        if (typeof ret !== 'undefined') {
-            p.fulfill(ret);
-        }
-        return p;
-    };
-}
-
-function err(s) {
-    return function(err) {
-        console.error(s);
-        console.error(err.toString());
-    }
-}
-
-var loadComponentList = avow(function (fulfill, reject) {
-    fs.readFile(path.join('build','components.json'), function(err, res) {
-        if (err) {
-            reject(err);
-        }
-        fulfill(JSON.parse(res));
-    });
-});
+var env = site.env;
+var avow = site.avow;
+var err = site.err;
+var getJSON = site.getJSON;
 
 var generateDocs = avow(function (fulfill, reject, components) {
     console.log('generating documentation');
@@ -48,15 +18,20 @@ var generateDocs = avow(function (fulfill, reject, components) {
             var docPath = path.join('component', name, 'xtag.json');
             var outPath = path.join('docs', name + '.html');
             console.log(name);
-            if (fs.existsSync(docPath)) {
-                try {
-                    var json = JSON.parse(fs.readFileSync(docPath));
-                    docs[name] = json;
-                } catch (e) {
-                    throw 'failed to parse ' + docPath
-                }
+            if (name === 'core') {
+                processComponent(n+1);
+                return;
             }
-            processComponent(n+1);
+            if (fs.existsSync(docPath)) {
+                getJSON(docPath).then(function(json) {
+                    docs[name] = json;
+                    processComponent(n+1);
+                }, err('failed to parse ' + docPath));
+            } else {
+                console.warn('no docs found for ' + name + '!');
+                docs[name] = {};
+                processComponent(n+1);
+            }
         } else {
             fulfill(docs);
         }
@@ -68,10 +43,11 @@ var writeIndex = avow(function (fulfill, reject, docs) {
     console.log('writing index');
     var tmpl = env.getTemplate('docs.html');
     fs.writeFileSync('docs.html', tmpl.render({tags: docs}));
+    console.log('index written!');
     return true;
 });
 
-loadComponentList()
+getJSON(path.join('build','components.json'))
     .then(generateDocs, err('Unable to read component list.'))
-    .then(writeIndex, err('failed to generate documentation.'));
+    .then(writeIndex, err('failed to generate documentation.')).then(false, err('failed to write index'));
 

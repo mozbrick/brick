@@ -50,9 +50,12 @@ h2 {
   height: 34px;
 }
 
+#mark {
+  white-space: nowrap;
+}
+
 header h1 {
   font-size: 400%;
-  white-space: nowrap;
 }
 
 .logo {
@@ -95,7 +98,7 @@ footer {
   padding-right: 84px;
 }
 
-section.demo-wrap{
+section.demo-wrap, section.main-sect{
   border-top: 1px solid grey;
 }
 
@@ -297,8 +300,8 @@ a.top {
     margin: 1em 0;
   }
 
-  header h1{
-    font-size: 300%;
+  header h1 {
+    font-size: 250%;
   }
 
   .markup-wrap{
