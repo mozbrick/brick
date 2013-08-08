@@ -79,11 +79,6 @@ This is a list of the currently bundled components provided in the library. (Cli
 * Transition types can be switched and overridden on the fly, allowing for a 
   variety of different entrance/exits
 
-### ['Modal' (Overlay)](https://github.com/x-tag/modal)
-
-* Content container that appears over current view context, similar to a popup overlay.
-* Blocks interaction with underlying content, but can be dismissed by clicking outside the modal
-
 ### ['Tooltip' (Callout)](component/tooltip)
 
 * Content container that appears over current view context
