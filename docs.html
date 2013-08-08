@@ -300,21 +300,46 @@
       
         <a href="component/flipbox/demo/index.html">View Demo &raquo;</a>
       
-      <p>Flips between two content elements with a CSS Animation, similar to flipping a playing card. The front face default to the first direct child element of the &lt;x-flipbox&gt;, and the back face defaults to the last direct child element.</p>
+      <p>Flips between two content elements with a CSS Animation, similar to flipping a playing card. The front face defaults to the first direct child element of the &lt;x-flipbox&gt;, and the back face defaults to the last direct child element.</p>
       <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>direction</code></dt>
+        <dd>Indicates which direction the flip-animation swivels towards. Valid options are &#39;right&#39;, &#39;left&#39;, &#39;up&#39;, and &#39;down&#39;. Defaults to &#39;left&#39;.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>flipped</code></dt>
+        <dd>Boolean attribute indicating whether the back face of the flipbox is showing or not.</dd>
+      </dl>
       
       <h2>Methods</h2>
       
       <dl>
-        <dt><code>toggle</code></dt>
+        <dt><code>toggle()</code></dt>
         <dd>Flips the card to its opposite face.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>showFront()</code></dt>
+        <dd>Force the flipbox to flip to its front face.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>showBack()</code></dt>
+        <dd>Force the flipbox to flip to its back face.</dd>
       </dl>
       
       <h2>Events</h2>
       
       <dl>
-        <dt><code>*: show</code></dt>
-        <dd>If either the front face or the back face of the flipbox receives a show event, the flipbox will automatically show that side.</dd>
+        <dt><code>flipend</code></dt>
+        <dd>The flipbox fires a flipend event whenever it fully finishes a flipping animation. This will not fire if the flipping animation is interrupted before completion.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>show</code></dt>
+        <dd>If either the front face or the back face of the flipbox receives a show event, the flipbox will automatically show that side. <br> Note: this event is not fired by the flipbox itself.</dd>
       </dl>
       
       <a class="top" href="#">top</a>
