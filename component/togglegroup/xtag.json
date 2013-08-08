@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"author": "Leon Zhang",
 	"description": "Togglegroups are used to display a set of clickable option buttons, which can be either toggle in an independent or mutually exclusive manner.",
-	"demo": "demo/togglegroup-demo.html",
+	"demo": "demo/index.html",
 	"categories": [
         "ui"
     ],

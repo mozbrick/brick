@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"author": "Leon Zhang",
 	"description": "A polyfill for <input type='date'> utilizing the x-calendar component.",
-	"demo": "demo/datepicker-demo.html",
+	"demo": "demo/index.html",
 	"categories": [
         "ui"
     ],

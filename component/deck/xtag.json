@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "author": "Leon Zhang",
   "description": "A box in which <x-card> elements can be cycled independently of order with a variety of different transitions",
-  "demo": "demo/deck-demo.html",
+  "demo": "demo/index.html",
   "categories": [
     "ui"
   ],

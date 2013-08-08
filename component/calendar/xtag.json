@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"author": "Leon Zhang, Matthew Claypotch",
 	"description": "A component acting as a calendar widget that can be manipulated with minimal user-written code/layout.",
-	"demo": "demo/calendar-demo.html",
+	"demo": "demo/index.html",
 	"categories": [
         "ui"
     ],

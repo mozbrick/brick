@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "author": "Leon Zhang",
   "description": "Polyfill on top of input type='range', providing a consistent UI regardless of whether type='range' is supported or not.",
-  "demo": "demo/slider-demo.html",
+  "demo": "demo/index.html",
   "categories": [
     "ui"
   ],

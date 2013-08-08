@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"author": "Leon Zhang",
 	"description": "Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.",
-	"demo": "demo/tabbar-demo.html",
+	"demo": "demo/index.html",
 	"categories": [
         "ui"
     ],

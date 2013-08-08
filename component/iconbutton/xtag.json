@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"author": "Leon Zhang",
 	"description": "A button with an anchored icon in addition to a content label",
-	"demo": "demo/iconbutton-demo.html",
+	"demo": "demo/index.html",
 	"categories": [
         "ui"
     ],
