@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
   <header>
-    <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> alpha</small></h1>
+    <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> {{ version }}</small></h1>
     <h2>UI Components for Modern Web Apps</h2>
   </header>
   <div id="page">
@@ -24,7 +24,7 @@
       <h1>Start Stacking</h1>
       <a class="download" href="#">
         <h3>Download Brick</h3>
-        <small>version 1.0 alpha &mdash; 28k</small>
+        <small>version {{ version }} &mdash; {{ size }}</small>
       </a>
     </section>
 
