@@ -194,6 +194,13 @@ a:hover {
   margin-top: 0;
 }
 
+pre.prettyprint{
+  text-align: left;
+  overflow: auto;
+  padding: .5em;
+  font-size: .9em;
+}
+
 .markup-wrap pre.prettyprint,
 .markup-wrap .code-box{
     text-align: left;

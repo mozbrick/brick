@@ -517,24 +517,29 @@
                             Monday instead of Sunday)
     **/
     function Calendar(data) {
+        // reassign this to minification friendly variable
+        var self = this;
         data = data || {};
-        this._span = data.span || 1;
-        this._multiple = data.multiple || false;
+        self._span = data.span || 1;
+        self._multiple = data.multiple || false;
         // initialize private vars
-        this._viewDate = this._getSanitizedViewDate(data.view, data.chosen);
-        this._chosenRanges = this._getSanitizedChosenRanges(data.chosen, 
+        self._viewDate = self._getSanitizedViewDate(data.view, data.chosen);
+        self._chosenRanges = self._getSanitizedChosenRanges(data.chosen, 
                                                                 data.view);
-        this._firstWeekdayNum = data.firstWeekdayNum || 0;
-        // Note that this is the .calendar child div, NOT the x-calendar itself
-        this._el = makeEl('div.calendar'); 
-        this._labels = GET_DEFAULT_LABELS();
+        self._firstWeekdayNum = data.firstWeekdayNum || 0;
 
-        this._customRenderFn = null;
+        // Note that self._el is the .calendar child div, 
+        // NOT the x-calendar itself
+        self._el = makeEl('div.calendar'); 
+        self._labels = GET_DEFAULT_LABELS();
 
-        this._renderRecursionFlag = false;
+        self._customRenderFn = null;
+        self._renderRecursionFlag = false;
 
-        this.render(true);
+        self.render(true);
     }
+    // minification friendly variable for Calendar.prototype
+    var CALENDAR_PROTOTYPE = Calendar.prototype;
 
     /** makeMonth: (Date) => DOM element
 
@@ -552,7 +557,7 @@
     params:
         d               the date whose month we will be rendering
     **/
-    Calendar.prototype.makeMonth = function(d) {
+    CALENDAR_PROTOTYPE.makeMonth = function(d) {
         if (!isValidDateObj(d)) throw 'Invalid view date!';
         var firstWeekday = this.firstWeekdayNum;
         var chosen = this.chosen;
@@ -639,7 +644,7 @@
                                     list of Date/[Date,Date]  ranges
                                     (defaults to this.chosen)
     **/
-    Calendar.prototype._getSanitizedViewDate = function(viewDate, 
+    CALENDAR_PROTOTYPE._getSanitizedViewDate = function(viewDate, 
                                                         chosenRanges)
     {
         chosenRanges = (chosenRanges === undefined) ? 
@@ -758,7 +763,7 @@
         viewDate                    (optional) the current cursor date
                                     (default = this.view)
     **/        
-    Calendar.prototype._getSanitizedChosenRanges = function(chosenRanges, 
+    CALENDAR_PROTOTYPE._getSanitizedChosenRanges = function(chosenRanges, 
                                                               viewDate)
     {
         viewDate = (viewDate === undefined) ? this.view : viewDate;
@@ -805,7 +810,7 @@
 
     if append is truthy, adds the given date to the stored list of date ranges
     **/
-    Calendar.prototype.addDate = function(dateObj, append){
+    CALENDAR_PROTOTYPE.addDate = function(dateObj, append){
         if(isValidDateObj(dateObj)){
             if(append){
                 this.chosen.push(dateObj);
@@ -822,7 +827,7 @@
 
     removes the given date from the Calendar's stored chosen date ranges
     **/
-    Calendar.prototype.removeDate = function(dateObj){
+    CALENDAR_PROTOTYPE.removeDate = function(dateObj){
         if(!isValidDateObj(dateObj)){
             return;
         }
@@ -862,7 +867,7 @@
 
     returns true if the given date is one of the dates stored as chosen
     **/
-    Calendar.prototype.hasChosenDate = function(dateObj){
+    CALENDAR_PROTOTYPE.hasChosenDate = function(dateObj){
         return dateMatches(dateObj, this._chosenRanges);
     };
 
@@ -877,7 +882,7 @@
     within the current visible span of dates, ignoring those in months not
     actually within the span
     **/
-    Calendar.prototype.hasVisibleDate = function(dateObj, excludeBadMonths){
+    CALENDAR_PROTOTYPE.hasVisibleDate = function(dateObj, excludeBadMonths){
         var startDate = (excludeBadMonths) ? this.firstVisibleMonth :
                                              this.firstVisibleDate;
         var endDate = (excludeBadMonths) ? findLast(this.lastVisibleMonth) :
@@ -904,7 +909,7 @@
     NOTE: this doesn't update the navigation controls, as they are separate from
     the calendar element
     **/
-    Calendar.prototype.render = function(preserveNodes){
+    CALENDAR_PROTOTYPE.render = function(preserveNodes){
         var span = this._span;
         var i;
         if(!preserveNodes){
@@ -958,7 +963,7 @@
 
     // call custom renderer on each day, passing in the element, the
     // date, and the iso representation of the date
-    Calendar.prototype._callCustomRenderer = function(){
+    CALENDAR_PROTOTYPE._callCustomRenderer = function(){
         if(!this._customRenderFn) return;
 
         // prevent infinite recursion of custom rendering requiring a rerender
@@ -984,7 +989,7 @@
         }
     };
 
-    Object.defineProperties(Calendar.prototype, {
+    Object.defineProperties(CALENDAR_PROTOTYPE, {
         /** Calendar.el: (readonly)
 
         the DOM element representing the calendar's contianer element
