@@ -182,10 +182,11 @@ The event also receives the following custom datamap in `e.detail`:
         'newCard': the x-card node that the transition is animating towards
     }
 
-##  x-card: ___show___
+##  ___show___
 
 If an &lt;x-card&gt; element receives a `show` event, the deck will transition to the card that received the event using the currently set transition type.
 
+X-deck does not fire this event.
 
 # Styling
 

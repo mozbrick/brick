@@ -27,7 +27,7 @@
     "events": {
       "shufflestart": "Fired by the <x-deck> when it is about to start a card transition animation. At this point, all deck attributes are set, and the only thing left to is to CSS animate the transition.",
       "shuffleend": "Fired by the <x-deck> element when a card transition animation has finished. Similar to 'transitionend' events, is not guaranteed to fire for every animation, and will only fire for animations that reach full completion without interruption.",
-      "x-card: show": "If an <x-card> element receives a 'show' event, the deck will automatically transition to the card that received the event."
+      "show": "If an <x-card> element receives a 'show' event, the deck will automatically transition to the card that received the event. \n This event is not fired by the x-deck itself."
     },
     "methods": {
       "shuffleTo([progressType])": "Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index.",
