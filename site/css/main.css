@@ -42,7 +42,7 @@ h2 {
 .moz {
   position: absolute;
   top: -1px;
-  right: -8px;
+  right: -11px;
   text-align: center;
 }
 .moz img {
@@ -52,6 +52,12 @@ h2 {
 
 #mark {
   white-space: nowrap;
+  margin: .5em 0 -.5em 0;
+}
+
+.site-header {
+  position: relative;
+  padding-top: 2em;
 }
 
 header h1 {
@@ -89,13 +95,21 @@ section:after, footer:after{
   clear: left;
 }
 
-footer nav a {
-  margin-right: 2em;
+.site-nav a {
+  margin-right: 1em;
+}
+
+header .site-nav {
+  position: absolute;
+  left: 0;
+  top: 1em;
 }
 
 footer {
   min-height: 2em;
   padding-right: 84px;
+  margin-top: 5em;
+  clear: left;
 }
 
 section.demo-wrap, section.main-sect{

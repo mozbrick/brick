@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-  <header>
-    <h1>Documentation</h1>
-    <h2>Version {{ version }}</h2>
-  </header>
+  <h1>Documentation</h1>
+  <h2>Version {{ version }}</h2>
   <nav>
-    {% for tag, meh in tags %}
-      <a href="#{{ tag }}">{{ tag }}</a>
+    <ul>
+    {% for tag, info in tags %}
+      <li><a href="#{{ tag }}">{{ tag }}</a></li>
     {% endfor %}
   </nav>
   {% for tag, info in tags %}

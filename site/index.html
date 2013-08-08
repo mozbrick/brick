@@ -1,49 +1,65 @@
 {% extends 'base.html' %}
-{% block content %}
-  <header>
-    <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> {{ version }}</small></h1>
-    <h2>UI Components for Modern Web Apps</h2>
-  </header>
-  <div id="page">
-    <div>
-      <section class="two-up">
-        <h2>What is Brick?</h2>
-        <p>
-          Brick is a bundle of re-usable UI components for <b>quickly</b> and <b>flexibly</b> building HTML5 apps. Brick adds <b>new HTML tags</b>- widgets that allow developers to express the structure of an application in a clearer, more concise manner.
-        </p>
-      </section>
-      <section class="two-up">
-        <h2>What are Web Components?</h2>
-        <p>
-          Web Components is a new <b>W3C standard</b> allowing developers to define new HTML tags and supply the code and styles that power them.
-        </p>
-      </section>
-    </div>
 
-    <section>
-      <h1>Start Stacking</h1>
-      <a class="download" href="#">
-        <h3>Download Brick</h3>
-        <small>version {{ version }} &mdash; {{ size }}</small>
-      </a>
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="component/flipbox/demo/demo.css"/>
+  <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+{% endblock %}
+
+{% block content %}
+  <div id="page">
+    <section class="two-up">
+      <h2>What is Brick?</h2>
+      <p>
+        Brick is a bundle of re-usable UI components for <b>quickly</b> and <b>flexibly</b> building HTML5 apps. Brick adds <b>new HTML tags</b>- widgets that allow developers to express the structure of an application in a clearer, more concise manner.
+      </p>
+    </section>
+
+    <section class="two-up">
+      <h2>What are Web Components?</h2>
+      <p>
+        Web Components is a new <b>W3C standard</b> allowing developers to define new HTML tags and supply the code and styles that power them.
+      </p>
     </section>
 
     <section>
-      <h1>Examples</h1>
-      <div>
+        <h1>Brick in Action</h1>
         <div class="two-up">
-          <h2>Basic App Layout</h2>
-          <figure class="demo" data-src="demos/basic/index.html"></figure>
+            <figure class="demo largeprint">
+                <x-flipbox>
+                    <div>I'm the front face.</div>
+                    <div>And I'm the back face.</div>
+                </x-flipbox>
+            </figure>
         </div>
-        <div class="two-up">
-          <h2>Shift Menu Layout</h2>
-          <figure class="demo" data-src="demos/basic/index.html"></figure>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton flip">Toggle flip</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;I'm the front face.&lt;/div&gt;<br/>    &lt;div&gt;And I'm the back face.&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function(){<br/>    flipBox.toggle(); <br/>});</pre>
         </div>
+    </section>
+
+    <section>
+      <div class="two-up">
+        <h1>Start Stacking</h1>
+        <a class="download" href="#">
+          <h3>Download Brick</h3>
+          <small>version {{ version }} &mdash; {{ size }}</small>
+        </a>
+      </div>
+      <div class="two-up">
+        <h1>Feedback</h1>
+        <p>Brick is currently in Beta. You may run into issues using the components, but it likely isn't your fault! Please let us know!</p>
+        <a href="https://github.com/mozilla/brick/issues/new">File an Issue &raquo;</a>
       </div>
     </section>
+
   </div>
 {% endblock %}
 {% block script %}
+  <script src="site/js/prettify.js"></script>
+  <script src="component/flipbox/demo/demo.js"></script>
   <script>
     var demos = document.querySelectorAll('.demo[data-src]');
     for (var i=0; i<demos.length; i++) {

@@ -4,3 +4,9 @@
   font-style: normal;
   font-variant: normal;
   src: local("Open Sans") local("OpenSans") url("OpenSans-SemiBold.ttf") format("truetype"); }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

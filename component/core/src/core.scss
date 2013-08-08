@@ -1,5 +1,11 @@
 @import "../../../component-ui-defaults";
 
-@include customFont("OpenSans-SemiBold", $fontFolder: "", 
-                    $fontFamily: $COMPONENT_CUSTOM_FONT_NAME, 
+@include customFont("OpenSans-SemiBold", $fontFolder: "",
+                    $fontFamily: $COMPONENT_CUSTOM_FONT_NAME,
                     $localNames: ("Open Sans", "OpenSans"));
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

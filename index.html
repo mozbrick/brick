@@ -5,68 +5,99 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>Brick </title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" type="text/css" href="dist/brick.css"/>
     <link rel="stylesheet" href="site/css/main.css">
+    
+  <link rel="stylesheet" type="text/css" href="component/flipbox/demo/demo.css"/>
+  <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+
   </head>
   <body>
     <article>
-      
-  <header>
-    <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> 1.0beta
+      <header class="site-header">
+        <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> 1.0beta
 </small></h1>
-    <h2>UI Components for Modern Web Apps</h2>
-  </header>
-  <div id="page">
-    <div>
-      <section class="two-up">
-        <h2>What is Brick?</h2>
-        <p>
-          Brick is a bundle of re-usable UI components for <b>quickly</b> and <b>flexibly</b> building HTML5 apps. Brick adds <b>new HTML tags</b>- widgets that allow developers to express the structure of an application in a clearer, more concise manner.
-        </p>
-      </section>
-      <section class="two-up">
-        <h2>What are Web Components?</h2>
-        <p>
-          Web Components is a new <b>W3C standard</b> allowing developers to define new HTML tags and supply the code and styles that power them.
-        </p>
-      </section>
-    </div>
+        <h2>UI Components for Modern Web Apps</h2>
+        <nav class="site-nav">
+  <a href="index.html">Home</a>
+  <a href="download.html">Download</a>
+  <a href="docs.html">Documentation</a>
+  <a href="http://github.com/mozilla/brick/">GitHub</a>
+  <a href="http://github.com/mozilla/brick/issues">Issues</a>
+</nav>
 
-    <section>
-      <h1>Start Stacking</h1>
-      <a class="download" href="#">
-        <h3>Download Brick</h3>
-        <small>version 1.0beta
- &mdash; 132K</small>
-      </a>
+        
+        
+      </header>
+      
+  <div id="page">
+    <section class="two-up">
+      <h2>What is Brick?</h2>
+      <p>
+        Brick is a bundle of re-usable UI components for <b>quickly</b> and <b>flexibly</b> building HTML5 apps. Brick adds <b>new HTML tags</b>- widgets that allow developers to express the structure of an application in a clearer, more concise manner.
+      </p>
+    </section>
+
+    <section class="two-up">
+      <h2>What are Web Components?</h2>
+      <p>
+        Web Components is a new <b>W3C standard</b> allowing developers to define new HTML tags and supply the code and styles that power them.
+      </p>
     </section>
 
     <section>
-      <h1>Examples</h1>
-      <div>
+        <h1>Brick in Action</h1>
         <div class="two-up">
-          <h2>Basic App Layout</h2>
-          <figure class="demo" data-src="demos/basic/index.html"></figure>
+            <figure class="demo largeprint">
+                <x-flipbox>
+                    <div>I'm the front face.</div>
+                    <div>And I'm the back face.</div>
+                </x-flipbox>
+            </figure>
         </div>
-        <div class="two-up">
-          <h2>Shift Menu Layout</h2>
-          <figure class="demo" data-src="demos/basic/index.html"></figure>
+        <div class="markup-wrap two-up">
+            <button class="prettybutton flip">Toggle flip</button>
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;I'm the front face.&lt;/div&gt;<br/>    &lt;div&gt;And I'm the back face.&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function(){<br/>    flipBox.toggle(); <br/>});</pre>
         </div>
+    </section>
+
+    <section>
+      <div class="two-up">
+        <h1>Start Stacking</h1>
+        <a class="download" href="#">
+          <h3>Download Brick</h3>
+          <small>version 1.0beta
+ &mdash; 131K</small>
+        </a>
+      </div>
+      <div class="two-up">
+        <h1>Feedback</h1>
+        <p>Brick is currently in Beta. You may run into issues using the components, but it likely isn't your fault! Please let us know!</p>
+        <a href="https://github.com/mozilla/brick/issues/new">File an Issue &raquo;</a>
       </div>
     </section>
+
   </div>
 
       <footer>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="download.html">Download</a>
-          <a href="docs.html">Documentation</a>
-          <a href="http://github.com/mozilla/brick/">GitHub</a>
-          <a href="http://github.com/mozilla/brick/issues">Issues</a>
-        </nav>
+        <nav class="site-nav">
+  <a href="index.html">Home</a>
+  <a href="download.html">Download</a>
+  <a href="docs.html">Documentation</a>
+  <a href="http://github.com/mozilla/brick/">GitHub</a>
+  <a href="http://github.com/mozilla/brick/issues">Issues</a>
+</nav>
+
         <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
       </footer>
     </article>
+    <script src="dist/brick.js"></script>
     
+  <script src="site/js/prettify.js"></script>
+  <script src="component/flipbox/demo/demo.js"></script>
   <script>
     var demos = document.querySelectorAll('.demo[data-src]');
     for (var i=0; i<demos.length; i++) {

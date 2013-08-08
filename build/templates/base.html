@@ -5,23 +5,28 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>Brick {% block pageTitle %}{% endblock %}</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
+    <link rel="stylesheet" type="text/css" href="dist/brick.css"/>
     <link rel="stylesheet" href="site/css/main.css">
+    {% block style %}
+    {% endblock %}
   </head>
   <body>
     <article>
+      <header class="site-header">
+        <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> {{ version }}</small></h1>
+        <h2>UI Components for Modern Web Apps</h2>
+        {% include 'nav.html' %}
+        {% block header %}
+        {% endblock %}
+      </header>
       {% block content %}
       {% endblock %}
       <footer>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="download.html">Download</a>
-          <a href="docs.html">Documentation</a>
-          <a href="http://github.com/mozilla/brick/">GitHub</a>
-          <a href="http://github.com/mozilla/brick/issues">Issues</a>
-        </nav>
+        {% include 'nav.html' %}
         <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
       </footer>
     </article>
+    <script src="dist/brick.js"></script>
     {% block script %}
     {% endblock %}
   </body>
