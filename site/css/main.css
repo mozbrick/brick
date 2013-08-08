@@ -115,6 +115,9 @@ footer {
 section.demo-wrap, section.main-sect{
   border-top: 1px solid grey;
 }
+.demo-wrap.clean {
+  border: 0;
+}
 
 .two-up {
   clear: none;
