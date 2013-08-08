@@ -16,7 +16,6 @@ var generateDocs = avow(function (fulfill, reject, components) {
         if (n < components.length) {
             var name = components[n];
             var docPath = path.join('component', name, 'xtag.json');
-            var outPath = path.join('docs', name + '.html');
             console.log(name);
             if (name === 'core') {
                 processComponent(n+1);
@@ -41,8 +40,7 @@ var generateDocs = avow(function (fulfill, reject, components) {
 
 var writeIndex = avow(function (fulfill, reject, docs) {
     console.log('writing index');
-    var tmpl = env.getTemplate('docs.html');
-    fs.writeFileSync('docs.html', tmpl.render({tags: docs}));
+    site.staticPage('docs.html', 'docs.html', {tags: docs});
     console.log('index written!');
     return true;
 });

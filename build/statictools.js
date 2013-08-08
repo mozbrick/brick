@@ -2,8 +2,19 @@
 var fs = require('fs');
 var nunjucks = require('nunjucks');
 var promise = require('promisesaplus');
+var _ = require('lodash');
 
 var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('build/templates'));
+
+env.addFilter('nl2br', function(str) {
+    return str.replace('\n', '<br>');
+});
+
+var version = fs.readFileSync('VERSION');
+
+var size = 0;
+size += fs.statSync('dist/brick.css').size;
+size += fs.statSync('dist/brick.js').size;
 
 function avow(fn) {
     return function() {
@@ -29,10 +40,31 @@ function err(s) {
     }
 }
 
-var staticPage = function(tmpl, path) {
+var staticPage = function(tmpl, path, obj) {
   var t = env.getTemplate(tmpl);
-  fs.writeFileSync(path, t.render());
+  obj = _.extend({
+    version: version,
+    size: ~~(size / 1024) + 'K'
+  }, obj);
+  fs.writeFileSync(path, t.render(obj));
 }
+
+var each = avow(function(fulfill, reject, o, fn) {
+  var keys = Object.keys(o);
+  var num = keys.length;
+  var n = -1;
+  function next() {
+    n++;
+    if (n < num) {
+      var p = promise();
+      fn(p.fulfill, p.reject, o[keys[n]], keys[n]);
+      p.then(next, reject);
+    } else {
+      fulfill();
+    }
+  }
+  next();
+});
 
 var getJSON = avow(function (fulfill, reject, path) {
   fs.readFile(path, function(err, res) {
@@ -46,7 +78,9 @@ var getJSON = avow(function (fulfill, reject, path) {
 module.exports = {
   avow: avow,
   err: err,
+  each: each,
   env: env,
+  version: version,
   staticPage: staticPage,
   getJSON: getJSON
 };

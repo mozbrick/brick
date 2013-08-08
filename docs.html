@@ -12,6 +12,8 @@
       
   <header>
     <h1>Documentation</h1>
+    <h2>Version 1.0beta
+</h2>
   </header>
   <nav>
     
@@ -45,6 +47,9 @@
   
     <section id="appbar" class="main-sect">
       <h1>appbar</h1>
+      
+        <a href="component/appbar/demo/index.html">View Demo &raquo;</a>
+      
       <p>The Application Bar provides the standard top header and navigation layout that is typical for Web Applications on mobile devices.</p>
       <h2>Attributes</h2>
       
@@ -57,6 +62,9 @@
   
     <section id="calendar" class="main-sect">
       <h1>calendar</h1>
+      
+        <a href="component/calendar/demo/index.html">View Demo &raquo;</a>
+      
       <p>A component acting as a calendar widget that can be manipulated with minimal user-written code/layout.</p>
       <h2>Attributes</h2>
       
@@ -94,32 +102,32 @@
       
       <dl>
         <dt><code>render([preserveNodes])</code></dt>
-        <dd>Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)</dd>
+        <dd>Can be called to manually force a refresh of the calendar&#39;s HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)</dd>
       </dl>
       
       <dl>
         <dt><code>prevMonth()</code></dt>
-        <dd>Go back one month by updating the 'view' attribute of the calendar.</dd>
+        <dd>Go back one month by updating the &#39;view&#39; attribute of the calendar.</dd>
       </dl>
       
       <dl>
         <dt><code>nextMonth()</code></dt>
-        <dd>Advance one month forward by updating the 'view' attribute of the calendar.</dd>
+        <dd>Advance one month forward by updating the &#39;view&#39; attribute of the calendar.</dd>
       </dl>
       
       <dl>
         <dt><code>toggleDateOn(dateObjToToggle, [append])</code></dt>
-        <dd>Sets the day corresponding to the given Date object as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar</dd>
+        <dd>Sets the day corresponding to the given Date object as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the &#39;chosen&#39; attribute of the calendar</dd>
       </dl>
       
       <dl>
         <dt><code>toggleDateOff(dateObjToToggle)</code></dt>
-        <dd>Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar</dd>
+        <dd>Removes the given date from the calendar&#39;s list of chosen dates. Also updates the &#39;chosen&#39; attribute of the calendar</dd>
       </dl>
       
       <dl>
         <dt><code>toggleDate(dateObjToToggle, [appendIfAdd])</code></dt>
-        <dd>Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar</dd>
+        <dd>Alternates the chosen status of the given date. Takes an &#39;appendIfAdded&#39; parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the &#39;chosen&#39; attribute of the calendar</dd>
       </dl>
       
       <dl>
@@ -131,17 +139,17 @@
       
       <dl>
         <dt><code>datetoggleon</code></dt>
-        <dd>Fired when the UI sets a day as chosen. Passes the following extra datamap in e.detail: 'date' is the actual Date object corresponding to the chosen day, and 'iso' is the ISO-formatted string representation of the date</dd>
+        <dd>Fired when the UI sets a day as chosen. Passes the following extra datamap in e.detail: &#39;date&#39; is the actual Date object corresponding to the chosen day, and &#39;iso&#39; is the ISO-formatted string representation of the date</dd>
       </dl>
       
       <dl>
         <dt><code>datetoggleoff</code></dt>
-        <dd>Fired when the UI sets a day as unchosen. Passes the following extra datamap in e.detail: 'date' is the actual Date object corresponding to the unchosen day, and 'iso' is the ISO-formatted string representation of the date</dd>
+        <dd>Fired when the UI sets a day as unchosen. Passes the following extra datamap in e.detail: &#39;date&#39; is the actual Date object corresponding to the unchosen day, and &#39;iso&#39; is the ISO-formatted string representation of the date</dd>
       </dl>
       
       <dl>
         <dt><code>datetap</code></dt>
-        <dd>Fired when the user taps a day without starting a drag-paint over other dates. Passes the following extra datamap in e.detail: 'date' is the actual Date object corresponding to the unchosen day, and 'iso' is the ISO-formatted string representation of the date</dd>
+        <dd>Fired when the user taps a day without starting a drag-paint over other dates. Passes the following extra datamap in e.detail: &#39;date&#39; is the actual Date object corresponding to the unchosen day, and &#39;iso&#39; is the ISO-formatted string representation of the date</dd>
       </dl>
       
       <a class="top" href="#">top</a>
@@ -149,6 +157,9 @@
   
     <section id="datepicker" class="main-sect">
       <h1>datepicker</h1>
+      
+        <a href="component/datepicker/demo/index.html">View Demo &raquo;</a>
+      
       <p>A polyfill for &lt;input type=&#39;date&#39;&gt; utilizing the x-calendar component.</p>
       <h2>Attributes</h2>
       
@@ -171,19 +182,19 @@
       
       <dl>
         <dt><code>editLabels(newLabelData)</code></dt>
-        <dd>Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure.</dd>
+        <dd>Allows the user to change the labels of the calendar, if currently in polyfill mode. See the &lt;x-calendar&gt;&#39;s .labels property documentation for details on expected input structure.</dd>
       </dl>
       
       <h2>Events</h2>
       
       <dl>
         <dt><code>input</code></dt>
-        <dd>Fired by the <x-datepicker> any time the user selects a date. Also fired as the user types in a date.</dd>
+        <dd>Fired by the &lt;x-datepicker&gt; any time the user selects a date. Also fired as the user types in a date.</dd>
       </dl>
       
       <dl>
         <dt><code>change</code></dt>
-        <dd>Fired by the <x-datepicker> whenever the submitValue of the datepicker changes or when the value is finalized. In other words, while input fires as the user types, change only fires if this changes the date selected by the datepicker, or if the user hits enter/leaves the datepicker's focus and the date gets parsed into ISO format.</dd>
+        <dd>Fired by the &lt;x-datepicker&gt; whenever the submitValue of the datepicker changes or when the value is finalized. In other words, while input fires as the user types, change only fires if this changes the date selected by the datepicker, or if the user hits enter/leaves the datepicker&#39;s focus and the date gets parsed into ISO format.</dd>
       </dl>
       
       <a class="top" href="#">top</a>
@@ -191,6 +202,9 @@
   
     <section id="deck" class="main-sect">
       <h1>deck</h1>
+      
+        <a href="component/deck/demo/index.html">View Demo &raquo;</a>
+      
       <p>A box in which &lt;x-card&gt; elements can be cycled independently of order with a variety of different transitions</p>
       <h2>Attributes</h2>
       
@@ -218,17 +232,17 @@
       
       <dl>
         <dt><code>shuffleTo([progressType])</code></dt>
-        <dd>Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index.</dd>
+        <dd>Transitions to the x-card at the given index. If given a progressType of &#39;forward&#39;, will perform the forwards animation. If given &#39;reverse&#39;, will performs the reverse animation. If the progressType is &#39;auto&#39; or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index.</dd>
       </dl>
       
       <dl>
         <dt><code>shuffleNext([progressType])</code></dt>
-        <dd>Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
+        <dd>Transitions to the next x-card in the deck. Takes an optional progressType of &#39;forward&#39;, &#39;reverse&#39;, or &#39;auto&#39;. Also takes an optional callback function.</dd>
       </dl>
       
       <dl>
         <dt><code>shufflePrev([progressType])</code></dt>
-        <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
+        <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of &#39;forward&#39;, &#39;reverse&#39;, or &#39;auto&#39;. Also takes an optional callback function.</dd>
       </dl>
       
       <dl>
@@ -253,30 +267,29 @@
       
       <dl>
         <dt><code>historyBack([progressType])</code></dt>
-        <dd>Transitions to the previously displayed card in the deck's history. progressType parameter acts similarly to shuffleTo's progressType parameter.</dd>
+        <dd>Transitions to the previously displayed card in the deck&#39;s history. progressType parameter acts similarly to shuffleTo&#39;s progressType parameter.</dd>
       </dl>
       
       <dl>
         <dt><code>historyForward([progressType])</code></dt>
-        <dd>Transitions to the more recently displayed card in the deck's history. progressType parameter acts similarly to shuffleTo's progressType parameter.</dd>
+        <dd>Transitions to the more recently displayed card in the deck&#39;s history. progressType parameter acts similarly to shuffleTo&#39;s progressType parameter.</dd>
       </dl>
       
       <h2>Events</h2>
       
       <dl>
         <dt><code>shufflestart</code></dt>
-        <dd>Fired by the <x-deck> when it is about to start a card transition animation. At this point, all deck attributes are set, and the only thing left to is to CSS animate the transition.</dd>
+        <dd>Fired by the &lt;x-deck&gt; when it is about to start a card transition animation. At this point, all deck attributes are set, and the only thing left to is to CSS animate the transition.</dd>
       </dl>
       
       <dl>
         <dt><code>shuffleend</code></dt>
-        <dd>Fired by the <x-deck> element when a card transition animation has finished. Similar to 'transitionend' events, is not guaranteed to fire for every animation, and will only fire for animations that reach full completion without interruption.</dd>
+        <dd>Fired by the &lt;x-deck&gt; element when a card transition animation has finished. Similar to &#39;transitionend&#39; events, is not guaranteed to fire for every animation, and will only fire for animations that reach full completion without interruption.</dd>
       </dl>
       
       <dl>
         <dt><code>show</code></dt>
-        <dd>If an <x-card> element receives a 'show' event, the deck will automatically transition to the card that received the event. 
- This event is not fired by the x-deck itself.</dd>
+        <dd>If an &lt;x-card&gt; element receives a &#39;show&#39; event, the deck will automatically transition to the card that received the event. <br> This event is not fired by the x-deck itself.</dd>
       </dl>
       
       <a class="top" href="#">top</a>
@@ -284,47 +297,24 @@
   
     <section id="flipbox" class="main-sect">
       <h1>flipbox</h1>
-      <p>Flips between two content elements with a CSS Animation, similar to flipping a playing card. The front face defaults to the first direct child element of the &lt;x-flipbox&gt;, and the back face defaults to the last direct child element.</p>
+      
+        <a href="component/flipbox/demo/index.html">View Demo &raquo;</a>
+      
+      <p>Flips between two content elements with a CSS Animation, similar to flipping a playing card. The front face default to the first direct child element of the &lt;x-flipbox&gt;, and the back face defaults to the last direct child element.</p>
       <h2>Attributes</h2>
-      
-      <dl>
-        <dt><code>direction</code></dt>
-        <dd>Indicates which direction the flip-animation swivels towards. Valid options are &#39;right&#39;, &#39;left&#39;, &#39;up&#39;, and &#39;down&#39;. Defaults to &#39;left&#39;.</dd>
-      </dl>
-      
-      <dl>
-        <dt><code>flipped</code></dt>
-        <dd>Boolean attribute indicating whether the back face of the flipbox is showing or not.</dd>
-      </dl>
       
       <h2>Methods</h2>
       
       <dl>
-        <dt><code>toggle()</code></dt>
+        <dt><code>toggle</code></dt>
         <dd>Flips the card to its opposite face.</dd>
-      </dl>
-      
-      <dl>
-        <dt><code>showFront()</code></dt>
-        <dd>Force the flipbox to flip to its front face.</dd>
-      </dl>
-      
-      <dl>
-        <dt><code>showBack()</code></dt>
-        <dd>Force the flipbox to flip to its back face.</dd>
       </dl>
       
       <h2>Events</h2>
       
       <dl>
-        <dt><code>flipend</code></dt>
-        <dd>The flipbox fires a flipend event whenever it fully finishes a flipping animation. This will not fire if the flipping animation is interrupted before completion.</dd>
-      </dl>
-      
-      <dl>
-        <dt><code>show</code></dt>
-        <dd>If either the front face or the back face of the flipbox receives a show event, the flipbox will automatically show that side. 
- Note: this event is not fired by the flipbox itself.</dd>
+        <dt><code>*: show</code></dt>
+        <dd>If either the front face or the back face of the flipbox receives a show event, the flipbox will automatically show that side.</dd>
       </dl>
       
       <a class="top" href="#">top</a>
@@ -332,6 +322,9 @@
   
     <section id="iconbutton" class="main-sect">
       <h1>iconbutton</h1>
+      
+        <a href="component/iconbutton/demo/index.html">View Demo &raquo;</a>
+      
       <p>A button with an anchored icon in addition to a content label</p>
       <h2>Attributes</h2>
       
@@ -354,6 +347,9 @@
   
     <section id="layout" class="main-sect">
       <h1>layout</h1>
+      
+        <a href="component/layout/demo/index.html">View Demo &raquo;</a>
+      
       <p>A simple layout element that automatically stretches to fill the parent, with optional toggleable header and footer elements.</p>
       <h2>Attributes</h2>
       
@@ -371,6 +367,9 @@
   
     <section id="slidebox" class="main-sect">
       <h1>slidebox</h1>
+      
+        <a href="component/slidebox/demo/index.html">View Demo &raquo;</a>
+      
       <p>A container that allows animated transitions between content panes, displaying all slides along the way. Think of the component as a filmstrip of slides that moves around in a viewport.</p>
       <h2>Attributes</h2>
       
@@ -408,6 +407,9 @@
   
     <section id="slider" class="main-sect">
       <h1>slider</h1>
+      
+        <a href="component/slider/demo/index.html">View Demo &raquo;</a>
+      
       <p>Polyfill on top of input type=&#39;range&#39;, providing a consistent UI regardless of whether type=&#39;range&#39; is supported or not.</p>
       <h2>Attributes</h2>
       
@@ -460,6 +462,9 @@
   
     <section id="tabbar" class="main-sect">
       <h1>tabbar</h1>
+      
+        <a href="component/tabbar/demo/index.html">View Demo &raquo;</a>
+      
       <p>Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.</p>
       <h2>Attributes</h2>
       
@@ -474,7 +479,7 @@
       
       <dl>
         <dt><code>show</code></dt>
-        <dd>The default event that a x-tabbar-tab will fire on its selected elements if not overridden by 'target-event'</dd>
+        <dd>The default event that a x-tabbar-tab will fire on its selected elements if not overridden by &#39;target-event&#39;</dd>
       </dl>
       
       <a class="top" href="#">top</a>
@@ -482,6 +487,9 @@
   
     <section id="toggle" class="main-sect">
       <h1>toggle</h1>
+      
+        <a href="component/toggle/demo/index.html">View Demo &raquo;</a>
+      
       <p>A polyfill for radiobutton/checkbox inputs to provide a consistent UI and simplify markup</p>
       <h2>Attributes</h2>
       
@@ -524,6 +532,9 @@
   
     <section id="togglegroup" class="main-sect">
       <h1>togglegroup</h1>
+      
+        <a href="component/togglegroup/demo/index.html">View Demo &raquo;</a>
+      
       <p>Togglegroups are used to display a set of clickable option buttons, which can be either toggle in an independent or mutually exclusive manner.</p>
       <h2>Attributes</h2>
       
@@ -546,6 +557,9 @@
   
     <section id="tooltip" class="main-sect">
       <h1>tooltip</h1>
+      
+        <a href="component/tooltip/demo/index.html">View Demo &raquo;</a>
+      
       <p>Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content</p>
       <h2>Attributes</h2>
       
@@ -578,22 +592,22 @@
       
       <dl>
         <dt><code>refreshPosition()</code></dt>
-        <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.</dd>
+        <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip&#39;s contents are changed and need to be immediately visually repositioned.</dd>
       </dl>
       
       <dl>
         <dt><code>show()</code></dt>
-        <dd>This method forces the tooltip to display (this will fire a 'tooltipshown' event).</dd>
+        <dd>This method forces the tooltip to display (this will fire a &#39;tooltipshown&#39; event).</dd>
       </dl>
       
       <dl>
         <dt><code>hide()</code></dt>
-        <dd>This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).</dd>
+        <dd>This method forces the tooltip to hide (this will fire a &#39;tooltiphidden&#39; event).</dd>
       </dl>
       
       <dl>
         <dt><code>toggle()</code></dt>
-        <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate).</dd>
+        <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a &#39;tooltipshown&#39; or &#39;tooltiphidden&#39; event, whichever is appropriate).</dd>
       </dl>
       
       <h2>Events</h2>
