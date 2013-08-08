@@ -207,15 +207,15 @@ Advance one month forward by updating the 'view' attribute of the calendar.
 
 **Note:** This rerenders the calendar
 
-## ___toggleDateOn___(dateToToggle, [append])
+## ___toggleDateOn___(dateObjToToggle, [append])
 
-Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. 
+Sets the day corresponding to the given Date object as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. 
 
 Also updates the `chosen` attribute of the calendar.
 
 **Note:** This rerenders the calendar
 
-## ___toggleDateOff___(dateToToggle)
+## ___toggleDateOff___(dateObjToToggle)
 
 Removes the given date from the calendar's list of chosen dates. 
 
@@ -223,7 +223,7 @@ Also updates the 'chosen' attribute of the calendar.
 
 **Note:** This rerenders the calendar
 
-## ___toggleDate___(dateToToggle, [appendIfAdd])
+## ___toggleDate___(dateObjToToggle, [appendIfAdd])
 
 Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled to on. 
 

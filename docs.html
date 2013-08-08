@@ -59,7 +59,7 @@
   
     <section id="calendar" class="main-sect">
       <h1>calendar</h1>
-      <p>A port of Potch&#39;s fortnight.js calendar UI in component form</p>
+      <p>A component acting as a calendar widget that can be manipulated with minimal user-written code/layout.</p>
       <h2>Attributes</h2>
       
       <dl>
@@ -95,37 +95,37 @@
       <h2>Methods</h2>
       
       <dl>
-        <dt><code>render</code></dt>
+        <dt><code>render([preserveNodes])</code></dt>
         <dd>Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)</dd>
       </dl>
       
       <dl>
-        <dt><code>prevMonth</code></dt>
+        <dt><code>prevMonth()</code></dt>
         <dd>Go back one month by updating the 'view' attribute of the calendar.</dd>
       </dl>
       
       <dl>
-        <dt><code>nextMonth</code></dt>
+        <dt><code>nextMonth()</code></dt>
         <dd>Advance one month forward by updating the 'view' attribute of the calendar.</dd>
       </dl>
       
       <dl>
-        <dt><code>toggleDateOn</code></dt>
-        <dd>Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar</dd>
+        <dt><code>toggleDateOn(dateObjToToggle, [append])</code></dt>
+        <dd>Sets the day corresponding to the given Date object as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar</dd>
       </dl>
       
       <dl>
-        <dt><code>toggleDateOff</code></dt>
+        <dt><code>toggleDateOff(dateObjToToggle)</code></dt>
         <dd>Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar</dd>
       </dl>
       
       <dl>
-        <dt><code>toggleDate</code></dt>
+        <dt><code>toggleDate(dateObjToToggle, [appendIfAdd])</code></dt>
         <dd>Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar</dd>
       </dl>
       
       <dl>
-        <dt><code>hasVisibleDate</code></dt>
+        <dt><code>hasVisibleDate(dateToCheck, [excludeBadMonths])</code></dt>
         <dd>Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months.</dd>
       </dl>
       
@@ -172,7 +172,7 @@
       <h2>Methods</h2>
       
       <dl>
-        <dt><code>editLabels</code></dt>
+        <dt><code>editLabels(newLabelData)</code></dt>
         <dd>Allows the user to change the labels of the calendar, if currently in polyfill mode. See the <x-calendar>'s .labels property documentation for details on expected input structure.</dd>
       </dl>
       
@@ -193,51 +193,91 @@
   
     <section id="deck" class="main-sect">
       <h1>deck</h1>
-      <p>A box in which cards can be cycled independently of order with a variety of different transitions</p>
+      <p>A box in which &lt;x-card&gt; elements can be cycled independently of order with a variety of different transitions</p>
       <h2>Attributes</h2>
       
       <dl>
         <dt><code>transition-type</code></dt>
-        <dd>Defines the kind of transition animation that is used when cycling cards. Valid options: &#39;scrollLeft&#39;, &#39;scrollUp&#39;, &#39;scrollRight&#39;, &#39;scrollDown&#39;, &#39;flipX&#39;, &#39;flipY&#39;, &#39;none&#39;</dd>
+        <dd>Defines the kind of transition animation that is used when cycling cards. Valid options: &#39;scrollLeft&#39;, &#39;scrollUp&#39;, &#39;scrollRight&#39;, &#39;scrollDown&#39;, &#39;flipX&#39;, &#39;flipY&#39;, &#39;coverLeft&#39;, &#39;coverUp&#39;, &#39;coverRight&#39;, &#39;coverDown&#39;, &#39;uncoverLeft&#39;, &#39;uncoverUp&#39;, &#39;uncoverRight&#39;, &#39;uncoverDown&#39;, &#39;none&#39;. Defaults to &#39;scrollLeft&#39;</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>selected-index</code></dt>
+        <dd>Defines which card index will be displayed. If set in the initial markup, this will initialize the given card as the selected card. Defaults to 0.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>history-cap</code></dt>
+        <dd>Defines how many cards to keep in history to allow developers to simply return to the previously displayed card. Defaults to 10.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>x-card: transition-override</code></dt>
+        <dd>If transition-override is defined on a card, the animation used to transition to this card will be what is given here instead of the deck&#39;s animation. Valid options are the same as the &lt;x-deck&gt;&#39;s transition-type attribute.</dd>
       </dl>
       
       <h2>Methods</h2>
       
       <dl>
-        <dt><code>shuffleTo</code></dt>
-        <dd>Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.</dd>
+        <dt><code>shuffleTo([progressType])</code></dt>
+        <dd>Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index.</dd>
       </dl>
       
       <dl>
-        <dt><code>shuffleNext</code></dt>
+        <dt><code>shuffleNext([progressType])</code></dt>
         <dd>Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
       </dl>
       
       <dl>
-        <dt><code>shufflePrev</code></dt>
+        <dt><code>shufflePrev([progressType])</code></dt>
         <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.</dd>
       </dl>
       
       <dl>
-        <dt><code>getAllCards</code></dt>
+        <dt><code>getAllCards()</code></dt>
         <dd>Returns a list of all x-card elements in the deck.</dd>
       </dl>
       
       <dl>
-        <dt><code>getSelectedCard</code></dt>
+        <dt><code>getSelectedCard()</code></dt>
         <dd>Returns the currently selected x-card in the deck.</dd>
       </dl>
       
       <dl>
-        <dt><code>getCardIndex</code></dt>
+        <dt><code>getCardIndex(cardEl)</code></dt>
         <dd>Given an x-card element, returns its index in this deck, if it is a child element.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>getCardAt(index)</code></dt>
+        <dd>Returns the x-card at the given index.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>historyBack([progressType])</code></dt>
+        <dd>Transitions to the previously displayed card in the deck's history. progressType parameter acts similarly to shuffleTo's progressType parameter.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>historyForward([progressType])</code></dt>
+        <dd>Transitions to the more recently displayed card in the deck's history. progressType parameter acts similarly to shuffleTo's progressType parameter.</dd>
       </dl>
       
       <h2>Events</h2>
       
       <dl>
+        <dt><code>shufflestart</code></dt>
+        <dd>Fired by the <x-deck> when it is about to start a card transition animation. At this point, all deck attributes are set, and the only thing left to is to CSS animate the transition.</dd>
+      </dl>
+      
+      <dl>
         <dt><code>shuffleend</code></dt>
-        <dd>fired by the x-deck element when a card transition animation has finished</dd>
+        <dd>Fired by the <x-deck> element when a card transition animation has finished. Similar to 'transitionend' events, is not guaranteed to fire for every animation, and will only fire for animations that reach full completion without interruption.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>x-card: show</code></dt>
+        <dd>If an <x-card> element receives a 'show' event, the deck will automatically transition to the card that received the event.</dd>
       </dl>
       
       <a class="top" href="#">top</a>
@@ -245,24 +285,29 @@
   
     <section id="flipbox" class="main-sect">
       <h1>flipbox</h1>
-      <p>The flipbox tag allows you to flip a content element with a CSS Animation to the other side to view additional content. An example use of flipbox, would be to flip and app&#39;s content to reveal a settings panel</p>
+      <p>Flips between two content elements with a CSS Animation, similar to flipping a playing card. The front face default to the first direct child element of the &lt;x-flipbox&gt;, and the back face defaults to the last direct child element.</p>
       <h2>Attributes</h2>
       
       <h2>Methods</h2>
       
       <dl>
         <dt><code>toggle</code></dt>
-        <dd>Flips the card</dd>
+        <dd>Flips the card to its opposite face.</dd>
       </dl>
       
       <h2>Events</h2>
+      
+      <dl>
+        <dt><code>*: show</code></dt>
+        <dd>If either the front face or the back face of the flipbox receives a show event, the flipbox will automatically show that side.</dd>
+      </dl>
       
       <a class="top" href="#">top</a>
     </section>
   
     <section id="iconbutton" class="main-sect">
       <h1>iconbutton</h1>
-      <p>A button with an anchored icon in addition to a label</p>
+      <p>A button with an anchored icon in addition to a content label</p>
       <h2>Attributes</h2>
       
       <dl>
@@ -272,7 +317,7 @@
       
       <dl>
         <dt><code>icon-anchor</code></dt>
-        <dd>Defines the location of the icon relative to the label. Valid options are &#39;left&#39;, &#39;top&#39;, &#39;right&#39;, &#39;bottom&#39;</dd>
+        <dd>Defines the location of the icon relative to the content label. Valid options are &#39;left&#39;, &#39;top&#39;, &#39;right&#39;, &#39;bottom&#39;</dd>
       </dl>
       
       <h2>Methods</h2>
@@ -284,8 +329,13 @@
   
     <section id="layout" class="main-sect">
       <h1>layout</h1>
-      <p></p>
+      <p>A simple layout element that automatically stretches to fill the parent, with optional toggleable header and footer elements.</p>
       <h2>Attributes</h2>
+      
+      <dl>
+        <dt><code>maxcontent</code></dt>
+        <dd>If set, the maxcontent attribute specifies that any header/footer in the layout should be minimized to give the main content full screen space.</dd>
+      </dl>
       
       <h2>Methods</h2>
       
@@ -314,6 +364,11 @@
         <dd>A boolean attribute that when present will allow the modal to be closed by pressed the escape key.</dd>
       </dl>
       
+      <dl>
+        <dt><code>cancel-click-hide</code></dt>
+        <dd>If set, will prevent the modal from being dismissed by clicking outside its box.</dd>
+      </dl>
+      
       <h2>Methods</h2>
       
       <h2>Events</h2>
@@ -328,12 +383,12 @@
   
     <section id="slidebox" class="main-sect">
       <h1>slidebox</h1>
-      <p>A container that allows animated transitions between content panes. Slide Box supports horizontal and vertical transitions.</p>
+      <p>A container that allows animated transitions between content panes, displaying all slides along the way. Think of the component as a filmstrip of slides that moves around in a viewport.</p>
       <h2>Attributes</h2>
       
       <dl>
         <dt><code>orientation</code></dt>
-        <dd>Slide axis.  &#39;x&#39; or &#39;y&#39;</dd>
+        <dd>Slide axis. Set as &#39;x&#39; for horizontal animations, and set as &#39;y&#39; for vertical animations.</dd>
       </dl>
       
       <h2>Methods</h2>
@@ -345,12 +400,12 @@
       
       <dl>
         <dt><code>slideNext</code></dt>
-        <dd>Slides to next element.</dd>
+        <dd>Slides to the next slide element.</dd>
       </dl>
       
       <dl>
         <dt><code>slidePrevious</code></dt>
-        <dd>Slides to the previous element.</dd>
+        <dd>Slides to the previous slide element.</dd>
       </dl>
       
       <h2>Events</h2>
@@ -449,12 +504,12 @@
       
       <dl>
         <dt><code>label</code></dt>
-        <dd>Contains the raw HTML to render as the toggle&#39;s label.</dd>
+        <dd>Contains the raw HTML string to render as the toggle&#39;s label.</dd>
       </dl>
       
       <dl>
         <dt><code>name</code></dt>
-        <dd>Handles the name of the input. Follows the same rules as radio/checkbox input naming, and is required for form submissions to see the input.</dd>
+        <dd>Handles the name of the input. Follows the same rules as radio/checkbox input naming, and is required for form submissions to see the input. Multiple &lt;x-toggle&gt;s with the same name automatically become radio buttons.</dd>
       </dl>
       
       <dl>
@@ -464,12 +519,12 @@
       
       <dl>
         <dt><code>active</code></dt>
-        <dd>Handles whether or not the toggle is the currently active toggle in of its group, if it has one.</dd>
+        <dd>Indicates whether or not the toggle is the currently active toggle in of its group, if it has one.</dd>
       </dl>
       
       <dl>
         <dt><code>checked</code></dt>
-        <dd>Handles whether the toggle is checked or not</dd>
+        <dd>Indicates whether the toggle is checked or not</dd>
       </dl>
       
       <h2>Methods</h2>
@@ -534,22 +589,22 @@
       <h2>Methods</h2>
       
       <dl>
-        <dt><code>refreshPosition</code></dt>
+        <dt><code>refreshPosition()</code></dt>
         <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.</dd>
       </dl>
       
       <dl>
-        <dt><code>showTooltip</code></dt>
+        <dt><code>show()</code></dt>
         <dd>This method forces the tooltip to display (this will fire a 'tooltipshown' event).</dd>
       </dl>
       
       <dl>
-        <dt><code>hideTooltip</code></dt>
+        <dt><code>hide()</code></dt>
         <dd>This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).</dd>
       </dl>
       
       <dl>
-        <dt><code>toggleTooltip</code></dt>
+        <dt><code>toggle()</code></dt>
         <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate).</dd>
       </dl>
       

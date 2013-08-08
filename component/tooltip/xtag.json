@@ -30,10 +30,10 @@
       "tooltiphidden": "Fired by the x-tooltip element when tooltip is hidden"
     },
     "methods": {
-      "refreshPosition": "This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.",
-      "showTooltip": "This method forces the tooltip to display (this will fire a 'tooltipshown' event).",
-      "hideTooltip": "This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).",
-      "toggleTooltip": "This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate)."
+      "refreshPosition()": "This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip's contents are changed and need to be immediately visually repositioned.",
+      "show()": "This method forces the tooltip to display (this will fire a 'tooltipshown' event).",
+      "hide()": "This method forces the tooltip to hide (this will fire a 'tooltiphidden' event).",
+      "toggle()": "This method forces the tooltip to toggle whether it is visible or not (this will fire a 'tooltipshown' or 'tooltiphidden' event, whichever is appropriate)."
     },
     "getters": {
       "orientation": "This will provide the current value of the orientation attribute.",

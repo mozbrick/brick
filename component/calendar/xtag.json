@@ -3,7 +3,7 @@
 	"tagName": "x-calendar",
 	"version": "0.1.0",
 	"author": "Leon Zhang, Matthew Claypotch",
-	"description": "A port of Potch's fortnight.js calendar UI in component form",
+	"description": "A component acting as a calendar widget that can be manipulated with minimal user-written code/layout.",
 	"demo": "demo/calendar-demo.html",
 	"categories": [
         "ui"
@@ -17,7 +17,7 @@
 		"ios": 4
 	},
 	"documentation": {
-		"description": "A port of Potch's fortnight.js calendar UI in component form",
+		"description": "A component acting as a calendar widget that can be manipulated with minimal user-written code/layout.",
 		"attributes": {
 			"controls": "Controls the visibility of the calendar's navigation controls; usage is similar to the 'controls' attribute of <video> elements",
 			"multiple": "Controls whether or not multiple calendar dates can be chosen simultaneously",
@@ -32,13 +32,13 @@
 			"datetap": "Fired when the user taps a day without starting a drag-paint over other dates. Passes the following extra datamap in e.detail: 'date' is the actual Date object corresponding to the unchosen day, and 'iso' is the ISO-formatted string representation of the date"
 		},
 		"methods": {
-			"render": "Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)",
-			"prevMonth": "Go back one month by updating the 'view' attribute of the calendar.",
-			"nextMonth": "Advance one month forward by updating the 'view' attribute of the calendar.",
-			"toggleDateOn": "Sets the given date as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar",
-			"toggleDateOff": "Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar",
-			"toggleDate": "Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar",
-			"hasVisibleDate": "Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months."
+			"render([preserveNodes])": "Can be called to manually force a refresh of the calendar's HTML elements. Optionally takes a preserveNodes parameter to indicate that the existing DOM elements in the calendar should be not recreated (Useful when the viewing window of the calendar does not need to change)",
+			"prevMonth()": "Go back one month by updating the 'view' attribute of the calendar.",
+			"nextMonth()": "Advance one month forward by updating the 'view' attribute of the calendar.",
+			"toggleDateOn(dateObjToToggle, [append])": "Sets the day corresponding to the given Date object as chosen. Depending on what is given for the append parameter, this either overrides the current chosen dates if append is falsy/not given, or adds to the list of chosen dates, if append is truthy. Also updates the 'chosen' attribute of the calendar",
+			"toggleDateOff(dateObjToToggle)": "Removes the given date from the calendar's list of chosen dates. Also updates the 'chosen' attribute of the calendar",
+			"toggleDate(dateObjToToggle, [appendIfAdd])": "Alternates the chosen status of the given date. Takes an 'appendIfAdded' parameter to determine how the new date replaces existing chosen dates if it is toggled on. Also updates the 'chosen' attribute of the calendar",
+			"hasVisibleDate(dateToCheck, [excludeBadMonths])": "Determines whether or not the given date is in the visible calendar display of dates. Optionally ignores dates outside of the span of fully-visible months."
 		},
 		"getters": {
 			"controls": "Returns true if the 'controls' attribute is set and false otherwise",

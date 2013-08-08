@@ -3,7 +3,7 @@
   "tagName": "x-deck",
   "version": "0.1.0",
   "author": "Leon Zhang",
-  "description": "A box in which cards can be cycled independently of order with a variety of different transitions",
+  "description": "A box in which <x-card> elements can be cycled independently of order with a variety of different transitions",
   "demo": "demo/deck-demo.html",
   "categories": [
     "ui"
@@ -17,26 +17,45 @@
     "ios": 4
   },
   "documentation": {
-    "description": "A box in which cards can be cycled independently of order with a variety of different transitions",
+    "description": "A box in which <x-card> elements can be cycled independently of order with a variety of different transitions",
     "attributes": {
-      "transition-type": "Defines the kind of transition animation that is used when cycling cards. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
+      "transition-type": "Defines the kind of transition animation that is used when cycling cards. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'coverLeft', 'coverUp', 'coverRight', 'coverDown', 'uncoverLeft', 'uncoverUp', 'uncoverRight', 'uncoverDown', 'none'. Defaults to 'scrollLeft'",
+      "selected-index": "Defines which card index will be displayed. If set in the initial markup, this will initialize the given card as the selected card. Defaults to 0.",
+      "history-cap": "Defines how many cards to keep in history to allow developers to simply return to the previously displayed card. Defaults to 10.",
+      "x-card: transition-override": "If transition-override is defined on a card, the animation used to transition to this card will be what is given here instead of the deck's animation. Valid options are the same as the <x-deck>'s transition-type attribute."
     },
     "events": {
-      "shuffleend": "fired by the x-deck element when a card transition animation has finished"
+      "shufflestart": "Fired by the <x-deck> when it is about to start a card transition animation. At this point, all deck attributes are set, and the only thing left to is to CSS animate the transition.",
+      "shuffleend": "Fired by the <x-deck> element when a card transition animation has finished. Similar to 'transitionend' events, is not guaranteed to fire for every animation, and will only fire for animations that reach full completion without interruption.",
+      "x-card: show": "If an <x-card> element receives a 'show' event, the deck will automatically transition to the card that received the event."
     },
     "methods": {
-      "shuffleTo": "Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index. Also takes an optional callback function.",
-      "shuffleNext": "Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.",
-      "shufflePrev": "Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.",
-      "getAllCards": "Returns a list of all x-card elements in the deck.",
-      "getSelectedCard": "Returns the currently selected x-card in the deck.",
-      "getCardIndex": "Given an x-card element, returns its index in this deck, if it is a child element."
+      "shuffleTo([progressType])": "Transitions to the x-card at the given index. If given a progressType of 'forward', will perform the forwards animation. If given 'reverse', will performs the reverse animation. If the progressType is 'auto' or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index.",
+      "shuffleNext([progressType])": "Transitions to the next x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.",
+      "shufflePrev([progressType])": "Transitions to the previous x-card in the deck. Takes an optional progressType of 'forward', 'reverse', or 'auto'. Also takes an optional callback function.",
+      "getAllCards()": "Returns a list of all x-card elements in the deck.",
+      "getSelectedCard()": "Returns the currently selected x-card in the deck.",
+      "getCardIndex(cardEl)": "Given an x-card element, returns its index in this deck, if it is a child element.",
+      "getCardAt(index)": "Returns the x-card at the given index.",
+      "historyBack([progressType])": "Transitions to the previously displayed card in the deck's history. progressType parameter acts similarly to shuffleTo's progressType parameter.",
+      "historyForward([progressType])": "Transitions to the more recently displayed card in the deck's history. progressType parameter acts similarly to shuffleTo's progressType parameter."
     },
     "getters": {
-      "transition-type": "Returns the kind of transition animation that is used when cycling cards. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
+      "numCards": "Returns the number of cards currently in the deck.",
+      "selectedCard": "Returns the <x-card> currently displayed in the deck.",
+      "cards": "Returns an array of all <x-card>s in the deck.",
+      "transitionType": "Returns the value of the 'transition-type' attribute.",
+      "selectedIndex": "Returns the value of the 'selected-index' attribute.",
+      "historyCap": "Returns the value of the 'history-cap' attribute.",
+      "currHistorySize": "Returns the number of cards currently stored in the deck's history.",
+      "currHistoryIndex": "Returns the deck's current index in its history stack.",
+      "x-card: transitionOverride": "Returns the transition override of the card."
     },
     "setters": {
-      "transition-type": "Sets the kind of transition animation that is used when cycling cards. Valid options: 'scrollLeft', 'scrollUp', 'scrollRight', 'scrollDown', 'flipX', 'flipY', 'none'"
+      "transitionType": "Sets the value of the 'transition-type' attribute.",
+      "selectedIndex": "Sets the value of the 'selected-index' attribute.",
+      "historyCap": "Sets the value of the 'history-cap' attribute.",
+      "x-card: transitionOverride": "Sets the transition override of the card."
     }
   }
 }
