@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+
 {% block content %}
   <header>
-    <h1><img class="logo" src="site/img/logo.svg">Brick<small> alpha</small></h1>
+    <h1><img class="logo" src="site/img/logo.svg">Brick<small> {{ version }}</small></h1>
     <h2>UI Web Components for Mobile Web Apps</h2>
   </header>
 
@@ -27,47 +28,34 @@
       <div class="two-up"></div>
       <div class="two-up"></div>
       <div style="clear: both; padding: 1em 0;">
-        <input disabled type="submit" id="buildBundle" value="Build Bundle">
+        <input type="submit" id="buildBundle" value="Build Bundle">
         <progress id="buildProgress" value="0" max="0">Building Your zip...</progress>
         <a id="zip">Download Bundle</a>
       </div>
     </form>
   </section>
 {% endblock %}
+
 {% block script %}
   <script src="../site/js/jszip.js"></script>
   <script>
     var form = document.querySelector('#byob');
     var submit = document.querySelector('#buildBundle');
 
-    // window.addEventListener('load', function() {
-    //   var xhr = new XMLHttpRequest();
-    //   xhr.onload = function() {
-    //     var components = JSON.parse(xhr.response);
-    //     var cols = document.querySelectorAll('#byob .two-up');
-    //     for (var i = 0; i < components.length; i++) {
-    //       var row = document.createElement('div');
-    //       var input = document.createElement('input');
-    //       var name = components[i];
-    //       input.type = 'checkbox';
-    //       input.value = name;
-    //       var label = document.createElement('label');
-    //       label.innerHTML = name;
-    //       if (name === 'core') {
-    //         input.disabled = true;
-    //         input.checked = true;
-    //       }
-    //       label.appendChild(input);
-    //       row.appendChild(label);
-    //       cols[i % 2].appendChild(row);
-    //     }
-    //     submit.disabled = false;
-    //   };
-    //   xhr.open("get", "../build/components.json", true);
-    //   xhr.send();
-    // });
-
     var prog = 0;
+
+    form.addEventListener('change', function(e) {
+      var deps = e.target.getAttribute('data-dependencies');
+      if (deps && e.target.checked) {
+        deps = deps.split(' ');
+        deps.forEach(function(d) {
+          var i = form.querySelector('[value="' + d + '"]');
+          if (i) {
+            i.checked = true;
+          }
+        });
+      }
+    });
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();

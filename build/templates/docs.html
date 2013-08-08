@@ -2,6 +2,7 @@
 {% block content %}
   <header>
     <h1>Documentation</h1>
+    <h2>Version {{ version }}</h2>
   </header>
   <nav>
     {% for tag, meh in tags %}
@@ -11,26 +12,29 @@
   {% for tag, info in tags %}
     <section id="{{ tag }}" class="main-sect">
       <h1>{{ tag }}</h1>
-      <p>{{ info.description|escape }}</p>
+      {% if info.demo %}
+        <a href="component/{{ tag }}/{{ info.demo }}">View Demo &raquo;</a>
+      {% endif %}
+      <p>{{ info.description|escape|nl2br }}</p>
       <h2>Attributes</h2>
       {% for key, value in info.documentation.attributes %}
       <dl>
         <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape }}</dd>
+        <dd>{{ value|escape|nl2br }}</dd>
       </dl>
       {% endfor %}
       <h2>Methods</h2>
       {% for key, value in info.documentation.methods %}
       <dl>
         <dt><code>{{ key }}</code></dt>
-        <dd>{{ value }}</dd>
+        <dd>{{ value|escape|nl2br }}</dd>
       </dl>
       {% endfor %}
       <h2>Events</h2>
       {% for key, value in info.documentation.events %}
       <dl>
         <dt><code>{{ key }}</code></dt>
-        <dd>{{ value }}</dd>
+        <dd>{{ value|escape|nl2br }}</dd>
       </dl>
       {% endfor %}
       <a class="top" href="#">top</a>

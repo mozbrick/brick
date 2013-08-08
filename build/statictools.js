@@ -6,6 +6,10 @@ var _ = require('lodash');
 
 var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('build/templates'));
 
+env.addFilter('nl2br', function(str) {
+    return str.replace('\n', '<br>');
+});
+
 var version = fs.readFileSync('VERSION');
 
 var size = 0;

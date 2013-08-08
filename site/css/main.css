@@ -263,7 +263,7 @@ progress {
   padding: .5em 1em;
   background: #f8f8f8;
   cursor: pointer;
-  margin: 1em 0;
+  margin-top: 1em;
 }
 #byob input[type=checkbox] {
   float: right;
