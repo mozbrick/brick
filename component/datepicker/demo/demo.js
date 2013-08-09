@@ -85,10 +85,9 @@ document.addEventListener('DOMComponentsLoaded', function(){
         updatePropertyList(this);
     });
 
-    var form = document.querySelector("form");
-    form.addEventListener("submit", function(e){
+    xtag.addEvent(document, "submit:delegate(.demo form)", function(e){
         // retrieves all _actual_ <input> elements (ie: not fake polyfills)
-        var inputElems = e.currentTarget.elements;
+        var inputElems = e.target.elements;
         var vals = [];
         for (var i = 0; i < inputElems.length; i++) {
             var input = inputElems[i];
