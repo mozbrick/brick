@@ -89,15 +89,20 @@ document.addEventListener('DOMComponentsLoaded', function(){
     form.addEventListener("submit", function(e){
         // retrieves all _actual_ <input> elements (ie: not fake polyfills)
         var inputElems = e.currentTarget.elements;
-        var vals = "";
+        var vals = [];
         for (var i = 0; i < inputElems.length; i++) {
             var input = inputElems[i];
-            if(!input.name) break;
+            if(!input.name) continue;
+            if((input.type === "radio" || input.type === "checkbox") &&
+                (!input.checked))
+            {
+                continue;
+            }
 
-            vals += encodeURIComponent(input.name) + "=" + 
-                    encodeURIComponent(input.value);
+            vals.push(encodeURIComponent(input.name) + "=" + 
+                      encodeURIComponent(input.value));
         }
-        alert("submitted: " + vals);
+        alert("submitted: " + vals.join("&"));
         e.preventDefault();
         e.stopPropagation();
     });
