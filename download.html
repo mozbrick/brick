@@ -30,7 +30,7 @@
       
   <section>
     <h1>All Components</h1>
-    <a class="download" href="#">
+    <a class="download" href="https://github.com/mozilla/brick/releases/download/1.0beta/brick-1.0beta.zip">
       <h3>Download Brick</h3>
       <small>version 1.0beta
  &mdash; 131K</small>
@@ -144,7 +144,7 @@
     </article>
     <script src="dist/brick.js"></script>
     
-  <script src="../site/js/jszip.js"></script>
+  <script src="site/js/jszip.js"></script>
   <script>
     var form = document.querySelector('#byob');
     var submit = document.querySelector('#buildBundle');
@@ -171,7 +171,7 @@
       var localCSS = '';
       var localJS = '';
 
-      var selected = [];
+      var selected = ['core'];
 
       for (var i = 0; i < ins.length; i++) {
         if (ins[i].checked) {
@@ -204,21 +204,26 @@
       function done() {
         prog++;
         progress.value = prog;
+        numDone++;
         if (numDone === numReqs) {
           cb(total);
+        } else {
+          get(c[numDone]);
         }
       }
 
-      c.forEach(function(c) {
+      function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
+          console.log(c, req.response.length);
           total += req.response;
-          numDone++;
           done();
         };
         req.open("get", "../dist/" + c + "/" + c + '.min.css');
         req.send();
-      });
+      }
+
+      get(c[0]);
     }
 
     function getJs(c, cb) {
@@ -229,21 +234,26 @@
       function done() {
         prog++;
         progress.value = prog;
+        numDone++;
         if (numDone === numReqs) {
           cb(total);
+        } else {
+          get(c[numDone]);
         }
       }
 
-      c.forEach(function(c) {
+      function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
+          console.log(c, req.response.length);
           total += req.response;
-          numDone++;
           done();
         };
         req.open("get", "../dist/" + c + "/" + c + '.min.js');
         req.send();
-      });
+      }
+
+      get(c[0]);
     }
 
     function makeZip(js, css) {

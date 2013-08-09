@@ -59,7 +59,7 @@
       var localCSS = '';
       var localJS = '';
 
-      var selected = [];
+      var selected = ['core'];
 
       for (var i = 0; i < ins.length; i++) {
         if (ins[i].checked) {
@@ -92,21 +92,26 @@
       function done() {
         prog++;
         progress.value = prog;
+        numDone++;
         if (numDone === numReqs) {
           cb(total);
+        } else {
+          get(c[numDone]);
         }
       }
 
-      c.forEach(function(c) {
+      function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
+          console.log(c, req.response.length);
           total += req.response;
-          numDone++;
           done();
         };
         req.open("get", "../dist/" + c + "/" + c + '.min.css');
         req.send();
-      });
+      }
+
+      get(c[0]);
     }
 
     function getJs(c, cb) {
@@ -117,21 +122,26 @@
       function done() {
         prog++;
         progress.value = prog;
+        numDone++;
         if (numDone === numReqs) {
           cb(total);
+        } else {
+          get(c[numDone]);
         }
       }
 
-      c.forEach(function(c) {
+      function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
+          console.log(c, req.response.length);
           total += req.response;
-          numDone++;
           done();
         };
         req.open("get", "../dist/" + c + "/" + c + '.min.js');
         req.send();
-      });
+      }
+
+      get(c[0]);
     }
 
     function makeZip(js, css) {
