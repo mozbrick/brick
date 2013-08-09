@@ -285,18 +285,6 @@ progress {
 #byob input[type=checkbox] {
   float: right;
 }
-#buildBundle {
-  background: #eee;
-  border: 2px solid black;
-  border-radius: 6px;
-  padding: .5em 1em;
-  font: inherit;
-  cursor: pointer;
-  color: #600;
-}
-#buildBundle:hover {
-  color: #a00;
-}
 
 a.top {
   float: right;
