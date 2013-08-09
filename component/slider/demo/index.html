@@ -116,16 +116,5 @@
     <script type="text/javascript" src="../../../site/js/prettify.js"></script>
     <script type="text/javascript" src="../../../dist/brick.js"></script>
     <script type="text/javascript" src="demo.js"></script>
-    <script>
-        document.addEventListener('DOMComponentsLoaded', function(){
-            xtag.addEvent(document, "input:delegate(x-slider)", function(e){
-                console.log("input fired on", this);
-            });
-
-            xtag.addEvent(document, "change:delegate(x-slider)", function(e){
-                console.log("change fired on", this);
-            });
-        });
-    </script>
 </body>
 </html>
