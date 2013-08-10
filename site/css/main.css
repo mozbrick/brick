@@ -118,6 +118,23 @@ section.demo-wrap, section.main-sect{
 .demo-wrap.clean {
   border: 0;
 }
+.demo-wrap .demo > *:only-child:not(x-appbar){
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.demo-wrap .demo > form{
+    box-shadow: 1px 1px 4px grey;
+    background-color: rgba(255,255,255,0.5);
+    background-image: none;
+    padding: 0.5em;
+}
 
 .two-up {
   clear: none;

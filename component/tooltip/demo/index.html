@@ -15,6 +15,9 @@
     <header><h1>x-tooltip</h1></header>
     <section id="basic-demo" class="demo-wrap">
         <header><h2>Basic usage</h2></header>
+        <p>In its most basic form, place the <code class="prettyprint">&lt;x-tooltip&gt;</code> in the markup immediately after the element that should trigger it. (You can specify the target element with an attribute, but the default is the previous sibling.)</p>
+        <p>By default, the <code class="prettyprint">&lt;x-tooltip&gt;</code> will trigger on a <code>hover</code> event, and will be auto-oriented.</p>
+        <p>Note that the tooltip is not removed from its markup location, and will thus retain the same nesting and DOM ancestors that it started in.</p>
         <div class="two-up">
             <figure class="demo">
                 <div class="target-button">
@@ -31,6 +34,9 @@
     <!-- orientation demo -->
     <section id="orientation-edit-demo" class="demo-wrap">
         <header><h2><code>orientation</code>: Specifying different positions</h2></header>
+        <p>Specifies where the <code class="prettyprint">&lt;x-tooltip&gt;</code> appears in relation to the target triggering element.</p>
+        <p>Valid options: <code class="prettyprint">"left","right","top","bottom","auto"</code></p>
+        <p>By default, the <code>orientation</code> is <code class"prettyprint">"auto"</code>, meaning that the <code class="prettyprint">&lt;x-tooltip&gt;</code> will attempt to place itself in the best position that doesn't overlap the triggering element.</p>
         <div class="two-up">
             <figure class="demo">
                 <div class="target-button">
@@ -109,16 +115,5 @@
 <script type="text/javascript" src="../../../dist/brick.js"></script>
 <script type="text/javascript" src="../../../site/js/prettify.js"></script>
 <script type="text/javascript" src="demo.js"></script>
-<script>
-document.addEventListener('DOMComponentsLoaded', function(){
-    xtag.addEvent(document, "tooltipshown:delegate(x-tooltip)", function(e){
-        console.log("\ntooltip shown!", this);
-    });
-
-    xtag.addEvent(document, "tooltiphidden:delegate(x-tooltip)", function(e){
-        console.log("\ntooltip hidden!", this);
-    });
-});
-</script>
 </body>
 </html>

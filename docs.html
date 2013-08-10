@@ -542,7 +542,7 @@
       
         <a href="component/toggle/demo/index.html">View Demo &raquo;</a>
       
-      <p>A polyfill for radiobutton/checkbox inputs to provide a consistent UI and simplify markup</p>
+      <p>A polyfill merging radiobutton/checkbox inputs into a single tag to provide a consistent UI and simplify markup. Automatically switches between radiobutton and checkbox depending on name attribute.</p>
       <h2>Attributes</h2>
       
       <dl>
@@ -558,6 +558,11 @@
       <dl>
         <dt><code>name</code></dt>
         <dd>Handles the name of the input. Follows the same rules as radio/checkbox input naming, and is required for form submissions to see the input. Multiple &lt;x-toggle&gt;s with the same name automatically become radio buttons.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>value</code></dt>
+        <dd>Handles the input&#39;s value. Acts the same as any other &lt;input&gt; tag&#39;s value, and is submitted in forms.</dd>
       </dl>
       
       <dl>

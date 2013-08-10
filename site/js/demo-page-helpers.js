@@ -89,7 +89,7 @@ var DemoHelpers;
 
     _DemoHelpers.prototype.getFormString = function(formEl){
         // retrieves all _actual_ <input> elements (ie: not fake polyfills)
-        var inputElems = e.currentTarget.elements;
+        var inputElems = formEl.elements;
         var vals = [];
         for (var i = 0; i < inputElems.length; i++) {
             var input = inputElems[i];
@@ -146,8 +146,8 @@ var DemoHelpers;
         // prevent submission of any demo forms and alert values instead
         xtag.addEvent(document, "submit:delegate(" +
                                 _DEMO_SECT_SELECTOR +
-                                " > .demo form)", function(e){
-            alert(DemoHelpers.getFormString(e.target));
+                                " .demo form)", function(e){
+            alert('submitted: "'+DemoHelpers.getFormString(this)+'"');
             e.preventDefault();
             e.stopPropagation();
         });
@@ -209,7 +209,7 @@ var DemoHelpers;
 
         // fire initial update on all demo sections
         xtag.query(document, _DEMO_SECT_SELECTOR).forEach(function(demoSect){
-            xtag.fireEvent(demoSect, "update-demo");
+            xtag.fireEvent(demoSect, "update-demo", {detail: {init: true}});
         });
 
         prettyPrint();
