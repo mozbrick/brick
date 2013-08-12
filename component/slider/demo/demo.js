@@ -1,66 +1,28 @@
-function hasNativeRangeSupport(){
-    rangeInput = document.createElement("input");
-    rangeInput.setAttribute("type", "range");
-
-    return (rangeInput.type.toLowerCase() === "range");
-}
-
-function updatePropertyList(demoSect, skipPrettyprint){
+function updateDemoSect(demoSect){
     var slider = demoSect.querySelector("x-slider");
     var proplist = demoSect.querySelector('.proplist');
-    if((!slider) || (!proplist)) return;
-
-    var propNames = ["value", "min", "max", "step", "polyfill"];
-    var propKeys = [];
-    for(var i = 0; i < propNames.length; i++){
-        var propName = propNames[i];
-        var val = slider[propName];
-        if(typeof(val) === "string") val = '"'+val+'"';
-        propKeys.push("." + propName + " -> " + val);
+    if(slider && proplist){
+        var propNames = ["value", "min", "max", "step", "polyfill"];
+        var propStr = DemoHelpers.getPropertiesString(slider, propNames);
+        DemoHelpers.updatePrettyprintEl(proplist, propStr);
     }
-
-    proplist.textContent = propKeys.join("\n");
-    xtag.removeClass(proplist, "prettyprinted");
-    if(!skipPrettyprint) prettyPrint(); 
 }
 
-var updateEventsDemo = function(){
-    var nativeCounters = {
-        "change": 0,
-        "input": 0
+function getEventCounter(eventDemo){
+    var nativeSlider = eventDemo.querySelector("x-slider:first-of-type");
+    var polyfillSlider = eventDemo.querySelector("x-slider:last-of-type");
+    var keys = ["nativechange", "nativeinput", "polychange", "polyinput"];
+    var toKeyFn = function(e, slider){
+        if(e.type !== "change" && e.type !== "input") return;
+        if(slider!== nativeSlider && slider !== polyfillSlider) return;
+        return ((slider === nativeSlider) ? "native" : "poly") + e.type;
     };
-    var polyfillCounters = {
-        "change": 0,
-        "input": 0
-    };
-    var eventDemo = document.getElementById("event-demo");
-    var markupEl = eventDemo.querySelector(".events");
-    var nativeElem = eventDemo.querySelector("x-slider:first-of-type");
-    var polyfillElem = eventDemo.querySelector("x-slider:last-of-type");
-    return function(slider, eventType){
-        if(eventType !== undefined && 
-           (slider === nativeElem || slider === polyfillElem))
-        {
-            var isPolyfill = (slider === polyfillElem);
-            var counters = (isPolyfill) ? polyfillCounters : nativeCounters;
-            if(!(eventType in counters)){
-                return;
-            }
-            counters[eventType]++;
-        }
-        markupEl.textContent = "<x-slider> input count: " + 
-                                nativeCounters.input + 
-                                "\n<x-slider> change count: " + 
-                                nativeCounters.change + 
-                                "\n<x-slider polyfill> input count: " + 
-                                polyfillCounters.input + 
-                                "\n<x-slider polyfill> change count: " + 
-                                polyfillCounters.change;
-    }
-}();
+
+    return new DemoHelpers.EventCounter(keys, toKeyFn);
+}
 
 document.addEventListener('DOMComponentsLoaded', function(){
-    var supportsNative = hasNativeRangeSupport();
+    var supportsNative = DemoHelpers.hasNativeInputTypeSupport('range');
     var msgEl = document.getElementById("native-support-msg");
     msgEl.innerHTML = "<code class='prettyprint'>" +
                      "&lt;input type='range'&gt;</code> is <b>" + 
@@ -71,41 +33,32 @@ document.addEventListener('DOMComponentsLoaded', function(){
                      ((supportsNative) ? "native" : "polyfill") + " UI</b>.";
 
 
-    xtag.addEvent(document, "input:delegate(.demo-wrap)", function(e){
-        updateEventsDemo(e.target, "input");
-        updatePropertyList(this);
+    var eventDemo = document.getElementById("event-demo");
+    var eventCounter = getEventCounter(eventDemo);
+    xtag.addEvent(eventDemo, "input:delegate(x-slider)", function(e){
+        eventCounter.updateCounter(e, this);
     });
 
-    xtag.addEvent(document, "change:delegate(.demo-wrap)", function(e){
-        updateEventsDemo(e.target, "change");
-        updatePropertyList(this);
+    xtag.addEvent(eventDemo, "change:delegate(x-slider)", function(e){
+        eventCounter.updateCounter(e, this);
     });
 
-    xtag.query(document, ".demo-wrap").forEach(function(demoSect){
-        updateEventsDemo();
-        updatePropertyList(demoSect, true);
-    });
+    xtag.addEvent(document, "update-demo:delegate("+DemoHelpers.DEMO_SECT_SELECTOR+")", function(e){
+        var demoSect = this;
+        updateDemoSect(demoSect);
 
-    var form = document.querySelector("form");
-    form.addEventListener("submit", function(e){
-        // retrieves all _actual_ <input> elements (ie: not fake polyfills)
-        var inputElems = e.currentTarget.elements;
-        var vals = [];
-        for (var i = 0; i < inputElems.length; i++) {
-            var input = inputElems[i];
-            if(!input.name) continue;
-            if((input.type === "radio" || input.type === "checkbox") &&
-                (!input.checked))
-            {
-                continue;
-            }
-
-            vals.push(encodeURIComponent(input.name) + "=" + 
-                      encodeURIComponent(input.value));
+        if(demoSect === eventDemo){
+            var eventEl = demoSect.querySelector(".events");
+            var counters = eventCounter.counters;
+            DemoHelpers.updatePrettyprintEl(eventEl, [
+                "<x-slider> input fired " + counters.nativeinput + " times",
+                "<x-slider> change fired " + counters.nativechange + " times",
+                "<x-slider polyfill> input fired " + counters.polyinput + " times",
+                "<x-slider polyfill> change fired " + counters.polychange + " times"
+            ].join("\n"));
         }
-        alert("submitted: " + vals.join("&"));
-        e.preventDefault();
-        e.stopPropagation();
     });
-    prettyPrint();
+
+    DemoHelpers.registerUpdateListeners(["input", "change"]);
+    DemoHelpers.initializeDemos();
 });

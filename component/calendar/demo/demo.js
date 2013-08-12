@@ -234,32 +234,10 @@ document.addEventListener('DOMComponentsLoaded', function(){
         if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
     });
 
-
     xtag.query(document, '.demo-wrap').forEach(function(demoSect){
         var contextEl = getContextEl(demoSect);
         var markupEl = getMarkupEl(demoSect);
         if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
-    });
-
-
-    xtag.addEvent(document, "prevmonth:delegate(x-calendar)", function(e){
-        console.log("prevmonth detected on", this);
-    });
-
-    xtag.addEvent(document, "nextmonth:delegate(x-calendar)", function(e){
-        console.log("nextmonth detected on", this);
-    });
-
-    xtag.addEvent(document, "datetoggleon:delegate(x-calendar)", function(e){
-        console.log("datetoggleon detected on", this, e.detail);
-    });
-
-    xtag.addEvent(document, "datetoggleoff:delegate(x-calendar)", function(e){
-        console.log("datetoggleoff detected on", this, e.detail);
-    });
-
-    xtag.addEvent(document, "datetap:delegate(x-calendar)", function(e){
-        console.log("datetap detected on", this, e.detail);
     });
 
     initFrenchCalendar();
