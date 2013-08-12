@@ -166,10 +166,10 @@ var DemoHelpers;
         //                       boolean attribute to toggle on and off
         xtag.addEvent(document, "click:delegate(" +
                                 _BUTTON_SELECTOR +
-                                "[data-toggle-attr])", function(e){
+                                "[data-toggle-prop])", function(e){
             var button = this;
             var demoSect = DemoHelpers.controlButtonToDemoSect(button);
-            var toggleAttr = button.getAttribute("data-toggle-attr");
+            var toggleAttr = button.getAttribute("data-toggle-prop");
             var toggleTargetSelector = button.getAttribute(
                                             "data-toggle-target"
                                        );
