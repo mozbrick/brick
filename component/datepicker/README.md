@@ -46,11 +46,20 @@ For example, if the user is currently typing `July 4, 2013` and hasn't left focu
 
 Also note that unless the datepicker has a `name` attribute, this does not guarantee that this will actually be submitted to a form.
 
-# Methods
+## ___labels___ (read/write)
 
-## ___editLabels___(newLabelData)
+Much like an `<x-calendar>`'s `.labels` property, `<x-datepicker>`s also have a `.labels` property to allow relabeling/localization of the component. 
 
-If a calendar is present, changes the labels of the calendar. See `x-calendar`'s `.labels` property for more details.
+The format and interface for the datepicker's `.labels` property is near identical to `<x-calendar>`'s `.labels` property, so it would be best to read the calendar's labels documentation for full details.
+
+However, in addition to the labels provided by the calendar, there are three extra keys that can be set for a datepicker's labels:
+
+    {
+        'yearAbbr': A single character to use in abbreviations of a year category. (ex: "Y"),
+        'monthAbbr': A single character to use in abbreviations of a month category. (ex: "M"),
+        'dayAbbr': A single character to use in abbreviations of a day category. (ex: "D")
+    }
+
 
 # Events
 

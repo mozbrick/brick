@@ -1,124 +1,3 @@
-function dedentAll(source){
-    // find the least amount of tabbing and dedent each line by that much
-    var tabRegex = /\n(\s*?)(\S|\n)/g;
-    var spacing = tabRegex.exec(source);
-    if(spacing){
-        var shortest = spacing[1].length;
-        while(spacing){
-            if(spacing[1].length < shortest){
-                shortest = spacing[1].length;
-            }
-            spacing = tabRegex.exec(source);
-        }
-        if(shortest > 0){
-            var dedentRegex = new RegExp("\\n\\s{"+shortest+"}", "g");
-            source = source.replace(dedentRegex, "\n");
-        }
-    }
-    return source;
-}
-
-function cleanHtmlSource(html, ignoreAttrs){
-    // remove any attributes given in parameter, but only if they are
-    // actually in a tag
-    if(ignoreAttrs && ignoreAttrs.length){
-        // no global flag, or we will over-skip through string
-        var attrIgnoreRegex = new RegExp("(<[^>]*?\\s)(("+
-                                         ignoreAttrs.join("|")+
-                                         ")=\".*?\"\\s?)([^<]*?>)");
-        var match = attrIgnoreRegex.exec(html);
-        while(match){
-            html = html.substr(0, match.index) + match[1] + match[4] + 
-                   html.substr(match.index + match[0].length);
-            match = attrIgnoreRegex.exec(html);
-        }
-        html = html.replace(/\s*>/g, ">");
-    }
-    
-    html = dedentAll(html);
-    // trim spacing from start/end of markup
-    html = html.replace(/^\s*\n/, "");
-    html = html.replace(/\n\s*$/, "");
-    return html;
-}
-
-
-function updateHtmlMarkup(markupEl, contextEl, isInit){
-    // remove shadow dom internals
-    var calendar = contextEl.querySelector("x-calendar");
-    var markup = contextEl.innerHTML.replace(calendar.innerHTML, "");
-    markup = cleanHtmlSource(markup, ["active"])
-
-    // special case to account for escaped json doublequote when 
-    // retrieved from inner/outerHTML
-    var r = /chosen="(.*?)"/;
-    var match = r.exec(markup);
-    if(match){
-        var val = match[1];
-        markup = markup.substring(0, match.index) + 
-                 ((calendar.multiple) ? "\n    chosen='" : "chosen='") +
-                 val.replace(/&quot;/g, '"') + "'" + 
-                 markup.substring(match.index+match[0].length);
-    }
-
-    // remove empty attributes
-    markup = markup.replace(/=""/g, "");
-
-    markupEl.textContent = markup;
-    xtag.removeClass(markupEl, "prettyprinted");
-    if(!isInit) prettyPrint();
-}
-
-function getMarkupEl(demoSect){
-    return demoSect.querySelector(".markup-wrap .html");
-}
-
-function getContextEl(demoSect){
-    return demoSect.querySelector(".demo");
-}
-
-function getCalendar(demoSect){
-    return demoSect.querySelector("x-calendar");
-}
-
-function initEventsDemo(){
-    var demoSect = document.getElementById("events-demo");
-    var calendar = getCalendar(demoSect);
-    var trackerEl = demoSect.querySelector(".events-tracker");
-
-    var eventsData = {
-        "datetoggleon": 0,
-        "datetoggleoff": 0,
-        "datetap": 0,
-        "prevmonth": 0,
-        "nextmonth": 0
-    };
-
-    var _updateTrackerEl = function(isInit){
-        var events = [];
-        for(var eventName in eventsData){
-            events.push(eventName + " fired " + eventsData[eventName] + " times");
-        }
-        trackerEl.textContent = events.join("\n");
-        xtag.removeClass(trackerEl, "prettyprinted");
-        if(!isInit) prettyPrint();
-    };
-
-    var _listenerUpdate = function(e){
-        if(!(e.type in eventsData)) return;
-        eventsData[e.type]++;
-        _updateTrackerEl()
-    };
-
-    calendar.addEventListener("datetoggleon", _listenerUpdate);
-    calendar.addEventListener("datetoggleoff", _listenerUpdate);
-    calendar.addEventListener("datetap", _listenerUpdate);
-    calendar.addEventListener("prevmonth", _listenerUpdate);
-    calendar.addEventListener("nextmonth", _listenerUpdate);
-
-    _updateTrackerEl(true);
-}
-
 function initFrenchCalendar(){
     var frenchCal = document.querySelector("x-calendar[lang=fr]");
     frenchCal.labels = {
@@ -128,19 +7,6 @@ function initFrenchCalendar(){
                  "juin", "juillet", "ao\u00FBt", "septembre", "octobre", 
                  "novembre", "d\u00E9cembre"],
         weekdays: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"]
-    };
-}
-
-function initSimpleCustomRenderDemo(){
-    var cal = document.getElementById("custom-render-simple");
-    cal.customRenderFn = function(dayEl, date, iso){
-        // add selector to every 5th day in a month
-        if(date.getDate() % 5 === 0){
-            dayEl.setAttribute("dance-time", true);
-        }
-        else{
-            dayEl.removeAttribute("dance-time");
-        }
     };
 }
 
@@ -212,37 +78,77 @@ function initEventSchedulerDemo(){
     });
 }
 
+function initSimpleCustomRenderDemo(){
+    var cal = document.getElementById("custom-render-simple");
+    cal.customRenderFn = function(dayEl, date, iso){
+        // add selector to every 5th day in a month
+        if(date.getDate() % 5 === 0){
+            dayEl.setAttribute("dance-time", true);
+        }
+        else{
+            dayEl.removeAttribute("dance-time");
+        }
+    };
+}
+
+function updateDemoSect(demoSect){
+    var contextEl = DemoHelpers.getContextEl(demoSect);
+    var markupEl = DemoHelpers.getMarkupEl(demoSect, "html");
+    var calendar = demoSect.querySelector("x-calendar");
+
+    if(contextEl && markupEl && calendar){
+         // remove shadow dom internals
+        var markup = contextEl.innerHTML.replace(calendar.innerHTML, "");
+        markup = DemoHelpers.cleanHtmlSource(markup, ["active"])
+
+        // special case to account for escaped json doublequote when 
+        // retrieved from inner/outerHTML
+        var r = /chosen="(.*?)"/;
+        var match = r.exec(markup);
+        if(match){
+            var val = match[1];
+            markup = markup.substring(0, match.index) + 
+                     ((calendar.multiple) ? "\n    chosen='" : "chosen='") +
+                     val.replace(/&quot;/g, '"') + "'" + 
+                     markup.substring(match.index+match[0].length);
+        }
+
+        DemoHelpers.updatePrettyprintEl(markupEl, markup);
+    }
+}
+
+function getInitEventsCounter(eventsDemo){
+    var keys = ["datetoggleon", "datetoggleoff", "datetap", 
+                "prevmonth", "nextmonth"];
+
+    return new DemoHelpers.EventCounter(keys);
+}
+
 document.addEventListener('DOMComponentsLoaded', function(){
-    xtag.addEvent(document, "datetoggleon:delegate(.demo-wrap)", function(e){
+    var eventsDemo = document.getElementById("events-demo");
+    var eventCounter = getInitEventsCounter(eventsDemo);
+
+    xtag.addEvent(document, "update-demo:delegate("+DemoHelpers.DEMO_SECT_SELECTOR+")", function(e){
         var demoSect = this;
-        var contextEl = getContextEl(demoSect);
-        var markupEl = getMarkupEl(demoSect);
-        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
+        if(demoSect === eventsDemo){
+            if(e.detail && e.detail.originalEvent){
+                eventCounter.updateCounter(e.detail.originalEvent);
+            }
+            // still update the markup even if no counter update is called
+            var eventEl = demoSect.querySelector(".events");
+            if(eventEl){
+                DemoHelpers.updatePrettyprintEl(eventEl, 
+                                                eventCounter.toString());
+            }   
+        }
+        updateDemoSect(demoSect);
     });
 
-    xtag.addEvent(document, "datetoggleoff:delegate(.demo-wrap)", function(e){
-        var demoSect = this;
-        var contextEl = getContextEl(demoSect);
-        var markupEl = getMarkupEl(demoSect);
-        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
-    });
-
-    xtag.addEvent(document, "datetap:delegate(.demo-wrap)", function(e){
-        var demoSect = this;
-        var contextEl = getContextEl(demoSect);
-        var markupEl = getMarkupEl(demoSect);
-        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
-    });
-
-    xtag.query(document, '.demo-wrap').forEach(function(demoSect){
-        var contextEl = getContextEl(demoSect);
-        var markupEl = getMarkupEl(demoSect);
-        if(contextEl && markupEl) updateHtmlMarkup(markupEl, contextEl);
-    });
-
-    initFrenchCalendar();
-    initEventsDemo();
     initSimpleCustomRenderDemo();
+    initFrenchCalendar();
     initEventSchedulerDemo();
-    prettyPrint();
+
+    DemoHelpers.registerUpdateListeners(["datetoggleon", "datetoggleoff", "datetap"]);
+
+    DemoHelpers.initializeDemos();
 });

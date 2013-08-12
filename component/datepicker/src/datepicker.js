@@ -1,5 +1,10 @@
 (function(){
     var ENTER_KEYCODE = 13;
+    var DEFAULT_CAL_LABELS = document.createElement("x-calendar").labels;
+
+    function cloneDataMap(data){
+        return JSON.parse(JSON.stringify(data));
+    }
 
     // Date utils
 
@@ -122,19 +127,20 @@
            parsed version as well)
     **/
     function _updateDatepicker(datepicker, sendParsed){
-        var rawVal = (datepicker.polyfill) ? 
-                            datepicker.xtag.polyfillInput.value : 
-                            datepicker.xtag.dateInput.value;
+        var input = (datepicker.polyfill) ? 
+                        datepicker.xtag.polyfillInput : 
+                        datepicker.xtag.dateInput;
+        var rawVal = input.value;
         var parsedDate = parseSingleDate(rawVal);
 
         datepicker.value = (sendParsed && parsedDate) ? parsedDate : rawVal;
     }
 
-    // pass this a callback function to execute
-    // if the submit value of the datepicker is changed by the callback,
-    // fire the change event on the datepicker
-    // if alsoWatchRawVal is true, will also trigger a change event if the 
-    // .value changes, not just if the .submitValue changes
+    /* pass this a callback function to execute while being observed;
+     * if the submit value of the datepicker is changed during the callback,
+     * fire the change event on the datepicker;
+     * if alsoWatchRawVal is true, will also trigger a change event if the 
+     * .value changes, not just if the .submitValue changes */
     function _watchForChange(datepicker, callback, alsoWatchRawVal){
         var oldVal = datepicker.submitValue;
         var oldRawVal = datepicker.value;
@@ -148,22 +154,39 @@
         }
     }
 
+    function getPlaceholderText(datepicker){
+        var labels = datepicker.xtag._labels;
+        return (new Array(5).join(labels.yearAbbr) + "-" + 
+                new Array(3).join(labels.monthAbbr) + "-" + 
+                new Array(3).join(labels.dayAbbr));
+    }
+
     xtag.register("x-datepicker", {
         lifecycle: {
             created: function(){
                 this.innerHTML = "";
-                this.xtag.dateInput = document.createElement("input");
-                this.xtag.dateInput.setAttribute("type", "date");
-                xtag.addClass(this.xtag.dateInput, "x-datepicker-input");
-                this.appendChild(this.xtag.dateInput);
+                var dateInput = document.createElement("input");
+                dateInput.setAttribute("type", "date");
+                xtag.addClass(dateInput, "x-datepicker-input");
+                this.appendChild(dateInput);
+                this.xtag.dateInput = dateInput;
+
+                // datepicker unique labels
+                this.xtag._labels = {
+                    yearAbbr: "Y",
+                    monthAbbr: "M",
+                    dayAbbr: "D"
+                };
+
+                // calendar-specific labels
+                this.xtag._polyfillCalLabels = cloneDataMap(DEFAULT_CAL_LABELS);
 
                 this.xtag.polyfillInput = null;
                 this.xtag.polyfillUI = null;
 
                 // initialize polyfill with detected support
                 this.polyfill = (this.hasAttribute("polyfill") || 
-                                 this.xtag.dateInput.type.toLowerCase() 
-                                    !== "date");
+                                 dateInput.type.toLowerCase() !== "date");
             }
         },
         events: {
@@ -184,13 +207,11 @@
             },
 
             "datetoggleoff:delegate(x-calendar)": function(e){
-                var datepicker = e.currentTarget;
-                datepicker.value = null;
+                e.currentTarget.value = null;
             },
 
             "focus": function(e){
-                var datepicker = e.currentTarget;
-                datepicker.setAttribute("focused", true);
+                e.currentTarget.setAttribute("focused", true);
             },
 
             "blur:delegate(.x-datepicker-input)": function(e){
@@ -220,24 +241,26 @@
 
             "keypress:delegate(.x-datepicker-polyfill-input)": function(e){
                 var keyCode = e.keyCode;
+                var datepicker = e.currentTarget;
                 if(keyCode === ENTER_KEYCODE){
                      // send parsed version to ensure that text of input matches
-                     _watchForChange(e.currentTarget, function(){
-                        _updateDatepicker(e.currentTarget, true);
+                     _watchForChange(datepicker, function(){
+                        _updateDatepicker(datepicker, true);
                     }, true);
                 }
             },
 
             // handle UI changes to the native date input
             "input:delegate(.x-datepicker-input)": function(e){
-                _watchForChange(e.currentTarget, function(){
+                var datepicker = e.currentTarget;
+                _watchForChange(datepicker, function(){
                     // send parsed version to ensure that value of native
                     // input matches
-                     _updateDatepicker(e.currentTarget, true);
+                     _updateDatepicker(datepicker, true);
 
                     // redirect event target
                     e.stopPropagation();
-                    xtag.fireEvent(e.currentTarget, "input");
+                    xtag.fireEvent(datepicker, "input");
                 });
             },
 
@@ -246,11 +269,12 @@
                 // _DONT_ send parsed verison when using polyfill in order to 
                 // prevent the input from constantly overriding the user's
                 // text as they are typing
-                _watchForChange(e.currentTarget, function(){
-                    _updateDatepicker(e.currentTarget, false);
+                var datepicker = e.currentTarget;
+                _watchForChange(datepicker, function(){
+                    _updateDatepicker(datepicker, false);
                     // redirect event target
                     e.stopPropagation();
-                    xtag.fireEvent(e.currentTarget, "input");
+                    xtag.fireEvent(datepicker, "input");
                 });
             },
 
@@ -268,8 +292,9 @@
                 // _DONT_ send parsed verison when using polyfill in order to 
                 // prevent the input from constantly overriding the user's
                 // text as they are typing
-                _watchForChange(e.currentTarget, function(){
-                    _updateDatepicker(e.currentTarget, false);
+                var datepicker = e.currentTarget;
+                _watchForChange(datepicker, function(){
+                    _updateDatepicker(datepicker, false);
                 });
             }
         },
@@ -277,11 +302,12 @@
             "name": {
                 attribute: {selector: ".x-datepicker-input"},
                 set: function(newName){
+                    var dateInput = this.xtag.dateInput;
                     if(newName === null || newName === undefined){
-                        this.xtag.dateInput.removeAttribute("name");
+                        dateInput.removeAttribute("name");
                     }
                     else{
-                        this.xtag.dateInput.setAttribute("name", newName);
+                        dateInput.setAttribute("name", newName);
                     }
                 }
             },
@@ -338,20 +364,23 @@
                         // only override input's text value if given something 
                         // different, in order to prevent having us override
                         // text as the user types
+
+                        var attrVal;
                         if(polyfillInput){
                             if(rawDateVal !== polyfillInput.value){
                                 polyfillInput.value = finalVal;
-                                this.setAttribute("value", finalVal);
+                                attrVal = finalVal;
                             }
                             // otherwise, match the value attribute to whats
                             // displayed
                             else{
-                                this.setAttribute("value", rawDateVal);
+                                attrVal = rawDateVal;
                             }
                         } 
                         else{
-                            this.setAttribute("value", finalVal);
+                            attrVal = finalVal;
                         }
+                        this.setAttribute("value", attrVal);
 
                         // make sure the date input (ie: what actually 
                         // would submit in a form) either contains a valid date
@@ -403,7 +432,7 @@
                                           "x-datepicker-polyfill-input");
                             polyfillInput.setAttribute("type", "text");
                             polyfillInput.setAttribute("placeholder", 
-                                                        "YYYY-MM-DD");
+                                                      getPlaceholderText(this));
                             polyfillInput.value = this.xtag.dateInput.value;
 
                             this.xtag.polyfillInput = polyfillInput;
@@ -421,6 +450,7 @@
                             polyfillUI.chosen = this.value;
                             polyfillUI.view = this.xtag.dateInput.value;
                             polyfillUI.controls = true;
+                            polyfillUI.labels = this.xtag._polyfillCalLabels;
                             this.xtag.polyfillUI = polyfillUI;
                             this.appendChild(polyfillUI);
                         }
@@ -429,20 +459,62 @@
                     else{
                         dateInput.setAttribute("type", "date");
                         dateInput.removeAttribute("readonly");
-
-                        if(this.xtag.polyfillInput){
-                            this.xtag.polyfillInput.setAttribute("disabled", 
-                                                                 true);
+                        var polyInput = this.xtag.polyfillInput;
+                        if(polyInput){
+                            polyInput.setAttribute("disabled", true);
                         }
                     }
                 }
-            }
-        },
-        methods: {
-            editLabels: function(newLabelData){
-                if(this.xtag.polyfillUI && this.xtag.polyfillUI.labels){
-                    this.xtag.polyfillUI.labels = newLabelData;
+            },
+
+            "labels": {
+                get: function(){
+                    // merge both the datepicker-only and calendar-only 
+                    // labels into a single dict
+                    var allLabels = {};
+                    var datepickerLabels = this.xtag._labels;
+                    var calendarLabels = this.xtag._polyfillCalLabels;
+                    for(var key in datepickerLabels){
+                        allLabels[key] = datepickerLabels[key];
+                    }
+                    for(var key in calendarLabels){
+                        allLabels[key] = calendarLabels[key];
+                    }
+                    // prevent any aliases from slipping through
+                    return cloneDataMap(allLabels);
+                },
+                set: function(newLabelData){
+                    var calendar = this.xtag.polyfillUI;
+                    var polyInput = this.xtag.polyfillInput;
+                    // set calendar labels
+                    if(calendar){
+                        calendar.labels = newLabelData;
+                        this.xtag._polyfillCalLabels = calendar.labels;
+                    }
+                    else{
+                        var polyLabels = this.xtag._polyfillCalLabels;
+                        for(var key in polyLabels){
+                            if(key in newLabelData){
+                                polyLabels[key] = newLabelData[key];
+                            }
+                        }
+                    }
+
+                    // replace datepicker specific labels
+                    var datepickerLabels = this.xtag._labels;
+                    for(var key in datepickerLabels){
+                        if(key in newLabelData){
+                            datepickerLabels[key] = newLabelData[key];
+                        }
+                    }
+
+                    // rerender placeholder text
+                    if(polyInput){
+                        polyInput.setAttribute("placeholder", 
+                                                getPlaceholderText(this));
+                    }
                 }
+
             }
         }
     });

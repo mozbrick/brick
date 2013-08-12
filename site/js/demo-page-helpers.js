@@ -174,7 +174,8 @@ var DemoHelpers;
             var selector = eventType+":delegate("+_DEMO_SECT_SELECTOR+")";
             xtag.addEvent(document, selector, function(e){
                 var demoSect = this;
-                xtag.fireEvent(demoSect, "update-demo");
+                xtag.fireEvent(demoSect, "update-demo", 
+                               {detail: {"originalEvent": e}});
             });
         }
     };
@@ -200,6 +201,16 @@ var DemoHelpers;
         // function to use when translating/validating an event to a key
         self.eventToKeyFn = (eventToKeyFn) ? eventToKeyFn : 
                                              function(e){return e.type;}; 
+
+        var defaultToStr = function(counters){
+           var strs = [];
+           for(var key in counters){
+                strs.push(key + " fired " + counters[key] + " times");
+           }
+           return strs.join("\n");
+        };
+
+        self.toStrFn = (toStrFn) ? toStrFn : defaultToStr;                         
     };
 
     // takes an event, but can also take additional optional parameters as long
@@ -209,6 +220,10 @@ var DemoHelpers;
         if(key === null || !(key in this.counters)) return;
         
         this.counters[key]++;
+    };
+
+    EventCounter.prototype.toString = function(e){
+        return this.toStrFn(this.counters);
     };
 
     /* use EventCounter by calling new DemoHelpers.EventCounter() */

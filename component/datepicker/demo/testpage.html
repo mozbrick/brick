@@ -69,10 +69,17 @@
         <code class="prettyprint">
             &lt;x-datepicker class="styles-demo" polyfill&gt;&lt;/x-datepicker&gt;
         </code>
+        <hr/>
+        <button id="togglePolyFrench">Toggle french polyfills</button>
+        <x-datepicker lang="fr"></x-datepicker>
+        <x-datepicker polyfill lang="fr"></x-datepicker>
     </article>
 
     <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
     <script type="text/javascript" src="../../../dist/brick.js"></script>
+    <!--<script type="text/javascript" src="../../core/src/core.js"></script>
+    <script type="text/javascript" src="../../calendar/src/calendar.js"></script>
+    <script type="text/javascript" src="../src/datepicker.js"></script>-->
     <script>
         var ENTER_KEYCODE = 13;
 
@@ -119,6 +126,28 @@
 
             xtag.addEvent(document, "blur:delegate(x-datepicker)", function(e){
                 console.log("blur on", e.target);
+            });
+
+            xtag.query(document, "x-datepicker[lang='fr']").forEach(function(datepicker){
+                var frenchLabels = {
+                    prev: "<<",
+                    next: ">>",
+                    months: ["janvier", "f\u00E9vrier", "mars", "avril", "mai", 
+                             "juin", "juillet", "ao\u00FBt", "septembre", "octobre", 
+                             "novembre", "d\u00E9cembre"],
+                    weekdays: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"],
+                    yearAbbr: "A",
+                    monthAbbr: "M",
+                    dayAbbr: "J"
+                };
+
+                datepicker.labels = frenchLabels;
+            });
+
+            document.getElementById("togglePolyFrench").addEventListener("click", function(){
+                xtag.query(document, "x-datepicker[lang='fr']").forEach(function(datepicker){
+                    datepicker.polyfill = !datepicker.polyfill;
+                });
             });
         }, false);
     </script>

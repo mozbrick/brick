@@ -166,7 +166,7 @@ will color all days after the current date red.
 
 ## ___labels___ (getter/setter)
 
-The labels of the calendars are managed using a datamap of strings. This allows localizers/translators to 
+The labels of the calendar are managed using a datamap of strings. This allows localizers/translators to 
 edit the labels of the calendar.
 
 ## getter

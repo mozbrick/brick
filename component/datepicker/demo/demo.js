@@ -1,67 +1,37 @@
-function hasNativeDateSupport(){
-    rangeInput = document.createElement("input");
-    rangeInput.setAttribute("type", "date");
-
-    return (rangeInput.type.toLowerCase() === "date");
-}
-
-function updatePropertyList(demoSect, skipPrettyprint){
+function updateDemoSect(demoSect){
     var datepicker = demoSect.querySelector("x-datepicker");
     var proplist = demoSect.querySelector('.proplist');
-    if((!datepicker) || (!proplist)) return;
-
-    var propNames = ["value", "submitValue", "polyfill"];
-    var propKeys = [];
-    for(var i = 0; i < propNames.length; i++){
-        var propName = propNames[i];
-        var val = datepicker[propName];
-        if(typeof(val) === "string") val = '"'+val+'"';
-        propKeys.push("." + propName + " -> " + val);
+    if(datepicker && proplist){
+        var propNames = ["value", "submitValue", "polyfill"];
+        var propStr = DemoHelpers.getPropertiesString(datepicker, propNames);
+        DemoHelpers.updatePrettyprintEl(proplist, propStr);
     }
-
-    proplist.textContent = propKeys.join("\n");
-    xtag.removeClass(proplist, "prettyprinted");
-    if(!skipPrettyprint) prettyPrint(); 
 }
 
-
-var updateEventsDemo = function(){
-    var nativeCounters = {
-        "change": 0,
-        "input": 0
-    };
-    var polyfillCounters = {
-        "change": 0,
-        "input": 0
-    };
-    var eventDemo = document.getElementById("event-demo");
-    var markupEl = eventDemo.querySelector(".events");
+function getInitEventCounter(eventDemo){
     var nativeElem = eventDemo.querySelector("x-datepicker:first-of-type");
     var polyfillElem = eventDemo.querySelector("x-datepicker:last-of-type");
-    return function(datepicker, eventType){
-        if(eventType !== undefined && 
-           (datepicker === nativeElem || datepicker === polyfillElem))
-        {
-            var isPolyfill = (datepicker === polyfillElem);
-            var counters = (isPolyfill) ? polyfillCounters : nativeCounters;
-            if(!(eventType in counters)){
-                return;
-            }
-            counters[eventType]++;
-        }
-        markupEl.textContent = "<x-datepicker> input count: " + 
-                                nativeCounters.input + 
-                                "\n<x-datepicker> change count: " + 
-                                nativeCounters.change + 
-                                "\n<x-datepicker polyfill> input count: " + 
-                                polyfillCounters.input + 
-                                "\n<x-datepicker polyfill> change count: " + 
-                                polyfillCounters.change;
-    }
-}();
+    var keys = ["nativeinput", "nativechange", "polyinput", "polychange"];
+    var toKeyFn = function(e, elem){
+        if(e.type !== "input" && e.type !== "change") return;
+        if(elem !== nativeElem && elem !== polyfillElem) return;
+        return ((elem === nativeElem) ? "native" : "poly") + e.type;
+    };
+
+    var toStrFn = function(counters){
+        return [
+            "<x-datepicker> input fired " + counters.nativeinput + " times",
+            "<x-datepicker> change fired " + counters.nativechange + " times",
+            "<x-datepicker polyfill> input fired " + counters.polyinput + " times",
+            "<x-datepicker polyfill> change fired " + counters.polychange + " times"
+        ].join("\n");
+    };
+
+    return new DemoHelpers.EventCounter(keys, toKeyFn, toStrFn);
+}
 
 document.addEventListener('DOMComponentsLoaded', function(){
-    var supportsNative = hasNativeDateSupport();
+    var supportsNative = DemoHelpers.hasNativeInputTypeSupport("date");
     var msgEl = document.getElementById("native-support-msg");
     msgEl.innerHTML = "<code class='prettyprint'>" +
                      "&lt;input type='date'&gt;</code> is <b>" + 
@@ -71,40 +41,25 @@ document.addEventListener('DOMComponentsLoaded', function(){
                      " demos will use a <b>" + 
                      ((supportsNative) ? "native" : "polyfill") + " UI</b>.";
 
-    xtag.query(document, ".demo-wrap").forEach(function(demoSect){
-        updatePropertyList(demoSect, true);
+    var eventDemo = document.getElementById("event-demo");
+    var eventCounter = getInitEventCounter(eventDemo);
+
+    xtag.addEvent(eventDemo, "input:delegate(x-datepicker)", function(e){
+        eventCounter.updateCounter(e, this);
+    });
+    xtag.addEvent(eventDemo, "change:delegate(x-datepicker)", function(e){
+        eventCounter.updateCounter(e, this);
     });
 
-    xtag.addEvent(document, "input:delegate(.demo-wrap)", function(e){
-        updateEventsDemo(e.target, "input");
-        updatePropertyList(this);
-    });
-
-    xtag.addEvent(document, "change:delegate(.demo-wrap)", function(e){
-        updateEventsDemo(e.target, "change");
-        updatePropertyList(this);
-    });
-
-    xtag.addEvent(document, "submit:delegate(.demo form)", function(e){
-        // retrieves all _actual_ <input> elements (ie: not fake polyfills)
-        var inputElems = e.target.elements;
-        var vals = [];
-        for (var i = 0; i < inputElems.length; i++) {
-            var input = inputElems[i];
-            if(!input.name) continue;
-            if((input.type === "radio" || input.type === "checkbox") &&
-                (!input.checked))
-            {
-                continue;
-            }
-
-            vals.push(encodeURIComponent(input.name) + "=" + 
-                      encodeURIComponent(input.value));
+    xtag.addEvent(document, "update-demo:delegate("+DemoHelpers.DEMO_SECT_SELECTOR+")", function(e){
+        var demoSect = this;
+        if(demoSect === eventDemo){
+            var eventEl = demoSect.querySelector(".events");
+            DemoHelpers.updatePrettyprintEl(eventEl, eventCounter.toString());
         }
-        alert("submitted: " + vals.join("&"));
-        e.preventDefault();
-        e.stopPropagation();
+        updateDemoSect(demoSect);
     });
-    updateEventsDemo();
-    prettyPrint();
+
+    DemoHelpers.registerUpdateListeners(["input", "change"]);
+    DemoHelpers.initializeDemos();
 });

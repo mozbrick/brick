@@ -12,13 +12,23 @@ function getEventCounter(eventDemo){
     var nativeSlider = eventDemo.querySelector("x-slider:first-of-type");
     var polyfillSlider = eventDemo.querySelector("x-slider:last-of-type");
     var keys = ["nativechange", "nativeinput", "polychange", "polyinput"];
+
     var toKeyFn = function(e, slider){
         if(e.type !== "change" && e.type !== "input") return;
         if(slider!== nativeSlider && slider !== polyfillSlider) return;
         return ((slider === nativeSlider) ? "native" : "poly") + e.type;
     };
 
-    return new DemoHelpers.EventCounter(keys, toKeyFn);
+    var toStrFn = function(counters){
+        return [
+            "<x-slider> input fired " + counters.nativeinput + " times",
+            "<x-slider> change fired " + counters.nativechange + " times",
+            "<x-slider polyfill> input fired " + counters.polyinput + " times",
+            "<x-slider polyfill> change fired " + counters.polychange + " times"
+        ].join("\n");
+    };
+
+    return new DemoHelpers.EventCounter(keys, toKeyFn, toStrFn);
 }
 
 document.addEventListener('DOMComponentsLoaded', function(){
@@ -49,13 +59,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
 
         if(demoSect === eventDemo){
             var eventEl = demoSect.querySelector(".events");
-            var counters = eventCounter.counters;
-            DemoHelpers.updatePrettyprintEl(eventEl, [
-                "<x-slider> input fired " + counters.nativeinput + " times",
-                "<x-slider> change fired " + counters.nativechange + " times",
-                "<x-slider polyfill> input fired " + counters.polyinput + " times",
-                "<x-slider polyfill> change fired " + counters.polychange + " times"
-            ].join("\n"));
+            DemoHelpers.updatePrettyprintEl(eventEl, eventCounter.toString());
         }
     });
 
