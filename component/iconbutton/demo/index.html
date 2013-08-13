@@ -38,8 +38,20 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button id="anchor-edit-button" class="prettybutton">Edit <code>icon-anchor</code></button>
-            <button id="src-edit-button" class="prettybutton">Edit <code>src</code></button>
+            <div class="controls">
+                <button class="prettybutton" 
+                        data-toggle-prop="iconAnchor" 
+                        data-toggle-target="x-iconbutton" 
+                        data-toggle-options='["left", "top", "right", "bottom"]'>
+                    Edit <code>icon-anchor</code>
+                </button>
+                <button class="prettybutton" 
+                        data-toggle-prop="src" 
+                        data-toggle-target="x-iconbutton" 
+                        data-toggle-options='["firefox.png", "http://placekitten.com/50", "grounds_keeping_it_real_s1.gif"]'>
+                    Edit <code>src</code>
+                </button>
+            </div>
             <h3>Initializing markup</h3>
             <pre class="prettyprint html"></pre>
         </div>
@@ -54,12 +66,14 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button id="iconel-edit-button" class="prettybutton">Edit <code>.iconEl</code></button>
-            <button id="contentel-edit-button" class="prettybutton">Edit <code>.contentEl</code></button>
+            <div class="controls">
+                <button id="iconel-edit-button" class="prettybutton">Edit <code>.iconEl</code></button>
+                <button id="contentel-edit-button" class="prettybutton">Edit <code>.contentEl</code></button>
+            </div>
             <h3>Initializing markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>JavaScript</h3>
-            <pre class="prettyprint javascript">// assume that randomColor and randomWord are already provided<br/>var iconElToggle = document.getElementById(&quot;iconel-edit-button&quot;);<br/>var contentElToggle = document.getElementById(&quot;contentel-edit-button&quot;);<br/>var iconButton = document.getElementById(&quot;dom-demo-button&quot;);<br/><br/>// &quot;edit .iconEl&quot; button<br/>iconElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.iconEl.style.backgroundColor = randomColor();<br/>});<br/><br/>// &quot;edit .contentEl&quot; button<br/>contentElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.contentEl.style.color = randomColor();<br/>    iconButton.contentEl.textContent = randomWord(7);<br/>});</pre>
+            <pre class="prettyprint javascript">// assume that randomColor and randomWord are already provided<br/>var iconElToggle = document.getElementById(&quot;iconel-edit-button&quot;);<br/>var contentElToggle = document.getElementById(&quot;contentel-edit-button&quot;);<br/>var iconButton = document.getElementById(&quot;dom-demo-button&quot;);<br/><br/>// &quot;edit .iconEl&quot; button<br/>iconElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.iconEl.style.backgroundColor = randomColor();<br/>});<br/><br/>// &quot;edit .contentEl&quot; button<br/>contentElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.contentEl.style.color = randomColor();<br/>    iconButton.contentEl.textContent = "&lt;code&gt;"+randomWord(7)+"&lt;/code&gt;";<br/>});</pre>
         </div>
     </section>
     <section id="dom-demo" class="demo-wrap">
@@ -92,6 +106,7 @@
 
 <script type="text/javascript" src="../../../dist/brick.js"></script>
 <script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
 <script type="text/javascript" src="demo.js"></script>
 </body>
 </html>

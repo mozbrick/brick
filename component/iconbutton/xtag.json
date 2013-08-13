@@ -25,13 +25,13 @@
 		"events": {},
 		"methods": {},
 		"getters": {
-            "src" : "Returns the image source used as the button's icon. Only does something if the icon is a <img> element (which is the default behavior)",
+            "src" : "Returns the image source used as the button's icon.",
             "iconAnchor" : "Returns the location of the icon relative to the content label. Valid options are 'left', 'top', 'right', 'bottom'",
             "iconEl" : "Returns the DOM element representing the button's icon",
             "contentEl" : "Returns the DOM element representing the button's content label"
         },
 		"setters": {
-            "src" : "Sets the image source used as the button's icon. Only does something if the icon is a <img> element (which is the default behavior)",
+            "src" : "Sets the image source used as the button's icon.",
             "iconAnchor" : "Sets the location of the icon relative to the content label. Valid options are 'left', 'top', 'right', 'bottom'"
         }
 	}

@@ -35,7 +35,8 @@
       "inputElem": "Returns the DOM element of the actual underlying <input> element",
       "max": "Gets the maximum of the slider's range (as a number, not a string)",
       "min": "Gets the minimum of the slider's range (as a number, not a string)",
-      "step": "Gets the step value of the slider's range (as a number, not a string)"
+      "step": "Gets the step value of the slider's range (as a number, not a string)",
+      "polyfill": "Returns whether the slider is in polyfill mode or not."
     },
     "setters": {
       "polyfill": "If set, the input is 'replaced' with our polyfill slider's event handlers and graphics.",

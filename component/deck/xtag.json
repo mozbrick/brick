@@ -51,13 +51,13 @@
       "historyCap": "Returns the value of the 'history-cap' attribute.",
       "currHistorySize": "Returns the number of cards currently stored in the deck's history.",
       "currHistoryIndex": "Returns the deck's current index in its history stack.",
-      "x-card: transitionOverride": "Returns the transition override of the card."
+      "transitionOverride (on <x-card> element)": "Returns the transition override of the card."
     },
     "setters": {
       "transitionType": "Sets the value of the 'transition-type' attribute.",
       "selectedIndex": "Sets the value of the 'selected-index' attribute.",
       "historyCap": "Sets the value of the 'history-cap' attribute.",
-      "x-card: transitionOverride": "Sets the transition override of the card."
+      "transitionOverride (on <x-card> element)": "Sets the transition override of the card."
     }
   }
 }

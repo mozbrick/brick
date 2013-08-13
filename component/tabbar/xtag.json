@@ -26,17 +26,17 @@
         },
 		"methods": {},
 		"getters": {
-            "tabs": "simply returns a list of the x-tabbar-tabs that are in the x-tabbar",
+            "tabs": "Returns a list of the <x-tabbar-tab>s that are in the x-tabbar",
             "targetEvent": "Returns the name of the event any tabs that don't have overrides will be firing.",
-            "targetEvent (x-tabbar-tab only)": "Returns the name of the event a single tabbar-tab will fire on its targets. Accounts for user-specified overrides.",
-            "targetSelector (x-tabbar-tab only)": "Returns the CSS selector used to select the targets of a specific tab",
-            "targetElems (x-tabbar-tab only)": "Returns a list of the elements currently selected as targets of the specific tab"
+            "targetEvent (on x-tabbar-tab)": "Returns the name of the event a single tabbar-tab will fire on its targets. Accounts for user-specified overrides.",
+            "targetSelector (on x-tabbar-tab)": "Returns the CSS selector used to select the targets of a specific tab",
+            "targetElems (on x-tabbar-tab)": "Returns a list of the elements currently selected as targets of the specific tab"
         },
 		"setters": {
             "targetEvent": "Sets the name of the event any tabs that don't have overrides will be firing.",
-            "targetEvent (x-tabbar-tab only)": "Sets the name of the event a single tabbar-tab will fire on its targets, overriding the parent x-tabbar's overall targetEvent.",
-            "targetSelector (x-tabbar-tab only)": "Sets the CSS selector used to select the targets of a specific tab",
-            "targetElems (x-tabbar-tab only)": "Assigns a list of DOM elements to be targets of the specific tab"
+            "targetEvent (on x-tabbar-tab)": "Sets the name of the event a single tabbar-tab will fire on its targets, overriding the parent x-tabbar's overall targetEvent.",
+            "targetSelector (on x-tabbar-tab)": "Sets the CSS selector used to select the targets of a specific tab",
+            "targetElems (on x-tabbar-tab)": "Assigns a list of DOM elements to be targets of the specific tab"
         }
 	}
 }

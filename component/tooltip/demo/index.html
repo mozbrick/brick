@@ -32,7 +32,7 @@
         </div>
     </section>
     <!-- orientation demo -->
-    <section id="orientation-edit-demo" class="demo-wrap">
+    <section class="demo-wrap">
         <header><h2><code>orientation</code>: Specifying different positions</h2></header>
         <p>Specifies where the <code class="prettyprint">&lt;x-tooltip&gt;</code> appears in relation to the target triggering element.</p>
         <p>Valid options: <code class="prettyprint">"left","right","top","bottom","auto"</code></p>
@@ -46,13 +46,20 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button id="orientation-edit-button" class="prettybutton">Toggle orientation</button>
+            <div class="controls">
+                <button class="prettybutton"
+                        data-toggle-prop="orientation"
+                        data-toggle-target="x-tooltip"
+                        data-toggle-options='["auto", "top", "left", "bottom", "right"]'>
+                    Toggle orientation
+                </button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
         </div>
     </section>
     <!-- target-selector demo -->
-    <section id="target-edit-demo" class="demo-wrap">
+    <section class="demo-wrap">
         <header><h2><code>target-selector</code>: Specifying different targets</h2></header>
         <p><code>target-selector</code> defines which elements a tooltip attaches to. Valid options:
         </p>
@@ -78,13 +85,20 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button id="target-edit-button" class="prettybutton">Toggle target-selector</button>
+            <div class="controls">
+                <button class="prettybutton"
+                        data-toggle-prop="targetSelector"
+                        data-toggle-target="x-tooltip"
+                        data-toggle-options='["_previousSibling", "_nextSibling", ".sibling-demo img"]'>
+                    Toggle target-selector
+                </button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
         </div>
     </section>
     <!-- trigger-style demo -->
-    <section id="trigger-style-edit-demo" class="demo-wrap">
+    <section class="demo-wrap">
         <header><h2><code>trigger-style</code>: Specifying how to trigger a tooltip</h2></header>
         <p>This specifies what kind of interaction with a target element will
            trigger the element. You can either specify <code>hover</code> or 
@@ -96,17 +110,22 @@
                 <div class="target-button">
                     <span>Hover this button!</span>
                 </div>
-                <x-tooltip trigger-style="hover">Hover somewhere else to hide!</x-tooltip>
+                <x-tooltip trigger-style="hover" id="trigger-style-demo-tip">Hover somewhere else to hide!</x-tooltip>
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button id="trigger-style-edit-button" class="prettybutton">Toggle trigger-style</button>
+            <div class="controls">
+                <button class="prettybutton" 
+                        data-toggle-prop="triggerStyle"
+                        data-toggle-target="x-tooltip"
+                        data-toggle-options='["hover", "click", "touchstart", "custom"]'>
+                    Toggle trigger-style
+                </button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
-            <div class="js-wrap" hidden>
-                <h3>JavaScript</h3>
-                <pre class="prettyprint javascript"></pre>
-            </div>
+            <h3 class="custom-source" hidden>Custom trigger JavaScript</h3>
+            <pre class="prettyprint javascript custom-source" hidden>var toggleButton = document.getElementById(&quot;custom-toggle-button&quot;);<br/>toggleButton.addEventListener(&quot;click&quot;, function(){<br/>   var tooltip = document.getElementById(&quot;trigger-style-demo-tip&quot;);<br/>   tooltip.toggle(); <br/>});</pre>
         </div>
     </section>
 
@@ -114,6 +133,7 @@
 
 <script type="text/javascript" src="../../../dist/brick.js"></script>
 <script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
 <script type="text/javascript" src="demo.js"></script>
 </body>
 </html>

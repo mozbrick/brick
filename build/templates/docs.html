@@ -5,37 +5,59 @@
   <nav>
     <ul>
     {% for tag, info in tags %}
-      <li><a href="#{{ tag }}">{{ tag }}</a></li>
+      <li>
+        <a href="#{{ tag }}">{{ tag }}</a>
+      </li>
     {% endfor %}
   </nav>
   {% for tag, info in tags %}
     <section id="{{ tag }}" class="main-sect">
-      <h1>{{ tag }}</h1>
+      <h1><b>{{ tag }}</b></h1>
       {% if info.demo %}
-        <a href="component/{{ tag }}/{{ info.demo }}">View Demo &raquo;</a>
+        <h2><a href="component/{{ tag }}/{{ info.demo }}">View Demo &raquo;</a></h2>
       {% endif %}
       <p>{{ info.description|escape|nl2br|preserveTabs }}</p>
-      <h2>Attributes</h2>
+
+      <h2><b><em>Attributes</em></b></h2>
       {% for key, value in info.documentation.attributes %}
       <dl>
         <dt><code>{{ key }}</code></dt>
         <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
       </dl>
       {% endfor %}
-      <h2>Methods</h2>
+
+      <h2><b><em>Methods</em></b></h2>
       {% for key, value in info.documentation.methods %}
-      <dl>
-        <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-      </dl>
+        <dl>
+          <dt><code>{{ key }}</code></dt>
+          <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+        </dl>
       {% endfor %}
-      <h2>Events</h2>
+
+      <h2><b><em>Events</em></b></h2>
       {% for key, value in info.documentation.events %}
       <dl>
         <dt><code>{{ key }}</code></dt>
         <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
       </dl>
       {% endfor %}
+
+      <h2><b><em>Getters</em></b></h2>
+      {% for key, value in info.documentation.getters %}
+      <dl>
+        <dt><code>{{ key }}</code></dt>
+        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+      </dl>
+      {% endfor %}
+
+      <h2><b><em>Setters</em></b></h2>
+      {% for key, value in info.documentation.setters %}
+      <dl>
+        <dt><code>{{ key }}</code></dt>
+        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+      </dl>
+      {% endfor %}
+
       <a class="top" href="#">top</a>
     </section>
   {% endfor %}

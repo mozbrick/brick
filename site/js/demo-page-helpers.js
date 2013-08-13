@@ -42,6 +42,22 @@ var DemoHelpers;
         return type+"("+_randomVal()+","+_randomVal()+","+_randomVal()+alphaStr+")";
     };
 
+
+    _DemoHelpers.prototype.randomWord = function(len){
+        var output = "";
+        var aCode = "A".charCodeAt(0);
+        for(var i=0; i < len; i++){
+            var letterCode = aCode + Math.floor(Math.random() * 26);
+            var letter = String.fromCharCode(letterCode);
+            
+            if(Math.random() > 0.5){
+                letter = letter.toLowerCase();
+            }
+            output += letter;
+        }
+        return output;
+    }
+
     /* return true if the browser natively supports inputs of the given type */
     _DemoHelpers.prototype.hasNativeInputTypeSupport = function(type){
         var inputEl = document.createElement("input");
@@ -76,9 +92,10 @@ var DemoHelpers;
         // actually in a tag
         if(ignoreAttrs && ignoreAttrs.length){
             // no global flag, or we will over-skip through string
+            // also use [\s\S] instead of . to include newlines
             var attrIgnoreRegex = new RegExp("(<[^>]*?\\s)(("+
                                              ignoreAttrs.join("|")+
-                                             ")=\".*?\"\\s?)([^<]*?>)");
+                                             ")=\"[\\s\\S]*?\"\\s?)([^<]*?>)");
             var match = attrIgnoreRegex.exec(html);
             while(match){
                 html = html.substr(0, match.index) + match[1] + match[4] + 
@@ -265,16 +282,16 @@ var DemoHelpers;
                                 "[data-toggle-prop])", function(e){
             var button = this;
             var demoSect = DemoHelpers.controlButtonToDemoSect(button);
-            var toggleAttr = button.getAttribute("data-toggle-prop");
+            var toggleProp = button.getAttribute("data-toggle-prop");
             var toggleTargetSelector = button.getAttribute(
                                             "data-toggle-target"
                                        );
-            if((!toggleAttr) || (!toggleTargetSelector)) return;
+            if((!toggleProp) || (!toggleTargetSelector)) return;
 
             var targetElem = demoSect.querySelector(toggleTargetSelector);
             if(!targetElem) return;
 
-            var oldVal = targetElem[toggleAttr];
+            var oldVal = targetElem[toggleProp];
             var newVal;
 
             if(button.hasAttribute("data-toggle-options")){
@@ -284,22 +301,23 @@ var DemoHelpers;
                 newVal = DemoHelpers.nextItem(toggleOptions, oldVal);
                 if(newVal === null){
                     console.warn("invalid original option of ", oldVal, 
-                                 " for attribute ", toggleAttr, " on ", targetElem);
+                                 " for attribute ", toggleProp, " on ", targetElem);
                 }
             }
             else{
                 newVal = !oldVal;
             }
-            targetElem[toggleAttr] = newVal;
+            targetElem[toggleProp] = newVal;
 
             // account for any skip transitions
             xtag.requestFrame(function(){
                 var statusEl = button.querySelector(".attr-status");
                 if(statusEl){
-                    var content = toggleAttr+'="'+targetElem[toggleAttr]+'"';
+                    var content = toggleProp+'="'+targetElem[toggleProp]+'"';
                     DemoHelpers.updatePrettyprintEl(statusEl, content);
                 }
-                xtag.fireEvent(demoSect, "update-demo");
+                xtag.fireEvent(demoSect, "update-demo", 
+                               {detail: {"toggleProp": toggleProp}});
             });
         });
 

@@ -1,3 +1,3 @@
 document.addEventListener('DOMComponentsLoaded', function(){
-    prettyPrint();
+    DemoHelpers.initializeDemos();
 });
