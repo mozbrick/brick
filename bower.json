@@ -1,0 +1,16 @@
+{
+  "name": "brick",
+  "description": "UI Web Components for Mobile Web Apps",
+  "version": "0.1.0",
+  "keywords": [
+    "brick",
+    "custom",
+    "elements",
+    "x-tag"
+  ],
+  "main": [
+    "dist/brick.js",
+    "dist/brick.css",
+    "dist/OpenSans-SemiBold.ttf"
+  ]
+}
