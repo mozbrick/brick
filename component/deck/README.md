@@ -165,8 +165,8 @@ the two cards are in position to start animating, but have not yet begun the act
 The event also receives the following custom datamap in `e.detail`:
 
     {
-        'oldCard': the previously selected x-card node that the transition is animating away from,
-        'newCard': the x-card node that the transition is animating towards
+        'oldCard': the previously selected x-card that the transition is animating away from,
+        'newCard': the x-card that the transition is animating towards
     }
 
 ## ___shuffleend___
@@ -181,6 +181,26 @@ The event also receives the following custom datamap in `e.detail`:
         'oldCard': the previously selected x-card node that the transition is animating away from,
         'newCard': the x-card node that the transition is animating towards
     }
+
+## ___cardadd___
+
+Fired by the x-deck whenever an x-card is added.
+
+Receives the following datamap in `e.detail`:
+
+    {
+        'card': the x-card that was just added
+    }
+
+## ___cardremove___
+
+Fired by the x-deck whenever an x-card is removed.
+
+Receives the following datamap in `e.detail`:
+
+    {
+        'card': the x-card that was just removed
+    }   
 
 ##  ___show___
 

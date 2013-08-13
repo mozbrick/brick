@@ -34,9 +34,11 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button class="prettybutton prev">Previous card</button>
-            <button class="prettybutton next">Next card</button>
-            <button class="prettybutton shuffleto" target=1>Shuffle to card 1</button>
+            <div class="controls">
+                <button class="prettybutton prev">Previous card</button>
+                <button class="prettybutton next">Next card</button>
+                <button class="prettybutton shuffleto" target=1>Shuffle to card 1</button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>JavaScript</h3>
@@ -61,18 +63,20 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <h4>Automatic animation direction</h4>
-            <button class="prettybutton prev"><code>.shufflePrev()</code></button>
-            <button class="prettybutton next"><code>.shuffleNext()</code></button>
-            <button class="prettybutton shuffleto" target=1><code>.shuffleTo(1)</code></button>
-            <h4>Reverse animation direction</h4>
-            <button class="prettybutton prev reverse"><code>.shufflePrev("reverse")</code></button>
-            <button class="prettybutton next reverse"><code>.shuffleNext("reverse")</code></button>
-            <button class="prettybutton shuffleto reverse" target=1><code>.shuffleTo(1, "reverse")</code></button>
-            <h4>Forward animation direction</h4>
-            <button class="prettybutton prev forward"><code>.shufflePrev("forward")</code></button>
-            <button class="prettybutton next forward"><code>.shuffleNext("forward")</code></button>
-            <button class="prettybutton shuffleto forward" target=1><code>.shuffleTo(1, "forward")</code></button>
+            <div class="controls">
+                <h4>Automatic animation direction</h4>
+                <button class="prettybutton prev"><code>.shufflePrev()</code></button>
+                <button class="prettybutton next"><code>.shuffleNext()</code></button>
+                <button class="prettybutton shuffleto" target=1><code>.shuffleTo(1)</code></button>
+                <h4>Reverse animation direction</h4>
+                <button class="prettybutton prev reverse"><code>.shufflePrev("reverse")</code></button>
+                <button class="prettybutton next reverse"><code>.shuffleNext("reverse")</code></button>
+                <button class="prettybutton shuffleto reverse" target=1><code>.shuffleTo(1, "reverse")</code></button>
+                <h4>Forward animation direction</h4>
+                <button class="prettybutton prev forward"><code>.shufflePrev("forward")</code></button>
+                <button class="prettybutton next forward"><code>.shuffleNext("forward")</code></button>
+                <button class="prettybutton shuffleto forward" target=1><code>.shuffleTo(1, "forward")</code></button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
         </div>
@@ -113,9 +117,17 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button class="prettybutton prev">Previous card</button>
-            <button class="prettybutton transition-type">Change <code>transition-type</code></button>
-            <button class="prettybutton next">Next card</button>
+            <div class="controls">
+                <button class="prettybutton prev">Previous card</button>
+                <button class="prettybutton" 
+                        data-toggle-prop="transitionType" 
+                        data-toggle-target="x-deck" 
+                        data-toggle-options='["scrollLeft", "scrollUp", "scrollRight", "scrollDown","flipX", "flipY", "coverLeft", "coverUp", "coverRight", "coverDown","uncoverLeft", "uncoverUp", "uncoverRight", "uncoverDown", "none"]'
+                >
+                    Change <code>transition-type</code>
+                </button>
+                <button class="prettybutton next">Next card</button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>JavaScript</h3>
@@ -133,14 +145,16 @@
             <figure class="demo">
                 <x-deck class="simple-deck" transition-type="scrollLeft">
                     <x-card>0</x-card>
-                    <x-card transition-override="flipX">1</x-card>
+                    <x-card transition-override="flipY">1</x-card>
                     <x-card>2</x-card>
                 </x-deck>
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button class="prettybutton prev">Previous card</button>
-            <button class="prettybutton next">Next card</button>
+            <div class="controls">
+                <button class="prettybutton prev">Previous card</button>
+                <button class="prettybutton next">Next card</button>
+            </div>  
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
         </div>
@@ -161,10 +175,12 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button class="prettybutton prev">Previous card</button>
-            <button class="prettybutton next">Next card</button>
-            <button class="prettybutton add">Add card</button>
-            <button class="prettybutton remove">Remove card</button>
+            <div class="controls">
+                <button class="prettybutton prev">Previous card</button>
+                <button class="prettybutton next">Next card</button>
+                <button class="prettybutton add">Add card</button>
+                <button class="prettybutton remove">Remove card</button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>JavaScript</h3>
@@ -188,8 +204,10 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button class="prettybutton prev">Previous card</button>
-            <button class="prettybutton next">Next card</button>
+            <div class="controls">
+                <button class="prettybutton prev">Previous card</button>
+                <button class="prettybutton next">Next card</button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>Styling</h3>
@@ -198,10 +216,22 @@
     </section>
 
     <section id="shuffleevents-demo" class="demo-wrap">
-        <header><h2>Handling events: <code>shufflestart</code> and <code>shuffleend</code></h2></header>
+        <header><h2>Handling events: <code>shufflestart</code>, <code>shuffleend</code>, <code>cardadd</code>, and <code>cardremove</code></h2></header>
         <p>When the deck is transitioning cards, it fires events in order to signal different stages of the animation.</p>
-        <p>The <code class="prettyprint">&lt;x-deck&gt;</code> fires a <code>shufflestart</code> event when it has finished setting all attributes of the deck and is about to start a transition animation.</p>
-        <p>The <code class="prettyprint">&lt;x-deck&gt;</code> fires a <code>shuffleend</code> event when a transition animation has completed. Much like a <code>transitionend</code> event, the <code>shuffleend</code> event will not fire if interrupted by another transition, and will thus only fire on a full animation completion.</p>
+        <p>The <code class="prettyprint">&lt;x-deck&gt;</code> fires a <code>shufflestart</code> event when it has finished setting all attributes of the deck and is about to start a transition animation. This event also provides the following information in <code>e.detail</code>: 
+<pre class="prettyprint">{
+    'oldCard': the previously selected x-card that the transition is animating away from,
+    'newCard': the x-card that the transition is animating towards
+}</pre></p>
+        <p>The <code class="prettyprint">&lt;x-deck&gt;</code> fires a <code>shuffleend</code> event when a transition animation has completed. Much like a <code>transitionend</code> event, the <code>shuffleend</code> event will not fire if interrupted by another transition, and will thus only fire on a full animation completion. This event also provides the following information in <code>e.detail</code>: 
+<pre class="prettyprint">{
+    'oldCard': the previously selected x-card that the transition just animated away from,
+    'newCard': the x-card that the transition animated towards (ie: the now-selected card)
+}</pre></p>
+        <p>In addition, when a deck's <code class="prettyprint">&lt;x-card&gt;</code>s are added or removed, the deck fires the <code>cardadd</code> and <code>cardremove</code>, respectively. Both of these events also provide the following information in <code>e.detail</code>: 
+<pre class="prettyprint">{
+    'card': the x-card that was just added or removed
+}</pre></p>
 
         <div class="two-up">
             <figure class="demo">
@@ -213,18 +243,23 @@
             </figure>
         </div>
         <div class="markup-wrap two-up">
-            <button class="prettybutton prev">Previous card</button>
-            <button class="prettybutton next">Next card</button>
+            <div class="controls">
+                <button class="prettybutton prev">Previous card</button>
+                <button class="prettybutton next">Next card</button>
+                <button class="prettybutton add" noshuffle>Add card</button>
+                <button class="prettybutton remove">Remove card</button>
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>Events</h3>
-            <pre class="prettyprint events-tracker"></pre>
+            <pre class="prettyprint events"></pre>
         </div>
     </section>
 </article>
 
 <script type="text/javascript" src="../../../dist/brick.js"></script>
 <script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
 <script type="text/javascript" src="demo.js"></script>
 </body>
 </html>

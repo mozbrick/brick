@@ -14,26 +14,26 @@
       {% if info.demo %}
         <a href="component/{{ tag }}/{{ info.demo }}">View Demo &raquo;</a>
       {% endif %}
-      <p>{{ info.description|escape|nl2br }}</p>
+      <p>{{ info.description|escape|nl2br|preserveTabs }}</p>
       <h2>Attributes</h2>
       {% for key, value in info.documentation.attributes %}
       <dl>
         <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br }}</dd>
+        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
       </dl>
       {% endfor %}
       <h2>Methods</h2>
       {% for key, value in info.documentation.methods %}
       <dl>
         <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br }}</dd>
+        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
       </dl>
       {% endfor %}
       <h2>Events</h2>
       {% for key, value in info.documentation.events %}
       <dl>
         <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br }}</dd>
+        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
       </dl>
       {% endfor %}
       <a class="top" href="#">top</a>

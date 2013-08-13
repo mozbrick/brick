@@ -236,6 +236,8 @@ var DemoHelpers;
     *  - fire an initial "update-demo" event on all demo sections
     *  - a general prettyprint call
     */
+    /* IMPORTANT NOTE: make sure to call this AFTER any handlers for the 
+     * update-demo event have been registered */
     _DemoHelpers.prototype.initializeDemos = function(){
         // prevent submission of any demo forms and alert values instead
         xtag.addEvent(document, "submit:delegate(" +

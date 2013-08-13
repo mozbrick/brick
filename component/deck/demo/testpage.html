@@ -157,6 +157,16 @@
                 console.log("shuffleend", e);
                 updateStatuses();
             });
+
+            demoBox.addEventListener('cardadd', function(e){
+                console.log("cardadd", e);
+                updateStatuses();
+            });
+
+            demoBox.addEventListener('cardremove', function(e){
+                console.log("cardremove", e);
+                updateStatuses();
+            });
             
             xtag.query(document, "button").forEach(function(button){
                 button.addEventListener("click", function(){

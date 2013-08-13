@@ -937,12 +937,15 @@
     xtag.register("x-card", {
         lifecycle:{
             inserted: function(){
-                var deckContainer = this.parentNode;
+                var self = this;
+                var deckContainer = self.parentNode;
                 if (deckContainer){
                     if(deckContainer.tagName.toLowerCase() === 'x-deck')
                     {
                         _sanitizeCardAttrs(deckContainer);
-                        this.xtag.parentDeck = deckContainer;
+                        self.xtag.parentDeck = deckContainer;
+                        xtag.fireEvent(deckContainer, "cardadd", 
+                                      {detail: {"card": self}});
                     }
                 }                
                         
@@ -956,13 +959,16 @@
                 }
             },
             removed: function(){
-                if(!this.xtag.parentDeck){
+                var self = this;
+                if(!self.xtag.parentDeck){
                     return;
                 }
                 
-                var deck = this.xtag.parentDeck;
+                var deck = self.xtag.parentDeck;
                 deck.xtag.history.sanitizeStack();
                 _sanitizeCardAttrs(deck);
+                xtag.fireEvent(deck, "cardremove", 
+                               {detail: {"card": self}});
             }
         },
         accessors:{

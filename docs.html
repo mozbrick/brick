@@ -301,17 +301,27 @@
       
       <dl>
         <dt><code>shufflestart</code></dt>
-        <dd>Fired by the &lt;x-deck&gt; when it is about to start a card transition animation. At this point, all deck attributes are set, and the only thing left to is to CSS animate the transition.</dd>
+        <dd>A shufflestart event is fired by the &lt;x-deck&gt; element when, during the process of transitioning between cards, the two cards are in position to start animating, but have not yet begun the actual animation.<br/><br/>The event also receives the following custom datamap in `e.detail`:<br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;oldCard&#39;: the previously selected x-card node that the transition is animating away from,<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;newCard&#39;: the x-card node that the transition is animating towards<br/>}</dd>
       </dl>
       
       <dl>
         <dt><code>shuffleend</code></dt>
-        <dd>Fired by the &lt;x-deck&gt; element when a card transition animation has finished. Similar to &#39;transitionend&#39; events, is not guaranteed to fire for every animation, and will only fire for animations that reach full completion without interruption.</dd>
+        <dd>A `shuffleend` event is fired by the &amp;lt;x-deck&amp;gt; element when a cycle from one card to another has been completed.<br/><br/>**Note:** Much like the `transitionend` event, this is not guaranteed to fire after every transition that fires a shufflestart. For example, if two transitions are queued up, with the second occurring during the first transition, only the second transition&#39;s `shuffleend` will fire, due to the first transition being interrupted.<br/><br/>The event also receives the following custom datamap in `e.detail`:<br/><br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;oldCard&#39;: the previously selected x-card node that the transition is animating away from,<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;newCard&#39;: the x-card node that the transition is animating towards<br/>}</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>cardadd</code></dt>
+        <dd>Fired by the x-deck whenever an x-card is added.<br/><br/>Receives the following datamap in `e.detail`:<br/><br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;card&#39;: the x-card that was just added<br/>}</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>cardremove</code></dt>
+        <dd>Fired by the x-deck whenever an x-card is removed.<br/><br/>Receives the following datamap in `e.detail`:<br/><br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;card&#39;: the x-card that was just removed<br/>}</dd>
       </dl>
       
       <dl>
         <dt><code>show</code></dt>
-        <dd>If an &lt;x-card&gt; element receives a &#39;show&#39; event, the deck will automatically transition to the card that received the event. <br> This event is not fired by the x-deck itself.</dd>
+        <dd>If an &lt;x-card&gt; element receives a &#39;show&#39; event, the deck will automatically transition to the card that received the event. <br/> This event is not fired by the x-deck itself.</dd>
       </dl>
       
       <a class="top" href="#">top</a>
@@ -361,7 +371,7 @@
       
       <dl>
         <dt><code>show</code></dt>
-        <dd>If either the front face or the back face of the flipbox receives a show event, the flipbox will automatically show that side. <br> Note: this event is not fired by the flipbox itself.</dd>
+        <dd>If either the front face or the back face of the flipbox receives a show event, the flipbox will automatically show that side. <br/> Note: this event is not fired by the flipbox itself.</dd>
       </dl>
       
       <a class="top" href="#">top</a>

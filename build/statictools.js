@@ -7,7 +7,11 @@ var _ = require('lodash');
 var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('build/templates'));
 
 env.addFilter('nl2br', function(str) {
-    return str.replace('\n', '<br>');
+    return str.replace(/\n/g, '<br/>');
+});
+
+env.addFilter('preserveTabs', function(str){
+    return str.replace(/( {4}|\t)/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 });
 
 var version = fs.readFileSync('VERSION');
