@@ -148,7 +148,8 @@ document.addEventListener('DOMComponentsLoaded', function(){
     initFrenchCalendar();
     initEventSchedulerDemo();
 
-    DemoHelpers.registerUpdateListeners(["datetoggleon", "datetoggleoff", "datetap"]);
+    DemoHelpers.registerUpdateListeners(["datetoggleon", "datetoggleoff", 
+                                         "datetap", "prevmonth", "nextmonth"]);
 
     DemoHelpers.initializeDemos();
 });

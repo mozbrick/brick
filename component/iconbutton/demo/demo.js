@@ -74,7 +74,7 @@ function initIconDemo(){
 
     var anchors = ['left', 'top', 'right', 'bottom'];
     var srcs = ['firefox.png', 'http://placekitten.com/50', 
-                'grounds_keeping_it_real_small.gif'];
+                'grounds_keeping_it_real_s1.gif'];
 
     anchorButton.addEventListener("click", function(e){
         iconButton.iconAnchor = nextItem(anchors, iconButton.iconAnchor);
@@ -136,7 +136,7 @@ function initDomDemo(){
 
     contentElToggle.addEventListener("click", function(e){
         iconButton.contentEl.style.color = randomColor();
-        iconButton.contentEl.textContent = randomWord(7);
+        iconButton.contentEl.innerHTML = "<code>"+randomWord(7)+"</code>";
         updateHtmlMarkup(contextEl, markupEl, null, _postprocessor);
     });
 
