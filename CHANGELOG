@@ -1,0 +1,11 @@
+v1.0.1beta (Aug 13, 2013)
+
+- Add cardadd/cardremove events to x-deck api
+- Optimize x-deck's css to reduce duplication of transforms
+- Fix x-layout CSS flexbox issue with content not shrinking in older browsers (like FF18)
+- Sped up default flipbox animation
+- Fix slidebox graphical bug caused by changing orientation while viewing a slide other than the first slide
+
+v1.0beta (Aug 8, 2013)
+
+- Initial release
