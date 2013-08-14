@@ -1,46 +1,9 @@
+{% extends "component-demo-base.html" %}
 
+{% set TAG_NAME="x-tooltip" %}
+{% set COMPONENT_NAME="tooltip" %}
 
-
-
-
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-    <title>Brick x-tooltip demos</title>
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
-    <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
-    <link rel="stylesheet" href="../../../site/css/main.css">
-    
-    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
-    <link rel="stylesheet" type="text/css" href="demo.css"/>
-
-  </head>
-  <body>
-    <article>
-      <header class="site-header">
-        
-
-        
-<nav class="site-nav">
-  <a href="../../../index.html">Home</a>
-  <a href="../../../download.html">Download</a>
-  <a href="../../../docs.html">Documentation &amp; Demos</a>
-  <a href="http://github.com/mozilla/brick/">GitHub</a>
-  <a href="http://github.com/mozilla/brick/issues">Issues</a>
-</nav>
-
-
-        
-        
-      </header>
-      
-    <header>
-        <h1>x-tooltip</h1> 
-    </header>
-    <a href="../../../docs.html">&laquo; Back to docs</a>
-    
+{% block demoContent %}
 
     <section id="basic-demo" class="demo-wrap">
         <header><h2>Basic usage</h2></header>
@@ -161,26 +124,4 @@
         </div>
         <a href="#" class="top">Top</a>
     </section>
-
-
-      <footer>
-        
-<nav class="site-nav">
-  <a href="../../../index.html">Home</a>
-  <a href="../../../download.html">Download</a>
-  <a href="../../../docs.html">Documentation &amp; Demos</a>
-  <a href="http://github.com/mozilla/brick/">GitHub</a>
-  <a href="http://github.com/mozilla/brick/issues">Issues</a>
-</nav>
-
-        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="../../../site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
-      </footer>
-    </article>
-    <script src="../../../dist/brick.js"></script>
-     
-    <script type="text/javascript" src="../../../site/js/prettify.js"></script>
-    <script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
-    <script type="text/javascript" src="demo.js"></script>
-
-  </body>
-</html>
+{% endblock %}
