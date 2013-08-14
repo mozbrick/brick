@@ -56,8 +56,7 @@ function processComponentTemplate(componentDemoPath, componentName){
         p.reject(e);
     }
 
-    console.log(templatePath + " -> " + indexPagePath);
-
+    console.log("wrote " + templatePath + " -> " + indexPagePath);
     return p;
 }
 

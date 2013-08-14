@@ -1,3 +1,5 @@
+.PHONY: demos
+
 VERSION = $(shell cat VERSION)
 
 compile: clean
