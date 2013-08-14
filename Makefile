@@ -1,10 +1,12 @@
-
 VERSION = $(shell cat VERSION)
 
 compile: clean
 	@node build/minify.js
 
-site: homepage downloadpage docs
+site: homepage downloadpage docs demos
+
+demos:
+	@node build/demos.js
 
 homepage:
 	@rm -f index.html

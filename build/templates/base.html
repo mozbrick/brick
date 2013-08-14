@@ -1,3 +1,8 @@
+{% from "nav.html" import navbar %}
+
+{% set _relPath = REL_PATH if (REL_PATH != null) else "" %}
+{% set _hideLogo = HIDE_LOGO if (HIDE_LOGO != null) else false %}
+
 <!doctype html>
 <html>
   <head>
@@ -5,28 +10,32 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>Brick {% block pageTitle %}{% endblock %}</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
-    <link rel="stylesheet" type="text/css" href="dist/brick.css"/>
-    <link rel="stylesheet" href="site/css/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ _relPath }}dist/brick.css"/>
+    <link rel="stylesheet" href="{{ _relPath }}site/css/main.css">
     {% block style %}
     {% endblock %}
   </head>
   <body>
     <article>
       <header class="site-header">
-        <h1 id="mark"><img class="logo" src="site/img/logo.svg">Brick<small> {{ version }}</small></h1>
-        <h2>UI Components for Modern Web Apps</h2>
-        {% include 'nav.html' %}
+        {% if not _hideLogo %}
+          <h1 id="mark"><img class="logo" src="{{ _relPath }}site/img/logo.svg">Brick<small> {{ version }}</small></h1>
+          <h2>UI Components for Modern Web Apps</h2>
+        {% endif %}
+
+        {{ navbar(_relPath) }}
+
         {% block header %}
         {% endblock %}
       </header>
       {% block content %}
       {% endblock %}
       <footer>
-        {% include 'nav.html' %}
-        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
+        {{ navbar(_relPath) }}
+        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="{{ _relPath }}site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
       </footer>
     </article>
-    <script src="dist/brick.js"></script>
+    <script src="{{ _relPath }}dist/brick.js"></script>
     {% block script %}
     {% endblock %}
   </body>

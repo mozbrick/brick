@@ -304,6 +304,7 @@ progress {
 }
 
 a.top {
+  clear: both;
   float: right;
 }
 

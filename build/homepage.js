@@ -1,6 +1,6 @@
-
+var path = require('path');
 var site = require('./statictools');
 
 console.log('generating homepage');
-site.staticPage('site/index.html', 'index.html');
+site.staticPage(path.join('build','templates','index.html'), 'index.html');
 

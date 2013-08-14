@@ -1,46 +1,18 @@
-
-
-
-
-
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-    <title>Brick x-calendar demos</title>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Brick: x-calendar demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
     <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
-    <link rel="stylesheet" href="../../../site/css/main.css">
-    
     <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="../../../site/css/main.css"/>
     <link rel="stylesheet" type="text/css" href="demo.css"/>
-
-  </head>
-  <body>
-    <article>
-      <header class="site-header">
-        
-
-        
-<nav class="site-nav">
-  <a href="../../../index.html">Home</a>
-  <a href="../../../download.html">Download</a>
-  <a href="../../../docs.html">Documentation &amp; Demos</a>
-  <a href="http://github.com/mozilla/brick/">GitHub</a>
-  <a href="http://github.com/mozilla/brick/issues">Issues</a>
-</nav>
-
-
-        
-        
-      </header>
-      
-    <header>
-        <h1>x-calendar</h1> 
-    </header>
-    <a href="../../../docs.html">&laquo; Back to docs</a>
-    
+</head>
+<body>
+<article>
+    <header><h1>x-calendar</h1></header>
     <p>Provides a simple calendar UI widget.</p>
     <p>Note that when the API works with datestrings, while it's best to pass in "YYYY-MM-DD" ISO strings to the calendar, the <code class="prettyprint">&lt;x-calendar&gt;</code> will also accept any string parseable by <code class="prettyprint">Date.parse()</code>. However, be aware that browser implementations of <code class="prettyprint">Date.parse()</code> may differ slightly.</p>
     <section class="demo-wrap">
@@ -54,7 +26,6 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar&gt;&lt;/x-calendar&gt;</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Basic calendar with navigation controls</h2></header>
@@ -68,7 +39,6 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar controls&gt;&lt;/x-calendar&gt;</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Initializing the viewport with <code>view</code></h2></header>
@@ -82,7 +52,6 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar view="2013-06-09" controls&gt;&lt;/x-calendar&gt;</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Initializing selected dates with <code>chosen/.chosen</code></h2></header>
@@ -99,7 +68,6 @@
             <h3>Equivalent initial JavaScript</h3>
             <pre class="prettyprint javascript">// assume calendar is already defined to be the<br/>// &lt;x-calendar&gt; DOM node<br/>calendar.chosen = &quot;2013-05-17&quot;;<br/>// ...or...<br/>calendar.chosen = &quot;May 17, 2013&quot;;<br/>// ...or...<br/>// remember that Date() months start at 0, not 1<br/>calendar.chosen = new Date(2013, 4, 17);</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Allowing multi-selection with <code>multiple</code></h2></header>
@@ -121,7 +89,6 @@
             <h3>Equivalent initial JavaScript</h3>
             <pre class="prettyprint javascript">// assume calendar is already defined to be the<br/>// &lt;x-calendar&gt; DOM node<br/>calendar.chosen = '[[&quot;2013-06-04&quot;, &quot;2013-06-10&quot;], &quot;2013-06-19&quot;, [&quot;2013-06-29&quot;,&quot;2013-07-02&quot;]]';<br/>// ...or...<br/>calendar.chosen = [[&quot;2013-06-04&quot;, &quot;2013-06-10&quot;], &quot;2013-06-19&quot;, [&quot;2013-06-29&quot;,&quot;2013-07-02&quot;]];<br/>// ...or...<br/>// remember that Date() months start at 0, not 1<br/>calendar.chosen = [[new Date(2013, 5, 4), new Date(2013, 5, 10)], <br/>                   new Date(2013, 5, 19), <br/>                   [new Date(2013, 5, 29), new Date(2013, 6, 2)]<br/>                  ];</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Preventing date selection with <code>notoggle</code></h2></header>
@@ -137,7 +104,6 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar notoggle controls&gt;&lt;/x-calendar&gt;</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Displaying multiple months with <code>span</code></h2></header>
@@ -153,7 +119,6 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar controls span=2&gt;&lt;/x-calendar&gt;</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Changing the starting weekday with <code>first-weekday-num/.firstWeekdayNum</code></h2></header>
@@ -169,7 +134,6 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar controls first-weekday-num=1&gt;&lt;/x-calendar&gt;</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Changing the calendar's labels with <code>.labels</code></h2></header>
@@ -195,7 +159,6 @@
             <h3>JavaScript</h3>
             <pre class="prettyprint javascript">var frenchCal = document.querySelector(&quot;x-calendar[lang=fr]&quot;);<br/>frenchCal.labels = {<br/>    prev: &quot;&lt;&lt;&quot;,<br/>    next: &quot;&gt;&gt;&quot;,<br/>    months: [&quot;janvier&quot;, &quot;f\u00E9vrier&quot;, &quot;mars&quot;, &quot;avril&quot;, &quot;mai&quot;, <br/>             &quot;juin&quot;, &quot;juillet&quot;, &quot;ao\u00FBt&quot;, &quot;septembre&quot;, &quot;octobre&quot;, <br/>             &quot;novembre&quot;, &quot;d\u00E9cembre&quot;],<br/>    weekdays: [&quot;dim&quot;, &quot;lun&quot;, &quot;mar&quot;, &quot;mer&quot;, &quot;jeu&quot;, &quot;ven&quot;, &quot;sam&quot;]<br/>};</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section id="events-demo" class="demo-wrap">
         <header><h2>Events demo</h2></header>
@@ -233,7 +196,6 @@
             <h3>Events</h3>
             <pre class="prettyprint events"></pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Styling the calendar</h2></header>
@@ -271,7 +233,6 @@
             <pre class="prettyprint html">&lt;x-calendar id="custom-style-cal" controls&gt;&lt;/x-calendar&gt;</pre>
             <h3>CSS styling</h3>
             <pre class="prettyprint css">#custom-style-cal{<br/>    background-color: lightsteelblue;<br/>}<br/><br/>#custom-style-cal .month-label{<br/>    background-color: rgba(255,255,255,.3);<br/>}<br/><br/>/* use height and line-height to <br/>* modify the height of weeks */<br/>#custom-style-cal .week{<br/>    height: 1.9em;<br/>    line-height: 1.9em;<br/>}<br/><br/>#custom-style-cal .day{<br/>    font-size: .85em;<br/>    border-radius: 50%;<br/>    border: 1px solid #fff;<br/>    box-shadow: inset 1px 1px 4px grey;<br/>}<br/><br/>/* use :not selectors to let default colors <br/> * fall through in those cases */<br/>#custom-style-cal .day:not(:hover):not(.chosen){<br/>    background-color: #fff;<br/>}<br/><br/>#custom-style-cal .day.today{<br/>    border-color: limegreen;<br/>}</pre>
-            <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Doing additional rendering with <code>.customRenderFn</code></h2></header>
@@ -293,7 +254,6 @@
             <h3>JavaScript</h3>
             <pre class="prettyprint javascript">var cal = document.getElementById(&quot;custom-render-simple&quot;);<br/>cal.customRenderFn = function(dayEl, date, iso){<br/>    // add selector to every 5th day in a month<br/>    if(date.getDate() % 5 === 0){<br/>        dayEl.setAttribute(&quot;dance-time&quot;, true);<br/>    }<br/>    else{<br/>        dayEl.removeAttribute(&quot;dance-time&quot;);<br/>    }<br/>};</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
     <section class="demo-wrap">
         <header><h2>Putting it all together: creating a simple event scheduler/manager</h2></header>
@@ -316,28 +276,12 @@
             <h3>JavaScript</h3>
             <pre class="prettyprint javascript">/** set up custom event handling demo using provided API hooks **/<br/><br/>// the dictionary of iso datestring keys mapped to event data<br/>var DATE_INFO = {};<br/>// the currently displayed date<br/>var CURR_ISO = null;<br/><br/>// aliases for DOM manipulation<br/>var eventsStage = document.getElementById(&quot;scheduler-demo&quot;);<br/>var eventsCal = eventsStage.querySelector(&quot;x-calendar&quot;);<br/>var eventsDateHeader = document.getElementById(&quot;scheduler-date&quot;);<br/>var eventsInfo = document.getElementById(&quot;scheduler-info&quot;);<br/>var eventsSaveButton = document.getElementById(&quot;scheduler-save&quot;);<br/><br/>// define a .customRenderFn that provides extra styling <br/>// information for day elements with stored data<br/>eventsCal.customRenderFn = function(dayEl, date, isoStr){<br/>    if(isoStr === CURR_ISO){<br/>        xtag.addClass(dayEl, &quot;scheduler-current&quot;);<br/>    }<br/>    else{<br/>        xtag.removeClass(dayEl, &quot;scheduler-current&quot;);<br/>    }<br/><br/>    if(isoStr in DATE_INFO){<br/>        dayEl.setAttribute(&quot;scheduler-has-info&quot;, true);<br/>    }<br/>    else{<br/>        dayEl.removeAttribute(&quot;scheduler-has-info&quot;);<br/>    }<br/>}<br/><br/>// respond to calendar taps<br/>eventsCal.addEventListener(&quot;datetap&quot;, function(e){<br/>    // grab date info from event as both a Date and a string<br/>    var date = e.detail.date;<br/>    var dateStr = e.detail.iso;<br/>    // get dictionary content for this date<br/>    var content = (dateStr &amp;&amp; dateStr in DATE_INFO) ? <br/>                                    DATE_INFO[dateStr] : &quot;&quot;;<br/>    // set up text area                                                <br/>    eventsInfo.value = content;<br/>    eventsInfo.disabled = !dateStr;<br/>    eventsSaveButton.disabled = !dateStr;<br/>    // remember currently shown date<br/>    CURR_ISO = dateStr;<br/>    eventsDateHeader.textContent = (dateStr) ? dateStr : &quot;None&quot;;<br/>    // programmatically toggle date object with .toggleDateOn<br/>    eventsCal.toggleDateOn(date);<br/>    // forces rerender of calendar<br/>    eventsCal.render();<br/>});<br/><br/>// save button listener; simply adds textarea value to data<br/>eventsSaveButton.addEventListener(&quot;click&quot;, function(e){<br/>    if(CURR_ISO){<br/>        if(eventsInfo.value){<br/>            DATE_INFO[CURR_ISO] = eventsInfo.value;<br/>        }<br/>        else{<br/>            delete DATE_INFO[CURR_ISO];<br/>        }<br/>    }<br/>    eventsCal.render();<br/>});</pre>
         </div>
-        <a class="top" href="#">top</a>
     </section>
+</article>
 
-
-      <footer>
-        
-<nav class="site-nav">
-  <a href="../../../index.html">Home</a>
-  <a href="../../../download.html">Download</a>
-  <a href="../../../docs.html">Documentation &amp; Demos</a>
-  <a href="http://github.com/mozilla/brick/">GitHub</a>
-  <a href="http://github.com/mozilla/brick/issues">Issues</a>
-</nav>
-
-        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="../../../site/img/mozilla_wordmark.svg" title="built by Mozilla"></a>
-      </footer>
-    </article>
-    <script src="../../../dist/brick.js"></script>
-     
-    <script type="text/javascript" src="../../../site/js/prettify.js"></script>
-    <script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
-    <script type="text/javascript" src="demo.js"></script>
-
-  </body>
+<script type="text/javascript" src="../../../dist/brick.js"></script>
+<script type="text/javascript" src="../../../site/js/prettify.js"></script>
+<script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
+<script type="text/javascript" src="demo.js"></script>
+</body>
 </html>

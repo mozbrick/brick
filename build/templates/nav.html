@@ -1,7 +1,9 @@
+{% macro navbar(relPath) %}
 <nav class="site-nav">
-  <a href="index.html">Home</a>
-  <a href="download.html">Download</a>
-  <a href="docs.html">Documentation &amp; Demos</a>
+  <a href="{{ relPath }}index.html">Home</a>
+  <a href="{{ relPath }}download.html">Download</a>
+  <a href="{{ relPath }}docs.html">Documentation &amp; Demos</a>
   <a href="http://github.com/mozilla/brick/">GitHub</a>
   <a href="http://github.com/mozilla/brick/issues">Issues</a>
 </nav>
+{% endmacro %}

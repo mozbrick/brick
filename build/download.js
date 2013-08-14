@@ -27,7 +27,7 @@ var buildDependencyTree = avow(function (fulfill, reject, list) {
 });
 
 var renderDownloadPage = avow(function (fulfill, reject, tree) {
-  site.staticPage('site/download.html', 'download.html', { dependencies: tree });
+  site.staticPage(path.join('build', 'templates', 'download.html'), 'download.html', { dependencies: tree });
   console.log('wrote download.html');
 });
 
