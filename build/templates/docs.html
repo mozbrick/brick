@@ -1,8 +1,22 @@
 {% extends "base.html" %}
+{% set REL_PATH="" %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{{REL_PATH}}site/css/prettify.css">
+{% endblock %}
+
 {% block content %}
   <h1>Documentation</h1>
   <h2>Version {{ version }}</h2>
-  <nav>
+
+  <h1><b>Usage</b></h1>
+  <p>To include Brick in your project, include your downloaded stylesheet and script files in your project's page like normal:
+    <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-{{ version }}.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-{{ version }}.js&quot;&gt;&lt;/script&gt;</pre>
+  </p>
+  <p>Using any of Brick's components is as simple as including the respective tag in your HTML markup. (See individual component docs for details.)</p>
+  <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the document's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
+  <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>  // run code here...<br/>});</pre>
+  <nav><h2>Available components</h2>
     <ul>
     {% for tag, info in tags %}
       <li>
@@ -10,6 +24,7 @@
       </li>
     {% endfor %}
   </nav>
+  <a class="top" href="#">top</a>
   {% for tag, info in tags %}
     <section id="{{ tag }}" class="main-sect">
       <h1><b>{{ tag }}</b></h1>
@@ -61,4 +76,13 @@
       <a class="top" href="#">top</a>
     </section>
   {% endfor %}
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript" src="{{REL_PATH}}site/js/prettify.js"></script>
+  <script>
+    window.onload = function(){
+      prettyPrint();
+    }
+  </script>
 {% endblock %}
