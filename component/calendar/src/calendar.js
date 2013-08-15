@@ -99,7 +99,19 @@
     document
     **/
     function getRect(el){
-        return el.getBoundingClientRect();
+        var rect = el.getBoundingClientRect();
+        var documentScrollTop = (document.documentElement.scrollTop ||
+                                   document.body.scrollTop || 0);
+        var documentScrollLeft = (document.documentElement.scrollLeft ||
+                                    document.body.scrollLeft || 0);
+        return {
+            "left": rect.left + documentScrollLeft,
+            "right": rect.right + documentScrollLeft,
+            "top": rect.top + documentScrollTop,
+            "bottom": rect.bottom + documentScrollTop,
+            "width": rect.width,
+            "height": rect.height
+        };
     }
 
     /** addClass: (DOM element, string)
