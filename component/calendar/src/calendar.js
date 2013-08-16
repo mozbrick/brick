@@ -637,7 +637,7 @@
           cDate = nextDay(cDate);
           // if the next day starts a new week, append finished week and see if
           // we are done drawing the month
-          if (getDay(cDate) === firstWeekday) {
+          if (step % 7 === 0 && step > 0) {
             appendChild(monthEl, week);
             week = makeEl('div.week');
             // Are we finished drawing the month?
