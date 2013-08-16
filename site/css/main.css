@@ -157,7 +157,7 @@ a:hover {
 }
 
 .download {
-  background: url('../img/zip.svg') no-repeat;
+  background: url('../img/zip.png') no-repeat;
   background-size: 64px;
   display: inline-block;
   height: 64px;

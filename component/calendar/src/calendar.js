@@ -149,6 +149,9 @@
     function getDate(d) {
         return d.getUTCDate();
     }
+    function getDay(d){
+        return d.getUTCDay();
+    }
 
     /** pad: (Number, Number) => String
     
@@ -360,10 +363,15 @@
             firstWeekday = 0;
         }
 
-        while(d.getUTCDay() !== firstWeekday) {
-          d = prevDay(d);
+        for(var step=0; step < 7; step++){
+            if(getDay(d) === firstWeekday){
+                return d;
+            }
+            else{
+                d = prevDay(d);
+            }
         }
-        return d;
+        throw "unable to find week start";
     }
 
     /** findWeekEnd: Date => Date
@@ -380,10 +388,15 @@
             lastWeekDay = 6;
         }
 
-        while (d.getUTCDay() !== lastWeekDay){
-            d = nextDay(d);
+        for(var step=0; step < 7; step++){
+            if(getDay(d) === lastWeekDay){
+                return d;
+            }
+            else{
+                d = nextDay(d);
+            }
         }
-        return d;
+        throw "unable to find week end";
     }
 
     /** findFirst: Date => Date
@@ -391,9 +404,8 @@
     Find the first day of the date's month.
     **/
     function findFirst(d) {
-        while(getDate(d) > 1) {
-          d = prevDay(d);
-        }
+        d = new Date(d.valueOf());
+        d.setDate(1);
         return d;
     }
 
@@ -600,8 +612,11 @@
         var week = makeEl('div.week');
         var cDate = sDate;
         var done = false;
+        var maxDays = 7 * 6;
+        var step = 0;
 
-        while(!done) {
+        while((!done) && (step < maxDays)) {
+          step++;
           var day = makeEl('span.day');
           day.setAttribute('data-date', iso(cDate));
           day.textContent = getDate(cDate);
@@ -622,7 +637,7 @@
           cDate = nextDay(cDate);
           // if the next day starts a new week, append finished week and see if
           // we are done drawing the month
-          if (cDate.getUTCDay() === firstWeekday) {
+          if (getDay(cDate) === firstWeekday) {
             appendChild(monthEl, week);
             week = makeEl('div.week');
             // Are we finished drawing the month?
