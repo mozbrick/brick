@@ -58,7 +58,7 @@ x-tooltip {
   left: 0px;
   top: 0px;
   display: block;
-  z-index: 99999999999999;
+  z-index: 99999999999;
   overflow: visible;
   border: 1px solid grey;
   background-color: #eee;

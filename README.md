@@ -1,7 +1,7 @@
 Brick / App-components
 ==============
 
-Brick is a bundle of re-usable UI components for quickly and flexibly building mobile HTML5 apps. Brick adds new HTML tags- widgets that allow developers to express the structure of an application in a clearer, more concise manner.
+Brick is a bundle of re-usable UI components built with [x-tags](http://www.x-tags.org/) for quickly and flexibly building mobile HTML5 apps. Brick adds new HTML tags- widgets that allow developers to express the structure of an application in a clearer, more concise manner.
 
 In other words, Brick provides minimal-markup, cross-browser implementations of common user interface designs, from calendars to slidebars to cycleable galleries, taking care of most of the under-the-hood boilerplate for you.
 

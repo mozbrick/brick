@@ -1,4 +1,6 @@
 (function(){
+    var BEFORE_ANIM_ATTR = "_before-animation";
+
     /** HistoryStack
     *
     * a generic stack implementation intended for keeping track of state history
@@ -25,6 +27,7 @@
                                             function(x){ return true; };
     }   
     
+    var HISTORYSTACK_PROTOTYPE = HistoryStack.prototype;
     /** HistoryStack.pushState : (user-defined)
     *
     * adds a state to the stack as the most recent state and sets it as the 
@@ -32,7 +35,7 @@
     * 
     * also handles capping the maximum number of states
     **/
-    HistoryStack.prototype.pushState = function(newState){
+    HISTORYSTACK_PROTOTYPE.pushState = function(newState){
         if(this.canRedo){
              // remove all future items, if any exist
             this._historyStack.splice(this.currIndex + 1,  
@@ -61,7 +64,7 @@
     * removes consecutive duplicate states and also removes all invalid states
     * that fail to pass the validatorFn
     **/
-    HistoryStack.prototype.sanitizeStack = function(){
+    HISTORYSTACK_PROTOTYPE.sanitizeStack = function(){
         var validatorFn = this._validatorFn;
         var lastValidState;
         var i = 0;
@@ -86,7 +89,7 @@
     *
     * moves one state towards the most recent state
     **/
-    HistoryStack.prototype.forwards = function(){
+    HISTORYSTACK_PROTOTYPE.forwards = function(){
         if(this.canRedo){
             this.currIndex++;
         }
@@ -98,14 +101,14 @@
     *
     * moves one state back towards the oldest state
     **/
-    HistoryStack.prototype.backwards = function(){
+    HISTORYSTACK_PROTOTYPE.backwards = function(){
         if(this.canUndo){
             this.currIndex--;
         }
         this.sanitizeStack();
     };
 
-    Object.defineProperties(HistoryStack.prototype, {
+    Object.defineProperties(HISTORYSTACK_PROTOTYPE, {
         /** DEFAULT_CAP
         *
         * the default maximum cap on the number of states in the stack 
@@ -430,14 +433,14 @@
                                              onTransitionComplete);
                 newCard.removeEventListener("transitionend", 
                                              onTransitionComplete);
-                oldCard.removeAttribute("before-animation");
-                newCard.removeAttribute("before-animation");
+                oldCard.removeAttribute(BEFORE_ANIM_ATTR);
+                newCard.removeAttribute(BEFORE_ANIM_ATTR);
                 _onComplete();
             }
             else{
                 // unleash the animation!
-                oldCard.removeAttribute("before-animation");
-                newCard.removeAttribute("before-animation");
+                oldCard.removeAttribute(BEFORE_ANIM_ATTR);
+                newCard.removeAttribute(BEFORE_ANIM_ATTR);
 
                 window.setTimeout(function(){
                     if(animationComplete){
@@ -460,7 +463,7 @@
         // animation beginning states 
         xtag.skipTransition(oldCard, function(){
             oldCard.setAttribute("card-anim-type", cardAnimName);
-            oldCard.setAttribute("before-animation", true);
+            oldCard.setAttribute(BEFORE_ANIM_ATTR, true);
             
             oldCardAnimReady = true;
             _attemptBeforeCallback();
@@ -470,7 +473,7 @@
         
         xtag.skipTransition(newCard, function(){
             newCard.setAttribute("card-anim-type", cardAnimName);
-            newCard.setAttribute("before-animation", true);
+            newCard.setAttribute(BEFORE_ANIM_ATTR, true);
             
             newCardAnimReady = true;
             _attemptBeforeCallback();
@@ -511,10 +514,9 @@
         // avoid redundant call that doesnt actually change anything
         // about the cards
         if(oldCard === newCard){
-            xtag.fireEvent(deck, "shufflestart", {detail: {oldCard: oldCard,
-                                                           newCard: newCard}});
-            xtag.fireEvent(deck, "shuffleend", {detail: {oldCard: oldCard,
-                                                         newCard: newCard}});
+            var eDetail = {detail: {oldCard: oldCard, newCard: newCard}};
+            xtag.fireEvent(deck, "shufflestart", eDetail);
+            xtag.fireEvent(deck, "shuffleend", eDetail);
             return;
         }
         
@@ -632,7 +634,7 @@
         // ensure that the currCard and _only_ the currCard is selected
         cards.forEach(function(card){
             card.removeAttribute("leaving");
-            card.removeAttribute("before-animation");
+            card.removeAttribute(BEFORE_ANIM_ATTR);
             card.removeAttribute("card-anim-type");
             card.removeAttribute("reverse");
             if(card !== currCard){
@@ -651,32 +653,33 @@
     xtag.register("x-deck", {
         lifecycle:{
             created: function(){
-                this.xtag._initialized = true;
                 var self = this;
+                
+                self.xtag._initialized = true;
                 var _historyValidator = function(card){
                                             return card.parentNode === self;
                                         };
-                this.xtag.history = new HistoryStack(_historyValidator, 
+                self.xtag.history = new HistoryStack(_historyValidator, 
                                                      HistoryStack.DEFAULT_CAP);
                                     
-                this.xtag._selectedCard = (this.xtag._selectedCard) ? 
-                                           this.xtag._selectedCard : null; 
-                this.xtag._lastAnimTimestamp = null;
-                this.xtag.transitionType = "scrollLeft";
+                self.xtag._selectedCard = (self.xtag._selectedCard) ? 
+                                           self.xtag._selectedCard : null; 
+                self.xtag._lastAnimTimestamp = null;
+                self.xtag.transitionType = "scrollLeft";
 
                 // grab card at selected index and set initial card, 
                 // if available
-                var initCard = this.getCardAt(
-                                  this.getAttribute("selected-index")
+                var initCard = self.getCardAt(
+                                  self.getAttribute("selected-index")
                                );
                 if(initCard){
-                    this.xtag._selectedCard = initCard;
+                    self.xtag._selectedCard = initCard;
                 }
 
-                _sanitizeCardAttrs(this);
-                var currCard = this.xtag._selectedCard;
+                _sanitizeCardAttrs(self);
+                var currCard = self.xtag._selectedCard;
                 if(currCard){
-                    this.xtag.history.pushState(currCard);
+                    self.xtag.history.pushState(currCard);
                 }
             }
         },

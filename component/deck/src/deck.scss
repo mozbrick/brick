@@ -37,7 +37,7 @@
 $oldCard: "[leaving]";
 $newCard: "[selected]";
 
-$beforeAnimation: "[before-animation]";
+$beforeAnimation: "[_before-animation]";
 $afterAnimation: ":not(#{$beforeAnimation})";
 
 $oldStartingSelector: "#{$oldCard}#{$beforeAnimation}";

@@ -67,8 +67,17 @@ function minifyComponent(name) {
 
     var jsPath = path.join(distDir, name + '.min.js');
     console.log(jsPath);
+    var srcJsPath;
+    if(name === "core"){
+        srcJsPath = path.join('component', "core", 'src', 
+                              "x-tag-core", "dist", "x-tag-core.js");
+    }
+    else{
+        srcJsPath = path.join('component', name, 'src', name + '.js');
+    }
+
     try {
-        var js = uglifyjs.minify(path.join('component', name, 'src', name + '.js'));
+        var js = uglifyjs.minify(srcJsPath);
         fs.writeFileSync(jsPath, js.code);
     } catch (e) {
         p.reject(e);

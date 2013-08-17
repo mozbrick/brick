@@ -36,9 +36,10 @@
     **/
     function getRect(el){
         var rect = el.getBoundingClientRect();
-        var documentScrollTop = (document.documentElement.scrollTop ||
+        var docElem = document.documentElement;
+        var documentScrollTop = (docElem.scrollTop ||
                                    document.body.scrollTop || 0);
-        var documentScrollLeft = (document.documentElement.scrollLeft ||
+        var documentScrollLeft = (docElem.scrollLeft ||
                                     document.body.scrollLeft || 0);
         return {
             "left": rect.left + documentScrollLeft,
@@ -142,9 +143,11 @@
                 tooltip.xtag._skipOuterClick = false;
             });
         };
-        this._cachedListener = new CachedListener(document, eventType, 
-                                                  outerTriggerListener);
-        this._cachedListener.attachListener();
+        var cachedListener = this._cachedListener = new CachedListener(
+                                                            document, eventType, 
+                                                            outerTriggerListener
+                                                        );
+        cachedListener.attachListener();
     }
     
     /** OuterTriggerEventStruct.destroy
@@ -455,11 +458,11 @@
             
             //create CachedListeners for target elements
             var targetEnterListener = _getTargetDelegatedListener(
-                                        tooltip, targetSelector, "tapenter", 
+                                        tooltip, targetSelector, "enter", 
                                         showTipTargetFn
                                       );
             var targetExitListener = _getTargetDelegatedListener(
-                                        tooltip, targetSelector, "tapleave", 
+                                        tooltip, targetSelector, "leave", 
                                         hideTipTargetFn
                                       );
             createdListeners.push(targetEnterListener);
@@ -502,10 +505,10 @@
             
             // also create/add the CachedListeners fo rthe tooltip itself
             createdListeners.push(
-                new CachedListener(tooltip, "tapenter", showTipTooltipFn)
+                new CachedListener(tooltip, "enter", showTipTooltipFn)
             );
             createdListeners.push(
-                new CachedListener(tooltip, "tapleave", hideTipTooltipFn)
+                new CachedListener(tooltip, "leave", hideTipTooltipFn)
             );
             
             return createdListeners;
@@ -1197,7 +1200,6 @@
                                            newTriggerStyle);
             OUTER_TRIGGER_MANAGER.registerTooltip(newTriggerStyle, tooltip);
         }
-        
         // actually attach the listener functions
         listeners.forEach(function(listener){
             listener.attachListener();
@@ -1212,44 +1214,45 @@
     xtag.register("x-tooltip", {
         lifecycle:{
             created: function(){
+                var self = this;
                 // create content elements (allows user to style separately)
-                this.xtag.contentEl = document.createElement("div");
-                this.xtag.arrowEl = document.createElement("span");
+                self.xtag.contentEl = document.createElement("div");
+                self.xtag.arrowEl = document.createElement("span");
                 
-                xtag.addClass(this.xtag.contentEl, "tooltip-content");
-                xtag.addClass(this.xtag.arrowEl, "tooltip-arrow");
+                xtag.addClass(self.xtag.contentEl, "tooltip-content");
+                xtag.addClass(self.xtag.arrowEl, "tooltip-arrow");
                 
                 // remove content and put into the content
-                this.xtag.contentEl.innerHTML = this.innerHTML;
-                this.innerHTML = "";
+                self.xtag.contentEl.innerHTML = self.innerHTML;
+                self.innerHTML = "";
                 
-                this.appendChild(this.xtag.contentEl);
-                this.appendChild(this.xtag.arrowEl);
+                self.appendChild(self.xtag.contentEl);
+                self.appendChild(self.xtag.arrowEl);
                 
                 
                 // default trigger variables
-                this.xtag._orientation = "auto";
-                this.xtag._targetSelector = PREV_SIB_SELECTOR;
-                this.xtag._triggerStyle = "hover";
+                self.xtag._orientation = "auto";
+                self.xtag._targetSelector = PREV_SIB_SELECTOR;
+                self.xtag._triggerStyle = "hover";
                 // remember who the last element that triggered the tip was
                 // (ie: who we should be pointing to if suddenly told to show
                 //  outside of a trigger style)
                 var triggeringElems = _selectorToElems(
-                                         this, this.xtag._targetSelector
+                                         self, self.xtag._targetSelector
                                       );
-                this.xtag.lastTargetElem = (triggeringElems.length > 0) ? 
+                self.xtag.lastTargetElem = (triggeringElems.length > 0) ? 
                                             triggeringElems[0] : null; 
                 
                 // remember what event listeners are still active
-                this.xtag.cachedListeners = [];
+                self.xtag.cachedListeners = [];
 
                 // flag variable to indicate whether transitionend listener
                 // should do anything
-                this.xtag._hideTransitionFlag = false;
+                self.xtag._hideTransitionFlag = false;
                 // flag variable for if we should ignore an outer click hide
                 // trigger (used when clicking on a tooltip's target to prevent
                 // outer click from catching it as well)
-                this.xtag._skipOuterClick = false;
+                self.xtag._skipOuterClick = false;
             },
             inserted: function(){
                 _updateTriggerListeners(this, this.xtag._targetSelector, 

@@ -1,0 +1,10 @@
+{
+    "name": "Brick Demo",
+    "description": "A demo of the Brick components library.",
+    "developer": {
+        "name": "Mozilla",
+        "url": "http://github.com/mozilla/brick/"
+    },
+    "launch_path": "index.html",
+    "default_locale": "en"
+}

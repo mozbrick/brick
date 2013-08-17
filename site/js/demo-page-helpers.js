@@ -318,6 +318,7 @@ var DemoHelpers;
                 }
                 xtag.fireEvent(demoSect, "update-demo", 
                                {detail: {"toggleProp": toggleProp}});
+                xtag.fireEvent(button, "toggle");
             });
         });
 

@@ -6,7 +6,7 @@ function updateDemoSect(demoSect, isInit){
     var deck = getDeck(demoSect);
     var markupEl = DemoHelpers.getMarkupEl(demoSect, "html");
 
-    var ignoreAttrs = ["style","card-anim-type","before-animation",
+    var ignoreAttrs = ["style","card-anim-type","_before-animation",
                         "reverse","selected","leaving", "class"];
     // to indicate that initializing selected-index is not required
     if(isInit) ignoreAttrs.push("selected-index");
@@ -120,6 +120,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
 
     var eventDemo = document.getElementById("shuffleevents-demo");
     var eventCounter = getInitEventCounter(eventDemo);
+    var transitionDemo = document.getElementById("transition-demo");
 
     xtag.addEvent(document, "update-demo:delegate("+DemoHelpers.DEMO_SECT_SELECTOR+")", function(e){
         var demoSect = this;
@@ -132,6 +133,13 @@ document.addEventListener('DOMComponentsLoaded', function(){
 
             var eventsEl = eventDemo.querySelector(".markup-wrap .events");
             DemoHelpers.updatePrettyprintEl(eventsEl, eventCounter.toString());
+        }
+
+        if(demoSect === transitionDemo && 
+            e.detail && e.detail.toggleProp === "transitionType")
+        {
+            var deck = demoSect.querySelector("x-deck");
+            deck.shuffleNext("forward");
         }
     });
 

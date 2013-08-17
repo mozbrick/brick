@@ -237,6 +237,9 @@
 
             "tapstart:delegate(x-calendar)": function(e){
                 e.preventDefault(); // prevent blurring of polyfill input
+                if(e.baseEvent){
+                    e.baseEvent.preventDefault();
+                }
             },
 
             "keypress:delegate(.x-datepicker-polyfill-input)": function(e){

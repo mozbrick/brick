@@ -16,3 +16,6 @@
 [submodule "component/modal"]
 	path = component/modal
 	url = https://github.com/x-tag/modal.git
+[submodule "component/core/src/x-tag-core"]
+	path = component/core/src/x-tag-core
+	url = git@github.com:x-tag/core.git

@@ -100,9 +100,10 @@
     **/
     function getRect(el){
         var rect = el.getBoundingClientRect();
-        var documentScrollTop = (document.documentElement.scrollTop ||
+        var docElem = document.documentElement;
+        var documentScrollTop = (docElem.scrollTop ||
                                    document.body.scrollTop || 0);
-        var documentScrollLeft = (document.documentElement.scrollLeft ||
+        var documentScrollLeft = (docElem.scrollLeft ||
                                     document.body.scrollLeft || 0);
         return {
             "left": rect.left + documentScrollLeft,
@@ -1434,6 +1435,7 @@
                  // prevent dragging around existing selections
                  // also prevent mobile drag scroll
                 e.preventDefault();
+                if(e.baseEvent) e.baseEvent.preventDefault();
                 _onDragStart(e.currentTarget, this);
             },
 
