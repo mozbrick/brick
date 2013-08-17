@@ -1,8 +1,3 @@
-
-
-
-
-
 <!doctype html>
 <html>
   <head>
@@ -10,197 +5,198 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>Brick x-tabbar demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600">
-    <link rel="stylesheet" type="text/css" href="../../../dist/brick.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../dist/brick.css">
     <link rel="stylesheet" href="../../../site/css/main.css">
-    
     <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
-    <link rel="stylesheet" type="text/css" href="demo.css"/>
-
+    <link rel="stylesheet" type="text/css" href="demo.css">
   </head>
   <body>
     <article>
       <header class="site-header">
-        
-
-        
-<nav class="site-nav">
-  <a href="../../../index.html">Home</a>
-  <a href="../../../download.html">Download</a>
-  <a href="../../../docs.html">Documentation &amp; Demos</a>
-  <a href="http://github.com/mozilla/brick/">GitHub</a>
-  <a href="http://github.com/mozilla/brick/issues">Issues</a>
-</nav>
-
-
-        
-        
+        <nav class="site-nav">
+          <a href="../../../index.html">Home</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../docs.html">Documentation &amp; Demos</a>
+          <a href="http://github.com/mozilla/brick/">GitHub</a>
+          <a href="http://github.com/mozilla/brick/issues">Issues</a>
+        </nav>
       </header>
-      
-    <header>
-        <h1>x-tabbar</h1> 
-    </header>
-    <a href="../../../docs.html">&laquo; Back to docs</a>
-    
-    <p><code class="prettyprint">&lt;x-tabbar&gt;</code> elements are essentially containers for <code class="prettyprint">&lt;x-tabbar-tab&gt;</code> elements.<p>
-    <p>By default, whenever an <code class="prettyprint">&lt;x-tabbar-tab&gt;</code> element is clicked, it will fire a <code>show</code> event on its targeted elements. It is up to the element to respond to this event, but some components bundled in Brick have built in responses to <code>show</code> events.
-    </p>
-    <p>Users can specify target elements by modifying the <code>target-selector</code> attribute or the <code>.targetSelector</code> property of the tabbar's tab with a document-relative CSS selector. This will essentially act as a delegation, so any elements matching the selector at the time of clicking the tab will be receive the event.</p>
-    <p>However, we can also provide an unchanging list of elements to target by editing the <code>.targetElems</code> propery of the tabbar's tab.</p>
-    <section class="demo-wrap">
+
+      <header>
+          <h1>x-tabbar</h1>
+      </header>
+
+      <a href="../../../docs.html">&laquo; Back to docs</a>
+      <p><code class="prettyprint">&lt;x-tabbar&gt;</code> elements are essentially containers for <code class="prettyprint">&lt;x-tabbar-tab&gt;</code> elements.<p>
+      <p>By default, whenever an <code class="prettyprint">&lt;x-tabbar-tab&gt;</code> element is clicked, it will fire a <code>show</code> event on its targeted elements. It is up to the element to respond to this event, but some components bundled in Brick have built in responses to <code>show</code> events.</p>
+      <p>Users can specify target elements by modifying the <code>target-selector</code> attribute or the <code>.targetSelector</code> property of the tabbar's tab with a document-relative CSS selector. This will essentially act as a delegation, so any elements matching the selector at the time of clicking the tab will be receive the event.</p>
+      <p>However, we can also provide an unchanging list of elements to target by editing the <code>.targetElems</code> propery of the tabbar's tab.</p>
+
+      <section class="demo-wrap">
         <header><h2>With <code class="prettyprint">&lt;x-deck&gt;</code></h2></header>
-        <div class="two-up">
-            <figure class="demo">
-                <x-deck class="component-demo" transition-type="coverDown">
-                    <x-card><img src="dog1.png"/><span>One</span></x-card>
-                    <x-card><img src="dog2.png"/><span>Two</span></x-card>
-                    <x-card><img src="dog3.png"/><span>Three</span></x-card>
-                    <x-card><img src="dog4.png"/><span>Four</span></x-card>
-                    <x-card><img src="dog5.png"/><span>Five</span></x-card>
-                </x-deck>
 
-                <x-tabbar>
-                    <x-tabbar-tab target-selector="x-deck x-card:first-child">
-                        <x-iconbutton src="dog1.png" icon-anchor="top">One</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
-                        <x-iconbutton src="dog2.png" icon-anchor="top">Two</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
-                        <x-iconbutton src="dog3.png" icon-anchor="top">Three</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
-                        <x-iconbutton src="dog4.png" icon-anchor="top">Four</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
-                        <x-iconbutton src="dog5.png" icon-anchor="top">Five</x-iconbutton>
-                    </x-tabbar-tab>
-                </x-tabbar>
-            </figure>
+        <div class="two-up">
+          <figure class="demo">
+            <x-deck class="component-demo" transition-type="coverDown">
+              <x-card><img src="dog1.png"><span>One</span></x-card>
+              <x-card><img src="dog2.png"><span>Two</span></x-card>
+              <x-card><img src="dog3.png"><span>Three</span></x-card>
+              <x-card><img src="dog4.png"><span>Four</span></x-card>
+              <x-card><img src="dog5.png"><span>Five</span></x-card>
+            </x-deck>
+
+            <x-tabbar>
+              <x-tabbar-tab target-selector="x-deck x-card:first-child">
+                <x-iconbutton src="dog1.png" icon-anchor="top">One</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
+                <x-iconbutton src="dog2.png" icon-anchor="top">Two</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
+                <x-iconbutton src="dog3.png" icon-anchor="top">Three</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
+                <x-iconbutton src="dog4.png" icon-anchor="top">Four</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
+                <x-iconbutton src="dog5.png" icon-anchor="top">Five</x-iconbutton>
+              </x-tabbar-tab>
+            </x-tabbar>
+          </figure>
         </div>
+
         <div class="markup-wrap two-up">
-            <h3>Markup</h3>
-            <pre class="prettyprint html">&lt;x-deck class=&quot;component-demo&quot; transition-type=&quot;coverDown&quot;&gt;<br/>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br/>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br/>&lt;/x-deck&gt;<br/><br/>&lt;x-tabbar&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:first-child&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(2)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(3)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(4)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(5)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
+          <h3>Markup</h3>
+          <pre class="prettyprint html">&lt;x-deck class=&quot;component-demo&quot; transition-type=&quot;coverDown&quot;&gt;<br>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br>    &lt;x-card&gt;&lt;!-- content unimportant --&gt;&lt;/x-card&gt;<br>&lt;/x-deck&gt;<br><br>&lt;x-tabbar&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:first-child&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(2)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(3)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(4)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-deck x-card:nth-child(5)&quot;&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
         </div>
+
         <a href="#" class="top">Top</a>
-    </section>
-    <section class="demo-wrap">
+      </section>
+
+      <section class="demo-wrap">
         <header>
-            <h2>With <code class="prettyprint">&lt;x-slidebox&gt;</code> <br/>(also dynamically assigned tab targets)</h2>
+          <h2>With <code class="prettyprint">&lt;x-slidebox&gt;</code> <br>(also dynamically assigned tab targets)</h2>
         </header>
+
         <div class="two-up">
-            <figure class="demo">
-                <x-slidebox class="component-demo" orientation="x">
-                    <x-slides>
-                      <x-slide><img src="birnimal-calendar.png" /></x-slide>
-                      <x-slide><img src="birnimal-graph.png" /></x-slide>
-                      <x-slide><img src="birnimal-detail.png" /></x-slide>
-                      <x-slide><img src="birnimal-settings.png" /></x-slide>
-                    </x-slides>
-                </x-slidebox>
+          <figure class="demo">
+            <x-slidebox class="component-demo" orientation="x">
+              <x-slides>
+                <x-slide><img src="birnimal-calendar.png"></x-slide>
+                <x-slide><img src="birnimal-graph.png"></x-slide>
+                <x-slide><img src="birnimal-detail.png"></x-slide>
+                <x-slide><img src="birnimal-settings.png"></x-slide>
+              </x-slides>
+            </x-slidebox>
 
-                <!-- see javascript to see demo of dynamically assigning targets -->
-                <x-tabbar id="slide-box-tabbar">
-                    <x-tabbar-tab>
-                        <x-iconbutton src="birnimal-calendar.png">A</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab>
-                        <x-iconbutton src="birnimal-graph.png">B</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab>
-                        <x-iconbutton src="birnimal-detail.png">C</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab>
-                        <x-iconbutton src="birnimal-settings.png">D</x-iconbutton>
-                    </x-tabbar-tab>
-                </x-tabbar>
-            </figure>
+            <!-- see javascript to see demo of dynamically assigning targets -->
+            <x-tabbar id="slide-box-tabbar">
+              <x-tabbar-tab>
+                <x-iconbutton src="birnimal-calendar.png">A</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab>
+                <x-iconbutton src="birnimal-graph.png">B</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab>
+                <x-iconbutton src="birnimal-detail.png">C</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab>
+                <x-iconbutton src="birnimal-settings.png">D</x-iconbutton>
+              </x-tabbar-tab>
+            </x-tabbar>
+          </figure>
         </div>
+
         <div class="markup-wrap two-up">
-            <h3>HTML markup</h3>
-            <pre class="prettyprint html">&lt;x-slidebox class=&quot;component-demo&quot; orientation=&quot;x&quot;&gt;<br/>    &lt;x-slides&gt;<br/>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br/>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br/>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br/>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br/>    &lt;/x-slides&gt;<br/>&lt;/x-slidebox&gt;<br/><br/>&lt;!-- see javascript to see demo of dynamically assigning targets --&gt;<br/>&lt;x-tabbar id=&quot;slide-box-tabbar&quot;&gt;<br/>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
-            <h3>JavaScript</h3>
-            <pre class="prettyprint javascript">document.addEventListener('DOMComponentsLoaded', function(){<br/>    // demonstrate dynamic tab-target handling in slidebox demo<br/>    var slideBox = document.querySelector('x-slidebox');<br/>    var slideBoxTabbar = document.getElementById(&quot;slide-box-tabbar&quot;);<br/><br/>    // assign each tab to its respective slide in the slidebox<br/>    var tabs = slideBoxTabbar.tabs;<br/>    var slides = xtag.query(slideBox, 'x-slide');<br/>    for(var i=0; i &lt; slides.length &amp;&amp; i &lt; tabs.length; i++){<br/>        var tab = tabs[i];<br/>        var slide = slides[i];<br/>        <br/>        // assign each slide to its respective tabbar tab<br/>        tab.targetElems = [slide];<br/>    }<br/>});</pre>
+          <h3>HTML markup</h3>
+          <pre class="prettyprint html">&lt;x-slidebox class=&quot;component-demo&quot; orientation=&quot;x&quot;&gt;<br>    &lt;x-slides&gt;<br>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br>      &lt;x-slide&gt;&lt;!-- content unimportant --&gt;&lt;/x-slide&gt;<br>    &lt;/x-slides&gt;<br>&lt;/x-slidebox&gt;<br><br>&lt;!-- see javascript to see demo of dynamically assigning targets --&gt;<br>&lt;x-tabbar id=&quot;slide-box-tabbar&quot;&gt;<br>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab&gt;&lt;!-- content unimportant --&gt;&lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
+          <h3>JavaScript</h3>
+          <pre class="prettyprint javascript">document.addEventListener('DOMComponentsLoaded', function(){<br>    // demonstrate dynamic tab-target handling in slidebox demo<br>    var slideBox = document.querySelector('x-slidebox');<br>    var slideBoxTabbar = document.getElementById(&quot;slide-box-tabbar&quot;);<br><br>    // assign each tab to its respective slide in the slidebox<br>    var tabs = slideBoxTabbar.tabs;<br>    var slides = xtag.query(slideBox, 'x-slide');<br>    for(var i=0; i &lt; slides.length &amp;&amp; i &lt; tabs.length; i++){<br>        var tab = tabs[i];<br>        var slide = slides[i];<br>        <br>        // assign each slide to its respective tabbar tab<br>        tab.targetElems = [slide];<br>    }<br>});</pre>
         </div>
-        <a href="#" class="top">Top</a>
-    </section>
 
-    <section class="demo-wrap">
+        <a href="#" class="top">Top</a>
+      </section>
+
+      <section class="demo-wrap">
         <header><h2>With <code class="prettyprint">&lt;x-flipbox&gt;</code></h2></header>
-        <div class="two-up">
-            <figure class="demo">
-                <x-flipbox class="component-demo">
-                  <div>
-                    <img src="Card_front.png"/>
-                  </div>
-                  <div>
-                    <img src="Card_back.png"/>
-                  </div>
-                </x-flipbox>
-                <x-tabbar>
-                    <x-tabbar-tab target-selector="x-flipbox > *:first-child">
-                        <x-iconbutton src="Card_front.svg">Front</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab target-selector="x-flipbox > *:last-child">
-                        <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
-                    </x-tabbar-tab>
-                </x-tabbar>
-            </figure>
-        </div>
-        <div class="markup-wrap two-up">
-            <h3>HTML markup</h3>
-            <pre class="prettyprint html">&lt;!-- the target element; the actual structure is unimportant and is <br/>     only provided to demo what the tabbar's tabs are targeting --&gt;<br/>&lt;x-flipbox class=&quot;component-demo&quot;&gt;<br/>  &lt;div&gt;<br/>    &lt;img src=&quot;Card_front.svg&quot;/&gt;<br/>  &lt;/div&gt;<br/>  &lt;div&gt;<br/>    &lt;img src=&quot;Card_back.svg&quot;/&gt;<br/>  &lt;/div&gt;<br/>&lt;/x-flipbox&gt;<br/><br/>&lt;!-- the tabbar itself --&gt;<br/>&lt;x-tabbar&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:first-child&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:last-child&quot;&gt;<br/>        &lt;!-- tab content is unimportant --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
-        </div>
-        <a href="#" class="top">Top</a>
-    </section>
 
-    <section class="demo-wrap">
+        <div class="two-up">
+          <figure class="demo">
+            <x-flipbox class="component-demo">
+              <div>
+                <img src="Card_front.png">
+              </div>
+              <div>
+                <img src="Card_back.png">
+              </div>
+            </x-flipbox>
+            <x-tabbar>
+              <x-tabbar-tab target-selector="x-flipbox > *:first-child">
+                <x-iconbutton src="Card_front.svg">Front</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab target-selector="x-flipbox > *:last-child">
+                <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
+              </x-tabbar-tab>
+            </x-tabbar>
+          </figure>
+        </div>
+
+        <div class="markup-wrap two-up">
+          <h3>HTML markup</h3>
+          <pre class="prettyprint html">&lt;!-- the target element; the actual structure is unimportant and is <br>     only provided to demo what the tabbar's tabs are targeting --&gt;<br>&lt;x-flipbox class=&quot;component-demo&quot;&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_front.svg&quot;/&gt;<br>  &lt;/div&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_back.svg&quot;/&gt;<br>  &lt;/div&gt;<br>&lt;/x-flipbox&gt;<br><br>&lt;!-- the tabbar itself --&gt;<br>&lt;x-tabbar&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:first-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:last-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
+        </div>
+
+        <a href="#" class="top">Top</a>
+      </section>
+
+      <section class="demo-wrap">
         <header><h2>Fire custom event types (using <code>target-event</code> attributes)</h2></header>
-        <p>Although tabbar tabs are set to fire <code>show</code> events by default, we can change what kind of event fires by editing the <code>target-event</code> attribute on the <code class="prettyprint">&lt;x-tabbar&gt;</code> (to change the event fired by all contained tabs), or on individual <code class="prettyprint">&lt;x-tabbar-tab&gt;</code>'s (to the change the event fired by a specific tab).
-        </p>
-        <div class="two-up">
-            <figure class="demo">
-                <div id="color-box" class="component-demo">
-                    <span>NIC CAGE</span>
-                    <img src="http://placecage.com/c/300/325"/>
-                </div>
-                <x-tabbar target-event="danceparty">
-                    <x-tabbar-tab target-selector="#color-box > span">
-                        <x-iconbutton src="http://placecage.com/100/100">danceparty</x-iconbutton>
-                    </x-tabbar-tab>
-                    <x-tabbar-tab target-selector="#color-box > img" target-event="override">
-                        <x-iconbutton src="http://placecage.com/c/100/100">override</x-iconbutton>
-                    </x-tabbar-tab>
-                </x-tabbar>
-            </figure>
-        </div>
-        <div class="markup-wrap two-up">
-            <h3>HTML markup</h3>
-            <pre class="prettyprint html">&lt;!-- the element we want to target --&gt;<br/>&lt;div id=&quot;color-box&quot; class=&quot;component-demo&quot;&gt;<br/>    &lt;span&gt;NIC CAGE&lt;/span&gt;<br/>    &lt;img src=&quot;http://placecage.com/c/300/325&quot;/&gt;<br/>&lt;/div&gt;<br/><br/>&lt;!-- The tabbar itself --&gt;<br/>&lt;x-tabbar target-event=&quot;danceparty&quot;&gt;<br/>    &lt;!-- this tab will fire a 'danceparty' event on the <br/>         selected element, due to inheriting it from the tabbar --&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;#color-box &gt; span&quot;&gt;<br/>        &lt;!-- tab 1 content --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>    &lt;!-- this tab will fire a 'override' event on the <br/>         selected element, due to having an override specified on the tab --&gt;<br/>    &lt;x-tabbar-tab target-selector=&quot;#color-box &gt; img&quot; target-event=&quot;override&quot;&gt;<br/>        &lt;!-- tab 2 content --&gt;<br/>    &lt;/x-tabbar-tab&gt;<br/>&lt;/x-tabbar&gt;</pre>
-            <h3>JavaScript</h3>
-            <pre class="prettyprint javascript">document.addEventListener('DOMComponentsLoaded', function(){<br/>    // demonstrate that events specified by the tabbar are fired<br/>    document.querySelector(&quot;#color-box &gt; span&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br/>        alert(&quot;The text received danceparty!&quot;);<br/>    });<br/>    <br/>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br/>        alert(&quot;The image received danceparty!&quot;);<br/>    });<br/>    <br/>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;override&quot;, function(e){<br/>        alert(&quot;The image received override!&quot;);<br/>    });<br/>});</pre>
-        </div>
-        <a href="#" class="top">Top</a>
-    </section>
 
+        <p>Although tabbar tabs are set to fire <code>show</code> events by default, we can change what kind of event fires by editing the <code>target-event</code> attribute on the <code class="prettyprint">&lt;x-tabbar&gt;</code> (to change the event fired by all contained tabs), or on individual <code class="prettyprint">&lt;x-tabbar-tab&gt;</code>'s (to the change the event fired by a specific tab).</p>
+
+        <div class="two-up">
+          <figure class="demo">
+            <div id="color-box" class="component-demo">
+              <span>NIC CAGE</span>
+              <img src="http://placecage.com/c/300/325">
+            </div>
+            <x-tabbar target-event="danceparty">
+              <x-tabbar-tab target-selector="#color-box > span">
+                <x-iconbutton src="http://placecage.com/100/100">danceparty</x-iconbutton>
+              </x-tabbar-tab>
+              <x-tabbar-tab target-selector="#color-box > img" target-event="override">
+                <x-iconbutton src="http://placecage.com/c/100/100">override</x-iconbutton>
+              </x-tabbar-tab>
+            </x-tabbar>
+          </figure>
+        </div>
+
+        <div class="markup-wrap two-up">
+          <h3>HTML markup</h3>
+          <pre class="prettyprint html">&lt;!-- the element we want to target --&gt;<br>&lt;div id=&quot;color-box&quot; class=&quot;component-demo&quot;&gt;<br>    &lt;span&gt;NIC CAGE&lt;/span&gt;<br>    &lt;img src=&quot;http://placecage.com/c/300/325&quot;/&gt;<br>&lt;/div&gt;<br><br>&lt;!-- The tabbar itself --&gt;<br>&lt;x-tabbar target-event=&quot;danceparty&quot;&gt;<br>    &lt;!-- this tab will fire a 'danceparty' event on the <br>         selected element, due to inheriting it from the tabbar --&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;#color-box &gt; span&quot;&gt;<br>        &lt;!-- tab 1 content --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>    &lt;!-- this tab will fire a 'override' event on the <br>         selected element, due to having an override specified on the tab --&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;#color-box &gt; img&quot; target-event=&quot;override&quot;&gt;<br>        &lt;!-- tab 2 content --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
+
+          <h3>JavaScript</h3>
+          <pre class="prettyprint javascript">document.addEventListener('DOMComponentsLoaded', function(){<br>    // demonstrate that events specified by the tabbar are fired<br>    document.querySelector(&quot;#color-box &gt; span&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br>        alert(&quot;The text received danceparty!&quot;);<br>    });<br>    <br>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;danceparty&quot;, function(e){<br>        alert(&quot;The image received danceparty!&quot;);<br>    });<br>    <br>    document.querySelector(&quot;#color-box &gt; img&quot;).addEventListener(&quot;override&quot;, function(e){<br>        alert(&quot;The image received override!&quot;);<br>    });<br>});</pre>
+        </div>
+
+        <a href="#" class="top">Top</a>
+      </section>
 
       <footer>
-        
-<nav class="site-nav">
-  <a href="../../../index.html">Home</a>
-  <a href="../../../download.html">Download</a>
-  <a href="../../../docs.html">Documentation &amp; Demos</a>
-  <a href="http://github.com/mozilla/brick/">GitHub</a>
-  <a href="http://github.com/mozilla/brick/issues">Issues</a>
-</nav>
+        <nav class="site-nav">
+          <a href="../../../index.html">Home</a>
+          <a href="../../../download.html">Download</a>
+          <a href="../../../docs.html">Documentation &amp; Demos</a>
+          <a href="http://github.com/mozilla/brick/">GitHub</a>
+          <a href="http://github.com/mozilla/brick/issues">Issues</a>
+        </nav>
 
         <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="../../../site/img/mozilla_wordmark.png" title="built by Mozilla"></a>
       </footer>
     </article>
     <script src="../../../dist/brick.js"></script>
-     
     <script type="text/javascript" src="../../../site/js/prettify.js"></script>
     <script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
     <script type="text/javascript" src="demo.js"></script>
-
   </body>
 </html>
