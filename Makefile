@@ -28,7 +28,7 @@ cleandocs:
 clean:
 	@$(RM) -f dist/brick.js dist/brick.css
 
-node_modules: package.json dist/*/*.min.js
+node_modules: package.json component/**/component.json
 	@git submodule update --init --recursive
 	@npm install
 
