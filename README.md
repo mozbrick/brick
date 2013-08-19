@@ -62,7 +62,7 @@ Full documentation can be found on [the Brick site](http://mozilla.github.io/bri
     - Components with default support for show event:
         - Slidebox
         - Flipbox
-        - Shuffledeck
+        - Deck
 * Can also fire user-defined events
 
 ### ['Slidebox'](https://github.com/x-tag/slidebox)
