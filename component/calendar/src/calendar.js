@@ -13,12 +13,38 @@
         };
     };
 
-    // the current date, set to midnight local time
-    var TODAY = new Date();
-    TODAY.setHours(0);
-    TODAY.setMinutes(0);
-    TODAY.setSeconds(0);
-    TODAY.setMilliseconds(0);
+    /** returns the given date, but as a Date object representing that date
+        without local/timezone information
+
+        ***IMPORTANT*** call this anytime we create a new Date(), in order to 
+        ensure avoid oddities caused by mixing and matching timezone offsets
+    **/
+    function toUTCDate(localDate){
+        // don't try to reconvert a date already set to UTC time, or
+        // the inherent timezone information of JS Dates may change an already
+        // converted date
+        if(localDate.getUTCHours() === 0 &&
+           localDate.getUTCMinutes() === 0 &&
+           localDate.getUTCSeconds() === 0 &&
+           localDate.getUTCMilliseconds() === 0)
+        {
+            return new Date(localDate.valueOf());
+        }
+        else{
+            var utcDate = new Date();
+            utcDate.setUTCDate(localDate.getDate());
+            utcDate.setUTCMonth(localDate.getMonth());
+            utcDate.setUTCFullYear(localDate.getFullYear());
+            utcDate.setUTCHours(0);
+            utcDate.setUTCMinutes(0);
+            utcDate.setUTCSeconds(0);
+            utcDate.setUTCMilliseconds(0);
+            return utcDate;
+        }
+    }
+
+    // the current date, set to midnight UTC time
+    var TODAY = toUTCDate(new Date());
 
     // constants used in tracking the type of the current drag/paint operation 
     var DRAG_ADD = "add";
@@ -188,7 +214,7 @@
         if (isValidDateObj(s)) return s;
         var d = ISO_DATE_REGEX.exec(s);
         if (d) {
-          return new Date(d[1],d[2]-1,d[3]);
+          return toUTCDate(new Date(d[1],d[2]-1,d[3]));
         }
         else{
             return null;
@@ -216,7 +242,7 @@
         else{
             var parsedMs = Date.parse(dateStr);
             if(!isNaN(parsedMs)){
-                return new Date(parsedMs);
+                return toUTCDate(new Date(parsedMs));
             }
             return null;
         }
@@ -333,7 +359,7 @@
         if (y === undefined) y = getYear(base);
         if (m === undefined) m = getMonth(base);
         if (d === undefined) d = getDate(base);
-        return new Date(y,m,d);
+        return toUTCDate(new Date(y,m,d));
     }
 
     /* relOffset: (Date, number, number. number) => Date
@@ -406,8 +432,8 @@
     **/
     function findFirst(d) {
         d = new Date(d.valueOf());
-        d.setDate(1);
-        return d;
+        d.setUTCDate(1);
+        return toUTCDate(d);
     }
 
     /** findLast: Date => Date
@@ -612,12 +638,9 @@
         // create each week of days in the month
         var week = makeEl('div.week');
         var cDate = sDate;
-        var done = false;
-        var maxDays = 7 * 6;
-        var step = 0;
+        var maxDays = 7 * 6; // maximum is 6 weeks displayed at once
 
-        while((!done) && (step < maxDays)) {
-          step++;
+        for(var step=0; step < maxDays; step++){
           var day = makeEl('span.day');
           day.setAttribute('data-date', iso(cDate));
           day.textContent = getDate(cDate);
@@ -635,18 +658,21 @@
           }
 
           appendChild(week, day);
+          var oldDate = cDate;
           cDate = nextDay(cDate);
           // if the next day starts a new week, append finished week and see if
           // we are done drawing the month
-          if (step % 7 === 0 && step > 0) {
+          if ((step+1) % 7 === 0) {
             appendChild(monthEl, week);
             week = makeEl('div.week');
             // Are we finished drawing the month?
             // Checks month rollover and year rollover
             // (ie: if month or year are after the current ones)
-            done = (getMonth(cDate) > month || 
-                    (getMonth(cDate) < month && getYear(cDate) > getYear(sDate))
-                   );
+            var done = (getMonth(cDate) > month || 
+                        (getMonth(cDate) < month && 
+                         getYear(cDate) > getYear(sDate))
+                       );
+            if(done) break;
           }
         }
         return monthEl;
@@ -677,31 +703,32 @@
     {
         chosenRanges = (chosenRanges === undefined) ? 
                             this.chosen : chosenRanges;
-
+        var saneDate;
         // if given a valid viewDate, return it
         if(isValidDateObj(viewDate)){
-           return viewDate;
+           saneDate = viewDate;
         }
         // otherwise if given a single date for chosenRanges, use it
         else if(isValidDateObj(chosenRanges)){
-            return chosenRanges;
+            saneDate = chosenRanges;
         }
         // otherwise, if given a valid chosenRanges, return the first date in
         // the range as the view date
         else if(isArray(chosenRanges) && chosenRanges.length > 0){
             var firstRange = chosenRanges[0];
             if(isValidDateObj(firstRange)){
-                return firstRange;
+                saneDate = firstRange;
             }
             else{
-                return firstRange[0];
+                saneDate = firstRange[0];
             }
         }
         // if not given a valid viewDate or chosenRanges, return the current
         // day as the view date
         else{
-            return TODAY;
+            saneDate = TODAY;
         }
+        return saneDate;
     };
 
     /** _collapseRanges: (Date/[Date,Date]) array => (Date/[Date,Date]) array

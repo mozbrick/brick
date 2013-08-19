@@ -20,7 +20,7 @@
     <article>
       <header class="site-header">
         
-          <h1 id="mark"><img class="logo" src="site/img/logo.png">Brick<small> 1.0.3beta</small></h1>
+          <h1 id="mark"><img class="logo" src="site/img/logo.png">Brick<small> 1.0.2beta</small></h1>
           <h2>UI Components for Modern Web Apps</h2>
         
 
@@ -39,14 +39,14 @@
       </header>
       
   <h1>Documentation</h1>
-  <h2>Version 1.0.3beta</h2>
+  <h2>Version 1.0.2beta</h2>
 
   <h1><b>Usage</b></h1>
   <p>To include Brick in your project, include your downloaded stylesheet and script files in your project's page like normal:
-    <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-1.0.3beta.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-1.0.3beta.js&quot;&gt;&lt;/script&gt;</pre>
+    <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-1.0.2beta.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-1.0.2beta.js&quot;&gt;&lt;/script&gt;</pre>
   </p>
   <p>Using any of Brick's components is as simple as including the respective tag in your HTML markup. (See individual component docs for details.)</p>
-  <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the document's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
+  <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the x-tags library's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
   <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>  // run code here...<br/>});</pre>
   <nav><h2>Available components</h2>
     <ul>
@@ -314,7 +314,7 @@
       
       <dl>
         <dt><code>customRenderFn</code></dt>
-        <dd>Sets an additional function to call on individual days when rendering the calendar. Will be called with three parameters: the day&#39;s DOM element, the JS Date corresponding to the day, and the ISO-formatted string version of the date. This is useful when styles need to be more dynamically flexible than the default. IMPORTANT NOTE: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render, or infinite recursion can result.</dd>
+        <dd>Sets an additional function to call on individual days when rendering the calendar. Will be called with three parameters: the day&#39;s DOM element, the JS Date corresponding to the day, and the ISO-formatted string version of the date. This is useful when styles need to be more dynamically flexible than the default. IMPORTANT NOTE: because this is intended as an additional callback to be used in rendering, the function itself should not modify attributes in a way that would require a re-render of the calendar, or infinite recursion can result.</dd>
       </dl>
       
       <dl>

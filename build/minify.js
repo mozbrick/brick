@@ -68,6 +68,7 @@ function minifyComponent(name) {
     var jsPath = path.join(distDir, name + '.min.js');
     console.log(jsPath);
     var srcJsPath;
+    // special case to account for the x-tag core submodule
     if(name === "core"){
         srcJsPath = path.join('component', "core", 'src', 
                               "x-tag-core", "dist", "x-tag-core.js");
@@ -108,6 +109,7 @@ function writeComponents(data) {
 
     fs.writeFileSync('dist/brick.js', data.js);
     fs.writeFileSync('dist/brick.css', data.css);
+    console.log('done!');
 }
 
 

@@ -39,6 +39,8 @@ The built files should be output to <code>dist/brick.css</code> and <code>dist/b
 
 This is a list of the currently bundled components provided in the library. (Click to view subfolder with readme and demo page)
 
+Full documentation can be found on [the Brick site](http://mozilla.github.io/brick/).
+
 ## Structural Components
 
 ### ['Layout'](component/layout)
@@ -77,7 +79,7 @@ This is a list of the currently bundled components provided in the library. (Cli
 * Like a combination of slidebox and flipbox
 * A gallery box in which slides can be cycled in and out independently, with a variety of different transitions
 * Transition types can be switched and overridden on the fly, allowing for a 
-  variety of different entrance/exits
+  variety of different entrances/exits
 
 ### ['Tooltip' (Callout)](component/tooltip)
 

@@ -14,7 +14,7 @@
     <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-{{ version }}.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-{{ version }}.js&quot;&gt;&lt;/script&gt;</pre>
   </p>
   <p>Using any of Brick's components is as simple as including the respective tag in your HTML markup. (See individual component docs for details.)</p>
-  <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the document's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
+  <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the x-tags library's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
   <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>  // run code here...<br/>});</pre>
   <nav><h2>Available components</h2>
     <ul>

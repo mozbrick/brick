@@ -118,7 +118,12 @@ section.demo-wrap, section.main-sect{
 .demo-wrap.clean {
   border: 0;
 }
-.demo-wrap .demo > *:only-child:not(x-appbar){
+/* centers demo items in the viewport for demo site;
+ * exclude appbar because it should be at the top of the demo;
+ * exclude layout because setting absolute position on flexbox causes 
+ * weirdness in FF18 where the flex item render doesn't override the 
+ * height 0 fix in layout.css */
+.demo-wrap .demo > *:only-child:not(x-appbar):not(x-layout){
     position: absolute;
     top: 50%;
     left: 50%;

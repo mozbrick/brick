@@ -176,8 +176,10 @@
         </figure>
     </article>
 
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-    <script type="text/javascript" src="../../../dist/brick.js"></script>
+    <!--<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>-->
+    <!--<script type="text/javascript" src="../../../dist/brick.js"></script>-->
+    <script type="text/javascript" src="../../core/src/x-tag-core/dist/x-tag-core.js"></script>
+    <script type="text/javascript" src="../src/calendar.js"></script>
     <script>
         document.addEventListener('DOMComponentsLoaded', function(){
             xtag.addEvent(document, "prevmonth:delegate(x-calendar)", function(e){
@@ -202,14 +204,14 @@
 
             /** set up custom labels demo **/
             var customLabelsCal = document.querySelector("#custom-labels-demo x-calendar");
-            customLabelsCal.labels = {
-                months: ["janvier", "f\u00E9vrier", "mars", "avril", "mai", 
-                         "juin", "juillet", "ao\u00FBt", "septembre", "octobre", 
-                         "novembre", "d\u00E9cembre"],
-                weekdays: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"]
-            };
-            console.log(customLabelsCal.labels);
-
+            if(customLabelsCal){
+                customLabelsCal.labels = {
+                    months: ["janvier", "f\u00E9vrier", "mars", "avril", "mai", 
+                             "juin", "juillet", "ao\u00FBt", "septembre", "octobre", 
+                             "novembre", "d\u00E9cembre"],
+                    weekdays: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"]
+                };
+            }
 
             /** set up custom event handling demo using provided API hooks **/
 
@@ -220,63 +222,64 @@
 
             // aliases for DOM manipulation
             var eventsDemoStage = document.getElementById("custom-events-demo");
-            var eventsCal = eventsDemoStage.querySelector("x-calendar");
-            var eventsDateHeader = document.getElementById("custom-events-date");
-            var eventsInfo = document.getElementById("custom-events-info");
-            var eventsSaveButton = document.getElementById("custom-events-save");
+            if(eventsDemoStage){
+                var eventsCal = eventsDemoStage.querySelector("x-calendar");
+                var eventsDateHeader = document.getElementById("custom-events-date");
+                var eventsInfo = document.getElementById("custom-events-info");
+                var eventsSaveButton = document.getElementById("custom-events-save");
 
-            // define a .customRenderFn that provides extra styling 
-            // information for day elements with stored data
-            eventsCal.customRenderFn = function(dayEl, date, isoStr){
-                if(isoStr === CURR_ISO){
-                    xtag.addClass(dayEl, "current");
-                }
-                else{
-                    xtag.removeClass(dayEl, "current");
-                }
-
-                if(isoStr in DATE_INFO){
-                    dayEl.setAttribute("has-info", true);
-                }
-                else{
-                    dayEl.removeAttribute("has-info");
-                }
-            }
-
-            // respond to calendar taps
-            xtag.addEvent(eventsCal, "datetap", function(e){
-                // grab date info from event as both a Date and a string
-                var date = e.detail.date;
-                var dateStr = e.detail.iso;
-                // get dictionary content for this date
-                var content = (dateStr && dateStr in DATE_INFO) ? 
-                                                DATE_INFO[dateStr] : "";
-                // set up text area                                                
-                eventsInfo.value = content;
-                eventsInfo.disabled = !dateStr;
-                eventsSaveButton.disabled = !dateStr;
-                // remember currently shown date
-                CURR_ISO = dateStr;
-                eventsDateHeader.textContent = (dateStr) ? dateStr : "None";
-                // programmatically toggle date object with .toggleDateOn
-                eventsCal.toggleDateOn(date);
-                // forces rerender of calendar
-                eventsCal.render();
-            });
-
-            // save button listener; simply adds textarea value to data
-            xtag.addEvent(eventsSaveButton, "click", function(e){
-                if(CURR_ISO){
-                    if(eventsInfo.value){
-                        DATE_INFO[CURR_ISO] = eventsInfo.value;
+                // define a .customRenderFn that provides extra styling 
+                // information for day elements with stored data
+                eventsCal.customRenderFn = function(dayEl, date, isoStr){
+                    if(isoStr === CURR_ISO){
+                        xtag.addClass(dayEl, "current");
                     }
                     else{
-                        delete DATE_INFO[CURR_ISO];
+                        xtag.removeClass(dayEl, "current");
+                    }
+
+                    if(isoStr in DATE_INFO){
+                        dayEl.setAttribute("has-info", true);
+                    }
+                    else{
+                        dayEl.removeAttribute("has-info");
                     }
                 }
-                eventsCal.render();
-            });
 
+                // respond to calendar taps
+                xtag.addEvent(eventsCal, "datetap", function(e){
+                    // grab date info from event as both a Date and a string
+                    var date = e.detail.date;
+                    var dateStr = e.detail.iso;
+                    // get dictionary content for this date
+                    var content = (dateStr && dateStr in DATE_INFO) ? 
+                                                    DATE_INFO[dateStr] : "";
+                    // set up text area                                                
+                    eventsInfo.value = content;
+                    eventsInfo.disabled = !dateStr;
+                    eventsSaveButton.disabled = !dateStr;
+                    // remember currently shown date
+                    CURR_ISO = dateStr;
+                    eventsDateHeader.textContent = (dateStr) ? dateStr : "None";
+                    // programmatically toggle date object with .toggleDateOn
+                    eventsCal.toggleDateOn(date);
+                    // forces rerender of calendar
+                    eventsCal.render();
+                });
+
+                // save button listener; simply adds textarea value to data
+                xtag.addEvent(eventsSaveButton, "click", function(e){
+                    if(CURR_ISO){
+                        if(eventsInfo.value){
+                            DATE_INFO[CURR_ISO] = eventsInfo.value;
+                        }
+                        else{
+                            delete DATE_INFO[CURR_ISO];
+                        }
+                    }
+                    eventsCal.render();
+                });
+            }
         }, false);
     </script>
 </body>

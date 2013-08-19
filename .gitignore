@@ -1,6 +1,6 @@
 .sass-cache
 node_modules
 .DS_Store
-brick-*
+brick-*.zip
 /test
 _component-ui-defaults.css

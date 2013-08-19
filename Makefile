@@ -28,8 +28,10 @@ cleandocs:
 clean:
 	@rm -f dist/brick.js dist/brick.css
 
-release: compile
+release: compile dist/OpenSans-SemiBold.ttf dist/readme.txt
 	@cp dist/brick.js brick-$(VERSION).js
 	@cp dist/brick.css brick-$(VERSION).css
-	@zip brick-$(VERSION).zip brick-$(VERSION).js brick-$(VERSION).css
-	@rm brick-$(VERSION).js brick-$(VERSION).css
+	@cp dist/OpenSans-SemiBold.ttf OpenSans-SemiBold.ttf
+	@cp dist/readme.txt readme-$(VERSION).txt
+	@zip brick-$(VERSION).zip brick-$(VERSION).js brick-$(VERSION).css OpenSans-SemiBold.ttf readme-$(VERSION).txt
+	@rm brick-$(VERSION).js brick-$(VERSION).css OpenSans-SemiBold.ttf readme-$(VERSION).txt
