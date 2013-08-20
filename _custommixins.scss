@@ -89,7 +89,7 @@ $FONTS_FOLDER: "../fonts/";
     -moz-transition-property: replaceItem($properties, transform, 
                                           -moz-transform);
     -ms-transition-property: replaceItem($properties, transform, 
-                                        -o-transform);
+                                        -ms-transform);
     -o-transition-property: replaceItem($properties, transform, 
                                         -o-transform);
     

@@ -89,7 +89,7 @@ x-deck {
     transition-property: transform;
     -webkit-transition-property: -webkit-transform;
     -moz-transition-property: -moz-transform;
-    -ms-transition-property: -o-transform;
+    -ms-transition-property: -ms-transform;
     -o-transition-property: -o-transform;
     transition-duration: 0.5s;
     -webkit-transition-duration: 0.5s;

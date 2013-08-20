@@ -375,27 +375,28 @@
     xtag.register("x-slider", {
         lifecycle: {
             created: function(){
-                this.xtag.callbackFns = _makeCallbackFns(this);
-                this.xtag.dragInitVal = null;
+                var self = this;
+                self.xtag.callbackFns = _makeCallbackFns(self);
+                self.xtag.dragInitVal = null;
                 /** create and initialize attributes of input **/
                 var input = document.createElement("input");
                 xtag.addClass(input, "input");
                 input.setAttribute("type", "range");
                 
                 // constrain initial attribute values
-                var initMax = (hasNumAttr(this, "max")) ? 
-                                +this.getAttribute("max") : 100;
+                var initMax = (hasNumAttr(self, "max")) ? 
+                                +self.getAttribute("max") : 100;
                                 
-                var initMin = (hasNumAttr(this, "min")) ? 
-                                +this.getAttribute("min") : 0;
+                var initMin = (hasNumAttr(self, "min")) ? 
+                                +self.getAttribute("min") : 0;
                                 
-                var initStep = (hasNumAttr(this, "step")) ? 
-                                +this.getAttribute("step") : 1;
+                var initStep = (hasNumAttr(self, "step")) ? 
+                                +self.getAttribute("step") : 1;
                 // steps must also be strictly positive
                 initStep = (initStep > 0) ? initStep : 1;
                 
-                var initVal = (hasNumAttr(this, "value")) ? 
-                                +this.getAttribute("value") : 
+                var initVal = (hasNumAttr(self, "value")) ? 
+                                +self.getAttribute("value") : 
                                 getDefaultVal(initMin, initMax, initStep);
                 
                 // because the x-slider accessors read from the input element's
@@ -406,19 +407,19 @@
                 input.setAttribute("value", initVal);
                 
                 // finally, actually add the the input to the x-slider
-                this.xtag.rangeInputEl = input;
-                this.appendChild(this.xtag.rangeInputEl);
+                self.xtag.rangeInputEl = input;
+                self.appendChild(self.xtag.rangeInputEl);
                 
-                this.xtag.polyFillSliderThumb = null;
+                self.xtag.polyFillSliderThumb = null;
                 
-                if(input.type !== "range" || this.hasAttribute("polyfill")){
-                    this.setAttribute("polyfill", true);
+                if(input.type !== "range" || self.hasAttribute("polyfill")){
+                    self.setAttribute("polyfill", true);
                 }
                 else{
-                    this.removeAttribute("polyfill");
+                    self.removeAttribute("polyfill");
                 }
                 
-                _redraw(this);
+                _redraw(self);
             },
             attributeChanged: function(){
                 _redraw(this);

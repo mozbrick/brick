@@ -30,7 +30,7 @@ x-tooltip {
   transition-property: visibility, transform, opacity;
   -webkit-transition-property: visibility, -webkit-transform, opacity;
   -moz-transition-property: visibility, -moz-transform, opacity;
-  -ms-transition-property: visibility, -o-transform, opacity;
+  -ms-transition-property: visibility, -ms-transform, opacity;
   -o-transition-property: visibility, -o-transform, opacity;
   transition-duration: 0.2s;
   -webkit-transition-duration: 0.2s;

@@ -5,6 +5,9 @@ VERSION = $(shell cat VERSION)
 compile: clean node_modules components
 	@node build/minify.js
 
+fastcompile: clean
+	@node build/minify.js
+
 site: dist/brick.js dist/brick.css node_modules components homepage downloadpage docs demos
 
 demos: node_modules components
