@@ -1,247 +1,223 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <section>
-    <h1>All Components</h1>
-    <a class="download" href="https://github.com/mozilla/brick/releases/download/{{ version }}/brick-{{ version }}.zip">
-      <h3>Download Brick</h3>
-      <small>version {{ version }} &mdash; {{ size }}</small>
-    </a>
+  <section class="row">
+    <div class="col-sm-12">
+      <h1>Download</h1>
+      <h2>All Components</h2>
+      <a class="download" href="https://github.com/mozilla/brick/releases/download/{{ version }}/brick-{{ version }}.zip">
+        <h3>Download Brick</h3>
+        <small>version {{ version }} &mdash; {{ size }}</small>
+      </a>
+    </div>
   </section>
 
-  <section>
-    <h1>Build Your Own Bundle</h1>
-    <h2>Select just the components you want</h2>
-    <form id="byob">
-      {% for component, deps in dependencies %}
-        <label class="two-up">
-          {{ component }}
-          <input type="checkbox" value="{{ component }}" {{ 'disabled' if component == 'core' }}
-                 data-dependencies="{{ deps|join(' ') }}">
-        </label>
-      {% endfor %}
-      <div class="two-up"></div>
-      <div class="two-up"></div>
-      <div style="clear: both; padding: 1em 0;">
-        <input type="submit" id="buildBundle" class="prettybutton" value="Build Bundle">
-        <progress id="buildProgress" value="0" max="0">Building Your zip...</progress>
-        <a id="zip">Download Bundle</a>
+  <form id="byob">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2>Build Your Own Bundle</h2>
+        <h3>Select just the components you want</h3>
       </div>
-    </form>
-  </section>
+    </div>
+    <div class="col-sm-8">
+      <div class="row">
+        {% for component, deps in dependencies %}
+          <div class="col-sm-6">
+            <label>
+              {{ component }}
+              <input type="checkbox" value="{{ component }}" {{ 'disabled' if component == 'core' }}
+                     data-dependencies="{{ deps|join(' ') }}">
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <b id="dl-count"></b> components selected
+        </div>
+        <div class="panel-footer c">
+          <input type="submit" id="buildBundle" class="btn btn-primary pull-left" value="Build Bundle">
+          <progress id="buildProgress" value="0" max="0">Building Your zip...</progress>
+          <a id="zip" class="btn btn-success pull-right">Download Bundle</a>
+        </div>
+      </div>
+    </div>
+  </form>
 {% endblock %}
 
 {% block script %}
   <script src="site/js/jszip.js"></script>
   <script>
-    (function(){
-      var form = document.querySelector('#byob');
-      var submit = document.querySelector('#buildBundle');
-      var extraFilePaths = ['dist/OpenSans-SemiBold.ttf', 'dist/readme.txt'];
+    var form = document.querySelector('#byob');
+    var submit = document.querySelector('#buildBundle');
 
-      var prog = 0;
+    var prog = 0;
 
+    var qs = window.location.search.substr(1);
+
+    var queryParams = (function() {
       var qs = window.location.search.substr(1);
+      var ret = {};
+      var pairs = qs.split('&');
 
-      var queryParams = (function() {
-        var qs = window.location.search.substr(1);
-        var ret = {};
-        var pairs = qs.split('&');
+      pairs.forEach(function(p) {
+        p = p.split('=');
+        ret[p[0]] = p[1];
+      });
 
-        pairs.forEach(function(p) {
-          p = p.split('=');
-          ret[p[0]] = p[1];
-        });
+      return ret;
 
-        return ret;
+    })();
 
-      })();
+    var inputs = document.querySelectorAll('#byob input');
 
-      var preSelected = queryParams.byob;
-      if (preSelected) {
-        preSelected = preSelected.split(',');
-        preSelected.forEach(function (c) {
-          var i = form.querySelector('[value="' + c + '"]');
+    var preSelected = queryParams.byob;
+    if (preSelected) {
+      preSelected = preSelected.split(',');
+      preSelected.forEach(function (c) {
+        var i = form.querySelector('[value="' + c + '"]');
+        if (i) {
+          i.checked = true;
+          selectDependencies(i);
+        }
+      });
+    }
+    updateCart();
+
+    function updateCart () {
+      var num = 0;
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) {
+          num++;
+        }
+      }
+      document.querySelector('#dl-count').innerHTML = num;
+    }
+
+    function selectDependencies(el) {
+      var deps = el.getAttribute('data-dependencies');
+      if (deps && el.checked) {
+        deps = deps.split(' ');
+        deps.forEach(function(d) {
+          var i = form.querySelector('[value="' + d + '"]');
           if (i) {
             i.checked = true;
-            selectDependencies(i);
           }
         });
       }
+    }
 
-      function selectDependencies(el) {
-        var deps = el.getAttribute('data-dependencies');
-        if (deps && el.checked) {
-          deps = deps.split(' ');
-          deps.forEach(function(d) {
-            var i = form.querySelector('[value="' + d + '"]');
-            if (i) {
-              i.checked = true;
-            }
-          });
+    form.addEventListener('change', function(e) {
+      selectDependencies(e.target);
+      updateCart();
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var buildURL = '/* ' + location.protocol + '//' + location.host + location.pathname;
+
+      var selected = [];
+
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) {
+          selected.push(inputs[i].value);
         }
       }
 
-      form.addEventListener('change', function(e) {
-        selectDependencies(e.target);
-      });
+      buildURL += '?byob=' + selected.join(',') + ' */ ';
 
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var ins = document.querySelectorAll('#byob input');
+      selected.unshift('core');
 
-        var buildURL = '/* ' + location.protocol + '//' + location.host + location.pathname;
+      progress.style.display = 'block';
+      progress.max = selected.length * 2 + 1;
+      prog = 0;
+      progress.value = 0;
 
-        var selected = [];
-
-        for (var i = 0; i < ins.length; i++) {
-          if (ins[i].checked) {
-            selected.push(ins[i].value);
-          }
-        }
-
-        buildURL += '?byob=' + selected.join(',') + ' */ ';
-
-        selected.unshift('core');
-
-        progress.style.display = 'inline-block';
-        progress.max = selected.length * 2 + 1 + extraFilePaths.length;
-        prog = 0;
-        progress.value = 0;
-
-        getCss(selected, function(css) {
-          getJs(selected, function(js) {
-            getExtraFiles(function(extraFileInfo){
-              makeZip(buildURL + js, buildURL + css, extraFileInfo);
-            });
-          });
+      getCss(selected, function(css) {
+        getJs(selected, function(js) {
+          makeZip(buildURL + js, buildURL + css);
         });
       });
+    });
 
-      var zipLink = document.querySelector('#zip');
-      var progress = document.querySelector('progress');
+    var zipLink = document.querySelector('#zip');
+    var progress = document.querySelector('progress');
 
-      function getCss(c, cb) {
-        var numReqs = c.length;
-        var numDone = 0;
-        var total = '';
+    function getCss(c, cb) {
+      var numReqs = c.length;
+      var numDone = 0;
+      var total = '';
 
-        function done() {
-          prog++;
-          progress.value = prog;
-          numDone++;
-          if (numDone === numReqs) {
-            cb(total);
-          } else {
-            get(c[numDone]);
-          }
-        }
-
-        function get(c) {
-          var req = new XMLHttpRequest();
-          req.onload = function(e) {
-            total += req.response;
-            done();
-          };
-          req.open("get", "dist/" + c + "/" + c + '.min.css');
-          req.send();
-        }
-
-        get(c[0]);
-      }
-
-      function getJs(c, cb) {
-        var numReqs = c.length;
-        var numDone = 0;
-        var total = '';
-
-        function done() {
-          prog++;
-          progress.value = prog;
-          numDone++;
-          if (numDone === numReqs) {
-            cb(total);
-          } else {
-            get(c[numDone]);
-          }
-        }
-
-        function get(c) {
-          var req = new XMLHttpRequest();
-          req.onload = function(e) {
-            total += req.response;
-            done();
-          };
-          req.open("get", "dist/" + c + "/" + c + '.min.js');
-          req.send();
-        }
-
-        get(c[0]);
-      }
-
-      function getExtraFiles(cb){
-        var numReqs = extraFilePaths.length;
-        var numDone = 0;
-        var fileInfo = [];
-
-        function done() {
-          prog++;
-          progress.value = prog;
-          numDone++;
-          if (numDone === numReqs) {
-            cb(fileInfo);
-          } else {
-            get(extraFilePaths[numDone]);
-          }
-        }
-
-        function get(filePath) {
-          var req = new XMLHttpRequest();
-          req.onload = function(e) {
-            fileInfo.push({
-              name: filePath.replace(/^dist\//, ""),
-              content: req.response
-            });
-            done();
-          };
-          req.responseType = "arraybuffer";
-
-          req.open("get", filePath);
-          req.send();
-        }
-
-        // for now, only include extra files for browsers that allow XHR2
-        // TODO: make this XHR1-friendly
-        if(JSZip.support.arraybuffer){
-          get(extraFilePaths[0]);
-        }
-        else{
-          prog += extraFilePaths.length;
-          progress.value = prog;
-          cb([]);
-        }
-      }
-
-      function makeZip(js, css, extraFileInfo) {
-        var zip = new JSZip();
-
-        zip.file('brick-{{version}}.byob.min.js', js);
-        zip.file('brick-{{version}}.byob.min.css', css);
-
-        for(var i=0; i < extraFileInfo.length; i++){
-          var fileData = extraFileInfo[i];
-          // load as binary data
-          zip.file(fileData.name, fileData.content);
-        }
-
+      function done() {
         prog++;
         progress.value = prog;
-
-        var blob = zip.generate({type:"blob"});
-        zipLink.setAttribute('download', 'brick-{{version}}-byob.zip');
-        zipLink.style.display = 'inline-block';
-        zipLink.setAttribute('href', window.URL.createObjectURL(blob));
+        numDone++;
+        if (numDone === numReqs) {
+          cb(total);
+        } else {
+          get(c[numDone]);
+        }
       }
-    })();
+
+      function get(c) {
+        var req = new XMLHttpRequest();
+        req.onload = function(e) {
+          total += req.response;
+          done();
+        };
+        req.open("get", "dist/" + c + "/" + c + '.min.css');
+        req.send();
+      }
+
+      get(c[0]);
+    }
+
+    function getJs(c, cb) {
+      var numReqs = c.length;
+      var numDone = 0;
+      var total = '';
+
+      function done() {
+        prog++;
+        progress.value = prog;
+        numDone++;
+        if (numDone === numReqs) {
+          cb(total);
+        } else {
+          get(c[numDone]);
+        }
+      }
+
+      function get(c) {
+        var req = new XMLHttpRequest();
+        req.onload = function(e) {
+          total += req.response;
+          done();
+        };
+        req.open("get", "dist/" + c + "/" + c + '.min.js');
+        req.send();
+      }
+
+      get(c[0]);
+    }
+
+    function makeZip(js, css) {
+      var zip = new JSZip();
+
+      zip.file('brick.min.js', js);
+      zip.file('brick.min.css', css);
+
+      prog++;
+      progress.value = prog;
+      progress.style.display = 'none';
+
+      var blob = zip.generate({type:"blob"});
+      zipLink.setAttribute('download', 'brick_byob.zip');
+      zipLink.style.display = 'inline-block';
+      zipLink.setAttribute('href', window.URL.createObjectURL(blob));
+    }
   </script>
 {% endblock %}

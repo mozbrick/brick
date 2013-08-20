@@ -47,7 +47,7 @@ var buildDependencyGraph = avow(function (fulfill, reject, list) {
     // then, flesh out the dependency graph by recursing through connections
     // and getting the reachable set for each node
     var dependencyGraph = {};
-    _.keys(initGraph).forEach(function(key){
+    _.keys(initGraph).forEach(function(key) {
         // components omit self from dependencies, since this is redundant info
         var dependencies = _.omit(getReachableSet(initGraph, key), key);
         dependencyGraph[key] = _.keys(dependencies);
@@ -57,8 +57,13 @@ var buildDependencyGraph = avow(function (fulfill, reject, list) {
   }, reject);
 });
 
+var calculateComponentWeight = avow(function (fulfill, reject, tree) {
+  fulfill(tree);
+});
+
 var renderDownloadPage = avow(function (fulfill, reject, tree) {
-  site.staticPage(path.join('build', 'templates', 'download.html'), 'download.html', { dependencies: tree });
+  site.staticPage(path.join('build', 'templates', 'download.html'),
+                  'download.html', { dependencies: tree });
   console.log('wrote download.html');
 });
 
@@ -66,6 +71,7 @@ console.log('generating download page');
 
 getJSON('build/components.json')
   .then(buildDependencyGraph, err('could not fetch component list'))
-  .then(renderDownloadPage, err('could not get dependencies'))
+  .then(calculateComponentWeight, err('could not fetch component list'))
+  .then(renderDownloadPage, err('failed to calc component weights'))
   .then(false, err('problem'));
 

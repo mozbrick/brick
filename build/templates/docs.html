@@ -39,46 +39,55 @@
           </h1>
           <p>{{ info.description|escape|nl2br|preserveTabs }}</p>
 
-          <h2>Attributes</h2>
-          {% for key, value in info.documentation.attributes %}
-          <dl>
-            <dt><code>{{ key }}</code></dt>
-            <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-          </dl>
-          {% endfor %}
-
-
-          <h2>Methods</h2>
-          {% for key, value in info.documentation.methods %}
+          {% if info.documentation.attributes|notEmpty %}
+            <h2>Attributes</h2>
+            {% for key, value in info.documentation.attributes %}
             <dl>
               <dt><code>{{ key }}</code></dt>
               <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
             </dl>
-          {% endfor %}
+            {% endfor %}
+          {% endif %}
 
-          <h2>Events</h2>
-          {% for key, value in info.documentation.events %}
-          <dl>
-            <dt><code>{{ key }}</code></dt>
-            <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-          </dl>
-          {% endfor %}
+          {% if info.documentation.methods|notEmpty %}
+            <h2>Methods</h2>
+            {% for key, value in info.documentation.methods %}
+              <dl>
+                <dt><code>{{ key }}</code></dt>
+                <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+              </dl>
+            {% endfor %}
+          {% endif %}
 
-          <h2>Getters</h2>
-          {% for key, value in info.documentation.getters %}
-          <dl>
-            <dt><code>{{ key }}</code></dt>
-            <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-          </dl>
-          {% endfor %}
+          {% if info.documentation.events|notEmpty %}
+            <h2>Events</h2>
+            {% for key, value in info.documentation.events %}
+            <dl>
+              <dt><code>{{ key }}</code></dt>
+              <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+            </dl>
+            {% endfor %}
+          {% endif %}
 
-          <h2>Setters</h2>
-          {% for key, value in info.documentation.setters %}
-          <dl>
-            <dt><code>{{ key }}</code></dt>
-            <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-          </dl>
-          {% endfor %}
+          {% if info.documentation.getters|notEmpty %}
+            <h2>Getters</h2>
+            {% for key, value in info.documentation.getters %}
+            <dl>
+              <dt><code>{{ key }}</code></dt>
+              <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+            </dl>
+            {% endfor %}
+          {% endif %}
+
+          {% if info.documentation.setters|notEmpty %}
+            <h2>Setters</h2>
+            {% for key, value in info.documentation.setters %}
+            <dl>
+              <dt><code>{{ key }}</code></dt>
+              <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+            </dl>
+            {% endfor %}
+          {% endif %}
         </section>
       {% endfor %}
     </div>
@@ -106,9 +115,8 @@
     }
 
     var sidebar = document.querySelector('#sidebar');
-    sidebar.style.width = sidebar.offsetWidth + 'px';
+    // sidebar.style.width = sidebar.offsetWidth + 'px';
     var triggerTop = getTop(sidebar) - 90;
-    sidebar.style.top = '90px';
 
     var scrollNavEls = document.querySelectorAll('.scrollnav');
     var scrollNav = (function() {

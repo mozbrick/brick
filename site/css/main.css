@@ -1,125 +1,88 @@
-/*
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-body {
-  font: normal 16px "Open Sans", sans-serif;
-  line-height: 1.5em;
-  color: #222;
-  margin: 0;
-  padding: 0;
-  min-width: 100%;
-  min-height: 100%;
-  position: relative;
-}
-
-html, body{
-  height: 100%;
-}
-
-article {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 1em;
-  position: relative;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 300;
-  margin: 1.5rem 0;
-}
-
-h1 {
-  line-height: 1.5em;
-  font-size: 200%;
-}
-
-h2 {
-  line-height: 1.5rem;
-}
-
-.moz {
-  position: absolute;
-  top: -1px;
-  right: -11px;
-  text-align: center;
-}
-.moz img {
-  opacity: .8;
-  height: 34px;
-}
-
-#mark {
-  white-space: nowrap;
-  margin: .5em 0 -.5em 0;
-}
-
-.site-header {
-  position: relative;
-  padding-top: 2em;
-}
-
-header h1 {
-  font-size: 400%;
-}
-*/
 
 body {
   padding-top: 70px;
 }
 
+.moz img {
+  width: 128px;
+  float: right;
+}
+
 .logo {
   width: 48px;
-  margin: -8px 8px -8px 0;
+  margin: -8px 4px -8px 0;
 }
 
 #sidebar {
   font-size: 12px;
 }
 
-@media (min-width:768px) {
+@media (min-width: 768px) {
   #sidebar.sticky {
     position: fixed;
+    top: 90px;
+    width: 261px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  #sidebar, #sidebar.sticky {
+    position: fixed;
+    max-height: calc(100% - 50px);
+    overflow: auto;
+    width: 25%;
+    top: 50px;
+    left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-nav {
+    display: none;
+  }
+  #sidebar.sticky {
+    position: relative;
+    z-index: 1;
   }
 }
 
 .docs section {
-  padding-top: 90px;
-  margin-top: -90px;
+  padding-top: 70px;
+  margin-top: -70px;
   border-bottom: 1px solid gray;
 }
 
-/*
-header small {
-  font-size: 1rem;
-  color: #888;
-  margin: 0;
-  margin-left: 4px;
+.navbar-brand {
+  font-size: 180%;
+  margin: -2px 0 -3px;
+}
+.navbar-brand small {
+  font-size: 50%;
 }
 
-header {
-  text-align: center;
-}
-
-section, footer {
-  position: relative;
+.row:after {
+  content: '';
+  display: block;
   clear: left;
-  margin: 3em 0;
+  margin-bottom: 2em;
 }
-*/
+
+.jumbotron {
+  margin-top: -21px;
+  padding-bottom: 64px;
+}
+
+footer {
+  margin-top: 2em;
+}
+
 /* clearfix */
-/*
-section:after, footer:after{
+.c:after{
   content: "";
   display: block;
   clear: left;
 }
-
+/*
 .site-nav a {
   margin-right: 1em;
 }
@@ -136,7 +99,7 @@ footer {
   margin-top: 5em;
   clear: left;
 }
-*/
+
 section.demo-wrap {
   border-top: 1px solid grey;
 }
@@ -185,13 +148,18 @@ a {
 a:hover {
   color: #a00;
 }
+*/
+
+.grayshade {
+}
 
 .download {
   background: url('../img/zip.png') no-repeat;
   background-size: 64px;
+  font-size: 120%;
   display: inline-block;
   height: 64px;
-  margin: 2em 3em 0 0;
+  margin: 5px 0 0;
   padding-left: 90px;
   white-space: nowrap;
 }
@@ -200,7 +168,6 @@ a:hover {
   text-indent: -.1rem;
   font-size: 150%;
 }
-*/
 .demo {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -235,6 +202,10 @@ a:hover {
   background: none;
 }
 
+.demo-left {
+  margin: 1em 0;
+}
+
 .demo iframe {
   border: 0;
   border-radius: 2px;
@@ -250,7 +221,7 @@ a:hover {
   width: 320px;
 }
 
-dl {
+.docs dl {
   padding-left: 1em;
 }
 
@@ -318,9 +289,11 @@ pre.prettyprint{
     background-color: #eee;
     box-shadow: inset 1px 1px 2px #888;
 }
+*/
 
 progress {
   display: none;
+  float: right;
 }
 
 #zip {
@@ -329,30 +302,21 @@ progress {
 
 #byob label {
   display: block;
-  padding: .5em 1em;
   background: #f8f8f8;
   cursor: pointer;
-  margin-top: 1em;
+  padding: .5em 1em;
 }
 #byob input[type=checkbox] {
   float: right;
 }
 
+/*
 a.top {
   clear: both;
   float: right;
 }
-
-@media screen and (max-width: 800px) {
-  .two-up {
-    float: none;
-    width: 100%;
-    margin: 3em 0;
-    padding: 0;
-  }
-  .two-up + .two-up {
-    margin-left: 0;
-  }
+*/
+@media screen and (max-width: 767px) {
   .demo {
     -webkit-transform: scale(.6);
     transform: scale(.6);
@@ -361,19 +325,8 @@ a.top {
   .demo iframe {
     pointer-events: none;
   }
-  section {
-    margin: 1em 0;
-  }
-
-  header h1 {
-    font-size: 250%;
-  }
-
-  .markup-wrap{
-    text-align: center;
-  }
 }
-
+/*
 @media screen and (max-width: 960px) {
   header {
     text-align: center;

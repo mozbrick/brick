@@ -18,17 +18,19 @@
   </head>
   <body>
     <header class="site-header">
-        {{ navbar(_relPath, version) }}
-
-        {% block header %}
-        {% endblock %}
+      {{ navbar(_relPath, version) }}
+      {% block header %}
+      {% endblock %}
       </div>
     </header>
     <article class="container">
       {% block content %}
       {% endblock %}
-      <footer>
-        <a class="moz" href="https://mozilla.org/"><img alt="mozilla" height="32" src="{{ _relPath }}site/img/mozilla_wordmark.png" title="built by Mozilla"></a>
+      <footer class="row">
+        <div class="col-xs-8"></div>
+        <div class="col-xs-4">
+          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="{{ _relPath }}site/img/mozillaHTML5.png" title="built by Mozilla"></a>
+        </div>
       </footer>
     </article>
     <script src="{{ _relPath }}dist/brick.js"></script>
