@@ -7,7 +7,7 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="panel panel-default" id="sidebar">
         <div class="panel-heading">
           Components
@@ -20,9 +20,9 @@
         </div>
       </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-sm-9 docs">
       <section id="usage">
-        <h1><b>Usage</b></h1>
+        <h1>Usage</h1>
         <p>To include Brick in your project, include your downloaded stylesheet and script files in your project's page like normal:
           <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-{{ version }}.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-{{ version }}.js&quot;&gt;&lt;/script&gt;</pre>
         </p>
@@ -102,7 +102,7 @@
 
     function posSidebar() {
       var top = window.scrollY;
-      sidebar.style.position = top > triggerTop ? 'fixed' : 'static';
+      sidebar.classList.toggle('sticky', top > triggerTop);
     }
 
     var sidebar = document.querySelector('#sidebar');
