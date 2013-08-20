@@ -23,24 +23,23 @@
         // don't try to reconvert a date already set to UTC time, or
         // the inherent timezone information of JS Dates may change an already
         // converted date
-        if(localDate.getUTCHours() === 0 &&
-           localDate.getUTCMinutes() === 0 &&
-           localDate.getUTCSeconds() === 0 &&
-           localDate.getUTCMilliseconds() === 0)
+        var utcDate;
+        if(localDate.getUTCHours() === 0)
         {
-            return new Date(localDate.valueOf());
+            utcDate = new Date(localDate.valueOf());
         }
         else{
-            var utcDate = new Date();
+            utcDate = new Date();
             utcDate.setUTCDate(localDate.getDate());
             utcDate.setUTCMonth(localDate.getMonth());
             utcDate.setUTCFullYear(localDate.getFullYear());
             utcDate.setUTCHours(0);
-            utcDate.setUTCMinutes(0);
-            utcDate.setUTCSeconds(0);
-            utcDate.setUTCMilliseconds(0);
-            return utcDate;
         }
+
+        utcDate.setUTCMinutes(0);
+        utcDate.setUTCSeconds(0);
+        utcDate.setUTCMilliseconds(0);
+        return utcDate;
     }
 
     // the current date, set to midnight UTC time
@@ -574,8 +573,8 @@
         self._span = data.span || 1;
         self._multiple = data.multiple || false;
         // initialize private vars
-        self._viewDate = self._getSanitizedViewDate(data.view, data.chosen);
-        self._chosenRanges = self._getSanitizedChosenRanges(data.chosen, 
+        self._viewDate = self._sanitizeViewDate(data.view, data.chosen);
+        self._chosenRanges = self._sanitizeChosenRanges(data.chosen, 
                                                                 data.view);
         self._firstWeekdayNum = data.firstWeekdayNum || 0;
 
@@ -679,7 +678,7 @@
     }
 
 
-    /** Calendar._getSanitizedViewDate: 
+    /** Calendar._sanitizeViewDate: 
                 (Date, (Date/[Date,Date]) array / Date) => Date
 
     given a view Date and an optional chosen range list or chosen date, 
@@ -698,7 +697,7 @@
                                     list of Date/[Date,Date]  ranges
                                     (defaults to this.chosen)
     **/
-    CALENDAR_PROTOTYPE._getSanitizedViewDate = function(viewDate, 
+    CALENDAR_PROTOTYPE._sanitizeViewDate = function(viewDate, 
                                                         chosenRanges)
     {
         chosenRanges = (chosenRanges === undefined) ? 
@@ -796,7 +795,7 @@
     }
 
 
-    /** Calendar._getSanitizedChosenRanges: 
+    /** Calendar._sanitizeChosenRanges: 
             ((Date/[Date,Date]) array, Date) => (Date/[Date,Date]) array
 
     given a chosen range list or chosen date and an optional view date
@@ -818,7 +817,7 @@
         viewDate                    (optional) the current cursor date
                                     (default = this.view)
     **/        
-    CALENDAR_PROTOTYPE._getSanitizedChosenRanges = function(chosenRanges, 
+    CALENDAR_PROTOTYPE._sanitizeChosenRanges = function(chosenRanges, 
                                                               viewDate)
     {
         viewDate = (viewDate === undefined) ? this.view : viewDate;
@@ -1071,7 +1070,7 @@
             },
             set: function(multi){
                 this._multiple = multi;
-                this.chosen = this._getSanitizedChosenRanges(this.chosen);
+                this.chosen = this._sanitizeChosenRanges(this.chosen);
                 this.render(true);
             }
         },
@@ -1106,7 +1105,7 @@
                 return this._viewDate;
             },
             set: function(rawViewDate){
-                var newViewDate = this._getSanitizedViewDate(rawViewDate);
+                var newViewDate = this._sanitizeViewDate(rawViewDate);
                 var oldViewDate = this._viewDate;
                 this._viewDate = newViewDate;
 
@@ -1129,7 +1128,7 @@
             },
             set: function(newChosenRanges){
                 this._chosenRanges = 
-                        this._getSanitizedChosenRanges(newChosenRanges);
+                        this._sanitizeChosenRanges(newChosenRanges);
                 this.render(true);
             }
         },

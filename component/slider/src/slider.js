@@ -224,11 +224,15 @@
         _onMouseInput(slider, pageX, pageY);
         
         var callbacks = slider.xtag.callbackFns;
+        // for minification
+        var _addBodyListener = function(event, listener){
+            document.body.addEventListener(event, listener);
+        };
         
-        document.body.addEventListener("mousemove", callbacks.onMouseDragMove);
-        document.body.addEventListener("touchmove", callbacks.onTouchDragMove);
-        document.body.addEventListener("mouseup", callbacks.onDragEnd);
-        document.body.addEventListener("touchend", callbacks.onDragEnd);
+        _addBodyListener("mousemove", callbacks.onMouseDragMove);
+        _addBodyListener("touchmove", callbacks.onTouchDragMove);
+        _addBodyListener("mouseup", callbacks.onDragEnd);
+        _addBodyListener("touchend", callbacks.onDragEnd);
         
         var thumb = slider.xtag.polyFillSliderThumb;
         // set flag to allow CSS stylings to apply
@@ -302,15 +306,14 @@
             // removes listeners for handling drag
             "onDragEnd": function(e){
                 var callbacks = slider.xtag.callbackFns;
-            
-                document.body.removeEventListener("mousemove", 
-                                                  callbacks.onMouseDragMove);
-                document.body.removeEventListener("touchmove", 
-                                                  callbacks.onTouchDragMove);
-                document.body.removeEventListener("mouseup", 
-                                                  callbacks.onDragEnd);
-                document.body.removeEventListener("touchend", 
-                                                  callbacks.onDragEnd);
+                // for minification
+                var _removeBodyListener = function(event, listener){
+                    document.body.removeEventListener(event, listener);
+                };
+                _removeBodyListener("mousemove", callbacks.onMouseDragMove);
+                _removeBodyListener("touchmove", callbacks.onTouchDragMove);
+                _removeBodyListener("mouseup", callbacks.onDragEnd);
+                _removeBodyListener("touchend", callbacks.onDragEnd);
                 
                 var thumb = slider.xtag.polyFillSliderThumb;
                 if(thumb){

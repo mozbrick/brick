@@ -1001,7 +1001,7 @@
         }
         
         // finally, constrain and position the tooltip
-        if(tooltip.noOverflow){
+        if(!tooltip.allowOverflow){
             newTop = constrainNum(newTop, 0, maxTop);
             newLeft = constrainNum(newLeft, 0, maxLeft);
         }
@@ -1101,7 +1101,6 @@
         var _readyToShowFn = function(){
             _unforceDisplay(tooltip);
             tooltip.setAttribute("visible", true);
-            
             xtag.fireEvent(tooltip, "tooltipshown", {
                 "triggerElem": triggerElem
             });
@@ -1233,7 +1232,7 @@
                 // default trigger variables
                 self.xtag._orientation = "auto";
                 self.xtag._targetSelector = PREV_SIB_SELECTOR;
-                self.xtag._triggerStyle = "hover";
+                self.xtag._triggerStyle = "click";
                 // remember who the last element that triggered the tip was
                 // (ie: who we should be pointing to if suddenly told to show
                 //  outside of a trigger style)
@@ -1358,12 +1357,12 @@
                 }
             },
 
-            "noOverflow":{
+            "allowOverflow":{
                 attribute: {
                     boolean: true,
-                    name: "no-overflow"
+                    name: "allow-overflow"
                 },
-                set: function(noOverflow){
+                set: function(allowsOverflow){
                     this.refreshPosition();
                 }
             },

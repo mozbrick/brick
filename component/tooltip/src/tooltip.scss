@@ -32,7 +32,7 @@
 // the only user styling that should be applied here is border
 x-tooltip{
     @include animated((visibility, transform, opacity), 0.2s);
-    @include boxSizing(border-box);
+    @extend %borderBox;
     position: absolute;
     margin: 0;
     padding: 0;
@@ -42,7 +42,7 @@ x-tooltip{
     display: block; // needed to favor horizontal tooltips, 
                     // use inline-block to favor vertical
 
-    z-index: 99999999999;
+    z-index: 2147483647;
     overflow: visible;
     
     // default styling
@@ -56,7 +56,7 @@ x-tooltip{
         pointer-events: none;
     }
 
-    &[no-overflow]{
+    &:not([allow-overflow]){
         max-width: 100%;
         max-height: 100%;
     }
@@ -125,7 +125,7 @@ x-tooltip{
 
 // let user style this to style the balloon
 x-tooltip > .tooltip-content{
-    @include boxSizing(border-box);
+    @extend %borderBox;
     position: relative;
     display: block;
     padding: .5em;
@@ -136,12 +136,12 @@ x-tooltip > .tooltip-content{
     z-index: 2;
 }
 
-x-tooltip:not([no-overflow]){
+x-tooltip[allow-overflow]{
     white-space: nowrap;
 }
 
 x-tooltip > .tooltip-arrow{
-    @include boxSizing(border-box);
+    @extend %borderBox;
     position: absolute;
     display: block;
     

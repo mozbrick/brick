@@ -20,12 +20,20 @@ $FONTS_FOLDER: "../fonts/";
     box-sizing: $value;
 }
 
+%borderBox{
+    @include boxSizing(border-box);   
+}
+
 @mixin backfaceVisibility($value){
     -webkit-backface-visibility: $value;
     -moz-backface-visibility: $value;
     -ms-backface-visibility: $value;
     -o-backface-visibility: $value;
     backface-visibility: $value;
+}
+
+%hiddenBackface{
+    @include backfaceVisibility(hidden);
 }
 
 @mixin perspective($val){

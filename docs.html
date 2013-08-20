@@ -1237,7 +1237,7 @@
       
       <dl>
         <dt><code>trigger-style</code></dt>
-        <dd>Indicates how the tooltip is triggered. Valid presets are &#39;hover&#39; and &#39;custom&#39; (defaults to &#39;hover&#39;). When set to &#39;hover&#39;, the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to &#39;custom&#39;, no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the .show(), .hide(), and .toggle() API calls without any default behaviors getting in the way. If set to anything else, the tooltip will use this as the event name to listen for on targeted elems to show the tooltip.</dd>
+        <dd>Indicates how the tooltip is triggered. Valid presets are &#39;hover&#39; and &#39;custom&#39;. When set to &#39;hover&#39;, the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to &#39;custom&#39;, no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the .show(), .hide(), and .toggle() API calls without any default behaviors getting in the way. If set to anything else, the tooltip will use this as the event name to listen for on targeted elems to show the tooltip.  (defaults to &#39;click&#39;)</dd>
       </dl>
       
       <dl>
@@ -1253,6 +1253,11 @@
       <dl>
         <dt><code>ignore-tooltip-pointer-events</code></dt>
         <dd>If present, pointer events on the tooltip will be ignored, keeping it from blocking interaction with underlying elements.</dd>
+      </dl>
+      
+      <dl>
+        <dt><code>allow-overflow</code></dt>
+        <dd>By default, the tooltip will always try to place the tooltip in a way that is constrained by the container element.<br/><br/>If `allow-overflow` set, this will instead allow the tooltip to be placed freely, even if it overflows the containing element.</dd>
       </dl>
       
 

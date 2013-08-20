@@ -148,13 +148,13 @@
     <div id="demo-tip-controls">
         Main tooltip: 
         <button onClick="changeOrientation()">Change orientation</button>
-        <button onClick="toggleTooltip()">Toggle tooltip</button>
+        <button onClick="toggleTooltip(event)">Toggle tooltip</button>
         <button onClick="toggleSelector()">Toggle selector</button>
         <button onClick="toggleTriggerStyle()">Toggle trigger style</button>
         <button onClick="toggleIgnoreOuter()">Toggle ignore-outer-trigger</button>
         <button onClick="changeContents()">Change tooltip contents</button>
         <button onClick="toggleTooltipPointerEvents()">Toggle tooltip pointer events</button>
-        <button onClick="toggleNoOverflow()">Toggle no-overflow</button>
+        <button onClick="toggleOverflow()">Toggle allow-overflow</button>
     </div>
     <br/>
     <span>Current selector = <span id="curr-selector-status"></span></span>
@@ -167,7 +167,7 @@
     <br/>
     <span>Tooltip pointer events = <span id="tooltip-pointer-events-status"></span></span>
     <br/>
-    <span>no-overflow = <span id="no-overflow-status"></span></span>
+    <span>allow-overflow = <span id="allow-overflow-status"></span></span>
     <br/>
     <button onClick="addFancySpan()">Add fancy-selector box</span>
     <button onClick="addRemoveMainTooltip()">Add / remove main tooltip</button>
@@ -293,7 +293,9 @@ function changeOrientation(){
     updateStatuses();
 }
 
-function toggleTooltip(){
+function toggleTooltip(e){
+    e.preventDefault();
+    e.stopPropagation();
     demoTip.toggle();
 }
 
@@ -323,8 +325,8 @@ function toggleTriggerStyle(){
     updateStatuses();
 }
 
-function toggleNoOverflow(){
-    demoTip.noOverflow = !demoTip.noOverflow;
+function toggleOverflow(){
+    demoTip.allowOverflow = !demoTip.allowOverflow;
     updateStatuses();
 }
 
@@ -334,7 +336,7 @@ function updateStatuses(){
     updateTriggerStyleBox();
     updateIgnoreOuterStatus();
     updateTooltipPointerEventsStatus();
-    updateNoOverflowStatus();
+    updateOverflowStatus();
     
     var oldTargets = xtag.query(document, ".demo-targeted");
     var targets = demoTip.targetElems;
@@ -361,9 +363,9 @@ function updateStatuses(){
     });
 }
 
-function updateNoOverflowStatus(){
-    var statusBox = document.getElementById("no-overflow-status");
-    statusBox.textContent = demoTip.noOverflow;
+function updateOverflowStatus(){
+    var statusBox = document.getElementById("allow-overflow-status");
+    statusBox.textContent = demoTip.allowOverflow;
 }
 
 function updateTooltipPointerEventsStatus(){
