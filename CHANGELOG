@@ -1,3 +1,6 @@
+v1.0.4beta (Aug 19, 2013)
+- Fixed critical issue with calendar that was causing hangs in certain regions
+
 v1.0.1beta (Aug 13, 2013)
 
 - Add cardadd/cardremove events to x-deck api
