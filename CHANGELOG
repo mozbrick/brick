@@ -1,7 +1,19 @@
-v1.0.4beta (Aug 19, 2013)
-- Fixed critical issue with calendar that was causing hangs in certain regions
+1.0.4beta (Aug 18, 2013)
 
-v1.0.1beta (Aug 13, 2013)
+- Nothing major, just updating the base x-tag core library
+
+1.0.3beta (Aug 18, 2013)
+
+- Fix timezone issue causing broken calendars/datepickers for non-US regions
+- Fix layout flexbox issue with height 100% children of flex items not displaying correctly
+- Include missing font files in release bundle
+- Link x-tag to core library
+
+1.0.2beta (Aug 16, 2013)
+
+- replace while loops in x-calendar with for loop to hotfix critical infinite loop issue; still need to track down underlying issue with non-US dateformats acting strangely
+
+1.0.1beta (Aug 13, 2013)
 
 - Add cardadd/cardremove events to x-deck api
 - Optimize x-deck's css to reduce duplication of transforms
@@ -9,6 +21,6 @@ v1.0.1beta (Aug 13, 2013)
 - Sped up default flipbox animation
 - Fix slidebox graphical bug caused by changing orientation while viewing a slide other than the first slide
 
-v1.0beta (Aug 8, 2013)
+1.0beta (Aug 8, 2013)
 
 - Initial release
