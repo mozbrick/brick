@@ -1,4 +1,4 @@
-
+/*
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -67,14 +67,17 @@ h2 {
 header h1 {
   font-size: 400%;
 }
+*/
 
-.logo {
-  width: 64px;
-  margin: 0 8px -8px 0;
-  margin-right: 8px;
-  display: inline-block;
+body {
+  padding-top: 70px;
 }
 
+.logo {
+  width: 48px;
+  margin: -8px 8px -8px 0;
+}
+/*
 header small {
   font-size: 1rem;
   color: #888;
@@ -91,8 +94,9 @@ section, footer {
   clear: left;
   margin: 3em 0;
 }
-
+*/
 /* clearfix */
+/*
 section:after, footer:after{
   content: "";
   display: block;
@@ -115,7 +119,7 @@ footer {
   margin-top: 5em;
   clear: left;
 }
-
+*/
 section.demo-wrap, section.main-sect{
   border-top: 1px solid grey;
 }
@@ -124,8 +128,8 @@ section.demo-wrap, section.main-sect{
 }
 /* centers demo items in the viewport for demo site;
  * exclude appbar because it should be at the top of the demo;
- * exclude layout because setting absolute position on flexbox causes 
- * weirdness in FF18 where the flex item render doesn't override the 
+ * exclude layout because setting absolute position on flexbox causes
+ * weirdness in FF18 where the flex item render doesn't override the
  * height 0 fix in layout.css */
 .demo-wrap .demo > *:only-child:not(x-appbar):not(x-layout){
     position: absolute;
@@ -144,7 +148,7 @@ section.demo-wrap, section.main-sect{
     background-image: none;
     padding: 0.5em;
 }
-
+/*
 .two-up {
   clear: none;
   width: 48%;
@@ -179,7 +183,7 @@ a:hover {
   text-indent: -.1rem;
   font-size: 150%;
 }
-
+*/
 .demo {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -195,7 +199,7 @@ a:hover {
   background: #f2d6b9 url("../img/retina_wood.png") repeat;
 }
 
-/* fake iphone button */
+/* fake phone button */
 .demo:after {
   content: '';
 
@@ -229,6 +233,11 @@ a:hover {
   width: 320px;
 }
 
+dl {
+  padding-left: 1em;
+}
+
+/*
 .markup-wrap{
   margin: .5em auto;
 }
