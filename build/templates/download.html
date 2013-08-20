@@ -34,160 +34,213 @@
 {% block script %}
   <script src="site/js/jszip.js"></script>
   <script>
-    var form = document.querySelector('#byob');
-    var submit = document.querySelector('#buildBundle');
+    (function(){
+      var form = document.querySelector('#byob');
+      var submit = document.querySelector('#buildBundle');
+      var extraFilePaths = ['dist/OpenSans-SemiBold.ttf', 'dist/readme.txt'];
 
-    var prog = 0;
+      var prog = 0;
 
-    var qs = window.location.search.substr(1);
-
-    var queryParams = (function() {
       var qs = window.location.search.substr(1);
-      var ret = {};
-      var pairs = qs.split('&');
 
-      pairs.forEach(function(p) {
-        p = p.split('=');
-        ret[p[0]] = p[1];
-      });
+      var queryParams = (function() {
+        var qs = window.location.search.substr(1);
+        var ret = {};
+        var pairs = qs.split('&');
 
-      return ret;
+        pairs.forEach(function(p) {
+          p = p.split('=');
+          ret[p[0]] = p[1];
+        });
 
-    })();
+        return ret;
 
-    var preSelected = queryParams.byob;
-    if (preSelected) {
-      preSelected = preSelected.split(',');
-      preSelected.forEach(function (c) {
-        var i = form.querySelector('[value="' + c + '"]');
-        if (i) {
-          i.checked = true;
-          selectDependencies(i);
-        }
-      });
-    }
+      })();
 
-    function selectDependencies(el) {
-      var deps = el.getAttribute('data-dependencies');
-      if (deps && el.checked) {
-        deps = deps.split(' ');
-        deps.forEach(function(d) {
-          var i = form.querySelector('[value="' + d + '"]');
+      var preSelected = queryParams.byob;
+      if (preSelected) {
+        preSelected = preSelected.split(',');
+        preSelected.forEach(function (c) {
+          var i = form.querySelector('[value="' + c + '"]');
           if (i) {
             i.checked = true;
+            selectDependencies(i);
           }
         });
       }
-    }
 
-    form.addEventListener('change', function(e) {
-      selectDependencies(e.target);
-    });
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      var ins = document.querySelectorAll('#byob input');
-
-      var buildURL = '/* ' + location.protocol + '//' + location.host + location.pathname;
-
-      var selected = [];
-
-      for (var i = 0; i < ins.length; i++) {
-        if (ins[i].checked) {
-          selected.push(ins[i].value);
+      function selectDependencies(el) {
+        var deps = el.getAttribute('data-dependencies');
+        if (deps && el.checked) {
+          deps = deps.split(' ');
+          deps.forEach(function(d) {
+            var i = form.querySelector('[value="' + d + '"]');
+            if (i) {
+              i.checked = true;
+            }
+          });
         }
       }
 
-      buildURL += '?byob=' + selected.join(',') + ' */ ';
+      form.addEventListener('change', function(e) {
+        selectDependencies(e.target);
+      });
 
-      selected.unshift('core');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var ins = document.querySelectorAll('#byob input');
 
-      progress.style.display = 'inline-block';
-      progress.max = selected.length * 2 + 1;
-      prog = 0;
-      progress.value = 0;
+        var buildURL = '/* ' + location.protocol + '//' + location.host + location.pathname;
 
-      getCss(selected, function(css) {
-        getJs(selected, function(js) {
-          makeZip(buildURL + js, buildURL + css);
+        var selected = [];
+
+        for (var i = 0; i < ins.length; i++) {
+          if (ins[i].checked) {
+            selected.push(ins[i].value);
+          }
+        }
+
+        buildURL += '?byob=' + selected.join(',') + ' */ ';
+
+        selected.unshift('core');
+
+        progress.style.display = 'inline-block';
+        progress.max = selected.length * 2 + 1 + extraFilePaths.length;
+        prog = 0;
+        progress.value = 0;
+
+        getCss(selected, function(css) {
+          getJs(selected, function(js) {
+            getExtraFiles(function(extraFileInfo){
+              makeZip(buildURL + js, buildURL + css, extraFileInfo);
+            });
+          });
         });
       });
-    });
 
-    var zipLink = document.querySelector('#zip');
-    var progress = document.querySelector('progress');
+      var zipLink = document.querySelector('#zip');
+      var progress = document.querySelector('progress');
 
-    function getCss(c, cb) {
-      var numReqs = c.length;
-      var numDone = 0;
-      var total = '';
+      function getCss(c, cb) {
+        var numReqs = c.length;
+        var numDone = 0;
+        var total = '';
 
-      function done() {
-        prog++;
-        progress.value = prog;
-        numDone++;
-        if (numDone === numReqs) {
-          cb(total);
-        } else {
-          get(c[numDone]);
+        function done() {
+          prog++;
+          progress.value = prog;
+          numDone++;
+          if (numDone === numReqs) {
+            cb(total);
+          } else {
+            get(c[numDone]);
+          }
+        }
+
+        function get(c) {
+          var req = new XMLHttpRequest();
+          req.onload = function(e) {
+            total += req.response;
+            done();
+          };
+          req.open("get", "dist/" + c + "/" + c + '.min.css');
+          req.send();
+        }
+
+        get(c[0]);
+      }
+
+      function getJs(c, cb) {
+        var numReqs = c.length;
+        var numDone = 0;
+        var total = '';
+
+        function done() {
+          prog++;
+          progress.value = prog;
+          numDone++;
+          if (numDone === numReqs) {
+            cb(total);
+          } else {
+            get(c[numDone]);
+          }
+        }
+
+        function get(c) {
+          var req = new XMLHttpRequest();
+          req.onload = function(e) {
+            total += req.response;
+            done();
+          };
+          req.open("get", "dist/" + c + "/" + c + '.min.js');
+          req.send();
+        }
+
+        get(c[0]);
+      }
+
+      function getExtraFiles(cb){
+        var numReqs = extraFilePaths.length;
+        var numDone = 0;
+        var fileInfo = [];
+
+        function done() {
+          prog++;
+          progress.value = prog;
+          numDone++;
+          if (numDone === numReqs) {
+            cb(fileInfo);
+          } else {
+            get(extraFilePaths[numDone]);
+          }
+        }
+
+        function get(filePath) {
+          var req = new XMLHttpRequest();
+          req.onload = function(e) {
+            fileInfo.push({
+              name: filePath.replace(/^dist\//, ""),
+              content: req.response
+            });
+            done();
+          };
+          req.responseType = "arraybuffer";
+
+          req.open("get", filePath);
+          req.send();
+        }
+
+        // for now, only include extra files for browsers that allow XHR2
+        // TODO: make this XHR1-friendly
+        if(JSZip.support.arraybuffer){
+          get(extraFilePaths[0]);
+        }
+        else{
+          prog += extraFilePaths.length;
+          progress.value = prog;
         }
       }
 
-      function get(c) {
-        var req = new XMLHttpRequest();
-        req.onload = function(e) {
-          total += req.response;
-          done();
-        };
-        req.open("get", "dist/" + c + "/" + c + '.min.css');
-        req.send();
-      }
+      function makeZip(js, css, extraFileInfo) {
+        var zip = new JSZip();
 
-      get(c[0]);
-    }
+        zip.file('brick-{{version}}.byob.min.js', js);
+        zip.file('brick-{{version}}.byob.min.css', css);
 
-    function getJs(c, cb) {
-      var numReqs = c.length;
-      var numDone = 0;
-      var total = '';
+        for(var i=0; i < extraFileInfo.length; i++){
+          var fileData = extraFileInfo[i];
+          // load as binary data
+          zip.file(fileData.name, fileData.content);
+        }
 
-      function done() {
         prog++;
         progress.value = prog;
-        numDone++;
-        if (numDone === numReqs) {
-          cb(total);
-        } else {
-          get(c[numDone]);
-        }
+
+        var blob = zip.generate({type:"blob"});
+        zipLink.setAttribute('download', 'brick-{{version}}-byob.zip');
+        zipLink.style.display = 'inline-block';
+        zipLink.setAttribute('href', window.URL.createObjectURL(blob));
       }
-
-      function get(c) {
-        var req = new XMLHttpRequest();
-        req.onload = function(e) {
-          total += req.response;
-          done();
-        };
-        req.open("get", "dist/" + c + "/" + c + '.min.js');
-        req.send();
-      }
-
-      get(c[0]);
-    }
-
-    function makeZip(js, css) {
-      var zip = new JSZip();
-
-      zip.file('brick.min.js', js);
-      zip.file('brick.min.css', css);
-
-      prog++;
-      progress.value = prog;
-
-      var blob = zip.generate({type:"blob"});
-      zipLink.setAttribute('download', 'brick_byob.zip');
-      zipLink.style.display = 'inline-block';
-      zipLink.setAttribute('href', window.URL.createObjectURL(blob));
-    }
+    })();
   </script>
 {% endblock %}

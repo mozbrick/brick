@@ -15,9 +15,11 @@ That's it! It really is that easy.
 
 #Installation
 
-Prebuilt versions of the entire library are provided in <code>dist/brick.css</code> and <code>dist/brick.js</code>, and should be included in your project like any other CSS/JavaScript file.
+Release bundles are provided on Github under this project's Releases tab.
 
-In the near future, compartmentalized releases of specific components will be released in their respective folders under <code>dist</code>, allowing you to pick and choose what components you want. (Do not use these yet, as dependencies have not been created yet.)
+Prebuilt versions of the entire library are also provided in <code>dist/brick.css</code> and <code>dist/brick.js</code>, and should be included in your project like any other CSS/JavaScript file.
+
+Compartmentalized releases of specific components are also released in their respective folders under <code>dist</code>, allowing you to pick and choose what components you want.
 
 ## Building from the repository source 
 
@@ -28,12 +30,12 @@ Then, run the following:
 ```
 git clone git@github.com:mozilla/brick.git
 cd brick
-git submodule update --init --recursive
-npm install
 make
 ```
 
-The built files should be output to <code>dist/brick.css</code> and <code>dist/brick.js</code>.
+By default, `make` should take care of running `npm install` and `git submodule update --init --recursive` for you.
+
+The built minified files should be output to <code>dist/brick.css</code> and <code>dist/brick.js</code>.
 
 # Components
 
