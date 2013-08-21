@@ -33,3 +33,15 @@
     display: block;
     margin: 0 auto;
 }
+
+x-tooltip code{
+    white-space: nowrap;
+}
+
+.sibling-demo[not-target]{
+    background-color: grey;
+}
+
+.sibling-demo[not-target] img[not-target]{
+    opacity: 0.5;
+}

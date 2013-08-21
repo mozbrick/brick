@@ -8,19 +8,19 @@
     <section id="basic-demo" class="demo-wrap">
         <header><h2>Basic usage</h2></header>
         <p>In its most basic form, place the <code class="prettyprint">&lt;x-tooltip&gt;</code> in the markup immediately after the element that should trigger it. (You can specify the target element with an attribute, but the default is the previous sibling.)</p>
-        <p>By default, the <code class="prettyprint">&lt;x-tooltip&gt;</code> will trigger on a <code>hover</code> event, and will be auto-oriented.</p>
+        <p>By default, the <code class="prettyprint">&lt;x-tooltip&gt;</code> will trigger on a <code>click</code> event, and will be auto-oriented.</p>
         <p>Note that the tooltip is not removed from its markup location, and will thus retain the same nesting and DOM ancestors that it started in.</p>
         <div class="two-up">
             <figure class="demo">
                 <div class="target-button">
-                    Hover this div to see a tooltip!
+                    Click this div to see a tooltip!
                 </div>
                 <x-tooltip>You can include any markup here! <a href="#">(Wow!)</a></x-tooltip>
             </figure>
         </div>
         <div class="markup-wrap two-up">
             <h3>Markup</h3>
-            <pre class="prettyprint html">&lt;div class=&quot;target-button&quot;&gt;<br/>    Hover this div to see a tooltip!<br/>&lt;/div&gt;<br/>&lt;x-tooltip&gt;You can include any markup here! &lt;a href=&quot;#&quot;&gt;(Wow!)&lt;/a&gt;&lt;/x-tooltip&gt;</pre>
+            <pre class="prettyprint html">&lt;div class=&quot;target-button&quot;&gt;<br/>    Click this div to see a tooltip!<br/>&lt;/div&gt;<br/>&lt;x-tooltip&gt;You can include any markup here! &lt;a href=&quot;#&quot;&gt;(Wow!)&lt;/a&gt;&lt;/x-tooltip&gt;</pre>
         </div>
         <a href="#" class="top">Top</a>
     </section>
@@ -33,7 +33,7 @@
         <div class="two-up">
             <figure class="demo">
                 <div class="target-button">
-                    Hover this div to see a tooltip!
+                    Click this div to see a tooltip!
                 </div>
                 <x-tooltip orientation="top"><code>orientation="top"</code></x-tooltip>
             </figure>
@@ -103,9 +103,9 @@
         <div class="two-up">
             <figure class="demo">
                 <div class="target-button">
-                    <span>Hover this button!</span>
+                    <span>Click this button!</span>
                 </div>
-                <x-tooltip trigger-style="hover" id="trigger-style-demo-tip">Hover somewhere else to hide!</x-tooltip>
+                <x-tooltip trigger-style="click" id="trigger-style-demo-tip">Click somewhere else to hide!</x-tooltip>
             </figure>
         </div>
         <div class="markup-wrap two-up">
@@ -113,7 +113,7 @@
                 <button class="prettybutton" 
                         data-toggle-prop="triggerStyle"
                         data-toggle-target="x-tooltip"
-                        data-toggle-options='["hover", "click", "touchstart", "custom"]'>
+                        data-toggle-options='["click", "hover", "touchstart", "custom"]'>
                     Toggle trigger-style
                 </button>
             </div>

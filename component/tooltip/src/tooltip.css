@@ -75,8 +75,11 @@ x-tooltip {
     visibility: hidden !important;
     opacity: 0 !important; }
     x-tooltip:not([visible]):not([_force-display]) {
-      width: 0px !important;
-      height: 0px !important;
+      left: 0px !important;
+      top: 0px !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
       overflow: hidden !important;
       border-width: 0px !important; }
   x-tooltip[visible] {
@@ -99,8 +102,8 @@ x-tooltip > .tooltip-content {
   display: block;
   padding: .5em;
   overflow: auto;
-  max-width: inherit;
-  max-height: inherit;
+  width: inherit;
+  height: inherit;
   z-index: 2; }
 
 x-tooltip[allow-overflow] {

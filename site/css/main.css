@@ -18,6 +18,10 @@ body {
   position: relative;
 }
 
+html, body{
+  height: 100%;
+}
+
 article {
   max-width: 960px;
   margin: 0 auto;
