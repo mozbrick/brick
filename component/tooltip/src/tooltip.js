@@ -742,8 +742,15 @@
     
     function _pickBestTooltipOrient(tooltip, validPositionDataList){
         var context = tooltip.parentNode;
-        var contextWidth = context.scrollWidth;
-        var contextHeight = context.scrollHeight;
+        var contextScrollLeft = context.scrollLeft;
+        var contextScrollTop = context.scrollTop;
+        var contextViewWidth = context.clientWidth;
+        var contextViewHeight = context.clientHeight;
+        
+        var minX = contextScrollLeft;
+        var minY = contextScrollTop;
+        var maxX = contextViewWidth + minX;
+        var maxY = contextViewHeight + minY;
 
         // first, partition data into two categories: those that leave the
         // context's boundaries and those who don't
@@ -752,8 +759,8 @@
         for(var i = 0; i < validPositionDataList.length; i++){
             var data = validPositionDataList[i];
             var rect = data.rect;
-            if(rect.left < 0 || rect.top < 0 || 
-               rect.right > contextWidth || rect.bottom > contextHeight)
+            if(rect.left < minX || rect.top < minY || 
+               rect.right > maxX || rect.bottom > maxY)
             {
                 notInContextData.push(data);
             }
@@ -913,10 +920,12 @@
                                                               tipContext,
                                                               contextScale);
 
-        var contextWidth = tipContext.scrollWidth * contextScale.x;
-        var contextHeight = tipContext.scrollHeight * contextScale.y;
+        var contextScrollWidth = tipContext.scrollWidth * contextScale.x;
+        var contextScrollHeight = tipContext.scrollHeight * contextScale.y;
         var contextViewWidth = tipContext.clientWidth * contextScale.x;
         var contextViewHeight = tipContext.clientHeight * contextScale.y;
+        var contextScrollLeft = tipContext.scrollLeft * contextScale.x;
+        var contextScrollTop = tipContext.scrollTop * contextScale.x;
 
         var targetRect = getRect(targetElem);
         var targetWidth = targetRect.width;
@@ -966,44 +975,51 @@
         
         // on first pass, determine the coordinates of the tooltip, as well as 
         // its constraints
-        var newTop, newLeft, maxTop, maxLeft;
+        var newTop, newLeft, maxViewTop, maxViewLeft;
+        var minTop = contextScrollTop;
+        var minLeft = contextScrollLeft;
         if(orientation === "top"){
             arrowHeight /= 2; // remember that the arrow is translated to 
                               // overlap the balloon
             newTop =targetContextCoords.top - origTooltipHeight - arrowHeight;
             newLeft = centerAlignCoords.left;
-            maxTop = contextHeight - origTooltipHeight - arrowHeight;
-            maxLeft = contextWidth - origTooltipWidth;
+            maxViewTop = contextViewHeight - origTooltipHeight - arrowHeight;
+            maxViewLeft = contextViewWidth - origTooltipWidth;
         }
         else if(orientation === "bottom"){
             arrowHeight /= 2; //remember that the arrow is translated to overlap
             newTop = targetContextCoords.top + targetHeight + arrowHeight;
             newLeft = centerAlignCoords.left;
-            maxTop = contextHeight - origTooltipHeight;
-            maxLeft = contextWidth - origTooltipWidth;
+            minTop += arrowHeight;
+            maxViewTop = contextViewHeight - origTooltipHeight;
+            maxViewLeft = contextViewWidth - origTooltipWidth;
         }
         else if(orientation === "left"){
             arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
             newLeft =targetContextCoords.left - origTooltipWidth - arrowWidth;
-            maxTop = contextHeight - origTooltipHeight;
-            maxLeft = contextWidth - origTooltipWidth - arrowWidth;
+            maxViewTop = contextViewHeight - origTooltipHeight;
+            maxViewLeft = contextViewWidth - origTooltipWidth - arrowWidth;
         }
         else if(orientation === "right"){
             arrowWidth /= 2; // remember that the arrow is translated to overlap
             newTop = centerAlignCoords.top;
             newLeft = targetContextCoords.left + targetWidth + arrowWidth;
-            maxTop = contextHeight - origTooltipHeight;
-            maxLeft = contextWidth - origTooltipWidth;
+            minLeft += arrowWidth;
+            maxViewTop = contextViewHeight - origTooltipHeight;
+            maxViewLeft = contextViewWidth - origTooltipWidth;
         }
         else{
             throw "invalid orientation " + orientation;
         }
+        // account for scrolling
+        var maxTop = minTop + maxViewTop;
+        var maxLeft = minLeft + maxViewLeft;
         
         // finally, constrain and position the tooltip
         if(!tooltip.allowOverflow){
-            newTop = constrainNum(newTop, 0, maxTop);
-            newLeft = constrainNum(newLeft, 0, maxLeft);
+            newTop = constrainNum(newTop, minTop, maxTop);
+            newLeft = constrainNum(newLeft, minLeft, maxLeft);
         }
         
         // position the arrow in the tooltip to center on the target element
