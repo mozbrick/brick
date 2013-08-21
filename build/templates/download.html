@@ -4,47 +4,46 @@
   <section class="row">
     <div class="col-sm-12">
       <h1>Download</h1>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="col-md-4">
       <h2>All Components</h2>
       <a class="download" href="https://github.com/mozilla/brick/releases/download/{{ version }}/brick-{{ version }}.zip">
         <h3>Download Brick</h3>
         <small>version {{ version }} &mdash; {{ size }}</small>
       </a>
     </div>
-  </section>
-
-  <form id="byob">
-    <div class="row">
-      <div class="col-sm-12">
+    <div class="col-md-8">
+      <form id="byob">
         <h2>Build Your Own Bundle</h2>
-        <h3>Select just the components you want</h3>
-      </div>
-    </div>
-    <div class="col-sm-8">
-      <div class="row">
-        {% for component, deps in dependencies %}
-          <div class="col-sm-6">
-            <label>
-              {{ component }}
-              <input type="checkbox" value="{{ component }}" {{ 'disabled' if component == 'core' }}
-                     data-dependencies="{{ deps|join(' ') }}">
-            </label>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Select just the components you want
           </div>
-        {% endfor %}
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <b id="dl-count"></b> components selected
+          <div class="panel-body row">
+          {% for component, deps in dependencies %}
+            <div class="col-sm-6">
+              <label>
+                {{ component }}
+                <input type="checkbox" value="{{ component }}" {{ 'disabled' if component == 'core' }}
+                       data-dependencies="{{ deps|join(' ') }}">
+              </label>
+            </div>
+          {% endfor %}
+          </div>
+          <div class="panel-footer c">
+            <input type="submit" id="buildBundle"
+                   class="btn btn-primary pull-left" value="Build Bundle">
+            <span style=""><b id="dl-count"></b> components selected </span>
+            <progress id="buildProgress" value="0" max="0">Building Your zip...</progress>
+            <a id="zip" class="btn btn-success pull-right">Download Bundle</a>
+          </div>
         </div>
-        <div class="panel-footer c">
-          <input type="submit" id="buildBundle" class="btn btn-primary pull-left" value="Build Bundle">
-          <progress id="buildProgress" value="0" max="0">Building Your zip...</progress>
-          <a id="zip" class="btn btn-success pull-right">Download Bundle</a>
-        </div>
-      </div>
+      </form>
     </div>
-  </form>
+  </section>
 {% endblock %}
 
 {% block script %}

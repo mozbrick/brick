@@ -6,24 +6,22 @@
         <img class="logo" src="{{ _relPath }}site/img/logo.png">
         Brick<small> {{ version }}</small>
       </a>
-      <a id="foo" class='navbar-toggle'>Menu</a>
     </div>
     <ul class="navbar-nav nav">
-      <li><a href="{{ relPath }}docs.html">Documentation &amp; Demos</a></li>
-      <li><a href="{{ relPath }}download.html">Download</a></li>
-      <li><a href="http://github.com/mozilla/brick/">GitHub</a></li>
-      <li><a href="http://github.com/mozilla/brick/issues">Issues</a></li>
+      <li><a href="{{ relPath }}docs.html">
+        <span class="succinct">Docs</span>
+        <span class="verbose">Documentation &amp; Demos</span>
+      </a></li>
+      <li><a href="{{ relPath }}download.html">
+        <span>Download</span>
+      </a></li>
+      <li><a href="http://github.com/mozilla/brick/">
+        <span>Github</span>
+      </a></li>
+      <li><a href="http://github.com/mozilla/brick/issues">
+        <span>Issues</span>
+      </a></li>
     </ul>
-    <x-tooltip target-selector="#foo" trigger-style="click" orientation="bottom">
-      <div class="panel" id="nav-menu">
-        <div class="list-group">
-        <a class="list-group-item" href="{{ relPath }}docs.html">Documentation &amp; Demos</a>
-        <a class="list-group-item" href="{{ relPath }}download.html">Download</a>
-        <a class="list-group-item" href="http://github.com/mozilla/brick/">GitHub</a>
-        <a class="list-group-item" href="http://github.com/mozilla/brick/issues">Issues</a>
-        </div>
-      </div>
-    </x-tooltip>
   </div>
 </nav>
 {% endmacro %}

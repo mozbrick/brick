@@ -23,6 +23,9 @@ body {
     top: 90px;
     width: 261px;
   }
+  .navbar-nav .succinct {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -37,12 +40,32 @@ body {
 }
 
 @media (max-width: 767px) {
+  .navbar-nav .verbose {
+    display: none;
+  }
   .navbar-nav {
+    margin: 5px 10px;
+    position: absolute;
+    right: 0px;
+  }
+  .nav > li > a {
+    padding: 10px;
+  }
+  .logo {
+    width: 32px;
+  }
+  .navbar-brand small {
     display: none;
   }
   #sidebar.sticky {
     position: relative;
     z-index: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    font-size: 70%;
   }
 }
 
@@ -58,6 +81,15 @@ body {
 }
 .navbar-brand small {
   font-size: 50%;
+}
+.navbar-nav > li {
+  float: left;
+}
+.navbar-header {
+  float: left;
+}
+.navbar-nav {
+  float: left;
 }
 
 .row:after {
@@ -80,7 +112,7 @@ footer {
 .c:after{
   content: "";
   display: block;
-  clear: left;
+  clear: both;
 }
 /*
 .site-nav a {
@@ -225,15 +257,6 @@ a:hover {
   padding-left: 1em;
 }
 
-/*
-.markup-wrap{
-  margin: .5em auto;
-}
-
-.markup-wrap > *:first-child{
-  margin-top: 0;
-}
-
 pre.prettyprint{
   text-align: left;
   overflow: auto;
@@ -260,36 +283,11 @@ pre.prettyprint{
     white-space: nowrap;
 }
 
-.prettybutton{
-    display: inline-block;
-    padding: .25em .5em;
-    border: 1px solid grey;
-    border-top-color: #aaa;
-    border-bottom-color: #777;
-    border-radius: 4px;
-    vertical-align: middle;
-    font: inherit;
-    background-color: white;
-    background-repeat: no-repeat;
-    background-image: -o-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: -ms-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: -moz-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: -webkit-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: linear-gradient(top, white, white 25%, #d9d9d9);
-    text-shadow: 1px 1px #fff;
-    cursor: pointer;
+.panel-footer span {
+  line-height: 30px;
+  white-space: nowrap;
+  display: inline-block;
 }
-
-.prettybutton:hover{
-    background-position: 0 1em;
-}
-
-.prettybutton:active{
-    background-image: none;
-    background-color: #eee;
-    box-shadow: inset 1px 1px 2px #888;
-}
-*/
 
 progress {
   display: none;
@@ -300,11 +298,17 @@ progress {
   display: none;
 }
 
+#byob {
+  margin-top: 2em;
+}
 #byob label {
   display: block;
   background: #f8f8f8;
   cursor: pointer;
   padding: .5em 1em;
+}
+#buildBundle {
+  margin-right: 1em;
 }
 #byob input[type=checkbox] {
   float: right;
@@ -316,6 +320,12 @@ a.top {
   float: right;
 }
 */
+@media screen and (max-width: 400px) {
+  .panel-footer .btn {
+    width: 100%;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .demo {
     -webkit-transform: scale(.6);
