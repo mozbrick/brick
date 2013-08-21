@@ -16,6 +16,9 @@
 
     var PREV_SIB_SELECTOR = "_previousSibling";
     var NEXT_SIB_SELECTOR = "_nextSibling";
+
+    var ARROW_DIR_ATTR = "arrow-direction";
+    var AUTO_ORIENT_ATTR = "_auto-orientation";
     
     /** isValidOrientation: (string)
     *
@@ -135,7 +138,7 @@
                 // - we are not triggering inside the tooltip itself
                 if((!tooltip.xtag._skipOuterClick) && 
                    tooltip.hasAttribute("visible") &&
-                   (!tooltip.hasAttribute("ignore-outer-trigger")) &&
+                   (!tooltip.ignoreOuterTrigger) &&
                    (!hasParentNode(e.target, tooltip)))
                 {
                     _hideTooltip(tooltip);
@@ -772,7 +775,7 @@
         var filterDataList = (inContextData.length > 0) ? inContextData :
                                                              notInContextData;
         // TODO: pick the position with the least tooltip offset from the 
-        // target
+        // target;
         // for now, just pick the first one that is filtered
         return (filterDataList.length > 0) ? filterDataList[0].orient : null;
     }
@@ -784,7 +787,7 @@
         // coordinates of the target element, relative to the document
         var targetPageCoords = getRect(targetElem);
         
-        // coordinates of the context element, rel to the document
+        // coordinates of the context element, relative to the document
         var contextPageCoords = getRect(contextElem);
 
         // coordinates of the target element, relative to context element
@@ -802,18 +805,24 @@
             "left": targetPageCoords.left - contextPageCoords.left - borderLeft
         };
         
-        // add in scroll offset if the context is not the body 
+        // add in scroll offset if the context is not the body or higher
         // (we don't add scroll if the context is the body because our 
         //  getRect calculations were already in relation to the body)
-        if(contextElem !== document.body && 
+        if((!hasParentNode(document.body, contextElem)) &&
            hasParentNode(contextElem, document.body))
         {
+            console.log("adding scroll factors");
             targetContextCoords.top += scrollTop;
             targetContextCoords.left += scrollLeft;
         }
         return targetContextCoords;
     }
 
+
+    /** by setting this on the tooltip, we force the tooltip to display using
+        its calculated dimensions. Make sure to have _force-display whenever
+        accessing dimensions of the tooltip.
+    **/
     function _forceDisplay(elem){
         elem.setAttribute("_force-display", true);
     }
@@ -833,7 +842,7 @@
 
         for(var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP){
             // ensure arrow is pointing in correct direction
-            arrow.setAttribute("arrow-direction", 
+            arrow.setAttribute(ARROW_DIR_ATTR, 
                                TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
             // recursively attempt a valid positioning
             var positionRect = _positionTooltip(tooltip, targetElem, 
@@ -858,10 +867,10 @@
          * still apply even though orientation attribute is not
          * one of 'top', 'left', 'bottom', or 'right'
          */
-        tooltip.setAttribute("_auto-orientation", bestOrient);
+        tooltip.setAttribute(AUTO_ORIENT_ATTR, bestOrient);
 
         // ensure arrow is pointing in correct direction
-        arrow.setAttribute("arrow-direction", 
+        arrow.setAttribute(ARROW_DIR_ATTR, 
                            TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
         // if best orient exists and isn't what was the last position 
         // attempted, set that position again
@@ -920,8 +929,6 @@
                                                               tipContext,
                                                               contextScale);
 
-        var contextScrollWidth = tipContext.scrollWidth * contextScale.x;
-        var contextScrollHeight = tipContext.scrollHeight * contextScale.y;
         var contextViewWidth = tipContext.clientWidth * contextScale.x;
         var contextViewHeight = tipContext.clientHeight * contextScale.y;
         var contextScrollLeft = tipContext.scrollLeft * contextScale.x;
@@ -1147,7 +1154,7 @@
     function _hideTooltip(tooltip){
         // remove remnant attribute used for auto placement animations
         if(isValidOrientation(tooltip.orientation)){
-            tooltip.removeAttribute("_auto-orientation");
+            tooltip.removeAttribute(AUTO_ORIENT_ATTR);
         }
         
         if(tooltip.hasAttribute("visible")){
@@ -1308,13 +1315,13 @@
                     var newArrowDir = null;
                     if(isValidOrientation(newOrientation)){
                         newArrowDir = TIP_ORIENT_ARROW_DIR_MAP[newOrientation];
-                        arrow.setAttribute("arrow-direction", newArrowDir);
-                        this.removeAttribute("_auto-orientation");
+                        arrow.setAttribute(ARROW_DIR_ATTR, newArrowDir);
+                        this.removeAttribute(AUTO_ORIENT_ATTR);
                     }
                     else{
                         // when auto placing, we will determine arrow direction
                         // when shown
-                        arrow.removeAttribute("arrow-direction");
+                        arrow.removeAttribute(ARROW_DIR_ATTR);
                     }
                     
                     this.xtag._orientation = newOrientation;

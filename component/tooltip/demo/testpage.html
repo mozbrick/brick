@@ -133,6 +133,9 @@
     <x-tooltip id="demoTip" orientation="top" target-selector=".fancy-selector" trigger-style="click">
         <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placecage.com/30/30"/>
         <br/><a href="http://google.com">Check out this link!</a>
+<!--
+        <h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1><h1>test</h1>
+-->
     </x-tooltip>
     <div id="next-sib">
         <h1>Next sibling</h1>
@@ -213,9 +216,8 @@ document.addEventListener('DOMComponentsLoaded', function(){
 });
 
 function addDummyTooltip(){
-    var cssSelectors = [".fancy-selector", ".fancy-selector img",
-                         "#container"];
-    var orients = ["auto", "top", "right", "bottom", "left"];
+    var cssSelectors = [".fancy-selector", ".fancy-selector img", "#container"];
+    var orients =  ["auto", "top", "right", "bottom", "left"];
     var styles = ["tap", "click", "hover"];
     
     var selector = cssSelectors[Math.floor(Math.random() * cssSelectors.length)];

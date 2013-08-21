@@ -85,15 +85,18 @@ x-tooltip{
         // however, if _force-display is set on a hidden tooltip, ignore
         // constraints (this allows measurement of metrics)
         &:not([_force-display]){
-            // can't use width/height:0px due to causing jump upon 
+            // can't use width/height:0px due to sometimes causing jump upon 
             // dimension recalculation in Webkit
+            width: 1px!important;
+            height: 1px!important;
             left: 0px!important;
             top: 0px!important;
             margin: 0!important;
-            max-width: 100%!important;
-            max-height: 100%!important;
-            overflow:hidden!important;
             border-width: 0px!important;
+
+            & > *{
+                display: none!important;
+            }
         }
     }
 
