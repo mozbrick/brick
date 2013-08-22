@@ -26,6 +26,7 @@
             max-height: 480px;
             position: relative;
             overflow: auto;
+            background: #fff;
         }
         
         #prev-sib{
@@ -119,10 +120,56 @@
         #fancy-selector-zone .fancy-selector{
             margin: 1px 2px;
         }
+
+        #testA, #testB{
+            position:absolute;
+            opacity: 0.5;
+            z-index: 99;
+            pointer-events: none;
+        }
+
+        #testA{      
+            background: red;
+        }
+
+        #testB{
+            background: blue;
+        }
+
+        #fixie{
+            overflow: visible;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4em;
+            background-color: rgba(100,200,100,0.8);
+            z-index: 99;
+        }
+
+        #fixie button{
+            float: right;
+            background: orange;
+            margin: .25em .5em 0 0;
+            padding: 5px;
+            font-size: 2em;
+        }
     </style>
 </head>
 <body>
 <h1>X-ToolTip demo</h1>
+<header id="fixie">
+    <button>Clicky</button>
+    <x-tooltip allow-overflow>
+        <h1>Lorem ipsum</h1>
+        <h1>Lorem ipsum</h1>
+        <h1>Lorem ipsum</h1>
+        <h1>Lorem ipsum</h1>
+        <h1>Lorem ipsum</h1>
+    </x-tooltip>
+</header>
+
+<div id="testA"></div><div id="testB"></div>
 <div id="container">
     parent node
     <button id="prev-sib">
@@ -130,7 +177,7 @@
             <img src="http://placecage.com/100/50"/>
         </p>
     </button>
-    <x-tooltip id="demoTip" orientation="top" target-selector=".fancy-selector" trigger-style="click">
+    <x-tooltip id="demoTip" orientation="auto" target-selector=".fancy-selector" trigger-style="click">
         <span class="fancy-selector">Hi!</span>I'm a tooltip! <img src="http://placecage.com/30/30"/>
         <br/><a href="http://google.com">Check out this link!</a>
 <!--

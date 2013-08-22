@@ -116,25 +116,46 @@
         return el;
     } 
 
-    /** getRect: DOM element => {top: number, left: number, 
+    /** getWindowViewport() => { top: number, left: number, 
+                                  right: number, bottom: number,
+                                  width: number, height: number}
+
+    returns the rectangle of the current window viewport, relative to the 
+    document
+    **/
+    function getWindowViewport(){
+        var docElem = document.documentElement;
+        var rect = {
+            left: (docElem.scrollLeft || document.body.scrollLeft || 0),
+            top: (docElem.scrollTop || document.body.scrollTop || 0),
+            width: docElem.clientWidth,
+            height: docElem.clientHeight
+        };
+        rect.right = rect.left + rect.width;
+        rect.bottom = rect.top + rect.height;
+        return rect;
+    }
+
+    /** getRect: DOM element => { top: number, left: number, 
                                   right: number, bottom: number,
                                   width: number, height: number}
 
     returns the absolute metrics of the given DOM element in relation to the
     document
+
+    returned coordinates already account for any CSS transform scaling on the
+    given element
     **/
     function getRect(el){
         var rect = el.getBoundingClientRect();
-        var docElem = document.documentElement;
-        var documentScrollTop = (docElem.scrollTop ||
-                                   document.body.scrollTop || 0);
-        var documentScrollLeft = (docElem.scrollLeft ||
-                                    document.body.scrollLeft || 0);
+        var viewport = getWindowViewport();
+        var docScrollLeft = viewport.left;
+        var docScrollTop = viewport.top;
         return {
-            "left": rect.left + documentScrollLeft,
-            "right": rect.right + documentScrollLeft,
-            "top": rect.top + documentScrollTop,
-            "bottom": rect.bottom + documentScrollTop,
+            "left": rect.left + docScrollLeft,
+            "right": rect.right + docScrollLeft,
+            "top": rect.top + docScrollTop,
+            "bottom": rect.bottom + docScrollTop,
             "width": rect.width,
             "height": rect.height
         };

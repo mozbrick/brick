@@ -87,9 +87,9 @@ Can be set with the `trigger-style` HTML attribute or the `triggerStyle` JavaScr
 
 ## ___allow-overflow___ / ___allowOverflow___
 
-By default, the tooltip will always try to place the tooltip in a way that is constrained by the container element.
+By default, the tooltip will always try to place the tooltip in a way that is constrained by both the container element and the window's viewport (ie: accounting for scrolling).
 
-If `allow-overflow` set, this will instead allow the tooltip to be placed freely, even if it overflows the containing element.
+If `allow-overflow` set, this will instead allow the tooltip to be placed freely, even if it overflows the containing element (However, the tooltip will still be constrained by the window's viewport).
 
 ## ___ignore-outer-trigger___ / ___ignoreOuterTrigger___
 

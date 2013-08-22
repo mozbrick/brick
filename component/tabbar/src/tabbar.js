@@ -1,58 +1,47 @@
 (function(){
-   /** getLeft: DOM element => Number
+    /** getWindowViewport() => { top: number, left: number, 
+                                  right: number, bottom: number,
+                                  width: number, height: number}
 
-    returns the absolute left X coordinate of the given element in relation to 
-    the document
+    returns the rectangle of the current window viewport, relative to the 
+    document
     **/
-    function getLeft(el) {
-        if(el.getBoundingClientRect){
-          var documentScrollLeft = (document.documentElement.scrollLeft ||
-                                    document.body.scrollLeft || 0);
-          return el.getBoundingClientRect().left + documentScrollLeft;
-        }
-        else if (el.offsetParent) {
-          return getLeft(el.offsetParent) + el.offsetLeft;
-        } else {
-          return el.offsetLeft;
-        }
+    function getWindowViewport(){
+        var docElem = document.documentElement;
+        var rect = {
+            left: (docElem.scrollLeft || document.body.scrollLeft || 0),
+            top: (docElem.scrollTop || document.body.scrollTop || 0),
+            width: docElem.clientWidth,
+            height: docElem.clientHeight
+        };
+        rect.right = rect.left + rect.width;
+        rect.bottom = rect.top + rect.height;
+        return rect;
     }
 
-    /** getLeft: DOM element => Number
-
-    returns the absolute top Y coordinate of the given element in relation to 
-    the document
-    **/
-    function getTop(el) {
-        if(el.getBoundingClientRect){
-          var documentScrollTop = (document.documentElement.scrollTop ||
-                                   document.body.scrollTop || 0);
-          return el.getBoundingClientRect().top + documentScrollTop;
-        }
-        else if (el.offsetParent) {
-          return getTop(el.offsetParent) + el.offsetTop;
-        } else {
-          return el.offsetTop;
-        }   
-    }
-
-    /** getRect: DOM element => {top: number, left: number, 
+    /** getRect: DOM element => { top: number, left: number, 
                                   right: number, bottom: number,
                                   width: number, height: number}
 
     returns the absolute metrics of the given DOM element in relation to the
     document
+
+    returned coordinates already account for any CSS transform scaling on the
+    given element
     **/
     function getRect(el){
-        var baseRect = {
-            top: getTop(el),
-            left: getLeft(el),
-            width: el.offsetWidth,
-            height: el.offsetHeight,
+        var rect = el.getBoundingClientRect();
+        var viewport = getWindowViewport();
+        var docScrollLeft = viewport.left;
+        var docScrollTop = viewport.top;
+        return {
+            "left": rect.left + docScrollLeft,
+            "right": rect.right + docScrollLeft,
+            "top": rect.top + docScrollTop,
+            "bottom": rect.bottom + docScrollTop,
+            "width": rect.width,
+            "height": rect.height
         };
-
-        baseRect.right = baseRect.left + baseRect.width;
-        baseRect.bottom = baseRect.top + baseRect.height;
-        return baseRect;
     }
     /* _pointIsInRect: (Number, Number, {left: number, top: number, 
                                          right: number, bottom: number})
@@ -132,7 +121,6 @@
 
                     var releasedTouch = e.changedTouches[0];
                     var tabRect = getRect(tabEl);
-
                     if(_pointIsInRect(releasedTouch.pageX, releasedTouch.pageY, 
                                       tabRect))
                     {

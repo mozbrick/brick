@@ -109,6 +109,7 @@ x-tooltip{
     // hackery to have auto orientation have the same transform animations
     $autoOrientationSelector: attrValNotInList(orientation, (top, bottom, left, right));
     &#{$autoOrientationSelector}{
+        $defaultAutoOrient: attrValNotInList(_auto-orientation, (bottom, left, right));
         &[_auto-orientation=top]{
             @extend %orientTopStartLoc;
         }
