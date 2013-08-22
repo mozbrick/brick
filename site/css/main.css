@@ -28,6 +28,12 @@ body {
   }
 }
 
+@media (min-width: 992px) and (max-width: 1199px) {
+  #sidebar.sticky {
+    width: 213px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
   #sidebar, #sidebar.sticky {
     position: fixed;
@@ -37,6 +43,7 @@ body {
     top: 50px;
     left: 0;
   }
+
 }
 
 @media (max-width: 767px) {
@@ -54,9 +61,6 @@ body {
   .logo {
     width: 32px;
   }
-  .navbar-brand small {
-    display: none;
-  }
   #sidebar.sticky {
     position: relative;
     z-index: 1;
@@ -66,6 +70,9 @@ body {
 @media (max-width: 480px) {
   .navbar {
     font-size: 70%;
+  }
+  .navbar-brand small {
+    display: none;
   }
 }
 
@@ -114,30 +121,7 @@ footer {
   display: block;
   clear: both;
 }
-/*
-.site-nav a {
-  margin-right: 1em;
-}
 
-header .site-nav {
-  position: absolute;
-  left: 0;
-  top: 1em;
-}
-
-footer {
-  min-height: 2em;
-  padding-right: 84px;
-  margin-top: 5em;
-  clear: left;
-}
-
-section.demo-wrap {
-  border-top: 1px solid grey;
-}
-.demo-wrap.clean {
-  border: 0;
-}
 /* centers demo items in the viewport for demo site;
  * exclude appbar because it should be at the top of the demo;
  * exclude layout because setting absolute position on flexbox causes
@@ -160,27 +144,6 @@ section.demo-wrap {
     background-image: none;
     padding: 0.5em;
 }
-/*
-.two-up {
-  clear: none;
-  width: 48%;
-  width: calc(50% - 1em);
-  float: left;
-}
-.two-up:nth-of-type(2n) {
-  margin-left: 2em;
-}
-.two-up h2 {
-  text-align: center;
-}
-
-a {
-  color: #600;
-}
-a:hover {
-  color: #a00;
-}
-*/
 
 .grayshade {
 }
