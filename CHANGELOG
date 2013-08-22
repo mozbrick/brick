@@ -1,3 +1,10 @@
+1.0beta5 (Aug 22, 2013)
+- Changing default settings of tooltip's trigger-style attribute
+- Changed tooltip's no-overflow property to allow-overflow
+- Tooltips now constrain to stay in window viewport
+- Tooltips now properly follow around fixed positioning elements
+- Deck and flipbox animations made IE10 compatible and degrade gracefully in IE9
+
 1.0.4beta (Aug 18, 2013)
 
 - Nothing major, just updating the base x-tag core library
