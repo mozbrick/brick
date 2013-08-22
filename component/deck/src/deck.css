@@ -27,32 +27,32 @@ x-deck > x-card[selected][_before-animation][card-anim-type=scrollUp]:not([rever
   -o-transform: translateY(100%); }
 
 x-deck > x-card[card-anim-type=flipX][selected][_before-animation]:not([reverse]), x-deck > x-card[card-anim-type=flipX][reverse][leaving]:not([_before-animation]) {
-  transform: rotateX(180deg);
-  -ms-transform: rotateX(180deg);
-  -moz-transform: rotateX(180deg);
-  -webkit-transform: rotateX(180deg);
-  -o-transform: rotateX(180deg); }
+  transform: perspective(800px) rotateX(180deg);
+  -ms-transform: perspective(800px) rotateX(180deg);
+  -moz-transform: perspective(800px) rotateX(180deg);
+  -webkit-transform: perspective(800px) rotateX(180deg);
+  -o-transform: perspective(800px) rotateX(180deg); }
 
 x-deck > x-card[card-anim-type=flipX][leaving]:not([reverse]):not([_before-animation]), x-deck > x-card[card-anim-type=flipX][reverse][selected][_before-animation] {
-  transform: rotateX(-180deg);
-  -ms-transform: rotateX(-180deg);
-  -moz-transform: rotateX(-180deg);
-  -webkit-transform: rotateX(-180deg);
-  -o-transform: rotateX(-180deg); }
+  transform: perspective(800px) rotateX(-180deg);
+  -ms-transform: perspective(800px) rotateX(-180deg);
+  -moz-transform: perspective(800px) rotateX(-180deg);
+  -webkit-transform: perspective(800px) rotateX(-180deg);
+  -o-transform: perspective(800px) rotateX(-180deg); }
 
 x-deck > x-card[card-anim-type=flipY][selected][_before-animation]:not([reverse]), x-deck > x-card[card-anim-type=flipY][reverse][leaving]:not([_before-animation]) {
-  transform: rotateY(180deg);
-  -ms-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg); }
+  transform: perspective(800px) rotateY(180deg);
+  -ms-transform: perspective(800px) rotateY(180deg);
+  -moz-transform: perspective(800px) rotateY(180deg);
+  -webkit-transform: perspective(800px) rotateY(180deg);
+  -o-transform: perspective(800px) rotateY(180deg); }
 
 x-deck > x-card[card-anim-type=flipY][leaving]:not([reverse]):not([_before-animation]), x-deck > x-card[card-anim-type=flipY][reverse][selected][_before-animation] {
-  transform: rotateY(-180deg);
-  -ms-transform: rotateY(-180deg);
-  -moz-transform: rotateY(-180deg);
-  -webkit-transform: rotateY(-180deg);
-  -o-transform: rotateY(-180deg); }
+  transform: perspective(800px) rotateY(-180deg);
+  -ms-transform: perspective(800px) rotateY(-180deg);
+  -moz-transform: perspective(800px) rotateY(-180deg);
+  -webkit-transform: perspective(800px) rotateY(-180deg);
+  -o-transform: perspective(800px) rotateY(-180deg); }
 
 x-deck > x-card[selected] {
   z-index: 2; }
@@ -69,12 +69,7 @@ x-deck {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 100%;
-  -webkit-perspective: 2000px;
-  -moz-perspective: 2000px;
-  -o-perspective: 2000px;
-  -ms-perspective: 2000px;
-  perspective: 2000px; }
+  height: 100%; }
   x-deck > x-card {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -82,6 +77,9 @@ x-deck {
     -o-box-sizing: border-box;
     box-sizing: border-box;
     -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
     transform-style: preserve-3d;
     display: block;
     overflow: hidden;
@@ -111,11 +109,6 @@ x-deck {
     -ms-backface-visibility: hidden;
     -o-backface-visibility: hidden;
     backface-visibility: hidden;
-    transform: translate3d(0%, 0%, 1px);
-    -ms-transform: translate3d(0%, 0%, 1px);
-    -moz-transform: translate3d(0%, 0%, 1px);
-    -webkit-transform: translate3d(0%, 0%, 1px);
-    -o-transform: translate3d(0%, 0%, 1px);
     height: 100%;
     width: 100%;
     left: 0px;
@@ -125,11 +118,5 @@ x-deck {
     x-deck > x-card:not([selected]):not([leaving]) {
       visibility: hidden;
       opacity: 0; }
-    x-deck > x-card[card-anim-type][leaving][_before-animation], x-deck > x-card[card-anim-type][selected][_before-animation], x-deck > x-card[card-anim-type][leaving]:not([_before-animation]), x-deck > x-card[card-anim-type][selected]:not([_before-animation]) {
-      transform: translate3d(0%, 0%, 1px);
-      -ms-transform: translate3d(0%, 0%, 1px);
-      -moz-transform: translate3d(0%, 0%, 1px);
-      -webkit-transform: translate3d(0%, 0%, 1px);
-      -o-transform: translate3d(0%, 0%, 1px); }
     x-deck > x-card[card-anim-type=flipY]:not([reverse]) {
       /* initial positions for animation */ }
