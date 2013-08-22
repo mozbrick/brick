@@ -15,6 +15,13 @@ env.addFilter('preserveTabs', function(str){
     return str.replace(/( {4}|\t)/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 });
 
+env.addFilter('notEmpty', function(o) {
+    if (typeof o === 'object') {
+      return Object.keys(o).length > 0;
+    }
+    return false;
+});
+
 var version = S(fs.readFileSync('VERSION')).trim().s;
 
 var size = 0;

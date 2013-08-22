@@ -1,131 +1,131 @@
 
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
 body {
-  font: normal 16px "Open Sans", sans-serif;
-  line-height: 1.5em;
-  color: #222;
-  margin: 0;
-  padding: 0;
-  min-width: 100%;
-  min-height: 100%;
-  position: relative;
+  padding-top: 70px;
 }
 
-html, body{
-  height: 100%;
-}
-
-article {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 1em;
-  position: relative;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 300;
-  margin: 1.5rem 0;
-}
-
-h1 {
-  line-height: 1.5em;
-  font-size: 200%;
-}
-
-h2 {
-  line-height: 1.5rem;
-}
-
-.moz {
-  position: absolute;
-  top: -1px;
-  right: -11px;
-  text-align: center;
-}
 .moz img {
-  opacity: .8;
-  height: 34px;
-}
-
-#mark {
-  white-space: nowrap;
-  margin: .5em 0 -.5em 0;
-}
-
-.site-header {
-  position: relative;
-  padding-top: 2em;
-}
-
-header h1 {
-  font-size: 400%;
+  width: 128px;
+  float: right;
 }
 
 .logo {
-  width: 64px;
-  margin: 0 8px -8px 0;
-  margin-right: 8px;
-  display: inline-block;
+  width: 48px;
+  margin: -8px 4px -8px 0;
 }
 
-header small {
-  font-size: 1rem;
-  color: #888;
-  margin: 0;
-  margin-left: 4px;
+#sidebar {
+  font-size: 12px;
 }
 
-header {
-  text-align: center;
+@media (min-width: 768px) {
+  #sidebar.sticky {
+    position: fixed;
+    top: 90px;
+    width: 261px;
+  }
+  .navbar-nav .succinct {
+    display: none;
+  }
 }
 
-section, footer {
-  position: relative;
-  clear: left;
-  margin: 3em 0;
+@media (min-width: 992px) and (max-width: 1199px) {
+  #sidebar.sticky {
+    width: 213px;
+  }
 }
 
-/* clearfix */
-section:after, footer:after{
-  content: "";
+@media (min-width: 768px) and (max-width: 991px) {
+  #sidebar, #sidebar.sticky {
+    position: fixed;
+    max-height: calc(100% - 50px);
+    overflow: auto;
+    width: 25%;
+    top: 50px;
+    left: 0;
+  }
+
+}
+
+@media (max-width: 767px) {
+  .navbar-nav .verbose {
+    display: none;
+  }
+  .navbar-nav {
+    margin: 5px 10px;
+    position: absolute;
+    right: 0px;
+  }
+  .nav > li > a {
+    padding: 10px;
+  }
+  .logo {
+    width: 32px;
+  }
+  #sidebar.sticky {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    font-size: 70%;
+  }
+  .navbar-brand small {
+    display: none;
+  }
+}
+
+.docs section {
+  padding-top: 70px;
+  margin-top: -70px;
+  border-bottom: 1px solid gray;
+}
+
+.navbar-brand {
+  font-size: 180%;
+  margin: -2px 0 -3px;
+}
+.navbar-brand small {
+  font-size: 50%;
+}
+.navbar-nav > li {
+  float: left;
+}
+.navbar-header {
+  float: left;
+}
+.navbar-nav {
+  float: left;
+}
+
+.row:after {
+  content: '';
   display: block;
   clear: left;
+  margin-bottom: 2em;
 }
 
-.site-nav a {
-  margin-right: 1em;
-}
-
-header .site-nav {
-  position: absolute;
-  left: 0;
-  top: 1em;
+.jumbotron {
+  margin-top: -21px;
+  padding-bottom: 64px;
 }
 
 footer {
-  min-height: 2em;
-  padding-right: 84px;
-  margin-top: 5em;
-  clear: left;
+  margin-top: 2em;
 }
 
-section.demo-wrap, section.main-sect{
-  border-top: 1px solid grey;
+/* clearfix */
+.c:after{
+  content: "";
+  display: block;
+  clear: both;
 }
-.demo-wrap.clean {
-  border: 0;
-}
+
 /* centers demo items in the viewport for demo site;
  * exclude appbar because it should be at the top of the demo;
- * exclude layout because setting absolute position on flexbox causes 
- * weirdness in FF18 where the flex item render doesn't override the 
+ * exclude layout because setting absolute position on flexbox causes
+ * weirdness in FF18 where the flex item render doesn't override the
  * height 0 fix in layout.css */
 .demo-wrap .demo > *:only-child:not(x-appbar):not(x-layout){
     position: absolute;
@@ -145,32 +145,16 @@ section.demo-wrap, section.main-sect{
     padding: 0.5em;
 }
 
-.two-up {
-  clear: none;
-  width: 48%;
-  width: calc(50% - 1em);
-  float: left;
-}
-.two-up:nth-of-type(2n) {
-  margin-left: 2em;
-}
-.two-up h2 {
-  text-align: center;
-}
-
-a {
-  color: #600;
-}
-a:hover {
-  color: #a00;
+.grayshade {
 }
 
 .download {
   background: url('../img/zip.png') no-repeat;
   background-size: 64px;
+  font-size: 120%;
   display: inline-block;
   height: 64px;
-  margin: 2em 3em 0 0;
+  margin: 5px 0 0;
   padding-left: 90px;
   white-space: nowrap;
 }
@@ -179,7 +163,6 @@ a:hover {
   text-indent: -.1rem;
   font-size: 150%;
 }
-
 .demo {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -195,7 +178,7 @@ a:hover {
   background: #f2d6b9 url("../img/retina_wood.png") repeat;
 }
 
-/* fake iphone button */
+/* fake phone button */
 .demo:after {
   content: '';
 
@@ -214,6 +197,10 @@ a:hover {
   background: none;
 }
 
+.demo-left {
+  margin: 1em 0;
+}
+
 .demo iframe {
   border: 0;
   border-radius: 2px;
@@ -229,12 +216,8 @@ a:hover {
   width: 320px;
 }
 
-.markup-wrap{
-  margin: .5em auto;
-}
-
-.markup-wrap > *:first-child{
-  margin-top: 0;
+.docs dl {
+  padding-left: 1em;
 }
 
 pre.prettyprint{
@@ -263,70 +246,50 @@ pre.prettyprint{
     white-space: nowrap;
 }
 
-.prettybutton{
-    display: inline-block;
-    padding: .25em .5em;
-    border: 1px solid grey;
-    border-top-color: #aaa;
-    border-bottom-color: #777;
-    border-radius: 4px;
-    vertical-align: middle;
-    font: inherit;
-    background-color: white;
-    background-repeat: no-repeat;
-    background-image: -o-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: -ms-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: -moz-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: -webkit-linear-gradient(top, white, white 25%, #d9d9d9);
-    background-image: linear-gradient(top, white, white 25%, #d9d9d9);
-    text-shadow: 1px 1px #fff;
-    cursor: pointer;
-}
-
-.prettybutton:hover{
-    background-position: 0 1em;
-}
-
-.prettybutton:active{
-    background-image: none;
-    background-color: #eee;
-    box-shadow: inset 1px 1px 2px #888;
+.panel-footer span {
+  line-height: 30px;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 progress {
   display: none;
+  float: right;
 }
 
 #zip {
   display: none;
 }
 
+#byob {
+  margin-top: 2em;
+}
 #byob label {
   display: block;
-  padding: .5em 1em;
   background: #f8f8f8;
   cursor: pointer;
-  margin-top: 1em;
+  padding: .5em 1em;
+}
+#buildBundle {
+  margin-right: 1em;
 }
 #byob input[type=checkbox] {
   float: right;
 }
 
+/*
 a.top {
   clear: both;
   float: right;
 }
-
-@media screen and (max-width: 800px) {
-  .two-up {
-    float: none;
+*/
+@media screen and (max-width: 400px) {
+  .panel-footer .btn {
     width: 100%;
-    margin: 3em 0;
-    padding: 0;
   }
-  .two-up + .two-up {
-    margin-left: 0;
-  }
+}
+
+@media screen and (max-width: 767px) {
   .demo {
     -webkit-transform: scale(.6);
     transform: scale(.6);
@@ -335,19 +298,8 @@ a.top {
   .demo iframe {
     pointer-events: none;
   }
-  section {
-    margin: 1em 0;
-  }
-
-  header h1 {
-    font-size: 250%;
-  }
-
-  .markup-wrap{
-    text-align: center;
-  }
 }
-
+/*
 @media screen and (max-width: 960px) {
   header {
     text-align: center;

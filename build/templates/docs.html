@@ -6,76 +6,92 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Documentation</h1>
-  <h2>Version {{ version }}</h2>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="panel panel-default" id="sidebar">
+        <div class="panel-heading">
+          Components
+        </div>
+        <div class="list-group">
+          <a class="list-group-item scrollnav" href="#usage">Usage</a>
+          {% for tag, info in tags %}
+          <a class="list-group-item scrollnav" href="#{{ tag }}">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-9 docs">
+      <section id="usage">
+        <h1>Usage</h1>
+        <p>To include Brick in your project, include your downloaded stylesheet and script files in your project's page like normal:
+          <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-{{ version }}.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-{{ version }}.js&quot;&gt;&lt;/script&gt;</pre>
+        </p>
+        <p>Using any of Brick's components is as simple as including the respective tag in your HTML markup. (See individual component docs for details.)</p>
+        <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the x-tags library's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
+        <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>  // run code here...<br/>});</pre>
+      </section>
+      {% for tag, info in tags %}
+        <section id="{{ tag }}" class="main-sect">
+          <h1>{{ tag }}
+            {% if info.demo %}
+              <small><a href="component/{{ tag }}/{{ info.demo }}">View Demo &raquo;</a></small>
+            {% endif %}
+          </h1>
+          <p>{{ info.description|escape|nl2br|preserveTabs }}</p>
 
-  <h1><b>Usage</b></h1>
-  <p>To include Brick in your project, include your downloaded stylesheet and script files in your project's page like normal:
-    <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-{{ version }}.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-{{ version }}.js&quot;&gt;&lt;/script&gt;</pre>
-  </p>
-  <p>Using any of Brick's components is as simple as including the respective tag in your HTML markup. (See individual component docs for details.)</p>
-  <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the x-tags library's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
-  <pre class="prettyprint">document.addEventListener('DOMComponentsLoaded', function(){<br/>  // run code here...<br/>});</pre>
-  <nav><h2>Available components</h2>
-    <ul>
-    {% for tag, info in tags %}
-      <li>
-        <a href="#{{ tag }}">{{ tag }}</a>
-      </li>
-    {% endfor %}
-  </nav>
-  <a class="top" href="#">top</a>
-  {% for tag, info in tags %}
-    <section id="{{ tag }}" class="main-sect">
-      <h1><b>{{ tag }}</b></h1>
-      {% if info.demo %}
-        <h2><a href="component/{{ tag }}/{{ info.demo }}">View Demo &raquo;</a></h2>
-      {% endif %}
-      <p>{{ info.description|escape|nl2br|preserveTabs }}</p>
+          {% if info.documentation.attributes|notEmpty %}
+            <h2>Attributes</h2>
+            {% for key, value in info.documentation.attributes %}
+            <dl>
+              <dt><code>{{ key }}</code></dt>
+              <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+            </dl>
+            {% endfor %}
+          {% endif %}
 
-      <h2><b><em>Attributes</em></b></h2>
-      {% for key, value in info.documentation.attributes %}
-      <dl>
-        <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-      </dl>
+          {% if info.documentation.methods|notEmpty %}
+            <h2>Methods</h2>
+            {% for key, value in info.documentation.methods %}
+              <dl>
+                <dt><code>{{ key }}</code></dt>
+                <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+              </dl>
+            {% endfor %}
+          {% endif %}
+
+          {% if info.documentation.events|notEmpty %}
+            <h2>Events</h2>
+            {% for key, value in info.documentation.events %}
+            <dl>
+              <dt><code>{{ key }}</code></dt>
+              <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+            </dl>
+            {% endfor %}
+          {% endif %}
+
+          {% if info.documentation.getters|notEmpty %}
+            <h2>Getters</h2>
+            {% for key, value in info.documentation.getters %}
+            <dl>
+              <dt><code>{{ key }}</code></dt>
+              <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+            </dl>
+            {% endfor %}
+          {% endif %}
+
+          {% if info.documentation.setters|notEmpty %}
+            <h2>Setters</h2>
+            {% for key, value in info.documentation.setters %}
+            <dl>
+              <dt><code>{{ key }}</code></dt>
+              <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
+            </dl>
+            {% endfor %}
+          {% endif %}
+        </section>
       {% endfor %}
-
-      <h2><b><em>Methods</em></b></h2>
-      {% for key, value in info.documentation.methods %}
-        <dl>
-          <dt><code>{{ key }}</code></dt>
-          <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-        </dl>
-      {% endfor %}
-
-      <h2><b><em>Events</em></b></h2>
-      {% for key, value in info.documentation.events %}
-      <dl>
-        <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-      </dl>
-      {% endfor %}
-
-      <h2><b><em>Getters</em></b></h2>
-      {% for key, value in info.documentation.getters %}
-      <dl>
-        <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-      </dl>
-      {% endfor %}
-
-      <h2><b><em>Setters</em></b></h2>
-      {% for key, value in info.documentation.setters %}
-      <dl>
-        <dt><code>{{ key }}</code></dt>
-        <dd>{{ value|escape|nl2br|preserveTabs }}</dd>
-      </dl>
-      {% endfor %}
-
-      <a class="top" href="#">top</a>
-    </section>
-  {% endfor %}
+    </div>
+  </div>
 {% endblock %}
 
 {% block script %}
@@ -84,5 +100,54 @@
     window.onload = function(){
       prettyPrint();
     }
+
+    function getTop(el) {
+      if (!el) return 0;
+      for (var top=0; el.offsetParent; el = el.offsetParent) {
+        top += el.offsetTop;
+      }
+      return top;
+    }
+
+    function posSidebar() {
+      var top = window.scrollY;
+      sidebar.classList.toggle('sticky', top > triggerTop);
+    }
+
+    var sidebar = document.querySelector('#sidebar');
+    // sidebar.style.width = sidebar.offsetWidth + 'px';
+    var triggerTop = getTop(sidebar) - 90;
+
+    var scrollNavEls = document.querySelectorAll('.scrollnav');
+    var scrollNav = (function() {
+      var ret = [];
+      for (var i=0; i<scrollNavEls.length; i++) {
+        var el = document.querySelector(scrollNavEls[i].hash);
+        ret.push(el ? getTop(el) : Infinity);
+      }
+      return ret;
+    })();
+    var activeScrollNav;
+
+    function setScrollNav() {
+      var top = window.scrollY;
+      for (var i=scrollNavEls.length-1; i>=0; i--) {
+        if (top - scrollNav[i] > -90) {
+          activeScrollNav && activeScrollNav.classList.remove('active');
+          scrollNavEls[i].classList.add('active');
+          activeScrollNav = scrollNavEls[i];
+          break;
+        }
+      }
+    }
+
+    window.addEventListener('scroll', function() {
+      posSidebar();
+      setScrollNav();
+    });
+
+    posSidebar();
+    setScrollNav();
+
   </script>
 {% endblock %}
