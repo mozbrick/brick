@@ -1,0 +1,29 @@
+[group="group-demo"][active]{
+    text-shadow: 1px 1px grey;
+}
+
+.custom-style{
+    float: left;
+    clear: both;
+    margin-top: .5em;
+}
+
+.custom-style > .x-toggle-content{
+    background-color: rgba(255,255,255,.5);
+    padding: .5em;
+    border-radius: 4px;
+}
+
+.custom-style[focus] > .x-toggle-content
+{
+    box-shadow: 1px 1px 4px grey;
+}
+
+.custom-style[checked] > .x-toggle-content{
+    background-color: rgba(255,165,0,.5);
+}
+
+.custom-style[type="radio"]{
+    font-family: Courier, monospace;
+    text-transform: uppercase;
+}

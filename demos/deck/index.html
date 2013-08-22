@@ -2,7 +2,6 @@
 
 
 
-
 <!doctype html>
 <html>
   <head>
@@ -10,11 +9,11 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>Brick x-deck demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400">
-    <link rel="stylesheet" href="../../../site/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../../dist/brick.css"/>
-    <link rel="stylesheet" href="../../../site/css/main.css">
+    <link rel="stylesheet" href="../../site/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../dist/brick.css"/>
+    <link rel="stylesheet" href="../../site/css/main.css">
     
-    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="demo.css"/>
 
   </head>
@@ -24,17 +23,17 @@
 <nav class="navbar navbar-default navbar-fixed-top grayshade" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="../../../index.html">
-        <img class="logo" src="../../../site/img/logo.png">
+      <a class="navbar-brand" href="../../index.html">
+        <img class="logo" src="../../site/img/logo.png">
         Brick<small> 1.0.4beta</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
-      <li><a href="../../../docs.html">
+      <li><a href="../../docs.html">
         <span class="succinct">Docs</span>
         <span class="verbose">Documentation &amp; Demos</span>
       </a></li>
-      <li><a href="../../../download.html">
+      <li><a href="../../download.html">
         <span>Download</span>
       </a></li>
       <li><a href="http://github.com/mozilla/brick/">
@@ -56,7 +55,7 @@
     <header>
         <h1>x-deck</h1> 
     </header>
-    <a href="../../../docs.html">&laquo; Back to docs</a>
+    <a href="../../docs.html">&laquo; Back to docs</a>
     
 <p><code class="prettyprint">&lt;x-deck&gt;</code>s are components that act similarly to slideshows or galleries where cards can be cycled independently of order with a variety of different transitions.</p>
     <section class="demo-wrap">
@@ -70,19 +69,19 @@
                         0<span>I'm the first card!</span>
                     </x-card>
                     <x-card>
-                        1<code>These cards can contain any markup!<br/><img src="grounds_keeping_it_real_s3.gif"/><img src="grounds_keeping_it_real_s1.gif"/><img src="grounds_keeping_it_real_s2.gif"/></code>
+                        1<span>These cards can contain any markup!<br/><img src="../../site/img/grounds_keeping_it_real_s3.gif"/><img src="../../site/img/grounds_keeping_it_real_s1.gif"/><img src="../../site/img/grounds_keeping_it_real_s2.gif"/></span>
                     </x-card>
                     <x-card>
-                        2<img src="thumbs_up.gif"/>
+                        2<img src="../../site/img/thumbs_up.gif"/>
                     </x-card>
                 </x-deck>
             </figure>
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
-                <button class="prettybutton shuffleto" target=1>Shuffle to card 1</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
+                <button class="btn btn-default shuffleto" target=1>Shuffle to card 1</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -111,17 +110,17 @@
         <div class="markup-wrap two-up">
             <div class="controls">
                 <h4>Automatic animation direction</h4>
-                <button class="prettybutton prev"><code>.shufflePrev()</code></button>
-                <button class="prettybutton next"><code>.shuffleNext()</code></button>
-                <button class="prettybutton shuffleto" target=1><code>.shuffleTo(1)</code></button>
+                <button class="btn btn-default prev"><code>.shufflePrev()</code></button>
+                <button class="btn btn-default next"><code>.shuffleNext()</code></button>
+                <button class="btn btn-default shuffleto" target=1><code>.shuffleTo(1)</code></button>
                 <h4>Reverse animation direction</h4>
-                <button class="prettybutton prev reverse"><code>.shufflePrev("reverse")</code></button>
-                <button class="prettybutton next reverse"><code>.shuffleNext("reverse")</code></button>
-                <button class="prettybutton shuffleto reverse" target=1><code>.shuffleTo(1, "reverse")</code></button>
+                <button class="btn btn-default prev reverse"><code>.shufflePrev("reverse")</code></button>
+                <button class="btn btn-default next reverse"><code>.shuffleNext("reverse")</code></button>
+                <button class="btn btn-default shuffleto reverse" target=1><code>.shuffleTo(1, "reverse")</code></button>
                 <h4>Forward animation direction</h4>
-                <button class="prettybutton prev forward"><code>.shufflePrev("forward")</code></button>
-                <button class="prettybutton next forward"><code>.shuffleNext("forward")</code></button>
-                <button class="prettybutton shuffleto forward" target=1><code>.shuffleTo(1, "forward")</code></button>
+                <button class="btn btn-default prev forward"><code>.shufflePrev("forward")</code></button>
+                <button class="btn btn-default next forward"><code>.shuffleNext("forward")</code></button>
+                <button class="btn btn-default shuffleto forward" target=1><code>.shuffleTo(1, "forward")</code></button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -165,15 +164,15 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton" 
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default" 
                         data-toggle-prop="transitionType" 
                         data-toggle-target="x-deck" 
                         data-toggle-options='["scrollLeft", "scrollUp", "scrollRight", "scrollDown","flipX", "flipY", "coverLeft", "coverUp", "coverRight", "coverDown","uncoverLeft", "uncoverUp", "uncoverRight", "uncoverDown", "none"]'
                 >
                     Change <code>transition-type</code>
                 </button>
-                <button class="prettybutton next">Next card</button>
+                <button class="btn btn-default next">Next card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -200,8 +199,8 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
             </div>  
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -225,10 +224,10 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
-                <button class="prettybutton add">Add card</button>
-                <button class="prettybutton remove">Remove card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
+                <button class="btn btn-default add">Add card</button>
+                <button class="btn btn-default remove">Remove card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -256,8 +255,8 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -296,10 +295,10 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
-                <button class="prettybutton add" noshuffle>Add card</button>
-                <button class="prettybutton remove">Remove card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
+                <button class="btn btn-default add" noshuffle>Add card</button>
+                <button class="btn btn-default remove">Remove card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -313,14 +312,14 @@
       <footer class="row">
         <div class="col-xs-8"></div>
         <div class="col-xs-4">
-          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="../../../site/img/mozillaHTML5.png" title="built by Mozilla"></a>
+          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="../../site/img/mozillaHTML5.png" title="built by Mozilla"></a>
         </div>
       </footer>
     </article>
-    <script src="../../../dist/brick.js"></script>
+    <script src="../../dist/brick.js"></script>
      
-    <script type="text/javascript" src="../../../site/js/prettify.js"></script>
-    <script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
+    <script type="text/javascript" src="../../site/js/prettify.js"></script>
+    <script type="text/javascript" src="../../site/js/demo-page-helpers.js"></script>
     <script type="text/javascript" src="demo.js"></script>
 
   </body>

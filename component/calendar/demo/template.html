@@ -252,7 +252,7 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar id="custom-render-simple" controls&gt;&lt;/x-calendar&gt;</pre>
             <h3>Styling</h3>
-            <pre class="prettyprint css">*[dance-time]{<br/>    background-image: url(&quot;grounds_keeping_it_real_s1.gif&quot;);<br/>    color: white;<br/>    text-shadow: 1px 1px 4px grey;<br/>}</pre>
+            <pre class="prettyprint css">*[dance-time]{<br/>    background-image: url(&quot;../../site/img/grounds_keeping_it_real_s1.gif&quot;);<br/>    color: white;<br/>    text-shadow: 1px 1px 4px grey;<br/>}</pre>
             <h3>JavaScript</h3>
             <pre class="prettyprint javascript">var cal = document.getElementById(&quot;custom-render-simple&quot;);<br/>cal.customRenderFn = function(dayEl, date, iso){<br/>    // add selector to every 5th day in a month<br/>    if(date.getDate() % 5 === 0){<br/>        dayEl.setAttribute(&quot;dance-time&quot;, true);<br/>    }<br/>    else{<br/>        dayEl.removeAttribute(&quot;dance-time&quot;);<br/>    }<br/>};</pre>
         </div>

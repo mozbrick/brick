@@ -1300,6 +1300,10 @@
         }
     }
     
+    /** _destroyListeners(DOM)
+
+    removes all cached triggering listeners on the given tooltip
+    **/
     function _destroyListeners(tooltip){
         var cachedListeners = tooltip.xtag.cachedListeners;
         cachedListeners.forEach(function(cachedListener){

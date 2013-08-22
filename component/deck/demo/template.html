@@ -16,19 +16,19 @@
                         0<span>I'm the first card!</span>
                     </x-card>
                     <x-card>
-                        1<code>These cards can contain any markup!<br/><img src="grounds_keeping_it_real_s3.gif"/><img src="grounds_keeping_it_real_s1.gif"/><img src="grounds_keeping_it_real_s2.gif"/></code>
+                        1<span>These cards can contain any markup!<br/><img src="{{REL_PATH}}site/img/grounds_keeping_it_real_s3.gif"/><img src="{{REL_PATH}}site/img/grounds_keeping_it_real_s1.gif"/><img src="{{REL_PATH}}site/img/grounds_keeping_it_real_s2.gif"/></span>
                     </x-card>
                     <x-card>
-                        2<img src="thumbs_up.gif"/>
+                        2<img src="{{REL_PATH}}site/img/thumbs_up.gif"/>
                     </x-card>
                 </x-deck>
             </figure>
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
-                <button class="prettybutton shuffleto" target=1>Shuffle to card 1</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
+                <button class="btn btn-default shuffleto" target=1>Shuffle to card 1</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -57,17 +57,17 @@
         <div class="markup-wrap two-up">
             <div class="controls">
                 <h4>Automatic animation direction</h4>
-                <button class="prettybutton prev"><code>.shufflePrev()</code></button>
-                <button class="prettybutton next"><code>.shuffleNext()</code></button>
-                <button class="prettybutton shuffleto" target=1><code>.shuffleTo(1)</code></button>
+                <button class="btn btn-default prev"><code>.shufflePrev()</code></button>
+                <button class="btn btn-default next"><code>.shuffleNext()</code></button>
+                <button class="btn btn-default shuffleto" target=1><code>.shuffleTo(1)</code></button>
                 <h4>Reverse animation direction</h4>
-                <button class="prettybutton prev reverse"><code>.shufflePrev("reverse")</code></button>
-                <button class="prettybutton next reverse"><code>.shuffleNext("reverse")</code></button>
-                <button class="prettybutton shuffleto reverse" target=1><code>.shuffleTo(1, "reverse")</code></button>
+                <button class="btn btn-default prev reverse"><code>.shufflePrev("reverse")</code></button>
+                <button class="btn btn-default next reverse"><code>.shuffleNext("reverse")</code></button>
+                <button class="btn btn-default shuffleto reverse" target=1><code>.shuffleTo(1, "reverse")</code></button>
                 <h4>Forward animation direction</h4>
-                <button class="prettybutton prev forward"><code>.shufflePrev("forward")</code></button>
-                <button class="prettybutton next forward"><code>.shuffleNext("forward")</code></button>
-                <button class="prettybutton shuffleto forward" target=1><code>.shuffleTo(1, "forward")</code></button>
+                <button class="btn btn-default prev forward"><code>.shufflePrev("forward")</code></button>
+                <button class="btn btn-default next forward"><code>.shuffleNext("forward")</code></button>
+                <button class="btn btn-default shuffleto forward" target=1><code>.shuffleTo(1, "forward")</code></button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -111,15 +111,15 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton" 
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default" 
                         data-toggle-prop="transitionType" 
                         data-toggle-target="x-deck" 
                         data-toggle-options='["scrollLeft", "scrollUp", "scrollRight", "scrollDown","flipX", "flipY", "coverLeft", "coverUp", "coverRight", "coverDown","uncoverLeft", "uncoverUp", "uncoverRight", "uncoverDown", "none"]'
                 >
                     Change <code>transition-type</code>
                 </button>
-                <button class="prettybutton next">Next card</button>
+                <button class="btn btn-default next">Next card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -146,8 +146,8 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
             </div>  
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -171,10 +171,10 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
-                <button class="prettybutton add">Add card</button>
-                <button class="prettybutton remove">Remove card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
+                <button class="btn btn-default add">Add card</button>
+                <button class="btn btn-default remove">Remove card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -202,8 +202,8 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
@@ -242,10 +242,10 @@
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton prev">Previous card</button>
-                <button class="prettybutton next">Next card</button>
-                <button class="prettybutton add" noshuffle>Add card</button>
-                <button class="prettybutton remove">Remove card</button>
+                <button class="btn btn-default prev">Previous card</button>
+                <button class="btn btn-default next">Next card</button>
+                <button class="btn btn-default add" noshuffle>Add card</button>
+                <button class="btn btn-default remove">Remove card</button>
             </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>

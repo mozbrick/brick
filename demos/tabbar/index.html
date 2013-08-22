@@ -2,7 +2,6 @@
 
 
 
-
 <!doctype html>
 <html>
   <head>
@@ -10,11 +9,11 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>Brick x-tabbar demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400">
-    <link rel="stylesheet" href="../../../site/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../../dist/brick.css"/>
-    <link rel="stylesheet" href="../../../site/css/main.css">
+    <link rel="stylesheet" href="../../site/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../dist/brick.css"/>
+    <link rel="stylesheet" href="../../site/css/main.css">
     
-    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="demo.css"/>
 
   </head>
@@ -24,17 +23,17 @@
 <nav class="navbar navbar-default navbar-fixed-top grayshade" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="../../../index.html">
-        <img class="logo" src="../../../site/img/logo.png">
+      <a class="navbar-brand" href="../../index.html">
+        <img class="logo" src="../../site/img/logo.png">
         Brick<small> 1.0.4beta</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
-      <li><a href="../../../docs.html">
+      <li><a href="../../docs.html">
         <span class="succinct">Docs</span>
         <span class="verbose">Documentation &amp; Demos</span>
       </a></li>
-      <li><a href="../../../download.html">
+      <li><a href="../../download.html">
         <span>Download</span>
       </a></li>
       <li><a href="http://github.com/mozilla/brick/">
@@ -56,7 +55,7 @@
     <header>
         <h1>x-tabbar</h1> 
     </header>
-    <a href="../../../docs.html">&laquo; Back to docs</a>
+    <a href="../../docs.html">&laquo; Back to docs</a>
     
   <p><code class="prettyprint">&lt;x-tabbar&gt;</code> elements are essentially containers for <code class="prettyprint">&lt;x-tabbar-tab&gt;</code> elements.<p>
   <p>By default, whenever an <code class="prettyprint">&lt;x-tabbar-tab&gt;</code> element is clicked, it will fire a <code>show</code> event on its targeted elements. It is up to the element to respond to this event, but some components bundled in Brick have built in responses to <code>show</code> events.</p>
@@ -67,28 +66,28 @@
     <div class="two-up">
       <figure class="demo">
         <x-deck class="component-demo" transition-type="coverDown">
-          <x-card><img src="dog1.png"><span>One</span></x-card>
-          <x-card><img src="dog2.png"><span>Two</span></x-card>
-          <x-card><img src="dog3.png"><span>Three</span></x-card>
-          <x-card><img src="dog4.png"><span>Four</span></x-card>
-          <x-card><img src="dog5.png"><span>Five</span></x-card>
+          <x-card><img src="../../site/img/dog1.png"><span>One</span></x-card>
+          <x-card><img src="../../site/img/dog2.png"><span>Two</span></x-card>
+          <x-card><img src="../../site/img/dog3.png"><span>Three</span></x-card>
+          <x-card><img src="../../site/img/dog4.png"><span>Four</span></x-card>
+          <x-card><img src="../../site/img/dog5.png"><span>Five</span></x-card>
         </x-deck>
 
         <x-tabbar>
           <x-tabbar-tab target-selector="x-deck x-card:first-child">
-            <x-iconbutton src="dog1.png" icon-anchor="top">One</x-iconbutton>
+            <x-iconbutton src="../../site/img/dog1.png" icon-anchor="top">One</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
-            <x-iconbutton src="dog2.png" icon-anchor="top">Two</x-iconbutton>
+            <x-iconbutton src="../../site/img/dog2.png" icon-anchor="top">Two</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
-            <x-iconbutton src="dog3.png" icon-anchor="top">Three</x-iconbutton>
+            <x-iconbutton src="../../site/img/dog3.png" icon-anchor="top">Three</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
-            <x-iconbutton src="dog4.png" icon-anchor="top">Four</x-iconbutton>
+            <x-iconbutton src="../../site/img/dog4.png" icon-anchor="top">Four</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
-            <x-iconbutton src="dog5.png" icon-anchor="top">Five</x-iconbutton>
+            <x-iconbutton src="../../site/img/dog5.png" icon-anchor="top">Five</x-iconbutton>
           </x-tabbar-tab>
         </x-tabbar>
       </figure>
@@ -107,26 +106,26 @@
       <figure class="demo">
         <x-slidebox class="component-demo" orientation="x">
           <x-slides>
-            <x-slide><img src="birnimal-calendar.png"></x-slide>
-            <x-slide><img src="birnimal-graph.png"></x-slide>
-            <x-slide><img src="birnimal-detail.png"></x-slide>
-            <x-slide><img src="birnimal-settings.png"></x-slide>
+            <x-slide><img src="../../site/img/birnimal-calendar.png"></x-slide>
+            <x-slide><img src="../../site/img/birnimal-graph.png"></x-slide>
+            <x-slide><img src="../../site/img/birnimal-detail.png"></x-slide>
+            <x-slide><img src="../../site/img/birnimal-settings.png"></x-slide>
           </x-slides>
         </x-slidebox>
 
         <!-- see javascript to see demo of dynamically assigning targets -->
         <x-tabbar id="slide-box-tabbar">
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-calendar.png">A</x-iconbutton>
+            <x-iconbutton src="../../site/img/birnimal-calendar.png">A</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-graph.png">B</x-iconbutton>
+            <x-iconbutton src="../../site/img/birnimal-graph.png">B</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-detail.png">C</x-iconbutton>
+            <x-iconbutton src="../../site/img/birnimal-detail.png">C</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-settings.png">D</x-iconbutton>
+            <x-iconbutton src="../../site/img/birnimal-settings.png">D</x-iconbutton>
           </x-tabbar-tab>
         </x-tabbar>
       </figure>
@@ -146,25 +145,25 @@
       <figure class="demo">
         <x-flipbox class="component-demo">
           <div>
-            <img src="Card_front.png">
+            <img src="../../site/img/Card_front.png">
           </div>
           <div>
-            <img src="Card_back.png">
+            <img src="../../site/img/Card_back.png">
           </div>
         </x-flipbox>
         <x-tabbar>
           <x-tabbar-tab target-selector="x-flipbox > *:first-child">
-            <x-iconbutton src="Card_front.svg">Front</x-iconbutton>
+            <x-iconbutton src="../../site/img/Card_front.png">Front</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-flipbox > *:last-child">
-            <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
+            <x-iconbutton src="../../site/img/Card_back.png">Back</x-iconbutton>
           </x-tabbar-tab>
         </x-tabbar>
       </figure>
     </div>
     <div class="markup-wrap two-up">
       <h3>HTML markup</h3>
-      <pre class="prettyprint html">&lt;!-- the target element; the actual structure is unimportant and is <br>     only provided to demo what the tabbar's tabs are targeting --&gt;<br>&lt;x-flipbox class=&quot;component-demo&quot;&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_front.svg&quot;/&gt;<br>  &lt;/div&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_back.svg&quot;/&gt;<br>  &lt;/div&gt;<br>&lt;/x-flipbox&gt;<br><br>&lt;!-- the tabbar itself --&gt;<br>&lt;x-tabbar&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:first-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:last-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
+      <pre class="prettyprint html">&lt;!-- the target element; the actual structure is unimportant and is <br>     only provided to demo what the tabbar's tabs are targeting --&gt;<br>&lt;x-flipbox class=&quot;component-demo&quot;&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_front.png&quot;/&gt;<br>  &lt;/div&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_back.png&quot;/&gt;<br>  &lt;/div&gt;<br>&lt;/x-flipbox&gt;<br><br>&lt;!-- the tabbar itself --&gt;<br>&lt;x-tabbar&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:first-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:last-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
     </div>
     <a href="#" class="top">Top</a>
   </section>
@@ -202,14 +201,14 @@
       <footer class="row">
         <div class="col-xs-8"></div>
         <div class="col-xs-4">
-          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="../../../site/img/mozillaHTML5.png" title="built by Mozilla"></a>
+          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="../../site/img/mozillaHTML5.png" title="built by Mozilla"></a>
         </div>
       </footer>
     </article>
-    <script src="../../../dist/brick.js"></script>
+    <script src="../../dist/brick.js"></script>
      
-    <script type="text/javascript" src="../../../site/js/prettify.js"></script>
-    <script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
+    <script type="text/javascript" src="../../site/js/prettify.js"></script>
+    <script type="text/javascript" src="../../site/js/demo-page-helpers.js"></script>
     <script type="text/javascript" src="demo.js"></script>
 
   </body>

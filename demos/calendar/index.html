@@ -2,7 +2,6 @@
 
 
 
-
 <!doctype html>
 <html>
   <head>
@@ -10,11 +9,11 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <title>Brick x-calendar demos</title>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400">
-    <link rel="stylesheet" href="../../../site/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../../dist/brick.css"/>
-    <link rel="stylesheet" href="../../../site/css/main.css">
+    <link rel="stylesheet" href="../../site/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../dist/brick.css"/>
+    <link rel="stylesheet" href="../../site/css/main.css">
     
-    <link rel="stylesheet" type="text/css" href="../../../site/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="../../site/css/prettify.css">
     <link rel="stylesheet" type="text/css" href="demo.css"/>
 
   </head>
@@ -24,17 +23,17 @@
 <nav class="navbar navbar-default navbar-fixed-top grayshade" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="../../../index.html">
-        <img class="logo" src="../../../site/img/logo.png">
+      <a class="navbar-brand" href="../../index.html">
+        <img class="logo" src="../../site/img/logo.png">
         Brick<small> 1.0.4beta</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
-      <li><a href="../../../docs.html">
+      <li><a href="../../docs.html">
         <span class="succinct">Docs</span>
         <span class="verbose">Documentation &amp; Demos</span>
       </a></li>
-      <li><a href="../../../download.html">
+      <li><a href="../../download.html">
         <span>Download</span>
       </a></li>
       <li><a href="http://github.com/mozilla/brick/">
@@ -56,7 +55,7 @@
     <header>
         <h1>x-calendar</h1> 
     </header>
-    <a href="../../../docs.html">&laquo; Back to docs</a>
+    <a href="../../docs.html">&laquo; Back to docs</a>
     
     <p>Provides a simple calendar UI widget.</p>
     <p>Note that when the API works with datestrings, while it's best to pass in "YYYY-MM-DD" ISO strings to the calendar, the <code class="prettyprint">&lt;x-calendar&gt;</code> will also accept any string parseable by <code class="prettyprint">Date.parse()</code>. However, be aware that browser implementations of <code class="prettyprint">Date.parse()</code> may differ slightly.</p>
@@ -306,7 +305,7 @@
             <h3>Markup</h3>
             <pre class="prettyprint html">&lt;x-calendar id="custom-render-simple" controls&gt;&lt;/x-calendar&gt;</pre>
             <h3>Styling</h3>
-            <pre class="prettyprint css">*[dance-time]{<br/>    background-image: url(&quot;grounds_keeping_it_real_s1.gif&quot;);<br/>    color: white;<br/>    text-shadow: 1px 1px 4px grey;<br/>}</pre>
+            <pre class="prettyprint css">*[dance-time]{<br/>    background-image: url(&quot;../../site/img/grounds_keeping_it_real_s1.gif&quot;);<br/>    color: white;<br/>    text-shadow: 1px 1px 4px grey;<br/>}</pre>
             <h3>JavaScript</h3>
             <pre class="prettyprint javascript">var cal = document.getElementById(&quot;custom-render-simple&quot;);<br/>cal.customRenderFn = function(dayEl, date, iso){<br/>    // add selector to every 5th day in a month<br/>    if(date.getDate() % 5 === 0){<br/>        dayEl.setAttribute(&quot;dance-time&quot;, true);<br/>    }<br/>    else{<br/>        dayEl.removeAttribute(&quot;dance-time&quot;);<br/>    }<br/>};</pre>
         </div>
@@ -340,14 +339,14 @@
       <footer class="row">
         <div class="col-xs-8"></div>
         <div class="col-xs-4">
-          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="../../../site/img/mozillaHTML5.png" title="built by Mozilla"></a>
+          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="../../site/img/mozillaHTML5.png" title="built by Mozilla"></a>
         </div>
       </footer>
     </article>
-    <script src="../../../dist/brick.js"></script>
+    <script src="../../dist/brick.js"></script>
      
-    <script type="text/javascript" src="../../../site/js/prettify.js"></script>
-    <script type="text/javascript" src="../../../site/js/demo-page-helpers.js"></script>
+    <script type="text/javascript" src="../../site/js/prettify.js"></script>
+    <script type="text/javascript" src="../../site/js/demo-page-helpers.js"></script>
     <script type="text/javascript" src="demo.js"></script>
 
   </body>

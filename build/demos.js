@@ -40,7 +40,8 @@ function processComponentTemplate(componentDemoPath, componentName){
     var p = promise();
 
     var templatePath = path.join(componentDemoPath, "template.html");
-    var indexPagePath = path.join(componentDemoPath, "index.html");
+    var outputDir = path.join("demos", componentName);
+    var outputPath = path.join(outputDir, "index.html");
 
     if(!fs.existsSync(templatePath)){
         console.log("skipped " + componentName + "; no template.html found");
@@ -48,15 +49,33 @@ function processComponentTemplate(componentDemoPath, componentName){
         return p;
     }
 
+    if(!fs.existsSync(outputDir)){
+        fs.mkdirSync(outputDir);
+    }
+
     try{
-        site.staticPage(templatePath, indexPagePath);
-        p.fulfill();
+        site.staticPage(templatePath, outputPath);
     }
     catch(e){
         p.reject(e);
     }
 
-    console.log("wrote " + templatePath + " -> " + indexPagePath);
+    console.log("wrote " + templatePath + " -> " + outputPath);
+
+    // copy over demo files
+    var demoFiles = ["demo.css", "demo.js"];
+    demoFiles.forEach(function(demoFilename){
+        var srcPath = path.join(componentDemoPath, demoFilename);
+        if(!fs.existsSync(srcPath)) return;
+
+        var src = fs.readFileSync(srcPath);
+        var outPath = path.join(outputDir, demoFilename);
+        fs.writeFileSync(outPath, src);
+        console.log("  - copied " + srcPath + " -> " + outPath);
+    });
+
+    p.fulfill();
+
     return p;
 }
 

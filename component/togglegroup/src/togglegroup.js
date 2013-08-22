@@ -12,8 +12,6 @@
 
                     option.noBox = true;
                 }.bind(this));
-
-                console.log(this.options);
             }
         },
         events: {

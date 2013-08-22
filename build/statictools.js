@@ -3,7 +3,6 @@ var fs = require('fs');
 var nunjucks = require('nunjucks');
 var promise = require('promisesaplus');
 var _ = require('lodash');
-var S = require("string");
 
 var env = new nunjucks.Environment(new nunjucks.FileSystemLoader('build/templates'));
 
@@ -22,7 +21,7 @@ env.addFilter('notEmpty', function(o) {
     return false;
 });
 
-var version = S(fs.readFileSync('VERSION')).trim().s;
+var version = fs.readFileSync('VERSION').toString().replace(/^\s*/, "").replace(/\s*$/, "");
 
 var size = 0;
 size += fs.statSync('dist/brick.css').size;

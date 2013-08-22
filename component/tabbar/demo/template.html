@@ -13,28 +13,28 @@
     <div class="two-up">
       <figure class="demo">
         <x-deck class="component-demo" transition-type="coverDown">
-          <x-card><img src="dog1.png"><span>One</span></x-card>
-          <x-card><img src="dog2.png"><span>Two</span></x-card>
-          <x-card><img src="dog3.png"><span>Three</span></x-card>
-          <x-card><img src="dog4.png"><span>Four</span></x-card>
-          <x-card><img src="dog5.png"><span>Five</span></x-card>
+          <x-card><img src="{{REL_PATH}}site/img/dog1.png"><span>One</span></x-card>
+          <x-card><img src="{{REL_PATH}}site/img/dog2.png"><span>Two</span></x-card>
+          <x-card><img src="{{REL_PATH}}site/img/dog3.png"><span>Three</span></x-card>
+          <x-card><img src="{{REL_PATH}}site/img/dog4.png"><span>Four</span></x-card>
+          <x-card><img src="{{REL_PATH}}site/img/dog5.png"><span>Five</span></x-card>
         </x-deck>
 
         <x-tabbar>
           <x-tabbar-tab target-selector="x-deck x-card:first-child">
-            <x-iconbutton src="dog1.png" icon-anchor="top">One</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/dog1.png" icon-anchor="top">One</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(2)">
-            <x-iconbutton src="dog2.png" icon-anchor="top">Two</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/dog2.png" icon-anchor="top">Two</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(3)">
-            <x-iconbutton src="dog3.png" icon-anchor="top">Three</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/dog3.png" icon-anchor="top">Three</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(4)">
-            <x-iconbutton src="dog4.png" icon-anchor="top">Four</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/dog4.png" icon-anchor="top">Four</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-deck x-card:nth-child(5)">
-            <x-iconbutton src="dog5.png" icon-anchor="top">Five</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/dog5.png" icon-anchor="top">Five</x-iconbutton>
           </x-tabbar-tab>
         </x-tabbar>
       </figure>
@@ -53,26 +53,26 @@
       <figure class="demo">
         <x-slidebox class="component-demo" orientation="x">
           <x-slides>
-            <x-slide><img src="birnimal-calendar.png"></x-slide>
-            <x-slide><img src="birnimal-graph.png"></x-slide>
-            <x-slide><img src="birnimal-detail.png"></x-slide>
-            <x-slide><img src="birnimal-settings.png"></x-slide>
+            <x-slide><img src="{{REL_PATH}}site/img/birnimal-calendar.png"></x-slide>
+            <x-slide><img src="{{REL_PATH}}site/img/birnimal-graph.png"></x-slide>
+            <x-slide><img src="{{REL_PATH}}site/img/birnimal-detail.png"></x-slide>
+            <x-slide><img src="{{REL_PATH}}site/img/birnimal-settings.png"></x-slide>
           </x-slides>
         </x-slidebox>
 
         <!-- see javascript to see demo of dynamically assigning targets -->
         <x-tabbar id="slide-box-tabbar">
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-calendar.png">A</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/birnimal-calendar.png">A</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-graph.png">B</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/birnimal-graph.png">B</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-detail.png">C</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/birnimal-detail.png">C</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab>
-            <x-iconbutton src="birnimal-settings.png">D</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/birnimal-settings.png">D</x-iconbutton>
           </x-tabbar-tab>
         </x-tabbar>
       </figure>
@@ -92,25 +92,25 @@
       <figure class="demo">
         <x-flipbox class="component-demo">
           <div>
-            <img src="Card_front.png">
+            <img src="{{REL_PATH}}site/img/Card_front.png">
           </div>
           <div>
-            <img src="Card_back.png">
+            <img src="{{REL_PATH}}site/img/Card_back.png">
           </div>
         </x-flipbox>
         <x-tabbar>
           <x-tabbar-tab target-selector="x-flipbox > *:first-child">
-            <x-iconbutton src="Card_front.svg">Front</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/Card_front.png">Front</x-iconbutton>
           </x-tabbar-tab>
           <x-tabbar-tab target-selector="x-flipbox > *:last-child">
-            <x-iconbutton src="Card_back.svg">Back</x-iconbutton>
+            <x-iconbutton src="{{REL_PATH}}site/img/Card_back.png">Back</x-iconbutton>
           </x-tabbar-tab>
         </x-tabbar>
       </figure>
     </div>
     <div class="markup-wrap two-up">
       <h3>HTML markup</h3>
-      <pre class="prettyprint html">&lt;!-- the target element; the actual structure is unimportant and is <br>     only provided to demo what the tabbar's tabs are targeting --&gt;<br>&lt;x-flipbox class=&quot;component-demo&quot;&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_front.svg&quot;/&gt;<br>  &lt;/div&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_back.svg&quot;/&gt;<br>  &lt;/div&gt;<br>&lt;/x-flipbox&gt;<br><br>&lt;!-- the tabbar itself --&gt;<br>&lt;x-tabbar&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:first-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:last-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
+      <pre class="prettyprint html">&lt;!-- the target element; the actual structure is unimportant and is <br>     only provided to demo what the tabbar's tabs are targeting --&gt;<br>&lt;x-flipbox class=&quot;component-demo&quot;&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_front.png&quot;/&gt;<br>  &lt;/div&gt;<br>  &lt;div&gt;<br>    &lt;img src=&quot;Card_back.png&quot;/&gt;<br>  &lt;/div&gt;<br>&lt;/x-flipbox&gt;<br><br>&lt;!-- the tabbar itself --&gt;<br>&lt;x-tabbar&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:first-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>    &lt;x-tabbar-tab target-selector=&quot;x-flipbox &gt; *:last-child&quot;&gt;<br>        &lt;!-- tab content is unimportant --&gt;<br>    &lt;/x-tabbar-tab&gt;<br>&lt;/x-tabbar&gt;</pre>
     </div>
     <a href="#" class="top">Top</a>
   </section>

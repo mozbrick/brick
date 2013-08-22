@@ -490,7 +490,11 @@
                     }
                     // turn off polyfill elements (but don't remove them)
                     else{
-                        dateInput.setAttribute("type", "date");
+                        // workaround for Chrome 29 bug with date input getting 
+                        // set to type=date twice and breaking menus
+                        if(dateInput.getAttribute("type") !== "date"){
+                            dateInput.setAttribute("type", "date");
+                        }
                         dateInput.removeAttribute("readonly");
                         var polyInput = this.xtag.polyfillInput;
                         if(polyInput){

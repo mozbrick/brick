@@ -3,7 +3,7 @@
 
 $polyfillInputBorderWidth: 1px;
 
-x-datepicker {
+x-datepicker, x-foo {
     position: relative;
     display: inline-block;
     overflow: visible !important; // allow displaying calendar

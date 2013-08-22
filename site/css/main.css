@@ -17,6 +17,15 @@ body {
   font-size: 12px;
 }
 
+section.demo-wrap .two-up{
+  margin-top: 1.5em;
+}
+
+section.demo-wrap:not(.clean){
+  margin-top: 2em;
+  border-top: 1px solid grey;
+}
+
 @media (min-width: 768px) {
   #sidebar.sticky {
     position: fixed;
@@ -136,6 +145,11 @@ footer {
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+/* to address rendering issue when button is absolutely positioned */
+.demo-wrap .demo > x-iconbutton:only-child:not(x-appbar):not(x-layout){
+    position:relative;
 }
 
 .demo-wrap .demo > form{

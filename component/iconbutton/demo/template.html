@@ -9,7 +9,7 @@
         <header><h2>Basic usage</h2></header>
         <div class="two-up">
             <figure class="demo">
-                <x-iconbutton src="firefox.png">
+                <x-iconbutton src="{{REL_PATH}}site/img/firefox.png">
                     Put <code>any markup</code> here!
                 </x-iconbutton>
             </figure>
@@ -24,23 +24,23 @@
         <header><h2>Editing the icon with <code>icon-anchor</code> and <code>src</code></h2></header>
         <div class="two-up">
             <figure class="demo">
-                <x-iconbutton icon-anchor="left" src="firefox.png">
+                <x-iconbutton icon-anchor="left" src="{{REL_PATH}}site/img/firefox.png">
                     Lorem ipsum
                 </x-iconbutton>
             </figure>
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button class="prettybutton" 
+                <button class="btn btn-default" 
                         data-toggle-prop="iconAnchor" 
                         data-toggle-target="x-iconbutton" 
                         data-toggle-options='["left", "top", "right", "bottom"]'>
                     Edit <code>icon-anchor</code>
                 </button>
-                <button class="prettybutton" 
+                <button class="btn btn-default" 
                         data-toggle-prop="src" 
                         data-toggle-target="x-iconbutton" 
-                        data-toggle-options='["firefox.png", "http://placekitten.com/50", "grounds_keeping_it_real_s1.gif"]'>
+                        data-toggle-options='["{{REL_PATH}}site/img/firefox.png", "http://placekitten.com/50", "{{REL_PATH}}site/img/grounds_keeping_it_real_s1.gif"]'>
                     Edit <code>src</code>
                 </button>
             </div>
@@ -55,18 +55,18 @@
         <p><b>Important:</b> Edit these elements instead of directly editing <code>.innerHTML</code> or <code>.textContent</code> of an <code class="prettyprint">&lt;x-iconbutton&gt;</code>.</p>
         <div class="two-up">
             <figure class="demo">
-                <x-iconbutton id="dom-demo-button" src="firefox.png"><code>Content</code></x-iconbutton>
+                <x-iconbutton id="dom-demo-button" src="{{REL_PATH}}site/img/firefox.png"><code>Content</code></x-iconbutton>
             </figure>
         </div>
         <div class="markup-wrap two-up">
             <div class="controls">
-                <button id="iconel-edit-button" class="prettybutton">Edit <code>.iconEl</code></button>
-                <button id="contentel-edit-button" class="prettybutton">Edit <code>.contentEl</code></button>
+                <button id="iconel-edit-button" class="btn btn-default">Edit <code>.iconEl</code></button>
+                <button id="contentel-edit-button" class="btn btn-default">Edit <code>.contentEl</code></button>
             </div>
             <h3>Initializing markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>JavaScript</h3>
-            <pre class="prettyprint javascript">// assume that randomColor and randomWord are already provided<br/>var iconElToggle = document.getElementById(&quot;iconel-edit-button&quot;);<br/>var contentElToggle = document.getElementById(&quot;contentel-edit-button&quot;);<br/>var iconButton = document.getElementById(&quot;dom-demo-button&quot;);<br/><br/>// &quot;edit .iconEl&quot; button<br/>iconElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.iconEl.style.backgroundColor = randomColor();<br/>});<br/><br/>// &quot;edit .contentEl&quot; button<br/>contentElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.contentEl.style.color = randomColor();<br/>    iconButton.contentEl.textContent = "&lt;code&gt;"+randomWord(7)+"&lt;/code&gt;";<br/>});</pre>
+            <pre class="prettyprint javascript">// assume that randomColor and randomWord are already provided<br/>var iconElToggle = document.getElementById(&quot;iconel-edit-button&quot;);<br/>var contentElToggle = document.getElementById(&quot;contentel-edit-button&quot;);<br/>var iconButton = document.getElementById(&quot;dom-demo-button&quot;);<br/><br/>// &quot;edit .iconEl&quot; button<br/>iconElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.iconEl.style.backgroundColor = randomColor();<br/>});<br/><br/>// &quot;edit .contentEl&quot; button<br/>contentElToggle.addEventListener(&quot;click&quot;, function(e){<br/>    iconButton.contentEl.innerHTML = "&lt;code&gt;"+randomWord(7)+"&lt;/code&gt;";<br/>});</pre>
         </div>
         <a href="#" class="top">Top</a>
     </section>
@@ -84,7 +84,7 @@
         </ul>
         <div class="two-up">
             <figure class="demo">
-                <x-iconbutton id="custom-style-iconbutton" src="firefox.png">
+                <x-iconbutton id="custom-style-iconbutton" src="{{REL_PATH}}site/img/firefox.png">
                     How fancy!
                 </x-iconbutton>
             </figure>
