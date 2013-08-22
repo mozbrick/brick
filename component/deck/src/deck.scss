@@ -77,6 +77,7 @@ $newCardZIndex: 2;
 }
 
 x-deck{
+    @extend %borderBox;
     display: block; //can be overridden with anything non-inline
     position: relative;
     overflow: hidden;
@@ -85,7 +86,7 @@ x-deck{
     height: 100%;
 
     & > x-card{
-        @include boxSizing(border-box);
+        @extend %borderBox;
         -webkit-transform-style: preserve-3d;
         -moz-transform-style: preserve-3d;
         -ms-transform-style: preserve-3d;

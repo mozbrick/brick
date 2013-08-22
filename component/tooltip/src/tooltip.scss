@@ -52,6 +52,10 @@ x-tooltip{
 
     box-shadow: 1px 1px 4px grey;
     
+    &[_target-fixed]{
+        position: fixed;
+    }
+
     &[ignore-tooltip-pointer-events]{
         pointer-events: none;
     }

@@ -66,6 +66,8 @@ x-tooltip {
   background-color: #eee;
   border-radius: 4px;
   box-shadow: 1px 1px 4px grey; }
+  x-tooltip[_target-fixed] {
+    position: fixed; }
   x-tooltip[ignore-tooltip-pointer-events] {
     pointer-events: none; }
   x-tooltip:not([allow-overflow]) {

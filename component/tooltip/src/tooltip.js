@@ -54,7 +54,7 @@
                                   width: number, height: number}
 
     returns the absolute metrics of the given DOM element in relation to the
-    visible document (ie to the window)
+    entire document
 
     by default, returned coordinates already account for any CSS transform 
     scaling on the given element
@@ -607,8 +607,25 @@
         
         return createdListeners;
     }
-    
-    
+
+    /** searchAncestors: (DOM, Function) => DOM/null 
+
+    given an element and a callback function that takes an element and returns
+    true or false depending on if it meets some condition, returns the first
+    ancestor node of the given element that causes the callback to return true;
+
+    returns null if no such ancestor is found
+    **/
+    function searchAncestors(elem, conditionFn){
+        while(elem){
+            if(conditionFn(elem)){
+                return elem;
+            }
+            elem = elem.parentNode;
+        }
+        return null;
+    }
+
     /** hasParentNode: (DOM, DOM) => Boolean
     * 
     *  utility function that determines if the given element actually has the 
@@ -619,13 +636,10 @@
             return parent.contains(elem);
         }
         else{
-            while(elem){
-                if(elem === parent){
-                    return true;
-                }
-                elem = elem.parentNode;
-            }
-            return false;
+            var condition = function(el){ 
+                              return el === parent; 
+                            };
+            return !!searchAncestors(elem, condition);
         }
     }
     
@@ -785,43 +799,6 @@
                         Math.min(max, output) : output;
         return output;
     }    
-    
-    function _pickBestTooltipOrient(tooltip, validPositionDataList){
-        var context = tooltip.parentNode;
-        var contextScrollLeft = context.scrollLeft;
-        var contextScrollTop = context.scrollTop;
-        var contextViewWidth = context.clientWidth;
-        var contextViewHeight = context.clientHeight;
-        
-        var minX = contextScrollLeft;
-        var minY = contextScrollTop;
-        var maxX = contextViewWidth + minX;
-        var maxY = contextViewHeight + minY;
-
-        // first, partition data into two categories: those that leave the
-        // context's boundaries and those who don't
-        var inContextData = [];
-        var notInContextData = [];
-        for(var i = 0; i < validPositionDataList.length; i++){
-            var data = validPositionDataList[i];
-            var rect = data.rect;
-            if(rect.left < minX || rect.top < minY || 
-               rect.right > maxX || rect.bottom > maxY)
-            {
-                notInContextData.push(data);
-            }
-            else{
-                inContextData.push(data);
-            }
-        }
-        
-        var filterDataList = (inContextData.length > 0) ? inContextData :
-                                                             notInContextData;
-        // TODO: pick the position with the least tooltip offset from the 
-        // target;
-        // for now, just pick the first one that is filtered
-        return (filterDataList.length > 0) ? filterDataList[0].orient : null;
-    }
 
     // return the given coordinates from the original context, but relative to 
     // the given new context element (ie: within the context element's 
@@ -871,10 +848,75 @@
         return translatedCoords;
     }
 
+    /** _getTooltipConstraints(DOM, rect) => rect
+
+    given a tooltip and an optional bounding rectangle for the tooltip's 
+    context, return a rectangle relative to the document for the 
+    minimum left/top and maximum right/bottom coordinates that can contain
+    the tooltip
+    **/
+    function _getTooltipConstraints(tooltip, contextRect){
+        if(!contextRect){
+            contextRect = getRect(tooltip.offsetParent || tooltip.parentNode)
+        }
+        var viewport = getWindowViewport();
+        var bounds = viewport;
+        if(!tooltip.allowOverflow){
+            // get the dimensions of the part of the context element that is 
+            // within the window's viewport
+            bounds = getRectIntersection(viewport, contextRect);
+            if(!bounds) bounds = contextRect;
+        }
+        return bounds;
+    }
+
+    /** _pickBestTooltipOrient(DOM, {orient: String, rect: Rect}) => string/null
+
+    given a tooltip and a list of datamaps containing the name of an orientation
+    and the positioning rectangle (relative to the document),
+    as returned by _autoPositionTooltip; return the name of the best orientation
+    for the tooltip, or return null if no orientation was given
+    **/
+    function _pickBestTooltipOrient(tooltip, validPositionDataList){
+        if(validPositionDataList.length === 0) return null;
+        var bounds = _getTooltipConstraints(tooltip);
+        
+        var minX = bounds.left;
+        var minY = bounds.top;
+        var maxX = bounds.right;
+        var maxY = bounds.bottom;
+
+        // first, partition data into two categories: those that leave the
+        // context's boundaries and those who don't
+        var inContextData = [];
+        var notInContextData = [];
+        for(var i = 0; i < validPositionDataList.length; i++){
+            var data = validPositionDataList[i];
+            var rect = data.rect;
+            if(rect.left < minX || rect.top < minY || 
+               rect.right > maxX || rect.bottom > maxY)
+            {
+                notInContextData.push(data);
+            }
+            else{
+                inContextData.push(data);
+            }
+        }
+
+        var filterDataList = (inContextData.length > 0) ? inContextData :
+                                                             notInContextData;
+        // TODO: pick the position with the least tooltip offset from the 
+        // target;
+        // for now, just pick the first one that is filtered
+        return filterDataList[0].orient;
+    }
+
 
     /** by setting this on the tooltip, we force the tooltip to display using
-        its calculated dimensions. Make sure to have _force-display whenever
-        accessing dimensions of the tooltip.
+        its calculated dimensions. Make sure to have _force-display enabled
+        whenever accessing dimensions of the tooltip, as the tooltip otherwise
+        shrinks its dimensions to avoid stretching the scrollHeight/Width of its
+        parent.
     **/
     function _forceDisplay(elem){
         elem.setAttribute("_force-display", true);
@@ -907,7 +949,8 @@
 
             _forceDisplay(tooltip);
             // found a good position, so save data
-            if(!overlaps(tooltip, targetElem)){
+            if(!overlaps(tooltip, targetElem))
+            {
                 validOrientDataList.push({
                     orient: tmpOrient,
                     rect: positionRect
@@ -917,6 +960,7 @@
         }
         var bestOrient = _pickBestTooltipOrient(tooltip, 
                                                 validOrientDataList);
+        if(!bestOrient) bestOrient = "top";
         /* set the _auto-orientation attribute so that CSS animations
          * still apply even though orientation attribute is not
          * one of 'top', 'left', 'bottom', or 'right'
@@ -945,6 +989,9 @@
      * if given orientation is not a valid orientation type, this will attempt
      * to autoplace the tooltip in an orientation that doesn't overlap the 
      * targeted elements
+     *
+     * also returns the positioning rectangle of the tooltip, relative to the
+     * document
      **/
     function _positionTooltip(tooltip, targetElem, orientation, reattemptDepth){
         if((!tooltip.parentNode)){
@@ -976,6 +1023,7 @@
         _forceDisplay(tooltip); // make sure we are working with the tooltip's
                                 // "true" dimensions
 
+        var viewport = getWindowViewport();                                
         // recall that getRect accounts for CSS scaling
         var contextRect = getRect(tipContext); 
         var contextScale = getScale(tipContext, contextRect);
@@ -984,8 +1032,6 @@
         // CSS transform scaling
         var contextViewWidth = tipContext.clientWidth * contextScale.x;
         var contextViewHeight = tipContext.clientHeight * contextScale.y;
-        var contextScrollLeft = tipContext.scrollLeft * contextScale.x;
-        var contextScrollTop = tipContext.scrollTop * contextScale.y;
 
         // get dimensions of targeted element
         var targetRect = getRect(targetElem);
@@ -1027,27 +1073,13 @@
             arrowWidth /= 2;
         }
         
-        
-        // calculate the bounding constraints of the tooltip (relative to the
-        // window viewport)
-        var viewport = getWindowViewport();
-        var minRawLeft = 0;
-        var minRawTop = 0;
-        var maxRawLeft = viewport.right;
-        var maxRawTop = viewport.bottom;
-        if(!tooltip.allowOverflow){
-            // get the dimensions of the part of the context element that is 
-            // within the window's viewport
-            var bounds = getRectIntersection(viewport, contextRect);
-            if(!bounds) bounds = contextRect;
-            minRawLeft = Math.max(minRawLeft, bounds.left);
-            minRawTop = Math.max(minRawTop, bounds.top);
-            maxRawLeft = Math.min(maxRawLeft, bounds.right);
-            maxRawTop = Math.min(maxRawTop, bounds.bottom);
-        }
-        // also account for tooltip dimensions
-        maxRawLeft -= origTooltipWidth;
-        maxRawTop -= origTooltipHeight;
+        // calculate the bounding constraints of the tooltip
+        // (relative to the document)
+        var bounds = _getTooltipConstraints(tooltip, contextRect);
+        var minRawLeft = bounds.left;
+        var minRawTop = bounds.top;
+        var maxRawLeft = bounds.right - origTooltipWidth;
+        var maxRawTop = bounds.bottom - origTooltipHeight;
 
         // tooltip coords for ideal placement to be used for either vertically 
         // or horizontally centering the tooltip on the target element;
@@ -1087,20 +1119,49 @@
         rawLeft += tipPlacementOffsetX;
         rawTop += tipPlacementOffsetY;
 
-        // translate the new coordinates to match the context's coord system
-        var relativeCoords = _coordsRelToNewContext(rawLeft, rawTop,
-                                                    window, tipContext,
-                                                    contextScale);
-        var newLeft = relativeCoords.left;
-        var newTop = relativeCoords.top;
+        var _isFixed = function(el){
+            if((!window.getComputedStyle) || el === document || 
+                el === document.documentElement)
+            {
+                return false;
+            }
+
+            var styles;
+            try{
+                styles = window.getComputedStyle(el);
+            }
+            catch(e){
+                return false;
+            }
+            return styles && styles.position === "fixed";
+        };
+
+        var newLeft;
+        var newTop;
+        // set tooltip to be fixed and translate document coords to viewport
+        // coord context if the target is in a fixed element and the
+        // tooltip is not already in the same element
+        var fixedAncestor = searchAncestors(targetElem, _isFixed);
+        if(fixedAncestor && !hasParentNode(tooltip, fixedAncestor)){
+            // don't forget to account for the viewport's scroll factors,
+            // since the raw coords are in relation to the entire document
+            newLeft = rawLeft - viewport.left; 
+            newTop = rawTop - viewport.top;
+            tooltip.setAttribute("_target-fixed", true);
+        }
+        // otherwise, translate the new coordinates to match the context's 
+        // coordinate system
+        else{
+            var relativeCoords = _coordsRelToNewContext(rawLeft, rawTop,
+                                                        window, tipContext,
+                                                        contextScale);
+            newLeft = relativeCoords.left;
+            newTop = relativeCoords.top;
+            tooltip.removeAttribute("_target-fixed");
+        }
         
-        // position tooltip with percentage in regards to context clientviewport
-        var newTopFrac = (contextViewHeight) ? 
-                                (newTop / contextViewHeight) : 0;
-        var newLeftFrac = (contextViewWidth) ? 
-                                (newLeft / contextViewWidth) : 0;
-        tooltip.style.top = newTopFrac*100 + "%";
-        tooltip.style.left = newLeftFrac*100 + "%";
+        tooltip.style.top = newTop + "px";
+        tooltip.style.left = newLeft + "px"
 
         // position the arrow in the tooltip to center on the target element
         var maxVal;
@@ -1153,14 +1214,15 @@
                                     reattemptDepth+1);
         }
         else{
-            // return bounding rectangle of finalized position
+            // return bounding rectangle of finalized position, relative to
+            // the document
             return {
-                "left": newLeft,
-                "top": newTop,
+                "left": rawLeft,
+                "top": rawTop,
                 "width": newTooltipWidth,
                 "height": newTooltipHeight,
-                "right": newLeft + newTooltipWidth,
-                "bottom": newTop + newTooltipHeight
+                "right": rawLeft + newTooltipWidth,
+                "bottom": rawTop + newTooltipHeight
             };
         }
     }

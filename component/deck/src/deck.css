@@ -1,3 +1,10 @@
+x-deck, x-deck > x-card {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box; }
+
 x-deck > x-card[selected][_before-animation][card-anim-type=scrollLeft]:not([reverse]), x-deck > x-card[selected][_before-animation][card-anim-type=scrollRight][reverse], x-deck > x-card[leaving][card-anim-type=scrollLeft][reverse]:not([_before-animation]), x-deck > x-card[leaving][card-anim-type=scrollRight]:not([_before-animation]):not([reverse]), x-deck > x-card[selected][_before-animation][card-anim-type=coverLeft]:not([reverse]), x-deck > x-card[selected][_before-animation][card-anim-type=uncoverRight][reverse], x-deck > x-card[leaving][card-anim-type=coverLeft][reverse]:not([_before-animation]), x-deck > x-card[leaving][card-anim-type=uncoverRight]:not([_before-animation]):not([reverse]) {
   transform: translateX(100%);
   -ms-transform: translateX(100%);
@@ -71,11 +78,6 @@ x-deck {
   width: 100%;
   height: 100%; }
   x-deck > x-card {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    box-sizing: border-box;
     -webkit-transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     -ms-transform-style: preserve-3d;
