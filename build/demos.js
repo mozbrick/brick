@@ -49,6 +49,10 @@ function processComponentTemplate(componentDemoPath, componentName){
         return p;
     }
 
+    if(!fs.existsSync("demos")){
+        fs.mkdirSync("demos");
+    }
+
     if(!fs.existsSync(outputDir)){
         fs.mkdirSync(outputDir);
     }
