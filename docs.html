@@ -1469,7 +1469,11 @@
 
     function posSidebar() {
       var top = window.scrollY;
-      sidebar.classList.toggle('sticky', top > triggerTop);
+      if (top > triggerTop) {
+        sidebar.classList.add('sticky');
+      } else {
+        sidebar.classList.remove('sticky');
+      }
     }
 
     var sidebar = document.querySelector('#sidebar');
