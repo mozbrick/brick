@@ -70,7 +70,7 @@ function minifyComponent(name) {
     var srcJsPath;
     // special case to account for the x-tag core submodule
     if(name === "core"){
-        srcJsPath = path.join('component', "core", 'src', 
+        srcJsPath = path.join('component', "core", 'src',
                               "x-tag-core", "dist", "x-tag-core.js");
     }
     else{
