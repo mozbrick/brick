@@ -1,3 +1,6 @@
+1.0beta6 (Aug 26, 2013)
+- Updated x-tag core library to fix Safari/iOS support. Yay!
+
 1.0beta5 (Aug 22, 2013)
 - Changing default settings of tooltip's trigger-style attribute
 - Changed tooltip's no-overflow property to allow-overflow
