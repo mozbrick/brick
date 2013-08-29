@@ -3,6 +3,13 @@ body {
   padding-top: 70px;
 }
 
+.jumbotron {
+    background-image: linear-gradient(to bottom right, rgba(170,34,0,1), rgba(170,34,0,.5)), url(../img/bgtile.png);
+    background-size: auto, 636px auto;
+    color: #fff;
+    text-shadow: 0 0 2px #000;
+}
+
 .moz img {
   width: 128px;
   float: right;
@@ -184,27 +191,23 @@ footer {
   height: 360px;
   margin: 1em auto;
   border: 10px solid #eee;
-  box-shadow: 0 0 0 3px #222;
   border-width: 40px 15px 60px;
   border-radius: 20px;
   position: relative;
-
   background: #f2d6b9 url("../img/retina_wood.png") repeat;
 }
 
 /* fake phone button */
 .demo:after {
   content: '';
-
   position: absolute;
   width: 30px;
   height: 30px;
   top: 103%;
   left: 43.75%;
   left: calc(50% - 15px);
-  background: #d8d8d8;
+  background: #fff;
   border-radius: 20px;
-  box-shadow: 0 0 0 2px #222;
 }
 
 .demo[data-src] {
