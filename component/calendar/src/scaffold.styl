@@ -1,0 +1,113 @@
+@import '../../../build/mixins';
+@import '../../../build/params';
+
+$textColor = #444;
+$todayBorderColor = orange;
+$defaultMonthWidth = $tapTargetSize * 7;
+$oneEmPxVal = 16px;
+$dayMarginPx = 1px;
+
+x-calendar {
+    &, & *{
+        box-sizing(border-box);
+    }
+
+    nohighlight();
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+
+    font-size: 1em;
+    text-align: center;
+
+    overflow: hidden;
+
+    .calendar{
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+
+    .month{
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        vertical-align: top;
+        white-space: nowrap;
+        width: $defaultMonthWidth;
+        max-width: 100%;
+    }
+
+    .week, .weekday-labels{
+        margin: 1px 0;
+        overflow: visible;
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .day, .prev, .next, .weekday-label{
+        display: inline-block;
+        width: $tapTargetSize;
+    }
+
+    .month-label, .weekday-labels, .week, .prev, .next{
+        height: 2em;
+        line-height: 2em;
+    }
+
+    .weekday-label{
+        opacity: .8;
+        font-size: .8em;
+    }
+
+    .weekday-label, .day{
+        height: 100%;
+        line-height: inherit;
+        margin: 0 auto;
+    }
+
+    .month-label{
+        width: 100%;
+    }
+
+    .day{
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .badmonth{
+        opacity: .5;
+    }
+
+    &:not([controls]) .controls{
+        display: none !important;
+    }
+
+    &[controls] .controls{
+        display: block;
+    }
+
+    .prev, .next{
+        position: absolute;
+        top: 0px;
+        max-width: 3em;
+    }
+
+    .prev{
+        left: 0px;
+    }
+
+    .next{
+        right: 0px;
+    }
+
+    &:not([active]){
+        .day:hover, .prev:hover, .next:hover {
+            cursor: pointer;
+        }
+    }
+}
