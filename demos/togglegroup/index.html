@@ -1,0 +1,95 @@
+
+
+
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>Brick x-togglegroup demos</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400">
+    <link rel="stylesheet" href="../../site/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../dist/brick.css"/>
+    <link rel="stylesheet" href="../../site/css/main.css">
+    
+    <link rel="stylesheet" type="text/css" href="../../site/css/prettify.css">
+    <link rel="stylesheet" type="text/css" href="demo.css"/>
+
+  </head>
+  <body>
+    <header class="site-header">
+      
+<nav class="navbar navbar-default navbar-fixed-top grayshade" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../index.html">
+        <img class="logo" src="../../site/img/logo.png">
+        Brick<small> 1.0beta6</small>
+      </a>
+    </div>
+    <ul class="navbar-nav nav">
+      <li><a href="../../docs.html">
+        <span class="succinct">Docs</span>
+        <span class="verbose">Documentation &amp; Demos</span>
+      </a></li>
+      <li><a href="../../download.html">
+        <span>Download</span>
+      </a></li>
+      <li><a href="http://github.com/mozilla/brick/">
+        <span>Github</span>
+      </a></li>
+      <li><a href="http://github.com/mozilla/brick/issues">
+        <span>Issues</span>
+      </a></li>
+    </ul>
+  </div>
+</nav>
+
+      
+      
+    </header>
+    <article class="container">
+      
+    <header>
+        <h1>x-togglegroup</h1> 
+    </header>
+    <a href="../../docs.html">&laquo; Back to docs</a>
+    
+    <p><code class="prettyprint">&lt;x-togglegroup&gt;</code> are very simple components that simply act as a wrapper for <code class="prettyprint">&lt;x-toggle&gt;</code> elements by displaying them as a menu of toggle buttons.</p>
+    <p>See the <code class="prettyprint">&lt;x-toggle&gt;</code> documentation for further details on how to use them.</p>
+    <section class="demo-wrap">
+        <header><h2>Basic usage</h2></header>
+        <p>Each <code class="prettyprint">&lt;x-toggle&gt;</code> in the <code class="prettyprint">&lt;x-togglegroup&gt;</code> acts as if it receives the <code>name</code> and <code>group</code> attributes of the <code class="prettyprint">&lt;x-togglegroup&gt;</code>, if they are present.</p>
+        <div class="two-up">
+            <figure class="demo">
+                <x-togglegroup name="searchtype" group="groupname">
+                    <x-toggle label="Title"></x-toggle>
+                    <x-toggle label="Author"></x-toggle>
+                    <x-toggle label="Date"></x-toggle>
+                </x-togglegroup>
+            </figure>
+        </div>
+        <div class="markup-wrap two-up">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-togglegroup name=&quot;searchtype&quot; group=&quot;groupname&quot;&gt;<br/>    &lt;x-toggle label=&quot;Title&quot;&gt;&lt;/x-toggle&gt;<br/>    &lt;x-toggle label=&quot;Author&quot;&gt;&lt;/x-toggle&gt;<br/>    &lt;x-toggle label=&quot;Date&quot;&gt;&lt;/x-toggle&gt;<br/>&lt;/x-togglegroup&gt;</pre>
+        </div>
+        <a href="#" class="top">Top</a>
+    </section>
+
+
+      <footer class="row">
+        <div class="col-xs-8"></div>
+        <div class="col-xs-4">
+          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="../../site/img/mozillaHTML5.png" title="built by Mozilla"></a>
+        </div>
+      </footer>
+    </article>
+    <script src="../../dist/brick.js"></script>
+     
+    <script type="text/javascript" src="../../site/js/prettify.js"></script>
+    <script type="text/javascript" src="../../site/js/demo-page-helpers.js"></script>
+    <script type="text/javascript" src="demo.js"></script>
+
+  </body>
+</html>
