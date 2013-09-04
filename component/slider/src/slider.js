@@ -159,19 +159,25 @@
         var sliderRect = slider.getBoundingClientRect();
         var thumbRect = thumb.getBoundingClientRect();
         var fraction = _rawValToFraction(slider, value);
+        var vertical = slider.vertical;
+		
+        // if the slider is vertical, we need to use height rather than width
+        var sliderWidth = sliderRect[vertical ? 'height' : 'width'];
+        var thumbWidth = thumbRect[vertical ? 'height' : 'width'];
         
         // note that range inputs don't allow the thumb to spill past the bar
         // boundaries, so we actually have a little less width to work with
         // than the actual width of the slider when determining thumb position
-        var availableWidth = Math.max(sliderRect.width - thumbRect.width, 0);
+        var availableWidth = Math.max(sliderWidth - thumbWidth, 0);
         
         var newThumbX = (availableWidth * fraction);
         
         // translate back into percentage in relation to the full width, since
         // the element isn't actually constrained by our overflow constraints
-        var finalPercentage = newThumbX / sliderRect.width;
+        var finalPercentage = newThumbX / sliderWidth;
         
-        thumb.style.left = finalPercentage*100 + "%";
+        thumb.style[vertical ? 'top' : 'left'] = 0;
+        thumb.style[vertical ? 'left' : 'top'] = finalPercentage*100 + "%";
     }
     
     
@@ -201,10 +207,15 @@
         var inputEl = slider.xtag.rangeInputEl;
         var inputOffsets = inputEl.getBoundingClientRect();
         var inputClickX = pageX - inputOffsets.left;
+        var divideby = inputOffsets.width;
+        if(slider.vertical){
+            divideby = inputOffsets.height;
+            inputClickX = pageY - inputOffsets.top;
+        }
         
         var oldValue = slider.value;
         var newValue = _fractionToCorrectedVal(slider, 
-                                              inputClickX / inputOffsets.width);
+                                              inputClickX / divideby);
         slider.value = newValue;
         
         // fire events
@@ -497,6 +508,18 @@
                         this.removeEventListener("keydown", 
                                                  callbackFns.onKeyDown);
                     }
+                }
+            },
+            "vertical": {
+                attribute: {boolean: true},
+                /** when vertical is set, rotate the polyfill slider graphical
+                 *  elements 90 degrees
+                 *
+                 * when unset, remove vertical elements and revert to original
+                 * settings
+                 **/
+                set: function(isVertical){
+                    _redraw(this);
                 }
             },
             // simple interface with the actual input element

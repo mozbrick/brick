@@ -12,6 +12,17 @@ x-slider {
     width: 100%;
     min-height: 100%;
     background: transparent; }
+  x-slider[vertical] {
+    transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform-origin: 0 100% 0;
+    -moz-transform-origin: 0 100% 0;
+    -webkit-transform-origin: 0 100% 0;
+    -o-transform-origin: 0 100% 0;
+    -ms-transform-origin: 0 100% 0; }
   x-slider[polyfill] {
     cursor: default;
     -webkit-touch-callout: none;
