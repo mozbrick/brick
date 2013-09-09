@@ -5,6 +5,10 @@ box-sizing($v) {
     box-sizing: $v;
 }
 
+$borderBox {
+    box-sizing(border-box);
+}
+
 nohighlight() {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -16,4 +20,76 @@ nohighlight() {
     -webkit-tap-highlight-color: transparent;
     -moz-tap-highlight-color: transparent;
     tap-highlight-color: transparent;
+}
+
+perspective($val){
+    -webkit-perspective: $val;
+    -moz-perspective: $val;
+    -o-perspective: $val;
+    -ms-perspective: $val;
+    perspective: $val;
+}
+
+backfaceVisibility($value){
+    -webkit-backface-visibility: $value;
+    -moz-backface-visibility: $value;
+    -ms-backface-visibility: $value;
+    -o-backface-visibility: $value;
+    backface-visibility: $value;
+}
+
+transformed($transform){
+    transform:$transform;
+    -ms-transform:$transform; // IE 9
+    -moz-transform:$transform; // Firefox
+    -webkit-transform:$transform; // Safari and Chrome
+    -o-transform:$transform; // Opera
+}
+
+replace(expr, str, val) {
+    expr = clone(expr)
+    for e, i in expr {
+        if str == e {
+            expr[i] = val
+        }
+    }
+    expr
+}
+
+animated($properties = all, $durations = 0.2s, $timings = ease-in, $delays = 0s){
+    -webkit-transition-property: replace($properties, transform,
+                                             -webkit-transform);
+    -moz-transition-property: replace($properties, transform,
+                                          -moz-transform);
+    -ms-transition-property: replace($properties, transform,
+                                        -ms-transform);
+    -o-transition-property: replace($properties, transform,
+                                        -o-transform);
+    transition-property: $properties;
+
+    -webkit-transition-duration: $durations;
+    -moz-transition-duration: $durations;
+    -ms-transition-duration: $durations;
+    -o-transition-duration: $durations;
+    transition-duration: $durations;
+
+    -webkit-transition-timing-function: $timings;
+    -moz-transition-timing-function: $timings;
+    -ms-transition-timing-function: $timings;
+    -o-transition-timing-function: $timings;
+    transition-timing-function: $timings;
+
+    -webkit-transition-delay: $delays;
+    -moz-transition-delay: $delays;
+    -ms-transition-delay: $delays;
+    -o-transition-delay: $delays;
+    transition-delay: $delays;
+}
+
+transformed($transform){
+    -webkit-transform: $transform; // Safari and Chrome
+    -moz-transform: $transform;    // Firefox
+    -ms-transform: $transform;     // IE 9
+    -o-transform: $transform;      // Opera
+    transform: $transform;
 }
