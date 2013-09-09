@@ -1,0 +1,429 @@
+@import '../../../build/mixins';
+@import '../../../build/params';
+
+// positioning transforms
+
+shiftedRight() {
+    transformed(translateX(100%));
+}
+
+shiftedLeft() {
+    transformed(translateX(-100%));
+}
+
+shiftedUp() {
+    transformed(translateY(-100%));
+}
+
+shiftedDown() {
+    transformed(translateY(100%));
+}
+
+// apply perspective to card itself to fix rendering problem in IE10
+$flippedUp {
+    transformed(perspective(800px) rotateX(180deg));
+}
+
+$flippedDown {
+    transformed(perspective(800px) rotateX(-180deg));
+}
+
+$flippedRight {
+    transformed(perspective(800px) rotateY(180deg));
+}
+
+$flippedLeft {
+    transformed(perspective(800px) rotateY(-180deg));
+}
+
+$oldCard = "[leaving]";
+$newCard = "[selected]";
+$reverse = "[reverse]";
+
+$beforeAnimation =  "[_before-animation]";
+$afterAnimation = ":not(" + $beforeAnimation + ")";
+
+$oldStartingSelector = $oldCard + $beforeAnimation;
+$newStartingSelector = $newCard + $beforeAnimation;
+$oldEndingSelector = $oldCard + $afterAnimation;
+$newEndingSelector = $newCard + $afterAnimation;
+
+$oldCardZIndex = 1;
+$newCardZIndex = 2;
+
+$defaultCardOrder {
+    &{$newCard} {
+        z-index: $newCardZIndex;
+    }
+
+    &{$oldCard} {
+        z-index: $oldCardZIndex;
+    }
+}
+
+$swappedCardOrder {
+    &{$newCard} {
+        z-index: $oldCardZIndex;
+    }
+
+    &{$oldCard} {
+        z-index: $newCardZIndex;
+    }
+}
+
+$defaultTransform {
+    // do not use this default transform,
+    // as it breaks IE10's rendering of flipY
+
+   // transformed(translate3d(0,0,1px));
+}
+
+////////////////////////////////////////////////////
+// animation silent-classes for @extend'ing
+/////////////////////////////////////////////////////
+
+$scrollLeftAnim {
+    // initial positions for animation
+    &{$newStartingSelector} {
+        shiftedRight();
+    }
+
+    // target positions for animation
+    &{$oldEndingSelector} {
+        shiftedLeft();
+    }
+}
+
+$scrollRightAnim {
+    // initial positions for animation
+    &{$newStartingSelector} {
+        shiftedLeft();
+    }
+
+    // target positions for animation
+    &{$oldEndingSelector} {
+        shiftedRight();
+    }
+}
+
+$scrollUpAnim {
+    // initial positions for animation
+    &{$newStartingSelector} {
+        shiftedDown();
+    }
+
+    // target positions for animation
+    &{$oldEndingSelector} {
+        shiftedUp();
+    }
+}
+
+$scrollDownAnim {
+    // initial positions for animation
+    &{$newStartingSelector} {
+        shiftedUp();
+    }
+
+    // target positions for animation
+    &{$oldEndingSelector} {
+        shiftedDown();
+    }
+}
+
+$coverLeftAnim {
+    &{$newStartingSelector} {
+        shiftedRight();
+    }
+}
+
+$coverRightAnim {
+    &{$newStartingSelector} {
+        shiftedLeft();
+    }
+}
+
+$coverUpAnim {
+    &{$newStartingSelector} {
+        shiftedDown();
+    }
+}
+
+$coverDownAnim {
+    &{$newStartingSelector} {
+        shiftedUp();
+    }
+}
+
+$uncoverLeftAnim {
+    @extend $swappedCardOrder;
+    &{$oldEndingSelector} {
+        shiftedLeft();
+    }
+}
+
+$uncoverRightAnim {
+    @extend $swappedCardOrder;
+    &{$oldEndingSelector} {
+        shiftedRight();
+    }
+}
+
+$uncoverUpAnim {
+    @extend $swappedCardOrder;
+    &{$oldEndingSelector} {
+        shiftedUp();
+    }
+}
+
+$uncoverDownAnim {
+    @extend $swappedCardOrder;
+    &{$oldEndingSelector} {
+        shiftedDown();
+    }
+}
+
+
+x-deck {
+    @extend $borderBox;
+    display: block; //can be overridden with anything non-inline
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+    height: 100%;
+
+    & > x-card{
+        @extend $borderBox;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        display: block;
+
+        overflow: hidden;
+        position: absolute!important;
+
+        animated(transform, 0.5s, ease, 0s);
+        backfaceVisibility(hidden);
+        @extend $defaultTransform;
+
+        height: 100%;
+        width: 100%;
+
+        left: 0px;
+        right: 0px;
+
+        z-index: 0;
+
+        @extend $defaultCardOrder;
+
+        &:not({$newCard}):not({$oldCard}){
+            visibility: hidden; // note: do not use display: none here!
+            opacity: 0;
+        }
+
+        /** card animation types go here **/
+
+        // default animation: jump from one spot to another
+        &[card-anim-type]{
+            &{$oldStartingSelector}, &{$newStartingSelector},
+            &{$oldEndingSelector}, &{$newEndingSelector}{
+                @extend $defaultTransform;
+            }
+        }
+
+        //////////////////////
+        // rotation animations
+        //////////////////////
+        &[card-anim-type=flipX]{
+            &:not({$reverse}){
+                // initial positions for animation
+                &{$newStartingSelector}{
+                    @extend $flippedUp;
+                }
+
+                // target positions for animation
+                &{$oldEndingSelector}{
+                    @extend $flippedDown;
+                }
+            }
+            &{$reverse}{
+                // initial positions for animation
+                &{$newStartingSelector}{
+                    @extend $flippedDown;
+                }
+
+                // target positions for animation
+                &{$oldEndingSelector}{
+                    @extend $flippedUp;
+                }
+            }
+        }
+
+        &[card-anim-type=flipY]{
+            &:not({$reverse}){
+                /* initial positions for animation */
+                &{$newStartingSelector}{
+                    @extend $flippedRight;
+                }
+
+                // target positions for animation
+                &{$oldEndingSelector}{
+                    @extend $flippedLeft;
+                }
+            }
+            &{$reverse}{
+                // initial positions for animation
+                &{$newStartingSelector}{
+                    @extend $flippedLeft;
+                }
+
+                // target positions for animation
+                &{$oldEndingSelector}{
+                    @extend $flippedRight;
+                }
+            }
+        }
+
+        //////////////////////
+        // scroll animations
+        //////////////////////
+
+        // new card scrolls from right to left
+        &[card-anim-type=scrollLeft]{
+            &:not({$reverse}){
+                @extend $scrollLeftAnim;
+            }
+
+            // animation for reverse direction
+            &{$reverse}{
+                @extend $scrollRightAnim;
+            }
+        }
+
+        // new card scrolls from left to right
+        &[card-anim-type=scrollRight]{
+            &:not({$reverse}){
+                @extend $scrollRightAnim;
+            }
+
+            // animation for reverse direction
+            &{$reverse}{
+                @extend $scrollLeftAnim;
+            }
+        }
+
+        // new card scrolls from bottom to top
+        &[card-anim-type=scrollUp]{
+            &:not({$reverse}){
+                @extend $scrollUpAnim;
+            }
+
+            // animation for reverse direction
+            &{$reverse}{
+                @extend $scrollDownAnim;
+            }
+        }
+
+        // new card scrolls from top to bottom
+        &[card-anim-type=scrollDown]{
+            &:not({$reverse}){
+                @extend $scrollDownAnim;
+            }
+
+            // animation for reverse direction
+            &{$reverse}{
+                @extend $scrollUpAnim;
+            }
+        }
+
+        //////////////////////
+        // covering animations
+        //////////////////////
+
+        &[card-anim-type=coverLeft]{
+            &:not({$reverse}){
+                @extend $coverLeftAnim;
+            }
+
+            &{$reverse}{
+                @extend $uncoverRightAnim;
+            }
+        }
+
+        &[card-anim-type=coverRight]{
+            &:not({$reverse}){
+                @extend $coverRightAnim;
+            }
+
+            &{$reverse}{
+                @extend $uncoverLeftAnim;
+            }
+        }
+
+        &[card-anim-type=coverUp]{
+            &:not({$reverse}){
+                @extend $coverUpAnim;
+            }
+
+            &{$reverse}{
+                @extend $uncoverDownAnim;
+            }
+        }
+
+        &[card-anim-type=coverDown]{
+            &:not({$reverse}){
+                @extend $coverDownAnim;
+            }
+
+            &{$reverse}{
+                @extend $uncoverUpAnim;
+            }
+        }
+
+        //////////////////////
+        // uncovering animations
+        //////////////////////
+
+        &[card-anim-type=uncoverLeft]{
+            &:not({$reverse}){
+                @extend $uncoverLeftAnim;
+            }
+
+            &{$reverse}{
+                @extend $coverRightAnim;
+            }
+        }
+
+        &[card-anim-type=uncoverRight]{
+            &:not({$reverse}){
+                @extend $uncoverRightAnim;
+            }
+
+            &{$reverse}{
+                @extend $coverLeftAnim;
+            }
+        }
+
+        &[card-anim-type=uncoverUp]{
+            &:not({$reverse}){
+                @extend $uncoverUpAnim;
+            }
+
+            &{$reverse}{
+                @extend $coverDownAnim;
+            }
+        }
+
+        &[card-anim-type=uncoverDown]{
+            &:not({$reverse}){
+                @extend $uncoverDownAnim;
+            }
+
+            &{$reverse}{
+                @extend $coverUpAnim;
+            }
+        }
+    }
+}
