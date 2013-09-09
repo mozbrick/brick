@@ -30,10 +30,10 @@
         }
         else{
             utcDate = new Date();
-            utcDate.setUTCDate(localDate.getDate());
-            utcDate.setUTCMonth(localDate.getMonth());
-            utcDate.setUTCFullYear(localDate.getFullYear());
             utcDate.setUTCHours(0);
+            utcDate.setUTCFullYear(localDate.getFullYear());
+            utcDate.setUTCMonth(localDate.getMonth());
+            utcDate.setUTCDate(localDate.getDate());
         }
 
         utcDate.setUTCMinutes(0);

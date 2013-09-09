@@ -1,3 +1,6 @@
+1.0beta7 (Sep 2, 2013)
+- patched critical issue with calendar dates breaking during the transition between certain months
+
 1.0beta6 (Aug 26, 2013)
 - Updated x-tag core library to fix Safari/iOS support. Yay!
 

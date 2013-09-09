@@ -18,24 +18,23 @@
         // don't try to reconvert a date already set to UTC time, or
         // the inherent timezone information of JS Dates may change an already
         // converted date
-        if(localDate.getUTCHours() === 0 &&
-           localDate.getUTCMinutes() === 0 &&
-           localDate.getUTCSeconds() === 0 &&
-           localDate.getUTCMilliseconds() === 0)
+        var utcDate;
+        if(localDate.getUTCHours() === 0)
         {
-            return new Date(localDate.valueOf());
+            utcDate = new Date(localDate.valueOf());
         }
         else{
-            var utcDate = new Date();
-            utcDate.setUTCDate(localDate.getDate());
-            utcDate.setUTCMonth(localDate.getMonth());
-            utcDate.setUTCFullYear(localDate.getFullYear());
+            utcDate = new Date();
             utcDate.setUTCHours(0);
-            utcDate.setUTCMinutes(0);
-            utcDate.setUTCSeconds(0);
-            utcDate.setUTCMilliseconds(0);
-            return utcDate;
+            utcDate.setUTCFullYear(localDate.getFullYear());
+            utcDate.setUTCMonth(localDate.getMonth());
+            utcDate.setUTCDate(localDate.getDate());
         }
+
+        utcDate.setUTCMinutes(0);
+        utcDate.setUTCSeconds(0);
+        utcDate.setUTCMilliseconds(0);
+        return utcDate;
     }
 
     /** isValidDateObj: (*) => Boolean
