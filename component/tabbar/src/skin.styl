@@ -1,43 +1,31 @@
-@import "../../../custommixins";
-@import "../../../component-ui-defaults";
+@import '../../../build/mixins'
+@import '../../../build/params'
 
 x-tabbar{
-    @include component-ui-background;
-    display: block;
-    @include flexbox();
-    width: 100%;
-    
+    component-ui-background();
+
     font-family: $COMPONENT_UI_FONT_FAMILY;
     color: $COMPONENT_UI_TEXT_COLOR;
 
-    overflow: hidden;
-    white-space: nowrap;
-    text-align: center;
-
     // hack to remove inline spacing
     letter-spacing: -0.31em;
-    
+
     & > x-tabbar-tab{
-        @include flex(1);
+
         letter-spacing: normal;
         overflow: hidden;
-        @include component-ui-background;
-        @include boxSizing(border-box);
-        display: inline-block;
-        height: 100%;
-
-        vertical-align: middle;
+        component-ui-background();
 
         border-right: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
         border-left: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
 
         &:hover{
-            @include component-ui-background-hover;
+            component-ui-background-hover();
             color: $COMPONENT_UI_TEXT_COLOR_HOVER;
         }
 
         &:active{
-            @include component-ui-background-selected;
+            component-ui-background-selected();
             color: $COMPONENT_UI_TEXT_COLOR_SELECTED;
         }
 
@@ -47,13 +35,6 @@ x-tabbar{
 
         &:last-child{
             border-right-width: 2px;
-        }
-
-        & > *:only-child{
-            vertical-align: top;
-            height: 100%;
-            width: 100%;
-            margin: 0 !important;
         }
 
         // special overrides with x-iconbutton
