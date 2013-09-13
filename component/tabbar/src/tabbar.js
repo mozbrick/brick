@@ -1,9 +1,9 @@
 (function(){
-    /** getWindowViewport() => { top: number, left: number, 
+    /** getWindowViewport() => { top: number, left: number,
                                   right: number, bottom: number,
                                   width: number, height: number}
 
-    returns the rectangle of the current window viewport, relative to the 
+    returns the rectangle of the current window viewport, relative to the
     document
     **/
     function getWindowViewport(){
@@ -19,7 +19,7 @@
         return rect;
     }
 
-    /** getRect: DOM element => { top: number, left: number, 
+    /** getRect: DOM element => { top: number, left: number,
                                   right: number, bottom: number,
                                   width: number, height: number}
 
@@ -43,11 +43,11 @@
             "height": rect.height
         };
     }
-    /* _pointIsInRect: (Number, Number, {left: number, top: number, 
+    /* _pointIsInRect: (Number, Number, {left: number, top: number,
                                          right: number, bottom: number})
     */
     function _pointIsInRect(x, y, rect){
-        return (rect.left <= x && x <= rect.right && 
+        return (rect.left <= x && x <= rect.right &&
                 rect.top <= y && y <= rect.bottom);
     }
 
@@ -91,10 +91,11 @@
     function _onTabbarTabTap(tabEl){
         if(tabEl.parentNode.nodeName.toLowerCase() === "x-tabbar"){
             var targetEvent = tabEl.targetEvent; // getter handles casing
-        
-            var targets = (tabEl.targetSelector) ? 
-                              xtag.query(document, tabEl.targetSelector) : 
+
+            var targets = (tabEl.targetSelector) ?
+                              xtag.query(document, tabEl.targetSelector) :
                               tabEl.targetElems;
+
             targets.forEach(function(targ){
                 xtag.fireEvent(targ, targetEvent);
             });
@@ -113,15 +114,14 @@
         },
         events: {
             "tap": function(e){
-                var tabEl = e.currentTarget;
-                // for touchend, ensure that we actually tapped and didn't drag 
-                // off
-                if(e.changedTouches){
-                    if(!e.changedTouches.length) return;
 
+                var tabEl = e.currentTarget;
+                // for touchend, ensure that we actually tapped and didn't drag
+                // off
+                if(e.changedTouches && e.changedTouches.length>0){
                     var releasedTouch = e.changedTouches[0];
                     var tabRect = getRect(tabEl);
-                    if(_pointIsInRect(releasedTouch.pageX, releasedTouch.pageY, 
+                    if(_pointIsInRect(releasedTouch.pageX, releasedTouch.pageY,
                                       tabRect))
                     {
                         _onTabbarTabTap(tabEl);
@@ -140,7 +140,7 @@
                 },
                 set: function(newTargetSelector){
                     this.xtag.targetSelector = newTargetSelector;
-                    
+
                     if(newTargetSelector){
                         this.xtag.overrideTargetElems = null;
                     }
