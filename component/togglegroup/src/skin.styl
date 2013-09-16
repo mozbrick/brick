@@ -1,28 +1,11 @@
-@import "../../../custommixins";
-@import "../../../component-ui-defaults";
+@import '../../../build/mixins'
+@import '../../../build/params'
 
 x-togglegroup{
-    @include boxSizing(border-box);
-    * {
-        @include boxSizing(border-box);
-    }
-    @include unhighlightable;
-    @include flexbox;
-    @include align-content(center);
-    width: 100%;
-    min-height: 0;
     font-family: $COMPONENT_UI_FONT_FAMILY;
-    white-space: nowrap;
-
     & > x-toggle{
-        @include simplegradient;
-        @include animated((background-position, background-color, box-shadow), 0.1s);
-
-        display: block; // display block requires for old flexbox syntax
-        @include flex(1);
-
-        padding: .25em 0;
-        margin: 0;
+        simplegradient();
+        animated(background-position background-color box-shadow, 0.1s);
 
         border-width: 1px;
         border-color: #aaa grey #777 grey;
@@ -30,22 +13,16 @@ x-togglegroup{
         text-shadow: 1px 1px white;
         vertical-align: middle;
 
-        word-wrap: break-word;
-        overflow: hidden;
-        
-        font: inherit;
-        text-align: center;
-
         &:hover:not([checked]){
             background-position: 0 1em;
         }
 
         &[checked]{
-            background-image: none;   
+            background-image: none;
             background-color: #eee;
             box-shadow: inset 1px 1px 2px #888;
         }
-    
+
 
         &[type="radio"]{
             &:first-of-type{
@@ -64,7 +41,7 @@ x-togglegroup{
         }
 
         &:not([type="radio"]){
-            @include rounded;
+            rounded();
             margin-left: .2em;
             margin-right: .2em;
 

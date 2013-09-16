@@ -22,32 +22,13 @@ x-togglegroup {
   align-content: center;
   width: 100%;
   min-height: 0;
+  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   white-space: nowrap;
 }
 x-togglegroup * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-}
-x-togglegroup > x-toggle {
-  display: block;
-  min-width: auto;
-  min-height: auto;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  box-flex: 1;
-  flex: 1;
-  padding: 0.25em 0;
-  margin: 0;
-  word-wrap: break-word;
-  overflow: hidden;
-  font: inherit;
-  text-align: center;
-}
-x-togglegroup {
-  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
 x-togglegroup > x-toggle {
   background-color: #fff;
@@ -77,11 +58,26 @@ x-togglegroup > x-toggle {
   -ms-transition-delay: 0s;
   -o-transition-delay: 0s;
   transition-delay: 0s;
+  display: block;
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  padding: 0.25em 0;
+  margin: 0;
   border-width: 1px;
   border-color: #aaa #808080 #777 #808080;
   border-style: solid;
   text-shadow: 1px 1px #fff;
   vertical-align: middle;
+  word-wrap: break-word;
+  overflow: hidden;
+  font: inherit;
+  text-align: center;
 }
 x-togglegroup > x-toggle:hover:not([checked]) {
   background-position: 0 1em;

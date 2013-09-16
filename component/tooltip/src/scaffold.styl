@@ -1,57 +1,50 @@
-@import "../../../component-ui-defaults";
+@import '../../../build/mixins'
+@import '../../../build/params'
 
 // generate a selector for an element without any of the given values in the
 // specified attribute
-@function attrValNotInList($attrName, $invalidList){
-    $finalSelector: "";
-    
-    @each $invalidVal in $invalidList{
-        $finalSelector: "#{$finalSelector}:not([#{$attrName}=#{$invalidVal}])"
+attrValNotInList($attrName, $invalidList){
+    $finalSelector = null;
+
+    for $invalidVal in $invalidList{
+        $finalSelector = '%s:not([%s=%s])' % ($finalSelector $attrName $invalidVal)
     }
-    
-    @return $finalSelector;
+
+    return $finalSelector;
 }
 
-%orientTopStartLoc{
-    @include transformed(translate3d(0, 10px, 1px));
+$orientTopStartLoc{
+    transformed(translate3d(0, 10px, 1px));
 }
 
-%orientBottomStartLoc{
-    @include transformed(translate3d(0, -10px, 1px));
+$orientBottomStartLoc{
+    transformed(translate3d(0, -10px, 1px));
 }
 
-%orientLeftStartLoc{
-    @include transformed(translate3d(10px, 0, 1px));
+$orientLeftStartLoc{
+    transformed(translate3d(10px, 0, 1px));
 }
 
-%orientRightStartLoc{
-    @include transformed(translate3d(-10px, 0, 1px));
+$orientRightStartLoc{
+    transformed(translate3d(-10px, 0, 1px));
 }
 
 // responsible for positioning;
-// the only user styling that should be applied here is border
 x-tooltip{
-    @include animated((visibility, transform, opacity), 0.2s);
-    @extend %borderBox;
+    animated(visibility transform opacity, 0.2s);
+    @extend $borderBox;
     position: absolute;
     margin: 0;
     padding: 0;
     left: 0px;
     top: 0px;
-    
-    display: block; // needed to favor horizontal tooltips, 
+
+    display: block; // needed to favor horizontal tooltips,
                     // use inline-block to favor vertical
 
     z-index: 2147483647;
     overflow: visible;
-    
-    // default styling
-    border: 1px solid grey;
-    background-color: #eee;
-    border-radius: 4px;
 
-    box-shadow: 1px 1px 4px grey;
-    
     &[_target-fixed]{
         position: fixed;
     }
@@ -64,23 +57,23 @@ x-tooltip{
         max-width: 100%;
         max-height: 100%;
     }
-    
+
     &[orientation=top]{
-        @extend %orientTopStartLoc;
+        @extend $orientTopStartLoc;
     }
-    
+
     &[orientation=bottom]{
-        @extend %orientBottomStartLoc;
+        @extend $orientBottomStartLoc;
     }
-        
+
     &[orientation=left]{
-        @extend %orientLeftStartLoc;
+        @extend $orientLeftStartLoc;
     }
-        
+
     &[orientation=right]{
-        @extend %orientRightStartLoc;
+        @extend $orientRightStartLoc;
     }
-    
+
     &:not([visible]){
         visibility: hidden!important;
         opacity: 0!important;
@@ -89,7 +82,7 @@ x-tooltip{
         // however, if _force-display is set on a hidden tooltip, ignore
         // constraints (this allows measurement of metrics)
         &:not([_force-display]){
-            // can't use width/height:0px due to sometimes causing jump upon 
+            // can't use width/height:0px due to sometimes causing jump upon
             // dimension recalculation in Webkit
             width: 1px!important;
             height: 1px!important;
@@ -107,38 +100,38 @@ x-tooltip{
     &[visible]{
         visibility: visible;
         opacity: 1;
-        @include transformed(translate3d(0,0,1px));
+        transformed(translate3d(0,0,1px));
     }
-    
+
     // hackery to have auto orientation have the same transform animations
-    $autoOrientationSelector: attrValNotInList(orientation, (top, bottom, left, right));
-    &#{$autoOrientationSelector}{
-        $defaultAutoOrient: attrValNotInList(_auto-orientation, (bottom, left, right));
+    $autoOrientationSelector = attrValNotInList(orientation, top bottom left right);
+    &{$autoOrientationSelector}{
+        $defaultAutoOrient = attrValNotInList(_auto-orientation, bottom left right);
         &[_auto-orientation=top]{
-            @extend %orientTopStartLoc;
+            @extend $orientTopStartLoc;
         }
-        
+
         &[_auto-orientation=bottom]{
-            @extend %orientBottomStartLoc;
+            @extend $orientBottomStartLoc;
         }
-            
+
         &[_auto-orientation=left]{
-            @extend %orientLeftStartLoc;
+            @extend $orientLeftStartLoc;
         }
-            
+
         &[_auto-orientation=right]{
-            @extend %orientRightStartLoc;
+            @extend $orientRightStartLoc;
         }
-        
+
         &[visible]{
-            @include transformed(translate3d(0,0,1px));
+            transformed(translate3d(0,0,1px));
         }
     }
 }
 
 // let user style this to style the balloon
 x-tooltip > .tooltip-content{
-    @extend %borderBox;
+    @extend $borderBox;
     position: relative;
     display: block;
     padding: .5em;
@@ -154,61 +147,61 @@ x-tooltip[allow-overflow]{
 }
 
 x-tooltip > .tooltip-arrow{
-    @extend %borderBox;
+    @extend $borderBox;
     position: absolute;
     display: block;
-    
+
     margin: 0px;
     padding: 0px;
-    
+
     vertical-align: top;
-    
+
     // override arrow size by modifying these together;
     // may also need to mess with transforms to line things up
     // (remember to preserve the rotate(45deg) !
     width: 1em;
     height: 1em;
-    
+
     // default: shares these properties with the tooltip itself
     // can be overridden directly by using .tooltip-arrow class as well
-    border: inherit; 
+    border: inherit;
     background: inherit;
 
     z-index: 1;
-    
+
     // default to pointing down
-    &#{attrValNotInList(arrow-direction, (up, left, right))}{
+    &{attrValNotInList(arrow-direction, up left right)}{
         top: 100%; // default positions to be overridden later
         left: 50%;
-        
-        @include transformed(translateY(-50%) rotate(45deg));
+
+        transformed(translateY(-50%) rotate(45deg));
         border-top-color: transparent !important;
         border-left-color: transparent !important;
     }
-    
+
     &[arrow-direction=up]{
         bottom: 100%;
         left: 50%;
-        
-        @include transformed(translateY(50%) rotate(45deg));
+
+        transformed(translateY(50%) rotate(45deg));
         border-bottom-color: transparent !important;
         border-right-color: transparent !important;
     }
-    
+
     &[arrow-direction=left]{
         right: 100%;
         top: 50%;
-        
-        @include transformed(translateX(50%) rotate(45deg));
+
+        transformed(translateX(50%) rotate(45deg));
         border-top-color: transparent !important;
         border-right-color: transparent !important;
     }
-    
+
     &[arrow-direction=right]{
         left: 100%;
         top: 50%;
-        
-        @include transformed(translateX(-50%) rotate(45deg));
+
+        transformed(translateX(-50%) rotate(45deg));
         border-bottom-color: transparent !important;
         border-left-color: transparent !important;
     }

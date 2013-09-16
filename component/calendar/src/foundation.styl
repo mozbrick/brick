@@ -1,0 +1,52 @@
+@import '../../../build/mixins';
+@import '../../../build/params';
+
+$textColor = #444;
+$todayBorderColor = orange;
+
+x-calendar {
+    border: 2px solid #888;
+
+    font-size: 1em;
+    font-family: $COMPONENT_UI_FONT_FAMILY;
+
+    background-color: #fff;
+    color: $textColor;
+
+    .weekday-label{
+        opacity: .8;
+    }
+
+    .month-label{
+        border-bottom: 1px dashed grey;
+    }
+
+    .day{
+        @include rounded;
+        border: 1px solid transparent;
+
+        &[active]{
+            border-color: $todayBorderColor;
+        }
+
+        &.chosen{
+            background: #444;
+            color: #fff;
+        }
+        &.today{
+            border-color: tomato;
+            font-weight: bold;
+        }
+    }
+
+    &:not([active]){
+        .prev:hover, .next:hover{
+            background-color: #f9f9f9;
+            opacity: 0.7;
+        }
+
+        .day:not(.chosen):hover{
+            background: #ccc;
+        }
+    }
+}
