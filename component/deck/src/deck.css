@@ -6,35 +6,35 @@ x-deck > x-card {
 }
 x-deck > x-card[card-anim-type=flipX]:not([reverse])[selected][_before-animation],
 x-deck > x-card[card-anim-type=flipX][reverse][leaving]:not([_before-animation]) {
-  -webkit-transform: perspective: 800px; rotateX(180deg);
-  -moz-transform: perspective: 800px; rotateX(180deg);
-  -ms-transform: perspective: 800px; rotateX(180deg);
-  -o-transform: perspective: 800px; rotateX(180deg);
-  transform: perspective: 800px; rotateX(180deg);
+  -webkit-transform: perspective(800px) rotateX(180deg);
+  -moz-transform: perspective(800px) rotateX(180deg);
+  -ms-transform: perspective(800px) rotateX(180deg);
+  -o-transform: perspective(800px) rotateX(180deg);
+  transform: perspective(800px) rotateX(180deg);
 }
 x-deck > x-card[card-anim-type=flipX]:not([reverse])[leaving]:not([_before-animation]),
 x-deck > x-card[card-anim-type=flipX][reverse][selected][_before-animation] {
-  -webkit-transform: perspective: 800px; rotateX(-180deg);
-  -moz-transform: perspective: 800px; rotateX(-180deg);
-  -ms-transform: perspective: 800px; rotateX(-180deg);
-  -o-transform: perspective: 800px; rotateX(-180deg);
-  transform: perspective: 800px; rotateX(-180deg);
+  -webkit-transform: perspective(800px) rotateX(-180deg);
+  -moz-transform: perspective(800px) rotateX(-180deg);
+  -ms-transform: perspective(800px) rotateX(-180deg);
+  -o-transform: perspective(800px) rotateX(-180deg);
+  transform: perspective(800px) rotateX(-180deg);
 }
 x-deck > x-card[card-anim-type=flipY]:not([reverse])[selected][_before-animation],
 x-deck > x-card[card-anim-type=flipY][reverse][leaving]:not([_before-animation]) {
-  -webkit-transform: perspective: 800px; rotateY(180deg);
-  -moz-transform: perspective: 800px; rotateY(180deg);
-  -ms-transform: perspective: 800px; rotateY(180deg);
-  -o-transform: perspective: 800px; rotateY(180deg);
-  transform: perspective: 800px; rotateY(180deg);
+  -webkit-transform: perspective(800px) rotateY(180deg);
+  -moz-transform: perspective(800px) rotateY(180deg);
+  -ms-transform: perspective(800px) rotateY(180deg);
+  -o-transform: perspective(800px) rotateY(180deg);
+  transform: perspective(800px) rotateY(180deg);
 }
 x-deck > x-card[card-anim-type=flipY]:not([reverse])[leaving]:not([_before-animation]),
 x-deck > x-card[card-anim-type=flipY][reverse][selected][_before-animation] {
-  -webkit-transform: perspective: 800px; rotateY(-180deg);
-  -moz-transform: perspective: 800px; rotateY(-180deg);
-  -ms-transform: perspective: 800px; rotateY(-180deg);
-  -o-transform: perspective: 800px; rotateY(-180deg);
-  transform: perspective: 800px; rotateY(-180deg);
+  -webkit-transform: perspective(800px) rotateY(-180deg);
+  -moz-transform: perspective(800px) rotateY(-180deg);
+  -ms-transform: perspective(800px) rotateY(-180deg);
+  -o-transform: perspective(800px) rotateY(-180deg);
+  transform: perspective(800px) rotateY(-180deg);
 }
 x-deck > x-card[selected] {
   z-index: 2;
