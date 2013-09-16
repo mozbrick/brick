@@ -1,0 +1,189 @@
+strip-units($number) {
+    $number / ($number * 0 + 1);
+}
+
+box-sizing($v) {
+    -webkit-box-sizing: $v;
+    -moz-box-sizing: $v;
+    box-sizing: $v;
+}
+
+$borderBox {
+    box-sizing(border-box);
+}
+
+nohighlight() {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+}
+
+prefix_perspective($val){
+    -webkit-perspective: $val;
+    -moz-perspective: $val;
+    -o-perspective: $val;
+    -ms-perspective: $val;
+    perspective: $val;
+}
+
+backfaceVisibility($value){
+    -webkit-backface-visibility: $value;
+    -moz-backface-visibility: $value;
+    -ms-backface-visibility: $value;
+    -o-backface-visibility: $value;
+    backface-visibility: $value;
+}
+
+transformed($transform){
+    transform:$transform;
+    -ms-transform:$transform; // IE 9
+    -moz-transform:$transform; // Firefox
+    -webkit-transform:$transform; // Safari and Chrome
+    -o-transform:$transform; // Opera
+}
+
+replace(expr, str, val) {
+    expr = clone(expr)
+    for e, i in expr {
+        if str == e {
+            expr[i] = val
+        }
+    }
+    expr
+}
+
+animated($properties = all, $durations = 0.2s, $timings = ease-in, $delays = 0s){
+    -webkit-transition-property: replace($properties, transform,
+                                             -webkit-transform);
+    -moz-transition-property: replace($properties, transform,
+                                          -moz-transform);
+    -ms-transition-property: replace($properties, transform,
+                                        -ms-transform);
+    -o-transition-property: replace($properties, transform,
+                                        -o-transform);
+    transition-property: $properties;
+
+    -webkit-transition-duration: $durations;
+    -moz-transition-duration: $durations;
+    -ms-transition-duration: $durations;
+    -o-transition-duration: $durations;
+    transition-duration: $durations;
+
+    -webkit-transition-timing-function: $timings;
+    -moz-transition-timing-function: $timings;
+    -ms-transition-timing-function: $timings;
+    -o-transition-timing-function: $timings;
+    transition-timing-function: $timings;
+
+    -webkit-transition-delay: $delays;
+    -moz-transition-delay: $delays;
+    -ms-transition-delay: $delays;
+    -o-transition-delay: $delays;
+    transition-delay: $delays;
+}
+
+transformed($transform){
+    -webkit-transform: $transform; // Safari and Chrome
+    -moz-transform: $transform;    // Firefox
+    -ms-transform: $transform;     // IE 9
+    -o-transform: $transform;      // Opera
+    transform: $transform;
+}
+
+rounded($radius = 4px){
+    border-radius: $radius;
+}
+
+simplegradientglossy($base = #ffffff){
+    $darker = darken($base, 15%);
+    background-color: $base;
+    background-repeat: no-repeat;
+
+    background-image: -o-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+    background-image: -ms-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+    background-image: -moz-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+    background-image: -webkit-linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+    background-image: linear-gradient(top, $base, $base 50%, $darker 50%, $darker);
+
+}
+
+simplegradient($base = #ffffff){
+    $darker = darken($base, 15%);
+    background-color: $base;
+    background-repeat: no-repeat;
+
+    background-image: -o-linear-gradient(top, $base, $base 25%, $darker);
+    background-image: -ms-linear-gradient(top, $base, $base 25%, $darker);
+    background-image: -moz-linear-gradient(top, $base, $base 25%, $darker);
+    background-image: -webkit-linear-gradient(top, $base, $base 25%, $darker);
+    background-image: linear-gradient(top, $base, $base 25%, $darker);
+}
+
+unhighlightable(){
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+}
+
+flexbox() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+flex($values) {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: $values;
+    -moz-box-flex:  $values;
+    -webkit-flex:  $values;
+    -ms-flex:  $values;
+    box-flex: $values;
+    flex:  $values;
+}
+
+align-items($align){
+    -webkit-align-items: $align;
+    -moz-align-items: $align;
+    -ms-align-items: $align;
+    align-items: $align;
+}
+
+align-content($align){
+    -webkit-align-content: $align;
+    -moz-align-content: $align;
+    -ms-align-content: $align;
+    align-content: $align;
+}
+
+justify-content($just){
+    -webkit-justify-content: $just;
+    -moz-justify-content: $just;
+    -ms-justify-content: $just;
+    justify-content: $just;
+}
+
+order($val) {
+  -webkit-box-ordinal-group: $val;
+  -moz-box-ordinal-group: $val;
+  -ms-flex-order: $val;
+  -webkit-order: $val;
+  order: $val;
+}
+

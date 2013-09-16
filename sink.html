@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>The Kitchen Sink</title>
+    <link rel="stylesheet" href="dist/brick.css">
+    <style>
+      body, html {
+        font-family: sans-serif;
+        height: 100%;
+      }
+      x-card p {
+        padding: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <x-layout>
+      <section>
+        <x-deck>
+          <x-card id="flip">
+            <x-flipbox>
+              <div>
+                <p>
+                  This is the front
+                  <button class="flip">Flip</button>
+                </p>
+              </div>
+              <div>
+                <p>
+                  This is the front
+                  <button class="flip">Flip</button>
+                </p>
+              </div>
+            </x-flipbox>
+          </x-card>
+          <x-card id="slide">
+            <x-slidebox>
+              <x-slides>
+                <x-slide>
+                  <p>Slide 1 <button class="rand">Random</button></p>
+                </x-slide>
+                <x-slide>
+                  <p>Slide 2 <button class="rand">Random</button></p>
+                </x-slide>
+                <x-slide>
+                  <p>Slide 3 <button class="rand">Random</button></p>
+                </x-slide>
+                <x-slide>
+                  <p>Slide 4 <button class="rand">Random</button></p>
+                </x-slide>
+              </x-slides>
+            </x-flipbox>
+          </x-card>
+          <x-card id="cal">
+            <p><x-datepicker></x-datepicker></p>
+            <p><x-calendar controls></x-calendar></p>
+          </x-card>
+          <x-card id="misc">
+            <p>
+              <x-slider></x-slider>
+            </p>
+            <p>
+              <x-toggle label="Yay"></x-toggle>
+            </p>
+            <p>
+              <button id="tip">Show Tooltip</button>
+              <x-tooltip target-selector="#tip">I'm the tooltip! Yayaaaaaaaas!</x-tooltip>
+            </p>
+          </x-card>
+        </x-deck>
+      </section>
+      <footer>
+        <x-tabbar>
+          <x-tabbar-tab target-selector="#flip">flip</x-tabbar-tab>
+          <x-tabbar-tab target-selector="#slide">slide</x-tabbar-tab>
+          <x-tabbar-tab target-selector="#cal">cal</x-tabbar-tab>
+          <x-tabbar-tab target-selector="#misc">misc</x-tabbar-tab>
+        </x-tabbar>
+      </x-footer>
+    </x-layout>
+    <script src="dist/brick.js"></script>
+    <script>
+      document.addEventListener('DOMComponentsLoaded', function(){
+        var slidebox = document.querySelector('x-slidebox');
+        var slides = document.querySelectorAll('x-slide');
+        var flipbox = document.querySelector('x-flipbox');
+
+        document.body.addEventListener('click', function (e) {
+          switch (e.target.className) {
+            case 'rand':
+              slidebox.slideTo(Math.random() * slides.length | 0);
+              break;
+            case 'flip':
+              flipbox.toggle();
+              break;
+          }
+        });
+      });
+
+
+    </script>
+  </body>
+</html>
