@@ -10,7 +10,6 @@ notifications:
 language: node_js
 node_js:
   - "0.11"
-  - "0.10"
 before_script:
   - "export SLIMERJSLAUNCHER=/usr/bin/firefox"
   - "export DISPLAY=:99.0"
@@ -22,11 +21,10 @@ before_script:
   - "echo 'Installing Slimer'"
   - "wget http://download.slimerjs.org/v0.8/slimerjs-0.8.zip"
   - "unzip slimerjs-0.8.zip"
-  - "sudo mv slimerjs-0.8 /bin/slimerjs"
-  - "ls -lisa /bin/slimerjs"
+  - "sudo mv slimerjs-0.8 ./slimerjs"
   - "echo 'Installing Casper'"
   - "git clone git://github.com/n1k0/casperjs.git casperjs"
   - "cd casperjs && git checkout 1.1-beta2 && cd .." # Use Homebrew's version of casper
-  - "sudo mv casperjs/bin/casperjs /bin/casperjs"
+  - "sudo mv casperjs/bin/casperjs ./casperjs"
 script:
-  - "casperjs test --engine=slimerjs test"
+  - "./casperjs test --engine=./slimerjs test"
