@@ -25,6 +25,5 @@ before_script:
   - "echo 'Installing Casper'"
   - "git clone git://github.com/n1k0/casperjs.git casperjs"
   - "cd casperjs && git checkout 1.1-beta2 && cd .." # Use Homebrew's version of casper
-  - "sudo mv casperjs/bin/casperjs ./casperjs"
 script:
-  - "./casperjs test --engine=./slimerjs test"
+  - "./casperjs/bin/casperjs test --engine=./slimerjs test"
