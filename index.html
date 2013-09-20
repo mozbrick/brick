@@ -1,7 +1,6 @@
 
 
 
-
 <!doctype html>
 <html>
   <head>
@@ -97,7 +96,7 @@
           <h3>Markup</h3>
           <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;I'm the front face.&lt;/div&gt;<br/>    &lt;div&gt;And I'm the back face.&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
           <h3>JavaScript</h3>
-          <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function(){<br/>    flipBox.toggle(); <br/>});</pre>
+          <pre class="prettyprint javascript">var toggleButton = document.getElementById('toggleButton');<br>var flipBox = document.getElementById('flipBox');<br/>toggleButton.addEventListener(&quot;click&quot;, function(){<br/>    flipBox.toggle(); <br/>});</pre>
       </div>
   </section>
 
