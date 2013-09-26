@@ -38,7 +38,7 @@ var buildDependencyGraph = avow(function (fulfill, reject, list) {
       fulfill();
       return;
     }
-    var docPath = path.join('component',c,'xtag.json');
+    var docPath = path.join('bower_components',c,'xtag.json');
     getJSON(docPath).then(function(json) {
       initGraph[c] = json.dependencies || [];
       fulfill()

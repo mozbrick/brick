@@ -7,3 +7,7 @@ brick-*.zip
 /download.html
 /demos
 _component-ui-defaults.css
+bower_components
+dev-repos
+component
+dist/zip

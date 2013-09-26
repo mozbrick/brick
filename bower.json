@@ -15,5 +15,22 @@
   ],
   "ignore": [
     "./site" , "./demos", "./component", "./build"
-  ]
+  ],
+  "dependencies":{
+    "x-tag-core": "~0.8.1",
+    "x-tag-appbar": "*",
+    "x-tag-flipbox": "*",
+    "x-tag-slidebox": "*",
+    "x-tag-toggle": "*",
+    "x-tag-calendar": "*",
+    "x-tag-datepicker": "*",
+    "x-tag-deck": "*",
+    "x-tag-iconbutton": "*",
+    "x-tag-layout": "*",
+    "x-tag-slider": "*",
+    "x-tag-tabbar": "*",
+    "x-tag-togglegroup": "*",
+    "x-tag-tooltip": "*",
+    "brick-common": "*"
+  }
 }
