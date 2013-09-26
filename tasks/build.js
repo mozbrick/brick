@@ -31,8 +31,8 @@ module.exports = function(grunt){
     var pkg = grunt.file.readJSON('package.json');
     grunt.file.copy('dist/brick.css','dist/zip/brick-'+pkg.version+'.css');
     grunt.file.copy('dist/brick.js','dist/zip/brick-'+pkg.version+'.js');
-    grunt.file.copy('dist/readme.txt','dist/zip/readme-'+pkg.version+'.txt');
-    grunt.file.copy('dist/OpenSans-SemiBold.ttf','dist/zip/OpenSans-SemiBold.ttf');
+    grunt.file.copy('build/readme.txt','dist/zip/readme-'+pkg.version+'.txt');
+    grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/zip/OpenSans-SemiBold.ttf');
     grunt.config.set('compress',{
       release:{
         options:{
