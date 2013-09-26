@@ -27,7 +27,7 @@ module.exports = function(grunt){
     });
   });
 
-  grunt.registerTask('zip', 'Creates ', function(){
+  grunt.registerTask('zip', 'Creates brick-x.x.x.zip', function(){
     var pkg = grunt.file.readJSON('package.json');
     grunt.file.copy('dist/brick.css','dist/zip/brick-'+pkg.version+'.css');
     grunt.file.copy('dist/brick.js','dist/zip/brick-'+pkg.version+'.js');
