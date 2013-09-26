@@ -21,10 +21,18 @@ Prebuilt versions of the entire library are also provided in <code>dist/brick.cs
 
 Compartmentalized releases of specific components are also released in their respective folders under <code>dist</code>, allowing you to pick and choose what components you want.
 
+## Development Prerequisites
+
+You need three things to get started with Brick.  NPM, Grunt and Bower.
+
+First install <a href="http://nodejs.org/download/">NodeJS/NPM</a>.  Once you have `npm` installed it's easy to install Bower and GruntCLI.   Simply run `npm install -g bower grunt-cli`.
+
+
 ## Building from the repository source
 
-If you wish to build the library yourself, first have <code>npm</code> and <code>bower</code>installed.
-Then, run the following:
+Once you have the prerequisites, you're ready to clone and build from source.
+
+Run the following:
 
 ```
 git clone git@github.com:mozilla/brick.git
@@ -41,8 +49,8 @@ The built minified files should be output to <code>dist/brick.css</code> and <co
 By default, Brick uses Bower to pull in components, which means that they are not git repositories.  If you would like to work on the components within their git repository, then run the following:
 
 ```
-bower install
-grunt clone-repos   # clone all repositories to dev-repos
+bower install       # we use bower to get the repository locations, so this is required
+grunt clone-repos   # clone all repositories to ./dev-repos/
 grunt build-dev     # build from repositories instead of bower
 
 ```
