@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('fastcompile', ['clean:dist','build']);
   grunt.registerTask('fastcompile-dev', ['clean:dist','build-dev']);
-  grunt.registerTask('site', ['clean:site','demos','docs','homepage','downloadpage','build']);
+  grunt.registerTask('site', ['clean:site','build','demos','docs','homepage','downloadpage']);
   grunt.registerTask('release', ['build','zip']);
 
 };

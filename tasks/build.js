@@ -58,7 +58,7 @@ function buildGruntConfiguration(grunt, source, callback){
       uglifyConfig = {};
 
   stylusConfig[path.join('dist','brick.css')] = [];
-  uglifyConfig[path.join('dist','brick.js')] = [];
+  uglifyConfig[path.join('dist','brick.js')] = [path.join(source,'x-tag-core','dist','x-tag-core.js')];
 
   grunt.util.spawn({cmd:'bower', args: ['list','--json']}, function(e, result){
     var bower_data = JSON.parse(result.stdout);
