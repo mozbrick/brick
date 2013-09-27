@@ -72,17 +72,16 @@ function buildGruntConfiguration(grunt, source, callback){
 
   grunt.log.debug('spawning bower tasks');
 
-  grunt.util.spawn({cmd:'bower', args: ['list','--json']}, function(e, result){
+  grunt.util.spawn({cmd:'bower', args: ['-j', 'list']}, function(e, result){
     if (e) grunt.log.write(e);
     grunt.log.debug('parsing bower data');
-
-    grunt.log.debug('bower says:');
-    grunt.log.debug(result.stdout);
     var bower_data;
     try {
       bower_data = JSON.parse(result.stdout);
     } catch (e) {
       grunt.log.error('cannot parse bower output. giving up.');
+      grunt.log.debug('bower said:');
+      grunt.log.debug(result.stdout);
       throw e;
     }
     var dependencies = bower_data.dependencies;
