@@ -17,9 +17,8 @@ module.exports = function(grunt){
       });
     } catch (e) {
       grunt.log.error('something has gone terribly wrong.');
-      grunt.log.error(JSON.stringify(e)) {
-        throw e;
-      }
+      grunt.log.error(JSON.stringify(e));
+      throw e;
     }
   });
 
