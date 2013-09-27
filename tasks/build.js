@@ -62,14 +62,20 @@ module.exports = function(grunt){
 
 function buildGruntConfiguration(grunt, source, callback){
 
+  grunt.log.debug('building grunt configuration...');
+
   var stylusConfig = {},
       uglifyConfig = {};
 
   stylusConfig[path.join('dist','brick.css')] = [];
   uglifyConfig[path.join('dist','brick.js')] = [path.join(source,'x-tag-core','dist','x-tag-core.js')];
 
+  grunt.log.debug('spawning bower tasks');
+
   grunt.util.spawn({cmd:'bower', args: ['list','--json']}, function(e, result){
     if (e) grunt.log.write(e);
+    grunt.log.debug('parsing bower data');
+
     var bower_data = JSON.parse(result.stdout);
       dependencies = bower_data.dependencies,
       components = grunt.file.readJSON('./build/components.json');
@@ -82,7 +88,11 @@ function buildGruntConfiguration(grunt, source, callback){
       };
     });
 
+    grunt.log.debug('iterating over component deps');
+
     dKeys.forEach(function(k){
+
+      grunt.log.debug('dependency ' + k);
 
       var stylusFile = dependencies[k].pkgMeta.main.filter(function(f){
         if(f.indexOf('.styl')>-1){
@@ -107,6 +117,8 @@ function buildGruntConfiguration(grunt, source, callback){
       uglifyConfig[path.join('dist','brick.js')].push(jsFile);
 
     });
+
+    grunt.log.debug('finishing up');
 
     callback(null, {
       stylus: {
