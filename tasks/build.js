@@ -76,9 +76,17 @@ function buildGruntConfiguration(grunt, source, callback){
     if (e) grunt.log.write(e);
     grunt.log.debug('parsing bower data');
 
-    var bower_data = JSON.parse(result.stdout);
-      dependencies = bower_data.dependencies,
-      components = grunt.file.readJSON('./build/components.json');
+    grunt.log.debug('bower says:');
+    grunt.log.debug(result.stdout);
+    var bower_data;
+    try {
+      bower_data = JSON.parse(result.stdout);
+    } catch (e) {
+      grunt.log.error('cannot parse bower output. giving up.');
+      throw e;
+    }
+    var dependencies = bower_data.dependencies;
+    var components = grunt.file.readJSON('./build/components.json');
 
     var dKeys = Object.keys(dependencies).filter(function(c){
       for (var i = 0; i < components.length; i++){
