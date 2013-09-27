@@ -14,7 +14,7 @@
     "dist/OpenSans-SemiBold.ttf"
   ],
   "ignore": [
-    "./site" , "./demos", "./component", "./build"
+    "site" , "demos", "component", "build"
   ],
   "dependencies":{
     "x-tag-core": "~0.8.1",
