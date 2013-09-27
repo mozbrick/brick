@@ -6,14 +6,21 @@ module.exports = function(grunt){
   grunt.registerTask('build', 'Build dist from bower components' , function(){
     var done = this.async();
     grunt.log.write('Fetching files from bower_components...');
-    buildGruntConfiguration(grunt, 'bower_components', function(err, configs){
-      if (err) grunt.log.write(JSON.stringify(err));
-      grunt.log.ok();
-      grunt.config.set('stylus', { dist: configs.stylus });
-      grunt.config.set('uglify', { dist: configs.uglify });
-      grunt.task.run('stylus','uglify');
-      done();
-    });
+    try {
+      buildGruntConfiguration(grunt, 'bower_components', function(err, configs){
+        if (err) grunt.log.write(JSON.stringify(err));
+        grunt.log.ok();
+        grunt.config.set('stylus', { dist: configs.stylus });
+        grunt.config.set('uglify', { dist: configs.uglify });
+        grunt.task.run('stylus','uglify');
+        done();
+      });
+    } catch (e) {
+      grunt.log.error('something has gone terribly wrong.');
+      grunt.log.error(JSON.stringify(e)) {
+        throw e;
+      }
+    }
   });
 
   grunt.registerTask('build-dev', 'Build dist from dev repositories' , function(){
