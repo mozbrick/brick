@@ -1,10 +1,10 @@
 {
   "name": "brick",
-  "version": "1.0.0-beta7",
+  "version": "1.0.0-beta8",
   "description": "UI Web Components for Mobile Web Apps",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "casperjs test --engine=slimerjs $(pwd)/test"
   },
   "repository": {
     "type": "git",
