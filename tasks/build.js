@@ -7,6 +7,7 @@ module.exports = function(grunt){
     var done = this.async();
     grunt.log.write('Fetching files from bower_components...');
     buildGruntConfiguration(grunt, 'bower_components', function(err, configs){
+      if (err) grunt.log.write(JSON.stringify(err));
       grunt.log.ok();
       grunt.config.set('stylus', { dist: configs.stylus });
       grunt.config.set('uglify', { dist: configs.uglify });
@@ -19,6 +20,7 @@ module.exports = function(grunt){
     var done = this.async();
     grunt.log.write('Fetching files from dev-repos...');
     buildGruntConfiguration(grunt, 'dev-repos', function(err, configs){
+      if (err) grunt.log.write(err);
       grunt.log.ok();
       grunt.config.set('stylus', { dist: configs.stylus });
       grunt.config.set('uglify', { dist: configs.uglify });
@@ -61,6 +63,7 @@ function buildGruntConfiguration(grunt, source, callback){
   uglifyConfig[path.join('dist','brick.js')] = [path.join(source,'x-tag-core','dist','x-tag-core.js')];
 
   grunt.util.spawn({cmd:'bower', args: ['list','--json']}, function(e, result){
+    if (e) grunt.log.write(e);
     var bower_data = JSON.parse(result.stdout);
       dependencies = bower_data.dependencies,
       components = grunt.file.readJSON('./build/components.json');

@@ -1,7 +1,7 @@
 notifications:
   irc:
     channels:
-      - "irc.mozilla.org#apps"
+      - "irc.mozilla.org#bots"
     on_success: always
     on_failure: always
     use_notice: true
