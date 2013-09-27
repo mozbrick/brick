@@ -1,7 +1,10 @@
 notifications:
   irc:
-    on_success: change
-    on_failure: change
+    channels:
+      - "irc.mozilla.org#apps"
+    on_success: always
+    on_failure: always
+    use_notice: true
 language: node_js
 addons:
   firefox: "18.0"
@@ -16,6 +19,7 @@ before_script:
   - "npm install"
   - "npm install -g grunt-cli"
   - "npm install -g bower"
+  - "echo 'Installing Bower Dependencies'"
   - "bower install"
   - "echo 'Building Brick'"
   - "grunt build"
