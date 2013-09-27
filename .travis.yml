@@ -22,7 +22,7 @@ before_script:
   - "echo 'Installing Bower Dependencies'"
   - "bower install -v"
   - "echo 'Building Brick'"
-  - "grunt build -v"
+  - "grunt build -v -d"
   - "echo 'Installing Slimer'"
   - "wget http://download.slimerjs.org/v0.8/slimerjs-0.8.zip"
   - "unzip slimerjs-0.8.zip"
