@@ -25,7 +25,7 @@ Compartmentalized releases of specific components are also released in their res
 
 You need three things to get started with Brick.  NPM, Grunt and Bower.
 
-First install <a href="http://nodejs.org/download/">NodeJS/NPM</a>.  Once you have `npm` installed it's easy to install Bower and GruntCLI.   Simply run `npm install -g bower grunt-cli`.
+First install <a href="http://nodejs.org/download/">NodeJS/NPM</a>.  Once you have `npm` installed it's easy to install [Bower](http://bower.io) and [Grunt](http://gruntjs.com).   Simply run `npm install -g bower grunt-cli`.
 
 
 ## Building from the repository source
