@@ -15,7 +15,7 @@
         <div class="list-group">
           <a class="list-group-item scrollnav" href="#usage">Usage</a>
           {% for tag, info in tags %}
-          <a class="list-group-item scrollnav" href="#{{ tag }}">{{ tag }}</a>
+          <a class="list-group-item scrollnav" href="#{{ tag }}">{{ tag.replace('x-tag-','') }}</a>
           {% endfor %}
         </div>
       </div>
@@ -32,7 +32,7 @@
       </section>
       {% for tag, info in tags %}
         <section id="{{ tag }}" class="main-sect">
-          <h1>{{ tag }}
+          <h1>{{ tag.replace('x-tag-','') }}
             {% if info.demo %}
               <small><a href="demos/{{ tag }}/index.html">View Demo &raquo;</a></small>
             {% endif %}

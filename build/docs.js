@@ -15,8 +15,8 @@ var generateDocs = avow(function (fulfill, reject, components) {
     function processComponent(n) {
         if (n < components.length) {
             var name = components[n];
-            var docPath = path.join('component', name, 'xtag.json');
-            console.log(name);
+            var docPath = path.join('bower_components', name, 'xtag.json');
+            console.log(name, docPath);
             if (name === 'core') {
                 processComponent(n+1);
                 return;

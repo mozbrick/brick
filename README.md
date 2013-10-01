@@ -23,21 +23,42 @@ Prebuilt versions of the entire library are also provided in <code>dist/brick.cs
 
 Compartmentalized releases of specific components are also released in their respective folders under <code>dist</code>, allowing you to pick and choose what components you want.
 
-## Building from the repository source 
+## Development Prerequisites
 
-If you wish to build the library yourself, first have <code>npm</code> installed. You'll also need the ability to run <code>make</code>, so Windows users may need to install Cygwin, [making sure to install the <code>make</code> package](http://superuser.com/questions/154418/where-do-i-get-make-for-cygwin).
+You need three things to get started with Brick.  NPM, Grunt and Bower.
 
-Then, run the following:
+First install <a href="http://nodejs.org/download/">NodeJS/NPM</a>.  Once you have `npm` installed it's easy to install Bower and GruntCLI.   Simply run `npm install -g bower grunt-cli`.
+
+
+## Building from the repository source
+
+Once you have the prerequisites, you're ready to clone and build from source.
+
+Run the following:
 
 ```
 git clone git@github.com:mozilla/brick.git
 cd brick
-make
+npm install
+bower install
+grunt
 ```
 
-By default, `make` should take care of running `npm install` and `git submodule update --init --recursive` for you.
-
 The built minified files should be output to <code>dist/brick.css</code> and <code>dist/brick.js</code>.
+
+## Development
+
+By default, Brick uses Bower to pull in components, which means that they are not git repositories.  If you would like to work on the components within their git repository, then run the following:
+
+```
+bower install       # we use bower to get the repository locations, so this is required
+grunt clone-repos   # clone all repositories to ./dev-repos/
+grunt build-dev     # build from repositories instead of bower
+
+```
+
+Now you can work one each component within their respective git repository.
+
 
 # Components
 
@@ -47,7 +68,7 @@ Full documentation can be found on [the Brick site](http://mozilla.github.io/bri
 
 ## Structural Components
 
-### ['Layout'](component/layout)
+### ['Layout'](https://github.com/x-tag/layout)
 
 * Primary layout container, holds app structure.
 * Allows whole "app" space to have layout properties like flexbox without affecting <body>
@@ -57,7 +78,7 @@ Full documentation can be found on [the Brick site](http://mozilla.github.io/bri
 * Contains top-level information and UI
 * Similar to a toolbar or roughly equivalent to Android's action bar
 
-### ['Tab Bar' (navigation, footer)](component/tabbar)
+### ['Tab Bar' (navigation, footer)](https://github.com/x-tag/tabbar)
 
 * Used to display an app-level navigation at the bottom of the UI
 * Usually a series of icons with labels.
@@ -78,14 +99,14 @@ Full documentation can be found on [the Brick site](http://mozilla.github.io/bri
 * Similar to slidebox, but with a perspective flip effect.
 * May be combinable with slidebox and accessed via an option
 
-### ['Deck' ('Cycle'/'Gallery')](component/deck)
+### ['Deck' ('Cycle'/'Gallery')](https://github.com/x-tag/deck)
 
 * Like a combination of slidebox and flipbox
 * A gallery box in which slides can be cycled in and out independently, with a variety of different transitions
-* Transition types can be switched and overridden on the fly, allowing for a 
+* Transition types can be switched and overridden on the fly, allowing for a
   variety of different entrances/exits
 
-### ['Tooltip' (Callout)](component/tooltip)
+### ['Tooltip' (Callout)](https://github.com/x-tag/tooltip)
 
 * Content container that appears over current view context
 * Associated with a trigger element in the underlying content
@@ -93,23 +114,23 @@ Full documentation can be found on [the Brick site](http://mozilla.github.io/bri
 
 ## Content Components
 
-### [Calendar](component/calendar)
+### [Calendar](https://github.com/x-tag/calendar)
 
 * A calendar widget based on/extended from [fortnight.js](https://github.com/potch/fortnight.js), but in a web component format
 * Simple instantiation, with API hooks to allow flexible use cases such as an event-managing calendar (see demo)
 
-### [Datepicker](component/datepicker)
+### [Datepicker](https://github.com/x-tag/datepicker)
 
 * A polyfill for &lt;input type='date'&gt;, regardless of native browser support for date inputs
 * Ability to select a date and submit its ISO string to a server
 * Extends upon x-calendar to provide a calendar view
 
-### [Icon Button](component/iconbutton)
+### [Icon Button](https://github.com/x-tag/iconbutton)
 
 * A simple UI component that creates a button with both an icon and a label
 * Allows multiple anchor locations of the icon and saves the developer from the headache of correctly CSS-centering contents
 
-### [Slider](component/slider)
+### [Slider](https://github.com/x-tag/slider)
 
 * Polyfill on top of &lt;input type='range'&gt;, providing a consistent UI regardless of whether type="range" is supported or not.
 
@@ -117,7 +138,7 @@ Full documentation can be found on [the Brick site](http://mozilla.github.io/bri
 
 * Unifies checkboxes and radios into a single consistent UI component
 
-### [Togglegroup (aka Option Bar)](component/togglegroup)
+### [Togglegroup (aka Option Bar)](https://github.com/x-tag/togglegroup)
 
 * A set of associated options of which only one can be selected at a time
 * Designed to appear as a cohesive set

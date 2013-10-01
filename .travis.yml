@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 notifications:
   irc:
     on_success: change
@@ -25,3 +26,33 @@ before_script:
   - "cd casperjs && git checkout 1.1-beta1 && cd .." # Use Homebrew's version of casper
 script:
   - "casperjs test --engine=slimerjs $(pwd)/test"
+=======
+language: node_js
+
+node_js:
+  - "0.10"
+
+notifications:
+  irc:
+    channels:
+      - "irc.mozilla.org#bots"
+    on_success: always
+    on_failure: always
+    use_notice: true
+
+env:
+  - SLIMERJSLAUNCHER=$(which firefox) DISPLAY=:99.0 PATH=$TRAVIS_BUILD_DIR/slimerjs:$TRAVIS_BUILD_DIR/casperjs/bin:$PATH
+
+addons:
+  firefox: "18.0"
+
+install:
+  - ./travis_install.sh
+
+before_script:
+  - "sh -e /etc/init.d/xvfb start"
+
+script:
+  - grunt build -d
+  - casperjs test --engine=slimerjs $(pwd)/test
+>>>>>>> grunt
