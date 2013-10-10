@@ -9,6 +9,11 @@
       body, html {
         font-family: sans-serif;
         height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      x-slider {
+        width: 100%;
       }
       x-card p {
         padding: 1em;
@@ -17,6 +22,13 @@
   </head>
   <body>
     <x-layout>
+      <header>
+        <x-appbar>
+          <button>Foo</button>
+          <header>Brick</header>
+          <button>Bar</button>
+        </x-appbar>
+      </header>
       <section>
         <x-deck>
           <x-card id="flip">
@@ -29,7 +41,7 @@
               </div>
               <div>
                 <p>
-                  This is the front
+                  This is the back
                   <button class="flip">Flip</button>
                 </p>
               </div>
@@ -59,7 +71,7 @@
           </x-card>
           <x-card id="misc">
             <p>
-              <x-slider></x-slider>
+              <x-slider polyfill></x-slider>
             </p>
             <p>
               <x-toggle label="Yay"></x-toggle>
@@ -98,8 +110,6 @@
           }
         });
       });
-
-
     </script>
   </body>
 </html>
