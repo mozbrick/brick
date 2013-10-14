@@ -48,7 +48,7 @@ The built minified files should be output to <code>dist/brick.css</code> and <co
 
 ## Skins
 
-Each component in Brick can be skinned by creating a new folder in the `./skins/` directory and then creating a Stylus file with the name of the component you wish to style.  Once you've created an alternate style for a particular element, you can build it by using the `--skin=` parameter with `grunt build` or `grunt build-dev` commands.   All other components will use the default styles if a custom style is not provided.
+Each component in Brick can be skinned by creating a new folder in the `./skins/` directory and then creating a Stylus file with the name of the component you wish to style.  Once you've created an alternate style for a particular element, build it by using the `--skin=` parameter with `grunt build` or `grunt build-dev` commands.   All other components will use the default styles if a custom style is not provided.
 
 ```
   grunt build --skin=solo
