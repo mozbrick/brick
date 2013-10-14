@@ -14,3 +14,8 @@ x-datepicker{border:1px solid #808080;}
 x-datepicker > .x-datepicker-polyfill-ui{box-shadow:1px 1px 4px #808080}
 x-datepicker[polyfill]:focus,x-datepicker[polyfill][focused]{box-shadow:1px 1px 4px #ffa500}
 x-datepicker[polyfill][invalid] > .x-datepicker-polyfill-input{background-color:#ff6347}
+
+x-datepicker{border:1px solid #808080;}
+x-datepicker > .x-datepicker-polyfill-ui{box-shadow:1px 1px 4px #808080}
+x-datepicker[polyfill]:focus,x-datepicker[polyfill][focused]{box-shadow:1px 1px 4px #ffa500}
+x-datepicker[polyfill][invalid] > .x-datepicker-polyfill-input{background-color:#ff6347}

@@ -1,4 +1,5 @@
-var path = require('path');
+var path = require('path'),
+  fs = require('fs');
 
 module.exports = function(grunt){
 
@@ -9,6 +10,9 @@ module.exports = function(grunt){
     try {
       buildGruntConfiguration(grunt, 'bower_components', function(err, configs){
         if (err) grunt.log.write(JSON.stringify(err));
+        grunt.log.ok();
+        grunt.log.write('Loading Skin:', grunt.option('skin')||'default', ' ');
+        loadSkin(grunt, grunt.option('skin'), configs.stylus);
         grunt.log.ok();
         grunt.config.set('stylus', { dist: configs.stylus });
         grunt.config.set('uglify', { dist: configs.uglify });
@@ -27,6 +31,9 @@ module.exports = function(grunt){
     grunt.log.write('Fetching files from dev-repos...');
     buildGruntConfiguration(grunt, 'dev-repos', function(err, configs){
       if (err) grunt.log.write(err);
+      grunt.log.ok();
+      grunt.log.write('Loading Skin:', grunt.option('skin')||'default', ' ');
+      loadSkin(grunt, grunt.option('skin'), configs.stylus);
       grunt.log.ok();
       grunt.config.set('stylus', { dist: configs.stylus });
       grunt.config.set('uglify', { dist: configs.uglify });
@@ -58,7 +65,41 @@ module.exports = function(grunt){
 
 }
 
+function loadSkin(grunt, skinFolder, config){
+  var files = config.files;
+  var keys = Object.keys(files);
+  keys.forEach(function(k){
+    var val = files[k];
+    if (typeof val == 'string'){
+      var skinFile = getSkinFile(grunt, skinFolder, val);
+      if (skinFile){
+        files[k] = [val, skinFile];
+      }
+    } else {
+      newList = val.slice(0);
+      val.forEach(function(scaffold, idx){
+        var skinFile = getSkinFile(grunt, skinFolder, scaffold);
+        if (skinFile){
+          newList.push(skinFile);
+        }
+      });
+      files[k] = newList;
+    }
+  });
+}
 
+function getSkinFile(grunt, skinFolder, component){
+  component = component.split('/')[1];
+  var componentSkin = path.join('skins', skinFolder||'default',component+'.styl');
+  if (fs.existsSync(componentSkin)){
+    return componentSkin;
+  } else if(skinFolder){  //fallback to default, if there is a default
+    componentSkin = path.join('skins', 'default', component+'.styl');
+    if (fs.existsSync(componentSkin)){
+      return componentSkin;
+    }
+  }
+}
 
 function buildGruntConfiguration(grunt, source, callback){
 

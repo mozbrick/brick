@@ -7,3 +7,5 @@ x-layout > section > *:only-child{position:absolute}
 x-layout[content-maximizing] > header,x-layout[content-maximized] > header,x-layout[maxcontent] > header{-webkit-transform:translateY(-100%);-moz-transform:translateY(-100%);-ms-transform:translateY(-100%);transform:translateY(-100%)}
 x-layout[content-maximizing] > footer,x-layout[content-maximized] > footer,x-layout[maxcontent] > footer{-webkit-transform:translateY(100%);-moz-transform:translateY(100%);-ms-transform:translateY(100%);transform:translateY(100%)}
 html,body{min-height:100%}
+
+html,body{min-height:100%}

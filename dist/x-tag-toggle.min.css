@@ -9,3 +9,9 @@ x-toggle[no-box] .x-toggle-check{display:none !important}
 x-toggle[type="radio"] .x-toggle-check{border-radius:50%}
 x-toggle[checked] .x-toggle-check{border-width:8px}
 x-toggle[focus] .x-toggle-check{-webkit-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-moz-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-ms-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);box-shadow:0 0 2px 1px rgba(0,100,155,0.8)}
+
+x-toggle .x-toggle-check{width:16px;height:16px;margin:0 3px 0 0;color:#000;vertical-align:middle;border:2px solid;-webkit-transition:border .15s 0 ease-in-out;-moz-transition:border .15s 0 ease-in-out;-ms-transition:border .15s 0 ease-in-out;transition:border .15s 0 ease-in-out}
+x-toggle[no-box] .x-toggle-check{display:none !important}
+x-toggle[type="radio"] .x-toggle-check{border-radius:50%}
+x-toggle[checked] .x-toggle-check{border-width:8px}
+x-toggle[focus] .x-toggle-check{-webkit-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-moz-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-ms-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);box-shadow:0 0 2px 1px rgba(0,100,155,0.8)}

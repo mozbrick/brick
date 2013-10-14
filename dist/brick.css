@@ -199,3 +199,59 @@ x-tooltip > .tooltip-arrow[arrow-direction=up]{bottom:100%;left:50%;-webkit-tran
 x-tooltip > .tooltip-arrow[arrow-direction=left]{right:100%;top:50%;-webkit-transform:translateX(50%) rotate(45deg);-moz-transform:translateX(50%) rotate(45deg);-ms-transform:translateX(50%) rotate(45deg);-o-transform:translateX(50%) rotate(45deg);transform:translateX(50%) rotate(45deg);border-top-color:transparent !important;border-right-color:transparent !important}
 x-tooltip > .tooltip-arrow[arrow-direction=right]{left:100%;top:50%;-webkit-transform:translateX(-50%) rotate(45deg);-moz-transform:translateX(-50%) rotate(45deg);-ms-transform:translateX(-50%) rotate(45deg);-o-transform:translateX(-50%) rotate(45deg);transform:translateX(-50%) rotate(45deg);border-bottom-color:transparent !important;border-left-color:transparent !important}
 x-tooltip{border:1px solid #808080;background-color:#eee;border-radius:4px;box-shadow:1px 1px 4px #808080}
+
+x-appbar{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;color:#7b5ac8;font-size:14pt}
+x-appbar > header:after{padding-left:6px;font-size:65%}
+x-appbar > *:before{background-color:rgba(255,255,255,0.25);width:2px;top:0;bottom:0;content:" ";position:absolute;left:0}
+
+x-calendar{border:2px solid #888;font-size:1em;font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;background-color:#fff;color:#444;}
+x-calendar .weekday-label{opacity:.8}
+x-calendar .month-label{border-bottom:1px dashed #808080}
+x-calendar .day{include:rounded;border:1px solid transparent;}
+x-calendar .day[active]{border-color:#ffa500}
+x-calendar .day.chosen{background:#444;color:#fff}
+x-calendar .day.today{border-color:#ff6347;font-weight:bold}
+x-calendar:not([active]) .prev:hover,x-calendar:not([active]) .next:hover{background-color:#f9f9f9;opacity:.7}
+x-calendar:not([active]) .day:not(.chosen):hover{background:#ccc}
+
+x-datepicker{border:1px solid #808080;}
+x-datepicker > .x-datepicker-polyfill-ui{box-shadow:1px 1px 4px #808080}
+x-datepicker[polyfill]:focus,x-datepicker[polyfill][focused]{box-shadow:1px 1px 4px #ffa500}
+x-datepicker[polyfill][invalid] > .x-datepicker-polyfill-input{background-color:#ff6347}
+
+x-iconbutton{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-moz-tap-highlight-color:transparent;tap-highlight-color:transparent;border:1px solid #808080;font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;font-size:14px;text-align:center;color:#d4d4d4;}
+x-iconbutton:hover{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 1em;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);color:#eaeaea}
+x-iconbutton:active,x-iconbutton[active]{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-position:0 1em;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#e1e1e1 100%);color:#f2f2f2}
+
+html,body{min-height:100%}
+
+
+x-slider[polyfill] > .input{-webkit-appearance:none;-moz-appearance:none;background:transparent;border:0 solid transparent;color:transparent;background-color:transparent;background-size:100% 3px;background-repeat:no-repeat;background-image:-webkit-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:-moz-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:-ms-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:-o-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-position:center}
+
+x-tabbar{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;color:#d4d4d4;letter-spacing:-.31em;}
+x-tabbar > x-tabbar-tab{letter-spacing:normal;overflow:hidden;background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);border-right:1px solid #b4b4b4;border-left:1px solid #b4b4b4;}
+x-tabbar > x-tabbar-tab:hover{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 1em;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);color:#eaeaea}
+x-tabbar > x-tabbar-tab:active{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-position:0 1em;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#e1e1e1 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#e1e1e1 100%);color:#f2f2f2}
+x-tabbar > x-tabbar-tab:first-child{border-left-width:2px}
+x-tabbar > x-tabbar-tab:last-child{border-right-width:2px}
+x-tabbar > x-tabbar-tab > x-iconbutton:only-child{border:0}
+
+x-toggle .x-toggle-check{width:16px;height:16px;margin:0 3px 0 0;color:#000;vertical-align:middle;border:2px solid;-webkit-transition:border .15s 0 ease-in-out;-moz-transition:border .15s 0 ease-in-out;-ms-transition:border .15s 0 ease-in-out;transition:border .15s 0 ease-in-out}
+x-toggle[no-box] .x-toggle-check{display:none !important}
+x-toggle[type="radio"] .x-toggle-check{border-radius:50%}
+x-toggle[checked] .x-toggle-check{border-width:8px}
+x-toggle[focus] .x-toggle-check{-webkit-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-moz-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-ms-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);box-shadow:0 0 2px 1px rgba(0,100,155,0.8)}
+
+x-togglegroup{font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;}
+x-togglegroup > x-toggle{background-color:#fff;background-repeat:no-repeat;background-image:-o-linear-gradient(top,#fff,#fff 25%,#d9d9d9);background-image:-ms-linear-gradient(top,#fff,#fff 25%,#d9d9d9);background-image:-moz-linear-gradient(top,#fff,#fff 25%,#d9d9d9);background-image:-webkit-linear-gradient(top,#fff,#fff 25%,#d9d9d9);background-image:linear-gradient(top,#fff,#fff 25%,#d9d9d9);-webkit-transition-property:background-position background-color box-shadow;-moz-transition-property:background-position background-color box-shadow;-ms-transition-property:background-position background-color box-shadow;-o-transition-property:background-position background-color box-shadow;transition-property:background-position background-color box-shadow;-webkit-transition-duration:.1s;-moz-transition-duration:.1s;-ms-transition-duration:.1s;-o-transition-duration:.1s;transition-duration:.1s;-webkit-transition-timing-function:ease-in;-moz-transition-timing-function:ease-in;-ms-transition-timing-function:ease-in;-o-transition-timing-function:ease-in;transition-timing-function:ease-in;-webkit-transition-delay:0;-moz-transition-delay:0;-ms-transition-delay:0;-o-transition-delay:0;transition-delay:0;border-width:1px;border-color:#aaa #808080 #777 #808080;border-style:solid;text-shadow:1px 1px #fff;vertical-align:middle;}
+x-togglegroup > x-toggle:hover:not([checked]){background-position:0 1em}
+x-togglegroup > x-toggle[checked]{background-image:none;background-color:#eee;box-shadow:inset 1px 1px 2px #888}
+x-togglegroup > x-toggle[type="radio"]:first-of-type{border-top-left-radius:4px;border-bottom-left-radius:4px}
+x-togglegroup > x-toggle[type="radio"]:last-of-type{border-top-right-radius:4px;border-bottom-right-radius:4px}
+x-togglegroup > x-toggle[type="radio"]:not(:first-of-type){margin-left:-1px}
+x-togglegroup > x-toggle:not([type="radio"]){border-radius:4px;margin-left:.2em;margin-right:.2em;}
+x-togglegroup > x-toggle:not([type="radio"]):first-child{margin-left:0}
+x-togglegroup > x-toggle:not([type="radio"]):last-child{margin-right:0}
+x-togglegroup > x-toggle[focus]{-webkit-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-moz-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-ms-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);box-shadow:0 0 2px 1px rgba(0,100,155,0.8)}
+
+x-tooltip{border:1px solid #808080;background-color:#eee;border-radius:4px;box-shadow:1px 1px 4px #808080}
