@@ -26,5 +26,5 @@ before_script:
 
 script:
   - grunt build -d
+  - grunt site
   - casperjs test --engine=slimerjs $(pwd)/test
-
