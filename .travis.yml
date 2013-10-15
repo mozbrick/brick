@@ -1,32 +1,4 @@
-<<<<<<< HEAD
-notifications:
-  irc:
-    on_success: change
-    on_failure: change
-language: node_js
-addons:
-  firefox: "18.0"
-node_js:
-  - "0.11"
-before_script:
-  - "export SLIMERJSLAUNCHER=$(which firefox)"
-  - "export DISPLAY=:99.0"
-  - "export PATH=./slimerjs:./casperjs/bin:$PATH"
-  - "sh -e /etc/init.d/xvfb start"
-  - "echo 'Installing Node Dependencies'"
-  - "npm install"
-  - "echo 'Building Brick'"
-  - "make && make site"
-  - "echo 'Installing Slimer'"
-  - "wget http://download.slimerjs.org/v0.8/slimerjs-0.8.zip"
-  - "unzip slimerjs-0.8.zip"
-  - "mv slimerjs-0.8 ./slimerjs"
-  - "echo 'Installing Casper'"
-  - "git clone git://github.com/n1k0/casperjs.git casperjs"
-  - "cd casperjs && git checkout 1.1-beta1 && cd .." # Use Homebrew's version of casper
-script:
-  - "casperjs test --engine=slimerjs $(pwd)/test"
-=======
+
 language: node_js
 
 node_js:
@@ -54,5 +26,5 @@ before_script:
 
 script:
   - grunt build -d
+  - grunt site
   - casperjs test --engine=slimerjs $(pwd)/test
->>>>>>> grunt
