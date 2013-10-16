@@ -1,0 +1,30 @@
+@import 'mixins'
+@import 'params'
+
+x-iconbutton{
+    component-ui-background();
+    unhighlightable();
+
+    border: 1px solid grey;
+
+    font-family: $COMPONENT_UI_FONT_FAMILY;
+    font-size: $COMPONENT_UI_FONT_SIZE;
+    text-align: center;
+
+    color: $COMPONENT_UI_TEXT_COLOR;
+
+    &:hover{
+      component-ui-background-hover();
+      color: $COMPONENT_UI_TEXT_COLOR_HOVER;
+    }
+
+    &:active, &[active]{
+      component-ui-background-selected();
+      color: $COMPONENT_UI_TEXT_COLOR_SELECTED;
+    }
+}
+
+
+
+
+

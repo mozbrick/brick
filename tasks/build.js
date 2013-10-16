@@ -1,15 +1,17 @@
-var path = require('path');
+var path = require('path'),
+  fs = require('fs');
 
 module.exports = function(grunt){
 
 
   grunt.registerTask('build', 'Build dist from bower components' , function(){
     var done = this.async();
-    grunt.log.write('Fetching files from bower_components...');
+    grunt.log.writeln('Fetching files from bower_components...');
     try {
       buildGruntConfiguration(grunt, 'bower_components', function(err, configs){
-        if (err) grunt.log.write(JSON.stringify(err));
-        grunt.log.ok();
+        if (err) grunt.log.write(JSON.stringify(err));        
+        grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
+        loadSkin(grunt, grunt.option('skin'), configs.stylus);
         grunt.config.set('stylus', { dist: configs.stylus });
         grunt.config.set('uglify', { dist: configs.uglify });
         grunt.task.run('stylus','uglify');
@@ -24,10 +26,11 @@ module.exports = function(grunt){
 
   grunt.registerTask('build-dev', 'Build dist from dev repositories' , function(){
     var done = this.async();
-    grunt.log.write('Fetching files from dev-repos...');
+    grunt.log.writeln('Fetching files from dev-repos...');
     buildGruntConfiguration(grunt, 'dev-repos', function(err, configs){
-      if (err) grunt.log.write(err);
-      grunt.log.ok();
+      if (err) grunt.log.write(err);      
+      grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
+      loadSkin(grunt, grunt.option('skin'), configs.stylus);      
       grunt.config.set('stylus', { dist: configs.stylus });
       grunt.config.set('uglify', { dist: configs.uglify });
       grunt.task.run('stylus','uglify');
@@ -58,9 +61,56 @@ module.exports = function(grunt){
 
 }
 
+function loadSkin(grunt, skinFolder, config){
+  if(!fs.existsSync(path.join('skins',skinFolder||'default'))){
+    grunt.log.warn('skin folder ./skins/' + skinFolder + ' is missing, using default.');
+  }
+  var files = config.files;
+  var keys = Object.keys(files);
+  keys.forEach(function(k){
+    var val = files[k];    
+    if (typeof val == 'string'){
+      var skinFile = getSkinFile(grunt, skinFolder, val);
+      if (skinFile){
+        files[k] = [val, skinFile];
+      }
+    } else {
+      newList = val.slice(0);
+      val.forEach(function(scaffold, idx){
+        var skinFile = getSkinFile(grunt, skinFolder, scaffold);
+        if (skinFile){
+          newList.push(skinFile);
+        }
+      });
+      files[k] = newList;
+    }
+  });
+}
 
+function getSkinFile(grunt, skinFolder, component){
+  component = component.split(path.sep)[1];
+  var componentSkin = path.join('skins', skinFolder||'default',component+'.styl');
+  if (fs.existsSync(componentSkin)){
+    return componentSkin;
+  } else if(skinFolder){  //fallback to default, if there is a default
+    componentSkin = path.join('skins', 'default', component+'.styl');
+    if (fs.existsSync(componentSkin)){
+      grunt.log.writeln('>> Unable to find skin ' + path.join(skinFolder, component) + ', using default');
+      return componentSkin;
+    }
+  }
+}
 
 function buildGruntConfiguration(grunt, source, callback){
+  var componentLocation = path.join(source,'brick-common');
+  if (!fs.existsSync(componentLocation)){      
+    if (source == 'dev-repos') {
+      grunt.fail.warn('Source files missing, did you run "grunt clone-repos" yet?\n');
+    } else {      
+      grunt.fail.warn('Source files missing, did you run "bower install" yet?\n');
+    }    
+    return;
+  }
 
   grunt.log.debug('building grunt configuration...');
 

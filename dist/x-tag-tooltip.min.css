@@ -20,3 +20,5 @@ x-tooltip > .tooltip-arrow[arrow-direction=up]{bottom:100%;left:50%;-webkit-tran
 x-tooltip > .tooltip-arrow[arrow-direction=left]{right:100%;top:50%;-webkit-transform:translateX(50%) rotate(45deg);-moz-transform:translateX(50%) rotate(45deg);-ms-transform:translateX(50%) rotate(45deg);-o-transform:translateX(50%) rotate(45deg);transform:translateX(50%) rotate(45deg);border-top-color:transparent !important;border-right-color:transparent !important}
 x-tooltip > .tooltip-arrow[arrow-direction=right]{left:100%;top:50%;-webkit-transform:translateX(-50%) rotate(45deg);-moz-transform:translateX(-50%) rotate(45deg);-ms-transform:translateX(-50%) rotate(45deg);-o-transform:translateX(-50%) rotate(45deg);transform:translateX(-50%) rotate(45deg);border-bottom-color:transparent !important;border-left-color:transparent !important}
 x-tooltip{border:1px solid #808080;background-color:#eee;border-radius:4px;box-shadow:1px 1px 4px #808080}
+
+x-tooltip{border:1px solid #808080;background-color:#eee;border-radius:4px;box-shadow:1px 1px 4px #808080}
