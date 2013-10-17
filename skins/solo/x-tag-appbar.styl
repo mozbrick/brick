@@ -1,0 +1,25 @@
+@import 'mixins'
+@import 'params'
+
+x-appbar {
+  component-ui-background();
+  font-family: $COMPONENT_UI_FONT_FAMILY;
+  color: rgba(123,90,200,1);
+  font-size: 19pt;
+}
+
+x-appbar > header:after {
+  padding-left: 6px;
+  font-size: 65%;
+}
+
+/* Spacer style */
+x-appbar > *:before {
+  background-color: rgba(255,255,255,0.25);
+  width: 2px;
+  top: 0px;
+  bottom: 0px;
+  content: " ";
+  position: absolute;
+  left: 0px;
+}

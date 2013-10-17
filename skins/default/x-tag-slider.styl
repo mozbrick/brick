@@ -1,0 +1,30 @@
+@import 'mixins'
+@import 'params'
+
+$trackTopColor = #B0B0B0;
+$trackBottomColor = #fff;
+
+x-slider{
+
+    &[polyfill]{
+
+        & > .input{
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: transparent;
+            border: 0px solid transparent;
+            color: transparent;
+
+            background-color: transparent;
+            /* use CSS to draw a trackbar in the background of the input */
+            background-size: 100% 3px;
+            background-repeat: no-repeat;
+            background-image: -webkit-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: -moz-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: -ms-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: -o-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-image: linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
+            background-position: center;
+        }
+    }
+}
