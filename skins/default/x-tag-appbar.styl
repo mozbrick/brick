@@ -2,24 +2,24 @@
 @import 'params'
 
 x-appbar {
-  component-ui-background();
+  background-color: $darkBG;
+  color: $barFG;
   font-family: $COMPONENT_UI_FONT_FAMILY;
-  color: $COMPONENT_UI_TEXT_COLOR;
-  font-size: $COMPONENT_UI_HEADER_FONT_SIZE;
+  font-size: 17px;
+  height: $barHeight;
+  line-height: $barHeight;
+}
+
+x-appbar > header {
+  font-weight: 600;
+}
+
+x-appbar > * {
+  color: $barFG;
+  font-size: inherit;
 }
 
 x-appbar > header:after {
   padding-left: 6px;
   font-size: 60%;
-}
-
-/* Spacer style */
-x-appbar > *:before {
-  background-color: rgba(255,255,255,0.25);
-  width: 2px;
-  top: 0px;
-  bottom: 0px;
-  content: " ";
-  position: absolute;
-  left: 0px;
 }

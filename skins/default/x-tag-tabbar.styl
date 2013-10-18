@@ -2,39 +2,26 @@
 @import 'params'
 
 x-tabbar{
-    component-ui-background();
-
+    background: $darkBG;
+    color: $barFG;
     font-family: $COMPONENT_UI_FONT_FAMILY;
-    color: $COMPONENT_UI_TEXT_COLOR;
 
-    // hack to remove inline spacing
-    letter-spacing: -0.31em;
+    height: $barHeight;
+    line-height: $barHeight;
 
     & > x-tabbar-tab{
 
         letter-spacing: normal;
         overflow: hidden;
-        component-ui-background();
-
-        border-right: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
-        border-left: 1px solid darken($COMPONENT_UI_TEXT_COLOR, 15%);
 
         &:hover{
-            component-ui-background-hover();
+            background-color: lighten($darkBG, 10%);
             color: $COMPONENT_UI_TEXT_COLOR_HOVER;
         }
 
         &:active{
             component-ui-background-selected();
             color: $COMPONENT_UI_TEXT_COLOR_SELECTED;
-        }
-
-        &:first-child{
-            border-left-width: 2px;
-        }
-
-        &:last-child{
-            border-right-width: 2px;
         }
 
         // special overrides with x-iconbutton
