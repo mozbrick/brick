@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> default skin wip
 x-appbar {
   padding: 0;
   width: 100%;
@@ -12,11 +15,17 @@ x-appbar {
   box-sizing: border-box;
 }
 x-appbar > * {
+<<<<<<< HEAD
   display: flex;
+=======
+  position: relative;
+  display: inline-block;
+>>>>>>> default skin wip
   border: none;
   padding: 2px 5px 0;
   vertical-align: middle;
   text-align: center;
+<<<<<<< HEAD
   -webkit-flex-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
@@ -25,16 +34,23 @@ x-appbar > * {
   -ms-align-items: center;
   align-items: center;
   text-align: center;
+=======
+  background: none;
+>>>>>>> default skin wip
 }
 x-appbar > *:first-child:before {
   display: none;
 }
+<<<<<<< HEAD
 x-appbar > h1,
 x-appbar > h2,
 x-appbar > h3,
 x-appbar > h4,
 x-appbar > h5,
 x-appbar > h6 {
+=======
+x-appbar > header {
+>>>>>>> default skin wip
   min-width: auto;
   min-height: auto;
   -webkit-box-flex: 1;
@@ -45,6 +61,7 @@ x-appbar > h6 {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+<<<<<<< HEAD
   margin: 0;
   line-height: 100%;
 }
@@ -54,6 +71,10 @@ x-appbar > h3:after,
 x-appbar > h4:after,
 x-appbar > h5:after,
 x-appbar > h6:after {
+=======
+}
+x-appbar > header:after {
+>>>>>>> default skin wip
   content: attr(subheading);
 }
 
@@ -585,7 +606,10 @@ x-layout {
 /* NEW, Spec - Opera 12.1, Firefox 20+ */
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   border: 1px solid #999;
+=======
+>>>>>>> default skin wip
   overflow: hidden;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -703,8 +727,14 @@ x-slider {
   position: relative;
   margin: 0;
   padding: 0;
+<<<<<<< HEAD
 }
 x-slider > .input {
+=======
+  height: 32px;
+}
+x-slider > input {
+>>>>>>> default skin wip
   margin: 0;
   padding: 0;
   position: relative;
@@ -712,9 +742,26 @@ x-slider > .input {
   vertical-align: middle;
   width: 100%;
   min-height: 100%;
+<<<<<<< HEAD
   background: transparent;
 }
 x-slider[polyfill] {
+=======
+}
+x-slider .slider-track {
+  position: absolute;
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 100%;
+  height: 4px;
+  margin: auto;
+  pointer-events: none;
+}
+x-slider .slider-thumb {
+>>>>>>> default skin wip
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -725,8 +772,26 @@ x-slider[polyfill] {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+<<<<<<< HEAD
 }
 x-slider[polyfill] > .input {
+=======
+  vertical-align: middle;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  -webkit-transform: translate3d(0, 0, 1px);
+  -moz-transform: translate3d(0, 0, 1px);
+  -ms-transform: translate3d(0, 0, 1px);
+  -o-transform: translate3d(0, 0, 1px);
+  transform: translate3d(0, 0, 1px);
+}
+x-slider[polyfill] {
+>>>>>>> default skin wip
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -737,6 +802,7 @@ x-slider[polyfill] > .input {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+<<<<<<< HEAD
   display: inline-block;
 }
 x-slider[polyfill] > .input::-webkit-slider-thumb {
@@ -751,6 +817,10 @@ x-slider[polyfill] > .input::-moz-range-track {
   width: 0;
 }
 x-slider[polyfill] > .slider-thumb {
+=======
+}
+x-slider[polyfill] input {
+>>>>>>> default skin wip
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -761,6 +831,7 @@ x-slider[polyfill] > .slider-thumb {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+<<<<<<< HEAD
   vertical-align: middle;
   position: absolute !important;
   top: 0;
@@ -807,6 +878,22 @@ x-slider[polyfill] > .slider-thumb[active] {
   x-slider[polyfill] > .slider-thumb {
     width: 1.5em;
   }
+=======
+  display: block;
+  position: relative;
+}
+x-slider[polyfill] input::-webkit-slider-thumb {
+  visibility: hidden;
+}
+x-slider[polyfill] input::-moz-range-thumb {
+  width: 0px;
+  height: 0px;
+}
+x-slider[polyfill] input::-moz-range-track {
+  height: 0;
+  width: 0;
+  opacity: 0;
+>>>>>>> default skin wip
 }
 x-slider:not([polyfill]) > .slider-thumb {
   visibility: hidden !important;
@@ -1084,6 +1171,7 @@ x-tooltip {
 }
 
 x-appbar {
+<<<<<<< HEAD
   background-color: #a0a0a0;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -1095,11 +1183,38 @@ x-appbar {
   font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   color: #d4d4d4;
   font-size: 20px;
+=======
+  background-color: #00202f;
+  color: #fff;
+  font-family: "_OpenSansBrick", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  height: 45px;
+  line-height: 45px;
+}
+x-appbar > header {
+  font-weight: 600;
+}
+x-appbar > * {
+  color: #fff;
+  font-family: "_OpenSansBrick", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: inherit;
+}
+x-appbar > button {
+  cursor: pointer;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  min-width: 45px;
+}
+x-appbar > *::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+>>>>>>> default skin wip
 }
 x-appbar > header:after {
   padding-left: 6px;
   font-size: 60%;
 }
+<<<<<<< HEAD
 /* Spacer style */
 x-appbar > *:before {
   background-color: rgba(255,255,255,0.25);
@@ -1115,6 +1230,14 @@ x-calendar {
   border: 2px solid #888;
   font-size: 1em;
   font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+=======
+
+x-calendar {
+  border: 1px solid #cecece;
+  border-radius: 3px;
+  font-size: 1em;
+  font-family: "_OpenSansBrick", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+>>>>>>> default skin wip
   background-color: #fff;
   color: #444;
 }
@@ -1122,17 +1245,25 @@ x-calendar .weekday-label {
   opacity: 0.8;
 }
 x-calendar .month-label {
+<<<<<<< HEAD
   border-bottom: 1px dashed #808080;
 }
 x-calendar .day {
   include: rounded;
   border: 1px solid transparent;
+=======
+  border-bottom: 1px solid #cecece;
+>>>>>>> default skin wip
 }
 x-calendar .day[active] {
   border-color: #ffa500;
 }
 x-calendar .day.chosen {
+<<<<<<< HEAD
   background: #444;
+=======
+  background: #0095dd;
+>>>>>>> default skin wip
   color: #fff;
 }
 x-calendar .day.today {
@@ -1154,12 +1285,52 @@ body {
 }
 
 
+<<<<<<< HEAD
 x-slider[polyfill] > .input {
+=======
+x-slider {
+  height: 27px;
+  padding-bottom: 2px;
+}
+x-slider .slider-thumb {
+  background: #fff;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border-radius: 13px;
+  border: 1px solid #979797;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);
+  cursor: pointer;
+  display: block;
+  height: 25px;
+  width: 25px;
+}
+x-slider input::-moz-range-thumb {
+  background: #fff;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border-radius: 13px;
+  border: 1px solid #979797;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);
+  cursor: pointer;
+  display: block;
+  height: 25px;
+  width: 25px;
+}
+x-slider .slider-track {
+  background: #d8d8d8;
+}
+x-slider > input::-moz-range-track,
+x-slider > input::-webkit-slider-runnable-track {
+  background: #d8d8d8;
+}
+x-slider input {
+>>>>>>> default skin wip
   -webkit-appearance: none;
   -moz-appearance: none;
   background: transparent;
   border: 0px solid transparent;
   color: transparent;
+<<<<<<< HEAD
   background-color: transparent;
 /* use CSS to draw a trackbar in the background of the input */
   background-size: 100% 3px;
@@ -1184,10 +1355,22 @@ x-tabbar {
   font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   color: #d4d4d4;
   letter-spacing: -0.31em;
+=======
+  padding-bottom: 2px;
+}
+
+x-tabbar {
+  background: #00202f;
+  color: #fff;
+  font-family: "_OpenSansBrick", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  height: 45px;
+  line-height: 45px;
+>>>>>>> default skin wip
 }
 x-tabbar > x-tabbar-tab {
   letter-spacing: normal;
   overflow: hidden;
+<<<<<<< HEAD
   background-color: #a0a0a0;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -1208,6 +1391,12 @@ x-tabbar > x-tabbar-tab:hover {
   background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
   background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
+=======
+  cursor: pointer;
+}
+x-tabbar > x-tabbar-tab:hover {
+  background-color: #00405d;
+>>>>>>> default skin wip
   color: #eaeaea;
 }
 x-tabbar > x-tabbar-tab:active {
@@ -1222,12 +1411,15 @@ x-tabbar > x-tabbar-tab:active {
   background-image: linear-gradient(-180deg, #a0a0a0 14%, #e1e1e1 100%);
   color: #f2f2f2;
 }
+<<<<<<< HEAD
 x-tabbar > x-tabbar-tab:first-child {
   border-left-width: 2px;
 }
 x-tabbar > x-tabbar-tab:last-child {
   border-right-width: 2px;
 }
+=======
+>>>>>>> default skin wip
 x-tabbar > x-tabbar-tab > x-iconbutton:only-child {
   border: 0;
 }
@@ -1266,6 +1458,7 @@ x-tooltip {
   border-radius: 4px;
   box-shadow: 1px 1px 4px #808080;
 }
+<<<<<<< HEAD
 =======
 x-appbar{padding:0;width:100%;display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 x-appbar > *{position:relative;display:inline-block;border:none;padding:2px 5px 0;vertical-align:middle;text-align:center;background:none}
@@ -1484,4 +1677,6 @@ x-togglegroup > x-toggle:not([type="radio"]):last-child{margin-right:0}
 x-togglegroup > x-toggle[focus]{-webkit-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-moz-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);-ms-box-shadow:0 0 2px 1px rgba(0,100,155,0.8);box-shadow:0 0 2px 1px rgba(0,100,155,0.8)}
 
 x-tooltip{border:1px solid #808080;background-color:#eee;border-radius:4px;box-shadow:1px 1px 4px #808080}
+>>>>>>> default skin wip
+=======
 >>>>>>> default skin wip

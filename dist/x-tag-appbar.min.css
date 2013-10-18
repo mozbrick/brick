@@ -14,5 +14,8 @@ x-appbar > header{font-weight:600}
 x-appbar > *{color:#fff;font-family:"_OpenSansBrick","Fira Sans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;font-size:inherit}
 x-appbar > button{cursor:pointer;padding-left:.5em;padding-right:.5em;min-width:45px}
 x-appbar > *::-moz-focus-inner{border:0;padding:0}
+<<<<<<< HEAD
+>>>>>>> default skin wip
+=======
 >>>>>>> default skin wip
 x-appbar > header:after{padding-left:6px;font-size:60%}

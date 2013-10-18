@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 x-slider{display:inline-block;position:relative;margin:0;padding:0}
 x-slider > .input{margin:0;padding:0;position:relative;overflow:hidden;vertical-align:middle;width:100%;min-height:100%;background:transparent}
 x-slider[polyfill]{cursor:default;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-moz-tap-highlight-color:transparent;tap-highlight-color:transparent}
@@ -13,6 +14,8 @@ x-slider[polyfill] > .slider-thumb[active]{background-color:#bae2f9;background-r
 }x-slider:not([polyfill]) > .slider-thumb{visibility:hidden !important}
 x-slider[polyfill] > .input{-webkit-appearance:none;-moz-appearance:none;background:transparent;border:0 solid transparent;color:transparent;background-color:transparent;background-size:100% 3px;background-repeat:no-repeat;background-image:-webkit-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:-moz-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:-ms-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:-o-linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-image:linear-gradient(top,#b0b0b0 1px,#fff 2px,#b0b0b0);background-position:center}
 =======
+=======
+>>>>>>> default skin wip
 x-slider{display:inline-block;position:relative;margin:0;padding:0;height:32px;}
 x-slider > input{margin:0;padding:0;position:relative;overflow:hidden;vertical-align:middle;width:100%;min-height:100%}
 x-slider .slider-track{position:absolute;display:block;left:0;right:0;bottom:0;top:0;width:100%;height:4px;margin:auto;pointer-events:none}
@@ -30,4 +33,7 @@ x-slider input::-moz-range-thumb{background:#fff;-moz-appearance:none;-webkit-ap
 x-slider .slider-track{background:#d8d8d8}
 x-slider > input::-moz-range-track,x-slider > input::-webkit-slider-runnable-track{background:#d8d8d8}
 x-slider input{-webkit-appearance:none;-moz-appearance:none;background:transparent;border:0 solid transparent;color:transparent;padding-bottom:2px}
+<<<<<<< HEAD
+>>>>>>> default skin wip
+=======
 >>>>>>> default skin wip

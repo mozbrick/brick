@@ -132,9 +132,56 @@ if (typeof WeakMap === 'undefined') {
  * license that can be found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 (function(global) {
 
   var registrationsTable = new WeakMap();
+=======
+// SideTable is a weak map where possible. If WeakMap is not available the
+// association is stored as an expando property.
+var SideTable;
+// TODO(arv): WeakMap does not allow for Node etc to be keys in Firefox
+if (typeof WeakMap !== 'undefined' && navigator.userAgent.indexOf('Firefox/') < 0) {
+  SideTable = WeakMap;
+} else {
+  (function() {
+    var defineProperty = Object.defineProperty;
+    var counter = Date.now() % 1e9;
+
+    SideTable = function() {
+      this.name = '__st' + (Math.random() * 1e9 >>> 0) + (counter++ + '__');
+    };
+
+    SideTable.prototype = {
+      set: function(key, value) {
+        var entry = key[this.name];
+        if (entry && entry[0] === key)
+          entry[1] = value;
+        else
+          defineProperty(key, this.name, {value: [key, value], writable: true});
+      },
+      get: function(key) {
+        var entry;
+        return (entry = key[this.name]) && entry[0] === key ?
+            entry[1] : undefined;
+      },
+      delete: function(key) {
+        this.set(key, undefined);
+      }
+    }
+  })();
+}
+
+/*
+ * Copyright 2012 The Polymer Authors. All rights reserved.
+ * Use of this source code is goverened by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+(function(global) {
+
+  var registrationsTable = new SideTable();
+>>>>>>> default skin wip
 
   // We use setImmediate or postMessage for our future callback.
   var setImmediate = window.msSetImmediate;
@@ -667,6 +714,7 @@ if (typeof WeakMap === 'undefined') {
 
   global.JsMutationObserver = JsMutationObserver;
 
+<<<<<<< HEAD
   // Provide unprefixed MutationObserver with native or JS implementation
   if (!global.MutationObserver && global.WebKitMutationObserver)
     global.MutationObserver = global.WebKitMutationObserver;
@@ -676,6 +724,24 @@ if (typeof WeakMap === 'undefined') {
 
 
 })(this);
+=======
+})(this);
+
+/*
+ * Copyright 2013 The Polymer Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+if (!window.MutationObserver) {
+  window.MutationObserver = 
+      window.WebKitMutationObserver || 
+      window.JsMutationObserver;
+  if (!MutationObserver) {
+    throw new Error("no mutation observer support");
+  }
+}
+>>>>>>> default skin wip
 
 /*
  * Copyright 2013 The Polymer Authors. All rights reserved.
@@ -887,8 +953,11 @@ if (useNative) {
     if (definition.is) {
       element.setAttribute('is', definition.is);
     }
+<<<<<<< HEAD
     // remove 'unresolved' attr, which is a standin for :unresolved.
     element.removeAttribute('unresolved');
+=======
+>>>>>>> default skin wip
     // make 'element' implement definition.prototype
     implement(element, definition);
     // flag as upgraded
@@ -952,14 +1021,18 @@ if (useNative) {
     // overrides to implement callbacks
     // TODO(sjmiles): should support access via .attributes NamedNodeMap
     // TODO(sjmiles): preserves user defined overrides, if any
+<<<<<<< HEAD
     if (prototype.setAttribute._polyfilled) {
       return;
     }
+=======
+>>>>>>> default skin wip
     var setAttribute = prototype.setAttribute;
     prototype.setAttribute = function(name, value) {
       changeAttribute.call(this, name, value, setAttribute);
     }
     var removeAttribute = prototype.removeAttribute;
+<<<<<<< HEAD
     prototype.removeAttribute = function(name) {
       changeAttribute.call(this, name, null, removeAttribute);
     }
@@ -975,6 +1048,19 @@ if (useNative) {
     if (this.attributeChangedCallback
         && (newValue !== oldValue)) {
       this.attributeChangedCallback(name, oldValue, newValue);
+=======
+    prototype.removeAttribute = function(name, value) {
+      changeAttribute.call(this, name, value, removeAttribute);
+    }
+  }
+
+  function changeAttribute(name, value, operation) {
+    var oldValue = this.getAttribute(name);
+    operation.apply(this, arguments);
+    if (this.attributeChangedCallback 
+        && (this.getAttribute(name) !== oldValue)) {
+      this.attributeChangedCallback(name, oldValue);
+>>>>>>> default skin wip
     }
   }
 
@@ -1245,7 +1331,11 @@ function removed(element) {
   }
 }
 
+<<<<<<< HEAD
 function _removed(element) {
+=======
+function removed(element) {
+>>>>>>> default skin wip
   // TODO(sjmiles): temporary: do work on all custom elements so we can track
   // behavior even when callbacks not defined
   if (element.leftViewCallback || (element.__upgraded__ && logFlags.dom)) {
@@ -1298,6 +1388,19 @@ function watchRoot(root) {
   }
 }
 
+<<<<<<< HEAD
+=======
+function filter(inNode) {
+  switch (inNode.localName) {
+    case 'style':
+    case 'script':
+    case 'template':
+    case undefined:
+      return true;
+  }
+}
+
+>>>>>>> default skin wip
 function handler(mutations) {
   //
   if (logFlags.dom) {
@@ -1320,7 +1423,11 @@ function handler(mutations) {
     if (mx.type === 'childList') {
       forEach(mx.addedNodes, function(n) {
         //logFlags.dom && console.log(n.localName);
+<<<<<<< HEAD
         if (!n.localName) {
+=======
+        if (filter(n)) {
+>>>>>>> default skin wip
           return;
         }
         // nodes added may need lifecycle management
@@ -1329,7 +1436,11 @@ function handler(mutations) {
       // removed nodes may need lifecycle management
       forEach(mx.removedNodes, function(n) {
         //logFlags.dom && console.log(n.localName);
+<<<<<<< HEAD
         if (!n.localName) {
+=======
+        if (filter(n)) {
+>>>>>>> default skin wip
           return;
         }
         removedNode(n);
@@ -1445,14 +1556,22 @@ CustomElements.parser = parser;
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
+<<<<<<< HEAD
 (function(scope){
+=======
+(function(){
+>>>>>>> default skin wip
 
 // bootstrap parsing
 function bootstrap() {
   // parse document
   CustomElements.parser.parse(document);
   // one more pass before register is 'live'
+<<<<<<< HEAD
   CustomElements.upgradeDocument(document);
+=======
+  CustomElements.upgradeDocument(document);  
+>>>>>>> default skin wip
   // choose async
   var async = window.Platform && Platform.endOfMicrotask ? 
     Platform.endOfMicrotask :
@@ -1476,6 +1595,7 @@ function bootstrap() {
 // CustomEvent shim for IE
 if (typeof window.CustomEvent !== 'function') {
   window.CustomEvent = function(inType) {
+<<<<<<< HEAD
     var e = document.createEvent('HTMLEvents');
     e.initEvent(inType, true, true);
     return e;
@@ -1494,12 +1614,26 @@ if (document.readyState === 'complete' || scope.flags.eager) {
   bootstrap();
 // When loading at other readyStates, wait for the appropriate DOM event to 
 // bootstrap.
+=======
+     var e = document.createEvent('HTMLEvents');
+     e.initEvent(inType, true, true);
+     return e;
+  };
+}
+
+if (document.readyState === 'complete') {
+  bootstrap();
+>>>>>>> default skin wip
 } else {
   var loadEvent = window.HTMLImports ? 'HTMLImportsLoaded' : 'DOMContentLoaded';
   window.addEventListener(loadEvent, bootstrap);
 }
 
+<<<<<<< HEAD
 })(window.CustomElements);
+=======
+})();
+>>>>>>> default skin wip
 
 (function () {
 
@@ -1651,7 +1785,10 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 
   function delegateAction(pseudo, event) {
     var match, target = event.target;
+<<<<<<< HEAD
     if (!target.tagName) return null;
+=======
+>>>>>>> default skin wip
     if (xtag.matchSelector(target, pseudo.value)) match = target;
     else if (xtag.matchSelector(target, pseudo.value + ' *')) {
       var parent = target.parentNode;
@@ -1858,7 +1995,11 @@ if (document.readyState === 'complete' || scope.flags.eager) {
       };
 
       if (tag.lifecycle.inserted) tag.prototype.enteredViewCallback = { value: tag.lifecycle.inserted, enumerable: true };
+<<<<<<< HEAD
       if (tag.lifecycle.removed) tag.prototype.leftViewCallback = { value: tag.lifecycle.removed, enumerable: true };
+=======
+      if (tag.lifecycle.removed) tag.prototype.leftDocumentCallback = { value: tag.lifecycle.removed, enumerable: true };
+>>>>>>> default skin wip
       if (tag.lifecycle.attributeChanged) tag.prototype.attributeChangedCallback = { value: tag.lifecycle.attributeChanged, enumerable: true };
 
       var setAttribute = tag.prototype.setAttribute || HTMLElement.prototype.setAttribute;
