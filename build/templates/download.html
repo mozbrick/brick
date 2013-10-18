@@ -130,8 +130,6 @@
 
       buildURL += '?byob=' + selected.join(',') + ' */ ';
 
-      selected.unshift('x-tag-core');
-
       progress.style.display = 'block';
       progress.max = selected.length * 2 + 1 + extraFilePaths.length;
       prog = 0;
