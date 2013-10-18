@@ -9,12 +9,15 @@ module.exports = function(grunt){
     grunt.log.writeln('Fetching files from bower_components...');
     try {
       buildGruntConfiguration(grunt, 'bower_components', function(err, configs){
-        if (err) grunt.log.write(JSON.stringify(err));        
+        if (err) grunt.log.write(JSON.stringify(err));
         grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
         loadSkin(grunt, grunt.option('skin'), configs.stylus);
         grunt.config.set('stylus', { dist: configs.stylus });
         grunt.config.set('uglify', { dist: configs.uglify });
         grunt.task.run('stylus','uglify');
+        grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
+        grunt.file.copy('build/readme.txt','dist/readme.txt');
+        grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
         done();
       });
     } catch (e) {
@@ -28,12 +31,15 @@ module.exports = function(grunt){
     var done = this.async();
     grunt.log.writeln('Fetching files from dev-repos...');
     buildGruntConfiguration(grunt, 'dev-repos', function(err, configs){
-      if (err) grunt.log.write(err);      
+      if (err) grunt.log.write(err);
       grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
-      loadSkin(grunt, grunt.option('skin'), configs.stylus);      
+      loadSkin(grunt, grunt.option('skin'), configs.stylus);
       grunt.config.set('stylus', { dist: configs.stylus });
       grunt.config.set('uglify', { dist: configs.uglify });
       grunt.task.run('stylus','uglify');
+      grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
+      grunt.file.copy('build/readme.txt','dist/readme.txt');
+      grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
       done();
     });
   });
@@ -68,7 +74,7 @@ function loadSkin(grunt, skinFolder, config){
   var files = config.files;
   var keys = Object.keys(files);
   keys.forEach(function(k){
-    var val = files[k];    
+    var val = files[k];
     if (typeof val == 'string'){
       var skinFile = getSkinFile(grunt, skinFolder, val);
       if (skinFile){
@@ -103,12 +109,12 @@ function getSkinFile(grunt, skinFolder, component){
 
 function buildGruntConfiguration(grunt, source, callback){
   var componentLocation = path.join(source,'brick-common');
-  if (!fs.existsSync(componentLocation)){      
+  if (!fs.existsSync(componentLocation)){
     if (source == 'dev-repos') {
       grunt.fail.warn('Source files missing, did you run "grunt clone-repos" yet?\n');
-    } else {      
+    } else {
       grunt.fail.warn('Source files missing, did you run "bower install" yet?\n');
-    }    
+    }
     return;
   }
 

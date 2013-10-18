@@ -26,8 +26,8 @@
           {% for component, deps in dependencies %}
             <div class="col-sm-6">
               <label>
-                {{ component }}
-                <input type="checkbox" value="{{ component }}" {{ 'disabled' if component == 'core' }}
+                {{ component.replace('x-tag-','') }}
+                <input type="checkbox" value="{{ component }}"
                        data-dependencies="{{ deps|join(' ') }}">
               </label>
             </div>
@@ -130,7 +130,6 @@
 
       buildURL += '?byob=' + selected.join(',') + ' */ ';
 
-      selected.unshift('core');
 
       progress.style.display = 'block';
       progress.max = selected.length * 2 + 1 + extraFilePaths.length;
@@ -138,6 +137,7 @@
       progress.value = 0;
 
        getCss(selected, function(css) {
+        selected.unshift('x-tag-core');
         getJs(selected, function(js) {
           getExtraFiles(function(extraFileInfo){
             makeZip(buildURL + js, buildURL + css, extraFileInfo);
@@ -171,7 +171,7 @@
           total += req.response;
           done();
         };
-        req.open("get", "dist/" + c + "/" + c + '.min.css');
+        req.open("get", "dist/" + c + '.min.css');
         req.send();
       }
 
@@ -200,7 +200,7 @@
           total += req.response;
           done();
         };
-        req.open("get", "dist/" + c + "/" + c + '.min.js');
+        req.open("get", "dist/" + c + '.min.js');
         req.send();
       }
 
