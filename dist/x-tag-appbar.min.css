@@ -3,10 +3,7 @@ x-appbar > *{position:relative;display:inline-block;border:none;padding:2px 5px 
 x-appbar > *:first-child:before{display:none}
 x-appbar > header{min-width:auto;min-height:auto;-webkit-box-flex:1;-moz-box-flex:1;-webkit-flex:1;-ms-flex:1;box-flex:1;flex:1;overflow:hidden;text-overflow:ellipsis}
 x-appbar > header:after{content:attr(subheading)}
+
 x-appbar{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;color:#d4d4d4;font-size:20px}
 x-appbar > header:after{padding-left:6px;font-size:60%}
-x-appbar > *:before{background-color:rgba(255,255,255,0.25);width:2px;top:0;bottom:0;content:" ";position:absolute;left:0}
-
-x-appbar{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;color:#7b5ac8;font-size:14pt}
-x-appbar > header:after{padding-left:6px;font-size:65%}
 x-appbar > *:before{background-color:rgba(255,255,255,0.25);width:2px;top:0;bottom:0;content:" ";position:absolute;left:0}
