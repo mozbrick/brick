@@ -3,6 +3,15 @@ var path = require('path');
 module.exports = function(grunt) {
 
   grunt.initConfig({
+    connect: {
+      demo: {
+        options:{
+          port: 3001,
+          base: '',
+          keepalive: true
+        }
+      }
+    },
     pkg: grunt.file.readJSON('package.json'),
     bumpup: ['bower.json', 'package.json', 'xtag.json'],
     tagrelease: {
@@ -19,6 +28,7 @@ module.exports = function(grunt) {
 
   grunt.task.loadTasks('./tasks/');
 
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-clean');
