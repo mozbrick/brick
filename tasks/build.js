@@ -14,6 +14,9 @@ module.exports = function(grunt){
         loadSkin(grunt, grunt.option('skin'), configs.stylus);
         grunt.config.set('stylus', { dist: configs.stylus });
         grunt.config.set('uglify', { dist: configs.uglify });
+        grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
+        grunt.file.copy('build/readme.txt','dist/readme.txt');
+        grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
         grunt.task.run('stylus','uglify');
         done();
       });
@@ -27,15 +30,24 @@ module.exports = function(grunt){
   grunt.registerTask('build-dev', 'Build dist from dev repositories' , function(){
     var done = this.async();
     grunt.log.writeln('Fetching files from dev-repos...');
-    buildGruntConfiguration(grunt, 'dev-repos', function(err, configs){
-      if (err) grunt.log.write(err);
-      grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
-      loadSkin(grunt, grunt.option('skin'), configs.stylus);
-      grunt.config.set('stylus', { dist: configs.stylus });
-      grunt.config.set('uglify', { dist: configs.uglify });
-      grunt.task.run('stylus','uglify');
-      done();
-    });
+    try {
+      buildGruntConfiguration(grunt, 'dev-repos', function(err, configs){
+        if (err) grunt.log.write(err);
+        grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
+        loadSkin(grunt, grunt.option('skin'), configs.stylus);
+        grunt.config.set('stylus', { dist: configs.stylus });
+        grunt.config.set('uglify', { dist: configs.uglify });
+        grunt.task.run('stylus','uglify');
+        grunt.file.copy('dev-repos/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
+        grunt.file.copy('build/readme.txt','dist/readme.txt');
+        grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
+        done();
+      });
+    } catch (e) {
+      grunt.log.error('something has gone terribly wrong.');
+      grunt.log.error(JSON.stringify(e));
+      throw e;
+    }
   });
 
   grunt.registerTask('zip', 'Creates brick-x.x.x.zip', function(){

@@ -130,7 +130,7 @@
 
       buildURL += '?byob=' + selected.join(',') + ' */ ';
 
-      selected.unshift('core');
+      selected.unshift('x-tag-core');
 
       progress.style.display = 'block';
       progress.max = selected.length * 2 + 1 + extraFilePaths.length;
@@ -171,7 +171,7 @@
           total += req.response;
           done();
         };
-        req.open("get", "dist/" + c + "/" + c + '.min.css');
+        req.open("get", "dist/" + c + '.min.css');
         req.send();
       }
 
@@ -200,7 +200,7 @@
           total += req.response;
           done();
         };
-        req.open("get", "dist/" + c + "/" + c + '.min.js');
+        req.open("get", "dist/" + c + '.min.js');
         req.send();
       }
 
