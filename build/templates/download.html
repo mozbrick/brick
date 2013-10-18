@@ -26,8 +26,8 @@
           {% for component, deps in dependencies %}
             <div class="col-sm-6">
               <label>
-                {{ component }}
-                <input type="checkbox" value="{{ component }}" {{ 'disabled' if component == 'core' }}
+                {{ component.replace('x-tag-','') }}
+                <input type="checkbox" value="{{ component }}"
                        data-dependencies="{{ deps|join(' ') }}">
               </label>
             </div>
@@ -138,6 +138,7 @@
       progress.value = 0;
 
        getCss(selected, function(css) {
+        selected.unshift('x-tag-core');
         getJs(selected, function(js) {
           getExtraFiles(function(extraFileInfo){
             makeZip(buildURL + js, buildURL + css, extraFileInfo);
