@@ -7,6 +7,7 @@ var avow = site.avow;
 var getJSON = site.getJSON;
 var each = site.each;
 var err = site.err;
+var getBowerComponents = site.getBowerComponents;
 
 // return a set of all nodes reachable from the given key
 function getReachableSet(graph, startKey){
@@ -70,6 +71,7 @@ var renderDownloadPage = avow(function (fulfill, reject, tree) {
 console.log('generating download page');
 
 getJSON('build/components.json')
+  .then(getBowerComponents)
   .then(buildDependencyGraph, err('could not fetch component list'))
   .then(calculateComponentWeight, err('could not fetch component list'))
   .then(renderDownloadPage, err('failed to calc component weights'))

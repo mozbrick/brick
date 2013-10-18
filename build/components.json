@@ -1,15 +1,43 @@
-[
-    "x-tag-appbar",
-    "x-tag-calendar",
-    "x-tag-datepicker",
-    "x-tag-deck",
-    "x-tag-flipbox",
-    "x-tag-iconbutton",
-    "x-tag-layout",
-    "x-tag-slidebox",
-    "x-tag-slider",
-    "x-tag-tabbar",
-    "x-tag-toggle",
-    "x-tag-togglegroup",
-    "x-tag-tooltip"
-]
+{
+  "appbar": "x-tag-appbar",
+  "calendar": "x-tag-calendar",
+  "datepicker": "x-tag-datepicker",
+  "deck": "x-tag-deck",
+  "flipbox": "x-tag-flipbox",
+  "iconbutton": "x-tag-iconbutton",
+  "layout": "x-tag-layout",
+  "slidebox": "x-tag-slidebox",
+  "slider": "x-tag-slider",
+  "tabbar": "x-tag-tabbar",
+  "toggle": "x-tag-toggle",
+  "togglegroup": "x-tag-togglegroup",
+  "tooltip": "x-tag-tooltip"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

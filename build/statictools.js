@@ -86,6 +86,22 @@ var getJSON = avow(function (fulfill, reject, path) {
   });
 });
 
+var getBowerComponents = avow(function(fulfill, reject, componentsJson){
+    var components = [];
+    Object.keys(componentsJson).forEach(function(key){
+      components.push(componentsJson[key]);
+    });
+    fulfill(components);
+});
+
+var getComponents = avow(function(fulfill, reject, componentsJson){
+    var components = [];
+    Object.keys(componentsJson).forEach(function(key){
+      components.push(key);
+    });
+    fulfill(components);
+});
+
 module.exports = {
   avow: avow,
   err: err,
@@ -93,5 +109,7 @@ module.exports = {
   env: env,
   version: version,
   staticPage: staticPage,
-  getJSON: getJSON
+  getJSON: getJSON,
+  getComponents: getComponents,
+  getBowerComponents: getBowerComponents
 };

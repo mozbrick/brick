@@ -7,6 +7,7 @@ var env = site.env;
 var avow = site.avow;
 var err = site.err;
 var getJSON = site.getJSON;
+var getBowerComponents = site.getBowerComponents;
 
 var generateDemoPages = avow(function(fulfill, reject, components){
     console.log("generating demo pages...");
@@ -86,4 +87,5 @@ function processComponentTemplate(componentDemoPath, componentName){
 
 
 getJSON(path.join("build", "components.json"))
+    .then(getBowerComponents, err("failed to find bower components"))
     .then(generateDemoPages, err("failed to build demo index"))

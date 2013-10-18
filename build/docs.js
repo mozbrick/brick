@@ -8,9 +8,16 @@ var env = site.env;
 var avow = site.avow;
 var err = site.err;
 var getJSON = site.getJSON;
+var getBowerComponents = site.getBowerComponents;
 
-var generateDocs = avow(function (fulfill, reject, components) {
+var generateDocs = avow(function (fulfill, reject, componentsJson) {
     console.log('generating documentation');
+
+    var components = [];
+    Object.keys(componentsJson).forEach(function(key){
+      components.push(componentsJson[key]);
+    });
+
     var docs = {};
     function processComponent(n) {
         if (n < components.length) {
@@ -46,6 +53,7 @@ var writeIndex = avow(function (fulfill, reject, docs) {
 });
 
 getJSON(path.join('build','components.json'))
+    .then(getBowerComponents)
     .then(generateDocs, err('Unable to read component list.'))
     .then(writeIndex, err('failed to generate documentation.')).then(false, err('failed to write index'));
 
