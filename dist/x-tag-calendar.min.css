@@ -16,12 +16,19 @@ x-calendar .prev,x-calendar .next{position:absolute;top:0;max-width:3em}
 x-calendar .prev{left:0}
 x-calendar .next{right:0}
 x-calendar:not([active]) .day:hover,x-calendar:not([active]) .prev:hover,x-calendar:not([active]) .next:hover{cursor:pointer}
+<<<<<<< HEAD
 x-calendar{border:2px solid #888;font-size:1em;font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;background-color:#fff;color:#444}
 x-calendar .weekday-label{opacity:.8}
 x-calendar .month-label{border-bottom:1px dashed #808080}
 x-calendar .day{include:rounded;border:1px solid transparent}
+=======
+
+x-calendar{border:1px solid #cecece;border-radius:3px;font-size:1em;font-family:"_OpenSansBrick","Fira Sans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;background-color:#fff;color:#444;}
+x-calendar .weekday-label{opacity:.8}
+x-calendar .month-label{border-bottom:1px solid #cecece}
+>>>>>>> default skin wip
 x-calendar .day[active]{border-color:#ffa500}
-x-calendar .day.chosen{background:#444;color:#fff}
+x-calendar .day.chosen{background:#0095dd;color:#fff}
 x-calendar .day.today{border-color:#ff6347;font-weight:bold}
 x-calendar:not([active]) .prev:hover,x-calendar:not([active]) .next:hover{background-color:#f9f9f9;opacity:.7}
 x-calendar:not([active]) .day:not(.chosen):hover{background:#ccc}

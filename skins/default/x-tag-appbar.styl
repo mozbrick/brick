@@ -16,7 +16,20 @@ x-appbar > header {
 
 x-appbar > * {
   color: $barFG;
+  font-family: $COMPONENT_UI_FONT_FAMILY;
   font-size: inherit;
+}
+
+x-appbar > button {
+  cursor: pointer;
+  padding-left: .5em;
+  padding-right: .5em;
+  min-width: $barHeight;
+}
+
+x-appbar > *::-moz-focus-inner {
+  border: 0;
+  padding: 0;
 }
 
 x-appbar > header:after {
