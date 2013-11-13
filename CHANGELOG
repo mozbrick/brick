@@ -1,3 +1,8 @@
+0.9.0 (2013-11-13)
+- Moving away from our poorly thought-out versioning to a more sane versioning. 1.0.0-beta8 graduates to 0.9.0.
+- Fixed bug in Calendar with month rendering.
+- Updated x-tag-core for extra bug fixes and removal of CSP-breaking polyfill code
+
 1.0beta7 (Sep 2, 2013)
 - patched critical issue with calendar dates breaking during the transition between certain months
 
