@@ -13,7 +13,7 @@ function err(s) {
     return function(err) {
         console.error(s);
         console.error(err.toString());
-    }
+    };
 }
 
 function loadComponentList() {
@@ -41,7 +41,7 @@ function minify(components) {
                 minifiedCSS += result.css;
                 minifiedJS += result.js;
                 processComponent(n+1);
-            }, err('Failed to process component ' + components[n] + ': '))
+            }, err('Failed to process component ' + components[n] + ': '));
         } else {
             p.fulfill({
                 css: minifiedCSS,
@@ -56,7 +56,8 @@ function minify(components) {
 
 function minifyComponent(name) {
     var p = promise();
-
+    var css;
+    var js;
     var distDir = path.join('dist', name);
     console.log(distDir);
 
@@ -78,7 +79,7 @@ function minifyComponent(name) {
     }
 
     try {
-        var js = uglifyjs.minify(srcJsPath);
+        js = uglifyjs.minify(srcJsPath);
         fs.writeFileSync(jsPath, js.code);
     } catch (e) {
         p.reject(e);
@@ -88,7 +89,7 @@ function minifyComponent(name) {
     var cssPath = path.join(distDir, name + '.min.css');
     console.log(cssPath);
     try {
-        var css = fs.readFileSync(path.join('component', name, 'src', name + '.css')).toString();
+        css = fs.readFileSync(path.join('component', name, 'src', name + '.css')).toString();
         css = cleancss.process(css);
         fs.writeFileSync(cssPath, css);
     } catch (e) {
