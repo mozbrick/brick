@@ -12,8 +12,8 @@ module.exports = function(grunt){
         if (err) grunt.log.write(JSON.stringify(err));
         grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
         loadSkin(grunt, grunt.option('skin'), configs.stylus);
-        grunt.config.set('stylus', { dist: configs.stylus });
-        grunt.config.set('uglify', { dist: configs.uglify });
+        grunt.config.set('stylus', configs.stylus );
+        grunt.config.set('uglify', configs.uglify );
         grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
         grunt.file.copy('build/readme.txt','dist/readme.txt');
         grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
@@ -38,8 +38,8 @@ module.exports = function(grunt){
         if (err) grunt.log.write(err);
         grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
         loadSkin(grunt, grunt.option('skin'), configs.stylus);
-        grunt.config.set('stylus', { dist: configs.stylus });
-        grunt.config.set('uglify', { dist: configs.uglify });
+        grunt.config.set('stylus', configs.stylus );
+        grunt.config.set('uglify', configs.uglify );
         grunt.task.run('stylus','uglify');
         grunt.file.copy('dev-repos/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
         grunt.file.copy('build/readme.txt','dist/readme.txt');
@@ -57,6 +57,8 @@ module.exports = function(grunt){
     var pkg = grunt.file.readJSON('package.json');
     grunt.file.copy('dist/brick.css','dist/zip/brick-'+pkg.version+'.css');
     grunt.file.copy('dist/brick.js','dist/zip/brick-'+pkg.version+'.js');
+    grunt.file.copy('dist/brick.min.css','dist/zip/brick-'+pkg.version+'.min.css');
+    grunt.file.copy('dist/brick.min.js','dist/zip/brick-'+pkg.version+'.min.js');
     grunt.file.copy('build/readme.txt','dist/zip/readme-'+pkg.version+'.txt');
     grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/zip/OpenSans-SemiBold.ttf');
     grunt.config.set('compress',{
@@ -80,7 +82,7 @@ function loadSkin(grunt, skinFolder, config){
   if(!fs.existsSync(path.join('skins',skinFolder||'default'))){
     grunt.log.warn('skin folder ./skins/' + skinFolder + ' is missing, using default.');
   }
-  var files = config.files;
+  var files = config.dist.files;
   var keys = Object.keys(files);
   keys.forEach(function(k){
     var val = files[k];
@@ -130,7 +132,7 @@ function buildGruntConfiguration(grunt, source, callback){
   grunt.log.debug('building grunt configuration...');
 
   var stylusConfig = {},
-      uglifyConfig = {};
+    uglifyConfig = {};
 
   stylusConfig[path.join('dist','brick.css')] = [];
   uglifyConfig[path.join('dist','brick.js')] = [path.join(source,'x-tag-core','dist','x-tag-core.js')];
@@ -185,26 +187,55 @@ function buildGruntConfiguration(grunt, source, callback){
       var dest = path.join('dist', k);
 
       stylusFile = path.join(source, k, stylusFile);
-      stylusConfig[dest + '.min.css'] = stylusFile
+      stylusConfig[dest + '.css'] = stylusFile
       stylusConfig[path.join('dist','brick.css')].push(stylusFile);
 
       jsFile = path.join(source, k, jsFile);
-      uglifyConfig[dest + '.min.js'] = jsFile;
+      uglifyConfig[dest + '.js'] = jsFile;
       uglifyConfig[path.join('dist','brick.js')].push(jsFile);
 
+    });
+
+    var minCSSConfig = {};
+    Object.keys(stylusConfig).forEach(function(item){
+      minCSSConfig[item.replace('.css','.min.css')] = item;
+    });
+
+    var minJSConfig = {};
+    Object.keys(uglifyConfig).forEach(function(item){
+      minJSConfig[item.replace('.js','.min.js')] = item;
     });
 
     grunt.log.debug('finishing up');
 
     callback(null, {
       stylus: {
-        options: {
-          paths: [path.join(source,'brick-common','styles')]
+        dist:{
+          options: {
+            paths: [path.join(source,'brick-common','styles')],
+            compress: false
+          },
+          files: stylusConfig
         },
-        files: stylusConfig
+        'dist-min': {
+          options: {
+            compress: true
+          },
+          files: minCSSConfig
+        }
       },
       uglify: {
-        files: uglifyConfig
+        dist:{
+          options: {
+            mangle: false,
+            compress: false,
+            beautify: true
+          },
+          files: uglifyConfig
+        },
+        'dist-min':{
+          files: minJSConfig
+        }
       }
     });
 
