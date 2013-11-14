@@ -1,7 +1,7 @@
 {
   "name": "brick",
   "description": "UI Web Components for Mobile Web Apps",
-  "version": "1.0.0-beta7",
+  "version": "0.9.1",
   "keywords": [
     "brick",
     "custom",
@@ -23,13 +23,10 @@
     "x-tag-slidebox": "*",
     "x-tag-toggle": "*",
     "x-tag-calendar": "*",
-    "x-tag-datepicker": "*",
     "x-tag-deck": "*",
-    "x-tag-iconbutton": "*",
     "x-tag-layout": "*",
     "x-tag-slider": "*",
     "x-tag-tabbar": "*",
-    "x-tag-togglegroup": "*",
     "x-tag-tooltip": "*",
     "brick-common": "*"
   }

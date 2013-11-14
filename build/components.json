@@ -1,16 +1,13 @@
 {
   "appbar": "x-tag-appbar",
   "calendar": "x-tag-calendar",
-  "datepicker": "x-tag-datepicker",
   "deck": "x-tag-deck",
   "flipbox": "x-tag-flipbox",
-  "iconbutton": "x-tag-iconbutton",
   "layout": "x-tag-layout",
   "slidebox": "x-tag-slidebox",
   "slider": "x-tag-slider",
   "tabbar": "x-tag-tabbar",
   "toggle": "x-tag-toggle",
-  "togglegroup": "x-tag-togglegroup",
   "tooltip": "x-tag-tooltip"
 }
 
