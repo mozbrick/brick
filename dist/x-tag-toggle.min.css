@@ -5,7 +5,6 @@ x-toggle .x-toggle-content{display:inline-block;vertical-align:middle;margin:0}
 x-toggle .x-toggle-content:after{content:"";display:inline-block;width:0;height:100%;vertical-align:middle}
 x-toggle .x-toggle-check{display:inline-block;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;width:16px;height:16px;margin:0 3px 0 0;color:#000;vertical-align:middle;border:1px solid}
 x-toggle[checked] .x-toggle-check{border-width:8px}
-
 x-toggle .x-toggle-check{width:16px;height:16px;margin:0 3px 0 0;color:#000;vertical-align:middle;border:2px solid;-webkit-transition:border .15s 0 ease-in-out;-moz-transition:border .15s 0 ease-in-out;-ms-transition:border .15s 0 ease-in-out;transition:border .15s 0 ease-in-out}
 x-toggle[no-box] .x-toggle-check{display:none !important}
 x-toggle[type="radio"] .x-toggle-check{border-radius:50%}
