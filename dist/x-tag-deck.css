@@ -1,0 +1,244 @@
+x-deck,
+x-deck > x-card {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+x-deck > x-card[card-anim-type=flipX]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=flipX][reverse][leaving]:not([_before-animation]) {
+  -webkit-transform: perspective(800px) rotateX(180deg);
+  -moz-transform: perspective(800px) rotateX(180deg);
+  -ms-transform: perspective(800px) rotateX(180deg);
+  -o-transform: perspective(800px) rotateX(180deg);
+  transform: perspective(800px) rotateX(180deg);
+}
+x-deck > x-card[card-anim-type=flipX]:not([reverse])[leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=flipX][reverse][selected][_before-animation] {
+  -webkit-transform: perspective(800px) rotateX(-180deg);
+  -moz-transform: perspective(800px) rotateX(-180deg);
+  -ms-transform: perspective(800px) rotateX(-180deg);
+  -o-transform: perspective(800px) rotateX(-180deg);
+  transform: perspective(800px) rotateX(-180deg);
+}
+x-deck > x-card[card-anim-type=flipY]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=flipY][reverse][leaving]:not([_before-animation]) {
+  -webkit-transform: perspective(800px) rotateY(180deg);
+  -moz-transform: perspective(800px) rotateY(180deg);
+  -ms-transform: perspective(800px) rotateY(180deg);
+  -o-transform: perspective(800px) rotateY(180deg);
+  transform: perspective(800px) rotateY(180deg);
+}
+x-deck > x-card[card-anim-type=flipY]:not([reverse])[leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=flipY][reverse][selected][_before-animation] {
+  -webkit-transform: perspective(800px) rotateY(-180deg);
+  -moz-transform: perspective(800px) rotateY(-180deg);
+  -ms-transform: perspective(800px) rotateY(-180deg);
+  -o-transform: perspective(800px) rotateY(-180deg);
+  transform: perspective(800px) rotateY(-180deg);
+}
+x-deck > x-card[selected] {
+  z-index: 2;
+}
+x-deck > x-card[leaving] {
+  z-index: 1;
+}
+x-deck > x-card[card-anim-type=coverLeft][reverse][selected],
+x-deck > x-card[card-anim-type=coverRight][reverse][selected],
+x-deck > x-card[card-anim-type=coverUp][reverse][selected],
+x-deck > x-card[card-anim-type=coverDown][reverse][selected],
+x-deck > x-card[card-anim-type=uncoverLeft]:not([reverse])[selected],
+x-deck > x-card[card-anim-type=uncoverRight]:not([reverse])[selected],
+x-deck > x-card[card-anim-type=uncoverUp]:not([reverse])[selected],
+x-deck > x-card[card-anim-type=uncoverDown]:not([reverse])[selected] {
+  z-index: 1;
+}
+x-deck > x-card[card-anim-type=coverLeft][reverse][leaving],
+x-deck > x-card[card-anim-type=coverRight][reverse][leaving],
+x-deck > x-card[card-anim-type=coverUp][reverse][leaving],
+x-deck > x-card[card-anim-type=coverDown][reverse][leaving],
+x-deck > x-card[card-anim-type=uncoverLeft]:not([reverse])[leaving],
+x-deck > x-card[card-anim-type=uncoverRight]:not([reverse])[leaving],
+x-deck > x-card[card-anim-type=uncoverUp]:not([reverse])[leaving],
+x-deck > x-card[card-anim-type=uncoverDown]:not([reverse])[leaving] {
+  z-index: 2;
+}
+x-deck > x-card[card-anim-type=scrollLeft]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=scrollRight][reverse][selected][_before-animation] {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+}
+x-deck > x-card[card-anim-type=scrollLeft]:not([reverse])[leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=scrollRight][reverse][leaving]:not([_before-animation]) {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+x-deck > x-card[card-anim-type=scrollLeft][reverse][selected][_before-animation],
+x-deck > x-card[card-anim-type=scrollRight]:not([reverse])[selected][_before-animation] {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+x-deck > x-card[card-anim-type=scrollLeft][reverse][leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=scrollRight]:not([reverse])[leaving]:not([_before-animation]) {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+}
+x-deck > x-card[card-anim-type=scrollUp]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=scrollDown][reverse][selected][_before-animation] {
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
+}
+x-deck > x-card[card-anim-type=scrollUp]:not([reverse])[leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=scrollDown][reverse][leaving]:not([_before-animation]) {
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
+x-deck > x-card[card-anim-type=scrollUp][reverse][selected][_before-animation],
+x-deck > x-card[card-anim-type=scrollDown]:not([reverse])[selected][_before-animation] {
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
+x-deck > x-card[card-anim-type=scrollUp][reverse][leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=scrollDown]:not([reverse])[leaving]:not([_before-animation]) {
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
+}
+x-deck > x-card[card-anim-type=coverLeft]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=uncoverRight][reverse][selected][_before-animation] {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+}
+x-deck > x-card[card-anim-type=coverRight]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=uncoverLeft][reverse][selected][_before-animation] {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+x-deck > x-card[card-anim-type=coverUp]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=uncoverDown][reverse][selected][_before-animation] {
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
+}
+x-deck > x-card[card-anim-type=coverDown]:not([reverse])[selected][_before-animation],
+x-deck > x-card[card-anim-type=uncoverUp][reverse][selected][_before-animation] {
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
+x-deck > x-card[card-anim-type=coverRight][reverse][leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=uncoverLeft]:not([reverse])[leaving]:not([_before-animation]) {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+x-deck > x-card[card-anim-type=coverLeft][reverse][leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=uncoverRight]:not([reverse])[leaving]:not([_before-animation]) {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+}
+x-deck > x-card[card-anim-type=coverDown][reverse][leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=uncoverUp]:not([reverse])[leaving]:not([_before-animation]) {
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
+x-deck > x-card[card-anim-type=coverUp][reverse][leaving]:not([_before-animation]),
+x-deck > x-card[card-anim-type=uncoverDown]:not([reverse])[leaving]:not([_before-animation]) {
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
+}
+x-deck {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+x-deck > x-card {
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  display: block;
+  overflow: hidden;
+  position: absolute !important;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  -ms-transition-property: -ms-transform;
+  -o-transition-property: -o-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -ms-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-timing-function: ease;
+  -ms-transition-timing-function: ease;
+  -o-transition-timing-function: ease;
+  transition-timing-function: ease;
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -ms-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  transition-delay: 0s;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+  height: 100%;
+  width: 100%;
+  left: 0px;
+  right: 0px;
+  z-index: 0;
+/** card animation types go here **/
+}
+x-deck > x-card:not([selected]):not([leaving]) {
+  visibility: hidden;
+  opacity: 0;
+}
