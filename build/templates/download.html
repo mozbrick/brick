@@ -20,9 +20,9 @@
         <h2>Build Your Own Bundle</h2>
         <div class="panel panel-default">
           <div class="panel-heading">
-            Select just the components you want
+            Select just the components you want <label for="dev-build">Minified <input type="checkbox" id="dev-build" checked></label>
           </div>
-          <div class="panel-body row">
+          <div id="components" class="panel-body row">
           {% for component, deps in dependencies %}
             <div class="col-sm-6">
               <label>
@@ -36,6 +36,8 @@
           <div class="panel-footer c">
             <input type="submit" id="buildBundle"
                    class="btn btn-primary pull-left" value="Build Bundle">
+
+
             <span style=""><b id="dl-count"></b> components selected </span>
             <progress id="buildProgress" value="0" max="0">Building Your zip...</progress>
             <a id="zip" class="btn btn-success pull-right">Download Bundle</a>
@@ -72,7 +74,7 @@
 
     })();
 
-    var inputs = document.querySelectorAll('#byob input');
+    var inputs = document.querySelectorAll('#components input');
 
     var preSelected = queryParams.byob;
     if (preSelected) {
@@ -110,13 +112,20 @@
       }
     }
 
-    form.addEventListener('change', function(e) {
+    var minifed = null;
+    function getFileName(file, ext){
+      return "dist/" + file + (minifed?'.min.':'.') + ext;
+    }
+
+    xtag.addEvent(form, 'change:delegate(#components input)', function(e){
       selectDependencies(e.target);
       updateCart();
     });
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+
+      minifed = document.getElementById('dev-build').checked ? true : false;
 
       var buildURL = '/* ' + location.protocol + '//' + location.host + location.pathname;
 
@@ -170,7 +179,7 @@
           total += req.response;
           done();
         };
-        req.open("get", "dist/" + c + '.min.css');
+        req.open("get", getFileName(c, 'css'));
         req.send();
       }
 
@@ -199,7 +208,7 @@
           total += req.response;
           done();
         };
-        req.open("get", "dist/" + c + '.min.js');
+        req.open("get", getFileName(c, 'js'));
         req.send();
       }
 
@@ -255,8 +264,8 @@
     function makeZip(js, css, extraFileInfo) {
       var zip = new JSZip();
 
-      zip.file('brick-{{version}}.byob.min.js', js);
-      zip.file('brick-{{version}}.byob.min.css', css);
+      zip.file('brick-{{version}}.byob'+(minifed?'.min.':'.')+'js', js);
+      zip.file('brick-{{version}}.byob'+(minifed?'.min.':'.')+'css', css);
 
       for(var i=0; i < extraFileInfo.length; i++){
         var fileData = extraFileInfo[i];

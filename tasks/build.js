@@ -19,6 +19,7 @@ module.exports = function(grunt){
         grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
         grunt.task.run('stylus','uglify');
         grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
+        grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.js','dist/x-tag-core.js');
         grunt.file.copy('build/readme.txt','dist/readme.txt');
         grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
         done();
@@ -42,6 +43,7 @@ module.exports = function(grunt){
         grunt.config.set('uglify', configs.uglify );
         grunt.task.run('stylus','uglify');
         grunt.file.copy('dev-repos/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
+        grunt.file.copy('dev-repos/x-tag-core/dist/x-tag-core.js','dist/x-tag-core.js');
         grunt.file.copy('build/readme.txt','dist/readme.txt');
         grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
         done();

@@ -290,8 +290,13 @@ progress {
 #buildBundle {
   margin-right: 1em;
 }
-#byob input[type=checkbox] {
+#components input[type=checkbox] {
   float: right;
+}
+#byob .panel-heading label {
+  margin-top: -7px;
+  float: right;
+  background: none;
 }
 
 /*
