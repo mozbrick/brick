@@ -92,38 +92,8 @@ if (typeof WeakMap === "undefined") {
     })();
 }
 
-var SideTable;
-
-if (typeof WeakMap !== "undefined" && navigator.userAgent.indexOf("Firefox/") < 0) {
-    SideTable = WeakMap;
-} else {
-    (function() {
-        var defineProperty = Object.defineProperty;
-        var counter = Date.now() % 1e9;
-        SideTable = function() {
-            this.name = "__st" + (Math.random() * 1e9 >>> 0) + (counter++ + "__");
-        };
-        SideTable.prototype = {
-            set: function(key, value) {
-                var entry = key[this.name];
-                if (entry && entry[0] === key) entry[1] = value; else defineProperty(key, this.name, {
-                    value: [ key, value ],
-                    writable: true
-                });
-            },
-            get: function(key) {
-                var entry;
-                return (entry = key[this.name]) && entry[0] === key ? entry[1] : undefined;
-            },
-            "delete": function(key) {
-                this.set(key, undefined);
-            }
-        };
-    })();
-}
-
 (function(global) {
-    var registrationsTable = new SideTable();
+    var registrationsTable = new WeakMap();
     var setImmediate = window.msSetImmediate;
     if (!setImmediate) {
         var setImmediateQueue = [];
@@ -415,14 +385,9 @@ if (typeof WeakMap !== "undefined" && navigator.userAgent.indexOf("Firefox/") < 
         }
     };
     global.JsMutationObserver = JsMutationObserver;
+    if (!global.MutationObserver && global.WebKitMutationObserver) global.MutationObserver = global.WebKitMutationObserver;
+    if (!global.MutationObserver) global.MutationObserver = JsMutationObserver;
 })(this);
-
-if (!window.MutationObserver) {
-    window.MutationObserver = window.WebKitMutationObserver || window.JsMutationObserver;
-    if (!MutationObserver) {
-        throw new Error("no mutation observer support");
-    }
-}
 
 (function(scope) {
     if (!scope) {
@@ -511,6 +476,7 @@ if (!window.MutationObserver) {
             if (definition.is) {
                 element.setAttribute("is", definition.is);
             }
+            element.removeAttribute("unresolved");
             implement(element, definition);
             element.__upgraded__ = true;
             scope.upgradeSubtree(element);
@@ -545,20 +511,25 @@ if (!window.MutationObserver) {
             }
         }
         function overrideAttributeApi(prototype) {
+            if (prototype.setAttribute._polyfilled) {
+                return;
+            }
             var setAttribute = prototype.setAttribute;
             prototype.setAttribute = function(name, value) {
                 changeAttribute.call(this, name, value, setAttribute);
             };
             var removeAttribute = prototype.removeAttribute;
-            prototype.removeAttribute = function(name, value) {
-                changeAttribute.call(this, name, value, removeAttribute);
+            prototype.removeAttribute = function(name) {
+                changeAttribute.call(this, name, null, removeAttribute);
             };
+            prototype.setAttribute._polyfilled = true;
         }
         function changeAttribute(name, value, operation) {
             var oldValue = this.getAttribute(name);
             operation.apply(this, arguments);
-            if (this.attributeChangedCallback && this.getAttribute(name) !== oldValue) {
-                this.attributeChangedCallback(name, oldValue);
+            var newValue = this.getAttribute(name);
+            if (this.attributeChangedCallback && newValue !== oldValue) {
+                this.attributeChangedCallback(name, oldValue, newValue);
             }
         }
         var registry = {};
@@ -734,7 +705,7 @@ if (!window.MutationObserver) {
             _removed(element);
         }
     }
-    function removed(element) {
+    function _removed(element) {
         if (element.leftViewCallback || element.__upgraded__ && logFlags.dom) {
             logFlags.dom && console.log("removed:", element.localName);
             if (!inDocument(element)) {
@@ -776,15 +747,6 @@ if (!window.MutationObserver) {
             root.__watched = true;
         }
     }
-    function filter(inNode) {
-        switch (inNode.localName) {
-          case "style":
-          case "script":
-          case "template":
-          case undefined:
-            return true;
-        }
-    }
     function handler(mutations) {
         if (logFlags.dom) {
             var mx = mutations[0];
@@ -803,13 +765,13 @@ if (!window.MutationObserver) {
         mutations.forEach(function(mx) {
             if (mx.type === "childList") {
                 forEach(mx.addedNodes, function(n) {
-                    if (filter(n)) {
+                    if (!n.localName) {
                         return;
                     }
                     addedNode(n);
                 });
                 forEach(mx.removedNodes, function(n) {
-                    if (filter(n)) {
+                    if (!n.localName) {
                         return;
                     }
                     removedNode(n);
@@ -882,7 +844,7 @@ if (!window.MutationObserver) {
     CustomElements.parser = parser;
 })();
 
-(function() {
+(function(scope) {
     function bootstrap() {
         CustomElements.parser.parse(document);
         CustomElements.upgradeDocument(document);
@@ -905,13 +867,15 @@ if (!window.MutationObserver) {
             return e;
         };
     }
-    if (document.readyState === "complete") {
+    if (document.readyState === "complete" || scope.flags.eager) {
+        bootstrap();
+    } else if (document.readyState === "interactive" && !window.attachEvent && (!window.HTMLImports || window.HTMLImports.ready)) {
         bootstrap();
     } else {
         var loadEvent = window.HTMLImports ? "HTMLImportsLoaded" : "DOMContentLoaded";
         window.addEventListener(loadEvent, bootstrap);
     }
-})();
+})(window.CustomElements);
 
 (function() {
     var win = window, doc = document, noop = function() {}, trueop = function() {
