@@ -665,6 +665,134 @@ x-layout[maxcontent] > footer {
   transform: translateY(100%);
 }
 
+x-shiftbox {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+x-shiftbox > aside {
+  box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: relative;
+  z-index: 0;
+}
+x-shiftbox > section {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-transition: 0.3s ease-out;
+  -moz-transition: 0.3s ease-out;
+  -ms-transition: 0.3s ease-out;
+  -o-transition: 0.3s ease-out;
+  transition: 0.3s ease-out;
+  -webkit-transition-property: top, bottom, left, right, -webkit-transform, margin;
+  -moz-transition-property: top, bottom, left, right, -moz-transform, margin;
+  -ms-transition-property: top, bottom, left, right, -ms-transform, margin;
+  -o-transition-property: top, bottom, left, right, -o-transform, margin;
+  transition-property: top, bottom, left, right, transform, margin;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  z-index: 1;
+}
+x-shiftbox[shift="up"][open] > section {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+  top: 35px;
+  margin-left: 0;
+}
+x-shiftbox[shift="right"][open] > section {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+  margin-left: -35px;
+}
+x-shiftbox[shift="down"][open] > section {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+  margin-top: -35px;
+  margin-left: 0;
+}
+x-shiftbox[shift="left"][open] > section {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+  left: 35px;
+  margin-left: 0;
+}
+x-shiftbox[shift="upright"][open] > section {
+  top: -35px;
+  left: 35px;
+  margin-left: 0;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+x-shiftbox[shift="downright"][open] > section {
+  top: 35px;
+  left: 35px;
+  margin-left: 0;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+x-shiftbox[shift="downleft"][open] > section {
+  top: 35px;
+  left: -35px;
+  margin-left: 0;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+x-shiftbox[shift="upleft"][open] > section {
+  top: -35px;
+  left: -35px;
+  margin-left: 0;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+x-shiftbox[open] > section {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+  margin-left: -35px;
+}
+
 x-slidebox {
   display: block;
   overflow: hidden;

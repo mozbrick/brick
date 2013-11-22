@@ -14,9 +14,13 @@
     "dist/OpenSans-SemiBold.ttf"
   ],
   "ignore": [
-    "site" , "demos", "component", "build"
+    "site",
+    "demos",
+    "component",
+    "build",
+    "bower_components"
   ],
-  "dependencies":{
+  "dependencies": {
     "x-tag-core": "~0.8.1",
     "x-tag-appbar": "*",
     "x-tag-flipbox": "*",
@@ -25,6 +29,7 @@
     "x-tag-calendar": "*",
     "x-tag-deck": "*",
     "x-tag-layout": "*",
+    "x-tag-shiftbox": "*",
     "x-tag-slider": "*",
     "x-tag-tabbar": "*",
     "x-tag-tooltip": "*",

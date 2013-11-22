@@ -4,6 +4,7 @@
   "deck": "x-tag-deck",
   "flipbox": "x-tag-flipbox",
   "layout": "x-tag-layout",
+  "shiftbox": "x-tag-shiftbox",
   "slidebox": "x-tag-slidebox",
   "slider": "x-tag-slider",
   "tabbar": "x-tag-tabbar",
