@@ -1651,6 +1651,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 
   function delegateAction(pseudo, event) {
     var match, target = event.target;
+    if (!target.tagName) return null;
     if (xtag.matchSelector(target, pseudo.value)) match = target;
     else if (xtag.matchSelector(target, pseudo.value + ' *')) {
       var parent = target.parentNode;
