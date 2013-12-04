@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       }
     },
     pkg: grunt.file.readJSON('package.json'),
-    bumpup: ['bower.json', 'package.json', 'xtag.json'],
+    bumpup: ['bower.json', 'package.json'],
     tagrelease: {
       file: 'package.json',
       prefix: '',

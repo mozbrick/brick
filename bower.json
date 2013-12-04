@@ -1,7 +1,7 @@
 {
   "name": "brick",
   "description": "UI Web Components for Mobile Web Apps",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "keywords": [
     "brick",
     "custom",
@@ -21,7 +21,7 @@
     "bower_components"
   ],
   "dependencies": {
-    "x-tag-core": "~0.8.1",
+    "x-tag-core": "0.8.20",
     "x-tag-appbar": "*",
     "x-tag-flipbox": "*",
     "x-tag-slidebox": "*",
