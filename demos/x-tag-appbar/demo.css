@@ -1,0 +1,10 @@
+#custom-style{
+    background-color: orange;
+    background-image: none;
+    font-size: 1.5em;
+    color: white;
+}
+
+#custom-style > *{
+    padding: .25em;
+}

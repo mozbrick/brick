@@ -1,0 +1,149 @@
+
+
+
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>Brick </title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400">
+    <link rel="stylesheet" href="site/css/bootstrap.min.css">
+    <link rel="stylesheet" href="dist/brick.css"/>
+    <link rel="stylesheet" href="site/css/main.css">
+    
+  <link rel="stylesheet" type="text/css" href="demos/x-tag-flipbox/demo.css"/>
+  <link rel="stylesheet" type="text/css" href="site/css/prettify.css">
+
+  </head>
+  <body>
+    <header class="site-header">
+      
+<nav class="navbar navbar-default navbar-fixed-top grayshade" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">
+        <img class="logo" src="site/img/logo.png">
+        Brick<small> 0.9.2</small>
+      </a>
+    </div>
+    <ul class="navbar-nav nav">
+      <li><a href="docs.html">
+        <span class="succinct">Docs</span>
+        <span class="verbose">Documentation &amp; Demos</span>
+      </a></li>
+      <li><a href="download.html">
+        <span>Download</span>
+      </a></li>
+      <li><a href="http://github.com/mozilla/brick/">
+        <span>Github</span>
+      </a></li>
+      <li><a href="http://github.com/mozilla/brick/issues">
+        <span>Issues</span>
+      </a></li>
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Brick</h1>
+      <h2>UI Components for Modern Web Apps</h2>
+    </div>
+  </div>
+
+    </header>
+    <article class="container">
+      
+  <div class="row">
+    <section class="col-md-4">
+      <h2>What is Brick?</h2>
+      <p>
+        Brick is a bundle of reusable UI components created to enable <b>rapid development</b> of cross-browser and mobile-friendly HTML5 web applications.
+      </p>
+    </section>
+
+    <section class="col-md-4">
+      <h2>Neat. How?</h2>
+      <p>
+        Brick components are <b>custom HTML tags</b> created using <a href="http://x-tags.org">X-Tag</a> &mdash; a library that makes developing Web Components easier.
+      </p>
+    </section>
+
+    <section class="col-md-4">
+      <h2>Um, Web Components?</h2>
+      <p>
+        <a href="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/spec/custom/index.html">Web Components</a> is a series of emerging <b>W3C standards</b> that allow developers to define custom HTML elements, and interact with them using the native DOM.
+      </p>
+    </section>
+  </div>
+
+  <section class="demo-wrap clean row">
+      <div class="col-md-4 col-sm-6">
+          <figure class="demo largeprint demo-left">
+              <x-flipbox>
+                  <div>I'm the front face.</div>
+                  <div>And I'm the back face.</div>
+              </x-flipbox>
+          </figure>
+      </div>
+      <div class="markup-wrap col-md-8 col-sm-6">
+          <h1>Brick in Action</h1>
+          <div class="controls">
+              <button class="btn btn-default" data-toggle-prop="flipped" data-toggle-target="x-flipbox">Toggle flip</button>
+          </div>
+          <h3>Markup</h3>
+          <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;I'm the front face.&lt;/div&gt;<br/>    &lt;div&gt;And I'm the back face.&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
+          <h3>JavaScript</h3>
+          <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function(){<br/>    flipBox.toggle(); <br/>});</pre>
+      </div>
+  </section>
+
+  <section class="row">
+    <div class="col-sm-6">
+      <h1>Start Stacking</h1>
+        <a class="download" href="download.html">
+          <h3>Download Brick</h3>
+          <small>version 0.9.2 &mdash; 241K</small>
+        </a>
+    </div>
+    <div class="col-sm-6">
+      <h1>Feedback</h1>
+      <p>Brick is currently in Beta. You may run into issues using the components, but it likely isn't your fault! Please let us know!</p>
+      <a href="https://github.com/mozilla/brick/issues/new">File an Issue &raquo;</a>
+    </div>
+  </section>
+
+
+      <footer class="row">
+        <div class="col-xs-8"></div>
+        <div class="col-xs-4">
+          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="site/img/mozillaHTML5.png" title="built by Mozilla"></a>
+        </div>
+      </footer>
+    </article>
+    <script src="dist/brick.js"></script>
+    
+  <script src="site/js/prettify.js"></script>
+  <script src="site/js/demo-page-helpers.js"></script>
+  <script src="demos/x-tag-flipbox/demo.js"></script>
+  <script>
+    var demos = document.querySelectorAll('.demo[data-src]');
+    for (var i=0; i<demos.length; i++) {
+      var fig = demos[i];
+      var iframe = document.createElement('iframe');
+      iframe.src = fig.getAttribute('data-src');
+      fig.appendChild(iframe);
+      iframe.onload = function(e) {
+        e.target.style.opacity = 1;
+      }
+      var a = document.createElement('a');
+      a.href = iframe.src;
+      fig.appendChild(a);
+    }
+  </script>
+
+  </body>
+</html>

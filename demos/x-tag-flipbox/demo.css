@@ -1,0 +1,13 @@
+.demo.largeprint x-flipbox > *{
+    line-height: 2em;
+    font-size: 2.5em;
+    padding: .5em;
+}
+
+x-flipbox > *:first-child{
+    background-color: #fff38e;
+}
+
+x-flipbox > *:last-child{
+    background-color: #9ebcc6;
+}
