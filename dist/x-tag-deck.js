@@ -278,7 +278,6 @@
         }
         _sanitizeCardAttrs(deck);
         if (transitionType === undefined) {
-            console.log("defaulting to none transition");
             transitionType = "none";
         }
         var isReverse;

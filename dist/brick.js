@@ -1571,14 +1571,9 @@ if (typeof WeakMap === "undefined") {
         fireEvent: function(element, type, options, warn) {
             var event = doc.createEvent("CustomEvent");
             options = options || {};
-            if (warn) console.warn("fireEvent has been modified");
             event.initCustomEvent(type, options.bubbles !== false, options.cancelable !== false, options.detail);
             if (options.baseEvent) inheritEvent(event, options.baseEvent);
-            try {
-                element.dispatchEvent(event);
-            } catch (e) {
-                console.warn("This error may have been caused by a change in the fireEvent method", e);
-            }
+            try {element.dispatchEvent(event);} catch (e) {}
         },
         addObserver: function(element, type, fn) {
             if (!element._records) {
@@ -1906,7 +1901,6 @@ if (typeof WeakMap === "undefined") {
             try {
                 ranges = JSON.parse(multiDateStr);
                 if (!isArray(ranges)) {
-                    console.warn("invalid list of ranges", multiDateStr);
                     return null;
                 }
             } catch (err) {
@@ -1914,7 +1908,6 @@ if (typeof WeakMap === "undefined") {
                 if (parsedSingle) {
                     return [ parsedSingle ];
                 } else {
-                    console.warn("unable to parse", multiDateStr, "as JSON or single date");
                     return null;
                 }
             }
@@ -1928,28 +1921,23 @@ if (typeof WeakMap === "undefined") {
             } else if (typeof range === "string") {
                 var parsedDate = parseSingleDate(range);
                 if (!parsedDate) {
-                    console.warn("unable to parse date", range);
                     return null;
                 }
                 ranges[i] = parsedDate;
             } else if (isArray(range) && range.length === 2) {
                 var parsedStartDate = parseSingleDate(range[0]);
                 if (!parsedStartDate) {
-                    console.warn("unable to parse start date", range[0], "from range", range);
                     return null;
                 }
                 var parsedEndDate = parseSingleDate(range[1]);
                 if (!parsedEndDate) {
-                    console.warn("unable to parse end date", range[1], "from range", range);
                     return null;
                 }
                 if (parsedStartDate.valueOf() > parsedEndDate.valueOf()) {
-                    console.warn("invalid range", range, ": start date is after end date");
                     return null;
                 }
                 ranges[i] = [ parsedStartDate, parsedEndDate ];
             } else {
-                console.warn("invalid range value: ", range);
                 return null;
             }
         }
@@ -1976,7 +1964,6 @@ if (typeof WeakMap === "undefined") {
         if (date > daysInNextMonth) {
             date = daysInNextMonth;
         }
-        console.log(new Date(d.getFullYear(), d.getMonth() + 1, date).toString());
         return new Date(d.getFullYear(), d.getMonth() + 1, date);
     }
     function prevMonth(d) {
@@ -3086,7 +3073,6 @@ if (typeof WeakMap === "undefined") {
         }
         _sanitizeCardAttrs(deck);
         if (transitionType === undefined) {
-            console.log("defaulting to none transition");
             transitionType = "none";
         }
         var isReverse;
@@ -4935,13 +4921,7 @@ if (typeof WeakMap === "undefined") {
         }
     }
     function _showTooltip(tooltip, triggerElem) {
-        if (triggerElem === tooltip) {
-            console.warn("The tooltip's target element is the tooltip itself!" + " Is this intentional?");
-        }
         var arrow = tooltip.xtag.arrowEl;
-        if (!arrow.parentNode) {
-            console.warn("The inner component DOM of the tooltip " + "appears to be missing. Make sure to edit tooltip" + " contents through the .contentEl property instead of" + "directly on the x-tooltip to avoid " + "clobbering the component's internals.");
-        }
         var targetOrient = tooltip.orientation;
         var _readyToShowFn = function() {
             _unforceDisplay(tooltip);
