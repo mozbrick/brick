@@ -136,7 +136,6 @@
             try {
                 ranges = JSON.parse(multiDateStr);
                 if (!isArray(ranges)) {
-                    console.warn("invalid list of ranges", multiDateStr);
                     return null;
                 }
             } catch (err) {
@@ -144,7 +143,6 @@
                 if (parsedSingle) {
                     return [ parsedSingle ];
                 } else {
-                    console.warn("unable to parse", multiDateStr, "as JSON or single date");
                     return null;
                 }
             }
@@ -158,28 +156,23 @@
             } else if (typeof range === "string") {
                 var parsedDate = parseSingleDate(range);
                 if (!parsedDate) {
-                    console.warn("unable to parse date", range);
                     return null;
                 }
                 ranges[i] = parsedDate;
             } else if (isArray(range) && range.length === 2) {
                 var parsedStartDate = parseSingleDate(range[0]);
                 if (!parsedStartDate) {
-                    console.warn("unable to parse start date", range[0], "from range", range);
                     return null;
                 }
                 var parsedEndDate = parseSingleDate(range[1]);
                 if (!parsedEndDate) {
-                    console.warn("unable to parse end date", range[1], "from range", range);
                     return null;
                 }
                 if (parsedStartDate.valueOf() > parsedEndDate.valueOf()) {
-                    console.warn("invalid range", range, ": start date is after end date");
                     return null;
                 }
                 ranges[i] = [ parsedStartDate, parsedEndDate ];
             } else {
-                console.warn("invalid range value: ", range);
                 return null;
             }
         }
@@ -206,7 +199,6 @@
         if (date > daysInNextMonth) {
             date = daysInNextMonth;
         }
-        console.log(new Date(d.getFullYear(), d.getMonth() + 1, date).toString());
         return new Date(d.getFullYear(), d.getMonth() + 1, date);
     }
     function prevMonth(d) {
