@@ -75,11 +75,18 @@
               <x-slider></x-slider>
             </p>
             <p>
-              <x-toggle label="Yay"></x-toggle>
+              <x-toggle label="Check"></x-toggle>
+              <x-toggle label="Check"></x-toggle>
+              <x-toggle label="Check"></x-toggle>
+              <x-toggle label="Check"></x-toggle>
+              <x-toggle name="f" label="Radio 1"></x-toggle>
+              <x-toggle name="f" label="Radio 2"></x-toggle>
             </p>
             <p>
               <button id="tip">Show Tooltip</button>
-              <x-tooltip target-selector="#tip">I'm the tooltip! Yayaaaaaaaas!</x-tooltip>
+              <x-tooltip target-selector="#tip">
+                I'm the tooltip!
+              </x-tooltip>
             </p>
           </x-card>
         </x-deck>
@@ -110,6 +117,12 @@
               break;
           }
         });
+
+        var loc = location.hash;
+        loc = parseInt(loc.substring(1));
+        if (loc) {
+          document.querySelector('x-deck').shuffleTo(loc);
+        }
       });
     </script>
   </body>

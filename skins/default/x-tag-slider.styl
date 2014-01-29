@@ -12,19 +12,7 @@ x-slider {
     height: $thumbSize + 2;
     padding-bottom: 2px;
 
-    .slider-thumb {
-        background: $barFG;
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        border-radius: 13px;
-        border: 1px solid #979797;
-        box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.50);
-        cursor: pointer;
-        display: block;
-        height: $thumbSize;
-        width: $thumbSize;
-    }
-    input::-moz-range-thumb {
+    .slider-thumb, input::-moz-range-thumb {
         background: $barFG;
         -moz-appearance: none;
         -webkit-appearance: none;
@@ -39,7 +27,10 @@ x-slider {
 
     .slider-track {
         background: #d8d8d8;
+        border-radius: 4px;
+        height: 2px;
     }
+
     & > input::-moz-range-track,
     & > input::-webkit-slider-runnable-track {
         background: #d8d8d8;
