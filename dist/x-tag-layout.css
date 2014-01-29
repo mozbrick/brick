@@ -19,7 +19,10 @@ x-layout {
 /* NEW, Spec - Opera 12.1, Firefox 20+ */
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   border: 1px solid #999;
+=======
+>>>>>>> default style
   overflow: hidden;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -81,6 +84,10 @@ x-layout > section > *:only-child {
   * height in Webkit
   * see: http://stackoverflow.com/a/15389545
   */
+<<<<<<< HEAD
+=======
+  height: 100%;
+>>>>>>> default style
   position: absolute;
 }
 x-layout[content-maximizing] > header,

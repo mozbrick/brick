@@ -1,4 +1,17 @@
 (function() {
+<<<<<<< HEAD
+=======
+    function reveal(e) {
+        var flipBox = e.currentTarget;
+        if (this.parentNode == flipBox) {
+            if (this.parentNode.firstElementChild == this) {
+                flipBox.flipped = false;
+            } else if (this.parentNode.lastElementChild == this) {
+                flipBox.flipped = true;
+            }
+        }
+    }
+>>>>>>> default style
     xtag.register("x-flipbox", {
         lifecycle: {
             created: function() {
@@ -14,6 +27,7 @@
             }
         },
         events: {
+<<<<<<< HEAD
             "transitionend:delegate(*:first-child)": function(e) {
                 var frontCard = e.target;
                 var flipBox = frontCard.parentNode;
@@ -35,6 +49,15 @@
                     flipBox.flipped = true;
                 }
             }
+=======
+            "transitionend:delegate(x-flipbox > *:first-child)": function(e) {
+                var flipBox = e.currentTarget;
+                if (this.parentNode == flipBox) {
+                    xtag.fireEvent(flipBox, "flipend");
+                }
+            },
+            "reveal:delegate(x-flipbox > *)": reveal
+>>>>>>> default style
         },
         accessors: {
             direction: {
@@ -43,12 +66,24 @@
                     return this.xtag._direction;
                 },
                 set: function(value) {
+<<<<<<< HEAD
                     xtag.skipTransition(this.firstElementChild, function() {
                         this.setAttribute("_anim-direction", value);
                     }, this);
                     xtag.skipTransition(this.lastElementChild, function() {
                         this.setAttribute("_anim-direction", value);
                     }, this);
+=======
+                    var self = this;
+                    xtag.skip(elem, before, after);
+                    xtag.skipTransition(this.firstElementChild, function() {
+                        self.setAttribute("_anim-direction", value);
+                        return function() {};
+                    });
+                    xtag.skipTransition(this.lastElementChild, function() {
+                        self.setAttribute("_anim-direction", value);
+                    });
+>>>>>>> default style
                     this.xtag._direction = value;
                 }
             },

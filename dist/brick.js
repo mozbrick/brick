@@ -3491,6 +3491,16 @@ if (!window.MutationObserver) {
 })();
 
 (function() {
+    function reveal(e) {
+        var flipBox = e.currentTarget;
+        if (this.parentNode == flipBox) {
+            if (this.parentNode.firstElementChild == this) {
+                flipBox.flipped = false;
+            } else if (this.parentNode.lastElementChild == this) {
+                flipBox.flipped = true;
+            }
+        }
+    }
     xtag.register("x-flipbox", {
         lifecycle: {
             created: function() {
@@ -3506,27 +3516,13 @@ if (!window.MutationObserver) {
             }
         },
         events: {
-            "transitionend:delegate(*:first-child)": function(e) {
-                var frontCard = e.target;
-                var flipBox = frontCard.parentNode;
-                if (flipBox.nodeName.toLowerCase() === "x-flipbox") {
+            "transitionend:delegate(x-flipbox > *:first-child)": function(e) {
+                var flipBox = e.currentTarget;
+                if (this.parentNode == flipBox) {
                     xtag.fireEvent(flipBox, "flipend");
                 }
             },
-            "show:delegate(*:first-child)": function(e) {
-                var frontCard = e.target;
-                var flipBox = frontCard.parentNode;
-                if (flipBox.nodeName.toLowerCase() === "x-flipbox") {
-                    flipBox.flipped = false;
-                }
-            },
-            "show:delegate(*:last-child)": function(e) {
-                var backCard = e.target;
-                var flipBox = backCard.parentNode;
-                if (flipBox.nodeName.toLowerCase() === "x-flipbox") {
-                    flipBox.flipped = true;
-                }
-            }
+            "reveal:delegate(x-flipbox > *)": reveal
         },
         accessors: {
             direction: {
@@ -3535,12 +3531,15 @@ if (!window.MutationObserver) {
                     return this.xtag._direction;
                 },
                 set: function(value) {
+                    var self = this;
+                    xtag.skip(elem, before, after);
                     xtag.skipTransition(this.firstElementChild, function() {
-                        this.setAttribute("_anim-direction", value);
-                    }, this);
+                        self.setAttribute("_anim-direction", value);
+                        return function() {};
+                    });
                     xtag.skipTransition(this.lastElementChild, function() {
-                        this.setAttribute("_anim-direction", value);
-                    }, this);
+                        self.setAttribute("_anim-direction", value);
+                    });
                     this.xtag._direction = value;
                 }
             },
@@ -3740,9 +3739,9 @@ if (!window.MutationObserver) {
                     xtag.fireEvent(this, "slideend");
                 }
             },
-            "show:delegate(x-slide)": function(e) {
+            "reveal:delegate(x-slidebox > x-slides > x-slide)": function(e) {
                 var slide = e.target;
-                if (slide.parentNode.nodeName.toLowerCase() === "x-slides" && slide.parentNode.parentNode.nodeName.toLowerCase() === "x-slidebox") {
+                if (e.target.parentNode.parentNode == e.currentTarget) {
                     var slideWrap = slide.parentNode;
                     var box = slideWrap.parentNode;
                     var slides = xtag.query(slideWrap, "x-slide");

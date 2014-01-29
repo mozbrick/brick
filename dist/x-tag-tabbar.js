@@ -35,7 +35,11 @@
             }
         },
         events: {
+<<<<<<< HEAD
             "tap:delegate(x-tabbar-tab)": function(e) {
+=======
+            "tap:delegate(x-tabbar-tab)": function() {
+>>>>>>> default style
                 var activeTab = xtag.query(this.parentNode, "x-tabbar-tab[selected]");
                 if (activeTab.length) {
                     activeTab.forEach(function(t) {

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 x-appbar{padding:0;width:100%;display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 x-appbar > *{display:flex;border:none;padding:2px 5px 0;vertical-align:middle;text-align:center;-webkit-flex-align:center;-ms-flex-align:center;-webkit-align-items:center;-webkit-align-items:center;-moz-align-items:center;-ms-align-items:center;align-items:center;text-align:center}
 x-appbar > *:first-child:before{display:none}
@@ -18,4 +19,16 @@ x-appbar > *::-moz-focus-inner{border:0;padding:0}
 >>>>>>> default skin wip
 =======
 >>>>>>> default skin wip
+=======
+x-appbar{padding:0;width:100%;display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex}
+x-appbar,x-appbar *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+x-appbar > *{border:none;vertical-align:middle;text-align:center;-webkit-flex-align:center;-ms-flex-align:center;-webkit-align-items:center;-webkit-align-items:center;-moz-align-items:center;-ms-align-items:center;align-items:center;text-align:center}
+x-appbar > header{min-width:auto;min-height:auto;-webkit-box-flex:1;-moz-box-flex:1;-webkit-flex:1;-ms-flex:1;box-flex:1;flex:1;overflow:hidden;text-overflow:ellipsis;margin:0}
+x-appbar{background-color:#00202f;color:#fff;font-family:"Fira Sans","Fira Sans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;font-size:17px;height:45px;line-height:45px}
+x-appbar > header{font-weight:600}
+x-appbar > *{color:#fff;font-family:"Fira Sans","Fira Sans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;font-size:inherit;line-height:inherit}
+x-appbar > button{cursor:pointer;padding-left:1em;padding-right:1em;min-width:45px;background:transparent}
+x-appbar > button:hover{background-color:#00405d}
+x-appbar > button::-moz-focus-inner{bordr:0;padding:0}
+>>>>>>> default style
 x-appbar > header:after{padding-left:6px;font-size:60%}

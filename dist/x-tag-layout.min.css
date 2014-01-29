@@ -3,7 +3,7 @@ x-layout > header,x-layout > footer{margin:0 !important;overflow:hidden;z-index:
 x-layout > header,x-layout > footer{-webkit-transition:-webkit-transform .2s ease-in-out;-moz-transition:-moz-transform .2s ease-in-out;-ms-transition:-ms-transform .2s ease-in-out;transition:transform .2s ease-in-out}
 x-layout > section{-webkit-box-flex:1;-moz-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;-webkit-transition:margin .2s ease-in-out;-moz-transition:margin .2s ease-in-out;-ms-transition:margin .2s ease-in-out;transition:margin .2s ease-in-out;-webkit-transform:translateZ(0);-moz-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);overflow:auto;height:0;position:relative}
 x-layout:not([content-maximizing]):not([maxcontent]) > section{margin:0 !important}
-x-layout > section > *:only-child{position:absolute}
+x-layout > section > *:only-child{height:100%;position:absolute}
 x-layout[content-maximizing] > header,x-layout[content-maximized] > header,x-layout[maxcontent] > header{-webkit-transform:translateY(-100%);-moz-transform:translateY(-100%);-ms-transform:translateY(-100%);transform:translateY(-100%)}
 x-layout[content-maximizing] > footer,x-layout[content-maximized] > footer,x-layout[maxcontent] > footer{-webkit-transform:translateY(100%);-moz-transform:translateY(100%);-ms-transform:translateY(100%);transform:translateY(100%)}
 html,body{min-height:100%}

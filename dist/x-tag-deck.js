@@ -5,7 +5,11 @@
         this.currIndex = -1;
         this._itemCap = undefined;
         this.itemCap = itemCap;
+<<<<<<< HEAD
         this._validatorFn = validatorFn ? validatorFn : function(x) {
+=======
+        this._validatorFn = validatorFn ? validatorFn : function() {
+>>>>>>> default style
             return true;
         };
     }
@@ -278,7 +282,10 @@
         }
         _sanitizeCardAttrs(deck);
         if (transitionType === undefined) {
+<<<<<<< HEAD
             console.log("defaulting to none transition");
+=======
+>>>>>>> default style
             transitionType = "none";
         }
         var isReverse;
@@ -319,7 +326,13 @@
         _replaceCurrCard(deck, newCard, transitionType, progressType);
     }
     function _sanitizeCardAttrs(deck) {
+<<<<<<< HEAD
         if (!deck.xtag._initialized) return;
+=======
+        if (!deck.xtag._initialized) {
+            return;
+        }
+>>>>>>> default style
         var cards = _getAllCards(deck);
         var currCard = deck.xtag._selectedCard;
         if (!currCard || currCard.parentNode !== deck) {
@@ -371,7 +384,11 @@
             }
         },
         events: {
+<<<<<<< HEAD
             "show:delegate(x-card)": function(e) {
+=======
+            "show:delegate(x-card)": function() {
+>>>>>>> default style
                 var card = this;
                 card.show();
             }
@@ -481,7 +498,10 @@
             },
             historyBack: function(progressType) {
                 var history = this.xtag.history;
+<<<<<<< HEAD
                 var deck = this;
+=======
+>>>>>>> default style
                 if (history.canUndo) {
                     history.backwards();
                     var newCard = history.currState;
@@ -492,7 +512,10 @@
             },
             historyForward: function(progressType) {
                 var history = this.xtag.history;
+<<<<<<< HEAD
                 var deck = this;
+=======
+>>>>>>> default style
                 if (history.canRedo) {
                     history.forwards();
                     var newCard = history.currState;

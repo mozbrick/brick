@@ -1424,6 +1424,13 @@ x-tabbar > x-tabbar-tab > x-iconbutton:only-child {
   border: 0;
 }
 
+<<<<<<< HEAD
+=======
+x-toggle .x-toggle-content {
+  min-height: 22px;
+  line-height: 24px;
+}
+>>>>>>> default style
 x-toggle .x-toggle-check {
   width: 16px;
   height: 16px;

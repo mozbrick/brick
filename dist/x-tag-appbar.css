@@ -6,14 +6,24 @@ x-appbar {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+<<<<<<< HEAD
+=======
+}
+x-appbar,
+x-appbar * {
+>>>>>>> default style
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 x-appbar > * {
+<<<<<<< HEAD
   display: flex;
   border: none;
   padding: 2px 5px 0;
+=======
+  border: none;
+>>>>>>> default style
   vertical-align: middle;
   text-align: center;
   -webkit-flex-align: center;
@@ -25,6 +35,7 @@ x-appbar > * {
   align-items: center;
   text-align: center;
 }
+<<<<<<< HEAD
 x-appbar > *:first-child:before {
   display: none;
 }
@@ -34,6 +45,9 @@ x-appbar > h3,
 x-appbar > h4,
 x-appbar > h5,
 x-appbar > h6 {
+=======
+x-appbar > header {
+>>>>>>> default style
   min-width: auto;
   min-height: auto;
   -webkit-box-flex: 1;
@@ -45,6 +59,7 @@ x-appbar > h6 {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+<<<<<<< HEAD
   line-height: 100%;
 }
 x-appbar > h1:after,
@@ -68,11 +83,46 @@ x-appbar {
   font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   color: #d4d4d4;
   font-size: 20px;
+=======
+}
+
+x-appbar {
+  background-color: #00202f;
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  height: 45px;
+  line-height: 45px;
+}
+x-appbar > header {
+  font-weight: 600;
+}
+x-appbar > * {
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: inherit;
+  line-height: inherit;
+}
+x-appbar > button {
+  cursor: pointer;
+  padding-left: 1em;
+  padding-right: 1em;
+  min-width: 45px;
+  background: transparent;
+}
+x-appbar > button:hover {
+  background-color: #00405d;
+}
+x-appbar > button::-moz-focus-inner {
+  bordr: 0;
+  padding: 0;
+>>>>>>> default style
 }
 x-appbar > header:after {
   padding-left: 6px;
   font-size: 60%;
 }
+<<<<<<< HEAD
 /* Spacer style */
 x-appbar > *:before {
   background-color: rgba(255,255,255,0.25);
@@ -83,3 +133,5 @@ x-appbar > *:before {
   position: absolute;
   left: 0px;
 }
+=======
+>>>>>>> default style

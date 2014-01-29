@@ -23,7 +23,12 @@ x-tabbar > x-tabbar-tab {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
+<<<<<<< HEAD
   height: 100%;
+=======
+  min-width: auto;
+  min-height: auto;
+>>>>>>> default style
   vertical-align: middle;
 }
 x-tabbar > x-tabbar-tab > *:only-child {
@@ -34,6 +39,7 @@ x-tabbar > x-tabbar-tab > *:only-child {
 }
 
 x-tabbar {
+<<<<<<< HEAD
   background-color: #a0a0a0;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -45,10 +51,18 @@ x-tabbar {
   font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   color: #d4d4d4;
   letter-spacing: -0.31em;
+=======
+  background: #00202f;
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  height: 45px;
+  line-height: 45px;
+>>>>>>> default style
 }
 x-tabbar > x-tabbar-tab {
   letter-spacing: normal;
   overflow: hidden;
+<<<<<<< HEAD
   background-color: #a0a0a0;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -89,6 +103,17 @@ x-tabbar > x-tabbar-tab:first-child {
 x-tabbar > x-tabbar-tab:last-child {
   border-right-width: 2px;
 }
+=======
+  cursor: pointer;
+}
+x-tabbar > x-tabbar-tab:hover {
+  background-color: #00405d;
+  color: #eaeaea;
+}
+x-tabbar > x-tabbar-tab:active {
+  color: #f2f2f2;
+}
+>>>>>>> default style
 x-tabbar > x-tabbar-tab > x-iconbutton:only-child {
   border: 0;
 }

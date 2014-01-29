@@ -1,11 +1,21 @@
 (function() {
     function getLayoutElements(layout) {
         var first = layout.firstElementChild;
+<<<<<<< HEAD
         if (!first) return {
             header: null,
             section: null,
             footer: null
         };
+=======
+        if (!first) {
+            return {
+                header: null,
+                section: null,
+                footer: null
+            };
+        }
+>>>>>>> default style
         var second = first.nextElementSibling;
         return {
             header: first.nodeName == "HEADER" ? first : null,
@@ -27,8 +37,17 @@
     function maxContent(layout, elements) {
         layout.setAttribute("content-maximizing", null);
         if (elements.section) {
+<<<<<<< HEAD
             if (elements.header) elements.section.style.marginTop = "-" + elements.header.getBoundingClientRect().height + "px";
             if (elements.footer) elements.section.style.marginBottom = "-" + elements.footer.getBoundingClientRect().height + "px";
+=======
+            if (elements.header) {
+                elements.section.style.marginTop = "-" + elements.header.getBoundingClientRect().height + "px";
+            }
+            if (elements.footer) {
+                elements.section.style.marginBottom = "-" + elements.footer.getBoundingClientRect().height + "px";
+            }
+>>>>>>> default style
         }
     }
     function minContent(layout, elements) {
@@ -44,9 +63,23 @@
             var target = event.target, layout = event.currentTarget;
             if (this.scrollhide && (target.parentNode == layout || xtag.matchSelector(target, layout.scrollTarget))) {
                 var now = target.scrollTop, buffer = layout.scrollBuffer, elements = getLayoutElements(layout), scroll = getLayoutScroll(layout, target);
+<<<<<<< HEAD
                 if (now > scroll.last) scroll.min = Math.max(now - buffer, buffer); else if (now < scroll.last) scroll.max = Math.max(now + buffer, buffer);
                 if (!layout.maxcontent) {
                     if (now > scroll.max && !layout.hasAttribute("content-maximized")) maxContent(layout, elements); else if (now < scroll.min) minContent(layout, elements);
+=======
+                if (now > scroll.last) {
+                    scroll.min = Math.max(now - buffer, buffer);
+                } else if (now < scroll.last) {
+                    scroll.max = Math.max(now + buffer, buffer);
+                }
+                if (!layout.maxcontent) {
+                    if (now > scroll.max && !layout.hasAttribute("content-maximized")) {
+                        maxContent(layout, elements);
+                    } else if (now < scroll.min) {
+                        minContent(layout, elements);
+                    }
+>>>>>>> default style
                 }
                 scroll.last = now;
             }
@@ -70,8 +103,17 @@
                 if (layout.taphide && this.parentNode == layout) {
                     var elements = getLayoutElements(layout);
                     if (layout.hasAttribute("content-maximizing") || layout.hasAttribute("content-maximized")) {
+<<<<<<< HEAD
                         if (!layout.maxcontent) minContent(layout, elements);
                     } else maxContent(layout, elements);
+=======
+                        if (!layout.maxcontent) {
+                            minContent(layout, elements);
+                        }
+                    } else {
+                        maxContent(layout, elements);
+                    }
+>>>>>>> default style
                 }
             },
             "mouseover:delegate(section)": function(e) {
@@ -122,7 +164,15 @@
                 },
                 set: function(value) {
                     var elements = getLayoutElements(this);
+<<<<<<< HEAD
                     if (value) maxContent(this, elements); else if (!this.hasAttribute("content-maximizing")) minContent(this, elements);
+=======
+                    if (value) {
+                        maxContent(this, elements);
+                    } else if (!this.hasAttribute("content-maximizing")) {
+                        minContent(this, elements);
+                    }
+>>>>>>> default style
                 }
             }
         }

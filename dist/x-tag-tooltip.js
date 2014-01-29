@@ -179,7 +179,11 @@
         }
     }
     PRESET_STYLE_LISTENERFNS = {
+<<<<<<< HEAD
         custom: function(tooltip, targetSelector) {
+=======
+        custom: function() {
+>>>>>>> default style
             return [];
         },
         hover: function(tooltip, targetSelector) {
@@ -242,7 +246,11 @@
     };
     function mkGenericListeners(tooltip, targetSelector, eventName) {
         var createdListeners = [];
+<<<<<<< HEAD
         var targetTriggerFn = function(e) {
+=======
+        var targetTriggerFn = function() {
+>>>>>>> default style
             var delegatedElem = this;
             tooltip.xtag._skipOuterClick = true;
             if (tooltip.hasAttribute("visible")) {
@@ -374,12 +382,24 @@
         var bounds = viewport;
         if (!tooltip.allowOverflow) {
             bounds = getRectIntersection(viewport, contextRect);
+<<<<<<< HEAD
             if (!bounds) bounds = contextRect;
+=======
+            if (!bounds) {
+                bounds = contextRect;
+            }
+>>>>>>> default style
         }
         return bounds;
     }
     function _pickBestTooltipOrient(tooltip, validPositionDataList) {
+<<<<<<< HEAD
         if (validPositionDataList.length === 0) return null;
+=======
+        if (validPositionDataList.length === 0) {
+            return null;
+        }
+>>>>>>> default style
         var bounds = _getTooltipConstraints(tooltip);
         var minX = bounds.left;
         var minY = bounds.top;
@@ -425,7 +445,13 @@
             _unforceDisplay(tooltip);
         }
         var bestOrient = _pickBestTooltipOrient(tooltip, validOrientDataList);
+<<<<<<< HEAD
         if (!bestOrient) bestOrient = "top";
+=======
+        if (!bestOrient) {
+            bestOrient = "top";
+        }
+>>>>>>> default style
         tooltip.setAttribute(AUTO_ORIENT_ATTR, bestOrient);
         arrow.setAttribute(ARROW_DIR_ATTR, TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
         if (isValidOrientation(bestOrient) && bestOrient !== tmpOrient) {
@@ -597,6 +623,10 @@
             tooltip.xtag.lastTargetElem = triggerElem;
             xtag.skipTransition(tooltip, function() {
                 _positionTooltip(tooltip, triggerElem, targetOrient);
+<<<<<<< HEAD
+=======
+                _forceDisplay(tooltip);
+>>>>>>> default style
                 return _readyToShowFn;
             });
         } else {
@@ -734,7 +764,10 @@
                     return this.xtag._targetSelector;
                 },
                 set: function(newSelector) {
+<<<<<<< HEAD
                     var newTriggerElems = _selectorToElems(this, newSelector);
+=======
+>>>>>>> default style
                     _updateTriggerListeners(this, newSelector, this.triggerStyle);
                     this.xtag._targetSelector = newSelector;
                 }
@@ -756,7 +789,11 @@
                     "boolean": true,
                     name: "allow-overflow"
                 },
+<<<<<<< HEAD
                 set: function(allowsOverflow) {
+=======
+                set: function() {
+>>>>>>> default style
                     this.refreshPosition();
                 }
             },

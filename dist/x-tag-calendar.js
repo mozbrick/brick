@@ -105,7 +105,13 @@
     }
     var ISO_DATE_REGEX = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
     function fromIso(s) {
+<<<<<<< HEAD
         if (isValidDateObj(s)) return s;
+=======
+        if (isValidDateObj(s)) {
+            return s;
+        }
+>>>>>>> default style
         var d = ISO_DATE_REGEX.exec(s);
         if (d) {
             return normalize(new Date(d[1], d[2] - 1, d[3]));
@@ -114,7 +120,13 @@
         }
     }
     function parseSingleDate(dateStr) {
+<<<<<<< HEAD
         if (isValidDateObj(dateStr)) return dateStr;
+=======
+        if (isValidDateObj(dateStr)) {
+            return dateStr;
+        }
+>>>>>>> default style
         var isoParsed = fromIso(dateStr);
         if (isoParsed) {
             return isoParsed;
@@ -136,7 +148,10 @@
             try {
                 ranges = JSON.parse(multiDateStr);
                 if (!isArray(ranges)) {
+<<<<<<< HEAD
                     console.warn("invalid list of ranges", multiDateStr);
+=======
+>>>>>>> default style
                     return null;
                 }
             } catch (err) {
@@ -144,7 +159,10 @@
                 if (parsedSingle) {
                     return [ parsedSingle ];
                 } else {
+<<<<<<< HEAD
                     console.warn("unable to parse", multiDateStr, "as JSON or single date");
+=======
+>>>>>>> default style
                     return null;
                 }
             }
@@ -158,37 +176,64 @@
             } else if (typeof range === "string") {
                 var parsedDate = parseSingleDate(range);
                 if (!parsedDate) {
+<<<<<<< HEAD
                     console.warn("unable to parse date", range);
+=======
+>>>>>>> default style
                     return null;
                 }
                 ranges[i] = parsedDate;
             } else if (isArray(range) && range.length === 2) {
                 var parsedStartDate = parseSingleDate(range[0]);
                 if (!parsedStartDate) {
+<<<<<<< HEAD
                     console.warn("unable to parse start date", range[0], "from range", range);
+=======
+>>>>>>> default style
                     return null;
                 }
                 var parsedEndDate = parseSingleDate(range[1]);
                 if (!parsedEndDate) {
+<<<<<<< HEAD
                     console.warn("unable to parse end date", range[1], "from range", range);
                     return null;
                 }
                 if (parsedStartDate.valueOf() > parsedEndDate.valueOf()) {
                     console.warn("invalid range", range, ": start date is after end date");
+=======
+                    return null;
+                }
+                if (parsedStartDate.valueOf() > parsedEndDate.valueOf()) {
+>>>>>>> default style
                     return null;
                 }
                 ranges[i] = [ parsedStartDate, parsedEndDate ];
             } else {
+<<<<<<< HEAD
                 console.warn("invalid range value: ", range);
+=======
+>>>>>>> default style
                 return null;
             }
         }
         return ranges;
     }
     function from(base, y, m, d) {
+<<<<<<< HEAD
         if (y === undefined) y = getYear(base);
         if (m === undefined) m = getMonth(base);
         if (d === undefined) d = getDate(base);
+=======
+        if (y === undefined) {
+            y = getYear(base);
+        }
+        if (m === undefined) {
+            m = getMonth(base);
+        }
+        if (d === undefined) {
+            d = getDate(base);
+        }
+>>>>>>> default style
         return normalize(new Date(y, m, d));
     }
     function daysInMonth(month, year) {
@@ -206,7 +251,10 @@
         if (date > daysInNextMonth) {
             date = daysInNextMonth;
         }
+<<<<<<< HEAD
         console.log(new Date(d.getFullYear(), d.getMonth() + 1, date).toString());
+=======
+>>>>>>> default style
         return new Date(d.getFullYear(), d.getMonth() + 1, date);
     }
     function prevMonth(d) {
@@ -260,7 +308,13 @@
         return relOffset(d, 0, 0, -1);
     }
     function dateMatches(d, matches) {
+<<<<<<< HEAD
         if (!matches) return;
+=======
+        if (!matches) {
+            return;
+        }
+>>>>>>> default style
         matches = matches.length === undefined ? [ matches ] : matches;
         var foundMatch = false;
         matches.forEach(function(match) {
@@ -312,7 +366,13 @@
     }
     var CALENDAR_PROTOTYPE = Calendar.prototype;
     CALENDAR_PROTOTYPE.makeMonth = function(d) {
+<<<<<<< HEAD
         if (!isValidDateObj(d)) throw "Invalid view date!";
+=======
+        if (!isValidDateObj(d)) {
+            throw "Invalid view date!";
+        }
+>>>>>>> default style
         var firstWeekday = this.firstWeekdayNum;
         var chosen = this.chosen;
         var labels = this.labels;
@@ -347,13 +407,22 @@
                 addClass(day, "today");
             }
             appendChild(week, day);
+<<<<<<< HEAD
             var oldDate = cDate;
+=======
+>>>>>>> default style
             cDate = nextDay(cDate);
             if ((step + 1) % 7 === 0) {
                 appendChild(monthEl, week);
                 week = makeEl("div.week");
                 var done = getMonth(cDate) > month || getMonth(cDate) < month && getYear(cDate) > getYear(sDate);
+<<<<<<< HEAD
                 if (done) break;
+=======
+                if (done) {
+                    break;
+                }
+>>>>>>> default style
             }
         }
         return monthEl;
@@ -520,7 +589,13 @@
         this._callCustomRenderer();
     };
     CALENDAR_PROTOTYPE._callCustomRenderer = function() {
+<<<<<<< HEAD
         if (!this._customRenderFn) return;
+=======
+        if (!this._customRenderFn) {
+            return;
+        }
+>>>>>>> default style
         if (this._renderRecursionFlag) {
             throw "Error: customRenderFn causes recursive loop of " + "rendering calendar; make sure your custom rendering " + "function doesn't modify attributes of the x-calendar that " + "would require a re-render!";
         }
@@ -659,7 +734,13 @@
             set: function(newLabelData) {
                 var oldLabelData = this.labels;
                 for (var labelType in oldLabelData) {
+<<<<<<< HEAD
                     if (!(labelType in newLabelData)) continue;
+=======
+                    if (!(labelType in newLabelData)) {
+                        continue;
+                    }
+>>>>>>> default style
                     var oldLabel = this._labels[labelType];
                     var newLabel = newLabelData[labelType];
                     if (isArray(oldLabel)) {
@@ -731,7 +812,11 @@
             day.setAttribute("active", true);
         }
     }
+<<<<<<< HEAD
     function _onDragEnd(e) {
+=======
+    function _onDragEnd() {
+>>>>>>> default style
         var xCalendars = xtag.query(document, "x-calendar");
         for (var i = 0; i < xCalendars.length; i++) {
             var xCalendar = xCalendars[i];
@@ -806,7 +891,13 @@
                     return;
                 }
                 e.preventDefault();
+<<<<<<< HEAD
                 if (e.baseEvent) e.baseEvent.preventDefault();
+=======
+                if (e.baseEvent) {
+                    e.baseEvent.preventDefault();
+                }
+>>>>>>> default style
                 _onDragStart(e.currentTarget, this);
             },
             touchmove: function(e) {
@@ -833,7 +924,11 @@
                 var day = this;
                 _onDragMove(xCalendar, day);
             },
+<<<<<<< HEAD
             "mouseout:delegate(.day)": function(e) {
+=======
+            "mouseout:delegate(.day)": function() {
+>>>>>>> default style
                 var day = this;
                 day.removeAttribute("active");
             },
@@ -996,9 +1091,19 @@
                     this.xtag.calObj.labels = newLabelData;
                     var labels = this.xtag.calObj.labels;
                     var prevControl = this.querySelector(".controls > .prev");
+<<<<<<< HEAD
                     if (prevControl) prevControl.textContent = labels.prev;
                     var nextControl = this.querySelector(".controls > .next");
                     if (nextControl) nextControl.textContent = labels.next;
+=======
+                    if (prevControl) {
+                        prevControl.textContent = labels.prev;
+                    }
+                    var nextControl = this.querySelector(".controls > .next");
+                    if (nextControl) {
+                        nextControl.textContent = labels.next;
+                    }
+>>>>>>> default style
                 }
             }
         },

@@ -4,7 +4,11 @@ x-slider {
   margin: 0;
   padding: 0;
 }
+<<<<<<< HEAD
 x-slider > .input {
+=======
+x-slider > input {
+>>>>>>> default style
   margin: 0;
   padding: 0;
   position: relative;
@@ -12,9 +16,26 @@ x-slider > .input {
   vertical-align: middle;
   width: 100%;
   min-height: 100%;
+<<<<<<< HEAD
   background: transparent;
 }
 x-slider[polyfill] {
+=======
+}
+x-slider .slider-track {
+  position: absolute;
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 100%;
+  height: 4px;
+  margin: auto;
+  pointer-events: none;
+}
+x-slider .slider-thumb {
+>>>>>>> default style
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -25,8 +46,21 @@ x-slider[polyfill] {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+<<<<<<< HEAD
 }
 x-slider[polyfill] > .input {
+=======
+  vertical-align: middle;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+}
+x-slider[polyfill] {
+>>>>>>> default style
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -37,6 +71,7 @@ x-slider[polyfill] > .input {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+<<<<<<< HEAD
   display: inline-block;
 }
 x-slider[polyfill] > .input::-webkit-slider-thumb {
@@ -51,6 +86,10 @@ x-slider[polyfill] > .input::-moz-range-track {
   width: 0;
 }
 x-slider[polyfill] > .slider-thumb {
+=======
+}
+x-slider[polyfill] > input {
+>>>>>>> default style
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -61,6 +100,7 @@ x-slider[polyfill] > .slider-thumb {
   -webkit-tap-highlight-color: transparent;
   -moz-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+<<<<<<< HEAD
   vertical-align: middle;
   position: absolute !important;
   top: 0;
@@ -107,17 +147,63 @@ x-slider[polyfill] > .slider-thumb[active] {
   x-slider[polyfill] > .slider-thumb {
     width: 1.5em;
   }
+=======
+  display: block;
+  position: relative;
+}
+x-slider[polyfill] > input::-webkit-slider-thumb {
+  visibility: hidden;
+}
+x-slider[polyfill] > input::-moz-range-thumb {
+  width: 0px;
+  height: 0px;
+}
+x-slider[polyfill] > input::-moz-range-track {
+  height: 0;
+  width: 0;
+>>>>>>> default style
 }
 x-slider:not([polyfill]) > .slider-thumb {
   visibility: hidden !important;
 }
 
+<<<<<<< HEAD
 x-slider[polyfill] > .input {
+=======
+x-slider {
+  height: 27px;
+  padding-bottom: 2px;
+}
+x-slider .slider-thumb,
+x-slider input::-moz-range-thumb {
+  background: #fff;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border-radius: 13px;
+  border: 1px solid #979797;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);
+  cursor: pointer;
+  display: block;
+  height: 25px;
+  width: 25px;
+}
+x-slider .slider-track {
+  background: #d8d8d8;
+  border-radius: 4px;
+  height: 2px;
+}
+x-slider > input::-moz-range-track,
+x-slider > input::-webkit-slider-runnable-track {
+  background: #d8d8d8;
+}
+x-slider input {
+>>>>>>> default style
   -webkit-appearance: none;
   -moz-appearance: none;
   background: transparent;
   border: 0px solid transparent;
   color: transparent;
+<<<<<<< HEAD
   background-color: transparent;
 /* use CSS to draw a trackbar in the background of the input */
   background-size: 100% 3px;
@@ -128,4 +214,7 @@ x-slider[polyfill] > .input {
   background-image: -o-linear-gradient(top, #b0b0b0 1px, #fff 2px, #b0b0b0);
   background-image: linear-gradient(top, #b0b0b0 1px, #fff 2px, #b0b0b0);
   background-position: center;
+=======
+  padding-bottom: 2px;
+>>>>>>> default style
 }
