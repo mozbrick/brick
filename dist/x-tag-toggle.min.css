@@ -4,13 +4,8 @@ x-toggle > .x-toggle-input-wrap > input{cursor:pointer}
 x-toggle .x-toggle-content{display:inline-block;vertical-align:middle;margin:0}
 x-toggle .x-toggle-content:after{content:"";display:inline-block;width:0;height:100%;vertical-align:middle}
 x-toggle .x-toggle-check{display:inline-block;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;width:16px;height:16px;margin:0 3px 0 0;color:#000;vertical-align:middle;border:1px solid}
-<<<<<<< HEAD
-x-toggle[checked] .x-toggle-check{border-width:8px}
-x-toggle .x-toggle-check{width:16px;height:16px;margin:0 3px 0 0;color:#000;vertical-align:middle;border:2px solid;-webkit-transition:border .15s 0 ease-in-out;-moz-transition:border .15s 0 ease-in-out;-ms-transition:border .15s 0 ease-in-out;transition:border .15s 0 ease-in-out}
-=======
 x-toggle .x-toggle-content{min-height:22px;line-height:24px}
 x-toggle .x-toggle-check{width:22px;height:22px;border-radius:50%;margin:0 3px 0 0;color:#000;vertical-align:middle;border:1px solid #00202f;position:relative}
->>>>>>> default style
 x-toggle[no-box] .x-toggle-check{display:none !important}
 x-toggle[type="radio"][checked] .x-toggle-check:after{content:'';display:block;position:absolute;left:0;top:0;bottom:0;right:0;margin:auto;border-radius:50%;width:14px;height:14px;background:#0095dd}
 x-toggle[type="checkbox"][checked] .x-toggle-check{border-width:0;background:#0095dd}

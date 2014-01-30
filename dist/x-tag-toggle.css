@@ -1,10 +1,7 @@
 x-toggle {
   display: inline-block;
   position: relative;
-<<<<<<< HEAD
-=======
 /* vertical centering ghost element */
->>>>>>> default style
 }
 x-toggle > .x-toggle-input-wrap {
   cursor: pointer;
@@ -16,11 +13,7 @@ x-toggle > .x-toggle-input-wrap {
   height: 100% !important;
   display: inline-block !important;
 /* do not remove visibility or display because we still want tabbability
-<<<<<<< HEAD
-     and submissability */
-=======
        and submissability */
->>>>>>> default style
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0.0001)" !important;
   opacity: 0.0001 !important;
   z-index: 9999 !important;
@@ -33,10 +26,6 @@ x-toggle .x-toggle-content {
   vertical-align: middle;
   margin: 0px;
 }
-<<<<<<< HEAD
-/* vertical centering ghost element */
-=======
->>>>>>> default style
 x-toggle .x-toggle-content:after {
   content: "";
   display: inline-block;
@@ -56,23 +45,6 @@ x-toggle .x-toggle-check {
   vertical-align: middle;
   border: 1px solid;
 }
-<<<<<<< HEAD
-x-toggle[checked] .x-toggle-check {
-  border-width: 8px;
-}
-
-x-toggle .x-toggle-check {
-  width: 16px;
-  height: 16px;
-  margin: 0px 3px 0px 0px;
-  color: #000;
-  vertical-align: middle;
-  border: 2px solid;
-  -webkit-transition: border 0.15s 0s ease-in-out;
-  -moz-transition: border 0.15s 0s ease-in-out;
-  -ms-transition: border 0.15s 0s ease-in-out;
-  transition: border 0.15s 0s ease-in-out;
-=======
 
 x-toggle .x-toggle-content {
   min-height: 22px;
@@ -87,24 +59,10 @@ x-toggle .x-toggle-check {
   vertical-align: middle;
   border: 1px solid #00202f;
   position: relative;
->>>>>>> default style
 }
 x-toggle[no-box] .x-toggle-check {
   display: none !important;
 }
-<<<<<<< HEAD
-x-toggle[type="radio"] .x-toggle-check {
-  border-radius: 50%;
-}
-x-toggle[checked] .x-toggle-check {
-  border-width: 8px;
-}
-x-toggle[focus] .x-toggle-check {
-  -webkit-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  -moz-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  -ms-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-=======
 x-toggle[type="radio"][checked] .x-toggle-check:after {
   content: '';
   display: block;
@@ -141,5 +99,4 @@ x-toggle[type="checkbox"][checked] .x-toggle-check:after {
   -ms-transform: rotate(-45deg);
   -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
->>>>>>> default style
 }

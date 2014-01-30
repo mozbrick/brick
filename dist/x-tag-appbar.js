@@ -2,9 +2,9 @@
     xtag.register("x-appbar", {
         lifecycle: {
             created: function() {
-                var header = xtag.queryChildren(this, "h1,h2,h3,h4,h5,h6")[0];
+                var header = xtag.queryChildren(this, "header")[0];
                 if (!header) {
-                    header = document.createElement("h1");
+                    header = document.createElement("header");
                     this.appendChild(header);
                 }
                 this.xtag.data.header = header;

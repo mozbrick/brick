@@ -18,12 +18,13 @@ x-appbar {
     font-family: $fontFamilyPrimary;
     font-size: inherit;
     line-height: inherit;
+    box-sizing(border-box);
   }
 
   & > button {
     cursor: pointer;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 2px;
+    padding-right: 2px;
     min-width: $barHeight;
     background: transparent;
     &:hover {

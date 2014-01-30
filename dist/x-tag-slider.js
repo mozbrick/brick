@@ -64,12 +64,6 @@
         var sliderRect = slider.getBoundingClientRect();
         var thumbRect = thumb.getBoundingClientRect();
         var fraction = _rawValToFraction(slider, value);
-<<<<<<< HEAD
-        var availableWidth = Math.max(sliderRect.width - thumbRect.width, 0);
-        var newThumbX = availableWidth * fraction;
-        var finalPercentage = newThumbX / sliderRect.width;
-        thumb.style.left = finalPercentage * 100 + "%";
-=======
         var vertical = slider.vertical;
         var sliderWidth = sliderRect[vertical ? "height" : "width"];
         var thumbWidth = thumbRect[vertical ? "height" : "width"];
@@ -78,7 +72,6 @@
         var finalPercentage = newThumbX / sliderWidth;
         thumb.style[vertical ? "left" : "top"] = 0;
         thumb.style[vertical ? "top" : "left"] = finalPercentage * 100 + "%";
->>>>>>> default style
     }
     function _redraw(slider) {
         _positionThumb(slider, slider.value);
@@ -87,18 +80,12 @@
         var inputEl = slider.xtag.rangeInputEl;
         var inputOffsets = inputEl.getBoundingClientRect();
         var inputClickX = pageX - inputOffsets.left;
-<<<<<<< HEAD
-        var oldValue = slider.value;
-        var newValue = _fractionToCorrectedVal(slider, inputClickX / inputOffsets.width);
-        slider.value = newValue;
-=======
         var divideby = inputOffsets.width;
         if (slider.vertical) {
             divideby = inputOffsets.height;
             inputClickX = pageY - inputOffsets.top;
         }
         slider.value = _fractionToCorrectedVal(slider, inputClickX / divideby);
->>>>>>> default style
         xtag.fireEvent(slider, "input");
         _redraw(slider);
     }
@@ -281,15 +268,12 @@
                         this.setAttribute("tabindex", 0);
                         this.xtag.rangeInputEl.setAttribute("tabindex", -1);
                         this.xtag.rangeInputEl.setAttribute("readonly", true);
-<<<<<<< HEAD
-=======
                         if (!this.xtag.polyFillSliderTrack) {
                             var sliderTrack = document.createElement("div");
                             xtag.addClass(sliderTrack, "slider-track");
                             this.xtag.polyFillSliderTrack = sliderTrack;
                             this.appendChild(sliderTrack);
                         }
->>>>>>> default style
                         if (!this.xtag.polyFillSliderThumb) {
                             var sliderThumb = document.createElement("span");
                             xtag.addClass(sliderThumb, "slider-thumb");
@@ -310,8 +294,6 @@
                     }
                 }
             },
-<<<<<<< HEAD
-=======
             vertical: {
                 attribute: {
                     "boolean": true
@@ -320,7 +302,6 @@
                     _redraw(this);
                 }
             },
->>>>>>> default style
             max: {
                 attribute: {
                     selector: "input[type=range]"
