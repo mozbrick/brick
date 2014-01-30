@@ -25,7 +25,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="../../index.html">
         <img class="logo" src="../../site/img/logo.png">
-        Brick<small> 0.9.2</small>
+        Brick<small> 0.10.0</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -63,76 +63,22 @@
         <div class="two-up">
             <figure class="demo">
                  <x-appbar>
-                    <div>=</div>
-                    <h1>Title</h1>
-                    <div>+</div>
-                    <div>?</div>
+                    <button>=</button>
+                    <header>Title</header>
+                    <button>+</button>
+                    <button>?</button>
                   </x-appbar>
             </figure>
         </div>
         <div class="markup-wrap two-up">
             <h3>Markup</h3>
-            <pre class="prettyprint html">&lt;x-appbar&gt;<br/>    &lt;div&gt;=&lt;/div&gt;<br/>    &lt;header&gt;Title&lt;/header&gt;<br/>    &lt;div&gt;+&lt;/div&gt;<br/>    &lt;div&gt;?&lt;/div&gt;<br/>&lt;/x-appbar&gt;</pre>
-        </div>
-        <a href="#" class="top">Top</a>
-    </section>
-    <section class="demo-wrap">
-        <header><h2>Dynamically editing header with <code>heading</code></h2></header>
-        <p>The header's text can also be overridden and changed using the the <code class="prettyprint">heading</code> attribute, or the <code class="prettyprint">.heading</code> JavaScript property of the <code class="prettyprint">&lt;x-appbar&gt;</code>.</p>
-        <div class="two-up">
-            <figure class="demo">
-                 <x-appbar heading="Set by Attribute">
-                    <div>=</div>
-                    <h1></h1>
-                    <div>+</div>
-                    <div>?</div>
-                  </x-appbar>
-            </figure>
-        </div>
-        <div class="markup-wrap two-up">
-            <h3>Markup</h3>
-            <pre class="prettyprint html">&lt;x-appbar heading="Set by Attribute"&gt;<br/>    &lt;div&gt;=&lt;/div&gt;<br/>    &lt;header&gt;&lt;/header&gt;<br/>    &lt;div&gt;+&lt;/div&gt;<br/>    &lt;div&gt;?&lt;/div&gt;<br/>&lt;/x-appbar&gt;</pre>
-        </div>
-        <a href="#" class="top">Top</a>
-    </section>
-    <section class="demo-wrap">
-        <header><h2>Adding a subheader with <code class="prettyprint">subheading</code></h2></header>
-        <p>To add a small subheading to the <code class="prettyprint">&lt;x-appbar&gt;</code>, such as for message notifications, utilize the<code class="prettyprint">subheading</code> attribute or <code class="prettyprint">.subheading</code> JavaScript property of the <code class="prettyprint">&lt;x-appbar&gt;</code>.</p>
-        <div class="two-up">
-            <figure class="demo">
-                 <x-appbar subheading="(2)">
-                    <div>=</div>
-                    <h1>Title</h1>
-                    <div>+</div>
-                    <div>?</div>
-                  </x-appbar>
-            </figure>
-        </div>
-        <div class="markup-wrap two-up">
-            <h3>Markup</h3>
-            <pre class="prettyprint html">&lt;x-appbar subheading="(2)"&gt;<br/>    &lt;div&gt;=&lt;/div&gt;<br/>    &lt;header&gt;Title&lt;/header&gt;<br/>    &lt;div&gt;+&lt;/div&gt;<br/>    &lt;div&gt;?&lt;/div&gt;<br/>&lt;/x-appbar&gt;</pre>
-        </div>
-        <a href="#" class="top">Top</a>
-    </section>
-
-    <section class="demo-wrap">
-        <header><h2>Custom styling</h2></header>
-        <p>The <code class="prettyprint">&lt;x-appbar&gt;</code> is a simple element, and can be styled like any other element.</p>
-        <div class="two-up">
-            <figure class="demo">
-                 <x-appbar id="custom-style">
-                    <div>=</div>
-                    <h1>Title</h1>
-                    <div>+</div>
-                    <div>?</div>
-                  </x-appbar>
-            </figure>
-        </div>
-        <div class="markup-wrap two-up">
-            <h3>Markup</h3>
-            <pre class="prettyprint html">&lt;x-appbar id=&quot;custom-style&quot;&gt;<br/>    &lt;div&gt;=&lt;/div&gt;<br/>    &lt;header&gt;Title&lt;/header&gt;<br/>    &lt;div&gt;+&lt;/div&gt;<br/>    &lt;div&gt;?&lt;/div&gt;<br/>&lt;/x-appbar&gt;</pre>
-            <h3>CSS Styling</h3>
-            <pre class="prettyprint css">#custom-style{<br/>    background-color: orange;<br/>    background-image: none;<br/>    font-size: 1.5em;<br/>    color: white;<br/>}<br/><br/>#custom-style &gt; *{<br/>    padding: .25em;<br/>}</pre>
+            <pre class="prettyprint html">
+&lt;x-appbar>
+    &lt;button>=&lt;/button>
+    &lt;header>Title&lt;/header>
+    &lt;button>+&lt;/button>
+    &lt;button>?&lt;/button>
+&lt;/x-appbar></pre>
         </div>
         <a href="#" class="top">Top</a>
     </section>

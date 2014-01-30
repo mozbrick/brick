@@ -12,7 +12,7 @@ x-tooltip:not([visible]):not([_force-display]){width:1px !important;height:1px !
 x-tooltip:not([visible]):not([_force-display]) > *{display:none !important}
 x-tooltip[visible]{visibility:visible;opacity:1;-webkit-transform:translate3d(0,0,1px);-moz-transform:translate3d(0,0,1px);-ms-transform:translate3d(0,0,1px);-o-transform:translate3d(0,0,1px);transform:translate3d(0,0,1px)}
 x-tooltip:not([orientation=top]):not([orientation=bottom]):not([orientation=left]):not([orientation=right])[visible]{-webkit-transform:translate3d(0,0,1px);-moz-transform:translate3d(0,0,1px);-ms-transform:translate3d(0,0,1px);-o-transform:translate3d(0,0,1px);transform:translate3d(0,0,1px)}
-x-tooltip > .tooltip-content{position:relative;display:block;padding:.5em;overflow:auto;max-width:inherit;max-height:inherit;z-index:2}
+x-tooltip > .tooltip-content{position:relative;display:block;overflow:auto;max-width:inherit;max-height:inherit;z-index:2}
 x-tooltip[allow-overflow]{white-space:nowrap}
 x-tooltip > .tooltip-arrow{position:absolute;display:block;margin:0;padding:0;vertical-align:top;width:1em;height:1em;border:inherit;background:inherit;z-index:1}
 x-tooltip > .tooltip-arrow:not([arrow-direction=up]):not([arrow-direction=left]):not([arrow-direction=right]){top:100%;left:50%;-webkit-transform:translateY(-50%) rotate(45deg);-moz-transform:translateY(-50%) rotate(45deg);-ms-transform:translateY(-50%) rotate(45deg);-o-transform:translateY(-50%) rotate(45deg);transform:translateY(-50%) rotate(45deg);border-top-color:transparent !important;border-left-color:transparent !important}
@@ -20,4 +20,6 @@ x-tooltip > .tooltip-arrow[arrow-direction=up]{bottom:100%;left:50%;-webkit-tran
 x-tooltip > .tooltip-arrow[arrow-direction=left]{right:100%;top:50%;-webkit-transform:translateX(50%) rotate(45deg);-moz-transform:translateX(50%) rotate(45deg);-ms-transform:translateX(50%) rotate(45deg);-o-transform:translateX(50%) rotate(45deg);transform:translateX(50%) rotate(45deg);border-top-color:transparent !important;border-right-color:transparent !important}
 x-tooltip > .tooltip-arrow[arrow-direction=right]{left:100%;top:50%;-webkit-transform:translateX(-50%) rotate(45deg);-moz-transform:translateX(-50%) rotate(45deg);-ms-transform:translateX(-50%) rotate(45deg);-o-transform:translateX(-50%) rotate(45deg);transform:translateX(-50%) rotate(45deg);border-bottom-color:transparent !important;border-left-color:transparent !important}
 x-tooltip{border:1px solid #808080;background-color:#fff;border-radius:4px;box-shadow:1px 1px 3px #808080}
-x-tooltip{border:1px solid #808080;background-color:#eee;border-radius:4px;box-shadow:1px 1px 4px #808080}
+x-tooltip{border:1px solid #808080;background-color:#fff;border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,0.5)}
+x-tooltip > .tooltip-arrow{box-shadow:2px 2px 2px -2px rgba(0,0,0,0.5)}
+x-tooltip > .tooltip-content{padding:1em}

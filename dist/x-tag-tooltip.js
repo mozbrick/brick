@@ -179,7 +179,7 @@
         }
     }
     PRESET_STYLE_LISTENERFNS = {
-        custom: function(tooltip, targetSelector) {
+        custom: function() {
             return [];
         },
         hover: function(tooltip, targetSelector) {
@@ -242,7 +242,7 @@
     };
     function mkGenericListeners(tooltip, targetSelector, eventName) {
         var createdListeners = [];
-        var targetTriggerFn = function(e) {
+        var targetTriggerFn = function() {
             var delegatedElem = this;
             tooltip.xtag._skipOuterClick = true;
             if (tooltip.hasAttribute("visible")) {
@@ -374,12 +374,16 @@
         var bounds = viewport;
         if (!tooltip.allowOverflow) {
             bounds = getRectIntersection(viewport, contextRect);
-            if (!bounds) bounds = contextRect;
+            if (!bounds) {
+                bounds = contextRect;
+            }
         }
         return bounds;
     }
     function _pickBestTooltipOrient(tooltip, validPositionDataList) {
-        if (validPositionDataList.length === 0) return null;
+        if (validPositionDataList.length === 0) {
+            return null;
+        }
         var bounds = _getTooltipConstraints(tooltip);
         var minX = bounds.left;
         var minY = bounds.top;
@@ -425,7 +429,9 @@
             _unforceDisplay(tooltip);
         }
         var bestOrient = _pickBestTooltipOrient(tooltip, validOrientDataList);
-        if (!bestOrient) bestOrient = "top";
+        if (!bestOrient) {
+            bestOrient = "top";
+        }
         tooltip.setAttribute(AUTO_ORIENT_ATTR, bestOrient);
         arrow.setAttribute(ARROW_DIR_ATTR, TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
         if (isValidOrientation(bestOrient) && bestOrient !== tmpOrient) {
@@ -597,6 +603,7 @@
             tooltip.xtag.lastTargetElem = triggerElem;
             xtag.skipTransition(tooltip, function() {
                 _positionTooltip(tooltip, triggerElem, targetOrient);
+                _forceDisplay(tooltip);
                 return _readyToShowFn;
             });
         } else {
@@ -734,7 +741,6 @@
                     return this.xtag._targetSelector;
                 },
                 set: function(newSelector) {
-                    var newTriggerElems = _selectorToElems(this, newSelector);
                     _updateTriggerListeners(this, newSelector, this.triggerStyle);
                     this.xtag._targetSelector = newSelector;
                 }
@@ -756,7 +762,7 @@
                     "boolean": true,
                     name: "allow-overflow"
                 },
-                set: function(allowsOverflow) {
+                set: function() {
                     this.refreshPosition();
                 }
             },

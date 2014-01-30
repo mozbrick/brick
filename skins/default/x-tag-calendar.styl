@@ -5,10 +5,11 @@ $textColor = #444;
 $todayBorderColor = orange;
 
 x-calendar {
-    border: 2px solid #888;
+    border: 1px solid #cecece;
+    border-radius: 3px;
 
     font-size: 1em;
-    font-family: $COMPONENT_UI_FONT_FAMILY;
+    font-family: $fontFamilyPrimary;
 
     background-color: #fff;
     color: $textColor;
@@ -18,23 +19,20 @@ x-calendar {
     }
 
     .month-label{
-        border-bottom: 1px dashed grey;
+        border-bottom: 1px solid #cecece;
     }
 
     .day{
-        @include rounded;
-        border: 1px solid transparent;
 
         &[active]{
             border-color: $todayBorderColor;
         }
 
         &.chosen{
-            background: #444;
+            background: $highlight;
             color: #fff;
         }
         &.today{
-            border-color: tomato;
             font-weight: bold;
         }
     }

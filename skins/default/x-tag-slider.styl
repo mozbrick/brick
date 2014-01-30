@@ -4,27 +4,45 @@
 $trackTopColor = #B0B0B0;
 $trackBottomColor = #fff;
 
-x-slider{
+$thumbSize = 25px;
+$trackSize = 3px;
 
-    &[polyfill]{
+x-slider {
 
-        & > .input{
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background: transparent;
-            border: 0px solid transparent;
-            color: transparent;
+    height: $thumbSize + 2;
+    padding-bottom: 2px;
 
-            background-color: transparent;
-            /* use CSS to draw a trackbar in the background of the input */
-            background-size: 100% 3px;
-            background-repeat: no-repeat;
-            background-image: -webkit-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
-            background-image: -moz-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
-            background-image: -ms-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
-            background-image: -o-linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
-            background-image: linear-gradient(top, $trackTopColor 1px, $trackBottomColor 2px, $trackTopColor);
-            background-position: center;
-        }
+    .slider-thumb, input::-moz-range-thumb {
+        background: $barFG;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        border-radius: 13px;
+        border: 1px solid #979797;
+        box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.50);
+        cursor: pointer;
+        display: block;
+        height: $thumbSize;
+        width: $thumbSize;
+    }
+
+    .slider-track {
+        background: #d8d8d8;
+        border-radius: 4px;
+        height: 2px;
+    }
+
+    & > input::-moz-range-track,
+    & > input::-webkit-slider-runnable-track {
+        background: #d8d8d8;
+    }
+
+
+    input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: transparent;
+        border: 0px solid transparent;
+        color: transparent;
+        padding-bottom: 2px;
     }
 }

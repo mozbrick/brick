@@ -1,0 +1,17 @@
+x-datepicker{position:relative;display:inline-block;overflow:visible !important;font-family:"_OpenSansBrick","Fira Sans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;}
+x-datepicker > .x-datepicker-input{width:100%;height:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:0;border:0 solid transparent;vertical-align:top;font:inherit}
+x-datepicker > .x-datepicker-polyfill-input{width:100%;height:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;position:relative;margin:0;padding:.25em;border:0 solid transparent;vertical-align:top;font:inherit}
+x-datepicker > .x-datepicker-polyfill-ui{position:absolute;left:0;top:100%;margin-top:-1px;min-width:100%;max-width:none;z-index:2147483647}
+x-datepicker[polyfill] > .x-datepicker-input{display:none !important}
+x-datepicker[polyfill] > .x-datepicker-polyfill-input{width:100%;height:100%}
+x-datepicker[polyfill] > .x-datepicker-polyfill-ui{-webkit-transition-property:opacity , visibility;-moz-transition-property:opacity , visibility;-ms-transition-property:opacity , visibility;-o-transition-property:opacity , visibility;transition-property:opacity , visibility;-webkit-transition-duration:.2s;-moz-transition-duration:.2s;-ms-transition-duration:.2s;-o-transition-duration:.2s;transition-duration:.2s;-webkit-transition-timing-function:ease-in;-moz-transition-timing-function:ease-in;-ms-transition-timing-function:ease-in;-o-transition-timing-function:ease-in;transition-timing-function:ease-in;-webkit-transition-delay:0;-moz-transition-delay:0;-ms-transition-delay:0;-o-transition-delay:0;transition-delay:0;opacity:0;visibility:hidden}
+x-datepicker[polyfill]:focus,x-datepicker[polyfill][focused]{z-index:2147483647;}
+x-datepicker[polyfill]:focus > .x-datepicker-polyfill-ui,x-datepicker[polyfill][focused] > .x-datepicker-polyfill-ui{opacity:1;visibility:visible}
+x-datepicker:not([polyfill]) > .x-datepicker-input{width:100%;height:100%}
+x-datepicker:not([polyfill]) > .x-datepicker-polyfill-input{display:none !important}
+x-datepicker:not([polyfill]) > .x-datepicker-polyfill-ui{display:none !important}
+
+x-datepicker{border:1px solid #808080;}
+x-datepicker > .x-datepicker-polyfill-ui{box-shadow:1px 1px 4px #808080}
+x-datepicker[polyfill]:focus,x-datepicker[polyfill][focused]{box-shadow:1px 1px 4px #ffa500}
+x-datepicker[polyfill][invalid] > .x-datepicker-polyfill-input{background-color:#ff6347}

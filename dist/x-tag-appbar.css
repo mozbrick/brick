@@ -6,14 +6,15 @@ x-appbar {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+}
+x-appbar,
+x-appbar * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 x-appbar > * {
-  display: flex;
   border: none;
-  padding: 2px 5px 0;
   vertical-align: middle;
   text-align: center;
   -webkit-flex-align: center;
@@ -25,15 +26,7 @@ x-appbar > * {
   align-items: center;
   text-align: center;
 }
-x-appbar > *:first-child:before {
-  display: none;
-}
-x-appbar > h1,
-x-appbar > h2,
-x-appbar > h3,
-x-appbar > h4,
-x-appbar > h5,
-x-appbar > h6 {
+x-appbar > header {
   min-width: auto;
   min-height: auto;
   -webkit-box-flex: 1;
@@ -45,41 +38,43 @@ x-appbar > h6 {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
-  line-height: 100%;
-}
-x-appbar > h1:after,
-x-appbar > h2:after,
-x-appbar > h3:after,
-x-appbar > h4:after,
-x-appbar > h5:after,
-x-appbar > h6:after {
-  content: attr(subheading);
 }
 
 x-appbar {
-  background-color: #a0a0a0;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
-  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-  color: #d4d4d4;
-  font-size: 20px;
+  background-color: #00202f;
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  height: 45px;
+  line-height: 45px;
+}
+x-appbar > header {
+  font-weight: 600;
+}
+x-appbar > * {
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: inherit;
+  line-height: inherit;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+x-appbar > button {
+  cursor: pointer;
+  padding-left: 2px;
+  padding-right: 2px;
+  min-width: 45px;
+  background: transparent;
+}
+x-appbar > button:hover {
+  background-color: #00405d;
+}
+x-appbar > button::-moz-focus-inner {
+  bordr: 0;
+  padding: 0;
 }
 x-appbar > header:after {
   padding-left: 6px;
   font-size: 60%;
-}
-/* Spacer style */
-x-appbar > *:before {
-  background-color: rgba(255,255,255,0.25);
-  width: 2px;
-  top: 0px;
-  bottom: 0px;
-  content: " ";
-  position: absolute;
-  left: 0px;
 }

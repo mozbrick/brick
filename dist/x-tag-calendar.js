@@ -105,7 +105,9 @@
     }
     var ISO_DATE_REGEX = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
     function fromIso(s) {
-        if (isValidDateObj(s)) return s;
+        if (isValidDateObj(s)) {
+            return s;
+        }
         var d = ISO_DATE_REGEX.exec(s);
         if (d) {
             return normalize(new Date(d[1], d[2] - 1, d[3]));
@@ -114,7 +116,9 @@
         }
     }
     function parseSingleDate(dateStr) {
-        if (isValidDateObj(dateStr)) return dateStr;
+        if (isValidDateObj(dateStr)) {
+            return dateStr;
+        }
         var isoParsed = fromIso(dateStr);
         if (isoParsed) {
             return isoParsed;
@@ -136,7 +140,6 @@
             try {
                 ranges = JSON.parse(multiDateStr);
                 if (!isArray(ranges)) {
-                    console.warn("invalid list of ranges", multiDateStr);
                     return null;
                 }
             } catch (err) {
@@ -144,7 +147,6 @@
                 if (parsedSingle) {
                     return [ parsedSingle ];
                 } else {
-                    console.warn("unable to parse", multiDateStr, "as JSON or single date");
                     return null;
                 }
             }
@@ -158,37 +160,38 @@
             } else if (typeof range === "string") {
                 var parsedDate = parseSingleDate(range);
                 if (!parsedDate) {
-                    console.warn("unable to parse date", range);
                     return null;
                 }
                 ranges[i] = parsedDate;
             } else if (isArray(range) && range.length === 2) {
                 var parsedStartDate = parseSingleDate(range[0]);
                 if (!parsedStartDate) {
-                    console.warn("unable to parse start date", range[0], "from range", range);
                     return null;
                 }
                 var parsedEndDate = parseSingleDate(range[1]);
                 if (!parsedEndDate) {
-                    console.warn("unable to parse end date", range[1], "from range", range);
                     return null;
                 }
                 if (parsedStartDate.valueOf() > parsedEndDate.valueOf()) {
-                    console.warn("invalid range", range, ": start date is after end date");
                     return null;
                 }
                 ranges[i] = [ parsedStartDate, parsedEndDate ];
             } else {
-                console.warn("invalid range value: ", range);
                 return null;
             }
         }
         return ranges;
     }
     function from(base, y, m, d) {
-        if (y === undefined) y = getYear(base);
-        if (m === undefined) m = getMonth(base);
-        if (d === undefined) d = getDate(base);
+        if (y === undefined) {
+            y = getYear(base);
+        }
+        if (m === undefined) {
+            m = getMonth(base);
+        }
+        if (d === undefined) {
+            d = getDate(base);
+        }
         return normalize(new Date(y, m, d));
     }
     function daysInMonth(month, year) {
@@ -206,7 +209,6 @@
         if (date > daysInNextMonth) {
             date = daysInNextMonth;
         }
-        console.log(new Date(d.getFullYear(), d.getMonth() + 1, date).toString());
         return new Date(d.getFullYear(), d.getMonth() + 1, date);
     }
     function prevMonth(d) {
@@ -260,7 +262,9 @@
         return relOffset(d, 0, 0, -1);
     }
     function dateMatches(d, matches) {
-        if (!matches) return;
+        if (!matches) {
+            return;
+        }
         matches = matches.length === undefined ? [ matches ] : matches;
         var foundMatch = false;
         matches.forEach(function(match) {
@@ -312,7 +316,9 @@
     }
     var CALENDAR_PROTOTYPE = Calendar.prototype;
     CALENDAR_PROTOTYPE.makeMonth = function(d) {
-        if (!isValidDateObj(d)) throw "Invalid view date!";
+        if (!isValidDateObj(d)) {
+            throw "Invalid view date!";
+        }
         var firstWeekday = this.firstWeekdayNum;
         var chosen = this.chosen;
         var labels = this.labels;
@@ -347,13 +353,14 @@
                 addClass(day, "today");
             }
             appendChild(week, day);
-            var oldDate = cDate;
             cDate = nextDay(cDate);
             if ((step + 1) % 7 === 0) {
                 appendChild(monthEl, week);
                 week = makeEl("div.week");
                 var done = getMonth(cDate) > month || getMonth(cDate) < month && getYear(cDate) > getYear(sDate);
-                if (done) break;
+                if (done) {
+                    break;
+                }
             }
         }
         return monthEl;
@@ -520,7 +527,9 @@
         this._callCustomRenderer();
     };
     CALENDAR_PROTOTYPE._callCustomRenderer = function() {
-        if (!this._customRenderFn) return;
+        if (!this._customRenderFn) {
+            return;
+        }
         if (this._renderRecursionFlag) {
             throw "Error: customRenderFn causes recursive loop of " + "rendering calendar; make sure your custom rendering " + "function doesn't modify attributes of the x-calendar that " + "would require a re-render!";
         }
@@ -659,7 +668,9 @@
             set: function(newLabelData) {
                 var oldLabelData = this.labels;
                 for (var labelType in oldLabelData) {
-                    if (!(labelType in newLabelData)) continue;
+                    if (!(labelType in newLabelData)) {
+                        continue;
+                    }
                     var oldLabel = this._labels[labelType];
                     var newLabel = newLabelData[labelType];
                     if (isArray(oldLabel)) {
@@ -731,7 +742,7 @@
             day.setAttribute("active", true);
         }
     }
-    function _onDragEnd(e) {
+    function _onDragEnd() {
         var xCalendars = xtag.query(document, "x-calendar");
         for (var i = 0; i < xCalendars.length; i++) {
             var xCalendar = xCalendars[i];
@@ -806,7 +817,9 @@
                     return;
                 }
                 e.preventDefault();
-                if (e.baseEvent) e.baseEvent.preventDefault();
+                if (e.baseEvent) {
+                    e.baseEvent.preventDefault();
+                }
                 _onDragStart(e.currentTarget, this);
             },
             touchmove: function(e) {
@@ -833,7 +846,7 @@
                 var day = this;
                 _onDragMove(xCalendar, day);
             },
-            "mouseout:delegate(.day)": function(e) {
+            "mouseout:delegate(.day)": function() {
                 var day = this;
                 day.removeAttribute("active");
             },
@@ -996,9 +1009,13 @@
                     this.xtag.calObj.labels = newLabelData;
                     var labels = this.xtag.calObj.labels;
                     var prevControl = this.querySelector(".controls > .prev");
-                    if (prevControl) prevControl.textContent = labels.prev;
+                    if (prevControl) {
+                        prevControl.textContent = labels.prev;
+                    }
                     var nextControl = this.querySelector(".controls > .next");
-                    if (nextControl) nextControl.textContent = labels.next;
+                    if (nextControl) {
+                        nextControl.textContent = labels.next;
+                    }
                 }
             }
         },

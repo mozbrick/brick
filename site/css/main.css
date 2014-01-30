@@ -189,12 +189,12 @@ footer {
   box-sizing: content-box;
   width: 240px;
   height: 360px;
-  margin: 1em auto;
+  margin: 2em auto;
   border: 10px solid #eee;
   border-width: 40px 15px 60px;
   border-radius: 20px;
   position: relative;
-  background: #f2d6b9 url("../img/retina_wood.png") repeat;
+  background: #fff;
 }
 
 /* fake phone button */

@@ -16,8 +16,13 @@
     }
     function init(toSelected) {
         var slides = this.firstElementChild;
-        if (!slides || !slides.children.length || slides.tagName.toLowerCase() != "x-slides") return;
-        var children = xtag.toArray(slides.children), size = 100 / (children.length || 1), orient = this.getAttribute("orientation") || "x", style = orient == "x" ? [ "width", "height" ] : [ "height", "width" ];
+        if (!slides || !slides.children.length || slides.tagName.toLowerCase() != "x-slides") {
+            return;
+        }
+        var children = xtag.toArray(slides.children);
+        var size = 100 / (children.length || 1);
+        var orient = this.getAttribute("orientation") || "x";
+        var style = orient == "x" ? [ "width", "height" ] : [ "height", "width" ];
         slides.style[style[1]] = "100%";
         slides.style[style[0]] = children.length * 100 + "%";
         slides.style[transform] = "translate" + orient + "(0%)";
@@ -28,7 +33,9 @@
         });
         if (toSelected) {
             var selected = slides.querySelector("[selected]");
-            if (selected) slide(this, children.indexOf(selected) || 0);
+            if (selected) {
+                slide(this, children.indexOf(selected) || 0);
+            }
         }
     }
     xtag.register("x-slidebox", {
@@ -43,9 +50,9 @@
                     xtag.fireEvent(this, "slideend");
                 }
             },
-            "show:delegate(x-slide)": function(e) {
+            "reveal:delegate(x-slidebox > x-slides > x-slide)": function(e) {
                 var slide = e.target;
-                if (slide.parentNode.nodeName.toLowerCase() === "x-slides" && slide.parentNode.parentNode.nodeName.toLowerCase() === "x-slidebox") {
+                if (e.target.parentNode.parentNode == e.currentTarget) {
                     var slideWrap = slide.parentNode;
                     var box = slideWrap.parentNode;
                     var slides = xtag.query(slideWrap, "x-slide");
@@ -87,12 +94,16 @@
         lifecycle: {
             inserted: function() {
                 var ancestor = this.parentNode.parentNode;
-                if (ancestor.tagName.toLowerCase() == "x-slidebox") init.call(ancestor, true);
+                if (ancestor.tagName.toLowerCase() == "x-slidebox") {
+                    init.call(ancestor, true);
+                }
             },
-            created: function(e) {
+            created: function() {
                 if (this.parentNode) {
                     var ancestor = this.parentNode.parentNode;
-                    if (ancestor.tagName.toLowerCase() == "x-slidebox") init.call(ancestor, true);
+                    if (ancestor.tagName.toLowerCase() == "x-slidebox") {
+                        init.call(ancestor, true);
+                    }
                 }
             }
         }

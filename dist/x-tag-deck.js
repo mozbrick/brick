@@ -5,7 +5,7 @@
         this.currIndex = -1;
         this._itemCap = undefined;
         this.itemCap = itemCap;
-        this._validatorFn = validatorFn ? validatorFn : function(x) {
+        this._validatorFn = validatorFn ? validatorFn : function() {
             return true;
         };
     }
@@ -278,7 +278,6 @@
         }
         _sanitizeCardAttrs(deck);
         if (transitionType === undefined) {
-            console.log("defaulting to none transition");
             transitionType = "none";
         }
         var isReverse;
@@ -319,7 +318,9 @@
         _replaceCurrCard(deck, newCard, transitionType, progressType);
     }
     function _sanitizeCardAttrs(deck) {
-        if (!deck.xtag._initialized) return;
+        if (!deck.xtag._initialized) {
+            return;
+        }
         var cards = _getAllCards(deck);
         var currCard = deck.xtag._selectedCard;
         if (!currCard || currCard.parentNode !== deck) {
@@ -371,7 +372,7 @@
             }
         },
         events: {
-            "show:delegate(x-card)": function(e) {
+            "show:delegate(x-card)": function() {
                 var card = this;
                 card.show();
             }
@@ -481,7 +482,6 @@
             },
             historyBack: function(progressType) {
                 var history = this.xtag.history;
-                var deck = this;
                 if (history.canUndo) {
                     history.backwards();
                     var newCard = history.currState;
@@ -492,7 +492,6 @@
             },
             historyForward: function(progressType) {
                 var history = this.xtag.history;
-                var deck = this;
                 if (history.canRedo) {
                     history.forwards();
                     var newCard = history.currState;

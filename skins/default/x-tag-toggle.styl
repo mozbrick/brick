@@ -1,31 +1,65 @@
-x-toggle .x-toggle-check {
-  width: 16px;
-  height: 16px;
-  margin: 0px 3px 0px 0px;
-  color: #000;
-  vertical-align: middle;
-  border: 2px solid;
-  -webkit-transition: border 0.15s 0s ease-in-out;
-  -moz-transition: border 0.15s 0s ease-in-out;
-  -ms-transition: border 0.15s 0s ease-in-out;
-  transition: border 0.15s 0s ease-in-out;
-}
+@import 'mixins'
+@import 'params'
 
-x-toggle[no-box] .x-toggle-check {
-  display: none !important;
-}
+$toggleSize = 22px;
 
-x-toggle[type="radio"] .x-toggle-check {
-  border-radius: 50%;
-}
+x-toggle {
+  .x-toggle-content {
+    min-height: $toggleSize;
+    line-height: $toggleSize + 2;
+  }
 
-x-toggle[checked] .x-toggle-check {
-  border-width: 8px;
-}
+  .x-toggle-check {
+    width: $toggleSize;
+    height: $toggleSize;
+    border-radius: 50%;
+    margin: 0px 3px 0px 0px;
+    color: #000;
+    vertical-align: middle;
+    border: 1px solid $darkBG;
+    position: relative;
+  }
 
-x-toggle[focus] .x-toggle-check {
-  -webkit-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
-  -moz-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
-  -ms-box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
-  box-shadow: 0 0 2px 1px rgba(0, 100, 155, 0.8);
+  &[no-box] .x-toggle-check {
+    display: none !important;
+  }
+
+  &[type="radio"][checked] .x-toggle-check {
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+      border-radius: 50%;
+      width: $toggleSize - 8px;
+      height: $toggleSize - 8px;
+      background: $highlight;
+    }
+  }
+
+  &[type="checkbox"][checked] .x-toggle-check {
+    border-width: 0;
+    background: $highlight;
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: $tapTargetSize * 0.1;
+      right: 0;
+      margin: auto;
+      width: 10px;
+      height: 5px;
+      border: solid #fff;
+      border-width: 0 0 2px 2px;
+      transformed(rotate(-45deg));
+    }
+  }
 }

@@ -111,7 +111,6 @@ x-tooltip:not([orientation=top]):not([orientation=bottom]):not([orientation=left
 x-tooltip > .tooltip-content {
   position: relative;
   display: block;
-  padding: 0.5em;
   overflow: auto;
   max-width: inherit;
   max-height: inherit;
@@ -185,7 +184,13 @@ x-tooltip {
 
 x-tooltip {
   border: 1px solid #808080;
-  background-color: #eee;
-  border-radius: 4px;
-  box-shadow: 1px 1px 4px #808080;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.5);
+}
+x-tooltip > .tooltip-arrow {
+  box-shadow: 2px 2px 2px -2px rgba(0,0,0,0.5);
+}
+x-tooltip > .tooltip-content {
+  padding: 1em;
 }

@@ -1,6 +1,7 @@
 x-toggle {
   display: inline-block;
   position: relative;
+/* vertical centering ghost element */
 }
 x-toggle > .x-toggle-input-wrap {
   cursor: pointer;
@@ -12,7 +13,7 @@ x-toggle > .x-toggle-input-wrap {
   height: 100% !important;
   display: inline-block !important;
 /* do not remove visibility or display because we still want tabbability
-     and submissability */
+       and submissability */
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0.0001)" !important;
   opacity: 0.0001 !important;
   z-index: 9999 !important;
@@ -25,7 +26,6 @@ x-toggle .x-toggle-content {
   vertical-align: middle;
   margin: 0px;
 }
-/* vertical centering ghost element */
 x-toggle .x-toggle-content:after {
   content: "";
   display: inline-block;
@@ -45,34 +45,58 @@ x-toggle .x-toggle-check {
   vertical-align: middle;
   border: 1px solid;
 }
-x-toggle[checked] .x-toggle-check {
-  border-width: 8px;
-}
 
+x-toggle .x-toggle-content {
+  min-height: 22px;
+  line-height: 24px;
+}
 x-toggle .x-toggle-check {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
   margin: 0px 3px 0px 0px;
   color: #000;
   vertical-align: middle;
-  border: 2px solid;
-  -webkit-transition: border 0.15s 0s ease-in-out;
-  -moz-transition: border 0.15s 0s ease-in-out;
-  -ms-transition: border 0.15s 0s ease-in-out;
-  transition: border 0.15s 0s ease-in-out;
+  border: 1px solid #00202f;
+  position: relative;
 }
 x-toggle[no-box] .x-toggle-check {
   display: none !important;
 }
-x-toggle[type="radio"] .x-toggle-check {
+x-toggle[type="radio"][checked] .x-toggle-check:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
   border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  background: #0095dd;
 }
-x-toggle[checked] .x-toggle-check {
-  border-width: 8px;
+x-toggle[type="checkbox"][checked] .x-toggle-check {
+  border-width: 0;
+  background: #0095dd;
 }
-x-toggle[focus] .x-toggle-check {
-  -webkit-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  -moz-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  -ms-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
+x-toggle[type="checkbox"][checked] .x-toggle-check:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 3.2px;
+  right: 0;
+  margin: auto;
+  width: 10px;
+  height: 5px;
+  border: solid #fff;
+  border-width: 0 0 2px 2px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }

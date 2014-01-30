@@ -6,14 +6,15 @@ x-appbar {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+}
+x-appbar,
+x-appbar * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 x-appbar > * {
-  display: flex;
   border: none;
-  padding: 2px 5px 0;
   vertical-align: middle;
   text-align: center;
   -webkit-flex-align: center;
@@ -25,15 +26,7 @@ x-appbar > * {
   align-items: center;
   text-align: center;
 }
-x-appbar > *:first-child:before {
-  display: none;
-}
-x-appbar > h1,
-x-appbar > h2,
-x-appbar > h3,
-x-appbar > h4,
-x-appbar > h5,
-x-appbar > h6 {
+x-appbar > header {
   min-width: auto;
   min-height: auto;
   -webkit-box-flex: 1;
@@ -45,15 +38,6 @@ x-appbar > h6 {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
-  line-height: 100%;
-}
-x-appbar > h1:after,
-x-appbar > h2:after,
-x-appbar > h3:after,
-x-appbar > h4:after,
-x-appbar > h5:after,
-x-appbar > h6:after {
-  content: attr(subheading);
 }
 
 x-calendar {
@@ -584,7 +568,6 @@ x-layout {
 /* NEW, Spec - Opera 12.1, Firefox 20+ */
   width: 100%;
   height: 100%;
-  border: 1px solid #999;
   overflow: hidden;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -646,6 +629,7 @@ x-layout > section > *:only-child {
   * height in Webkit
   * see: http://stackoverflow.com/a/15389545
   */
+  height: 100%;
   position: absolute;
 }
 x-layout[content-maximizing] > header,
@@ -703,7 +687,7 @@ x-slider {
   margin: 0;
   padding: 0;
 }
-x-slider > .input {
+x-slider > input {
   margin: 0;
   padding: 0;
   position: relative;
@@ -711,45 +695,20 @@ x-slider > .input {
   vertical-align: middle;
   width: 100%;
   min-height: 100%;
-  background: transparent;
 }
-x-slider[polyfill] {
-  cursor: default;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  -moz-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
+x-slider .slider-track {
+  position: absolute;
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 100%;
+  height: 4px;
+  margin: auto;
+  pointer-events: none;
 }
-x-slider[polyfill] > .input {
-  cursor: default;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  -moz-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-  display: inline-block;
-}
-x-slider[polyfill] > .input::-webkit-slider-thumb {
-  visibility: hidden;
-}
-x-slider[polyfill] > .input::-moz-range-thumb {
-  width: 0px;
-  height: 0px;
-}
-x-slider[polyfill] > .input::-moz-range-track {
-  height: 0;
-  width: 0;
-}
-x-slider[polyfill] > .slider-thumb {
+x-slider .slider-thumb {
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -764,48 +723,47 @@ x-slider[polyfill] > .slider-thumb {
   position: absolute !important;
   top: 0;
   left: 0;
-  height: 100%;
-  border-radius: 4px;
-  border: 1px solid #808080;
-  box-shadow: 0px 1px 4px #ddd;
-  width: 0.65em;
-  background-color: #fff;
-  background-repeat: no-repeat;
-  background-image: -o-linear-gradient(top, #fff, #fff 25%, #d9d9d9);
-  background-image: -ms-linear-gradient(top, #fff, #fff 25%, #d9d9d9);
-  background-image: -moz-linear-gradient(top, #fff, #fff 25%, #d9d9d9);
-  background-image: -webkit-linear-gradient(top, #fff, #fff 25%, #d9d9d9);
-  background-image: linear-gradient(top, #fff, #fff 25%, #d9d9d9);
+  width: 32px;
+  height: 32px;
   margin: 0;
   padding: 0;
-  -webkit-transform: translate3d(0, 0, 1px);
-  -moz-transform: translate3d(0, 0, 1px);
-  -ms-transform: translate3d(0, 0, 1px);
-  -o-transform: translate3d(0, 0, 1px);
-  transform: translate3d(0, 0, 1px);
 }
-x-slider[polyfill] > .slider-thumb:hover {
-  background-color: #e7f5fd;
-  background-repeat: no-repeat;
-  background-image: -o-linear-gradient(top, #e7f5fd, #e7f5fd 25%, #a4d9f7);
-  background-image: -ms-linear-gradient(top, #e7f5fd, #e7f5fd 25%, #a4d9f7);
-  background-image: -moz-linear-gradient(top, #e7f5fd, #e7f5fd 25%, #a4d9f7);
-  background-image: -webkit-linear-gradient(top, #e7f5fd, #e7f5fd 25%, #a4d9f7);
-  background-image: linear-gradient(top, #e7f5fd, #e7f5fd 25%, #a4d9f7);
+x-slider[polyfill] {
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
-x-slider[polyfill] > .slider-thumb[active] {
-  background-color: #bae2f9;
-  background-repeat: no-repeat;
-  background-image: -o-linear-gradient(top, #bae2f9, #bae2f9 25%, #7ec9f4);
-  background-image: -ms-linear-gradient(top, #bae2f9, #bae2f9 25%, #7ec9f4);
-  background-image: -moz-linear-gradient(top, #bae2f9, #bae2f9 25%, #7ec9f4);
-  background-image: -webkit-linear-gradient(top, #bae2f9, #bae2f9 25%, #7ec9f4);
-  background-image: linear-gradient(top, #bae2f9, #bae2f9 25%, #7ec9f4);
+x-slider[polyfill] > input {
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  display: block;
+  position: relative;
 }
-@media only screen and (max-device-width: 1024px) {
-  x-slider[polyfill] > .slider-thumb {
-    width: 1.5em;
-  }
+x-slider[polyfill] > input::-webkit-slider-thumb {
+  visibility: hidden;
+}
+x-slider[polyfill] > input::-moz-range-thumb {
+  width: 0px;
+  height: 0px;
+}
+x-slider[polyfill] > input::-moz-range-track {
+  height: 0;
+  width: 0;
 }
 x-slider:not([polyfill]) > .slider-thumb {
   visibility: hidden !important;
@@ -836,7 +794,8 @@ x-tabbar > x-tabbar-tab {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
-  height: 100%;
+  min-width: auto;
+  min-height: auto;
   vertical-align: middle;
 }
 x-tabbar > x-tabbar-tab > *:only-child {
@@ -849,6 +808,7 @@ x-tabbar > x-tabbar-tab > *:only-child {
 x-toggle {
   display: inline-block;
   position: relative;
+/* vertical centering ghost element */
 }
 x-toggle > .x-toggle-input-wrap {
   cursor: pointer;
@@ -860,7 +820,7 @@ x-toggle > .x-toggle-input-wrap {
   height: 100% !important;
   display: inline-block !important;
 /* do not remove visibility or display because we still want tabbability
-     and submissability */
+       and submissability */
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0.0001)" !important;
   opacity: 0.0001 !important;
   z-index: 9999 !important;
@@ -873,7 +833,6 @@ x-toggle .x-toggle-content {
   vertical-align: middle;
   margin: 0px;
 }
-/* vertical centering ghost element */
 x-toggle .x-toggle-content:after {
   content: "";
   display: inline-block;
@@ -892,9 +851,6 @@ x-toggle .x-toggle-check {
   color: #000;
   vertical-align: middle;
   border: 1px solid;
-}
-x-toggle[checked] .x-toggle-check {
-  border-width: 8px;
 }
 
 x-tooltip,
@@ -1010,7 +966,6 @@ x-tooltip:not([orientation=top]):not([orientation=bottom]):not([orientation=left
 x-tooltip > .tooltip-content {
   position: relative;
   display: block;
-  padding: 0.5em;
   overflow: auto;
   max-width: inherit;
   max-height: inherit;
@@ -1083,37 +1038,49 @@ x-tooltip {
 }
 
 x-appbar {
-  background-color: #a0a0a0;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
-  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-  color: #d4d4d4;
-  font-size: 20px;
+  background-color: #00202f;
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 17px;
+  height: 45px;
+  line-height: 45px;
+}
+x-appbar > header {
+  font-weight: 600;
+}
+x-appbar > * {
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: inherit;
+  line-height: inherit;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+x-appbar > button {
+  cursor: pointer;
+  padding-left: 2px;
+  padding-right: 2px;
+  min-width: 45px;
+  background: transparent;
+}
+x-appbar > button:hover {
+  background-color: #00405d;
+}
+x-appbar > button::-moz-focus-inner {
+  bordr: 0;
+  padding: 0;
 }
 x-appbar > header:after {
   padding-left: 6px;
   font-size: 60%;
 }
-/* Spacer style */
-x-appbar > *:before {
-  background-color: rgba(255,255,255,0.25);
-  width: 2px;
-  top: 0px;
-  bottom: 0px;
-  content: " ";
-  position: absolute;
-  left: 0px;
-}
 
 x-calendar {
-  border: 2px solid #888;
+  border: 1px solid #cecece;
+  border-radius: 3px;
   font-size: 1em;
-  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   background-color: #fff;
   color: #444;
 }
@@ -1121,21 +1088,16 @@ x-calendar .weekday-label {
   opacity: 0.8;
 }
 x-calendar .month-label {
-  border-bottom: 1px dashed #808080;
-}
-x-calendar .day {
-  include: rounded;
-  border: 1px solid transparent;
+  border-bottom: 1px solid #cecece;
 }
 x-calendar .day[active] {
   border-color: #ffa500;
 }
 x-calendar .day.chosen {
-  background: #444;
+  background: #0095dd;
   color: #fff;
 }
 x-calendar .day.today {
-  border-color: #ff6347;
   font-weight: bold;
 }
 x-calendar:not([active]) .prev:hover,
@@ -1153,115 +1115,128 @@ body {
 }
 
 
-x-slider[polyfill] > .input {
+x-slider {
+  height: 27px;
+  padding-bottom: 2px;
+}
+x-slider .slider-thumb,
+x-slider input::-moz-range-thumb {
+  background: #fff;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border-radius: 13px;
+  border: 1px solid #979797;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);
+  cursor: pointer;
+  display: block;
+  height: 25px;
+  width: 25px;
+}
+x-slider .slider-track {
+  background: #d8d8d8;
+  border-radius: 4px;
+  height: 2px;
+}
+x-slider > input::-moz-range-track,
+x-slider > input::-webkit-slider-runnable-track {
+  background: #d8d8d8;
+}
+x-slider input {
   -webkit-appearance: none;
   -moz-appearance: none;
   background: transparent;
   border: 0px solid transparent;
   color: transparent;
-  background-color: transparent;
-/* use CSS to draw a trackbar in the background of the input */
-  background-size: 100% 3px;
-  background-repeat: no-repeat;
-  background-image: -webkit-linear-gradient(top, #b0b0b0 1px, #fff 2px, #b0b0b0);
-  background-image: -moz-linear-gradient(top, #b0b0b0 1px, #fff 2px, #b0b0b0);
-  background-image: -ms-linear-gradient(top, #b0b0b0 1px, #fff 2px, #b0b0b0);
-  background-image: -o-linear-gradient(top, #b0b0b0 1px, #fff 2px, #b0b0b0);
-  background-image: linear-gradient(top, #b0b0b0 1px, #fff 2px, #b0b0b0);
-  background-position: center;
+  padding-bottom: 2px;
 }
 
 x-tabbar {
-  background-color: #a0a0a0;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
-  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-  color: #d4d4d4;
-  letter-spacing: -0.31em;
+  background: #00202f;
+  color: #fff;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  height: 45px;
+  line-height: 45px;
 }
 x-tabbar > x-tabbar-tab {
   letter-spacing: normal;
   overflow: hidden;
-  background-color: #a0a0a0;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
-  border-right: 1px solid #b4b4b4;
-  border-left: 1px solid #b4b4b4;
+  cursor: pointer;
 }
 x-tabbar > x-tabbar-tab:hover {
-  background-color: #a0a0a0;
-  background-repeat: no-repeat;
-  background-position: 0 1em;
-  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #858585 100%);
-  background-image: linear-gradient(-180deg, #a0a0a0 14%, #858585 100%);
+  background-color: #00405d;
   color: #eaeaea;
 }
 x-tabbar > x-tabbar-tab:active {
-  background-color: #a0a0a0;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-position: 0 1em;
-  background-image: -o-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
-  background-image: -moz-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
-  background-image: -webkit-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
-  background-image: -ms-linear-gradient(-90deg, #a0a0a0 14%, #e1e1e1 100%);
-  background-image: linear-gradient(-180deg, #a0a0a0 14%, #e1e1e1 100%);
   color: #f2f2f2;
-}
-x-tabbar > x-tabbar-tab:first-child {
-  border-left-width: 2px;
-}
-x-tabbar > x-tabbar-tab:last-child {
-  border-right-width: 2px;
 }
 x-tabbar > x-tabbar-tab > x-iconbutton:only-child {
   border: 0;
 }
 
+x-toggle .x-toggle-content {
+  min-height: 22px;
+  line-height: 24px;
+}
 x-toggle .x-toggle-check {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
   margin: 0px 3px 0px 0px;
   color: #000;
   vertical-align: middle;
-  border: 2px solid;
-  -webkit-transition: border 0.15s 0s ease-in-out;
-  -moz-transition: border 0.15s 0s ease-in-out;
-  -ms-transition: border 0.15s 0s ease-in-out;
-  transition: border 0.15s 0s ease-in-out;
+  border: 1px solid #00202f;
+  position: relative;
 }
 x-toggle[no-box] .x-toggle-check {
   display: none !important;
 }
-x-toggle[type="radio"] .x-toggle-check {
+x-toggle[type="radio"][checked] .x-toggle-check:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
   border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  background: #0095dd;
 }
-x-toggle[checked] .x-toggle-check {
-  border-width: 8px;
+x-toggle[type="checkbox"][checked] .x-toggle-check {
+  border-width: 0;
+  background: #0095dd;
 }
-x-toggle[focus] .x-toggle-check {
-  -webkit-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  -moz-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  -ms-box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
-  box-shadow: 0 0 2px 1px rgba(0,100,155,0.8);
+x-toggle[type="checkbox"][checked] .x-toggle-check:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 3.2px;
+  right: 0;
+  margin: auto;
+  width: 10px;
+  height: 5px;
+  border: solid #fff;
+  border-width: 0 0 2px 2px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 x-tooltip {
   border: 1px solid #808080;
-  background-color: #eee;
-  border-radius: 4px;
-  box-shadow: 1px 1px 4px #808080;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.5);
+}
+x-tooltip > .tooltip-arrow {
+  box-shadow: 2px 2px 2px -2px rgba(0,0,0,0.5);
+}
+x-tooltip > .tooltip-content {
+  padding: 1em;
 }

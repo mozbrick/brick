@@ -106,9 +106,10 @@ x-calendar:not([active]) .next:hover {
 }
 
 x-calendar {
-  border: 2px solid #888;
+  border: 1px solid #cecece;
+  border-radius: 3px;
   font-size: 1em;
-  font-family: "_OpenSansBrick", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Fira Sans", "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
   background-color: #fff;
   color: #444;
 }
@@ -116,21 +117,16 @@ x-calendar .weekday-label {
   opacity: 0.8;
 }
 x-calendar .month-label {
-  border-bottom: 1px dashed #808080;
-}
-x-calendar .day {
-  include: rounded;
-  border: 1px solid transparent;
+  border-bottom: 1px solid #cecece;
 }
 x-calendar .day[active] {
   border-color: #ffa500;
 }
 x-calendar .day.chosen {
-  background: #444;
+  background: #0095dd;
   color: #fff;
 }
 x-calendar .day.today {
-  border-color: #ff6347;
   font-weight: bold;
 }
 x-calendar:not([active]) .prev:hover,

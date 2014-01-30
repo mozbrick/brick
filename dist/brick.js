@@ -1736,9 +1736,9 @@ if (typeof WeakMap === "undefined") {
     xtag.register("x-appbar", {
         lifecycle: {
             created: function() {
-                var header = xtag.queryChildren(this, "h1,h2,h3,h4,h5,h6")[0];
+                var header = xtag.queryChildren(this, "header")[0];
                 if (!header) {
-                    header = document.createElement("h1");
+                    header = document.createElement("header");
                     this.appendChild(header);
                 }
                 this.xtag.data.header = header;
@@ -1875,7 +1875,9 @@ if (typeof WeakMap === "undefined") {
     }
     var ISO_DATE_REGEX = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
     function fromIso(s) {
-        if (isValidDateObj(s)) return s;
+        if (isValidDateObj(s)) {
+            return s;
+        }
         var d = ISO_DATE_REGEX.exec(s);
         if (d) {
             return normalize(new Date(d[1], d[2] - 1, d[3]));
@@ -1884,7 +1886,9 @@ if (typeof WeakMap === "undefined") {
         }
     }
     function parseSingleDate(dateStr) {
-        if (isValidDateObj(dateStr)) return dateStr;
+        if (isValidDateObj(dateStr)) {
+            return dateStr;
+        }
         var isoParsed = fromIso(dateStr);
         if (isoParsed) {
             return isoParsed;
@@ -1906,7 +1910,6 @@ if (typeof WeakMap === "undefined") {
             try {
                 ranges = JSON.parse(multiDateStr);
                 if (!isArray(ranges)) {
-                    console.warn("invalid list of ranges", multiDateStr);
                     return null;
                 }
             } catch (err) {
@@ -1914,7 +1917,6 @@ if (typeof WeakMap === "undefined") {
                 if (parsedSingle) {
                     return [ parsedSingle ];
                 } else {
-                    console.warn("unable to parse", multiDateStr, "as JSON or single date");
                     return null;
                 }
             }
@@ -1928,37 +1930,38 @@ if (typeof WeakMap === "undefined") {
             } else if (typeof range === "string") {
                 var parsedDate = parseSingleDate(range);
                 if (!parsedDate) {
-                    console.warn("unable to parse date", range);
                     return null;
                 }
                 ranges[i] = parsedDate;
             } else if (isArray(range) && range.length === 2) {
                 var parsedStartDate = parseSingleDate(range[0]);
                 if (!parsedStartDate) {
-                    console.warn("unable to parse start date", range[0], "from range", range);
                     return null;
                 }
                 var parsedEndDate = parseSingleDate(range[1]);
                 if (!parsedEndDate) {
-                    console.warn("unable to parse end date", range[1], "from range", range);
                     return null;
                 }
                 if (parsedStartDate.valueOf() > parsedEndDate.valueOf()) {
-                    console.warn("invalid range", range, ": start date is after end date");
                     return null;
                 }
                 ranges[i] = [ parsedStartDate, parsedEndDate ];
             } else {
-                console.warn("invalid range value: ", range);
                 return null;
             }
         }
         return ranges;
     }
     function from(base, y, m, d) {
-        if (y === undefined) y = getYear(base);
-        if (m === undefined) m = getMonth(base);
-        if (d === undefined) d = getDate(base);
+        if (y === undefined) {
+            y = getYear(base);
+        }
+        if (m === undefined) {
+            m = getMonth(base);
+        }
+        if (d === undefined) {
+            d = getDate(base);
+        }
         return normalize(new Date(y, m, d));
     }
     function daysInMonth(month, year) {
@@ -1976,7 +1979,6 @@ if (typeof WeakMap === "undefined") {
         if (date > daysInNextMonth) {
             date = daysInNextMonth;
         }
-        console.log(new Date(d.getFullYear(), d.getMonth() + 1, date).toString());
         return new Date(d.getFullYear(), d.getMonth() + 1, date);
     }
     function prevMonth(d) {
@@ -2030,7 +2032,9 @@ if (typeof WeakMap === "undefined") {
         return relOffset(d, 0, 0, -1);
     }
     function dateMatches(d, matches) {
-        if (!matches) return;
+        if (!matches) {
+            return;
+        }
         matches = matches.length === undefined ? [ matches ] : matches;
         var foundMatch = false;
         matches.forEach(function(match) {
@@ -2082,7 +2086,9 @@ if (typeof WeakMap === "undefined") {
     }
     var CALENDAR_PROTOTYPE = Calendar.prototype;
     CALENDAR_PROTOTYPE.makeMonth = function(d) {
-        if (!isValidDateObj(d)) throw "Invalid view date!";
+        if (!isValidDateObj(d)) {
+            throw "Invalid view date!";
+        }
         var firstWeekday = this.firstWeekdayNum;
         var chosen = this.chosen;
         var labels = this.labels;
@@ -2117,13 +2123,14 @@ if (typeof WeakMap === "undefined") {
                 addClass(day, "today");
             }
             appendChild(week, day);
-            var oldDate = cDate;
             cDate = nextDay(cDate);
             if ((step + 1) % 7 === 0) {
                 appendChild(monthEl, week);
                 week = makeEl("div.week");
                 var done = getMonth(cDate) > month || getMonth(cDate) < month && getYear(cDate) > getYear(sDate);
-                if (done) break;
+                if (done) {
+                    break;
+                }
             }
         }
         return monthEl;
@@ -2290,7 +2297,9 @@ if (typeof WeakMap === "undefined") {
         this._callCustomRenderer();
     };
     CALENDAR_PROTOTYPE._callCustomRenderer = function() {
-        if (!this._customRenderFn) return;
+        if (!this._customRenderFn) {
+            return;
+        }
         if (this._renderRecursionFlag) {
             throw "Error: customRenderFn causes recursive loop of " + "rendering calendar; make sure your custom rendering " + "function doesn't modify attributes of the x-calendar that " + "would require a re-render!";
         }
@@ -2429,7 +2438,9 @@ if (typeof WeakMap === "undefined") {
             set: function(newLabelData) {
                 var oldLabelData = this.labels;
                 for (var labelType in oldLabelData) {
-                    if (!(labelType in newLabelData)) continue;
+                    if (!(labelType in newLabelData)) {
+                        continue;
+                    }
                     var oldLabel = this._labels[labelType];
                     var newLabel = newLabelData[labelType];
                     if (isArray(oldLabel)) {
@@ -2501,7 +2512,7 @@ if (typeof WeakMap === "undefined") {
             day.setAttribute("active", true);
         }
     }
-    function _onDragEnd(e) {
+    function _onDragEnd() {
         var xCalendars = xtag.query(document, "x-calendar");
         for (var i = 0; i < xCalendars.length; i++) {
             var xCalendar = xCalendars[i];
@@ -2576,7 +2587,9 @@ if (typeof WeakMap === "undefined") {
                     return;
                 }
                 e.preventDefault();
-                if (e.baseEvent) e.baseEvent.preventDefault();
+                if (e.baseEvent) {
+                    e.baseEvent.preventDefault();
+                }
                 _onDragStart(e.currentTarget, this);
             },
             touchmove: function(e) {
@@ -2603,7 +2616,7 @@ if (typeof WeakMap === "undefined") {
                 var day = this;
                 _onDragMove(xCalendar, day);
             },
-            "mouseout:delegate(.day)": function(e) {
+            "mouseout:delegate(.day)": function() {
                 var day = this;
                 day.removeAttribute("active");
             },
@@ -2766,9 +2779,13 @@ if (typeof WeakMap === "undefined") {
                     this.xtag.calObj.labels = newLabelData;
                     var labels = this.xtag.calObj.labels;
                     var prevControl = this.querySelector(".controls > .prev");
-                    if (prevControl) prevControl.textContent = labels.prev;
+                    if (prevControl) {
+                        prevControl.textContent = labels.prev;
+                    }
                     var nextControl = this.querySelector(".controls > .next");
-                    if (nextControl) nextControl.textContent = labels.next;
+                    if (nextControl) {
+                        nextControl.textContent = labels.next;
+                    }
                 }
             }
         },
@@ -2813,7 +2830,7 @@ if (typeof WeakMap === "undefined") {
         this.currIndex = -1;
         this._itemCap = undefined;
         this.itemCap = itemCap;
-        this._validatorFn = validatorFn ? validatorFn : function(x) {
+        this._validatorFn = validatorFn ? validatorFn : function() {
             return true;
         };
     }
@@ -3086,7 +3103,6 @@ if (typeof WeakMap === "undefined") {
         }
         _sanitizeCardAttrs(deck);
         if (transitionType === undefined) {
-            console.log("defaulting to none transition");
             transitionType = "none";
         }
         var isReverse;
@@ -3127,7 +3143,9 @@ if (typeof WeakMap === "undefined") {
         _replaceCurrCard(deck, newCard, transitionType, progressType);
     }
     function _sanitizeCardAttrs(deck) {
-        if (!deck.xtag._initialized) return;
+        if (!deck.xtag._initialized) {
+            return;
+        }
         var cards = _getAllCards(deck);
         var currCard = deck.xtag._selectedCard;
         if (!currCard || currCard.parentNode !== deck) {
@@ -3179,7 +3197,7 @@ if (typeof WeakMap === "undefined") {
             }
         },
         events: {
-            "show:delegate(x-card)": function(e) {
+            "show:delegate(x-card)": function() {
                 var card = this;
                 card.show();
             }
@@ -3289,7 +3307,6 @@ if (typeof WeakMap === "undefined") {
             },
             historyBack: function(progressType) {
                 var history = this.xtag.history;
-                var deck = this;
                 if (history.canUndo) {
                     history.backwards();
                     var newCard = history.currState;
@@ -3300,7 +3317,6 @@ if (typeof WeakMap === "undefined") {
             },
             historyForward: function(progressType) {
                 var history = this.xtag.history;
-                var deck = this;
                 if (history.canRedo) {
                     history.forwards();
                     var newCard = history.currState;
@@ -3368,6 +3384,16 @@ if (typeof WeakMap === "undefined") {
 })();
 
 (function() {
+    function reveal(e) {
+        var flipBox = e.currentTarget;
+        if (this.parentNode == flipBox) {
+            if (this.parentNode.firstElementChild == this) {
+                flipBox.flipped = false;
+            } else if (this.parentNode.lastElementChild == this) {
+                flipBox.flipped = true;
+            }
+        }
+    }
     xtag.register("x-flipbox", {
         lifecycle: {
             created: function() {
@@ -3383,27 +3409,13 @@ if (typeof WeakMap === "undefined") {
             }
         },
         events: {
-            "transitionend:delegate(*:first-child)": function(e) {
-                var frontCard = e.target;
-                var flipBox = frontCard.parentNode;
-                if (flipBox.nodeName.toLowerCase() === "x-flipbox") {
+            "transitionend:delegate(x-flipbox > *:first-child)": function(e) {
+                var flipBox = e.currentTarget;
+                if (this.parentNode == flipBox) {
                     xtag.fireEvent(flipBox, "flipend");
                 }
             },
-            "show:delegate(*:first-child)": function(e) {
-                var frontCard = e.target;
-                var flipBox = frontCard.parentNode;
-                if (flipBox.nodeName.toLowerCase() === "x-flipbox") {
-                    flipBox.flipped = false;
-                }
-            },
-            "show:delegate(*:last-child)": function(e) {
-                var backCard = e.target;
-                var flipBox = backCard.parentNode;
-                if (flipBox.nodeName.toLowerCase() === "x-flipbox") {
-                    flipBox.flipped = true;
-                }
-            }
+            "reveal:delegate(x-flipbox > *)": reveal
         },
         accessors: {
             direction: {
@@ -3412,12 +3424,14 @@ if (typeof WeakMap === "undefined") {
                     return this.xtag._direction;
                 },
                 set: function(value) {
+                    var self = this;
                     xtag.skipTransition(this.firstElementChild, function() {
-                        this.setAttribute("_anim-direction", value);
-                    }, this);
+                        self.setAttribute("_anim-direction", value);
+                        return function() {};
+                    });
                     xtag.skipTransition(this.lastElementChild, function() {
-                        this.setAttribute("_anim-direction", value);
-                    }, this);
+                        self.setAttribute("_anim-direction", value);
+                    });
                     this.xtag._direction = value;
                 }
             },
@@ -3444,11 +3458,13 @@ if (typeof WeakMap === "undefined") {
 (function() {
     function getLayoutElements(layout) {
         var first = layout.firstElementChild;
-        if (!first) return {
-            header: null,
-            section: null,
-            footer: null
-        };
+        if (!first) {
+            return {
+                header: null,
+                section: null,
+                footer: null
+            };
+        }
         var second = first.nextElementSibling;
         return {
             header: first.nodeName == "HEADER" ? first : null,
@@ -3470,8 +3486,12 @@ if (typeof WeakMap === "undefined") {
     function maxContent(layout, elements) {
         layout.setAttribute("content-maximizing", null);
         if (elements.section) {
-            if (elements.header) elements.section.style.marginTop = "-" + elements.header.getBoundingClientRect().height + "px";
-            if (elements.footer) elements.section.style.marginBottom = "-" + elements.footer.getBoundingClientRect().height + "px";
+            if (elements.header) {
+                elements.section.style.marginTop = "-" + elements.header.getBoundingClientRect().height + "px";
+            }
+            if (elements.footer) {
+                elements.section.style.marginBottom = "-" + elements.footer.getBoundingClientRect().height + "px";
+            }
         }
     }
     function minContent(layout, elements) {
@@ -3487,9 +3507,17 @@ if (typeof WeakMap === "undefined") {
             var target = event.target, layout = event.currentTarget;
             if (this.scrollhide && (target.parentNode == layout || xtag.matchSelector(target, layout.scrollTarget))) {
                 var now = target.scrollTop, buffer = layout.scrollBuffer, elements = getLayoutElements(layout), scroll = getLayoutScroll(layout, target);
-                if (now > scroll.last) scroll.min = Math.max(now - buffer, buffer); else if (now < scroll.last) scroll.max = Math.max(now + buffer, buffer);
+                if (now > scroll.last) {
+                    scroll.min = Math.max(now - buffer, buffer);
+                } else if (now < scroll.last) {
+                    scroll.max = Math.max(now + buffer, buffer);
+                }
                 if (!layout.maxcontent) {
-                    if (now > scroll.max && !layout.hasAttribute("content-maximized")) maxContent(layout, elements); else if (now < scroll.min) minContent(layout, elements);
+                    if (now > scroll.max && !layout.hasAttribute("content-maximized")) {
+                        maxContent(layout, elements);
+                    } else if (now < scroll.min) {
+                        minContent(layout, elements);
+                    }
                 }
                 scroll.last = now;
             }
@@ -3513,8 +3541,12 @@ if (typeof WeakMap === "undefined") {
                 if (layout.taphide && this.parentNode == layout) {
                     var elements = getLayoutElements(layout);
                     if (layout.hasAttribute("content-maximizing") || layout.hasAttribute("content-maximized")) {
-                        if (!layout.maxcontent) minContent(layout, elements);
-                    } else maxContent(layout, elements);
+                        if (!layout.maxcontent) {
+                            minContent(layout, elements);
+                        }
+                    } else {
+                        maxContent(layout, elements);
+                    }
                 }
             },
             "mouseover:delegate(section)": function(e) {
@@ -3565,7 +3597,11 @@ if (typeof WeakMap === "undefined") {
                 },
                 set: function(value) {
                     var elements = getLayoutElements(this);
-                    if (value) maxContent(this, elements); else if (!this.hasAttribute("content-maximizing")) minContent(this, elements);
+                    if (value) {
+                        maxContent(this, elements);
+                    } else if (!this.hasAttribute("content-maximizing")) {
+                        minContent(this, elements);
+                    }
                 }
             }
         }
@@ -3590,8 +3626,13 @@ if (typeof WeakMap === "undefined") {
     }
     function init(toSelected) {
         var slides = this.firstElementChild;
-        if (!slides || !slides.children.length || slides.tagName.toLowerCase() != "x-slides") return;
-        var children = xtag.toArray(slides.children), size = 100 / (children.length || 1), orient = this.getAttribute("orientation") || "x", style = orient == "x" ? [ "width", "height" ] : [ "height", "width" ];
+        if (!slides || !slides.children.length || slides.tagName.toLowerCase() != "x-slides") {
+            return;
+        }
+        var children = xtag.toArray(slides.children);
+        var size = 100 / (children.length || 1);
+        var orient = this.getAttribute("orientation") || "x";
+        var style = orient == "x" ? [ "width", "height" ] : [ "height", "width" ];
         slides.style[style[1]] = "100%";
         slides.style[style[0]] = children.length * 100 + "%";
         slides.style[transform] = "translate" + orient + "(0%)";
@@ -3602,7 +3643,9 @@ if (typeof WeakMap === "undefined") {
         });
         if (toSelected) {
             var selected = slides.querySelector("[selected]");
-            if (selected) slide(this, children.indexOf(selected) || 0);
+            if (selected) {
+                slide(this, children.indexOf(selected) || 0);
+            }
         }
     }
     xtag.register("x-slidebox", {
@@ -3617,9 +3660,9 @@ if (typeof WeakMap === "undefined") {
                     xtag.fireEvent(this, "slideend");
                 }
             },
-            "show:delegate(x-slide)": function(e) {
+            "reveal:delegate(x-slidebox > x-slides > x-slide)": function(e) {
                 var slide = e.target;
-                if (slide.parentNode.nodeName.toLowerCase() === "x-slides" && slide.parentNode.parentNode.nodeName.toLowerCase() === "x-slidebox") {
+                if (e.target.parentNode.parentNode == e.currentTarget) {
                     var slideWrap = slide.parentNode;
                     var box = slideWrap.parentNode;
                     var slides = xtag.query(slideWrap, "x-slide");
@@ -3661,12 +3704,16 @@ if (typeof WeakMap === "undefined") {
         lifecycle: {
             inserted: function() {
                 var ancestor = this.parentNode.parentNode;
-                if (ancestor.tagName.toLowerCase() == "x-slidebox") init.call(ancestor, true);
+                if (ancestor.tagName.toLowerCase() == "x-slidebox") {
+                    init.call(ancestor, true);
+                }
             },
-            created: function(e) {
+            created: function() {
                 if (this.parentNode) {
                     var ancestor = this.parentNode.parentNode;
-                    if (ancestor.tagName.toLowerCase() == "x-slidebox") init.call(ancestor, true);
+                    if (ancestor.tagName.toLowerCase() == "x-slidebox") {
+                        init.call(ancestor, true);
+                    }
                 }
             }
         }
@@ -3739,10 +3786,14 @@ if (typeof WeakMap === "undefined") {
         var sliderRect = slider.getBoundingClientRect();
         var thumbRect = thumb.getBoundingClientRect();
         var fraction = _rawValToFraction(slider, value);
-        var availableWidth = Math.max(sliderRect.width - thumbRect.width, 0);
+        var vertical = slider.vertical;
+        var sliderWidth = sliderRect[vertical ? "height" : "width"];
+        var thumbWidth = thumbRect[vertical ? "height" : "width"];
+        var availableWidth = Math.max(sliderWidth - thumbWidth, 0);
         var newThumbX = availableWidth * fraction;
-        var finalPercentage = newThumbX / sliderRect.width;
-        thumb.style.left = finalPercentage * 100 + "%";
+        var finalPercentage = newThumbX / sliderWidth;
+        thumb.style[vertical ? "left" : "top"] = 0;
+        thumb.style[vertical ? "top" : "left"] = finalPercentage * 100 + "%";
     }
     function _redraw(slider) {
         _positionThumb(slider, slider.value);
@@ -3751,9 +3802,12 @@ if (typeof WeakMap === "undefined") {
         var inputEl = slider.xtag.rangeInputEl;
         var inputOffsets = inputEl.getBoundingClientRect();
         var inputClickX = pageX - inputOffsets.left;
-        var oldValue = slider.value;
-        var newValue = _fractionToCorrectedVal(slider, inputClickX / inputOffsets.width);
-        slider.value = newValue;
+        var divideby = inputOffsets.width;
+        if (slider.vertical) {
+            divideby = inputOffsets.height;
+            inputClickX = pageY - inputOffsets.top;
+        }
+        slider.value = _fractionToCorrectedVal(slider, inputClickX / divideby);
         xtag.fireEvent(slider, "input");
         _redraw(slider);
     }
@@ -3936,6 +3990,12 @@ if (typeof WeakMap === "undefined") {
                         this.setAttribute("tabindex", 0);
                         this.xtag.rangeInputEl.setAttribute("tabindex", -1);
                         this.xtag.rangeInputEl.setAttribute("readonly", true);
+                        if (!this.xtag.polyFillSliderTrack) {
+                            var sliderTrack = document.createElement("div");
+                            xtag.addClass(sliderTrack, "slider-track");
+                            this.xtag.polyFillSliderTrack = sliderTrack;
+                            this.appendChild(sliderTrack);
+                        }
                         if (!this.xtag.polyFillSliderThumb) {
                             var sliderThumb = document.createElement("span");
                             xtag.addClass(sliderThumb, "slider-thumb");
@@ -3954,6 +4014,14 @@ if (typeof WeakMap === "undefined") {
                         this.removeEventListener("touchstart", callbackFns.onTouchDragStart);
                         this.removeEventListener("keydown", callbackFns.onKeyDown);
                     }
+                }
+            },
+            vertical: {
+                attribute: {
+                    "boolean": true
+                },
+                set: function() {
+                    _redraw(this);
                 }
             },
             max: {
@@ -4061,7 +4129,7 @@ if (typeof WeakMap === "undefined") {
             }
         },
         events: {
-            "tap:delegate(x-tabbar-tab)": function(e) {
+            "tap:delegate(x-tabbar-tab)": function() {
                 var activeTab = xtag.query(this.parentNode, "x-tabbar-tab[selected]");
                 if (activeTab.length) {
                     activeTab.forEach(function(t) {
@@ -4177,15 +4245,21 @@ if (typeof WeakMap === "undefined") {
 (function() {
     function setScope(toggle) {
         var form = toggle.xtag.inputEl.form;
-        if (form) toggle.removeAttribute("x-toggle-no-form"); else toggle.setAttribute("x-toggle-no-form", "");
+        if (form) {
+            toggle.removeAttribute("x-toggle-no-form");
+        } else {
+            toggle.setAttribute("x-toggle-no-form", "");
+        }
         toggle.xtag.scope = toggle.parentNode ? form || document : null;
     }
     function updateScope(scope) {
-        var names = {}, docSelector = scope == document ? "[x-toggle-no-form]" : "";
+        var names = {};
+        var docSelector = scope == document ? "[x-toggle-no-form]" : "";
         xtag.query(scope, "x-toggle[name]" + docSelector).forEach(function(toggle) {
             var name = toggle.name;
             if (name && !names[name]) {
-                var named = xtag.query(scope, 'x-toggle[name="' + name + '"]' + docSelector), type = named.length > 1 ? "radio" : "checkbox";
+                var named = xtag.query(scope, 'x-toggle[name="' + name + '"]' + docSelector);
+                var type = named.length > 1 ? "radio" : "checkbox";
                 named.forEach(function(toggle) {
                     if (toggle.xtag && toggle.xtag.inputEl) {
                         toggle.type = type;
@@ -4211,26 +4285,40 @@ if (typeof WeakMap === "undefined") {
         keyup: function(e) {
             shifted = e.shiftKey;
         },
-        "focus:delegate(x-toggle)": function(e) {
+        "focus:delegate(x-toggle)": function() {
             this.setAttribute("focus", "");
         },
-        "blur:delegate(x-toggle)": function(e) {
+        "blur:delegate(x-toggle)": function() {
             this.removeAttribute("focus");
         },
-        "tap:delegate(x-toggle)": function(e) {
+        "tap:delegate(x-toggle)": function() {
             if (shifted && this.group) {
-                var toggles = this.groupToggles, active = this.xtag.scope.querySelector('x-toggle[group="' + this.group + '"][active]');
+                var toggles = this.groupToggles;
+                var selector = 'x-toggle[group="' + this.group + '"][active]';
+                var active = this.xtag.scope.querySelector(selector);
                 if (active && this != active) {
-                    var self = this, state = active.checked, index = toggles.indexOf(this), activeIndex = toggles.indexOf(active), minIndex = Math.min(index, activeIndex), maxIndex = Math.max(index, activeIndex);
+                    var self = this;
+                    var state = active.checked;
+                    var index = toggles.indexOf(this);
+                    var activeIndex = toggles.indexOf(active);
+                    var minIndex = Math.min(index, activeIndex);
+                    var maxIndex = Math.max(index, activeIndex);
                     toggles.slice(minIndex, maxIndex).forEach(function(toggler) {
-                        if (toggler != self) toggler.checked = state;
+                        if (toggler != self) {
+                            toggler.checked = state;
+                        }
                     });
                 }
             }
         },
-        "change:delegate(x-toggle)": function(e) {
-            var active = this.xtag.scope.querySelector('x-toggle[group="' + this.group + '"][active]');
-            this.checked = shifted && active && this != active ? active.checked : this.xtag.inputEl.checked;
+        "change:delegate(x-toggle)": function() {
+            var selector = 'x-toggle[group="' + this.group + '"][active]';
+            var active = this.xtag.scope.querySelector(selector);
+            if (shifted && active && this != active) {
+                this.checked = active.checked;
+            } else {
+                this.checked = this.xtag.inputEl.checked;
+            }
             if (this.group) {
                 this.groupToggles.forEach(function(toggle) {
                     toggle.active = false;
@@ -4251,8 +4339,12 @@ if (typeof WeakMap === "undefined") {
                 this.type = "checkbox";
                 setScope(this);
                 var name = this.getAttribute("name");
-                if (name) this.xtag.inputEl.name = this.getAttribute("name");
-                if (this.hasAttribute("checked")) this.checked = true;
+                if (name) {
+                    this.xtag.inputEl.name = this.getAttribute("name");
+                }
+                if (this.hasAttribute("checked")) {
+                    this.checked = true;
+                }
             },
             inserted: function() {
                 setScope(this);
@@ -4265,7 +4357,9 @@ if (typeof WeakMap === "undefined") {
                     }
                     this.setAttribute("no-box", true);
                 }
-                if (this.name) updateScope(this.xtag.scope);
+                if (this.name) {
+                    updateScope(this.xtag.scope);
+                }
             },
             removed: function() {
                 updateScope(this.xtag.scope);
@@ -4336,10 +4430,16 @@ if (typeof WeakMap === "undefined") {
                         var scopeSelector = this.xtag.scope == document ? "[x-toggle-no-form]" : "";
                         var selector = 'x-toggle[checked][name="' + name + '"]' + scopeSelector;
                         var previous = this.xtag.scope.querySelector(selector);
-                        if (previous) previous.removeAttribute("checked");
+                        if (previous) {
+                            previous.removeAttribute("checked");
+                        }
                     }
                     this.xtag.inputEl.checked = state;
-                    if (state) this.setAttribute("checked", ""); else this.removeAttribute("checked");
+                    if (state) {
+                        this.setAttribute("checked", "");
+                    } else {
+                        this.removeAttribute("checked");
+                    }
                 }
             },
             value: {
@@ -4536,7 +4636,7 @@ if (typeof WeakMap === "undefined") {
         }
     }
     PRESET_STYLE_LISTENERFNS = {
-        custom: function(tooltip, targetSelector) {
+        custom: function() {
             return [];
         },
         hover: function(tooltip, targetSelector) {
@@ -4599,7 +4699,7 @@ if (typeof WeakMap === "undefined") {
     };
     function mkGenericListeners(tooltip, targetSelector, eventName) {
         var createdListeners = [];
-        var targetTriggerFn = function(e) {
+        var targetTriggerFn = function() {
             var delegatedElem = this;
             tooltip.xtag._skipOuterClick = true;
             if (tooltip.hasAttribute("visible")) {
@@ -4731,12 +4831,16 @@ if (typeof WeakMap === "undefined") {
         var bounds = viewport;
         if (!tooltip.allowOverflow) {
             bounds = getRectIntersection(viewport, contextRect);
-            if (!bounds) bounds = contextRect;
+            if (!bounds) {
+                bounds = contextRect;
+            }
         }
         return bounds;
     }
     function _pickBestTooltipOrient(tooltip, validPositionDataList) {
-        if (validPositionDataList.length === 0) return null;
+        if (validPositionDataList.length === 0) {
+            return null;
+        }
         var bounds = _getTooltipConstraints(tooltip);
         var minX = bounds.left;
         var minY = bounds.top;
@@ -4782,7 +4886,9 @@ if (typeof WeakMap === "undefined") {
             _unforceDisplay(tooltip);
         }
         var bestOrient = _pickBestTooltipOrient(tooltip, validOrientDataList);
-        if (!bestOrient) bestOrient = "top";
+        if (!bestOrient) {
+            bestOrient = "top";
+        }
         tooltip.setAttribute(AUTO_ORIENT_ATTR, bestOrient);
         arrow.setAttribute(ARROW_DIR_ATTR, TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
         if (isValidOrientation(bestOrient) && bestOrient !== tmpOrient) {
@@ -4954,6 +5060,7 @@ if (typeof WeakMap === "undefined") {
             tooltip.xtag.lastTargetElem = triggerElem;
             xtag.skipTransition(tooltip, function() {
                 _positionTooltip(tooltip, triggerElem, targetOrient);
+                _forceDisplay(tooltip);
                 return _readyToShowFn;
             });
         } else {
@@ -5091,7 +5198,6 @@ if (typeof WeakMap === "undefined") {
                     return this.xtag._targetSelector;
                 },
                 set: function(newSelector) {
-                    var newTriggerElems = _selectorToElems(this, newSelector);
                     _updateTriggerListeners(this, newSelector, this.triggerStyle);
                     this.xtag._targetSelector = newSelector;
                 }
@@ -5113,7 +5219,7 @@ if (typeof WeakMap === "undefined") {
                     "boolean": true,
                     name: "allow-overflow"
                 },
-                set: function(allowsOverflow) {
+                set: function() {
                     this.refreshPosition();
                 }
             },
