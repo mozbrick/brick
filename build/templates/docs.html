@@ -40,7 +40,11 @@
           <h5 class="details">
             <span>Tag: <small>{{ info.tagName }}</small></span>
             <span>Version: <small>{{ info.version }}</small></span>
-            <span>Source: <small><a href="{{ pkgJson[tag].repository.url }}">{{ pkgJson[tag].repository.url.replace('.git','') }}</a></small></span>
+            {% if pkgJson[tag].repository %}
+            <span>Source: <small><a href="{{ pkgJson[tag].repository.url }}">
+              {{ pkgJson[tag].repository.url.replace('.git','') }}
+            </a></small></span>
+            {% endif %}
             <span>Bower: <small>{{ tag }}</small></span>
           </h5>
           <p>{{ info.description|escape|nl2br|preserveTabs }}</p>

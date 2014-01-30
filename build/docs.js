@@ -33,7 +33,7 @@ var generateDocs = avow(function (fulfill, reject, componentsJson) {
                 getJSON(docPath).then(function(json) {
                     data.docs[name] = json;
                     if(fs.existsSync(pkgPath)){
-                        getJSON(docPath).then(function(json) {
+                        getJSON(pkgPath).then(function(json) {
                             data.pkgJson[name] = json;
                             processComponent(n+1);
                         });
@@ -53,7 +53,11 @@ var generateDocs = avow(function (fulfill, reject, componentsJson) {
 
 var writeIndex = avow(function (fulfill, reject, data) {
     console.log('writing index');
+    try{
     site.staticPage('docs.html', 'docs.html', {tags: data.docs, pkgJson: data.pkgJson });
+    }catch(e){
+        console.log(e);
+    }
     console.log('index written!');
     return true;
 });
