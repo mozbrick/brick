@@ -23,7 +23,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="index.html">
         <img class="logo" src="site/img/logo.png">
-        Brick<small> 0.9.2</small>
+        Brick<small> 0.10.0</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -58,9 +58,9 @@
   <section class="row">
     <div class="col-md-4">
       <h2>All Components</h2>
-      <a class="download" href="https://github.com/mozilla/brick/releases/download/0.9.2/brick-0.9.2.zip">
+      <a class="download" href="https://github.com/mozilla/brick/releases/download/0.10.0/brick-0.10.0.zip">
         <h3>Download Brick</h3>
-        <small>version 0.9.2 &mdash; 239K</small>
+        <small>version 0.10.0 &mdash; 239K</small>
       </a>
     </div>
     <div class="col-md-8">
@@ -391,8 +391,8 @@
     function makeZip(js, css, extraFileInfo) {
       var zip = new JSZip();
 
-      zip.file('brick-0.9.2.byob'+(minifed?'.min.':'.')+'js', js);
-      zip.file('brick-0.9.2.byob'+(minifed?'.min.':'.')+'css', css);
+      zip.file('brick-0.10.0.byob'+(minifed?'.min.':'.')+'js', js);
+      zip.file('brick-0.10.0.byob'+(minifed?'.min.':'.')+'css', css);
 
       for(var i=0; i < extraFileInfo.length; i++){
         var fileData = extraFileInfo[i];
@@ -406,7 +406,7 @@
 
       var blob = zip.generate({type:"blob"});
       console.log(blob);
-      zipLink.setAttribute('download', 'brick-0.9.2-byob.zip');
+      zipLink.setAttribute('download', 'brick-0.10.0-byob.zip');
       zipLink.style.display = 'inline-block';
       zipLink.setAttribute('href', window.URL.createObjectURL(blob));
     }
