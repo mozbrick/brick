@@ -37,6 +37,12 @@
               <small><a href="demos/{{ tag }}/index.html">View Demo &raquo;</a></small>
             {% endif %}
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>{{ info.tagName }}</small></span>
+            <span>Version: <small>{{ info.version }}</small></span>
+            <span>Source: <small><a href="{{ pkgJson[tag].repository.url }}">{{ pkgJson[tag].repository.url.replace('.git','') }}</a></small></span>
+            <span>Bower: <small>{{ tag }}</small></span>
+          </h5>
           <p>{{ info.description|escape|nl2br|preserveTabs }}</p>
 
           {% if info.documentation.attributes|notEmpty %}
