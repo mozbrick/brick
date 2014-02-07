@@ -1,3 +1,7 @@
+0.10.0 (2014-01-30)
+New snazzy default skin!
+[See all the commits in this release](https://github.com/mozilla/brick/compare/0.9.2...0.10.0)
+
 0.9.2 (2013-11-14)
 Updated X-tag/core to 0.8.20 that contained a few fixes.
 
