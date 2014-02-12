@@ -102,6 +102,22 @@ var getComponents = avow(function(fulfill, reject, componentsJson){
     fulfill(components);
 });
 
+var flattenBowerDep = function(bower_data){
+  var result = {};
+  var flatten = function(data){
+    Object.keys(data||{}).forEach(function(key){
+      if(!result[key]){
+        result[key] = data[key];
+        if(data[key].dependencies){
+          flatten(data[key].dependencies);
+        }
+      }
+    });
+  };
+  flatten(bower_data.dependencies);
+  return result;
+}
+
 module.exports = {
   avow: avow,
   err: err,
@@ -111,5 +127,6 @@ module.exports = {
   staticPage: staticPage,
   getJSON: getJSON,
   getComponents: getComponents,
-  getBowerComponents: getBowerComponents
+  getBowerComponents: getBowerComponents,
+  flattenBowerDependencies: flattenBowerDep
 };

@@ -1,4 +1,5 @@
-var path = require('path');
+var path = require('path'),
+  tools = require('../build/statictools');
 
 module.exports = function(grunt){
 
@@ -17,7 +18,7 @@ module.exports = function(grunt){
 
           var bower_data = JSON.parse(result.stdout),
             gitCloneOptions = {},
-            dependencies = bower_data.dependencies,
+            dependencies = tools.flattenBowerDependencies(bower_data),
             dKeys = Object.keys(dependencies);
 
           grunt.log.write().ok();
