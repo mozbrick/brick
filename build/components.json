@@ -6,6 +6,5 @@
   "layout": "x-tag-layout",
   "slider": "x-tag-slider",
   "tabbar": "x-tag-tabbar",
-  "toggle": "x-tag-toggle",
-  "modal": "x-tag-modal"
+  "toggle": "x-tag-toggle"
 }
