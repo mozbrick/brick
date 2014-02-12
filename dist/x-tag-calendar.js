@@ -10,10 +10,7 @@
     };
     function normalize(localDate) {
         var normalizedDate = new Date(localDate.valueOf());
-        normalizedDate.setHours(0);
-        normalizedDate.setMinutes(0);
-        normalizedDate.setSeconds(0);
-        normalizedDate.setMilliseconds(0);
+        normalizedDate.setHours(0,0,0,0);
         return normalizedDate;
     }
     var TODAY = normalize(new Date());
