@@ -7,7 +7,7 @@ node_js:
 notifications:
   irc:
     channels:
-      - "irc.mozilla.org#bots"
+      - "irc.mozilla.org#brick"
     on_success: always
     on_failure: always
     use_notice: true
