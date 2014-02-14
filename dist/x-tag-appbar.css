@@ -71,7 +71,7 @@ x-appbar > button:hover {
   background-color: #00405d;
 }
 x-appbar > button::-moz-focus-inner {
-  bordr: 0;
+  border: 0;
   padding: 0;
 }
 x-appbar > header:after {

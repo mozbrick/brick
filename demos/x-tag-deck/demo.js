@@ -6,8 +6,7 @@ function updateDemoSect(demoSect, isInit){
     var deck = getDeck(demoSect);
     var markupEl = DemoHelpers.getMarkupEl(demoSect, "html");
 
-    var ignoreAttrs = ["style","card-anim-type","_before-animation",
-                        "reverse","selected","leaving", "class"];
+    var ignoreAttrs = ["style", "reverse","selected","hide", "class"];
     // to indicate that initializing selected-index is not required
     if(isInit) ignoreAttrs.push("selected-index");
 
@@ -26,13 +25,13 @@ function initShuffleButtons(){
         var demoSect = DemoHelpers.controlButtonToDemoSect(button);
         var deck = getDeck(demoSect);
         if(xtag.hasClass(button, "forward")){
-            deck.shufflePrev("forward");
+            deck.previousCard("forward");
         }
         else if(xtag.hasClass(button, "reverse")){
-            deck.shufflePrev("reverse");
+            deck.previousCard("reverse");
         }
         else{
-            deck.shufflePrev();
+            deck.previousCard();
         }
     });
 
@@ -43,18 +42,18 @@ function initShuffleButtons(){
         var deck = getDeck(demoSect);
 
         if(xtag.hasClass(button, "forward")){
-            deck.shuffleNext("forward");
+            deck.nextCard("forward");
         }
         else if(xtag.hasClass(button, "reverse")){
-            deck.shuffleNext("reverse");
+            deck.nextCard("reverse");
         }
         else{
-            deck.shuffleNext();
+            deck.nextCard();
         }
     });
 
     // set up global shuffle to handlers
-    xtag.addEvent(document, "click:delegate("+DemoHelpers.BUTTON_SELECTOR+".shuffleto)", function(e){
+    xtag.addEvent(document, "click:delegate("+DemoHelpers.BUTTON_SELECTOR+".showCard)", function(e){
         var button = this;
         var demoSect = DemoHelpers.controlButtonToDemoSect(button);
         var deck = getDeck(demoSect);
@@ -63,13 +62,13 @@ function initShuffleButtons(){
         target = parseInt(target);
 
         if(xtag.hasClass(button, "forward")){
-            deck.shuffleTo(target, "forward");
+            deck.showCard(target, "forward");
         }
         else if(xtag.hasClass(button, "reverse")){
-            deck.shuffleTo(target, "reverse");
+            deck.showCard(target, "reverse");
         }
         else{
-            deck.shuffleTo(target);
+            deck.showCard(target);
         }
     });
 }
@@ -81,14 +80,14 @@ function initCardAddRemoveButtons(){
         var deck = getDeck(demoSect);
 
         // deck.numCards retrieves the number of cards currently in the deck
-        var newIndex = deck.numCards;
+        var newIndex = deck.cards.length;
         var newCard = document.createElement("x-card");
         newCard.style.backgroundColor = DemoHelpers.randomColor();
         newCard.textContent = newIndex;
         deck.appendChild(newCard);
         if(!button.hasAttribute("noshuffle")){
             // for demo, shuffle to newly inserted card
-            deck.shuffleTo(newIndex);
+            deck.showCard(newIndex);
         }
     });
 
@@ -96,10 +95,11 @@ function initCardAddRemoveButtons(){
         var button = this;
         var demoSect = DemoHelpers.controlButtonToDemoSect(button);;
         var deck = getDeck(demoSect);
-
-        if(deck.numCards > 0){
+		var cards = deck.cards;
+		var length = cards.length;
+        if(length > 0){
             // deck.getCardAt retrieves the <x-card> at the given index
-            var lastCard = deck.getCardAt(deck.numCards-1);
+            var lastCard = cards[length-1];
             deck.removeChild(lastCard);            
         }
     });
@@ -112,7 +112,7 @@ function initRandomCardColors(){
 }
 
 function getInitEventCounter(eventDemo){
-    var keys = ["shufflestart", "shuffleend", "cardadd", "cardremove"];
+    var keys = ["show", "hide"];
     return new DemoHelpers.EventCounter(keys);
 }
 
@@ -139,7 +139,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
             e.detail && e.detail.toggleProp === "transitionType")
         {
             var deck = demoSect.querySelector("x-deck");
-            deck.shuffleNext("forward");
+            deck.nextCard("forward");
         }
     });
 
@@ -148,5 +148,5 @@ document.addEventListener('DOMComponentsLoaded', function(){
     initShuffleButtons();
     initCardAddRemoveButtons();
     initRandomCardColors();
-    DemoHelpers.registerUpdateListeners(["shufflestart", "shuffleend", "cardadd", "cardremove"]);
+    DemoHelpers.registerUpdateListeners(["show", "hide"]);
 });

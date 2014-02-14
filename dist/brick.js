@@ -2824,505 +2824,188 @@ if (typeof WeakMap === "undefined") {
 })();
 
 (function() {
-    var BEFORE_ANIM_ATTR = "_before-animation";
-    function HistoryStack(validatorFn, itemCap) {
-        this._historyStack = [];
-        this.currIndex = -1;
-        this._itemCap = undefined;
-        this.itemCap = itemCap;
-        this._validatorFn = validatorFn ? validatorFn : function() {
-            return true;
-        };
+    var matchNum = /[1-9]/, replaceSpaces = / /g, captureTimes = /(\d|\d+?[.]?\d+?)(s|ms)(?!\w)/gi, transPre = "transition" in getComputedStyle(document.documentElement) ? "t" : xtag.prefix.js + "T", transDur = transPre + "ransitionDuration", transProp = transPre + "ransitionProperty", skipFrame = function(fn) {
+        xtag.requestFrame(function() {
+            xtag.requestFrame(fn);
+        });
+    }, ready = document.readyState == "complete" ? skipFrame(function() {
+        ready = false;
+    }) : xtag.addEvent(document, "readystatechange", function() {
+        if (document.readyState == "complete") {
+            skipFrame(function() {
+                ready = false;
+            });
+            xtag.removeEvent(document, "readystatechange", ready);
+        }
+    });
+    function getTransitions(node) {
+        node.__transitions__ = node.__transitions__ || {};
+        return node.__transitions__;
     }
-    var HISTORYSTACK_PROTOTYPE = HistoryStack.prototype;
-    HISTORYSTACK_PROTOTYPE.pushState = function(newState) {
-        if (this.canRedo) {
-            this._historyStack.splice(this.currIndex + 1, this._historyStack.length - (this.currIndex + 1));
-        }
-        this._historyStack.push(newState);
-        this.currIndex = this._historyStack.length - 1;
-        this.sanitizeStack();
-        if (this._itemCap !== "none" && this._historyStack.length > this._itemCap) {
-            var len = this._historyStack.length;
-            this._historyStack.splice(0, len - this._itemCap);
-            this.currIndex = this._historyStack.length - 1;
-        }
-    };
-    HISTORYSTACK_PROTOTYPE.sanitizeStack = function() {
-        var validatorFn = this._validatorFn;
-        var lastValidState;
-        var i = 0;
-        while (i < this._historyStack.length) {
-            var state = this._historyStack[i];
-            if (state !== lastValidState && validatorFn(state)) {
-                lastValidState = state;
-                i++;
-            } else {
-                this._historyStack.splice(i, 1);
-                if (i <= this.currIndex) {
-                    this.currIndex--;
-                }
-            }
-        }
-    };
-    HISTORYSTACK_PROTOTYPE.forwards = function() {
-        if (this.canRedo) {
-            this.currIndex++;
-        }
-        this.sanitizeStack();
-    };
-    HISTORYSTACK_PROTOTYPE.backwards = function() {
-        if (this.canUndo) {
-            this.currIndex--;
-        }
-        this.sanitizeStack();
-    };
-    Object.defineProperties(HISTORYSTACK_PROTOTYPE, {
-        DEFAULT_CAP: {
-            value: 10
-        },
-        itemCap: {
-            get: function() {
-                return this._itemCap;
-            },
-            set: function(newCap) {
-                if (newCap === undefined) {
-                    this._itemCap = this.DEFAULT_CAP;
-                } else if (newCap === "none") {
-                    this._itemCap = "none";
-                } else {
-                    var num = parseInt(newCap, 10);
-                    if (isNaN(newCap) || newCap <= 0) {
-                        throw "attempted to set invalid item cap: " + newCap;
-                    }
-                    this._itemCap = num;
-                }
-            }
-        },
-        canUndo: {
-            get: function() {
-                return this.currIndex > 0;
-            }
-        },
-        canRedo: {
-            get: function() {
-                return this.currIndex < this._historyStack.length - 1;
-            }
-        },
-        numStates: {
-            get: function() {
-                return this._historyStack.length;
-            }
-        },
-        currState: {
-            get: function() {
-                var index = this.currIndex;
-                if (0 <= index && index < this._historyStack.length) {
-                    return this._historyStack[index];
-                }
-                return null;
+    function startTransition(node, name, transitions) {
+        var style = getComputedStyle(node), after = transitions[name].after;
+        node.setAttribute("transition", name);
+        if (after && !style[transDur].match(matchNum)) after();
+    }
+    xtag.addEvents(document, {
+        transitionend: function(e) {
+            var node = e.target, name = node.getAttribute("transition");
+            if (name) {
+                var i = 0, max = 0, prop = null, style = getComputedStyle(node), transitions = getTransitions(node), props = style[transProp].replace(replaceSpaces, "").split(",");
+                style[transDur].replace(captureTimes, function(match, time, unit) {
+                    time = parseFloat(time) * (unit === "s" ? 1e3 : 1);
+                    if (time > max) prop = i, max = time;
+                    i++;
+                });
+                prop = props[prop];
+                if (!prop) throw new SyntaxError("No matching transition property found"); else if (e.propertyName == prop && transitions[name].after) transitions[name].after();
             }
         }
     });
-    function getDurationStr(elem) {
-        var style = window.getComputedStyle(elem);
-        var browserDurationName = xtag.prefix.js + "TransitionDuration";
-        if (style.transitionDuration) {
-            return style.transitionDuration;
-        } else {
-            return style[browserDurationName];
-        }
-    }
-    function durationStrToMs(str) {
-        if (typeof str !== typeof "") {
-            return 0;
-        }
-        var reg = /^(\d*\.?\d+)(m?s)$/;
-        var matchInfo = str.toLowerCase().match(reg);
-        if (matchInfo) {
-            var strVal = matchInfo[1];
-            var unit = matchInfo[2];
-            var val = parseFloat(strVal);
-            if (isNaN(val)) {
-                throw "value error";
-            }
-            if (unit === "s") {
-                return val * 1e3;
-            } else if (unit === "ms") {
-                return val;
-            } else {
-                throw "unit error";
-            }
-        } else {
-            return 0;
-        }
-    }
-    function posModulo(x, divisor) {
-        return (x % divisor + divisor) % divisor;
-    }
-    function _getAllCards(elem) {
-        return xtag.queryChildren(elem, "x-card");
-    }
-    function _getCardAt(deck, targetIndex) {
-        var cards = _getAllCards(deck);
-        return isNaN(parseInt(targetIndex, 10)) || targetIndex < 0 || targetIndex >= cards.length ? null : cards[targetIndex];
-    }
-    function _getCardIndex(deck, card) {
-        var allCards = _getAllCards(deck);
-        return allCards.indexOf(card);
-    }
-    function _animateCardReplacement(deck, oldCard, newCard, cardAnimName, isReverse) {
-        deck.xtag._selectedCard = newCard;
-        var animTimeStamp = new Date();
-        deck.xtag._lastAnimTimestamp = animTimeStamp;
-        var _onComplete = function() {
-            if (animTimeStamp === deck.xtag._lastAnimTimestamp) {
-                _sanitizeCardAttrs(deck);
-                xtag.fireEvent(deck, "shuffleend", {
-                    detail: {
-                        oldCard: oldCard,
-                        newCard: newCard
-                    }
-                });
-            }
-        };
-        if (newCard === oldCard) {
-            _onComplete();
-            return;
-        }
-        var oldCardAnimReady = false;
-        var newCardAnimReady = false;
-        var animationStarted = false;
-        var _attemptBeforeCallback = function() {
-            if (oldCardAnimReady && newCardAnimReady) {
-                _getAllCards(deck).forEach(function(card) {
-                    card.removeAttribute("selected");
-                    card.removeAttribute("leaving");
-                });
-                oldCard.setAttribute("leaving", true);
-                newCard.setAttribute("selected", true);
-                deck.xtag._selectedCard = newCard;
-                deck.selectedIndex = _getCardIndex(deck, newCard);
-                if (isReverse) {
-                    oldCard.setAttribute("reverse", true);
-                    newCard.setAttribute("reverse", true);
-                }
-                xtag.fireEvent(deck, "shufflestart", {
-                    detail: {
-                        oldCard: oldCard,
-                        newCard: newCard
-                    }
-                });
-            }
-        };
-        var _attemptAnimation = function() {
-            if (animationStarted) {
-                return;
-            }
-            if (!(oldCardAnimReady && newCardAnimReady)) {
-                return;
-            }
-            _doAnimation();
-        };
-        var _doAnimation = function() {
-            animationStarted = true;
-            var oldCardDone = false;
-            var newCardDone = false;
-            var animationComplete = false;
-            var onTransitionComplete = function(e) {
-                if (animationComplete) {
-                    return;
-                }
-                if (e.target === oldCard) {
-                    oldCardDone = true;
-                    oldCard.removeEventListener("transitionend", onTransitionComplete);
-                } else if (e.target === newCard) {
-                    newCardDone = true;
-                    newCard.removeEventListener("transitionend", onTransitionComplete);
-                }
-                if (oldCardDone && newCardDone) {
-                    animationComplete = true;
-                    _onComplete();
-                }
+    xtag.transition = function(node, name, obj) {
+        var transitions = getTransitions(node), options = transitions[name] = obj || {};
+        if (options.immediate) options.immediate();
+        if (options.before) {
+            options.before();
+            if (ready) xtag.skipTransition(node, function() {
+                startTransition(node, name, transitions);
+            }); else skipFrame(function() {
+                startTransition(node, name, transitions);
+            });
+        } else startTransition(node, name, transitions);
+    };
+    xtag.pseudos.transition = {
+        onCompiled: function(fn, pseudo) {
+            var options = {}, when = pseudo["arguments"][0] || "immediate", name = pseudo["arguments"][1] || pseudo.key.split(":")[0];
+            return function() {
+                var target = this, args = arguments;
+                if (this.hasAttribute("transition")) {
+                    options[when] = function() {
+                        return fn.apply(target, args);
+                    };
+                    xtag.transition(this, name, options);
+                } else return fn.apply(this, args);
             };
-            oldCard.addEventListener("transitionend", onTransitionComplete);
-            newCard.addEventListener("transitionend", onTransitionComplete);
-            var oldDuration = durationStrToMs(getDurationStr(oldCard));
-            var newDuration = durationStrToMs(getDurationStr(newCard));
-            var maxDuration = Math.max(oldDuration, newDuration);
-            var waitMultiplier = 1.15;
-            var timeoutDuration = cardAnimName.toLowerCase() === "none" ? 0 : Math.ceil(maxDuration * waitMultiplier);
-            if (timeoutDuration === 0) {
-                animationComplete = true;
-                oldCard.removeEventListener("transitionend", onTransitionComplete);
-                newCard.removeEventListener("transitionend", onTransitionComplete);
-                oldCard.removeAttribute(BEFORE_ANIM_ATTR);
-                newCard.removeAttribute(BEFORE_ANIM_ATTR);
-                _onComplete();
-            } else {
-                oldCard.removeAttribute(BEFORE_ANIM_ATTR);
-                newCard.removeAttribute(BEFORE_ANIM_ATTR);
-                window.setTimeout(function() {
-                    if (animationComplete) {
-                        return;
-                    }
-                    animationComplete = true;
-                    oldCard.removeEventListener("transitionend", onTransitionComplete);
-                    newCard.removeEventListener("transitionend", onTransitionComplete);
-                    _onComplete();
-                }, timeoutDuration);
-            }
-        };
-        xtag.skipTransition(oldCard, function() {
-            oldCard.setAttribute("card-anim-type", cardAnimName);
-            oldCard.setAttribute(BEFORE_ANIM_ATTR, true);
-            oldCardAnimReady = true;
-            _attemptBeforeCallback();
-            return _attemptAnimation;
-        }, this);
-        xtag.skipTransition(newCard, function() {
-            newCard.setAttribute("card-anim-type", cardAnimName);
-            newCard.setAttribute(BEFORE_ANIM_ATTR, true);
-            newCardAnimReady = true;
-            _attemptBeforeCallback();
-            return _attemptAnimation;
-        }, this);
-    }
-    function _replaceCurrCard(deck, newCard, transitionType, progressType, ignoreHistory) {
-        var oldCard = deck.xtag._selectedCard;
-        if (oldCard === newCard) {
-            var eDetail = {
-                detail: {
-                    oldCard: oldCard,
-                    newCard: newCard
-                }
-            };
-            xtag.fireEvent(deck, "shufflestart", eDetail);
-            xtag.fireEvent(deck, "shuffleend", eDetail);
-            return;
         }
-        _sanitizeCardAttrs(deck);
-        if (transitionType === undefined) {
-            transitionType = "none";
-        }
-        var isReverse;
-        switch (progressType) {
-          case "forward":
-            isReverse = false;
-            break;
+    };
+})();
 
-          case "reverse":
-            isReverse = true;
-            break;
-
-          default:
-            if (!oldCard) {
-                isReverse = false;
-            }
-            var allCards = _getAllCards(deck);
-            if (allCards.indexOf(newCard) < allCards.indexOf(oldCard)) {
-                isReverse = true;
-            } else {
-                isReverse = false;
-            }
-            break;
-        }
-        if (newCard.hasAttribute("transition-override")) {
-            transitionType = newCard.getAttribute("transition-override");
-        }
-        if (!ignoreHistory) {
-            deck.xtag.history.pushState(newCard);
-        }
-        _animateCardReplacement(deck, oldCard, newCard, transitionType, isReverse);
+(function() {
+    var sides = {
+        next: [ "nextElementSibling", "firstElementChild" ],
+        previous: [ "previousElementSibling", "lastElementChild" ]
+    };
+    function indexOfCard(deck, card) {
+        return Array.prototype.indexOf.call(deck.children, card);
     }
-    function _replaceWithIndex(deck, targetIndex, transitionType, progressType) {
-        var newCard = _getCardAt(deck, targetIndex);
-        if (!newCard) {
-            throw "no card at index " + targetIndex;
-        }
-        _replaceCurrCard(deck, newCard, transitionType, progressType);
+    function getCard(deck, item) {
+        return item && item.nodeName ? item : isNaN(item) ? xtag.queryChildren(deck, item) : deck.children[item];
     }
-    function _sanitizeCardAttrs(deck) {
-        if (!deck.xtag._initialized) {
-            return;
-        }
-        var cards = _getAllCards(deck);
-        var currCard = deck.xtag._selectedCard;
-        if (!currCard || currCard.parentNode !== deck) {
-            if (cards.length > 0) {
-                if (deck.xtag.history && deck.xtag.history.numStates > 0) {
-                    currCard = deck.xtag.history.currState;
-                } else {
-                    currCard = cards[0];
-                }
-            } else {
-                currCard = null;
-            }
-        }
-        cards.forEach(function(card) {
-            card.removeAttribute("leaving");
-            card.removeAttribute(BEFORE_ANIM_ATTR);
-            card.removeAttribute("card-anim-type");
-            card.removeAttribute("reverse");
-            if (card !== currCard) {
-                card.removeAttribute("selected");
-            } else {
-                card.setAttribute("selected", true);
-            }
-        });
-        deck.xtag._selectedCard = currCard;
-        deck.selectedIndex = _getCardIndex(deck, currCard);
+    function checkCard(deck, card, selected) {
+        return card && (selected ? card == deck.xtag.selected : card != deck.xtag.selected) && deck == card.parentNode && card.nodeName == "X-CARD";
+    }
+    function shuffle(deck, side, direction) {
+        var getters = sides[side], selected = deck.xtag.selected && deck.xtag.selected[getters[0]];
+        if (selected) deck.showCard(selected, direction); else if (deck.loop || deck.selectedIndex == -1) deck.showCard(deck[getters[1]], direction);
     }
     xtag.register("x-deck", {
-        lifecycle: {
-            created: function() {
-                var self = this;
-                self.xtag._initialized = true;
-                var _historyValidator = function(card) {
-                    return card.parentNode === self;
-                };
-                self.xtag.history = new HistoryStack(_historyValidator, HistoryStack.DEFAULT_CAP);
-                self.xtag._selectedCard = self.xtag._selectedCard ? self.xtag._selectedCard : null;
-                self.xtag._lastAnimTimestamp = null;
-                self.xtag.transitionType = "scrollLeft";
-                var initCard = self.getCardAt(self.getAttribute("selected-index"));
-                if (initCard) {
-                    self.xtag._selectedCard = initCard;
-                }
-                _sanitizeCardAttrs(self);
-                var currCard = self.xtag._selectedCard;
-                if (currCard) {
-                    self.xtag.history.pushState(currCard);
-                }
-            }
-        },
         events: {
-            "show:delegate(x-card)": function() {
-                var card = this;
-                card.show();
+            "reveal:delegate(x-card)": function(e) {
+                if (this.parentNode == e.currentTarget) e.currentTarget.showCard(this);
             }
         },
         accessors: {
+            loop: {
+                attribute: {
+                    "boolean": true
+                }
+            },
+            cards: {
+                get: function() {
+                    return xtag.queryChildren(this, "x-card");
+                }
+            },
+            selectedCard: {
+                get: function() {
+                    return this.xtag.selected || null;
+                },
+                set: function(card) {
+                    this.showCard(card);
+                }
+            },
+            selectedIndex: {
+                attribute: {
+                    name: "selected-index",
+                    unlink: true
+                },
+                get: function() {
+                    return this.hasAttribute("selected-index") ? Number(this.getAttribute("selected-index")) : -1;
+                },
+                set: function(value) {
+                    var index = Number(value), card = this.cards[index];
+                    if (card) {
+                        this.setAttribute("selected-index", index);
+                        if (card != this.xtag.selected) this.showCard(card);
+                    } else {
+                        this.removeAttribute("selected-index");
+                        if (this.xtag.selected) this.hideCard(this.xtag.selected);
+                    }
+                }
+            },
             transitionType: {
                 attribute: {
                     name: "transition-type"
                 },
                 get: function() {
-                    return this.xtag.transitionType;
-                },
-                set: function(newType) {
-                    this.xtag.transitionType = newType;
-                }
-            },
-            selectedIndex: {
-                attribute: {
-                    skip: true,
-                    name: "selected-index"
-                },
-                get: function() {
-                    return _getCardIndex(this, this.xtag._selectedCard);
-                },
-                set: function(newIndex) {
-                    if (this.selectedIndex !== newIndex) {
-                        _replaceWithIndex(this, newIndex, "none");
-                    }
-                    this.setAttribute("selected-index", newIndex);
-                }
-            },
-            historyCap: {
-                attribute: {
-                    name: "history-cap"
-                },
-                get: function() {
-                    return this.xtag.history.itemCap;
-                },
-                set: function(itemCap) {
-                    this.xtag.history.itemCap = itemCap;
-                }
-            },
-            numCards: {
-                get: function() {
-                    return this.getAllCards().length;
-                }
-            },
-            currHistorySize: {
-                get: function() {
-                    return this.xtag.history.numStates;
-                }
-            },
-            currHistoryIndex: {
-                get: function() {
-                    return this.xtag.history.currIndex;
-                }
-            },
-            cards: {
-                get: function() {
-                    return this.getAllCards();
-                }
-            },
-            selectedCard: {
-                get: function() {
-                    return this.getSelectedCard();
+                    return this.getAttribute("transition-type") || "fade-scale";
                 }
             }
         },
         methods: {
-            shuffleTo: function(index, progressType) {
-                var targetCard = _getCardAt(this, index);
-                if (!targetCard) {
-                    throw "invalid shuffleTo index " + index;
-                }
-                var transitionType = this.xtag.transitionType;
-                _replaceWithIndex(this, index, transitionType, progressType);
+            nextCard: function(direction) {
+                shuffle(this, "next", direction);
             },
-            shuffleNext: function(progressType) {
-                progressType = progressType ? progressType : "auto";
-                var cards = _getAllCards(this);
-                var currCard = this.xtag._selectedCard;
-                var currIndex = cards.indexOf(currCard);
-                if (currIndex > -1) {
-                    this.shuffleTo(posModulo(currIndex + 1, cards.length), progressType);
-                }
+            previousCard: function(direction) {
+                shuffle(this, "previous", direction);
             },
-            shufflePrev: function(progressType) {
-                progressType = progressType ? progressType : "auto";
-                var cards = _getAllCards(this);
-                var currCard = this.xtag._selectedCard;
-                var currIndex = cards.indexOf(currCard);
-                if (currIndex > -1) {
-                    this.shuffleTo(posModulo(currIndex - 1, cards.length), progressType);
-                }
-            },
-            getAllCards: function() {
-                return _getAllCards(this);
-            },
-            getSelectedCard: function() {
-                return this.xtag._selectedCard;
-            },
-            getCardIndex: function(card) {
-                return _getCardIndex(this, card);
-            },
-            getCardAt: function(index) {
-                return _getCardAt(this, index);
-            },
-            historyBack: function(progressType) {
-                var history = this.xtag.history;
-                if (history.canUndo) {
-                    history.backwards();
-                    var newCard = history.currState;
-                    if (newCard) {
-                        _replaceCurrCard(this, newCard, this.transitionType, progressType, true);
-                    }
+            showCard: function(item, direction) {
+                var card = getCard(this, item);
+                if (checkCard(this, card, false)) {
+                    var selected = this.xtag.selected, nextIndex = indexOfCard(this, card);
+                    direction = direction || (nextIndex > indexOfCard(this, selected) ? "forward" : "reverse");
+                    if (selected) this.hideCard(selected, direction);
+                    this.xtag.selected = card;
+                    this.selectedIndex = nextIndex;
+                    if (!card.hasAttribute("selected")) card.selected = true;
+                    xtag.transition(card, "show", {
+                        before: function() {
+                            card.setAttribute("show", "");
+                            card.setAttribute("transition-direction", direction);
+                        },
+                        after: function() {
+                            xtag.fireEvent(card, "show");
+                        }
+                    });
                 }
             },
-            historyForward: function(progressType) {
-                var history = this.xtag.history;
-                if (history.canRedo) {
-                    history.forwards();
-                    var newCard = history.currState;
-                    if (newCard) {
-                        _replaceCurrCard(this, newCard, this.transitionType, progressType, true);
-                    }
+            hideCard: function(item, direction) {
+                var card = getCard(this, item);
+                if (checkCard(this, card, true)) {
+                    this.xtag.selected = null;
+                    if (card.hasAttribute("selected")) card.selected = false;
+                    xtag.transition(card, "hide", {
+                        before: function() {
+                            card.removeAttribute("show");
+                            card.setAttribute("hide", "");
+                            card.setAttribute("transition-direction", direction || "reverse");
+                        },
+                        after: function() {
+                            card.removeAttribute("hide");
+                            card.removeAttribute("transition");
+                            card.removeAttribute("transition-direction");
+                            xtag.fireEvent(card, "hide");
+                        }
+                    });
                 }
             }
         }
@@ -3330,53 +3013,38 @@ if (typeof WeakMap === "undefined") {
     xtag.register("x-card", {
         lifecycle: {
             inserted: function() {
-                var self = this;
-                var deckContainer = self.parentNode;
-                if (deckContainer) {
-                    if (deckContainer.tagName.toLowerCase() === "x-deck") {
-                        _sanitizeCardAttrs(deckContainer);
-                        self.xtag.parentDeck = deckContainer;
-                        xtag.fireEvent(deckContainer, "cardadd", {
-                            detail: {
-                                card: self
-                            }
-                        });
-                    }
-                }
-            },
-            created: function() {
-                var deckContainer = this.parentNode;
-                if (deckContainer && deckContainer.tagName.toLowerCase() === "x-deck") {
-                    this.xtag.parentDeck = deckContainer;
+                var deck = this.parentNode;
+                if (deck.nodeName == "X-DECK") {
+                    this.xtag.deck = deck;
+                    if (this != deck.selected && this.selected) deck.showCard(this);
                 }
             },
             removed: function() {
-                var self = this;
-                if (!self.xtag.parentDeck) {
-                    return;
+                var deck = this.xtag.deck;
+                if (deck) {
+                    if (this == deck.xtag.selected) {
+                        deck.xtag.selected = null;
+                        deck.removeAttribute("selected-index");
+                    } else deck.showCard(deck.selectedCard);
+                    this.xtag.deck = null;
                 }
-                var deck = self.xtag.parentDeck;
-                deck.xtag.history.sanitizeStack();
-                _sanitizeCardAttrs(deck);
-                xtag.fireEvent(deck, "cardremove", {
-                    detail: {
-                        card: self
-                    }
-                });
             }
         },
         accessors: {
-            transitionOverride: {
+            transitionType: {
                 attribute: {
-                    name: "transition-override"
+                    name: "transition-type"
                 }
-            }
-        },
-        methods: {
-            show: function() {
-                var deck = this.parentNode;
-                if (deck === this.xtag.parentDeck) {
-                    deck.shuffleTo(deck.getCardIndex(this));
+            },
+            selected: {
+                attribute: {
+                    "boolean": true
+                },
+                set: function(val) {
+                    var deck = this.xtag.deck;
+                    if (deck) {
+                        if (val && this != deck.selected) deck.showCard(this); else if (!val && this == deck.selected) deck.hideCard(this);
+                    }
                 }
             }
         }
@@ -3609,118 +3277,6 @@ if (typeof WeakMap === "undefined") {
 })();
 
 (function() {
-    var transform = xtag.prefix.js + "Transform";
-    function getState(el) {
-        var selected = xtag.query(el, "x-slides > x-slide[selected]")[0] || 0;
-        return [ selected ? xtag.query(el, "x-slides > x-slide").indexOf(selected) : selected, el.firstElementChild.children.length - 1 ];
-    }
-    function slide(el, index) {
-        var slides = xtag.toArray(el.firstElementChild.children);
-        slides.forEach(function(slide) {
-            slide.removeAttribute("selected");
-        });
-        slides[index || 0].setAttribute("selected", true);
-        var translate = "translate" + (el.getAttribute("orientation") || "x") + "(" + (index || 0) * (-100 / slides.length) + "%)";
-        el.firstElementChild.style[transform] = translate;
-        el.firstElementChild.style.transform = translate;
-    }
-    function init(toSelected) {
-        var slides = this.firstElementChild;
-        if (!slides || !slides.children.length || slides.tagName.toLowerCase() != "x-slides") {
-            return;
-        }
-        var children = xtag.toArray(slides.children);
-        var size = 100 / (children.length || 1);
-        var orient = this.getAttribute("orientation") || "x";
-        var style = orient == "x" ? [ "width", "height" ] : [ "height", "width" ];
-        slides.style[style[1]] = "100%";
-        slides.style[style[0]] = children.length * 100 + "%";
-        slides.style[transform] = "translate" + orient + "(0%)";
-        slides.style.transform = "translate" + orient + "(0%)";
-        children.forEach(function(slide) {
-            slide.style[style[0]] = size + "%";
-            slide.style[style[1]] = "100%";
-        });
-        if (toSelected) {
-            var selected = slides.querySelector("[selected]");
-            if (selected) {
-                slide(this, children.indexOf(selected) || 0);
-            }
-        }
-    }
-    xtag.register("x-slidebox", {
-        lifecycle: {
-            created: function() {
-                init();
-            }
-        },
-        events: {
-            transitionend: function(e) {
-                if (e.target == this.firstElementChild) {
-                    xtag.fireEvent(this, "slideend");
-                }
-            },
-            "reveal:delegate(x-slidebox > x-slides > x-slide)": function(e) {
-                var slide = e.target;
-                if (e.target.parentNode.parentNode == e.currentTarget) {
-                    var slideWrap = slide.parentNode;
-                    var box = slideWrap.parentNode;
-                    var slides = xtag.query(slideWrap, "x-slide");
-                    box.slideTo(slides.indexOf(slide));
-                }
-            }
-        },
-        accessors: {
-            orientation: {
-                get: function() {
-                    return this.getAttribute("orientation");
-                },
-                set: function(value) {
-                    var slidebox = this;
-                    xtag.skipTransition(slidebox.firstElementChild, function() {
-                        slidebox.setAttribute("orientation", value.toLowerCase());
-                        init.call(slidebox, true);
-                    });
-                }
-            }
-        },
-        methods: {
-            slideTo: function(index) {
-                slide(this, index);
-            },
-            slideNext: function() {
-                var shift = getState(this);
-                shift[0]++;
-                slide(this, shift[0] > shift[1] ? 0 : shift[0]);
-            },
-            slidePrevious: function() {
-                var shift = getState(this);
-                shift[0]--;
-                slide(this, shift[0] < 0 ? shift[1] : shift[0]);
-            }
-        }
-    });
-    xtag.register("x-slide", {
-        lifecycle: {
-            inserted: function() {
-                var ancestor = this.parentNode.parentNode;
-                if (ancestor.tagName.toLowerCase() == "x-slidebox") {
-                    init.call(ancestor, true);
-                }
-            },
-            created: function() {
-                if (this.parentNode) {
-                    var ancestor = this.parentNode.parentNode;
-                    if (ancestor.tagName.toLowerCase() == "x-slidebox") {
-                        init.call(ancestor, true);
-                    }
-                }
-            }
-        }
-    });
-})();
-
-(function() {
     var KEYCODES = {
         33: "PAGE_UP",
         34: "PAGE_DOWN",
@@ -3779,7 +3335,7 @@ if (typeof WeakMap === "undefined") {
         return constrainToSteppedRange(roundedVal, slider.min, slider.max, slider.step);
     }
     function _positionThumb(slider, value) {
-        var thumb = slider.xtag.polyFillSliderThumb;
+        var thumb = slider.xtag.sliderThumb;
         if (!thumb) {
             return;
         }
@@ -3794,6 +3350,7 @@ if (typeof WeakMap === "undefined") {
         var finalPercentage = newThumbX / sliderWidth;
         thumb.style[vertical ? "left" : "top"] = 0;
         thumb.style[vertical ? "top" : "left"] = finalPercentage * 100 + "%";
+        slider.xtag.sliderProgress.style[vertical ? "height" : "width"] = fraction * 100 + "%";
     }
     function _redraw(slider) {
         _positionThumb(slider, slider.value);
@@ -3801,8 +3358,9 @@ if (typeof WeakMap === "undefined") {
     function _onMouseInput(slider, pageX, pageY) {
         var inputEl = slider.xtag.rangeInputEl;
         var inputOffsets = inputEl.getBoundingClientRect();
-        var inputClickX = pageX - inputOffsets.left;
-        var divideby = inputOffsets.width;
+        var thumbWidth = slider.xtag.sliderThumb.getBoundingClientRect().width;
+        var inputClickX = pageX - inputOffsets.left - thumbWidth / 2;
+        var divideby = inputOffsets.width - thumbWidth / 2;
         if (slider.vertical) {
             divideby = inputOffsets.height;
             inputClickX = pageY - inputOffsets.top;
@@ -3822,7 +3380,7 @@ if (typeof WeakMap === "undefined") {
         _addBodyListener("touchmove", callbacks.onTouchDragMove);
         _addBodyListener("mouseup", callbacks.onDragEnd);
         _addBodyListener("touchend", callbacks.onDragEnd);
-        var thumb = slider.xtag.polyFillSliderThumb;
+        var thumb = slider.xtag.sliderThumb;
         if (thumb) {
             thumb.setAttribute("active", true);
         }
@@ -3868,7 +3426,7 @@ if (typeof WeakMap === "undefined") {
                 _removeBodyListener("touchmove", callbacks.onTouchDragMove);
                 _removeBodyListener("mouseup", callbacks.onDragEnd);
                 _removeBodyListener("touchend", callbacks.onDragEnd);
-                var thumb = slider.xtag.polyFillSliderThumb;
+                var thumb = slider.xtag.sliderThumb;
                 if (thumb) {
                     thumb.removeAttribute("active");
                 }
@@ -3945,16 +3503,40 @@ if (typeof WeakMap === "undefined") {
                 input.setAttribute("value", initVal);
                 self.xtag.rangeInputEl = input;
                 self.appendChild(self.xtag.rangeInputEl);
-                self.xtag.polyFillSliderThumb = null;
+                var sliderTrack = document.createElement("div");
+                xtag.addClass(sliderTrack, "slider-track");
+                this.xtag.sliderTrack = sliderTrack;
+                this.appendChild(sliderTrack);
+                var sliderProgress = document.createElement("div");
+                xtag.addClass(sliderProgress, "slider-progress");
+                this.xtag.sliderProgress = sliderProgress;
+                sliderTrack.appendChild(sliderProgress);
+                var sliderThumb = document.createElement("span");
+                xtag.addClass(sliderThumb, "slider-thumb");
+                this.xtag.sliderThumb = sliderThumb;
+                this.appendChild(sliderThumb);
                 if (input.type !== "range" || self.hasAttribute("polyfill")) {
                     self.setAttribute("polyfill", true);
                 } else {
                     self.removeAttribute("polyfill");
                 }
-                _redraw(self);
+                this.addEventListener("mousedown", self.xtag.callbackFns.onMouseDragStart);
+                this.addEventListener("touchstart", self.xtag.callbackFns.onTouchDragStart);
+                this.addEventListener("keydown", self.xtag.callbackFns.onKeyDown);
+                self.setAttribute("value", initVal);
             },
-            attributeChanged: function() {
-                _redraw(this);
+            inserted: function() {
+                var self = this;
+                xtag.requestFrame(function() {
+                    xtag.requestFrame(function() {
+                        _redraw(self);
+                    });
+                });
+            },
+            attributeChanged: function(property) {
+                if (property == "min" || property == "max" || property == "step") {
+                    _redraw(this);
+                }
             }
         },
         events: {
@@ -3990,29 +3572,11 @@ if (typeof WeakMap === "undefined") {
                         this.setAttribute("tabindex", 0);
                         this.xtag.rangeInputEl.setAttribute("tabindex", -1);
                         this.xtag.rangeInputEl.setAttribute("readonly", true);
-                        if (!this.xtag.polyFillSliderTrack) {
-                            var sliderTrack = document.createElement("div");
-                            xtag.addClass(sliderTrack, "slider-track");
-                            this.xtag.polyFillSliderTrack = sliderTrack;
-                            this.appendChild(sliderTrack);
-                        }
-                        if (!this.xtag.polyFillSliderThumb) {
-                            var sliderThumb = document.createElement("span");
-                            xtag.addClass(sliderThumb, "slider-thumb");
-                            this.xtag.polyFillSliderThumb = sliderThumb;
-                            this.appendChild(sliderThumb);
-                        }
                         _redraw(this);
-                        this.addEventListener("mousedown", callbackFns.onMouseDragStart);
-                        this.addEventListener("touchstart", callbackFns.onTouchDragStart);
-                        this.addEventListener("keydown", callbackFns.onKeyDown);
                     } else {
                         this.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("readonly");
-                        this.removeEventListener("mousedown", callbackFns.onMouseDragStart);
-                        this.removeEventListener("touchstart", callbackFns.onTouchDragStart);
-                        this.removeEventListener("keydown", callbackFns.onKeyDown);
                     }
                 }
             },
@@ -4125,7 +3689,7 @@ if (typeof WeakMap === "undefined") {
     xtag.register("x-tabbar", {
         lifecycle: {
             created: function() {
-                this.xtag.overallEventToFire = "show";
+                this.xtag.overallEventToFire = "reveal";
             }
         },
         events: {
@@ -4244,12 +3808,8 @@ if (typeof WeakMap === "undefined") {
 
 (function() {
     function setScope(toggle) {
-        var form = toggle.xtag.inputEl.form;
-        if (form) {
-            toggle.removeAttribute("x-toggle-no-form");
-        } else {
-            toggle.setAttribute("x-toggle-no-form", "");
-        }
+        var form = toggle.xtag.input.form;
+        if (form) toggle.removeAttribute("x-toggle-no-form"); else toggle.setAttribute("x-toggle-no-form", "");
         toggle.xtag.scope = toggle.parentNode ? form || document : null;
     }
     function updateScope(scope) {
@@ -4261,13 +3821,42 @@ if (typeof WeakMap === "undefined") {
                 var named = xtag.query(scope, 'x-toggle[name="' + name + '"]' + docSelector);
                 var type = named.length > 1 ? "radio" : "checkbox";
                 named.forEach(function(toggle) {
-                    if (toggle.xtag && toggle.xtag.inputEl) {
+                    if (toggle.xtag && toggle.xtag.input) {
                         toggle.type = type;
                     }
                 });
                 names[name] = true;
             }
         });
+    }
+    function toggleGroup(toggle) {
+        if (shifted && toggle.group && toggle.type != "radio") {
+            var toggles = toggle.groupToggles;
+            var selector = 'x-toggle[group="' + toggle.group + '"][active]';
+            var active = toggle.xtag.scope.querySelector(selector);
+            if (active && toggle != active) {
+                toggle.checked = active.checked;
+                var state = active.checked;
+                var index = toggles.indexOf(toggle);
+                var activeIndex = toggles.indexOf(active);
+                var minIndex = Math.min(index, activeIndex);
+                var maxIndex = Math.max(index, activeIndex);
+                toggles.slice(minIndex, maxIndex + 1).forEach(function(toggle) {
+                    if (toggle != active) toggle.checked = state;
+                });
+                return true;
+            }
+        }
+    }
+    function activateToggle(toggle) {
+        if (inTogglebar(toggle)) return;
+        toggle.groupToggles.forEach(function(node) {
+            node.active = false;
+        });
+        toggle.active = true;
+    }
+    function inTogglebar(toggle) {
+        return toggle.parentNode && toggle.parentNode.nodeName == "X-TOGGLEBAR";
     }
     var shifted = false;
     xtag.addEvents(document, {
@@ -4285,62 +3874,41 @@ if (typeof WeakMap === "undefined") {
         keyup: function(e) {
             shifted = e.shiftKey;
         },
-        "focus:delegate(x-toggle)": function() {
-            this.setAttribute("focus", "");
+        "focus:delegate(x-toggle)": function(e) {
+            this.focus = true;
+            this.xtag.input.focus();
         },
-        "blur:delegate(x-toggle)": function() {
-            this.removeAttribute("focus");
+        "blur:delegate(x-toggle)": function(e) {
+            this.focus = false;
         },
-        "tap:delegate(x-toggle)": function() {
-            if (shifted && this.group) {
-                var toggles = this.groupToggles;
-                var selector = 'x-toggle[group="' + this.group + '"][active]';
-                var active = this.xtag.scope.querySelector(selector);
-                if (active && this != active) {
-                    var self = this;
-                    var state = active.checked;
-                    var index = toggles.indexOf(this);
-                    var activeIndex = toggles.indexOf(active);
-                    var minIndex = Math.min(index, activeIndex);
-                    var maxIndex = Math.max(index, activeIndex);
-                    toggles.slice(minIndex, maxIndex).forEach(function(toggler) {
-                        if (toggler != self) {
-                            toggler.checked = state;
-                        }
-                    });
-                }
+        "tap:delegate(x-toggle)": function(e) {
+            var input = this.xtag.input;
+            if (input.type == "radio" ? !this.checked : true) {
+                input.checked = !input.checked;
+                var change = document.createEvent("Event");
+                change.initEvent("change", true, false);
+                input.dispatchEvent(change);
             }
+            input.focus();
         },
-        "change:delegate(x-toggle)": function() {
-            var selector = 'x-toggle[group="' + this.group + '"][active]';
-            var active = this.xtag.scope.querySelector(selector);
-            if (shifted && active && this != active) {
-                this.checked = active.checked;
-            } else {
-                this.checked = this.xtag.inputEl.checked;
-            }
-            if (this.group) {
-                this.groupToggles.forEach(function(toggle) {
-                    toggle.active = false;
-                });
-                this.active = true;
-            }
+        "change:delegate(x-toggle)": function(e) {
+            this.xtag.input.focus();
+            if (inTogglebar(this) || !toggleGroup(this) && this.type != "radio") this.checked = this.xtag.input.checked;
+            activateToggle(this);
         }
     });
+    var template = xtag.createFragment('<input /><div class="x-toggle-check"></div>');
     xtag.register("x-toggle", {
         lifecycle: {
             created: function() {
-                this.innerHTML = '<label class="x-toggle-input-wrap">' + '<input type="checkbox"></input>' + "</label>" + '<div class="x-toggle-check"></div>' + '<div class="x-toggle-content"></div>';
-                this.xtag.inputWrapEl = this.querySelector(".x-toggle-input-wrap");
-                this.xtag.inputEl = this.xtag.inputWrapEl.querySelector("input");
-                this.xtag.contentWrapEl = this.querySelector(".x-toggle-content-wrap");
+                this.appendChild(template.cloneNode(true));
+                this.xtag.input = this.querySelector("input");
                 this.xtag.checkEl = this.querySelector(".x-toggle-check");
-                this.xtag.contentEl = this.querySelector(".x-toggle-content");
                 this.type = "checkbox";
                 setScope(this);
                 var name = this.getAttribute("name");
                 if (name) {
-                    this.xtag.inputEl.name = this.getAttribute("name");
+                    this.xtag.input.name = this.getAttribute("name");
                 }
                 if (this.hasAttribute("checked")) {
                     this.checked = true;
@@ -4348,15 +3916,6 @@ if (typeof WeakMap === "undefined") {
             },
             inserted: function() {
                 setScope(this);
-                if (this.parentNode && this.parentNode.nodeName.toLowerCase() === "x-togglegroup") {
-                    if (this.parentNode.hasAttribute("name")) {
-                        this.name = this.parentNode.getAttribute("name");
-                    }
-                    if (this.parentNode.hasAttribute("group")) {
-                        this.group = this.parentNode.getAttribute("group");
-                    }
-                    this.setAttribute("no-box", true);
-                }
                 if (this.name) {
                     updateScope(this.xtag.scope);
                 }
@@ -4371,22 +3930,20 @@ if (typeof WeakMap === "undefined") {
                 attribute: {
                     name: "no-box",
                     "boolean": true
-                },
-                set: function() {}
+                }
             },
             type: {
                 attribute: {},
-                set: function(newType) {
-                    this.xtag.inputEl.type = newType;
+                set: function(type) {
+                    this.xtag.input.type = type;
                 }
             },
             label: {
-                attribute: {},
-                get: function() {
-                    return this.xtag.contentEl.innerHTML;
-                },
-                set: function(newLabelContent) {
-                    this.xtag.contentEl.innerHTML = newLabelContent;
+                attribute: {}
+            },
+            focus: {
+                attribute: {
+                    "boolean": true
                 }
             },
             active: {
@@ -4406,9 +3963,6 @@ if (typeof WeakMap === "undefined") {
                 attribute: {
                     skip: true
                 },
-                get: function() {
-                    return this.getAttribute("name");
-                },
                 set: function(name) {
                     if (name === null) {
                         this.removeAttribute("name");
@@ -4416,13 +3970,13 @@ if (typeof WeakMap === "undefined") {
                     } else {
                         this.setAttribute("name", name);
                     }
-                    this.xtag.inputEl.name = name;
+                    this.xtag.input.name = name;
                     updateScope(this.xtag.scope);
                 }
             },
             checked: {
                 get: function() {
-                    return this.xtag.inputEl.checked;
+                    return this.xtag.input.checked;
                 },
                 set: function(value) {
                     var name = this.name, state = value === "true" || value === true;
@@ -4434,7 +3988,7 @@ if (typeof WeakMap === "undefined") {
                             previous.removeAttribute("checked");
                         }
                     }
-                    this.xtag.inputEl.checked = state;
+                    this.xtag.input.checked = state;
                     if (state) {
                         this.setAttribute("checked", "");
                     } else {
@@ -4445,830 +3999,15 @@ if (typeof WeakMap === "undefined") {
             value: {
                 attribute: {},
                 get: function() {
-                    return this.xtag.inputEl.value;
+                    return this.xtag.input.value;
                 },
-                set: function(newVal) {
-                    this.xtag.inputEl.value = newVal;
+                set: function(value) {
+                    this.xtag.input.value = value;
                 }
             }
         }
     });
-})();
-
-(function() {
-    var TIP_ORIENT_ARROW_DIR_MAP = {
-        top: "down",
-        bottom: "up",
-        left: "right",
-        right: "left"
-    };
-    var OUTER_TRIGGER_MANAGER;
-    var PRESET_STYLE_LISTENERFNS;
-    var PREV_SIB_SELECTOR = "_previousSibling";
-    var NEXT_SIB_SELECTOR = "_nextSibling";
-    var ARROW_DIR_ATTR = "arrow-direction";
-    var AUTO_ORIENT_ATTR = "_auto-orientation";
-    function isValidOrientation(orient) {
-        return orient in TIP_ORIENT_ARROW_DIR_MAP;
-    }
-    function getWindowViewport() {
-        var docElem = document.documentElement;
-        var rect = {
-            left: docElem.scrollLeft || document.body.scrollLeft || 0,
-            top: docElem.scrollTop || document.body.scrollTop || 0,
-            width: docElem.clientWidth,
-            height: docElem.clientHeight
-        };
-        rect.right = rect.left + rect.width;
-        rect.bottom = rect.top + rect.height;
-        return rect;
-    }
-    function getRect(el) {
-        var rect = el.getBoundingClientRect();
-        var viewport = getWindowViewport();
-        var docScrollLeft = viewport.left;
-        var docScrollTop = viewport.top;
-        return {
-            left: rect.left + docScrollLeft,
-            right: rect.right + docScrollLeft,
-            top: rect.top + docScrollTop,
-            bottom: rect.bottom + docScrollTop,
-            width: rect.width,
-            height: rect.height
-        };
-    }
-    function getScale(el, rect) {
-        rect = rect !== undefined ? rect : getRect(el);
-        return {
-            x: el.offsetWidth ? rect.width / el.offsetWidth : 1,
-            y: el.offsetHeight ? rect.height / el.offsetHeight : 1
-        };
-    }
-    function getRectIntersection(rectA, rectB) {
-        if (rectA.right < rectB.left || rectB.right < rectA.left || rectA.bottom < rectB.top || rectB.bottom < rectA.top) {
-            return null;
-        }
-        var intersection = {
-            left: Math.max(rectA.left, rectB.left),
-            top: Math.max(rectA.top, rectB.top),
-            right: Math.min(rectA.right, rectB.right),
-            bottom: Math.min(rectA.bottom, rectB.bottom)
-        };
-        intersection.width = intersection.right - intersection.left;
-        intersection.height = intersection.bottom - intersection.top;
-        if (intersection.width < 0 || intersection.height < 0) {
-            return null;
-        }
-        return intersection;
-    }
-    function CachedListener(elem, eventType, listenerFn) {
-        this.eventType = eventType;
-        this.listenerFn = listenerFn;
-        this.elem = elem;
-        this._attachedFn = null;
-    }
-    CachedListener.prototype.attachListener = function() {
-        if (!this._attachedFn) {
-            this._attachedFn = xtag.addEvent(this.elem, this.eventType, this.listenerFn);
-        }
-    };
-    CachedListener.prototype.removeListener = function() {
-        if (this._attachedFn) {
-            xtag.removeEvent(this.elem, this.eventType, this._attachedFn);
-            this._attachedFn = null;
-        }
-    };
-    function OuterTriggerEventStruct(eventType) {
-        this._cachedListener = null;
-        this._tooltips = [];
-        var struct = this;
-        var outerTriggerListener = function(e) {
-            struct._tooltips.forEach(function(tooltip) {
-                if (!tooltip.xtag._skipOuterClick && tooltip.hasAttribute("visible") && !tooltip.ignoreOuterTrigger && !hasParentNode(e.target, tooltip)) {
-                    _hideTooltip(tooltip);
-                }
-                tooltip.xtag._skipOuterClick = false;
-            });
-        };
-        var cachedListener = this._cachedListener = new CachedListener(document, eventType, outerTriggerListener);
-        cachedListener.attachListener();
-    }
-    OuterTriggerEventStruct.prototype.destroy = function() {
-        this._cachedListener.removeListener();
-        this._cachedListener = null;
-        this._tooltips = null;
-    };
-    OuterTriggerEventStruct.prototype.containsTooltip = function(tooltip) {
-        return this._tooltips.indexOf(tooltip) !== -1;
-    };
-    OuterTriggerEventStruct.prototype.addTooltip = function(tooltip) {
-        if (!this.containsTooltip(tooltip)) {
-            this._tooltips.push(tooltip);
-        }
-    };
-    OuterTriggerEventStruct.prototype.removeTooltip = function(tooltip) {
-        if (this.containsTooltip(tooltip)) {
-            this._tooltips.splice(this._tooltips.indexOf(tooltip), 1);
-        }
-    };
-    Object.defineProperties(OuterTriggerEventStruct.prototype, {
-        numTooltips: {
-            get: function() {
-                return this._tooltips.length;
-            }
-        }
-    });
-    function OuterTriggerManager() {
-        this.eventStructDict = {};
-    }
-    OuterTriggerManager.prototype.registerTooltip = function(eventType, tooltip) {
-        if (eventType in this.eventStructDict) {
-            var eventStruct = this.eventStructDict[eventType];
-            if (!eventStruct.containsTooltip(tooltip)) {
-                eventStruct.addTooltip(tooltip);
-            }
-        } else {
-            this.eventStructDict[eventType] = new OuterTriggerEventStruct(eventType);
-            this.eventStructDict[eventType].addTooltip(tooltip);
-        }
-    };
-    OuterTriggerManager.prototype.unregisterTooltip = function(eventType, tooltip) {
-        if (eventType in this.eventStructDict && this.eventStructDict[eventType].containsTooltip(tooltip)) {
-            var eventStruct = this.eventStructDict[eventType];
-            eventStruct.removeTooltip(tooltip);
-            if (eventStruct.numTooltips === 0) {
-                eventStruct.destroy();
-                delete this.eventStructDict[eventType];
-            }
-        }
-    };
-    OUTER_TRIGGER_MANAGER = new OuterTriggerManager();
-    function _mkPrevSiblingTargetListener(tooltip, eventName, callback) {
-        var filteredCallback = function(e) {
-            if (callback && hasParentNode(e.target, tooltip.previousElementSibling)) {
-                callback.call(tooltip.previousElementSibling, e);
-            }
-        };
-        return new CachedListener(document.documentElement, eventName, filteredCallback);
-    }
-    function _mkNextSiblingTargetListener(tooltip, eventName, callback) {
-        var eventDelegateStr = eventName + ":delegate(x-tooltip+*)";
-        var filteredCallback = function(e) {
-            if (callback && this === tooltip.nextElementSibling) {
-                callback.call(this, e);
-            }
-        };
-        return new CachedListener(document.documentElement, eventDelegateStr, filteredCallback);
-    }
-    function _getTargetDelegatedListener(tooltip, targetSelector, eventName, targetCallback) {
-        if (targetSelector === PREV_SIB_SELECTOR) {
-            return _mkPrevSiblingTargetListener(tooltip, eventName, targetCallback);
-        } else if (targetSelector === NEXT_SIB_SELECTOR) {
-            return _mkNextSiblingTargetListener(tooltip, eventName, targetCallback);
-        } else {
-            var delegateEventStr = eventName + ":delegate(" + targetSelector + ")";
-            return new CachedListener(document.documentElement, delegateEventStr, function(e) {
-                var delegatedElem = this;
-                if (!hasParentNode(delegatedElem, tooltip)) {
-                    targetCallback.call(delegatedElem, e);
-                }
-            });
-        }
-    }
-    PRESET_STYLE_LISTENERFNS = {
-        custom: function() {
-            return [];
-        },
-        hover: function(tooltip, targetSelector) {
-            var createdListeners = [];
-            var hoverOutTimer = null;
-            var hideDelay = 200;
-            var cancelTimerFn = function() {
-                if (hoverOutTimer) {
-                    window.clearTimeout(hoverOutTimer);
-                }
-                hoverOutTimer = null;
-            };
-            var showTipTargetFn = mkIgnoreSubchildrenFn(function(e) {
-                cancelTimerFn();
-                var delegatedElem = this;
-                var fromElem = e.relatedTarget || e.toElement;
-                if (!hasParentNode(fromElem, tooltip)) {
-                    _showTooltip(tooltip, delegatedElem);
-                }
-            });
-            var hideTipTargetFn = mkIgnoreSubchildrenFn(function(e) {
-                cancelTimerFn();
-                var toElem = e.relatedTarget || e.toElement;
-                if (!hasParentNode(toElem, tooltip)) {
-                    hoverOutTimer = window.setTimeout(function() {
-                        if (tooltip.triggerStyle === "hover") {
-                            _hideTooltip(tooltip);
-                        }
-                    }, hideDelay);
-                }
-            });
-            var targetEnterListener = _getTargetDelegatedListener(tooltip, targetSelector, "enter", showTipTargetFn);
-            var targetExitListener = _getTargetDelegatedListener(tooltip, targetSelector, "leave", hideTipTargetFn);
-            createdListeners.push(targetEnterListener);
-            createdListeners.push(targetExitListener);
-            var showTipTooltipFn = mkIgnoreSubchildrenFn(function(e) {
-                cancelTimerFn();
-                var fromElem = e.relatedTarget || e.toElement;
-                var lastTarget = tooltip.xtag.lastTargetElem;
-                if (!tooltip.hasAttribute("visible") && lastTarget && !hasParentNode(fromElem, lastTarget)) {
-                    _showTooltip(tooltip, lastTarget);
-                }
-            });
-            var hideTipTooltipFn = mkIgnoreSubchildrenFn(function(e) {
-                cancelTimerFn();
-                var toElem = e.relatedTarget || e.toElement;
-                var lastTarget = tooltip.xtag.lastTargetElem;
-                if (lastTarget && !hasParentNode(toElem, lastTarget)) {
-                    hoverOutTimer = window.setTimeout(function() {
-                        if (tooltip.triggerStyle === "hover") {
-                            _hideTooltip(tooltip);
-                        }
-                    }, hideDelay);
-                }
-            });
-            createdListeners.push(new CachedListener(tooltip, "enter", showTipTooltipFn));
-            createdListeners.push(new CachedListener(tooltip, "leave", hideTipTooltipFn));
-            return createdListeners;
-        }
-    };
-    function mkGenericListeners(tooltip, targetSelector, eventName) {
-        var createdListeners = [];
-        var targetTriggerFn = function() {
-            var delegatedElem = this;
-            tooltip.xtag._skipOuterClick = true;
-            if (tooltip.hasAttribute("visible")) {
-                if (delegatedElem === tooltip.xtag.lastTargetElem) {
-                    _hideTooltip(tooltip);
-                } else {
-                    _showTooltip(tooltip, delegatedElem);
-                }
-            } else {
-                _showTooltip(tooltip, delegatedElem);
-            }
-        };
-        var delegatedTargetListener = _getTargetDelegatedListener(tooltip, targetSelector, eventName, targetTriggerFn);
-        createdListeners.push(delegatedTargetListener);
-        return createdListeners;
-    }
-    function searchAncestors(elem, conditionFn) {
-        while (elem) {
-            if (conditionFn(elem)) {
-                return elem;
-            }
-            elem = elem.parentNode;
-        }
-        return null;
-    }
-    function hasParentNode(elem, parent) {
-        if (parent.contains) {
-            return parent.contains(elem);
-        } else {
-            var condition = function(el) {
-                return el === parent;
-            };
-            return !!searchAncestors(elem, condition);
-        }
-    }
-    function mkIgnoreSubchildrenFn(callback) {
-        return function(e) {
-            var containerElem = this;
-            var relElem = e.relatedTarget || e.toElement;
-            if (relElem) {
-                if (!hasParentNode(relElem, containerElem)) {
-                    callback.call(this, e);
-                }
-            } else {
-                callback.call(this, e);
-            }
-        };
-    }
-    function _selectorToElems(tooltip, selector) {
-        var elems = [];
-        if (selector === PREV_SIB_SELECTOR) {
-            elems = tooltip.previousElementSibling ? [ tooltip.previousElementSibling ] : [];
-        } else if (selector === NEXT_SIB_SELECTOR) {
-            elems = tooltip.nextElementSibling ? [ tooltip.nextElementSibling ] : [];
-        } else {
-            elems = xtag.query(document, selector);
-        }
-        var i = 0;
-        while (i < elems.length) {
-            var elem = elems[i];
-            if (hasParentNode(elem, tooltip)) {
-                elems.splice(i, 1);
-            } else {
-                i++;
-            }
-        }
-        return elems;
-    }
-    function overlaps(elemA, elemB) {
-        var _pointIsInRect = function(x, y, rect) {
-            return rect.left <= x && x <= rect.right && rect.top <= y && y <= rect.bottom;
-        };
-        var rectA = getRect(elemA);
-        var rectB = getRect(elemB);
-        var _cornersOverlapBox = function(rectA, rectB) {
-            return _pointIsInRect(rectA.left, rectA.top, rectB) || _pointIsInRect(rectA.right, rectA.top, rectB) || _pointIsInRect(rectA.right, rectA.bottom, rectB) || _pointIsInRect(rectA.left, rectA.bottom, rectB);
-        };
-        var _isCrossIntersect = function(rectA, rectB) {
-            return rectA.top <= rectB.top && rectB.bottom <= rectA.bottom && rectB.left <= rectA.left && rectA.right <= rectB.right;
-        };
-        return _cornersOverlapBox(rectA, rectB) || _cornersOverlapBox(rectB, rectA) || _isCrossIntersect(rectA, rectB) || _isCrossIntersect(rectB, rectA);
-    }
-    function getRotationDims(width, height, degrees) {
-        var radians = degrees * (Math.PI / 180);
-        var rotatedHeight = width * Math.sin(radians) + height * Math.cos(radians);
-        var rotatedWidth = width * Math.cos(radians) + height * Math.sin(radians);
-        return {
-            height: rotatedHeight,
-            width: rotatedWidth
-        };
-    }
-    function constrainNum(num, min, max) {
-        var output = num;
-        output = min !== undefined && min !== null ? Math.max(min, output) : output;
-        output = max !== undefined && max !== null ? Math.min(max, output) : output;
-        return output;
-    }
-    function _coordsRelToNewContext(x, y, oldContext, newContext, contextScale) {
-        var viewportX, viewportY;
-        if (oldContext === window) {
-            viewportX = x;
-            viewportY = y;
-        } else {
-            var oldContextRect = getRect(oldContext);
-            viewportX = x - oldContextRect.left;
-            viewportY = y - oldContextRect.top;
-        }
-        var newContextRect = getRect(newContext);
-        contextScale = contextScale ? contextScale : getScale(newContext, newContextRect);
-        var borderTop = newContext.clientTop * contextScale.y;
-        var borderLeft = newContext.clientLeft * contextScale.x;
-        var scrollTop = newContext.scrollTop * contextScale.y;
-        var scrollLeft = newContext.scrollLeft * contextScale.x;
-        var translatedCoords = {
-            left: viewportX - newContextRect.left - borderLeft,
-            top: viewportY - newContextRect.top - borderTop
-        };
-        if (!hasParentNode(document.body, newContext) && hasParentNode(newContext, document.body)) {
-            translatedCoords.top += scrollTop;
-            translatedCoords.left += scrollLeft;
-        }
-        return translatedCoords;
-    }
-    function _getTooltipConstraints(tooltip, contextRect) {
-        if (!contextRect) {
-            contextRect = getRect(tooltip.offsetParent || tooltip.parentNode);
-        }
-        var viewport = getWindowViewport();
-        var bounds = viewport;
-        if (!tooltip.allowOverflow) {
-            bounds = getRectIntersection(viewport, contextRect);
-            if (!bounds) {
-                bounds = contextRect;
-            }
-        }
-        return bounds;
-    }
-    function _pickBestTooltipOrient(tooltip, validPositionDataList) {
-        if (validPositionDataList.length === 0) {
-            return null;
-        }
-        var bounds = _getTooltipConstraints(tooltip);
-        var minX = bounds.left;
-        var minY = bounds.top;
-        var maxX = bounds.right;
-        var maxY = bounds.bottom;
-        var inContextData = [];
-        var notInContextData = [];
-        for (var i = 0; i < validPositionDataList.length; i++) {
-            var data = validPositionDataList[i];
-            var rect = data.rect;
-            if (rect.left < minX || rect.top < minY || rect.right > maxX || rect.bottom > maxY) {
-                notInContextData.push(data);
-            } else {
-                inContextData.push(data);
-            }
-        }
-        var filterDataList = inContextData.length > 0 ? inContextData : notInContextData;
-        return filterDataList[0].orient;
-    }
-    function _forceDisplay(elem) {
-        elem.setAttribute("_force-display", true);
-    }
-    function _unforceDisplay(elem) {
-        elem.removeAttribute("_force-display");
-    }
-    function _autoPositionTooltip(tooltip, targetElem) {
-        tooltip.removeAttribute(AUTO_ORIENT_ATTR);
-        var arrow = tooltip.xtag.arrowEl, positionRect = null;
-        var validOrientDataList = [];
-        for (var tmpOrient in TIP_ORIENT_ARROW_DIR_MAP) {
-            arrow.setAttribute(ARROW_DIR_ATTR, TIP_ORIENT_ARROW_DIR_MAP[tmpOrient]);
-            positionRect = _positionTooltip(tooltip, targetElem, tmpOrient);
-            if (!positionRect) {
-                continue;
-            }
-            _forceDisplay(tooltip);
-            if (!overlaps(tooltip, targetElem)) {
-                validOrientDataList.push({
-                    orient: tmpOrient,
-                    rect: positionRect
-                });
-            }
-            _unforceDisplay(tooltip);
-        }
-        var bestOrient = _pickBestTooltipOrient(tooltip, validOrientDataList);
-        if (!bestOrient) {
-            bestOrient = "top";
-        }
-        tooltip.setAttribute(AUTO_ORIENT_ATTR, bestOrient);
-        arrow.setAttribute(ARROW_DIR_ATTR, TIP_ORIENT_ARROW_DIR_MAP[bestOrient]);
-        if (isValidOrientation(bestOrient) && bestOrient !== tmpOrient) {
-            return _positionTooltip(tooltip, targetElem, bestOrient);
-        } else {
-            return positionRect;
-        }
-    }
-    function _positionTooltip(tooltip, targetElem, orientation, reattemptDepth) {
-        if (!tooltip.parentNode) {
-            tooltip.left = "";
-            tooltip.top = "";
-            return null;
-        }
-        reattemptDepth = reattemptDepth === undefined ? 0 : reattemptDepth;
-        var arrow = tooltip.xtag.arrowEl;
-        if (!isValidOrientation(orientation)) {
-            return _autoPositionTooltip(tooltip, targetElem);
-        }
-        var tipContext = tooltip.offsetParent ? tooltip.offsetParent : tooltip.parentNode;
-        if (!reattemptDepth) {
-            tooltip.style.top = "";
-            tooltip.style.left = "";
-            arrow.style.top = "";
-            arrow.style.left = "";
-        }
-        _forceDisplay(tooltip);
-        var viewport = getWindowViewport();
-        var contextRect = getRect(tipContext);
-        var contextScale = getScale(tipContext, contextRect);
-        var contextViewWidth = tipContext.clientWidth * contextScale.x;
-        var contextViewHeight = tipContext.clientHeight * contextScale.y;
-        var targetRect = getRect(targetElem);
-        var targetWidth = targetRect.width;
-        var targetHeight = targetRect.height;
-        var tooltipRect = getRect(tooltip);
-        var tooltipScale = getScale(tooltip, tooltipRect);
-        var origTooltipWidth = tooltipRect.width;
-        var origTooltipHeight = tooltipRect.height;
-        var renderedTooltipWidth = tooltipRect.width;
-        var renderedTooltipHeight = tooltipRect.height;
-        var tipPlacementOffsetX = (renderedTooltipWidth - origTooltipWidth) / 2;
-        var tipPlacementOffsetY = (renderedTooltipHeight - origTooltipHeight) / 2;
-        var arrowWidth = arrow.offsetWidth * tooltipScale.x;
-        var arrowHeight = arrow.offsetHeight * tooltipScale.y;
-        var arrowRotationDegs = 45;
-        var arrowDims = getRotationDims(arrowWidth, arrowHeight, arrowRotationDegs);
-        arrowWidth = arrowDims.width;
-        arrowHeight = arrowDims.height;
-        if (orientation === "top" || orientation === "bottom") {
-            arrowHeight /= 2;
-        } else {
-            arrowWidth /= 2;
-        }
-        var bounds = _getTooltipConstraints(tooltip, contextRect);
-        var minRawLeft = bounds.left;
-        var minRawTop = bounds.top;
-        var maxRawLeft = bounds.right - origTooltipWidth;
-        var maxRawTop = bounds.bottom - origTooltipHeight;
-        var idealTipCenterAlignCoords = {
-            left: targetRect.left + (targetWidth - origTooltipWidth) / 2,
-            top: targetRect.top + (targetHeight - origTooltipHeight) / 2
-        };
-        var idealRawLeft = idealTipCenterAlignCoords.left;
-        var idealRawTop = idealTipCenterAlignCoords.top;
-        if (orientation === "top") {
-            idealRawTop = targetRect.top - renderedTooltipHeight - arrowHeight;
-            maxRawTop -= arrowHeight;
-        } else if (orientation === "bottom") {
-            idealRawTop = targetRect.top + targetHeight + arrowHeight;
-            maxRawTop -= arrowHeight;
-        } else if (orientation === "left") {
-            idealRawLeft = targetRect.left - renderedTooltipWidth - arrowWidth;
-            maxRawLeft -= arrowWidth;
-        } else if (orientation === "right") {
-            idealRawLeft = targetRect.left + targetWidth + arrowWidth;
-            maxRawLeft -= arrowWidth;
-        } else {
-            throw "invalid orientation " + orientation;
-        }
-        var rawLeft = constrainNum(idealRawLeft, minRawLeft, maxRawLeft);
-        var rawTop = constrainNum(idealRawTop, minRawTop, maxRawTop);
-        rawLeft += tipPlacementOffsetX;
-        rawTop += tipPlacementOffsetY;
-        var _isFixed = function(el) {
-            if (!window.getComputedStyle || el === document || el === document.documentElement) {
-                return false;
-            }
-            var styles;
-            try {
-                styles = window.getComputedStyle(el);
-            } catch (e) {
-                return false;
-            }
-            return styles && styles.position === "fixed";
-        };
-        var newLeft;
-        var newTop;
-        var fixedAncestor = searchAncestors(targetElem, _isFixed);
-        if (fixedAncestor && !hasParentNode(tooltip, fixedAncestor)) {
-            newLeft = rawLeft - viewport.left;
-            newTop = rawTop - viewport.top;
-            tooltip.setAttribute("_target-fixed", true);
-        } else {
-            var relativeCoords = _coordsRelToNewContext(rawLeft, rawTop, window, tipContext, contextScale);
-            newLeft = relativeCoords.left;
-            newTop = relativeCoords.top;
-            tooltip.removeAttribute("_target-fixed");
-        }
-        tooltip.style.top = newTop + "px";
-        tooltip.style.left = newLeft + "px";
-        var maxVal;
-        var arrowParentSize;
-        var arrowStyleProp;
-        var rawArrowCenter;
-        var tipTargetDiff;
-        if (orientation === "top" || orientation === "bottom") {
-            rawArrowCenter = (targetWidth - arrowWidth) / 2;
-            tipTargetDiff = targetRect.left - rawLeft;
-            maxVal = origTooltipWidth - arrowWidth;
-            arrowParentSize = origTooltipWidth;
-            arrowStyleProp = "left";
-        } else {
-            rawArrowCenter = (targetHeight - arrowHeight) / 2;
-            tipTargetDiff = targetRect.top - rawTop;
-            maxVal = origTooltipHeight - arrowHeight;
-            arrowParentSize = origTooltipHeight;
-            arrowStyleProp = "top";
-        }
-        var arrowVal = constrainNum(rawArrowCenter + tipTargetDiff, 0, maxVal);
-        var arrowFrac = arrowParentSize ? arrowVal / arrowParentSize : 0;
-        arrow.style[arrowStyleProp] = arrowFrac * 100 + "%";
-        var newTooltipWidth = tooltip.offsetWidth * tooltipScale.x;
-        var newTooltipHeight = tooltip.offsetHeight * tooltipScale.y;
-        var newContextViewWidth = tipContext.clientWidth * contextScale.x;
-        var newContextViewHeight = tipContext.clientHeight * contextScale.y;
-        _unforceDisplay(tooltip);
-        var recursionLimit = 2;
-        if (reattemptDepth < recursionLimit && (origTooltipWidth !== newTooltipWidth || origTooltipHeight !== newTooltipHeight || contextViewWidth !== newContextViewWidth || contextViewHeight !== newContextViewHeight)) {
-            return _positionTooltip(tooltip, targetElem, orientation, reattemptDepth + 1);
-        } else {
-            return {
-                left: rawLeft,
-                top: rawTop,
-                width: newTooltipWidth,
-                height: newTooltipHeight,
-                right: rawLeft + newTooltipWidth,
-                bottom: rawTop + newTooltipHeight
-            };
-        }
-    }
-    function _showTooltip(tooltip, triggerElem) {
-        if (triggerElem === tooltip) {
-            console.warn("The tooltip's target element is the tooltip itself!" + " Is this intentional?");
-        }
-        var arrow = tooltip.xtag.arrowEl;
-        if (!arrow.parentNode) {
-            console.warn("The inner component DOM of the tooltip " + "appears to be missing. Make sure to edit tooltip" + " contents through the .contentEl property instead of" + "directly on the x-tooltip to avoid " + "clobbering the component's internals.");
-        }
-        var targetOrient = tooltip.orientation;
-        var _readyToShowFn = function() {
-            _unforceDisplay(tooltip);
-            tooltip.setAttribute("visible", true);
-            xtag.fireEvent(tooltip, "tooltipshown", {
-                triggerElem: triggerElem
-            });
-        };
-        if (triggerElem) {
-            tooltip.xtag.lastTargetElem = triggerElem;
-            xtag.skipTransition(tooltip, function() {
-                _positionTooltip(tooltip, triggerElem, targetOrient);
-                _forceDisplay(tooltip);
-                return _readyToShowFn;
-            });
-        } else {
-            tooltip.style.top = "";
-            tooltip.style.left = "";
-            arrow.style.top = "";
-            arrow.style.left = "";
-            _readyToShowFn();
-        }
-    }
-    function _hideTooltip(tooltip) {
-        if (isValidOrientation(tooltip.orientation)) {
-            tooltip.removeAttribute(AUTO_ORIENT_ATTR);
-        }
-        if (tooltip.hasAttribute("visible")) {
-            _forceDisplay(tooltip);
-            tooltip.xtag._hideTransitionFlag = true;
-            tooltip.removeAttribute("visible");
-        }
-    }
-    function _destroyListeners(tooltip) {
-        var cachedListeners = tooltip.xtag.cachedListeners;
-        cachedListeners.forEach(function(cachedListener) {
-            cachedListener.removeListener();
-        });
-        tooltip.xtag.cachedListeners = [];
-        OUTER_TRIGGER_MANAGER.unregisterTooltip(tooltip.triggerStyle, tooltip);
-    }
-    function _updateTriggerListeners(tooltip, newTargetSelector, newTriggerStyle) {
-        if (!tooltip.parentNode) {
-            return;
-        }
-        if (newTargetSelector === undefined || newTargetSelector === null) {
-            newTargetSelector = tooltip.targetSelector;
-        }
-        if (newTriggerStyle === undefined || newTriggerStyle === null) {
-            newTriggerStyle = tooltip.triggerStyle;
-        }
-        var newTriggerElems = _selectorToElems(tooltip, newTargetSelector);
-        if (newTriggerElems.indexOf(tooltip.xtag.lastTargetElem) === -1) {
-            tooltip.xtag.lastTargetElem = newTriggerElems.length > 0 ? newTriggerElems[0] : null;
-            _positionTooltip(tooltip, tooltip.xtag.lastTargetElem, tooltip.orientation);
-        }
-        _destroyListeners(tooltip);
-        var listeners;
-        if (newTriggerStyle in PRESET_STYLE_LISTENERFNS) {
-            var getListenersFn = PRESET_STYLE_LISTENERFNS[newTriggerStyle];
-            listeners = getListenersFn(tooltip, newTargetSelector);
-        } else {
-            listeners = mkGenericListeners(tooltip, newTargetSelector, newTriggerStyle);
-            OUTER_TRIGGER_MANAGER.registerTooltip(newTriggerStyle, tooltip);
-        }
-        listeners.forEach(function(listener) {
-            listener.attachListener();
-        });
-        tooltip.xtag.cachedListeners = listeners;
-        _hideTooltip(tooltip);
-    }
-    xtag.register("x-tooltip", {
-        lifecycle: {
-            created: function() {
-                var self = this;
-                self.xtag.contentEl = document.createElement("div");
-                self.xtag.arrowEl = document.createElement("span");
-                xtag.addClass(self.xtag.contentEl, "tooltip-content");
-                xtag.addClass(self.xtag.arrowEl, "tooltip-arrow");
-                self.xtag.contentEl.innerHTML = self.innerHTML;
-                self.innerHTML = "";
-                self.appendChild(self.xtag.contentEl);
-                self.appendChild(self.xtag.arrowEl);
-                self.xtag._orientation = "auto";
-                self.xtag._targetSelector = PREV_SIB_SELECTOR;
-                self.xtag._triggerStyle = "click";
-                var triggeringElems = _selectorToElems(self, self.xtag._targetSelector);
-                self.xtag.lastTargetElem = triggeringElems.length > 0 ? triggeringElems[0] : null;
-                self.xtag.cachedListeners = [];
-                self.xtag._hideTransitionFlag = false;
-                self.xtag._skipOuterClick = false;
-            },
-            inserted: function() {
-                _updateTriggerListeners(this, this.xtag._targetSelector, this.xtag._triggerStyle);
-            },
-            removed: function() {
-                _destroyListeners(this);
-            }
-        },
-        events: {
-            transitionend: function(e) {
-                var tooltip = e.currentTarget;
-                if (tooltip.xtag._hideTransitionFlag && !tooltip.hasAttribute("visible")) {
-                    tooltip.xtag._hideTransitionFlag = false;
-                    xtag.fireEvent(tooltip, "tooltiphidden");
-                }
-                _unforceDisplay(tooltip);
-            }
-        },
-        accessors: {
-            orientation: {
-                attribute: {},
-                get: function() {
-                    return this.xtag._orientation;
-                },
-                set: function(newOrientation) {
-                    newOrientation = newOrientation.toLowerCase();
-                    var arrow = this.querySelector(".tooltip-arrow");
-                    var newArrowDir = null;
-                    if (isValidOrientation(newOrientation)) {
-                        newArrowDir = TIP_ORIENT_ARROW_DIR_MAP[newOrientation];
-                        arrow.setAttribute(ARROW_DIR_ATTR, newArrowDir);
-                        this.removeAttribute(AUTO_ORIENT_ATTR);
-                    } else {
-                        arrow.removeAttribute(ARROW_DIR_ATTR);
-                    }
-                    this.xtag._orientation = newOrientation;
-                    this.refreshPosition();
-                }
-            },
-            triggerStyle: {
-                attribute: {
-                    name: "trigger-style"
-                },
-                get: function() {
-                    return this.xtag._triggerStyle;
-                },
-                set: function(newTriggerStyle) {
-                    _updateTriggerListeners(this, this.targetSelector, newTriggerStyle);
-                    this.xtag._triggerStyle = newTriggerStyle;
-                }
-            },
-            targetSelector: {
-                attribute: {
-                    name: "target-selector"
-                },
-                get: function() {
-                    return this.xtag._targetSelector;
-                },
-                set: function(newSelector) {
-                    _updateTriggerListeners(this, newSelector, this.triggerStyle);
-                    this.xtag._targetSelector = newSelector;
-                }
-            },
-            ignoreOuterTrigger: {
-                attribute: {
-                    "boolean": true,
-                    name: "ignore-outer-trigger"
-                }
-            },
-            ignoreTooltipPointerEvents: {
-                attribute: {
-                    "boolean": true,
-                    name: "ignore-tooltip-pointer-events"
-                }
-            },
-            allowOverflow: {
-                attribute: {
-                    "boolean": true,
-                    name: "allow-overflow"
-                },
-                set: function() {
-                    this.refreshPosition();
-                }
-            },
-            contentEl: {
-                get: function() {
-                    return this.xtag.contentEl;
-                },
-                set: function(newContentElem) {
-                    var oldContent = this.xtag.contentEl;
-                    xtag.addClass(newContentElem, "tooltip-content");
-                    this.replaceChild(newContentElem, oldContent);
-                    this.xtag.contentEl = newContentElem;
-                    this.refreshPosition();
-                }
-            },
-            presetTriggerStyles: {
-                get: function() {
-                    var output = [];
-                    for (var presetName in PRESET_STYLE_LISTENERFNS) {
-                        output.push(presetName);
-                    }
-                    return output;
-                }
-            },
-            targetElems: {
-                get: function() {
-                    return _selectorToElems(this, this.targetSelector);
-                }
-            }
-        },
-        methods: {
-            refreshPosition: function() {
-                if (this.xtag.lastTargetElem) {
-                    _positionTooltip(this, this.xtag.lastTargetElem, this.orientation);
-                }
-            },
-            show: function() {
-                _showTooltip(this, this.xtag.lastTargetElem);
-            },
-            hide: function() {
-                _hideTooltip(this);
-            },
-            toggle: function() {
-                if (this.hasAttribute("visible")) {
-                    this.hide();
-                } else {
-                    this.show();
-                }
-            }
-        }
+    xtag.register("x-togglebar", {
+        events: {}
     });
 })();

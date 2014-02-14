@@ -7,5 +7,5 @@ x-appbar > header{font-weight:600}
 x-appbar > *{color:#fff;font-family:"Fira Sans","Fira Sans","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;font-size:inherit;line-height:inherit;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 x-appbar > button{cursor:pointer;padding-left:2px;padding-right:2px;min-width:45px;background:transparent}
 x-appbar > button:hover{background-color:#00405d}
-x-appbar > button::-moz-focus-inner{bordr:0;padding:0}
+x-appbar > button::-moz-focus-inner{border:0;padding:0}
 x-appbar > header:after{padding-left:6px;font-size:60%}

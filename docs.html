@@ -24,7 +24,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="index.html">
         <img class="logo" src="site/img/logo.png">
-        Brick<small> 0.10.0</small>
+        Brick<small> 0.11.0</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -69,15 +69,11 @@
           
           <a class="list-group-item scrollnav" href="#x-tag-layout">layout</a>
           
-          <a class="list-group-item scrollnav" href="#x-tag-slidebox">slidebox</a>
-          
           <a class="list-group-item scrollnav" href="#x-tag-slider">slider</a>
           
           <a class="list-group-item scrollnav" href="#x-tag-tabbar">tabbar</a>
           
           <a class="list-group-item scrollnav" href="#x-tag-toggle">toggle</a>
-          
-          <a class="list-group-item scrollnav" href="#x-tag-tooltip">tooltip</a>
           
         </div>
       </div>
@@ -86,7 +82,7 @@
       <section id="usage">
         <h1>Usage</h1>
         <p>To include Brick in your project, include your downloaded stylesheet and script files in your project's page like normal:
-          <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-0.10.0.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-0.10.0.js&quot;&gt;&lt;/script&gt;</pre>
+          <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-0.11.0.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-0.11.0.js&quot;&gt;&lt;/script&gt;</pre>
         </p>
         <p>Using any of Brick's components is as simple as including the respective tag in your HTML markup. (See individual component docs for details.)</p>
         <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the x-tags library's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
@@ -99,6 +95,16 @@
               <small><a href="demos/x-tag-appbar/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-appbar</small></span>
+            <span>Version: <small>0.2.8</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/appbar.git">
+              http://github.com/x-tag/appbar
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-appbar</small></span>
+          </h5>
           <p>An x-appbar is a simple component emulating the standard layout of a header seen at the top of a mobile application.</p>
 
           
@@ -157,6 +163,16 @@
               <small><a href="demos/x-tag-calendar/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-calendar</small></span>
+            <span>Version: <small>0.1.6</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/calendar.git">
+              http://github.com/x-tag/calendar
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-calendar</small></span>
+          </h5>
           <p>A component acting as a calendar widget that can be manipulated with minimal user-written code/layout.</p>
 
           
@@ -361,29 +377,34 @@
               <small><a href="demos/x-tag-deck/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-deck</small></span>
+            <span>Version: <small>0.2.0</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/deck.git">
+              http://github.com/x-tag/deck
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-deck</small></span>
+          </h5>
           <p>A box in which &lt;x-card&gt; elements can be cycled independently of order with a variety of different transitions</p>
 
           
             <h2>Attributes</h2>
             
             <dl>
+              <dt><code>loop</code></dt>
+              <dd>A boolean attribute that turns on/off the auto-looping feature when the x-deck has reached the beginning or end of its card index</dd>
+            </dl>
+            
+            <dl>
               <dt><code>transition-type</code></dt>
-              <dd>Defines the kind of transition animation that is used when cycling cards. Valid options: &#39;scrollLeft&#39;, &#39;scrollUp&#39;, &#39;scrollRight&#39;, &#39;scrollDown&#39;, &#39;flipX&#39;, &#39;flipY&#39;, &#39;coverLeft&#39;, &#39;coverUp&#39;, &#39;coverRight&#39;, &#39;coverDown&#39;, &#39;uncoverLeft&#39;, &#39;uncoverUp&#39;, &#39;uncoverRight&#39;, &#39;uncoverDown&#39;, &#39;none&#39;. Defaults to &#39;scrollLeft&#39;</dd>
+              <dd>Allows the user to set a default animation type for cards. If this attribute is added to an individual single &lt;x-card&gt; element, the animation specified will be used in place of the &lt;x-deck&gt;&#39;s default card animation. Valid options are the same as the &lt;x-deck&gt;&#39;s transition-type attribute.</dd>
             </dl>
             
             <dl>
               <dt><code>selected-index</code></dt>
-              <dd>Defines which card index will be displayed. If set in the initial markup, this will initialize the given card as the selected card. Defaults to 0.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>history-cap</code></dt>
-              <dd>Defines how many cards to keep in history to allow developers to simply return to the previously displayed card. Defaults to 10.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>x-card: transition-override</code></dt>
-              <dd>If transition-override is defined on a card, the animation used to transition to this card will be what is given here instead of the deck&#39;s animation. Valid options are the same as the &lt;x-deck&gt;&#39;s transition-type attribute.</dd>
+              <dd>Defines which card index will be displayed. If set in the initial markup, this will initialize the given card as the selected card.</dd>
             </dl>
             
           
@@ -392,48 +413,23 @@
             <h2>Methods</h2>
             
               <dl>
-                <dt><code>shuffleTo([progressType])</code></dt>
-                <dd>Transitions to the x-card at the given index. If given a progressType of &#39;forward&#39;, will perform the forwards animation. If given &#39;reverse&#39;, will performs the reverse animation. If the progressType is &#39;auto&#39; or omitted, will perform forward animation if going to a larger index, and will perform reverse animation if going to a smaller index.</dd>
+                <dt><code>showCard(index||element, [direction])</code></dt>
+                <dd>Transitions an x-card element to the shown state via index or card element reference. If given a direction of &#39;forward&#39;, will perform the forwards animation. If given &#39;reverse&#39;, will performs the reverse animation.</dd>
               </dl>
             
               <dl>
-                <dt><code>shuffleNext([progressType])</code></dt>
-                <dd>Transitions to the next x-card in the deck. Takes an optional progressType of &#39;forward&#39;, &#39;reverse&#39;, or &#39;auto&#39;. Also takes an optional callback function.</dd>
+                <dt><code>hideCard(index||element, [direction])</code></dt>
+                <dd>Transitions an x-card element to the hidden state via index or card element reference. If given a direction of &#39;forward&#39;, will perform the forwards animation. If given &#39;reverse&#39;, will performs the reverse animation.</dd>
               </dl>
             
               <dl>
-                <dt><code>shufflePrev([progressType])</code></dt>
-                <dd>Transitions to the previous x-card in the deck. Takes an optional progressType of &#39;forward&#39;, &#39;reverse&#39;, or &#39;auto&#39;. Also takes an optional callback function.</dd>
+                <dt><code>nextCard(index||element, [direction])</code></dt>
+                <dd>Transitions to the next x-card in the deck. Takes an optional direction of &#39;forward&#39; or &#39;reverse&#39;.</dd>
               </dl>
             
               <dl>
-                <dt><code>getAllCards()</code></dt>
-                <dd>Returns a list of all x-card elements in the deck.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>getSelectedCard()</code></dt>
-                <dd>Returns the currently selected x-card in the deck.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>getCardIndex(cardEl)</code></dt>
-                <dd>Given an x-card element, returns its index in this deck, if it is a child element.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>getCardAt(index)</code></dt>
-                <dd>Returns the x-card at the given index.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>historyBack([progressType])</code></dt>
-                <dd>Transitions to the previously displayed card in the deck&#39;s history. progressType parameter acts similarly to shuffleTo&#39;s progressType parameter.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>historyForward([progressType])</code></dt>
-                <dd>Transitions to the more recently displayed card in the deck&#39;s history. progressType parameter acts similarly to shuffleTo&#39;s progressType parameter.</dd>
+                <dt><code>previousCard(index||element, [direction])</code></dt>
+                <dd>Transitions to the previous x-card in the deck. Takes an optional direction of &#39;forward&#39; or &#39;reverse&#39;.</dd>
               </dl>
             
           
@@ -442,28 +438,13 @@
             <h2>Events</h2>
             
             <dl>
-              <dt><code>shufflestart</code></dt>
-              <dd>A shufflestart event is fired by the &lt;x-deck&gt; element when, during the process of transitioning between cards, the two cards are in position to start animating, but have not yet begun the actual animation.<br/><br/>The event also receives the following custom datamap in `e.detail`:<br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;oldCard&#39;: the previously selected x-card node that the transition is animating away from,<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;newCard&#39;: the x-card node that the transition is animating towards<br/>}</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>shuffleend</code></dt>
-              <dd>A `shuffleend` event is fired by the &amp;lt;x-deck&amp;gt; element when a cycle from one card to another has been completed.<br/><br/>**Note:** Much like the `transitionend` event, this is not guaranteed to fire after every transition that fires a shufflestart. For example, if two transitions are queued up, with the second occurring during the first transition, only the second transition&#39;s `shuffleend` will fire, due to the first transition being interrupted.<br/><br/>The event also receives the following custom datamap in `e.detail`:<br/><br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;oldCard&#39;: the previously selected x-card node that the transition is animating away from,<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;newCard&#39;: the x-card node that the transition is animating towards<br/>}</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>cardadd</code></dt>
-              <dd>Fired by the x-deck whenever an x-card is added.<br/><br/>Receives the following datamap in `e.detail`:<br/><br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;card&#39;: the x-card that was just added<br/>}</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>cardremove</code></dt>
-              <dd>Fired by the x-deck whenever an x-card is removed.<br/><br/>Receives the following datamap in `e.detail`:<br/><br/>{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&#39;card&#39;: the x-card that was just removed<br/>}</dd>
-            </dl>
-            
-            <dl>
               <dt><code>show</code></dt>
-              <dd>If an &lt;x-card&gt; element receives a &#39;show&#39; event, the deck will automatically transition to the card that received the event. <br/> This event is not fired by the x-deck itself.</dd>
+              <dd>Fired from a card target after it has completed its show animation, and the show state has been finalized.</dd>
+            </dl>
+            
+            <dl>
+              <dt><code>hide</code></dt>
+              <dd>Fired from a card target after it has completed its hide animation, and the hide state has been finalized.</dd>
             </dl>
             
           
@@ -472,18 +453,13 @@
             <h2>Getters</h2>
             
             <dl>
-              <dt><code>numCards</code></dt>
-              <dd>Returns the number of cards currently in the deck.</dd>
+              <dt><code>cards</code></dt>
+              <dd>Returns an array of all &lt;x-card&gt; elements within the &lt;x-deck&gt;.</dd>
             </dl>
             
             <dl>
               <dt><code>selectedCard</code></dt>
               <dd>Returns the &lt;x-card&gt; currently displayed in the deck.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>cards</code></dt>
-              <dd>Returns an array of all &lt;x-card&gt;s in the deck.</dd>
             </dl>
             
             <dl>
@@ -496,48 +472,23 @@
               <dd>Returns the value of the &#39;selected-index&#39; attribute.</dd>
             </dl>
             
-            <dl>
-              <dt><code>historyCap</code></dt>
-              <dd>Returns the value of the &#39;history-cap&#39; attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>currHistorySize</code></dt>
-              <dd>Returns the number of cards currently stored in the deck&#39;s history.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>currHistoryIndex</code></dt>
-              <dd>Returns the deck&#39;s current index in its history stack.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>transitionOverride (on <x-card> element)</code></dt>
-              <dd>Returns the transition override of the card.</dd>
-            </dl>
-            
           
 
           
             <h2>Setters</h2>
             
             <dl>
-              <dt><code>transitionType</code></dt>
-              <dd>Sets the value of the &#39;transition-type&#39; attribute.</dd>
+              <dt><code>selectedCard</code></dt>
+              <dd>Sets the provided &lt;x-card&gt; element as the selected card, and shows the element.</dd>
             </dl>
             
             <dl>
               <dt><code>selectedIndex</code></dt>
-              <dd>Sets the value of the &#39;selected-index&#39; attribute.</dd>
+              <dd>Sets the value of the &#39;selected-index&#39; attribute, and shows the card at that index</dd>
             </dl>
             
             <dl>
-              <dt><code>historyCap</code></dt>
-              <dd>Sets the value of the &#39;history-cap&#39; attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>transitionOverride (on <x-card> element)</code></dt>
+              <dt><code>transitionType (also available on <x-card> elements)</code></dt>
               <dd>Sets the transition override of the card.</dd>
             </dl>
             
@@ -550,6 +501,16 @@
               <small><a href="demos/x-tag-flipbox/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-flipbox</small></span>
+            <span>Version: <small>0.2.7</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/flipbox.git">
+              http://github.com/x-tag/flipbox
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-flipbox</small></span>
+          </h5>
           <p>Flips between two content elements with a CSS Animation, similar to flipping a playing card. The front face defaults to the first direct child element of the &lt;x-flipbox&gt;, and the back face defaults to the last direct child element.</p>
 
           
@@ -639,6 +600,16 @@
               <small><a href="demos/x-tag-layout/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-layout</small></span>
+            <span>Version: <small>0.1.5</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/layout.git">
+              http://github.com/x-tag/layout
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-layout</small></span>
+          </h5>
           <p>A simple layout element that automatically stretches to fill the parent, with optional toggleable header and footer elements.</p>
 
           
@@ -676,73 +647,22 @@
           
         </section>
       
-        <section id="x-tag-slidebox" class="main-sect">
-          <h1>slidebox
-            
-              <small><a href="demos/x-tag-slidebox/index.html">View Demo &raquo;</a></small>
-            
-          </h1>
-          <p>A container that allows animated transitions between content panes, displaying all slides along the way. Think of the component as a filmstrip of slides that moves around in a viewport.</p>
-
-          
-            <h2>Attributes</h2>
-            
-            <dl>
-              <dt><code>orientation</code></dt>
-              <dd>Slide axis. Set as &#39;x&#39; for horizontal animations, and set as &#39;y&#39; for vertical animations.</dd>
-            </dl>
-            
-          
-
-          
-            <h2>Methods</h2>
-            
-              <dl>
-                <dt><code>slideTo</code></dt>
-                <dd>Slides to a specific element index.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>slideNext</code></dt>
-                <dd>Slides to the next slide element.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>slidePrevious</code></dt>
-                <dd>Slides to the previous slide element.</dd>
-              </dl>
-            
-          
-
-          
-            <h2>Events</h2>
-            
-            <dl>
-              <dt><code>slideend</code></dt>
-              <dd>Fires at the end of each slide transition.</dd>
-            </dl>
-            
-          
-
-          
-
-          
-            <h2>Setters</h2>
-            
-            <dl>
-              <dt><code>orientation</code></dt>
-              <dd>Sets the slide axis as either &#39;x&#39; or &#39;y&#39;.</dd>
-            </dl>
-            
-          
-        </section>
-      
         <section id="x-tag-slider" class="main-sect">
           <h1>slider
             
               <small><a href="demos/x-tag-slider/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-slider</small></span>
+            <span>Version: <small>0.1.7</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/slider.git">
+              http://github.com/x-tag/slider
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-slider</small></span>
+          </h5>
           <p>Polyfill on top of input type=&#39;range&#39;, providing a consistent UI regardless of whether type=&#39;range&#39; is supported or not.</p>
 
           
@@ -859,6 +779,16 @@
               <small><a href="demos/x-tag-tabbar/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-tabbar</small></span>
+            <span>Version: <small>0.1.8</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/tabbar.git">
+              http://github.com/x-tag/tabbar
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-tabbar</small></span>
+          </h5>
           <p>Tab bars are used to display an app-level navigation/tabbing bar (usually at the bottom of the UI) that shows different content depending on which tab is selected.</p>
 
           
@@ -877,7 +807,7 @@
             <h2>Events</h2>
             
             <dl>
-              <dt><code>show</code></dt>
+              <dt><code>reveal</code></dt>
               <dd>The default event that a x-tabbar-tab will fire on its selected elements if not overridden by &#39;target-event&#39;</dd>
             </dl>
             
@@ -945,6 +875,16 @@
               <small><a href="demos/x-tag-toggle/index.html">View Demo &raquo;</a></small>
             
           </h1>
+          <h5 class="details">
+            <span>Tag: <small>x-toggle</small></span>
+            <span>Version: <small>0.2.8</small></span>
+            
+            <span>Source: <small><a href="http://github.com/x-tag/toggle.git">
+              http://github.com/x-tag/toggle
+            </a></small></span>
+            
+            <span>Bower: <small>x-tag-toggle</small></span>
+          </h5>
           <p>A polyfill merging radiobutton/checkbox inputs into a single tag to provide a consistent UI and simplify markup. Automatically switches between radiobutton and checkbox depending on name attribute.</p>
 
           
@@ -1062,170 +1002,6 @@
             <dl>
               <dt><code>checked</code></dt>
               <dd>Sets the value of the checked attribute</dd>
-            </dl>
-            
-          
-        </section>
-      
-        <section id="x-tag-tooltip" class="main-sect">
-          <h1>tooltip
-            
-              <small><a href="demos/x-tag-tooltip/index.html">View Demo &raquo;</a></small>
-            
-          </h1>
-          <p>Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content</p>
-
-          
-            <h2>Attributes</h2>
-            
-            <dl>
-              <dt><code>orientation</code></dt>
-              <dd>Determines where the tooltip appears in relation to the triggering element. Valid options are &#39;top&#39;, &#39;bottom&#39;, &#39;left&#39;, &#39;right&#39;. If not provided, or if invalid, defaults to auto placement of tooltip.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>trigger-style</code></dt>
-              <dd>Indicates how the tooltip is triggered. Valid presets are &#39;hover&#39; and &#39;custom&#39;. When set to &#39;hover&#39;, the tooltip is triggered when the user moves their cursor over a triggering element, and dismissed when moved off. When set to &#39;custom&#39;, no default behavior is implemented for triggering the tooltip. This is useful when you want to define your own triggering system using the .show(), .hide(), and .toggle() API calls without any default behaviors getting in the way. If set to anything else, the tooltip will use this as the event name to listen for on targeted elems to show the tooltip.  (defaults to &#39;click&#39;)</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>trigger-selector</code></dt>
-              <dd>Indicates how to select elements that would trigger the tooltip. If given a selector of &#39;_previousSibling&#39;, the tooltip will use the immediately preceding sibling element in the DOM tree as its triggering element. Similarly, when set to &#39;_nextSibling&#39;, the tooltip will use its next DOM sibling as its triggering element. Otherwise, the selector will be applied to the tooltip&#39;s parent node as a search query, and any elements that are not part of the tooltip itself will act as triggering elements for the tooltip. (For example, if you were to provide &#39;.fancy-selector&#39; as this attribute&#39;s value, and foo is your tooltip element, the elements you would get back would be same as those found from foo.parentNode.querySelectorAll(&#39;.fancy-selector&#39;).)</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>ignore-outer-trigger</code></dt>
-              <dd>If present, for non-&#39;hover&#39; and non-&#39;custom&#39; trigger styles, indicates whether an event firing outside of a targeting element should close the tooltip. Has no effect on preset trigger styles</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>ignore-tooltip-pointer-events</code></dt>
-              <dd>If present, pointer events on the tooltip will be ignored, keeping it from blocking interaction with underlying elements.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>allow-overflow</code></dt>
-              <dd>By default, the tooltip will always try to place the tooltip in a way that is constrained by both the container element and the window&#39;s viewport (ie: accounting for scrolling).<br/><br/>If `allow-overflow` set, this will instead allow the tooltip to be placed freely, even if it overflows the containing element (However, the tooltip will still be constrained by the window&#39;s viewport).</dd>
-            </dl>
-            
-          
-
-          
-            <h2>Methods</h2>
-            
-              <dl>
-                <dt><code>refreshPosition()</code></dt>
-                <dd>This method immediately repositions the tooltip to recenter on the triggering element. This is useful if the tooltip&#39;s contents are changed and need to be immediately visually repositioned.</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>show()</code></dt>
-                <dd>This method forces the tooltip to display (this will fire a &#39;tooltipshown&#39; event).</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>hide()</code></dt>
-                <dd>This method forces the tooltip to hide (this will fire a &#39;tooltiphidden&#39; event).</dd>
-              </dl>
-            
-              <dl>
-                <dt><code>toggle()</code></dt>
-                <dd>This method forces the tooltip to toggle whether it is visible or not (this will fire a &#39;tooltipshown&#39; or &#39;tooltiphidden&#39; event, whichever is appropriate).</dd>
-              </dl>
-            
-          
-
-          
-            <h2>Events</h2>
-            
-            <dl>
-              <dt><code>tooltipshown</code></dt>
-              <dd>Fired by the x-tooltip element when tooltip is shown</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>tooltiphidden</code></dt>
-              <dd>Fired by the x-tooltip element when tooltip is hidden</dd>
-            </dl>
-            
-          
-
-          
-            <h2>Getters</h2>
-            
-            <dl>
-              <dt><code>presetTriggerStyles</code></dt>
-              <dd>Returns a list of the valid preset style types for the &#39;trigger-style&#39; attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>targetElems</code></dt>
-              <dd>Returns a list of all DOM elements currently selected as a target of the tooltip.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>orientation</code></dt>
-              <dd>This will provide the current value of the orientation attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>triggerStyle</code></dt>
-              <dd>This will provide the current value of the trigger-style attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>triggerSelector</code></dt>
-              <dd>This will provide the current value of the trigger-selector attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>content</code></dt>
-              <dd>This will provide the DOM element that is acting as the content area of the tooltip.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>ignoreOuterTrigger</code></dt>
-              <dd>This will provide the current value of the ignore-outer-trigger attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>ignoreTooltipPointerEvents</code></dt>
-              <dd>This will provide the current value of the ignore-tooltip-pointer-events attribute.</dd>
-            </dl>
-            
-          
-
-          
-            <h2>Setters</h2>
-            
-            <dl>
-              <dt><code>orientation</code></dt>
-              <dd>This will change the value of the tooltip&#39;s orientation attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>triggerStyle</code></dt>
-              <dd>This will change the value of the tooltip&#39;s trigger-style attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>triggerSelector</code></dt>
-              <dd>This will change the value of the tooltip&#39;s trigger-selector attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>content</code></dt>
-              <dd>This will replace the DOM element for the tooltip&#39;s content area with an entirely new DOM element, destroying the old one.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>ignoreOuterTrigger</code></dt>
-              <dd>This will change the current value of the ignore-outer-trigger attribute.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>ignoreTooltipPointerEvents</code></dt>
-              <dd>This will change the current value of the ignore-tooltip-pointer-events attribute.</dd>
             </dl>
             
           
