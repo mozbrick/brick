@@ -25,7 +25,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="../../index.html">
         <img class="logo" src="../../site/img/logo.png">
-        Brick<small> 0.10.0</small>
+        Brick<small> 1.0.0rc1</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -63,9 +63,8 @@
         <div class="two-up">
             <figure class="demo">
                 <x-toggle label="Basic toggle"></x-toggle>
-                <x-toggle label="Place markup in the <code>label</code>."></x-toggle>
-                <x-toggle label="<span style='vertical-align: middle;'>Any markup works!</span> <img src='../../site/img/grounds_keeping_it_real_s1.gif' style='vertical-align: middle;'/>"></x-toggle>
-                <x-toggle label="Escaped angle brackets: &amp;lt; &amp;gt;"></x-toggle>
+                <x-toggle label="Any text works!"></x-toggle>
+                <x-toggle label="Use Unicode: &#9889;"></x-toggle>
             </figure>
         </div>
         <div class="markup-wrap two-up">
@@ -153,7 +152,7 @@
         <p>To fully customize how the <code class="prettyprint">&lt;x-toggle&gt;</code> appear, utilize any of the following CSS selectors to customize specific parts of the toggle:
             <ul>
                 <li>To style the toggle as a whole, apply styles to <code class="prettyprint">x-toggle</code>.</li>
-                <li>To style the toggle's content/label area only, apply styles to <code class="prettyprint">x-toggle > .x-toggle-content</code>.</li>
+                <li>To set the text for a toggle's label, add a <code class="prettyprint">label</code> attribute (text shown using <code class="prettyprint">:after</code> pseudo element)</li>
                 <li>To style the toggle's checkbox/radiobutton only, apply styles to <code class="prettyprint">x-toggle > .x-toggle-check</code>.</li>
                 <li>To style checkbox-type toggles only, apply styles to <code class="prettyprint">x-toggle[type='checkbox']</code>.</li>
                 <li>To style radio-type toggles only, apply styles to <code class="prettyprint">x-toggle[type='radio']</code>.</li>

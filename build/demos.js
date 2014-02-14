@@ -22,7 +22,7 @@ var generateDemoPages = avow(function(fulfill, reject, components){
             }
             else{
                 // TODO: this should use bower list --json
-                var componentDemoPath = path.join("bower_components", componentName,
+                var componentDemoPath = path.join("dev-repos", componentName,
                                                   "demo");
                 processComponentTemplate(componentDemoPath, componentName).then(function(){
                     processComponent(n+1);

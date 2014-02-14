@@ -4,10 +4,11 @@ body {
 }
 
 .jumbotron {
-    background-image: linear-gradient(to bottom right, rgba(170,34,0,1), rgba(170,34,0,.5)), url(../img/bgtile.png);
-    background-size: auto, 636px auto;
+    background-color: #a20;
     color: #fff;
-    text-shadow: 0 0 2px #000;
+}
+.jumbotron h1 {
+  font-size: 4em;
 }
 
 .moz img {
@@ -125,6 +126,10 @@ section.demo-wrap:not(.clean){
 .jumbotron {
   margin-top: -21px;
   padding-bottom: 64px;
+  text-align: center;
+}
+.jumbotron h1 {
+  font-size: ;
 }
 
 footer {

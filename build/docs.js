@@ -18,11 +18,12 @@ var generateDocs = avow(function (fulfill, reject, componentsJson) {
       components.push(componentsJson[key]);
     });
 
-    var docs = {};
+    var data = {docs:{}, pkgJson: {}};
     function processComponent(n) {
         if (n < components.length) {
             var name = components[n];
             var docPath = path.join('bower_components', name, 'xtag.json');
+            var pkgPath = path.join('bower_components', name, 'package.json');
             console.log(name, docPath);
             if (name === 'core') {
                 processComponent(n+1);
@@ -30,24 +31,33 @@ var generateDocs = avow(function (fulfill, reject, componentsJson) {
             }
             if (fs.existsSync(docPath)) {
                 getJSON(docPath).then(function(json) {
-                    docs[name] = json;
-                    processComponent(n+1);
+                    data.docs[name] = json;
+                    if(fs.existsSync(pkgPath)){
+                        getJSON(pkgPath).then(function(json) {
+                            data.pkgJson[name] = json;
+                            processComponent(n+1);
+                        });
+                    }
                 }, err('failed to parse ' + docPath));
             } else {
-                console.warn('no docs found for ' + name + '!');
-                docs[name] = {};
+                console.warn('no xtag.json found for ' + name + '!');
+                data[name] = {};
                 processComponent(n+1);
             }
         } else {
-            fulfill(docs);
+            fulfill(data);
         }
     }
     processComponent(0);
 });
 
-var writeIndex = avow(function (fulfill, reject, docs) {
+var writeIndex = avow(function (fulfill, reject, data) {
     console.log('writing index');
-    site.staticPage('docs.html', 'docs.html', {tags: docs});
+    try{
+    site.staticPage('docs.html', 'docs.html', {tags: data.docs, pkgJson: data.pkgJson });
+    }catch(e){
+        console.log(e);
+    }
     console.log('index written!');
     return true;
 });
