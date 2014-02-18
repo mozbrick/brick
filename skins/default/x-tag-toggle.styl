@@ -4,6 +4,11 @@
 $toggleSize = 22px;
 
 x-toggle {
+
+  &[focus] {
+    outline: 0;
+  }
+
   .x-toggle-content {
     min-height: $toggleSize;
     line-height: $toggleSize + 2;
@@ -12,19 +17,21 @@ x-toggle {
   .x-toggle-check {
     width: $toggleSize;
     height: $toggleSize;
-    border-radius: 50%;
+    border-radius: 3px;
     margin: 0px 3px 0px 0px;
     color: #000;
     vertical-align: middle;
     border: 1px solid $darkBG;
     position: relative;
+    background: #fff;
   }
 
   &[no-box] .x-toggle-check {
     display: none !important;
   }
 
-  &[type="radio"][checked] .x-toggle-check {
+  &[type="radio"] input:checked + .x-toggle-check {
+    background: #fff;
 
     &:after {
       content: '';
@@ -42,7 +49,7 @@ x-toggle {
     }
   }
 
-  &[type="checkbox"][checked] .x-toggle-check {
+  &[type="checkbox"] input:checked + .x-toggle-check {
     border-width: 0;
     background: $highlight;
 

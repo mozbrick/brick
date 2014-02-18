@@ -57,7 +57,7 @@
         return constrainToSteppedRange(roundedVal, slider.min, slider.max, slider.step);
     }
     function _positionThumb(slider, value) {
-        var thumb = slider.xtag.polyFillSliderThumb;
+        var thumb = slider.xtag.sliderThumb;
         if (!thumb) {
             return;
         }
@@ -72,6 +72,7 @@
         var finalPercentage = newThumbX / sliderWidth;
         thumb.style[vertical ? "left" : "top"] = 0;
         thumb.style[vertical ? "top" : "left"] = finalPercentage * 100 + "%";
+        slider.xtag.sliderProgress.style[vertical ? "height" : "width"] = fraction * 100 + "%";
     }
     function _redraw(slider) {
         _positionThumb(slider, slider.value);
@@ -79,8 +80,9 @@
     function _onMouseInput(slider, pageX, pageY) {
         var inputEl = slider.xtag.rangeInputEl;
         var inputOffsets = inputEl.getBoundingClientRect();
-        var inputClickX = pageX - inputOffsets.left;
-        var divideby = inputOffsets.width;
+        var thumbWidth = slider.xtag.sliderThumb.getBoundingClientRect().width;
+        var inputClickX = pageX - inputOffsets.left - thumbWidth / 2;
+        var divideby = inputOffsets.width - thumbWidth / 2;
         if (slider.vertical) {
             divideby = inputOffsets.height;
             inputClickX = pageY - inputOffsets.top;
@@ -100,7 +102,7 @@
         _addBodyListener("touchmove", callbacks.onTouchDragMove);
         _addBodyListener("mouseup", callbacks.onDragEnd);
         _addBodyListener("touchend", callbacks.onDragEnd);
-        var thumb = slider.xtag.polyFillSliderThumb;
+        var thumb = slider.xtag.sliderThumb;
         if (thumb) {
             thumb.setAttribute("active", true);
         }
@@ -146,7 +148,7 @@
                 _removeBodyListener("touchmove", callbacks.onTouchDragMove);
                 _removeBodyListener("mouseup", callbacks.onDragEnd);
                 _removeBodyListener("touchend", callbacks.onDragEnd);
-                var thumb = slider.xtag.polyFillSliderThumb;
+                var thumb = slider.xtag.sliderThumb;
                 if (thumb) {
                     thumb.removeAttribute("active");
                 }
@@ -223,16 +225,40 @@
                 input.setAttribute("value", initVal);
                 self.xtag.rangeInputEl = input;
                 self.appendChild(self.xtag.rangeInputEl);
-                self.xtag.polyFillSliderThumb = null;
+                var sliderTrack = document.createElement("div");
+                xtag.addClass(sliderTrack, "slider-track");
+                this.xtag.sliderTrack = sliderTrack;
+                this.appendChild(sliderTrack);
+                var sliderProgress = document.createElement("div");
+                xtag.addClass(sliderProgress, "slider-progress");
+                this.xtag.sliderProgress = sliderProgress;
+                sliderTrack.appendChild(sliderProgress);
+                var sliderThumb = document.createElement("span");
+                xtag.addClass(sliderThumb, "slider-thumb");
+                this.xtag.sliderThumb = sliderThumb;
+                this.appendChild(sliderThumb);
                 if (input.type !== "range" || self.hasAttribute("polyfill")) {
                     self.setAttribute("polyfill", true);
                 } else {
                     self.removeAttribute("polyfill");
                 }
-                _redraw(self);
+                this.addEventListener("mousedown", self.xtag.callbackFns.onMouseDragStart);
+                this.addEventListener("touchstart", self.xtag.callbackFns.onTouchDragStart);
+                this.addEventListener("keydown", self.xtag.callbackFns.onKeyDown);
+                self.setAttribute("value", initVal);
             },
-            attributeChanged: function() {
-                _redraw(this);
+            inserted: function() {
+                var self = this;
+                xtag.requestFrame(function() {
+                    xtag.requestFrame(function() {
+                        _redraw(self);
+                    });
+                });
+            },
+            attributeChanged: function(property) {
+                if (property == "min" || property == "max" || property == "step") {
+                    _redraw(this);
+                }
             }
         },
         events: {
@@ -268,29 +294,11 @@
                         this.setAttribute("tabindex", 0);
                         this.xtag.rangeInputEl.setAttribute("tabindex", -1);
                         this.xtag.rangeInputEl.setAttribute("readonly", true);
-                        if (!this.xtag.polyFillSliderTrack) {
-                            var sliderTrack = document.createElement("div");
-                            xtag.addClass(sliderTrack, "slider-track");
-                            this.xtag.polyFillSliderTrack = sliderTrack;
-                            this.appendChild(sliderTrack);
-                        }
-                        if (!this.xtag.polyFillSliderThumb) {
-                            var sliderThumb = document.createElement("span");
-                            xtag.addClass(sliderThumb, "slider-thumb");
-                            this.xtag.polyFillSliderThumb = sliderThumb;
-                            this.appendChild(sliderThumb);
-                        }
                         _redraw(this);
-                        this.addEventListener("mousedown", callbackFns.onMouseDragStart);
-                        this.addEventListener("touchstart", callbackFns.onTouchDragStart);
-                        this.addEventListener("keydown", callbackFns.onKeyDown);
                     } else {
                         this.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("tabindex");
                         this.xtag.rangeInputEl.removeAttribute("readonly");
-                        this.removeEventListener("mousedown", callbackFns.onMouseDragStart);
-                        this.removeEventListener("touchstart", callbackFns.onTouchDragStart);
-                        this.removeEventListener("keydown", callbackFns.onKeyDown);
                     }
                 }
             },

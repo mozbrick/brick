@@ -103,25 +103,13 @@
     <script src="dist/brick.js"></script>
     <script>
       document.addEventListener('DOMComponentsLoaded', function(){
-        var slidebox = document.querySelector('x-slidebox');
         var slides = document.querySelectorAll('x-slide');
         var flipbox = document.querySelector('x-flipbox');
-
-        document.body.addEventListener('click', function (e) {
-          switch (e.target.className) {
-            case 'rand':
-              slidebox.slideTo(Math.random() * slides.length | 0);
-              break;
-            case 'flip':
-              flipbox.toggle();
-              break;
-          }
-        });
 
         var loc = location.hash;
         loc = parseInt(loc.substring(1));
         if (loc) {
-          document.querySelector('x-deck').shuffleTo(loc);
+          document.querySelector('x-deck').showCard(loc);
         }
       });
     </script>
