@@ -23,8 +23,13 @@
             Select just the components you want <label for="dev-build">Minified <input type="checkbox" id="dev-build" checked></label>
           </div>
           <div id="components" class="panel-body row">
+          <div class="col-sm-6">
+          <label>x-tag core<input type="checkbox" checked="checked" disabled="" value="x-tag-core">
+          </label>
+          </div>
           {% for component, deps in dependencies %}
             <div class="col-sm-6">
+
               <label>
                 {{ component.replace('x-tag-','') }}
                 <input type="checkbox" value="{{ component }}"
@@ -129,7 +134,7 @@
 
       var buildURL = '/* ' + location.protocol + '//' + location.host + location.pathname;
 
-      var selected = ['x-tag-core'];
+      var selected = [];
 
       for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].checked) {

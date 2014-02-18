@@ -71,8 +71,13 @@
             Select just the components you want <label for="dev-build">Minified <input type="checkbox" id="dev-build" checked></label>
           </div>
           <div id="components" class="panel-body row">
+          <div class="col-sm-6">
+          <label>x-tag core<input type="checkbox" checked="checked" disabled="" value="x-tag-core">
+          </label>
+          </div>
           
             <div class="col-sm-6">
+
               <label>
                 appbar
                 <input type="checkbox" value="x-tag-appbar"
@@ -81,6 +86,7 @@
             </div>
           
             <div class="col-sm-6">
+
               <label>
                 calendar
                 <input type="checkbox" value="x-tag-calendar"
@@ -89,6 +95,7 @@
             </div>
           
             <div class="col-sm-6">
+
               <label>
                 deck
                 <input type="checkbox" value="x-tag-deck"
@@ -97,6 +104,7 @@
             </div>
           
             <div class="col-sm-6">
+
               <label>
                 flipbox
                 <input type="checkbox" value="x-tag-flipbox"
@@ -105,6 +113,7 @@
             </div>
           
             <div class="col-sm-6">
+
               <label>
                 layout
                 <input type="checkbox" value="x-tag-layout"
@@ -113,6 +122,7 @@
             </div>
           
             <div class="col-sm-6">
+
               <label>
                 slider
                 <input type="checkbox" value="x-tag-slider"
@@ -121,6 +131,7 @@
             </div>
           
             <div class="col-sm-6">
+
               <label>
                 tabbar
                 <input type="checkbox" value="x-tag-tabbar"
@@ -129,6 +140,7 @@
             </div>
           
             <div class="col-sm-6">
+
               <label>
                 toggle
                 <input type="checkbox" value="x-tag-toggle"
@@ -255,8 +267,7 @@
       prog = 0;
       progress.value = 0;
 
-       getCss(selected, function(css) {
-        selected.unshift('x-tag-core');
+      getCss(selected, function(css) {
         getJs(selected, function(js) {
           getExtraFiles(function(extraFileInfo){
             makeZip(buildURL + js, buildURL + css, extraFileInfo);
