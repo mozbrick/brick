@@ -129,7 +129,7 @@
 
       var buildURL = '/* ' + location.protocol + '//' + location.host + location.pathname;
 
-      var selected = [];
+      var selected = ['x-tag-core'];
 
       for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].checked) {
@@ -144,8 +144,7 @@
       prog = 0;
       progress.value = 0;
 
-       getCss(selected, function(css) {
-        selected.unshift('x-tag-core');
+      getCss(selected, function(css) {
         getJs(selected, function(js) {
           getExtraFiles(function(extraFileInfo){
             makeZip(buildURL + js, buildURL + css, extraFileInfo);
