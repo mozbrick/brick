@@ -25,13 +25,13 @@
       <header>
         <x-appbar>
           <button>Foo</button>
-          <header>Brick</header>
+          <h1>Brick</h1>
           <button>Bar</button>
         </x-appbar>
       </header>
       <section>
         <x-deck>
-          <x-card id="flip">
+          <x-card id="flip" selected>
             <x-flipbox>
               <div>
                 <p>
@@ -45,24 +45,6 @@
                   <button class="flip">Flip</button>
                 </p>
               </div>
-            </x-flipbox>
-          </x-card>
-          <x-card id="slide">
-            <x-slidebox>
-              <x-slides>
-                <x-slide>
-                  <p>Slide 1 <button class="rand">Random</button></p>
-                </x-slide>
-                <x-slide>
-                  <p>Slide 2 <button class="rand">Random</button></p>
-                </x-slide>
-                <x-slide>
-                  <p>Slide 3 <button class="rand">Random</button></p>
-                </x-slide>
-                <x-slide>
-                  <p>Slide 4 <button class="rand">Random</button></p>
-                </x-slide>
-              </x-slides>
             </x-flipbox>
           </x-card>
           <x-card id="cal">
@@ -94,7 +76,6 @@
       <footer>
         <x-tabbar>
           <x-tabbar-tab target-selector="#flip">flip</x-tabbar-tab>
-          <x-tabbar-tab target-selector="#slide">slide</x-tabbar-tab>
           <x-tabbar-tab target-selector="#cal">cal</x-tabbar-tab>
           <x-tabbar-tab target-selector="#misc">misc</x-tabbar-tab>
         </x-tabbar>
@@ -105,6 +86,12 @@
       document.addEventListener('DOMComponentsLoaded', function(){
         var slides = document.querySelectorAll('x-slide');
         var flipbox = document.querySelector('x-flipbox');
+
+        flipbox.addEventListener('click', function (e) {
+          if (e.target.classList.contains('flip')) {
+            flipbox.toggle();
+          }
+        });
 
         var loc = location.hash;
         loc = parseInt(loc.substring(1));
