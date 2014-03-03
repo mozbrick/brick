@@ -1,6 +1,6 @@
 {
   "name": "brick",
-  "version": "1.0.0rc1",
+  "version": "1.0.0-rc2",
   "description": "UI Web Components for Mobile Web Apps",
   "main": "index.js",
   "scripts": {

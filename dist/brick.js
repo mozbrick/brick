@@ -396,7 +396,7 @@ if (typeof WeakMap === "undefined") {
         };
     }
     var flags = scope.flags;
-    var hasNative = Boolean(document.register);
+    var hasNative = Boolean(document.registerElement);
     var useNative = !flags.register && hasNative;
     if (useNative) {
         var nop = function() {};
@@ -413,21 +413,24 @@ if (typeof WeakMap === "undefined") {
         function register(name, options) {
             var definition = options || {};
             if (!name) {
-                throw new Error("document.register: first argument `name` must not be empty");
+                throw new Error("document.registerElement: first argument `name` must not be empty");
             }
             if (name.indexOf("-") < 0) {
-                throw new Error("document.register: first argument ('name') must contain a dash ('-'). Argument provided was '" + String(name) + "'.");
+                throw new Error("document.registerElement: first argument ('name') must contain a dash ('-'). Argument provided was '" + String(name) + "'.");
             }
-            definition.name = name;
+            if (getRegisteredDefinition(name)) {
+                throw new Error("DuplicateDefinitionError: a type with name '" + String(name) + "' is already registered");
+            }
             if (!definition.prototype) {
                 throw new Error("Options missing required prototype property");
             }
+            definition.__name = name.toLowerCase();
             definition.lifecycle = definition.lifecycle || {};
             definition.ancestry = ancestry(definition.extends);
             resolveTagName(definition);
             resolvePrototypeChain(definition);
             overrideAttributeApi(definition.prototype);
-            registerDefinition(name, definition);
+            registerDefinition(definition.__name, definition);
             definition.ctor = generateConstructor(definition);
             definition.ctor.prototype = definition.prototype;
             definition.prototype.constructor = definition.ctor;
@@ -437,7 +440,7 @@ if (typeof WeakMap === "undefined") {
             return definition.ctor;
         }
         function ancestry(extnds) {
-            var extendee = registry[extnds];
+            var extendee = getRegisteredDefinition(extnds);
             if (extendee) {
                 return ancestry(extendee.extends).concat([ extendee ]);
             }
@@ -448,9 +451,9 @@ if (typeof WeakMap === "undefined") {
             for (var i = 0, a; a = definition.ancestry[i]; i++) {
                 baseTag = a.is && a.tag;
             }
-            definition.tag = baseTag || definition.name;
+            definition.tag = baseTag || definition.__name;
             if (baseTag) {
-                definition.is = definition.name;
+                definition.is = definition.__name;
             }
         }
         function resolvePrototypeChain(definition) {
@@ -533,6 +536,11 @@ if (typeof WeakMap === "undefined") {
             }
         }
         var registry = {};
+        function getRegisteredDefinition(name) {
+            if (name) {
+                return registry[name.toLowerCase()];
+            }
+        }
         function registerDefinition(name, definition) {
             registry[name] = definition;
         }
@@ -542,7 +550,7 @@ if (typeof WeakMap === "undefined") {
             };
         }
         function createElement(tag, typeExtension) {
-            var definition = registry[typeExtension || tag];
+            var definition = getRegisteredDefinition(typeExtension || tag);
             if (definition) {
                 return new definition.ctor();
             }
@@ -551,7 +559,7 @@ if (typeof WeakMap === "undefined") {
         function upgradeElement(element) {
             if (!element.__upgraded__ && element.nodeType === Node.ELEMENT_NODE) {
                 var type = element.getAttribute("is") || element.localName;
-                var definition = registry[type];
+                var definition = getRegisteredDefinition(type);
                 return definition && upgrade(element, definition);
             }
         }
@@ -562,12 +570,13 @@ if (typeof WeakMap === "undefined") {
         }
         var domCreateElement = document.createElement.bind(document);
         var domCloneNode = Node.prototype.cloneNode;
-        document.register = register;
+        document.registerElement = register;
         document.createElement = createElement;
         Node.prototype.cloneNode = cloneNode;
         scope.registry = registry;
         scope.upgrade = upgradeElement;
     }
+    document.register = document.registerElement;
     scope.hasNative = hasNative;
     scope.useNative = useNative;
 })(window.CustomElements);
@@ -673,7 +682,7 @@ if (typeof WeakMap === "undefined") {
         }
     }
     function _inserted(element) {
-        if (element.enteredViewCallback || element.__upgraded__ && logFlags.dom) {
+        if (element.attachedCallback || element.detachedCallback || element.__upgraded__ && logFlags.dom) {
             logFlags.dom && console.group("inserted:", element.localName);
             if (inDocument(element)) {
                 element.__inserted = (element.__inserted || 0) + 1;
@@ -682,9 +691,9 @@ if (typeof WeakMap === "undefined") {
                 }
                 if (element.__inserted > 1) {
                     logFlags.dom && console.warn("inserted:", element.localName, "insert/remove count:", element.__inserted);
-                } else if (element.enteredViewCallback) {
+                } else if (element.attachedCallback) {
                     logFlags.dom && console.log("inserted:", element.localName);
-                    element.enteredViewCallback();
+                    element.attachedCallback();
                 }
             }
             logFlags.dom && console.groupEnd();
@@ -706,8 +715,8 @@ if (typeof WeakMap === "undefined") {
         }
     }
     function _removed(element) {
-        if (element.leftViewCallback || element.__upgraded__ && logFlags.dom) {
-            logFlags.dom && console.log("removed:", element.localName);
+        if (element.attachedCallback || element.detachedCallback || element.__upgraded__ && logFlags.dom) {
+            logFlags.dom && console.group("removed:", element.localName);
             if (!inDocument(element)) {
                 element.__inserted = (element.__inserted || 0) - 1;
                 if (element.__inserted > 0) {
@@ -715,10 +724,11 @@ if (typeof WeakMap === "undefined") {
                 }
                 if (element.__inserted < 0) {
                     logFlags.dom && console.warn("removed:", element.localName, "insert/remove count:", element.__inserted);
-                } else if (element.leftViewCallback) {
-                    element.leftViewCallback();
+                } else if (element.detachedCallback) {
+                    element.detachedCallback();
                 }
             }
+            logFlags.dom && console.groupEnd();
         }
     }
     function inDocument(element) {
@@ -855,7 +865,7 @@ if (typeof WeakMap === "undefined") {
             if (window.HTMLImports) {
                 CustomElements.elapsed = CustomElements.readyTime - HTMLImports.readyTime;
             }
-            document.body.dispatchEvent(new CustomEvent("WebComponentsReady", {
+            document.dispatchEvent(new CustomEvent("WebComponentsReady", {
                 bubbles: true
             }));
         });
@@ -872,13 +882,13 @@ if (typeof WeakMap === "undefined") {
     } else if (document.readyState === "interactive" && !window.attachEvent && (!window.HTMLImports || window.HTMLImports.ready)) {
         bootstrap();
     } else {
-        var loadEvent = window.HTMLImports ? "HTMLImportsLoaded" : "DOMContentLoaded";
+        var loadEvent = window.HTMLImports && !HTMLImports.ready ? "HTMLImportsLoaded" : "DOMContentLoaded";
         window.addEventListener(loadEvent, bootstrap);
     }
 })(window.CustomElements);
 
 (function() {
-    var win = window, doc = document, noop = function() {}, trueop = function() {
+    var win = window, doc = document, container = doc.createElement("div"), noop = function() {}, trueop = function() {
         return true;
     }, regexPseudoSplit = /([\w-]+(?:\([^\)]+\))?)/g, regexPseudoReplace = /(\w*)(?:\(([^\)]*)\))?/, regexDigits = /(\d+)/g, keypseudo = {
         action: function(pseudo, event) {
@@ -944,8 +954,10 @@ if (typeof WeakMap === "undefined") {
         return source;
     }
     function wrapMixin(tag, key, pseudo, value, original) {
-        if (typeof original[key] != "function") original[key] = value; else {
-            original[key] = xtag.wrap(original[key], xtag.applyPseudos(pseudo, value, tag.pseudos));
+        var fn = original[key];
+        if (!(key in original)) original[key] = value; else if (typeof original[key] == "function") {
+            if (!fn.__mixins__) fn.__mixins__ = [];
+            fn.__mixins__.push(xtag.applyPseudos(pseudo, value, tag.pseudos));
         }
     }
     var uniqueMixinCount = 0;
@@ -958,7 +970,7 @@ if (typeof WeakMap === "undefined") {
             }
         } else {
             for (var zz in mixin) {
-                wrapMixin(tag, zz + ":__mixin__(" + uniqueMixinCount++ + ")", zz, mixin[zz], original);
+                original[zz + ":__mixin__(" + uniqueMixinCount++ + ")"] = xtag.applyPseudos(zz, mixin[zz], tag.pseudos);
             }
         }
     }
@@ -1023,7 +1035,7 @@ if (typeof WeakMap === "undefined") {
         });
     }
     var skipProps = {};
-    for (var z in document.createEvent("CustomEvent")) skipProps[z] = 1;
+    for (var z in doc.createEvent("CustomEvent")) skipProps[z] = 1;
     function inheritEvent(event, base) {
         var desc = Object.getOwnPropertyDescriptor(event, "target");
         for (var z in base) {
@@ -1054,7 +1066,7 @@ if (typeof WeakMap === "undefined") {
         var key = z.split(":"), type = key[0];
         if (type == "get") {
             key[0] = prop;
-            tag.prototype[prop].get = xtag.applyPseudos(key.join(":"), accessor[z], tag.pseudos);
+            tag.prototype[prop].get = xtag.applyPseudos(key.join(":"), accessor[z], tag.pseudos, accessor[z]);
         } else if (type == "set") {
             key[0] = prop;
             var setter = tag.prototype[prop].set = xtag.applyPseudos(key.join(":"), attr ? function(value) {
@@ -1067,7 +1079,7 @@ if (typeof WeakMap === "undefined") {
             } : accessor[z] ? function(value) {
                 accessor[z].call(this, value);
                 updateView(this, name, value);
-            } : null, tag.pseudos);
+            } : null, tag.pseudos, accessor[z]);
             if (attr) attr.setter = setter;
         } else tag.prototype[prop][z] = accessor[z];
     }
@@ -1131,9 +1143,9 @@ if (typeof WeakMap === "undefined") {
             delete options.prototype;
             var tag = xtag.tags[_name] = applyMixins(xtag.merge({}, xtag.defaultOptions, options));
             for (var z in tag.events) tag.events[z] = xtag.parseEvent(z, tag.events[z]);
-            for (z in tag.lifecycle) tag.lifecycle[z.split(":")[0]] = xtag.applyPseudos(z, tag.lifecycle[z], tag.pseudos);
+            for (z in tag.lifecycle) tag.lifecycle[z.split(":")[0]] = xtag.applyPseudos(z, tag.lifecycle[z], tag.pseudos, tag.lifecycle[z]);
             for (z in tag.methods) tag.prototype[z.split(":")[0]] = {
-                value: xtag.applyPseudos(z, tag.methods[z], tag.pseudos),
+                value: xtag.applyPseudos(z, tag.methods[z], tag.pseudos, tag.methods[z]),
                 enumerable: true
             };
             for (z in tag.accessors) parseAccessor(tag, z);
@@ -1146,7 +1158,7 @@ if (typeof WeakMap === "undefined") {
                     tag.mixins.forEach(function(mixin) {
                         if (xtag.mixins[mixin].events) xtag.addEvents(element, xtag.mixins[mixin].events);
                     });
-                    var output = ready ? ready.apply(this, toArray(arguments)) : null;
+                    var output = ready ? ready.apply(this, arguments) : null;
                     for (var name in tag.attributes) {
                         var attr = tag.attributes[name], hasAttr = this.hasAttribute(name);
                         if (hasAttr || attr.boolean) {
@@ -1159,14 +1171,28 @@ if (typeof WeakMap === "undefined") {
                     return output;
                 }
             };
-            if (tag.lifecycle.inserted) tag.prototype.enteredViewCallback = {
-                value: tag.lifecycle.inserted,
-                enumerable: true
-            };
-            if (tag.lifecycle.removed) tag.prototype.leftViewCallback = {
-                value: tag.lifecycle.removed,
-                enumerable: true
-            };
+            var inserted = tag.lifecycle.inserted, removed = tag.lifecycle.removed;
+            if (inserted || removed) {
+                tag.prototype.attachedCallback = {
+                    value: function() {
+                        if (removed) this.xtag.__parentNode__ = this.parentNode;
+                        if (inserted) return inserted.apply(this, arguments);
+                    },
+                    enumerable: true
+                };
+            }
+            if (removed) {
+                tag.prototype.detachedCallback = {
+                    value: function() {
+                        var args = toArray(arguments);
+                        args.unshift(this.xtag.__parentNode__);
+                        var output = removed.apply(this, args);
+                        delete this.xtag.__parentNode__;
+                        return output;
+                    },
+                    enumerable: true
+                };
+            }
             if (tag.lifecycle.attributeChanged) tag.prototype.attributeChangedCallback = {
                 value: tag.lifecycle.attributeChanged,
                 enumerable: true
@@ -1213,7 +1239,7 @@ if (typeof WeakMap === "undefined") {
             if (options["extends"]) {
                 definition["extends"] = options["extends"];
             }
-            var reg = doc.register(_name, definition);
+            var reg = doc.registerElement(_name, definition);
             fireReady(_name);
             return reg;
         },
@@ -1315,6 +1341,32 @@ if (typeof WeakMap === "undefined") {
         },
         pseudos: {
             __mixin__: {},
+            mixins: {
+                onCompiled: function(fn, pseudo) {
+                    var mixins = pseudo.source.__mixins__;
+                    if (mixins) switch (pseudo.value) {
+                      case "before":
+                        return function() {
+                            var self = this, args = arguments;
+                            mixins.forEach(function(m) {
+                                m.apply(self, args);
+                            });
+                            return fn.apply(self, args);
+                        };
+
+                      case "after":
+                      case null:
+                        return function() {
+                            var self = this, args = arguments;
+                            returns = fn.apply(self, args);
+                            mixins.forEach(function(m) {
+                                m.apply(self, args);
+                            });
+                            return returns;
+                        };
+                    }
+                }
+            },
             keypass: keypseudo,
             keyfail: keypseudo,
             delegate: {
@@ -1342,7 +1394,7 @@ if (typeof WeakMap === "undefined") {
         toArray: toArray,
         wrap: function(original, fn) {
             return function() {
-                var args = toArray(arguments), output = original.apply(this, args);
+                var args = arguments, output = original.apply(this, args);
                 fn.apply(this, args);
                 return output;
             };
@@ -1359,10 +1411,10 @@ if (typeof WeakMap === "undefined") {
             return Math.random().toString(36).substr(2, 10);
         },
         query: query,
-        skipTransition: function(element, fn) {
+        skipTransition: function(element, fn, bind) {
             var prop = prefix.js + "TransitionProperty";
             element.style[prop] = element.style.transitionProperty = "none";
-            var callback = fn();
+            var callback = fn ? fn.call(bind) : null;
             return xtag.requestFrame(function() {
                 xtag.requestFrame(function() {
                     element.style[prop] = element.style.transitionProperty = "";
@@ -1416,10 +1468,17 @@ if (typeof WeakMap === "undefined") {
             return xtag[xtag.hasClass(element, klass) ? "removeClass" : "addClass"].call(null, element, klass);
         },
         queryChildren: function(element, selector) {
-            var id = element.id, guid = element.id = id || "x_" + xtag.uid(), attr = "#" + guid + " > ";
+            var id = element.id, guid = element.id = id || "x_" + xtag.uid(), attr = "#" + guid + " > ", noParent = false;
+            if (!element.parentNode) {
+                noParent = true;
+                container.appendChild(element);
+            }
             selector = attr + (selector + "").replace(",", "," + attr, "g");
             var result = element.parentNode.querySelectorAll(selector);
             if (!id) element.removeAttribute("id");
+            if (noParent) {
+                container.removeChild(element);
+            }
             return toArray(result);
         },
         createFragment: function(content) {
@@ -1442,6 +1501,7 @@ if (typeof WeakMap === "undefined") {
                 while (--i) {
                     split[i].replace(regexPseudoReplace, function(match, name, value) {
                         if (!xtag.pseudos[name]) throw "pseudo not found: " + name + " " + split;
+                        value = value === "" || typeof value == "undefined" ? null : value;
                         var pseudo = pseudos[i] = Object.create(xtag.pseudos[name]);
                         pseudo.key = key;
                         pseudo.name = name;
@@ -1496,16 +1556,17 @@ if (typeof WeakMap === "undefined") {
             var condition = event.condition;
             event.condition = function(e) {
                 var t = e.touches, tt = e.targetTouches;
-                return condition.apply(this, toArray(arguments));
+                return condition.apply(this, arguments);
             };
             var stack = xtag.applyPseudos(event.chain, fn, event._pseudos, event);
             event.stack = function(e) {
+                e.currentTarget = e.currentTarget || this;
                 var t = e.touches, tt = e.targetTouches;
                 var detail = e.detail || {};
-                if (!detail.__stack__) return stack.apply(this, toArray(arguments)); else if (detail.__stack__ == stack) {
+                if (!detail.__stack__) return stack.apply(this, arguments); else if (detail.__stack__ == stack) {
                     e.stopPropagation();
                     e.cancelBubble = true;
-                    return stack.apply(this, toArray(arguments));
+                    return stack.apply(this, arguments);
                 }
             };
             event.listener = function(e) {
@@ -1736,9 +1797,9 @@ if (typeof WeakMap === "undefined") {
     xtag.register("x-appbar", {
         lifecycle: {
             created: function() {
-                var header = xtag.queryChildren(this, "header")[0];
+                var header = xtag.queryChildren(this, "h1,h2,h3,h4,h5,h6")[0];
                 if (!header) {
-                    header = document.createElement("header");
+                    header = document.createElement("h1");
                     this.appendChild(header);
                 }
                 this.xtag.data.header = header;
@@ -2824,20 +2885,32 @@ if (typeof WeakMap === "undefined") {
 })();
 
 (function() {
-    var matchNum = /[1-9]/, replaceSpaces = / /g, captureTimes = /(\d|\d+?[.]?\d+?)(s|ms)(?!\w)/gi, transPre = "transition" in getComputedStyle(document.documentElement) ? "t" : xtag.prefix.js + "T", transDur = transPre + "ransitionDuration", transProp = transPre + "ransitionProperty", skipFrame = function(fn) {
+    var matchNum = /[1-9]/;
+    var replaceSpaces = / /g;
+    var captureTimes = /(\d|\d+?[.]?\d+?)(s|ms)(?!\w)/gi;
+    var transPre = "transition" in getComputedStyle(document.documentElement) ? "t" : xtag.prefix.js + "T";
+    var transDur = transPre + "ransitionDuration";
+    var transProp = transPre + "ransitionProperty";
+    var skipFrame = function(fn) {
         xtag.requestFrame(function() {
             xtag.requestFrame(fn);
         });
-    }, ready = document.readyState == "complete" ? skipFrame(function() {
-        ready = false;
-    }) : xtag.addEvent(document, "readystatechange", function() {
-        if (document.readyState == "complete") {
-            skipFrame(function() {
-                ready = false;
-            });
-            xtag.removeEvent(document, "readystatechange", ready);
-        }
-    });
+    };
+    var ready;
+    if (document.readyState == "complete") {
+        ready = skipFrame(function() {
+            ready = false;
+        });
+    } else {
+        ready = xtag.addEvent(document, "readystatechange", function() {
+            if (document.readyState == "complete") {
+                skipFrame(function() {
+                    ready = false;
+                });
+                xtag.removeEvent(document, "readystatechange", ready);
+            }
+        });
+    }
     function getTransitions(node) {
         node.__transitions__ = node.__transitions__ || {};
         return node.__transitions__;
@@ -2845,7 +2918,9 @@ if (typeof WeakMap === "undefined") {
     function startTransition(node, name, transitions) {
         var style = getComputedStyle(node), after = transitions[name].after;
         node.setAttribute("transition", name);
-        if (after && !style[transDur].match(matchNum)) after();
+        if (after && !style[transDur].match(matchNum)) {
+            after();
+        }
     }
     xtag.addEvents(document, {
         transitionend: function(e) {
@@ -2854,25 +2929,40 @@ if (typeof WeakMap === "undefined") {
                 var i = 0, max = 0, prop = null, style = getComputedStyle(node), transitions = getTransitions(node), props = style[transProp].replace(replaceSpaces, "").split(",");
                 style[transDur].replace(captureTimes, function(match, time, unit) {
                     time = parseFloat(time) * (unit === "s" ? 1e3 : 1);
-                    if (time > max) prop = i, max = time;
+                    if (time > max) {
+                        prop = i;
+                        max = time;
+                    }
                     i++;
                 });
                 prop = props[prop];
-                if (!prop) throw new SyntaxError("No matching transition property found"); else if (e.propertyName == prop && transitions[name].after) transitions[name].after();
+                if (!prop) {
+                    throw new SyntaxError("No matching transition property found");
+                } else if (e.propertyName == prop && transitions[name].after) {
+                    transitions[name].after();
+                }
             }
         }
     });
     xtag.transition = function(node, name, obj) {
         var transitions = getTransitions(node), options = transitions[name] = obj || {};
-        if (options.immediate) options.immediate();
+        if (options.immediate) {
+            options.immediate();
+        }
         if (options.before) {
             options.before();
-            if (ready) xtag.skipTransition(node, function() {
-                startTransition(node, name, transitions);
-            }); else skipFrame(function() {
-                startTransition(node, name, transitions);
-            });
-        } else startTransition(node, name, transitions);
+            if (ready) {
+                xtag.skipTransition(node, function() {
+                    startTransition(node, name, transitions);
+                });
+            } else {
+                skipFrame(function() {
+                    startTransition(node, name, transitions);
+                });
+            }
+        } else {
+            startTransition(node, name, transitions);
+        }
     };
     xtag.pseudos.transition = {
         onCompiled: function(fn, pseudo) {
@@ -2884,7 +2974,9 @@ if (typeof WeakMap === "undefined") {
                         return fn.apply(target, args);
                     };
                     xtag.transition(this, name, options);
-                } else return fn.apply(this, args);
+                } else {
+                    return fn.apply(this, args);
+                }
             };
         }
     };
@@ -2905,13 +2997,20 @@ if (typeof WeakMap === "undefined") {
         return card && (selected ? card == deck.xtag.selected : card != deck.xtag.selected) && deck == card.parentNode && card.nodeName == "X-CARD";
     }
     function shuffle(deck, side, direction) {
-        var getters = sides[side], selected = deck.xtag.selected && deck.xtag.selected[getters[0]];
-        if (selected) deck.showCard(selected, direction); else if (deck.loop || deck.selectedIndex == -1) deck.showCard(deck[getters[1]], direction);
+        var getters = sides[side];
+        var selected = deck.xtag.selected && deck.xtag.selected[getters[0]];
+        if (selected) {
+            deck.showCard(selected, direction);
+        } else if (deck.loop || deck.selectedIndex == -1) {
+            deck.showCard(deck[getters[1]], direction);
+        }
     }
     xtag.register("x-deck", {
         events: {
             "reveal:delegate(x-card)": function(e) {
-                if (this.parentNode == e.currentTarget) e.currentTarget.showCard(this);
+                if (this.parentNode == e.currentTarget) {
+                    e.currentTarget.showCard(this);
+                }
             }
         },
         accessors: {
@@ -2945,19 +3044,20 @@ if (typeof WeakMap === "undefined") {
                     var index = Number(value), card = this.cards[index];
                     if (card) {
                         this.setAttribute("selected-index", index);
-                        if (card != this.xtag.selected) this.showCard(card);
+                        if (card != this.xtag.selected) {
+                            this.showCard(card);
+                        }
                     } else {
                         this.removeAttribute("selected-index");
-                        if (this.xtag.selected) this.hideCard(this.xtag.selected);
+                        if (this.xtag.selected) {
+                            this.hideCard(this.xtag.selected);
+                        }
                     }
                 }
             },
             transitionType: {
                 attribute: {
                     name: "transition-type"
-                },
-                get: function() {
-                    return this.getAttribute("transition-type") || "fade-scale";
                 }
             }
         },
@@ -2973,10 +3073,14 @@ if (typeof WeakMap === "undefined") {
                 if (checkCard(this, card, false)) {
                     var selected = this.xtag.selected, nextIndex = indexOfCard(this, card);
                     direction = direction || (nextIndex > indexOfCard(this, selected) ? "forward" : "reverse");
-                    if (selected) this.hideCard(selected, direction);
+                    if (selected) {
+                        this.hideCard(selected, direction);
+                    }
                     this.xtag.selected = card;
                     this.selectedIndex = nextIndex;
-                    if (!card.hasAttribute("selected")) card.selected = true;
+                    if (!card.hasAttribute("selected")) {
+                        card.selected = true;
+                    }
                     xtag.transition(card, "show", {
                         before: function() {
                             card.setAttribute("show", "");
@@ -2992,7 +3096,9 @@ if (typeof WeakMap === "undefined") {
                 var card = getCard(this, item);
                 if (checkCard(this, card, true)) {
                     this.xtag.selected = null;
-                    if (card.hasAttribute("selected")) card.selected = false;
+                    if (card.hasAttribute("selected")) {
+                        card.selected = false;
+                    }
                     xtag.transition(card, "hide", {
                         before: function() {
                             card.removeAttribute("show");
@@ -3016,7 +3122,9 @@ if (typeof WeakMap === "undefined") {
                 var deck = this.parentNode;
                 if (deck.nodeName == "X-DECK") {
                     this.xtag.deck = deck;
-                    if (this != deck.selected && this.selected) deck.showCard(this);
+                    if (this != deck.selected && this.selected) {
+                        deck.showCard(this);
+                    }
                 }
             },
             removed: function() {
@@ -3025,7 +3133,9 @@ if (typeof WeakMap === "undefined") {
                     if (this == deck.xtag.selected) {
                         deck.xtag.selected = null;
                         deck.removeAttribute("selected-index");
-                    } else deck.showCard(deck.selectedCard);
+                    } else {
+                        deck.showCard(deck.selectedCard);
+                    }
                     this.xtag.deck = null;
                 }
             }
@@ -3043,7 +3153,11 @@ if (typeof WeakMap === "undefined") {
                 set: function(val) {
                     var deck = this.xtag.deck;
                     if (deck) {
-                        if (val && this != deck.selected) deck.showCard(this); else if (!val && this == deck.selected) deck.hideCard(this);
+                        if (val && this != deck.selected) {
+                            deck.showCard(this);
+                        } else if (!val && this == deck.selected) {
+                            deck.hideCard(this);
+                        }
                     }
                 }
             }
@@ -3124,22 +3238,6 @@ if (typeof WeakMap === "undefined") {
 })();
 
 (function() {
-    function getLayoutElements(layout) {
-        var first = layout.firstElementChild;
-        if (!first) {
-            return {
-                header: null,
-                section: null,
-                footer: null
-            };
-        }
-        var second = first.nextElementSibling;
-        return {
-            header: first.nodeName == "HEADER" ? first : null,
-            section: first.nodeName == "SECTION" ? first : second && second.nodeName == "SECTION" ? second : null,
-            footer: layout.lastElementChild.nodeName == "FOOTER" ? layout.lastElementChild : null
-        };
-    }
     function getLayoutScroll(layout, element) {
         var scroll = element.__layoutScroll__ = element.__layoutScroll__ || Object.defineProperty(element, "__layoutScroll__", {
             value: {
@@ -3151,30 +3249,19 @@ if (typeof WeakMap === "undefined") {
         scroll.min = scroll.min || Math.max(now - buffer, buffer);
         return scroll;
     }
-    function maxContent(layout, elements) {
+    function maxContent(layout) {
         layout.setAttribute("content-maximizing", null);
-        if (elements.section) {
-            if (elements.header) {
-                elements.section.style.marginTop = "-" + elements.header.getBoundingClientRect().height + "px";
-            }
-            if (elements.footer) {
-                elements.section.style.marginBottom = "-" + elements.footer.getBoundingClientRect().height + "px";
-            }
-        }
     }
-    function minContent(layout, elements) {
+    function minContent(layout) {
         layout.removeAttribute("content-maximized");
         layout.removeAttribute("content-maximizing");
-        if (elements.section) {
-            elements.section.style.marginTop = "";
-            elements.section.style.marginBottom = "";
-        }
     }
     function evaluateScroll(event) {
-        if (!event.currentTarget.hasAttribute("content-maximizing")) {
-            var target = event.target, layout = event.currentTarget;
-            if (this.scrollhide && (target.parentNode == layout || xtag.matchSelector(target, layout.scrollTarget))) {
-                var now = target.scrollTop, buffer = layout.scrollBuffer, elements = getLayoutElements(layout), scroll = getLayoutScroll(layout, target);
+        var layout = event.currentTarget;
+        if (layout.hideTrigger == "scroll" && !event.currentTarget.hasAttribute("content-maximizing")) {
+            var target = event.target;
+            if (layout.scrollTarget ? xtag.matchSelector(target, layout.scrollTarget) : target.parentNode == layout) {
+                var now = target.scrollTop, buffer = layout.scrollBuffer, scroll = getLayoutScroll(layout, target);
                 if (now > scroll.last) {
                     scroll.min = Math.max(now - buffer, buffer);
                 } else if (now < scroll.last) {
@@ -3182,9 +3269,9 @@ if (typeof WeakMap === "undefined") {
                 }
                 if (!layout.maxcontent) {
                     if (now > scroll.max && !layout.hasAttribute("content-maximized")) {
-                        maxContent(layout, elements);
+                        maxContent(layout);
                     } else if (now < scroll.min) {
-                        minContent(layout, elements);
+                        minContent(layout);
                     }
                 }
                 scroll.last = now;
@@ -3192,41 +3279,33 @@ if (typeof WeakMap === "undefined") {
         }
     }
     xtag.register("x-layout", {
-        lifecycle: {
-            created: function() {}
-        },
         events: {
             scroll: evaluateScroll,
             transitionend: function(e) {
-                var elements = getLayoutElements(this);
-                if (this.hasAttribute("content-maximizing") && (e.target == elements.header || e.target == elements.section || e.target == elements.footer)) {
+                var node = e.target;
+                if (this.hasAttribute("content-maximizing") && node.parentNode == this && (node.nodeName == "HEADER" || node.nodeName == "FOOTER")) {
                     this.setAttribute("content-maximized", null);
                     this.removeAttribute("content-maximizing");
                 }
             },
             "tap:delegate(section)": function(e) {
                 var layout = e.currentTarget;
-                if (layout.taphide && this.parentNode == layout) {
-                    var elements = getLayoutElements(layout);
+                if (layout.hideTrigger == "tap" && !layout.maxcontent && this.parentNode == layout) {
                     if (layout.hasAttribute("content-maximizing") || layout.hasAttribute("content-maximized")) {
-                        if (!layout.maxcontent) {
-                            minContent(layout, elements);
-                        }
+                        minContent(layout);
                     } else {
-                        maxContent(layout, elements);
+                        maxContent(layout);
                     }
                 }
             },
-            "mouseover:delegate(section)": function(e) {
-                var layout = e.currentTarget;
-                if (layout.hoverhide && this.parentNode == layout && !layout.hasAttribute("content-maximized") && !layout.hasAttribute("content-maximizing") && (!e.relatedTarget || this.contains(e.target))) {
-                    maxContent(layout, getLayoutElements(layout));
+            mouseout: function(e) {
+                if (this.hideTrigger == "hover" && !this.maxcontent && !this.hasAttribute("content-maximized") && (!e.relatedTarget || !this.contains(e.relatedTarget))) {
+                    maxContent(this);
                 }
             },
-            "mouseout:delegate(section)": function(e) {
-                var layout = e.currentTarget;
-                if (layout.hoverhide && this.parentNode == layout && (layout.hasAttribute("content-maximized") || layout.hasAttribute("content-maximizing")) && (layout == e.relatedTarget || !layout.contains(e.relatedTarget))) {
-                    minContent(layout, getLayoutElements(layout));
+            mouseover: function(e) {
+                if (this.hideTrigger == "hover" && !this.maxcontent && (this.hasAttribute("content-maximized") || this.hasAttribute("content-maximizing")) && (this == e.relatedTarget || !this.contains(e.relatedTarget))) {
+                    minContent(this);
                 }
             }
         },
@@ -3241,22 +3320,12 @@ if (typeof WeakMap === "undefined") {
                     name: "scroll-buffer"
                 },
                 get: function() {
-                    return Number(this.getAttribute("scroll-buffer")) || 30;
+                    return Number(this.getAttribute("scroll-buffer")) || 80;
                 }
             },
-            taphide: {
+            hideTrigger: {
                 attribute: {
-                    "boolean": true
-                }
-            },
-            hoverhide: {
-                attribute: {
-                    "boolean": true
-                }
-            },
-            scrollhide: {
-                attribute: {
-                    "boolean": true
+                    name: "hide-trigger"
                 }
             },
             maxcontent: {
@@ -3264,11 +3333,10 @@ if (typeof WeakMap === "undefined") {
                     "boolean": true
                 },
                 set: function(value) {
-                    var elements = getLayoutElements(this);
                     if (value) {
-                        maxContent(this, elements);
+                        maxContent(this);
                     } else if (!this.hasAttribute("content-maximizing")) {
-                        minContent(this, elements);
+                        minContent(this);
                     }
                 }
             }

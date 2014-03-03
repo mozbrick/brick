@@ -34,8 +34,7 @@ x-deck > x-card[selected],
 x-deck > x-card[transition] {
   display: block;
 }
-/*** Default Transition ***/
-x-deck:not([transition-type]) > x-card:not([transition-type]),
+/*** Fade 'n' Scale ***/
 x-deck[transition-type="fade-scale"] > x-card,
 x-deck > x-card[transition-type="fade-scale"] {
   opacity: 0;
@@ -71,11 +70,11 @@ x-deck[transition-type^="slide"] > x-card[show],
 x-deck > x-card[show][transition-type^="slide"],
 x-deck[transition-type^="slide"] > x-card[hide],
 x-deck > x-card[hide][transition-type^="slide"] {
-  -webkit-transition: -webkit-transform 0.6s ease;
-  -moz-transition: -moz-transform 0.6s ease;
-  -ms-transition: -ms-transform 0.6s ease;
-  -o-transition: -o-transform 0.6s ease;
-  transition: transform 0.6s ease;
+  -webkit-transition: -webkit-transform 0.4s ease;
+  -moz-transition: -moz-transform 0.4s ease;
+  -ms-transition: -ms-transform 0.4s ease;
+  -o-transition: -o-transform 0.4s ease;
+  transition: transform 0.4s ease;
 }
 /*** Right/Left Slide Styles ***/
 x-deck[transition-type="slide-right"] > x-card[show][transition-direction="forward"],

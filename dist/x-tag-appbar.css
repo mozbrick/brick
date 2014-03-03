@@ -26,7 +26,12 @@ x-appbar > * {
   align-items: center;
   text-align: center;
 }
-x-appbar > header {
+x-appbar > h1,
+x-appbar h2,
+x-appbar h3,
+x-appbar h4,
+x-appbar h5,
+x-appbar h6 {
   min-width: auto;
   min-height: auto;
   -webkit-box-flex: 1;

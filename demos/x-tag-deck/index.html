@@ -25,7 +25,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="../../index.html">
         <img class="logo" src="../../site/img/logo.png">
-        Brick<small> 1.0.0rc1</small>
+        Brick<small> 1.0.0-rc2</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -56,24 +56,21 @@
     </header>
     <a href="../../docs.html">&laquo; Back to docs</a>
     
-<p><code class="prettyprint">&lt;x-deck&gt;</code>s are components that act similarly to slideshows or galleries where cards can be cycled independently of order with a variety of different transitions.</p>
+<p><code class="prettyprint">&lt;x-deck&gt;</code>s are components that act similarly to a deck of cards, where any <code class="prettyprint">&lt;x-card&gt;</code> element can be moved into view independent of DOM order</p>
     <section class="demo-wrap">
         <header><h2>Basic usage</h2></header>
-        <p>For basic transitions between <code class="prettyprint">&lt;x-card&gt;</code>s, simply call the <code class="prettyprint">.previousCard()</code> and <code class="prettyprint">.nextCard()</code> methods of the <code class="prettyprint">&lt;x-deck&gt;</code>.</p>
-        <p>Users can also call <code class="prettyprint">.showCard(index)</code> if they already know the index of the target card in the deck.</p>
+        <p>For basic transitions between <code class="prettyprint">&lt;x-card&gt;</code>s, simply call the <code class="prettyprint">.nextCard()</code> and <code class="prettyprint">.previousCard()</code> methods of the <code class="prettyprint">&lt;x-deck&gt;</code>.</p>
+        <p>You can also call <code class="prettyprint">.showCard(index)</code> if they have a specific index or card element you wish to show (by passing a reference).</p>
         <p>The <code class="prettyprint">loop</code> attribute option allows the deck to loop around after reaching the first or last index.</p>
+        <p>By default, there is no animation applied to card switching, but the <code class="prettyprint">transition-type</code> attribute lets you apply a variety of animations if you choose - more on that later</p>
         <div class="two-up">
             <figure class="demo">
                 <x-deck id="deck_1">
-                    <x-card selected>
-                        0<span>I'm the first card!</span>
-                    </x-card>
-                    <x-card>
-                        1<span>These cards can contain any markup!<br/><img src="../../site/img/grounds_keeping_it_real_s3.gif"/><img src="../../site/img/grounds_keeping_it_real_s1.gif"/><img src="../../site/img/grounds_keeping_it_real_s2.gif"/></span>
-                    </x-card>
-                    <x-card>
-                        2<img src="../../site/img/thumbs_up.gif"/>
-                    </x-card>
+                    <x-card selected>0<span>First</span></x-card>
+                    <x-card>1<span>Second</span></x-card>
+                    <x-card transition-type="fade-scale">2<span>Third</span></x-card>
+                    <x-card transition-type="slide-left">3<span>Fourth</span></x-card>
+                    <x-card transition-type="slide-up">4<span>Fifth</span></x-card>
                 </x-deck>
             </figure>
         </div>
@@ -131,15 +128,14 @@
 
     <section class="demo-wrap" id="transition-demo">
         <header><h2>Specifying deck transitions: <code>transition-type/.transitionType</code></h2></header>
-        <p>The <code class="prettyprint">&lt;x-deck&gt;</code>'s <code>transition-type</code> attribute (also accessible by the <code>.transitionType</code> property) controls how all cards in the deck animate in and out.</p>
+        <p>By default, there is no transition animation applied when switching between <code class="prettyprint">&lt;x-card&gt;</code> elements, but we provide a batch of ready-made transitions you can apply using the <code>transition-type</code> attribute (also accessible by the <code>.transitionType</code> property).</p>
         <p>Valid options: 
             <code>
                 slide-up,
                 slide-down,
                 slide-left,
-				slide-right,
-				fade-scale,
-				none
+                slide-right,
+                fade-scale
             </code>
         </p>
 
@@ -160,7 +156,7 @@
                 <button class="btn btn-default" 
                         data-toggle-prop="transitionType" 
                         data-toggle-target="x-deck" 
-                        data-toggle-options='["slide-up", "slide-down", "slide-left", "slide-right", "fade-scale", "none"]'>
+                        data-toggle-options='["slide-up", "slide-down", "slide-left", "slide-right", "fade-scale"]'>
                     Change <code>transition-type</code>
                 </button>
                 <button class="btn btn-default next">Next card</button>
@@ -235,7 +231,7 @@
 
         <div class="two-up">
             <figure class="demo">
-                <x-deck id="custom-styles" class="simple-deck">
+                <x-deck id="custom-styles" class="simple-deck" transition-type="slide-left">
                     <x-card selected>0</x-card>
                     <x-card>1</x-card>
                     <x-card>2</x-card>
@@ -261,8 +257,8 @@
         <p>An <code>show</code> event is fired from a card target after it has completed its show animation, and the show state has been finalized.</p>
 		<p>An <code>hide</code> event is fired from a card target after it has completed its hide animation, and the hide state has been finalized.</p>
         <div class="two-up">
-            <figure class="demo">
-                <x-deck class="simple-deck">
+            <figure class="demo" >
+                <x-deck class="simple-deck" transition-type="scale-fade">
                     <x-card selected>0</x-card>
                     <x-card>1</x-card>
                     <x-card>2</x-card>

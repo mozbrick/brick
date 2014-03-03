@@ -1,3 +1,12 @@
+# 1.0.0rc1 (2014-02-14)
+
+* So close we can taste it now! Test out what might just be Brick's 1.0 stable release!
+* Shipping sometimes means cutting scope. Pulled slidebox and tooltip from our launch roster. Slidebox may have been made redundant by deck, but tooltip will be back better than ever!
+* Component docs now have information about the individual repositories.
+
+[See all the commits in this release](https://github.com/mozilla/brick/compare/https://github.com/mozilla/brick/compare/0.10.0...1.0.0rc1)
+
+
 # 0.10.0 (2014-01-30)
 
 * New snazzy default skin!

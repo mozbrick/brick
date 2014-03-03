@@ -37,7 +37,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bumpup');
   grunt.loadNpmTasks('grunt-tagrelease');
 
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('default', ['site']);
   grunt.registerTask('bump:patch', ['bumpup:patch', 'tagrelease']);
 
   grunt.registerTask('fastcompile', ['clean:dist','build']);

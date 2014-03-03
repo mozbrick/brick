@@ -23,8 +23,13 @@
             Select just the components you want <label for="dev-build">Minified <input type="checkbox" id="dev-build" checked></label>
           </div>
           <div id="components" class="panel-body row">
+          <div class="col-sm-6">
+          <label>x-tag core<input type="checkbox" checked="checked" disabled="" value="x-tag-core">
+          </label>
+          </div>
           {% for component, deps in dependencies %}
             <div class="col-sm-6">
+
               <label>
                 {{ component.replace('x-tag-','') }}
                 <input type="checkbox" value="{{ component }}"
@@ -144,8 +149,7 @@
       prog = 0;
       progress.value = 0;
 
-       getCss(selected, function(css) {
-        selected.unshift('x-tag-core');
+      getCss(selected, function(css) {
         getJs(selected, function(js) {
           getExtraFiles(function(extraFileInfo){
             makeZip(buildURL + js, buildURL + css, extraFileInfo);
@@ -176,8 +180,13 @@
       function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
-          total += req.response;
-          done();
+          if (this.status != 200 && this.status != 304) {
+            if (console) console.warn('file not found:', getFileName(c, 'css'));
+            done();
+          } else {
+            total += '\n' + req.response;
+            done();
+          }
         };
         req.open("get", getFileName(c, 'css'));
         req.send();
@@ -205,8 +214,13 @@
       function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
-          total += req.response;
-          done();
+          if (this.status != 200 && this.status != 304) {
+            if (console) console.warn('file not found:', getFileName(c, 'js'));
+            done();
+          } else {
+            total += '\n' + req.response;
+            done();
+          }
         };
         req.open("get", getFileName(c, 'js'));
         req.send();
