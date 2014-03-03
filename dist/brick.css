@@ -26,7 +26,12 @@ x-appbar > * {
   align-items: center;
   text-align: center;
 }
-x-appbar > header {
+x-appbar > h1,
+x-appbar h2,
+x-appbar h3,
+x-appbar h4,
+x-appbar h5,
+x-appbar h6 {
   min-width: auto;
   min-height: auto;
   -webkit-box-flex: 1;
@@ -183,8 +188,7 @@ x-deck > x-card[selected],
 x-deck > x-card[transition] {
   display: block;
 }
-/*** Default Transition ***/
-x-deck:not([transition-type]) > x-card:not([transition-type]),
+/*** Fade 'n' Scale ***/
 x-deck[transition-type="fade-scale"] > x-card,
 x-deck > x-card[transition-type="fade-scale"] {
   opacity: 0;
@@ -220,11 +224,11 @@ x-deck[transition-type^="slide"] > x-card[show],
 x-deck > x-card[show][transition-type^="slide"],
 x-deck[transition-type^="slide"] > x-card[hide],
 x-deck > x-card[hide][transition-type^="slide"] {
-  -webkit-transition: -webkit-transform 0.6s ease;
-  -moz-transition: -moz-transform 0.6s ease;
-  -ms-transition: -ms-transform 0.6s ease;
-  -o-transition: -o-transform 0.6s ease;
-  transition: transform 0.6s ease;
+  -webkit-transition: -webkit-transform 0.4s ease;
+  -moz-transition: -moz-transform 0.4s ease;
+  -ms-transition: -ms-transform 0.4s ease;
+  -o-transition: -o-transform 0.4s ease;
+  transition: transform 0.4s ease;
 }
 /*** Right/Left Slide Styles ***/
 x-deck[transition-type="slide-right"] > x-card[show][transition-direction="forward"],
@@ -489,6 +493,10 @@ x-layout > footer {
   margin: 0 !important;
   overflow: hidden;
   z-index: 1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
   -ms-transform: translateZ(0);
@@ -533,6 +541,23 @@ x-layout > section > *:only-child {
   */
   height: 100%;
   position: absolute;
+}
+x-layout[hide-trigger] > header,
+x-layout[hide-trigger] > footer,
+x-layout[content-maximizing] > header,
+x-layout[content-maximized] > header,
+x-layout[maxcontent] > header,
+x-layout[content-maximizing] > footer,
+x-layout[content-maximized] > footer,
+x-layout[maxcontent] > footer {
+  position: absolute;
+  width: 100%;
+}
+x-layout[hide-trigger] > footer,
+x-layout[content-maximizing] > footer,
+x-layout[content-maximized] > footer,
+x-layout[maxcontent] > footer {
+  bottom: 0;
 }
 x-layout[content-maximizing] > header,
 x-layout[content-maximized] > header,

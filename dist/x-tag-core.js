@@ -4,8 +4,7 @@ window.Platform = {};
 var logFlags = {};
 
 
-
-// DOMTokenList polyfill fir IE9
+// DOMTokenList polyfill for IE9
 (function () {
 
 if (typeof window.Element === "undefined" || "classList" in document.documentElement) return;
@@ -702,9 +701,9 @@ if (!scope) {
 }
 var flags = scope.flags;
 
-// native document.register?
+// native document.registerElement?
 
-var hasNative = Boolean(document.register);
+var hasNative = Boolean(document.registerElement);
 var useNative = !flags.register && hasNative;
 
 if (useNative) {
@@ -752,7 +751,7 @@ if (useNative) {
    *      element.
    *
    * @example
-   *      FancyButton = document.register("fancy-button", {
+   *      FancyButton = document.registerElement("fancy-button", {
    *        extends: 'button',
    *        prototype: Object.create(HTMLButtonElement.prototype, {
    *          readyCallback: {
@@ -765,22 +764,24 @@ if (useNative) {
    * @return {Function} Constructor for the newly registered type.
    */
   function register(name, options) {
-    //console.warn('document.register("' + name + '", ', options, ')');
+    //console.warn('document.registerElement("' + name + '", ', options, ')');
     // construct a defintion out of options
     // TODO(sjmiles): probably should clone options instead of mutating it
     var definition = options || {};
     if (!name) {
       // TODO(sjmiles): replace with more appropriate error (EricB can probably
       // offer guidance)
-      throw new Error('document.register: first argument `name` must not be empty');
+      throw new Error('document.registerElement: first argument `name` must not be empty');
     }
     if (name.indexOf('-') < 0) {
       // TODO(sjmiles): replace with more appropriate error (EricB can probably
       // offer guidance)
-      throw new Error('document.register: first argument (\'name\') must contain a dash (\'-\'). Argument provided was \'' + String(name) + '\'.');
+      throw new Error('document.registerElement: first argument (\'name\') must contain a dash (\'-\'). Argument provided was \'' + String(name) + '\'.');
     }
-    // record name
-    definition.name = name;
+    // elements may only be registered once
+    if (getRegisteredDefinition(name)) {
+      throw new Error('DuplicateDefinitionError: a type with name \'' + String(name) + '\' is already registered');
+    }
     // must have a prototype, default to an extension of HTMLElement
     // TODO(sjmiles): probably should throw if no prototype, check spec
     if (!definition.prototype) {
@@ -788,6 +789,8 @@ if (useNative) {
       // offer guidance)
       throw new Error('Options missing required prototype property');
     }
+    // record name
+    definition.__name = name.toLowerCase();
     // ensure a lifecycle object so we don't have to null test it
     definition.lifecycle = definition.lifecycle || {};
     // build a list of ancestral custom elements (for native base detection)
@@ -803,7 +806,7 @@ if (useNative) {
     // overrides to implement attributeChanged callback
     overrideAttributeApi(definition.prototype);
     // 7.1.5: Register the DEFINITION with DOCUMENT
-    registerDefinition(name, definition);
+    registerDefinition(definition.__name, definition);
     // 7.1.7. Run custom element constructor generation algorithm with PROTOTYPE
     // 7.1.8. Return the output of the previous step.
     definition.ctor = generateConstructor(definition);
@@ -819,7 +822,7 @@ if (useNative) {
   }
 
   function ancestry(extnds) {
-    var extendee = registry[extnds];
+    var extendee = getRegisteredDefinition(extnds);
     if (extendee) {
       return ancestry(extendee.extends).concat([extendee]);
     }
@@ -836,10 +839,10 @@ if (useNative) {
       baseTag = a.is && a.tag;
     }
     // our tag is our baseTag, if it exists, and otherwise just our name
-    definition.tag = baseTag || definition.name;
+    definition.tag = baseTag || definition.__name;
     if (baseTag) {
       // if there is a base tag, use secondary 'is' specifier
-      definition.is = definition.name;
+      definition.is = definition.__name;
     }
   }
 
@@ -982,6 +985,12 @@ if (useNative) {
 
   var registry = {};
 
+  function getRegisteredDefinition(name) {
+    if (name) {
+      return registry[name.toLowerCase()];
+    }
+  }
+
   function registerDefinition(name, definition) {
     registry[name] = definition;
   }
@@ -995,7 +1004,7 @@ if (useNative) {
   function createElement(tag, typeExtension) {
     // TODO(sjmiles): ignore 'tag' when using 'typeExtension', we could
     // error check it, or perhaps there should only ever be one argument
-    var definition = registry[typeExtension || tag];
+    var definition = getRegisteredDefinition(typeExtension || tag);
     if (definition) {
       return new definition.ctor();
     }
@@ -1005,7 +1014,7 @@ if (useNative) {
   function upgradeElement(element) {
     if (!element.__upgraded__ && (element.nodeType === Node.ELEMENT_NODE)) {
       var type = element.getAttribute('is') || element.localName;
-      var definition = registry[type];
+      var definition = getRegisteredDefinition(type);
       return definition && upgrade(element, definition);
     }
   }
@@ -1028,7 +1037,7 @@ if (useNative) {
 
   // exports
 
-  document.register = register;
+  document.registerElement = register;
   document.createElement = createElement; // override
   Node.prototype.cloneNode = cloneNode; // override
 
@@ -1047,6 +1056,9 @@ if (useNative) {
    */
   scope.upgrade = upgradeElement;
 }
+
+// bc
+document.register = document.registerElement;
 
 scope.hasNative = hasNative;
 scope.useNative = useNative;
@@ -1154,10 +1166,10 @@ function insertedNode(node) {
 
 
 // TODO(sorvell): on platforms without MutationObserver, mutations may not be 
-// reliable and therefore entered/leftView are not reliable.
+// reliable and therefore attached/detached are not reliable.
 // To make these callbacks less likely to fail, we defer all inserts and removes
 // to give a chance for elements to be inserted into dom. 
-// This ensures enteredViewCallback fires for elements that are created and 
+// This ensures attachedCallback fires for elements that are created and 
 // immediately added to dom.
 var hasPolyfillMutations = (!window.MutationObserver ||
     (window.MutationObserver === window.JsMutationObserver));
@@ -1206,7 +1218,7 @@ function _inserted(element) {
   // TODO(sjmiles): when logging, do work on all custom elements so we can
   // track behavior even when callbacks not defined
   //console.log('inserted: ', element.localName);
-  if (element.enteredViewCallback || (element.__upgraded__ && logFlags.dom)) {
+  if (element.attachedCallback || element.detachedCallback || (element.__upgraded__ && logFlags.dom)) {
     logFlags.dom && console.group('inserted:', element.localName);
     if (inDocument(element)) {
       element.__inserted = (element.__inserted || 0) + 1;
@@ -1218,9 +1230,9 @@ function _inserted(element) {
       if (element.__inserted > 1) {
         logFlags.dom && console.warn('inserted:', element.localName,
           'insert/remove count:', element.__inserted)
-      } else if (element.enteredViewCallback) {
+      } else if (element.attachedCallback) {
         logFlags.dom && console.log('inserted:', element.localName);
-        element.enteredViewCallback();
+        element.attachedCallback();
       }
     }
     logFlags.dom && console.groupEnd();
@@ -1248,8 +1260,8 @@ function removed(element) {
 function _removed(element) {
   // TODO(sjmiles): temporary: do work on all custom elements so we can track
   // behavior even when callbacks not defined
-  if (element.leftViewCallback || (element.__upgraded__ && logFlags.dom)) {
-    logFlags.dom && console.log('removed:', element.localName);
+  if (element.attachedCallback || element.detachedCallback || (element.__upgraded__ && logFlags.dom)) {
+    logFlags.dom && console.group('removed:', element.localName);
     if (!inDocument(element)) {
       element.__inserted = (element.__inserted || 0) - 1;
       // if we are in a 'inserted' state, bluntly adjust to an 'removed' state
@@ -1260,10 +1272,11 @@ function _removed(element) {
       if (element.__inserted < 0) {
         logFlags.dom && console.warn('removed:', element.localName,
             'insert/remove count:', element.__inserted)
-      } else if (element.leftViewCallback) {
-        element.leftViewCallback();
+      } else if (element.detachedCallback) {
+        element.detachedCallback();
       }
     }
+    logFlags.dom && console.groupEnd();
   }
 }
 
@@ -1458,7 +1471,7 @@ function bootstrap() {
     Platform.endOfMicrotask :
     setTimeout;
   async(function() {
-    // set internal 'ready' flag, now document.register will trigger 
+    // set internal 'ready' flag, now document.registerElement will trigger 
     // synchronous upgrades
     CustomElements.ready = true;
     // capture blunt profiling data
@@ -1467,7 +1480,7 @@ function bootstrap() {
       CustomElements.elapsed = CustomElements.readyTime - HTMLImports.readyTime;
     }
     // notify the system that we are bootstrapped
-    document.body.dispatchEvent(
+    document.dispatchEvent(
       new CustomEvent('WebComponentsReady', {bubbles: true})
     );
   });
@@ -1495,7 +1508,8 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 // When loading at other readyStates, wait for the appropriate DOM event to 
 // bootstrap.
 } else {
-  var loadEvent = window.HTMLImports ? 'HTMLImportsLoaded' : 'DOMContentLoaded';
+  var loadEvent = window.HTMLImports && !HTMLImports.ready ?
+      'HTMLImportsLoaded' : 'DOMContentLoaded';
   window.addEventListener(loadEvent, bootstrap);
 }
 
@@ -1507,6 +1521,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 
   var win = window,
     doc = document,
+    container = doc.createElement('div'),
     noop = function(){},
     trueop = function(){ return true; },
     regexPseudoSplit = /([\w-]+(?:\([^\)]+\))?)/g,
@@ -1602,9 +1617,11 @@ if (document.readyState === 'complete' || scope.flags.eager) {
   }
 
   function wrapMixin(tag, key, pseudo, value, original){
-    if (typeof original[key] != 'function') original[key] = value;
-    else {
-      original[key] = xtag.wrap(original[key], xtag.applyPseudos(pseudo, value, tag.pseudos));
+    var fn = original[key];
+    if (!(key in original)) original[key] = value;
+    else if (typeof original[key] == 'function') {
+      if (!fn.__mixins__) fn.__mixins__ = [];
+      fn.__mixins__.push(xtag.applyPseudos(pseudo, value, tag.pseudos));
     }
   }
 
@@ -1619,7 +1636,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
     }
     else {
       for (var zz in mixin){
-        wrapMixin(tag, zz + ':__mixin__(' + (uniqueMixinCount++) + ')', zz, mixin[zz], original);
+        original[zz + ':__mixin__(' + (uniqueMixinCount++) + ')'] = xtag.applyPseudos(zz, mixin[zz], tag.pseudos);
       }
     }
   }
@@ -1698,7 +1715,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
   }
 
   var skipProps = {};
-  for (var z in document.createEvent('CustomEvent')) skipProps[z] = 1;
+  for (var z in doc.createEvent('CustomEvent')) skipProps[z] = 1;
   function inheritEvent(event, base){
     var desc = Object.getOwnPropertyDescriptor(event, 'target');
     for (var z in base) {
@@ -1737,7 +1754,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
     var key = z.split(':'), type = key[0];
     if (type == 'get') {
       key[0] = prop;
-      tag.prototype[prop].get = xtag.applyPseudos(key.join(':'), accessor[z], tag.pseudos);
+      tag.prototype[prop].get = xtag.applyPseudos(key.join(':'), accessor[z], tag.pseudos, accessor[z]);
     }
     else if (type == 'set') {
       key[0] = prop;
@@ -1751,7 +1768,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
       } : accessor[z] ? function(value){
         accessor[z].call(this, value);
         updateView(this, name, value);
-      } : null, tag.pseudos);
+      } : null, tag.pseudos, accessor[z]);
 
       if (attr) attr.setter = setter;
     }
@@ -1829,8 +1846,8 @@ if (document.readyState === 'complete' || scope.flags.eager) {
       var tag = xtag.tags[_name] = applyMixins(xtag.merge({}, xtag.defaultOptions, options));
 
       for (var z in tag.events) tag.events[z] = xtag.parseEvent(z, tag.events[z]);
-      for (z in tag.lifecycle) tag.lifecycle[z.split(':')[0]] = xtag.applyPseudos(z, tag.lifecycle[z], tag.pseudos);
-      for (z in tag.methods) tag.prototype[z.split(':')[0]] = { value: xtag.applyPseudos(z, tag.methods[z], tag.pseudos), enumerable: true };
+      for (z in tag.lifecycle) tag.lifecycle[z.split(':')[0]] = xtag.applyPseudos(z, tag.lifecycle[z], tag.pseudos, tag.lifecycle[z]);
+      for (z in tag.methods) tag.prototype[z.split(':')[0]] = { value: xtag.applyPseudos(z, tag.methods[z], tag.pseudos, tag.methods[z]), enumerable: true };
       for (z in tag.accessors) parseAccessor(tag, z);
 
       var ready = tag.lifecycle.created || tag.lifecycle.ready;
@@ -1842,7 +1859,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
           tag.mixins.forEach(function(mixin){
             if (xtag.mixins[mixin].events) xtag.addEvents(element, xtag.mixins[mixin].events);
           });
-          var output = ready ? ready.apply(this, toArray(arguments)) : null;
+          var output = ready ? ready.apply(this, arguments) : null;
           for (var name in tag.attributes) {
             var attr = tag.attributes[name],
                 hasAttr = this.hasAttribute(name);
@@ -1856,9 +1873,24 @@ if (document.readyState === 'complete' || scope.flags.eager) {
           return output;
         }
       };
-
-      if (tag.lifecycle.inserted) tag.prototype.enteredViewCallback = { value: tag.lifecycle.inserted, enumerable: true };
-      if (tag.lifecycle.removed) tag.prototype.leftViewCallback = { value: tag.lifecycle.removed, enumerable: true };
+			
+      var inserted = tag.lifecycle.inserted,
+          removed = tag.lifecycle.removed;
+      if (inserted || removed) {
+        tag.prototype.attachedCallback = { value: function(){
+          if (removed) this.xtag.__parentNode__ = this.parentNode;
+          if (inserted) return inserted.apply(this, arguments);
+        }, enumerable: true };
+      }
+      if (removed) {
+        tag.prototype.detachedCallback = { value: function(){
+          var args = toArray(arguments);
+          args.unshift(this.xtag.__parentNode__);
+          var output = removed.apply(this, args);
+          delete this.xtag.__parentNode__;
+          return output;
+        }, enumerable: true };
+      }
       if (tag.lifecycle.attributeChanged) tag.prototype.attributeChangedCallback = { value: tag.lifecycle.attributeChanged, enumerable: true };
 
       var setAttribute = tag.prototype.setAttribute || HTMLElement.prototype.setAttribute;
@@ -1910,7 +1942,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
       if (options['extends']) {
         definition['extends'] = options['extends'];
       }
-      var reg = doc.register(_name, definition);
+      var reg = doc.registerElement(_name, definition);
       fireReady(_name);
       return reg;
     },
@@ -2007,6 +2039,30 @@ if (document.readyState === 'complete' || scope.flags.eager) {
     },
     pseudos: {
       __mixin__: {},
+      mixins: {
+        onCompiled: function(fn, pseudo){
+          var mixins = pseudo.source.__mixins__;
+          if (mixins) switch (pseudo.value) {
+            case 'before': return function(){
+              var self = this,
+                  args = arguments;
+              mixins.forEach(function(m){
+                m.apply(self, args);
+              });
+              return fn.apply(self, args);
+            };
+            case 'after': case null: return function(){
+              var self = this,
+                  args = arguments;
+                  returns = fn.apply(self, args);
+              mixins.forEach(function(m){
+                m.apply(self, args);
+              });
+              return returns;
+            };
+          }
+        }
+      },
       keypass: keypseudo,
       keyfail: keypseudo,
       delegate: { action: delegateAction },
@@ -2036,7 +2092,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 
     wrap: function (original, fn) {
       return function(){
-        var args = toArray(arguments),
+        var args = arguments,
             output = original.apply(this, args);
         fn.apply(this, args);
         return output;
@@ -2060,10 +2116,10 @@ if (document.readyState === 'complete' || scope.flags.eager) {
 
     query: query,
 
-    skipTransition: function(element, fn){
+    skipTransition: function(element, fn, bind){
       var prop = prefix.js + 'TransitionProperty';
       element.style[prop] = element.style.transitionProperty = 'none';
-      var callback = fn();
+      var callback = fn ? fn.call(bind) : null;
       return xtag.requestFrame(function(){
         xtag.requestFrame(function(){
           element.style[prop] = element.style.transitionProperty = '';
@@ -2127,10 +2183,18 @@ if (document.readyState === 'complete' || scope.flags.eager) {
     queryChildren: function (element, selector) {
       var id = element.id,
         guid = element.id = id || 'x_' + xtag.uid(),
-        attr = '#' + guid + ' > ';
+        attr = '#' + guid + ' > ',
+        noParent = false;
+      if (!element.parentNode){
+        noParent = true;
+        container.appendChild(element);
+      }
       selector = attr + (selector + '').replace(',', ',' + attr, 'g');
       var result = element.parentNode.querySelectorAll(selector);
       if (!id) element.removeAttribute('id');
+      if (noParent){
+        container.removeChild(element);
+      }
       return toArray(result);
     },
 
@@ -2167,13 +2231,14 @@ if (document.readyState === 'complete' || scope.flags.eager) {
         while (--i) {
           split[i].replace(regexPseudoReplace, function (match, name, value) {
             if (!xtag.pseudos[name]) throw "pseudo not found: " + name + " " + split;
+            value = (value === '' || typeof value == 'undefined') ? null : value;
             var pseudo = pseudos[i] = Object.create(xtag.pseudos[name]);
-                pseudo.key = key;
-                pseudo.name = name;
-                pseudo.value = value;
-                pseudo['arguments'] = (value || '').split(',');
-                pseudo.action = pseudo.action || trueop;
-                pseudo.source = source;
+            pseudo.key = key;
+            pseudo.name = name;
+            pseudo.value = value;
+            pseudo['arguments'] = (value || '').split(',');
+            pseudo.action = pseudo.action || trueop;
+            pseudo.source = source;
             var last = listener;
             listener = function(){
               var args = toArray(arguments),
@@ -2230,17 +2295,18 @@ if (document.readyState === 'complete' || scope.flags.eager) {
       var condition = event.condition;
       event.condition = function(e){
         var t = e.touches, tt = e.targetTouches;
-        return condition.apply(this, toArray(arguments));
+        return condition.apply(this, arguments);
       };
       var stack = xtag.applyPseudos(event.chain, fn, event._pseudos, event);
       event.stack = function(e){
+        e.currentTarget = e.currentTarget || this;
         var t = e.touches, tt = e.targetTouches;
         var detail = e.detail || {};
-        if (!detail.__stack__) return stack.apply(this, toArray(arguments));
+        if (!detail.__stack__) return stack.apply(this, arguments);
         else if (detail.__stack__ == stack) {
           e.stopPropagation();
           e.cancelBubble = true;
-          return stack.apply(this, toArray(arguments));
+          return stack.apply(this, arguments);
         }
       };
       event.listener = function(e){
@@ -2274,7 +2340,7 @@ if (document.readyState === 'complete' || scope.flags.eager) {
     },
 
     addEvent: function (element, type, fn, capture) {
-      var event = (typeof fn == 'function') ? xtag.parseEvent(type, fn) : fn;
+      var event = typeof fn == 'function' ? xtag.parseEvent(type, fn) : fn;
       event._pseudos.forEach(function(obj){
         obj.onAdd.call(element, obj);
       });
