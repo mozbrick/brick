@@ -60,7 +60,7 @@
       <h2>All Components</h2>
       <a class="download" href="https://github.com/mozilla/brick/releases/download/1.0.0rc1/brick-1.0.0rc1.zip">
         <h3>Download Brick</h3>
-        <small>version 1.0.0rc1 &mdash; 182K</small>
+        <small>version 1.0.0rc1 &mdash; 184K</small>
       </a>
     </div>
     <div class="col-md-8">
@@ -298,8 +298,13 @@
       function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
-          total += req.response;
-          done();
+          if (this.status != 200 && this.status != 304) {
+            if (console) console.warn('file not found:', getFileName(c, 'css'));
+            done();
+          } else {
+            total += '\n' + req.response;
+            done();
+          }
         };
         req.open("get", getFileName(c, 'css'));
         req.send();
@@ -327,8 +332,13 @@
       function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
-          total += req.response;
-          done();
+          if (this.status != 200 && this.status != 304) {
+            if (console) console.warn('file not found:', getFileName(c, 'js'));
+            done();
+          } else {
+            total += '\n' + req.response;
+            done();
+          }
         };
         req.open("get", getFileName(c, 'js'));
         req.send();

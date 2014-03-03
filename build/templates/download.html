@@ -180,8 +180,13 @@
       function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
-          total += req.response;
-          done();
+          if (this.status != 200 && this.status != 304) {
+            if (console) console.warn('file not found:', getFileName(c, 'css'));
+            done();
+          } else {
+            total += '\n' + req.response;
+            done();
+          }
         };
         req.open("get", getFileName(c, 'css'));
         req.send();
@@ -209,8 +214,13 @@
       function get(c) {
         var req = new XMLHttpRequest();
         req.onload = function(e) {
-          total += req.response;
-          done();
+          if (this.status != 200 && this.status != 304) {
+            if (console) console.warn('file not found:', getFileName(c, 'js'));
+            done();
+          } else {
+            total += '\n' + req.response;
+            done();
+          }
         };
         req.open("get", getFileName(c, 'js'));
         req.send();
