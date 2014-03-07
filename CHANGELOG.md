@@ -1,3 +1,8 @@
+# 1.0.1 (TBD)
+
+* Removed `grunt build-dev` task
+* Added `--dev` option to all grunt tasks that build sections of Brick [site,demos,downloadpage,homepage,build].  This allows Brick to be built from ./dev-repos/ instead of ./bower_components/.
+
 # 1.0.0 (2014-03-04)
 
 We've gone stable!

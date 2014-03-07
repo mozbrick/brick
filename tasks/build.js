@@ -1,52 +1,18 @@
 var path = require('path'),
-  fs = require('fs');
+  fs = require('fs'),
+  tools = require('../build/statictools');
 
 module.exports = function(grunt){
 
-
   grunt.registerTask('build', 'Build dist from bower components' , function(){
     var done = this.async();
-    grunt.log.writeln('Fetching files from bower_components...');
-    try {
-      buildGruntConfiguration(grunt, 'bower_components', function(err, configs){
-        if (err) grunt.log.write(JSON.stringify(err));
-        grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
-        loadSkin(grunt, grunt.option('skin'), configs.stylus);
-        grunt.config.set('stylus', configs.stylus );
-        grunt.config.set('uglify', configs.uglify );
-        grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
-        grunt.file.copy('build/readme.txt','dist/readme.txt');
-        grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
-        grunt.task.run('stylus','uglify');
-        grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
-        grunt.file.copy('bower_components/x-tag-core/dist/x-tag-core.js','dist/x-tag-core.js');
-        grunt.file.copy('build/readme.txt','dist/readme.txt');
-        grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
-        done();
-      });
-    } catch (e) {
-      grunt.log.error('something has gone terribly wrong.');
-      grunt.log.error(JSON.stringify(e));
-      throw e;
-    }
-  });
 
-  grunt.registerTask('build-dev', 'Build dist from dev repositories' , function(){
-    var done = this.async();
-    grunt.log.writeln('Fetching files from dev-repos...');
     try {
-      buildGruntConfiguration(grunt, 'dev-repos', function(err, configs){
-        if (err) grunt.log.write(err);
-        grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
-        loadSkin(grunt, grunt.option('skin'), configs.stylus);
-        grunt.config.set('stylus', configs.stylus );
-        grunt.config.set('uglify', configs.uglify );
-        grunt.task.run('stylus','uglify');
-        grunt.file.copy('dev-repos/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
-        grunt.file.copy('dev-repos/x-tag-core/dist/x-tag-core.js','dist/x-tag-core.js');
-        grunt.file.copy('build/readme.txt','dist/readme.txt');
-        grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
-        done();
+      var sourcePath = ~process.argv.indexOf('--dev') ? 'dev-repos' : 'bower_components';
+      grunt.log.writeln('Fetching files from ' + sourcePath);
+      buildGruntConfiguration(grunt, sourcePath, function(err, configs){
+        if (err) grunt.log.write(JSON.stringify(err));
+        execGrunt(grunt, sourcePath, configs, done);
       });
     } catch (e) {
       grunt.log.error('something has gone terribly wrong.');
@@ -78,6 +44,19 @@ module.exports = function(grunt){
     grunt.task.run('compress');
   });
 
+}
+
+function execGrunt(grunt, sourcePath, configs, done){
+  grunt.log.writeln('Loading Skin:', grunt.option('skin')||'default', ' ');
+  loadSkin(grunt, grunt.option('skin'), configs.stylus);
+  grunt.config.set('stylus', configs.stylus );
+  grunt.config.set('uglify', configs.uglify );
+  grunt.task.run('stylus','uglify');
+  grunt.file.copy(sourcePath + '/x-tag-core/dist/x-tag-core.min.js','dist/x-tag-core.min.js');
+  grunt.file.copy(sourcePath + '/x-tag-core/dist/x-tag-core.js','dist/x-tag-core.js');
+  grunt.file.copy('build/readme.txt','dist/readme.txt');
+  grunt.file.copy('build/OpenSans-SemiBold.ttf','dist/OpenSans-SemiBold.ttf');
+  done();
 }
 
 function loadSkin(grunt, skinFolder, config){
@@ -153,24 +132,12 @@ function buildGruntConfiguration(grunt, source, callback){
       grunt.log.debug(result.stdout);
       throw e;
     }
-    var dependencies = bower_data.dependencies;
-    var componentsJson = grunt.file.readJSON('./build/components.json');
-    var components = [];
-    Object.keys(componentsJson).forEach(function(key){
-      components.push(componentsJson[key]);
-    });
 
-    var dKeys = Object.keys(dependencies).filter(function(c){
-      for (var i = 0; i < components.length; i++){
-        if (c.indexOf(components[i])>-1){
-          return true;
-        }
-      };
-    });
+    var dependencies = tools.flattenBowerDependencies(bower_data);
 
-    grunt.log.debug('iterating over component deps');
+    grunt.log.debug('iterating over component dependencies');
 
-    dKeys.forEach(function(k){
+    Object.keys(dependencies).forEach(function(k){
 
       grunt.log.debug('dependency ' + k);
 
@@ -188,13 +155,17 @@ function buildGruntConfiguration(grunt, source, callback){
 
       var dest = path.join('dist', k);
 
-      stylusFile = path.join(source, k, stylusFile);
-      stylusConfig[dest + '.css'] = stylusFile
-      stylusConfig[path.join('dist','brick.css')].push(stylusFile);
+      if (stylusFile){
+        stylusFile = path.join(source, k, stylusFile);
+        stylusConfig[dest + '.css'] = stylusFile
+        stylusConfig[path.join('dist','brick.css')].push(stylusFile);
+      }
 
-      jsFile = path.join(source, k, jsFile);
-      uglifyConfig[dest + '.js'] = jsFile;
-      uglifyConfig[path.join('dist','brick.js')].push(jsFile);
+      if (jsFile){
+        jsFile = path.join(source, k, jsFile);
+        uglifyConfig[dest + '.js'] = jsFile;
+        uglifyConfig[path.join('dist','brick.js')].push(jsFile);
+      }
 
     });
 
