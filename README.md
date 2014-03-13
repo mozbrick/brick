@@ -1,5 +1,5 @@
 Brick
-==============
+=====
 
 [![Build Status](https://travis-ci.org/mozilla/brick.png)](https://travis-ci.org/mozilla/brick)
 
@@ -9,7 +9,7 @@ In other words, Brick provides minimal-markup, cross-browser implementations of 
 
 For example, this is all the markup that would be needed to implement a mobile-friendly, cross-browser calendar widget:
 
-```
+```html
 <x-calendar></x-calendar>
 ```
 
@@ -19,7 +19,7 @@ That's it! It really is that easy.
 
 Release bundles are provided on Github under this project's Releases tab.
 
-Prebuilt versions of the entire library are also provided in <code>dist/brick.css</code> and <code>dist/brick.js</code>, and should be included in your project like any other CSS/JavaScript file.
+Prebuilt versions of the entire library are also provided in `dist/brick.css` and `dist/brick.js`, and should be included in your project like any other CSS/JavaScript file.
 
 Compartmentalized releases of specific components are also released in their respective folders under <code>dist</code>, allowing you to pick and choose what components you want.
 
@@ -27,7 +27,7 @@ Compartmentalized releases of specific components are also released in their res
 
 You need three things to get started with Brick.  NPM, Grunt and Bower.
 
-First install <a href="http://nodejs.org/download/">NodeJS/NPM</a>.  Once you have `npm` installed it's easy to install Bower and GruntCLI.   Simply run `npm install -g bower grunt-cli`.
+First install [NodeJS/NPM](http://nodejs.org/download/).  Once you have `npm` installed it's easy to install Bower and GruntCLI.   Simply run `npm install -g bower grunt-cli`.
 
 
 ## Building from the repository source
@@ -36,7 +36,7 @@ Once you have the prerequisites, you're ready to clone and build from source.
 
 Run the following:
 
-```
+```bash
 git clone git@github.com:mozilla/brick.git
 cd brick
 npm install
@@ -44,25 +44,24 @@ bower install
 grunt
 ```
 
-The built minified files should be output to <code>dist/brick.css</code> and <code>dist/brick.js</code>.
+The built minified files should be output to `dist/brick.css` and `dist/brick.js`.
 
 ## Skins
 
 Each component in Brick can be skinned by creating a new folder in the `./skins/` directory and then creating a Stylus file with the name of the component you wish to style.  Once you've created an alternate style for a particular element, build it by using the `--skin=` parameter with `grunt build` or `grunt build --dev` commands.   All other components will use the default styles if a custom style is not provided.
 
-```
-  grunt build --skin=solo
+```bash
+grunt build --skin=solo
 ```
 
 ## Development
 
 By default, Brick uses Bower to pull in components, which means that they are not git repositories.  If you would like to work on the components within their git repository, then run the following:
 
-```
+```bash
 bower install       # we use bower to get the repository locations, so this is required
 grunt clone-repos   # clone all repositories to ./dev-repos/
-grunt build --dev     # build from repositories instead of bower
-
+grunt build --dev   # build from repositories instead of bower
 ```
 
 Now you can work one each component within their respective git repository.
