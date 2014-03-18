@@ -116,7 +116,7 @@ function buildGruntConfiguration(grunt, source, callback){
     uglifyConfig = {};
 
   stylusConfig[path.join('dist','brick.css')] = [];
-  uglifyConfig[path.join('dist','brick.js')] = [path.join(source,'x-tag-core','dist','x-tag-core.js')];
+  uglifyConfig[path.join('dist','brick.js')] = [];
 
   grunt.log.debug('spawning bower tasks');
 
@@ -137,35 +137,46 @@ function buildGruntConfiguration(grunt, source, callback){
 
     grunt.log.debug('iterating over component dependencies');
 
-    Object.keys(dependencies).forEach(function(k){
+    dependencies.forEach(function(item){
+      k = Object.keys(item)[0];
 
       grunt.log.debug('dependency ' + k);
 
-      var stylusFile = dependencies[k].pkgMeta.main.filter(function(f){
+      var stylusFile = item[k].pkgMeta.main.filter(function(f){
         if(f.indexOf('.styl')>-1){
           return true;
         }
-      })[0];
+      });
 
-      var jsFile = dependencies[k].pkgMeta.main.filter(function(f){
+      var jsFile = item[k].pkgMeta.main.filter(function(f){
         if(f.indexOf('.js')>-1){
           return true;
         }
-      })[0];
+      });
 
       var dest = path.join('dist', k);
 
-      if (stylusFile){
-        stylusFile = path.join(source, k, stylusFile);
-        stylusConfig[dest + '.css'] = stylusFile
-        stylusConfig[path.join('dist','brick.css')].push(stylusFile);
-      }
+      stylusFile.forEach(function(file){
+        file = path.join(source, k, file);
+        if (stylusConfig[dest + '.css']){
+          stylusConfig[dest + '.css'].push(file);
+        }
+        else {
+          stylusConfig[dest + '.css'] = [file];
+        }
+        stylusConfig[path.join('dist','brick.css')].push(file);
+      });
 
-      if (jsFile){
-        jsFile = path.join(source, k, jsFile);
-        uglifyConfig[dest + '.js'] = jsFile;
-        uglifyConfig[path.join('dist','brick.js')].push(jsFile);
-      }
+      jsFile.forEach(function(file){
+        file = path.join(source, k, file);
+        if (uglifyConfig[dest + '.js']){
+          uglifyConfig[dest + '.js'].push(file);
+        }
+        else {
+          uglifyConfig[dest + '.js'] = [file];
+        }
+        uglifyConfig[path.join('dist','brick.js')].push(file);
+      });
 
     });
 
