@@ -22,7 +22,8 @@ That's it! It really is that easy.
 
 ## Install
 
-Release bundles are provided on Github under this project's Releases tab.
+Release bundles are provided on GitHub, under this
+[project's Releases tab](https://github.com/mozilla/brick/releases).
 
 Prebuilt versions of the entire library are also provided in
 [`dist/brick.css`](https://github.com/mozilla/brick/blob/master/dist/brick.css)
