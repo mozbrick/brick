@@ -36,6 +36,9 @@ respective folders under
 [`dist/brick.css`](https://github.com/mozilla/brick/tree/master/dist), allowing
 you to pick and choose what components you want.
 
+Brick is also available as a Bower component: `bower install brick` will
+install Brick for any project using Bower.
+
 ## Skins
 
 Each component in Brick can be skinned by creating a new folder in the
