@@ -131,7 +131,7 @@ Full documentation can be found on
 
 #### ['Slidebox'](https://github.com/x-tag/slidebox)
 
-* Allows a 'slide' film strip effect between views or panels
+* Allows a "slide" film strip effect between views or panels
 
 #### ['Flipbox'](https://github.com/x-tag/flipbox)
 
@@ -164,7 +164,7 @@ Full documentation can be found on
 
 #### [Datepicker](https://github.com/x-tag/datepicker)
 
-* A polyfill for &lt;input type='date'&gt;, regardless of native browser
+* A polyfill for <input type="date">, regardless of native browser
   support for date inputs
 * Ability to select a date and submit its ISO string to a server
 * Extends upon x-calendar to provide a calendar view
@@ -177,7 +177,7 @@ Full documentation can be found on
 
 #### [Slider](https://github.com/x-tag/slider)
 
-* Polyfill on top of `<input type='range'>`, providing a consistent UI
+* Polyfill on top of `<input type="range">`, providing a consistent UI
   regardless of whether `type="range"` is supported or not.
 
 #### [Toggle](https://github.com/x-tag/toggle)
