@@ -20,7 +20,7 @@ mobile-friendly, cross-browser calendar widget:
 
 That's it! It really is that easy.
 
-## Installation
+## Install
 
 Release bundles are provided on Github under this project's Releases tab.
 
