@@ -58,8 +58,8 @@ You need three things to get started with Brick:
 [npm](http://nodejs.org/download/), [Grunt](http://gruntjs.com), and
 [Bower](http://bower.io).
 
-First, install [NodeJS/NPM](http://nodejs.org/download/). Once you have `npm`
-installed it's easy to install Bower and GruntCLI. Run:
+First, install [NodeJS/npm](http://nodejs.org/download/). Once you have `npm`
+installed you need to install Bower and Grunt globally:
 
 ```bash
 npm install -g bower grunt-cli
