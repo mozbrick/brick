@@ -32,6 +32,9 @@ body {
   margin-bottom: 0;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .42);
 }
+.jumbotron h1 {
+  font-weight: bold;
+}
 .jumbotron h2 {
   font-size: 23px;
   line-height: 1.1em;
