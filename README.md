@@ -104,18 +104,18 @@ Full documentation can be found on
 
 ### Structural Components
 
-#### ['Layout'](https://github.com/x-tag/layout)
+#### [Layout](https://github.com/x-tag/layout)
 
 * Primary layout container, holds app structure.
 * Allows whole "app" space to have layout properties like flexbox without
   affecting <body>
 
-#### ['App Bar' (header)](https://github.com/x-tag/appbar)
+#### [App Bar (header)](https://github.com/x-tag/appbar)
 
 * Contains top-level information and UI
 * Similar to a toolbar or roughly equivalent to Android's action bar
 
-#### ['Tab Bar' (navigation, footer)](https://github.com/x-tag/tabbar)
+#### [Tab Bar (navigation, footer)](https://github.com/x-tag/tabbar)
 
 * Used to display an app-level navigation at the bottom of the UI
 * Usually a series of icons with labels.
@@ -129,28 +129,17 @@ Full documentation can be found on
     * Slidebox
 * Can also fire user-defined events
 
-#### ['Slidebox'](https://github.com/x-tag/slidebox)
+#### [Deck](https://github.com/x-tag/deck)
 
-* Allows a "slide" film strip effect between views or panels
-
-#### ['Flipbox'](https://github.com/x-tag/flipbox)
-
-* Similar to slidebox, but with a perspective flip effect.
-* May be combinable with slidebox and accessed via an option
-
-#### ['Deck' ('Cycle'/'Gallery')](https://github.com/x-tag/deck)
-
-* Like a combination of slidebox and flipbox
 * A gallery box in which slides can be cycled in and out independently, with a
   variety of different transitions
 * Transition types can be switched and overridden on the fly, allowing for a
   variety of different entrances/exits
 
-#### ['Tooltip' (Callout)](https://github.com/x-tag/tooltip)
+#### [Flipbox](https://github.com/x-tag/flipbox)
 
-* Content container that appears over current view context
-* Associated with a trigger element in the underlying content
-* Does not necessarily block interaction with underlying content
+* Similar to slidebox, but with a perspective flip effect.
+* May be combinable with slidebox and accessed via an option
 
 ### Content Components
 
@@ -162,19 +151,6 @@ Full documentation can be found on
 * Simple instantiation, with API hooks to allow flexible use cases such as an
   event-managing calendar (see demo)
 
-#### [Datepicker](https://github.com/x-tag/datepicker)
-
-* A polyfill for <input type="date">, regardless of native browser
-  support for date inputs
-* Ability to select a date and submit its ISO string to a server
-* Extends upon x-calendar to provide a calendar view
-
-#### [Icon Button](https://github.com/x-tag/iconbutton)
-
-* A simple UI component that creates a button with both an icon and a label
-* Allows multiple anchor locations of the icon and saves the developer from the
-  headache of correctly CSS-centering contents
-
 #### [Slider](https://github.com/x-tag/slider)
 
 * Polyfill on top of `<input type="range">`, providing a consistent UI
@@ -183,9 +159,3 @@ Full documentation can be found on
 #### [Toggle](https://github.com/x-tag/toggle)
 
 * Unifies checkboxes and radios into a single consistent UI component
-
-#### [Togglegroup (aka Option Bar)](https://github.com/x-tag/togglegroup)
-
-* A set of associated options of which only one can be selected at a time
-* Designed to appear as a cohesive set
-* Essentially several Toggles with the appearance of option buttons
