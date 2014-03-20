@@ -46,33 +46,67 @@
   </div>
 </nav>
 
-      
   <div class="jumbotron">
     <div class="container">
-      <h1>Brick</h1>
-      <h2>UI Components for Modern Web Apps</h2>
+      <section class="demo-wrap clean row">
+        <div class="col-md-4 col-sm-6">
+            <figure class="demo medium demo-left">
+                <x-flipbox>
+                    <div>Flip Me</div>
+                    <div>Flip Me Again</div>
+                </x-flipbox>
+            </figure>
+        </div>
+        <div class="markup-wrap col-md-8 col-sm-6">
+          <h1>Brick</h1>
+          <h2>UI Components for Modern Web Apps</h2>
+
+          <a class="download" href="download.html">
+            <h3>Download Brick</h3>
+            <small>version 1.0.0 &mdash; 184K</small>
+          </a>
+
+          <div class="clearfix"></div>
+
+          <h4>See it in action:</h4>
+          <div class="controls">
+            <button class="btn btn-default" data-toggle-prop="flipped" data-toggle-target="x-flipbox">Toggle flip</button>
+          </div>
+
+          <section class="markup">
+            <h3>Markup</h3>
+            <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;Flip Me&lt;/div&gt;<br/>    &lt;div&gt;Flip Me Again&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
+          </section>
+
+          <section class="js">
+            <h3>JavaScript</h3>
+            <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function() {<br/>    flipBox.toggle(); <br/>});</pre>
+          </section>
+        </div>
+      </section>
     </div>
   </div>
+</header>
 
-    </header>
-    <article class="container">
-      
+<div class="clearfix"></div>
+
+<article class="container">      
   <div class="row">
-    <section class="col-md-4">
+    <section class="col-md-4 intro">
       <h2>What is Brick?</h2>
       <p>
         Brick is a bundle of reusable UI components created to enable <b>rapid development</b> of cross-browser and mobile-friendly HTML5 web applications.
       </p>
     </section>
 
-    <section class="col-md-4">
+    <section class="col-md-4 intro">
       <h2>Neat. How?</h2>
       <p>
         Brick components are <b>custom HTML tags</b> created using <a href="http://x-tags.org">X-Tag</a> &mdash; a library that makes developing Web Components easier.
       </p>
     </section>
 
-    <section class="col-md-4">
+    <section class="col-md-4 intro">
       <h2>Um, Web Components?</h2>
       <p>
         <a href="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/spec/custom/index.html">Web Components</a> is a series of emerging <b>W3C standards</b> that allow developers to define custom HTML elements, and interact with them using the native DOM.
@@ -80,35 +114,7 @@
     </section>
   </div>
 
-  <section class="demo-wrap clean row">
-      <div class="col-md-4 col-sm-6">
-          <figure class="demo largeprint demo-left">
-              <x-flipbox>
-                  <div>I'm the front face.</div>
-                  <div>And I'm the back face.</div>
-              </x-flipbox>
-          </figure>
-      </div>
-      <div class="markup-wrap col-md-8 col-sm-6">
-          <h1>Brick in Action</h1>
-          <div class="controls">
-              <button class="btn btn-default" data-toggle-prop="flipped" data-toggle-target="x-flipbox">Toggle flip</button>
-          </div>
-          <h3>Markup</h3>
-          <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;I'm the front face.&lt;/div&gt;<br/>    &lt;div&gt;And I'm the back face.&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
-          <h3>JavaScript</h3>
-          <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function(){<br/>    flipBox.toggle(); <br/>});</pre>
-      </div>
-  </section>
-
   <section class="row">
-    <div class="col-sm-6">
-      <h1>Start Stacking</h1>
-        <a class="download" href="download.html">
-          <h3>Download Brick</h3>
-          <small>version 1.0.1 &mdash; 183K</small>
-        </a>
-    </div>
     <div class="col-sm-6">
       <h1>Feedback</h1>
       <p>Brick is currently in Beta. You may run into issues using the components, but it likely isn't your fault! Please let us know!</p>

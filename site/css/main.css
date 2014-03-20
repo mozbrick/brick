@@ -1,14 +1,41 @@
-
 body {
+  color: #555;
+  font-family: Helvetica, "Helvetica Neue", "Open Sans", Arial, sans-serif;
+  margin: 0 auto;
+  max-width: 1272px;
   padding-top: 70px;
 }
 
-.jumbotron {
-    background-color: #a20;
-    color: #fff;
+@media (min-width: 1273px) {
+  body {
+    border-left: #e7e7e7 1px solid;
+  }
 }
-.jumbotron h1 {
-  font-size: 4em;
+@media (min-width: 1274px) {
+  body {
+    border-right: #e7e7e7 1px solid;
+  }
+}
+
+.jumbotron {
+    background: url(../img/brick-bg.jpg) #ebebeb no-repeat 50% 0 / 1272px 258px;
+    border-bottom: 1px solid #d8d8d8;
+    margin-top: -21px;
+    max-height: 480px;
+    padding-top: 16px;
+}
+.jumbotron h1, .jumbotron h2 {
+  color: #fff;
+  font-family: "Museo Sans", "Open Sans", Helvetica, "Helvetica Neue", Arial, sans-serif;
+  font-size: 67px;
+  line-height: 1em;
+  margin-bottom: 0;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .42);
+}
+.jumbotron h2 {
+  font-size: 23px;
+  line-height: 1.1em;
+  margin: 0;
 }
 
 .moz img {
@@ -60,7 +87,6 @@ section.demo-wrap:not(.clean){
     top: 50px;
     left: 0;
   }
-
 }
 
 @media (max-width: 767px) {
@@ -99,6 +125,9 @@ section.demo-wrap:not(.clean){
   border-bottom: 1px solid gray;
 }
 
+.navbar {
+  font-family: "Open Sans", Helvetica, "Helvetica Neue", Arial, sans-serif;
+}
 .navbar-brand {
   font-size: 180%;
   margin: -2px 0 -3px;
@@ -123,13 +152,31 @@ section.demo-wrap:not(.clean){
   margin-bottom: 2em;
 }
 
-.jumbotron {
-  margin-top: -21px;
-  padding-bottom: 64px;
+.download, .download:hover {
+  background: #629ecb;
+  border: 1px solid #4376a2;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .50);
+  color: #c0e8f9;
+  display: inline-block;
+  float: left;
+  font-size: 12px;
+  height: 58px;
+  line-height: 1em;
+  margin: 28px 0 44px;
+  padding: 12px 0 0;
   text-align: center;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .42);
+  width: 180px;
+  white-space: nowrap;
 }
-.jumbotron h1 {
-  font-size: ;
+.download h3, .download:hover h3 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  text-indent: -.1rem;
 }
 
 footer {
@@ -171,35 +218,35 @@ footer {
     padding: 0.5em;
 }
 
-.grayshade {
+.intro {
+  padding: 0 35px;
+  text-align: center;
 }
 
-.download {
-  background: url('../img/zip.png') no-repeat;
-  background-size: 64px;
-  font-size: 120%;
-  display: inline-block;
-  height: 64px;
-  margin: 5px 0 0;
-  padding-left: 90px;
-  white-space: nowrap;
+.intro h2 {
+  color: #a72f0e;
+  font-size: 25px;
+  font-weight: bold;
 }
-.download h3 {
-  margin: .3rem 0;
-  text-indent: -.1rem;
-  font-size: 150%;
+
+.intro p {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.1em;
 }
+
 .demo {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   width: 240px;
   height: 360px;
   margin: 2em auto;
-  border: 10px solid #eee;
+  border: 10px solid #1e1e1e;
   border-width: 40px 15px 60px;
   border-radius: 20px;
   position: relative;
   background: #fff;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .42);
 }
 
 /* fake phone button */
@@ -211,7 +258,7 @@ footer {
   top: 103%;
   left: 43.75%;
   left: calc(50% - 15px);
-  background: #fff;
+  background: #3f3f3f;
   border-radius: 20px;
 }
 
@@ -238,6 +285,31 @@ footer {
   width: 320px;
 }
 
+.demo x-flipbox > *:first-child {
+    background-color: #5693c8;
+    color: #fff;
+    text-align: center;
+}
+.demo x-flipbox > *:before {
+    background: #4376a2;
+    border-radius: 3px;
+    content: '';
+    display: block;
+    height: 1.5em;
+    margin: 160px auto -1.75em;
+    width: 75%;
+}
+
+.demo x-flipbox > *:last-child {
+    background-color: #4376a2;
+    color: #fff;
+    text-align: center;
+}
+.demo x-flipbox > *:last-child:before {
+    background: #5693c8;
+}
+
+
 .docs dl {
   padding-left: 1em;
 }
@@ -249,15 +321,31 @@ pre.prettyprint{
   font-size: .9em;
 }
 
+.markup-wrap h4 {
+  float: left;
+}
+
+.markup-wrap section {
+  float: left;
+}
+
+.markup-wrap .markup {
+  width: 35%;
+}
+
+.markup-wrap .js {
+  width: 65%;
+}
+
 .markup-wrap pre.prettyprint,
 .markup-wrap .code-box{
     text-align: left;
     margin: 0;
-    width: 100%;
+    width: 90%;
     max-height: 20em;
 
     overflow: auto;
-    font-size: .9em;
+    font-size: 12px;
     box-shadow: inset 1px 1px 4px grey;
     padding: .5em;
 }
