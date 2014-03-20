@@ -18,19 +18,19 @@ module.exports = function(grunt){
 
           var bower_data = JSON.parse(result.stdout),
             gitCloneOptions = {},
-            dependencies = tools.flattenBowerDependencies(bower_data),
-            dKeys = Object.keys(dependencies);
+            dependencies = tools.flattenBowerDependencies(bower_data);
 
           grunt.log.write().ok();
 
-          async.forEachSeries(dKeys, function(k, cb){
+          async.forEachSeries(dependencies, function(item, cb){
+            var key = Object.keys(item)[0];
             var args = [
               'clone',
-              dependencies[k].pkgMeta._source.replace('git://','https://') ,
-              path.join('dev-repos', dependencies[k].endpoint.name) ];
+              item[key].pkgMeta._source.replace('git://','https://') ,
+              path.join('dev-repos', item[key].endpoint.name) ];
 
             try {
-              grunt.log.write('Processing '+dependencies[k].endpoint.name+ '\n ');
+              grunt.log.write('Processing '+item[key].endpoint.name+ '\n ');
               grunt.util.spawn({cmd:'git', args: args}, function(e,result){
                 if (e){
                   grunt.log.write(e).warn();

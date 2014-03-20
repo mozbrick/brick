@@ -103,19 +103,29 @@ var getComponents = avow(function(fulfill, reject, componentsJson){
 });
 
 var flattenBowerDep = function(bower_data){
-  var result = {};
-  var flatten = function(data){
+  var result = {}, oresult = [];
+  var flatten = function(item, data){
     Object.keys(data||{}).forEach(function(key){
-      if(!result[key]){
+      if (!result[key]){
+        if (item){
+          var parentIdx = oresult.indexOf(item);
+          oresult.splice(parentIdx,0, key);
+        } else{
+          oresult.push(key);
+        }
         result[key] = data[key];
-        if(data[key].dependencies){
-          flatten(data[key].dependencies);
+        if (data[key].dependencies){
+          flatten(key, data[key].dependencies);
         }
       }
     });
   };
-  flatten(bower_data.dependencies);
-  return result;
+  flatten(null,bower_data.dependencies);
+  return oresult.map(function(item, idx){
+    var tmp = {};
+    tmp[item] = result[item];
+    return tmp;
+  });
 }
 
 module.exports = {
