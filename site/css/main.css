@@ -21,7 +21,7 @@ body {
     background: url(../img/brick-bg.jpg) #ebebeb no-repeat 50% 0 / 1272px 258px;
     border-bottom: 1px solid #d8d8d8;
     margin-top: -21px;
-    max-height: 480px;
+    max-height: 460px;
     padding-top: 16px;
 }
 .jumbotron h1, .jumbotron h2 {
@@ -155,7 +155,7 @@ section.demo-wrap:not(.clean){
   margin-bottom: 2em;
 }
 
-.download, .download:hover {
+.download, .download:hover, .download:active, .download:focus {
   background: #629ecb;
   border: 1px solid #4376a2;
   border-radius: 3px;
@@ -174,12 +174,25 @@ section.demo-wrap:not(.clean){
   width: 180px;
   white-space: nowrap;
 }
-.download h3, .download:hover h3 {
+.download h3, .download:hover h3, .download:active h3, .download:focus h3 {
   color: #fff;
   font-size: 18px;
   font-weight: bold;
   margin: 0;
   text-indent: -.1rem;
+}
+
+.jumbotron .fork {
+  color: #e5a190;
+  float: left;
+  font-size: 14px;
+  line-height: 1em;
+  margin: 50px 0 0 10px;
+}
+.jumbotron .fork a {
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 footer {
@@ -221,9 +234,24 @@ footer {
     padding: 0.5em;
 }
 
+@media (max-width: 991px) {
+  .markup-wrap h4, .markup-wrap .demos, .markup-wrap section h3 {
+    display: none;
+  }
+
+  .markup-wrap .js {
+    clear: both;
+  }
+}
+
 .intro {
   padding: 0 35px;
-  text-align: center;
+}
+
+@media (min-width: 992px) {
+  .intro {
+    text-align: center;
+  }
 }
 
 .intro h2 {
@@ -324,31 +352,82 @@ pre.prettyprint{
   font-size: .9em;
 }
 
-.markup-wrap h4 {
+.markup-wrap .controls {
   float: left;
+  margin: 0 15px 0 0;
 }
 
-.markup-wrap section {
+.markup-wrap h4 {
+  color: #494949;
   float: left;
+  font-size: 14px;
+  margin: 15px 0 0 0;
+}
+
+.markup-wrap .demos {
+  float: left;
+  margin: -1px 0 0;
+  padding: 0 0 0 8px;
+  text-transform: lowercase;
+}
+.markup-wrap .demos li {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 1em;
+  list-style: none;
+  margin: 0;
+}
+.markup-wrap .demos li:after {
+  color: #676767;
+  content: "·";
+  display: inline-block;
+  font-size: 13px;
+  padding: 0 0 0 4px;
+}
+.markup-wrap .demos li:last-child:after {
+  content: "";
+}
+.markup-wrap .demos a {
+  color: #d3431c;
+  cursor: pointer;
+}
+.markup-wrap section {
+  margin: 0 0 5px;
+}
+@media (min-width: 992px) {
+  .markup-wrap section {
+    float: left;
+    margin: 15px 0 0;
+  }
+  .markup-wrap .markup {
+    clear: both;
+  }
+}
+.markup-wrap section h3 {
+  color: #555;
+  font-size: 13px;
+  margin: 0 0 5px 10px;
 }
 
 .markup-wrap .markup {
-  width: 35%;
+  float: left;
+  max-width: 245px;
+  width: 100%;
 }
-
 .markup-wrap .js {
-  width: 65%;
+  max-width: 400px;
+  width: 100%;
 }
 
 .markup-wrap pre.prettyprint,
 .markup-wrap .code-box{
     text-align: left;
     margin: 0;
-    width: 90%;
+    width: 95%;
     max-height: 20em;
 
     overflow: auto;
-    font-size: 12px;
+    font-size: 11px;
     box-shadow: inset 1px 1px 4px grey;
     padding: .5em;
 }
