@@ -25,7 +25,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="../../index.html">
         <img class="logo" src="../../site/img/logo.png">
-        Brick<small> 1.0.0-rc2</small>
+        Brick<small> 1.0.0</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -129,7 +129,7 @@
     <section class="demo-wrap" id="transition-demo">
         <header><h2>Specifying deck transitions: <code>transition-type/.transitionType</code></h2></header>
         <p>By default, there is no transition animation applied when switching between <code class="prettyprint">&lt;x-card&gt;</code> elements, but we provide a batch of ready-made transitions you can apply using the <code>transition-type</code> attribute (also accessible by the <code>.transitionType</code> property).</p>
-        <p>Valid options: 
+        <p>Valid options:
             <code>
                 slide-up,
                 slide-down,
@@ -153,9 +153,9 @@
         <div class="markup-wrap two-up">
             <div class="controls">
                 <button class="btn btn-default prev">Previous card</button>
-                <button class="btn btn-default" 
-                        data-toggle-prop="transitionType" 
-                        data-toggle-target="x-deck" 
+                <button class="btn btn-default"
+                        data-toggle-prop="transitionType"
+                        data-toggle-target="x-deck"
                         data-toggle-options='["slide-up", "slide-down", "slide-left", "slide-right", "fade-scale"]'>
                     Change <code>transition-type</code>
                 </button>
@@ -164,7 +164,7 @@
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
             <h3>JavaScript</h3>
-            <pre class="prettyprint javascript">// assume transitionButton and deck are already<br/>// defined as their respective DOM elements<br/>var types = [<br/> &quot;slide-up&quot;, &quot;slide-down&quot;, &quot;slide-left&quot;, &quot;slide-right&quot;,<br/>&quot;scale-fade&quot;,<br/>&quot;none&quot;<br/> ];<br/>transitionButton.addEventListener(&quot;click&quot;, function(){<br/>    var oldType = deck.transitionType;<br/>    deck.transitionType = types[(types.indexOf(oldType)+1) % type.length];<br/><br/>    // force animation to make visible for demo<br/>    deck.nextCard(&quot;forward&quot;);<br/>});</pre>
+            <pre class="prettyprint javascript">// assume transitionButton and deck are already<br/>// defined as their respective DOM elements<br/>var types = [<br/> &quot;slide-up&quot;, &quot;slide-down&quot;, &quot;slide-left&quot;, &quot;slide-right&quot;,<br/>&quot;fade-scale&quot;,<br/>&quot;none&quot;<br/> ];<br/>transitionButton.addEventListener(&quot;click&quot;, function(){<br/>    var oldType = deck.transitionType;<br/>    deck.transitionType = types[(types.indexOf(oldType)+1) % type.length];<br/><br/>    // force animation to make visible for demo<br/>    deck.nextCard(&quot;forward&quot;);<br/>});</pre>
         </div>
         <a href="#" class="top">Top</a>
     </section>
@@ -186,7 +186,7 @@
             <div class="controls">
                 <button class="btn btn-default prev">Previous card</button>
                 <button class="btn btn-default next">Next card</button>
-            </div>  
+            </div>
             <h3>Markup</h3>
             <pre class="prettyprint html"></pre>
         </div>
@@ -258,7 +258,7 @@
 		<p>An <code>hide</code> event is fired from a card target after it has completed its hide animation, and the hide state has been finalized.</p>
         <div class="two-up">
             <figure class="demo" >
-                <x-deck class="simple-deck" transition-type="scale-fade">
+                <x-deck class="simple-deck" transition-type="fade-scale">
                     <x-card selected>0</x-card>
                     <x-card>1</x-card>
                     <x-card>2</x-card>

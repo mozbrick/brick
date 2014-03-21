@@ -1,102 +1,4 @@
 (function() {
-    var matchNum = /[1-9]/;
-    var replaceSpaces = / /g;
-    var captureTimes = /(\d|\d+?[.]?\d+?)(s|ms)(?!\w)/gi;
-    var transPre = "transition" in getComputedStyle(document.documentElement) ? "t" : xtag.prefix.js + "T";
-    var transDur = transPre + "ransitionDuration";
-    var transProp = transPre + "ransitionProperty";
-    var skipFrame = function(fn) {
-        xtag.requestFrame(function() {
-            xtag.requestFrame(fn);
-        });
-    };
-    var ready;
-    if (document.readyState == "complete") {
-        ready = skipFrame(function() {
-            ready = false;
-        });
-    } else {
-        ready = xtag.addEvent(document, "readystatechange", function() {
-            if (document.readyState == "complete") {
-                skipFrame(function() {
-                    ready = false;
-                });
-                xtag.removeEvent(document, "readystatechange", ready);
-            }
-        });
-    }
-    function getTransitions(node) {
-        node.__transitions__ = node.__transitions__ || {};
-        return node.__transitions__;
-    }
-    function startTransition(node, name, transitions) {
-        var style = getComputedStyle(node), after = transitions[name].after;
-        node.setAttribute("transition", name);
-        if (after && !style[transDur].match(matchNum)) {
-            after();
-        }
-    }
-    xtag.addEvents(document, {
-        transitionend: function(e) {
-            var node = e.target, name = node.getAttribute("transition");
-            if (name) {
-                var i = 0, max = 0, prop = null, style = getComputedStyle(node), transitions = getTransitions(node), props = style[transProp].replace(replaceSpaces, "").split(",");
-                style[transDur].replace(captureTimes, function(match, time, unit) {
-                    time = parseFloat(time) * (unit === "s" ? 1e3 : 1);
-                    if (time > max) {
-                        prop = i;
-                        max = time;
-                    }
-                    i++;
-                });
-                prop = props[prop];
-                if (!prop) {
-                    throw new SyntaxError("No matching transition property found");
-                } else if (e.propertyName == prop && transitions[name].after) {
-                    transitions[name].after();
-                }
-            }
-        }
-    });
-    xtag.transition = function(node, name, obj) {
-        var transitions = getTransitions(node), options = transitions[name] = obj || {};
-        if (options.immediate) {
-            options.immediate();
-        }
-        if (options.before) {
-            options.before();
-            if (ready) {
-                xtag.skipTransition(node, function() {
-                    startTransition(node, name, transitions);
-                });
-            } else {
-                skipFrame(function() {
-                    startTransition(node, name, transitions);
-                });
-            }
-        } else {
-            startTransition(node, name, transitions);
-        }
-    };
-    xtag.pseudos.transition = {
-        onCompiled: function(fn, pseudo) {
-            var options = {}, when = pseudo["arguments"][0] || "immediate", name = pseudo["arguments"][1] || pseudo.key.split(":")[0];
-            return function() {
-                var target = this, args = arguments;
-                if (this.hasAttribute("transition")) {
-                    options[when] = function() {
-                        return fn.apply(target, args);
-                    };
-                    xtag.transition(this, name, options);
-                } else {
-                    return fn.apply(this, args);
-                }
-            };
-        }
-    };
-})();
-
-(function() {
     var sides = {
         next: [ "nextElementSibling", "firstElementChild" ],
         previous: [ "previousElementSibling", "lastElementChild" ]
@@ -108,7 +10,7 @@
         return item && item.nodeName ? item : isNaN(item) ? xtag.queryChildren(deck, item) : deck.children[item];
     }
     function checkCard(deck, card, selected) {
-        return card && (selected ? card == deck.xtag.selected : card != deck.xtag.selected) && deck == card.parentNode && card.nodeName == "X-CARD";
+        return card && (selected ? card == deck.xtag.selected : card != deck.xtag.selected) && deck == card.parentNode && card.nodeName.toLowerCase() == "x-card";
     }
     function shuffle(deck, side, direction) {
         var getters = sides[side];
@@ -234,7 +136,7 @@
         lifecycle: {
             inserted: function() {
                 var deck = this.parentNode;
-                if (deck.nodeName == "X-DECK") {
+                if (deck.nodeName.toLowerCase() == "x-deck") {
                     this.xtag.deck = deck;
                     if (this != deck.selected && this.selected) {
                         deck.showCard(this);
