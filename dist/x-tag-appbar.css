@@ -44,6 +44,14 @@ x-appbar h6 {
   text-overflow: ellipsis;
   margin: 0;
 }
+x-appbar > h1:after,
+x-appbar h2:after,
+x-appbar h3:after,
+x-appbar h4:after,
+x-appbar h5:after,
+x-appbar h6:after {
+  content: attr(subheading);
+}
 
 x-appbar {
   background-color: #00202f;

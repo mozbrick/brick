@@ -48,7 +48,7 @@
         toggle.active = true;
     }
     function inTogglebar(toggle) {
-        return toggle.parentNode && toggle.parentNode.nodeName == "X-TOGGLEBAR";
+        return toggle.parentNode && toggle.parentNode.nodeName.toLowerCase() == "x-togglebar";
     }
     var shifted = false;
     xtag.addEvents(document, {

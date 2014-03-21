@@ -3,6 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var site = require('./statictools');
 var promise = require('promisesaplus');
+var sourceDir = ~process.argv.indexOf('--dev') ? 'dev-repos' : 'bower_components';
 
 var env = site.env;
 var avow = site.avow;
@@ -22,8 +23,8 @@ var generateDocs = avow(function (fulfill, reject, componentsJson) {
     function processComponent(n) {
         if (n < components.length) {
             var name = components[n];
-            var docPath = path.join('bower_components', name, 'xtag.json');
-            var pkgPath = path.join('bower_components', name, 'package.json');
+            var docPath = path.join(sourceDir, name, 'xtag.json');
+            var pkgPath = path.join(sourceDir, name, 'package.json');
             console.log(name, docPath);
             if (name === 'core') {
                 processComponent(n+1);

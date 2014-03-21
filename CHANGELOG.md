@@ -1,3 +1,18 @@
+# 1.0.1 (TBD)
+
+* Removed `grunt build-dev` task
+* Added `--dev` option to all grunt tasks that build sections of Brick [site,demos,downloadpage,homepage,build].  This allows Brick to be built from ./dev-repos/ instead of ./bower_components/.
+
+# 1.0.0 (2014-03-04)
+
+We've gone stable!
+
+* Thanks to everyone who helped find bugs in our pre-release versions.
+* Individual component versions are frozen in our release branches.
+* Stay tuned for lots more components!
+
+[See all the commits in this release](https://github.com/mozilla/brick/compare/https://github.com/mozilla/brick/compare/1.0.0rc1...1.0.0)
+
 # 1.0.0rc1 (2014-02-14)
 
 * So close we can taste it now! Test out what might just be Brick's 1.0 stable release!

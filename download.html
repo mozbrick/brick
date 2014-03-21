@@ -60,7 +60,7 @@
       <h2>All Components</h2>
       <a class="download" href="https://github.com/mozilla/brick/releases/download/1.0.0/brick-1.0.0.zip">
         <h3>Download Brick</h3>
-        <small>version 1.0.0 &mdash; 184K</small>
+        <small>version 1.0.0 &mdash; 183K</small>
       </a>
     </div>
     <div class="col-md-8">
@@ -81,7 +81,7 @@
               <label>
                 appbar
                 <input type="checkbox" value="x-tag-appbar"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core brick-common">
               </label>
             </div>
           
@@ -90,7 +90,7 @@
               <label>
                 calendar
                 <input type="checkbox" value="x-tag-calendar"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core brick-common">
               </label>
             </div>
           
@@ -99,7 +99,7 @@
               <label>
                 deck
                 <input type="checkbox" value="x-tag-deck"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core x-tag-transitions brick-common">
               </label>
             </div>
           
@@ -108,7 +108,7 @@
               <label>
                 flipbox
                 <input type="checkbox" value="x-tag-flipbox"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core brick-common">
               </label>
             </div>
           
@@ -117,7 +117,7 @@
               <label>
                 layout
                 <input type="checkbox" value="x-tag-layout"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core brick-common">
               </label>
             </div>
           
@@ -126,7 +126,7 @@
               <label>
                 slider
                 <input type="checkbox" value="x-tag-slider"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core brick-common">
               </label>
             </div>
           
@@ -135,7 +135,7 @@
               <label>
                 tabbar
                 <input type="checkbox" value="x-tag-tabbar"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core brick-common">
               </label>
             </div>
           
@@ -144,7 +144,7 @@
               <label>
                 toggle
                 <input type="checkbox" value="x-tag-toggle"
-                       data-dependencies="">
+                       data-dependencies="x-tag-core brick-common">
               </label>
             </div>
           
@@ -256,6 +256,13 @@
 
       for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].checked) {
+          if(inputs[i].dataset.dependencies){
+            inputs[i].dataset.dependencies.split(' ').forEach(function(dep){
+              if(selected.indexOf(dep)==-1){
+                selected.push(dep);
+              }
+            });
+          }
           selected.push(inputs[i].value);
         }
       }
@@ -267,8 +274,8 @@
       prog = 0;
       progress.value = 0;
 
-      getCss(selected, function(css) {
-        getJs(selected, function(js) {
+      getFiles(selected, 'css', function(css) {
+        getFiles(selected, 'js', function(js) {
           getExtraFiles(function(extraFileInfo){
             makeZip(buildURL + js, buildURL + css, extraFileInfo);
           });
@@ -279,7 +286,8 @@
     var zipLink = document.querySelector('#zip');
     var progress = document.querySelector('progress');
 
-    function getCss(c, cb) {
+
+    function getFiles(c, type, cb){
       var numReqs = c.length;
       var numDone = 0;
       var total = '';
@@ -299,48 +307,14 @@
         var req = new XMLHttpRequest();
         req.onload = function(e) {
           if (this.status != 200 && this.status != 304) {
-            if (console) console.warn('file not found:', getFileName(c, 'css'));
+            if (console) console.warn('file not found:', getFileName(c, type));
             done();
           } else {
             total += '\n' + req.response;
             done();
           }
         };
-        req.open("get", getFileName(c, 'css'));
-        req.send();
-      }
-
-      get(c[0]);
-    }
-
-    function getJs(c, cb) {
-      var numReqs = c.length;
-      var numDone = 0;
-      var total = '';
-
-      function done() {
-        prog++;
-        progress.value = prog;
-        numDone++;
-        if (numDone === numReqs) {
-          cb(total);
-        } else {
-          get(c[numDone]);
-        }
-      }
-
-      function get(c) {
-        var req = new XMLHttpRequest();
-        req.onload = function(e) {
-          if (this.status != 200 && this.status != 304) {
-            if (console) console.warn('file not found:', getFileName(c, 'js'));
-            done();
-          } else {
-            total += '\n' + req.response;
-            done();
-          }
-        };
-        req.open("get", getFileName(c, 'js'));
+        req.open("get", getFileName(c, type));
         req.send();
       }
 
@@ -365,7 +339,6 @@
 
       function get(filePath) {
         var req = new XMLHttpRequest();
-
         req.onload = function(e) {
           fileInfo.push({
             name: filePath.replace(/^dist\//, ""),
@@ -373,11 +346,8 @@
           });
           done();
         };
-
         req.open("get", filePath);
-
         req.responseType = "arraybuffer";
-
         req.send();
       }
 
@@ -410,7 +380,6 @@
       progress.style.display = 'none';
 
       var blob = zip.generate({type:"blob"});
-      console.log(blob);
       zipLink.setAttribute('download', 'brick-1.0.0-byob.zip');
       zipLink.style.display = 'inline-block';
       zipLink.setAttribute('href', window.URL.createObjectURL(blob));

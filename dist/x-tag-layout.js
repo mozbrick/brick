@@ -44,7 +44,7 @@
             scroll: evaluateScroll,
             transitionend: function(e) {
                 var node = e.target;
-                if (this.hasAttribute("content-maximizing") && node.parentNode == this && (node.nodeName == "HEADER" || node.nodeName == "FOOTER")) {
+                if (this.hasAttribute("content-maximizing") && node.parentNode == this && (node.nodeName.toLowerCase() == "header" || node.nodeName.toLowerCase() == "footer")) {
                     this.setAttribute("content-maximized", null);
                     this.removeAttribute("content-maximizing");
                 }

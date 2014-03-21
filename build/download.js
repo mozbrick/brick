@@ -2,6 +2,7 @@
 var path = require('path');
 var site = require('./statictools');
 var _ = require('lodash');
+var sourceDir = ~process.argv.indexOf('--dev') ? 'dev-repos' : 'bower_components';
 
 var avow = site.avow;
 var getJSON = site.getJSON;
@@ -18,8 +19,8 @@ function getReachableSet(graph, startKey){
     }
     else{
       seen[key] = true;
-      var neighbors = graph[key] || [];
-      neighbors.forEach(function(neighbor){
+      var neighbors = graph[key] || {};
+      Object.keys(neighbors).forEach(function(neighbor){
         _traverseGraph(neighbor);
       });
     }
@@ -34,12 +35,7 @@ var buildDependencyGraph = avow(function (fulfill, reject, list) {
   each(list, function(fulfill, reject, c) {
     // first, build the graph of each component's immediate dependencies
     // by reading each component's settings json file
-    console.log(c);
-    if (c === 'core') {
-      fulfill();
-      return;
-    }
-    var docPath = path.join('bower_components',c,'xtag.json');
+    var docPath = path.join(sourceDir,c,'bower.json');
     getJSON(docPath).then(function(json) {
       initGraph[c] = json.dependencies || [];
       fulfill()
@@ -53,7 +49,6 @@ var buildDependencyGraph = avow(function (fulfill, reject, list) {
         var dependencies = _.omit(getReachableSet(initGraph, key), key);
         dependencyGraph[key] = _.keys(dependencies);
     });
-    console.log("dependencies:\n", dependencyGraph);
     fulfill(dependencyGraph);
   }, reject);
 });

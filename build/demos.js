@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var site = require('./statictools');
 var promise = require('promisesaplus');
+var sourceDir = ~process.argv.indexOf('--dev') ? 'dev-repos' : 'bower_components';
 
 var env = site.env;
 var avow = site.avow;
@@ -22,7 +23,7 @@ var generateDemoPages = avow(function(fulfill, reject, components){
             }
             else{
                 // TODO: this should use bower list --json
-                var componentDemoPath = path.join("bower_components", componentName,
+                var componentDemoPath = path.join(sourceDir, componentName,
                                                   "demo");
                 processComponentTemplate(componentDemoPath, componentName).then(function(){
                     processComponent(n+1);
