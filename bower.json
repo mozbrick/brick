@@ -22,14 +22,14 @@
   ],
   "dependencies": {
     "x-tag-core": "0.9.4",
-    "x-tag-appbar": "*",
-    "x-tag-flipbox": "*",
-    "x-tag-toggle": "*",
-    "x-tag-calendar": "*",
-    "x-tag-deck": "*",
-    "x-tag-layout": "*",
-    "x-tag-slider": "*",
-    "x-tag-tabbar": "*",
-    "brick-common": "*"
+    "x-tag-appbar": "0.2.12",
+    "x-tag-flipbox": "0.2.7",
+    "x-tag-toggle": "0.2.9",
+    "x-tag-calendar": "0.1.6",
+    "x-tag-deck": "0.2.4",
+    "x-tag-layout": "0.1.7",
+    "x-tag-slider": "0.1.7",
+    "x-tag-tabbar": "0.1.8",
+    "brick-common": "0.1.2"
   }
 }
