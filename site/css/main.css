@@ -248,6 +248,11 @@ footer {
     padding: 0.5em;
 }
 
+.top {
+  display: inline-block;
+  margin: 5px 0 0;
+}
+
 @media (max-width: 767px) {
   .jumbotron {
     margin-bottom: 0;
