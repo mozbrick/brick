@@ -174,6 +174,16 @@ section.demo-wrap:not(.clean){
   width: 180px;
   white-space: nowrap;
 }
+@media (max-width: 991px) {
+  .download, .download:hover, .download:active, .download:focus {
+    margin-bottom: 36px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1027px) {
+  .download, .download:hover, .download:active, .download:focus {
+    margin-bottom: 56px;
+  }
+}
 .download h3, .download:hover h3, .download:active h3, .download:focus h3 {
   color: #fff;
   font-size: 18px;
@@ -206,6 +216,10 @@ footer {
   clear: both;
 }
 
+.container {
+  clear: both;
+}
+
 /* centers demo items in the viewport for demo site;
  * exclude appbar because it should be at the top of the demo;
  * exclude layout because setting absolute position on flexbox causes
@@ -234,7 +248,64 @@ footer {
     padding: 0.5em;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 767px) {
+  .jumbotron {
+    margin-bottom: 0;
+    padding: 30px 30px 0;
+  }
+
+  .jumbotron h1 {
+    margin-top: 0;
+  }
+
+  .demo-wrap .phone figure {
+    position: absolute;
+    right: -70px;
+    top: -10px;
+  }
+
+  .toggle-and-code {
+    display: none;
+  }
+
+  .demo-wrap .phone figure, .demo-wrap .markup-wrap .controls {
+    display: none;
+  }
+}
+
+@media (max-width: 320px) {
+  .demo-wrap .markup-wrap .controls {
+    margin-left: -15px;
+  }
+}
+
+@media (max-width: 394px) {
+  .jumbotron h2 {
+    font-size: 19px;
+    margin-bottom: 0;
+  }
+  /*
+  .jumbotron .download {
+    margin-top: 10px;
+  }
+  */
+  .jumbotron .fork {
+    margin: -25px 0px 20px 30px;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 767px) {
+  .demo-wrap .markup-wrap .controls {
+    margin-top: 10px;
+  }
+}
+
+.markup-wrap section {
+  margin: 0 0 5px;
+  width: 100%;
+}
+
+@media (max-width: 1027px) {
   .markup-wrap h4, .markup-wrap .demos, .markup-wrap section h3 {
     display: none;
   }
@@ -244,13 +315,38 @@ footer {
   }
 }
 
+@media (min-width: 1028px) and (max-width: 1200px) {
+  .markup-wrap .js {
+    width: 370px;
+  }
+}
+
+@media (min-width: 1028px) {
+  .markup-wrap section {
+    float: left;
+    margin: 15px 0 0;
+  }
+  .markup-wrap .markup {
+    clear: both;
+  }
+}
+
 .intro {
+  margin-left: 15px;
   padding: 0 35px;
+  max-width: 500px;
 }
 
 @media (min-width: 992px) {
   .intro {
-    text-align: center;
+    margin-left: 0;
+    text-align: justify;
+  }
+}
+
+@media (min-width: 341px) {
+  .intro h2 {
+    white-space: nowrap;
   }
 }
 
@@ -258,6 +354,7 @@ footer {
   color: #a72f0e;
   font-size: 25px;
   font-weight: bold;
+  text-align: left;
 }
 
 .intro p {
@@ -316,6 +413,10 @@ footer {
   width: 320px;
 }
 
+.demo x-flipbox {
+  background: #000;
+}
+
 .demo x-flipbox > *:first-child {
     background-color: #5693c8;
     color: #fff;
@@ -353,6 +454,7 @@ pre.prettyprint{
 }
 
 .markup-wrap .controls {
+  clear: both;
   float: left;
   margin: 0 15px 0 0;
 }
@@ -391,18 +493,7 @@ pre.prettyprint{
   color: #d3431c;
   cursor: pointer;
 }
-.markup-wrap section {
-  margin: 0 0 5px;
-}
-@media (min-width: 992px) {
-  .markup-wrap section {
-    float: left;
-    margin: 15px 0 0;
-  }
-  .markup-wrap .markup {
-    clear: both;
-  }
-}
+
 .markup-wrap section h3 {
   color: #555;
   font-size: 13px;
@@ -416,7 +507,6 @@ pre.prettyprint{
 }
 .markup-wrap .js {
   max-width: 400px;
-  width: 100%;
 }
 
 .markup-wrap pre.prettyprint,

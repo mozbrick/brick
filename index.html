@@ -49,14 +49,15 @@
   <div class="jumbotron">
     <div class="container">
       <section class="demo-wrap clean row">
-        <div class="col-md-4 col-sm-5">
+        <div class="phone col-md-4 col-sm-5">
             <figure class="demo medium demo-left">
                 <x-flipbox>
-                    <div>Flip Me</div>
-                    <div>Flip Me Again</div>
+                    <div>Flip Me ☞</div>
+                    <div>Flip Me Again ☞</div>
                 </x-flipbox>
             </figure>
         </div>
+
         <div class="markup-wrap col-md-8 col-sm-7">
           <h1>Brick</h1>
           <h2>UI Components for Modern Web Apps</h2>
@@ -68,38 +69,36 @@
 
           <p class="fork">or <a href="https://github.com/mozilla/brick">fork on GitHub</a></p>
 
-          <div class="clearfix"></div>
-
           <div class="controls">
             <button class="btn btn-default" data-toggle-prop="flipped" data-toggle-target="x-flipbox">Toggle flipbox</button>
           </div>
 
-          <h4>See more:</h4>
-          <ul class="demos">
-            <li><a href="demos/x-tag-appbar/">appbar</a></li>
-            <li><a href="demos/x-tag-calendar/">calendar</a></li>
-            <li><a href="demos/x-tag-deck/">deck</a></li>
-            <li><a href="demos/x-tag-flipbox/">flipbox</a></li>
-            <li><a href="demos/x-tag-slider/">slider</a></li>
-            <li><a href="demos/x-tag-tabbar/">tabbar</a></li>
-          </ul>
+          <div class="toggle-and-code">
+            <h4>See more:</h4>
+            <ul class="demos">
+              <li><a href="demos/x-tag-appbar/">appbar</a></li>
+              <li><a href="demos/x-tag-calendar/">calendar</a></li>
+              <li><a href="demos/x-tag-deck/">deck</a></li>
+              <li><a href="demos/x-tag-flipbox/">flipbox</a></li>
+              <li><a href="demos/x-tag-slider/">slider</a></li>
+              <li><a href="demos/x-tag-tabbar/">tabbar</a></li>
+            </ul>
 
-          <section class="markup">
-            <h3>Markup</h3>
-            <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;Flip Me&lt;/div&gt;<br/>    &lt;div&gt;Flip Me Again&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
-          </section>
+            <section class="markup">
+              <h3>Markup</h3>
+              <pre class="prettyprint html">&lt;x-flipbox&gt;<br/>    &lt;div&gt;Flip Me&lt;/div&gt;<br/>    &lt;div&gt;Flip Me Again&lt;/div&gt;<br/>&lt;/x-flipbox&gt;</pre>
+            </section>
 
-          <section class="js">
-            <h3>JavaScript</h3>
-            <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function() {<br/>    flipBox.toggle(); <br/>});</pre>
-          </section>
+            <section class="js">
+              <h3>JavaScript</h3>
+              <pre class="prettyprint javascript">// assume that toggleButton and flipBox are already<br/>// defined as their respective DOM elements<br/>toggleButton.addEventListener(&quot;click&quot;, function() {<br/>    flipBox.toggle(); <br/>});</pre>
+            </section>
+          </div>
         </div>
       </section>
     </div>
   </div>
 </header>
-
-<div class="clearfix"></div>
 
 <article class="container">      
   <div class="row">
@@ -134,16 +133,15 @@
     </section>
   </div>
 
+  <footer class="row">
+    <div class="col-xs-8"></div>
+    <div class="col-xs-4">
+      <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="site/img/mozillaHTML5.png" title="built by Mozilla"></a>
+    </div>
+  </footer>
+</article>
+  <script src="dist/brick.js"></script>
 
-      <footer class="row">
-        <div class="col-xs-8"></div>
-        <div class="col-xs-4">
-          <a class="moz" href="https://mozilla.org/"><img alt="mozilla" src="site/img/mozillaHTML5.png" title="built by Mozilla"></a>
-        </div>
-      </footer>
-    </article>
-    <script src="dist/brick.js"></script>
-    
   <script src="site/js/prettify.js"></script>
   <script src="site/js/demo-page-helpers.js"></script>
   <script src="demos/x-tag-flipbox/demo.js"></script>
