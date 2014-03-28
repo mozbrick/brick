@@ -268,7 +268,7 @@ footer {
     display: none;
   }
 
-  .demo-wrap .phone figure, .demo-wrap .markup-wrap .controls {
+  .demo-wrap .phone figure, .index .demo-wrap .markup-wrap .controls {
     display: none;
   }
 }
@@ -284,11 +284,7 @@ footer {
     font-size: 19px;
     margin-bottom: 0;
   }
-  /*
-  .jumbotron .download {
-    margin-top: 10px;
-  }
-  */
+
   .jumbotron .fork {
     margin: -25px 0px 20px 30px;
   }
@@ -455,8 +451,11 @@ pre.prettyprint{
 
 .markup-wrap .controls {
   clear: both;
-  float: left;
   margin: 0 15px 0 0;
+}
+
+.index .markup-wrap .controls {
+  float: left;
 }
 
 .markup-wrap h4 {

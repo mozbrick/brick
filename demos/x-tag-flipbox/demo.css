@@ -1,7 +1,6 @@
 .demo.largeprint x-flipbox > *{
     line-height: 2em;
-    font-size: 2.5em;
-    padding: .5em;
+    font-size: 1.25em;
 }
 
 x-flipbox > *:first-child{
