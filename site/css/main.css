@@ -21,6 +21,11 @@ Add border to the side of the page on very large viewports; prevents the
   }
 }
 
+/* Fix for phone content overlapping header in WebKit */
+.navbar-fixed-top {
+  z-index: 12000;
+}
+
 /* Brick logo */
 .logo {
   margin: -8px 4px -8px 0;
@@ -47,6 +52,7 @@ The large header at the top of the page, with the brick-texture background.
 }
 .jumbotron h1 {
   font-weight: bold;
+  margin-left: -5px;
 }
 .jumbotron h2 {
   font-size: 23px;
@@ -207,6 +213,15 @@ screens and focus on content, with demos on another page.
 .moz img {
   width: 128px;
   float: right;
+}
+/* Center Mozilla <3 HTML5 on frontpage */
+.index .moz {
+  display: block;
+  margin: 0 auto;
+  width: 128px;
+}
+.index .moz {
+  float: none;
 }
 
 /* Site elements */
@@ -392,7 +407,7 @@ section.demo-wrap:not(.clean) {
 }
 
 .demo-left {
-  margin: 1em 0;
+  margin: 1em 0 1em 12.5px;
 }
 
 .demo iframe {
@@ -413,9 +428,13 @@ section.demo-wrap:not(.clean) {
 .demo x-flipbox {
   background: #000;
 }
-
 .demo x-flipbox > *:first-child {
   background-color: #5693c8;
+  color: #fff;
+  text-align: center;
+}
+.demo x-flipbox > *:last-child {
+  background-color: #4376a2;
   color: #fff;
   text-align: center;
 }
@@ -427,12 +446,6 @@ section.demo-wrap:not(.clean) {
   height: 1.5em;
   margin: 160px auto -1.75em;
   width: 75%;
-}
-
-.demo x-flipbox > *:last-child {
-  background-color: #4376a2;
-  color: #fff;
-  text-align: center;
 }
 .demo x-flipbox > *:last-child:before {
   background: #5693c8;
@@ -490,7 +503,7 @@ section.demo-wrap:not(.clean) {
 .markup-wrap section h3 {
   color: #555;
   font-size: 13px;
-  margin: 0 0 5px 10px;
+  margin: 0 0 5px;
 }
 
 .markup-wrap .markup {
