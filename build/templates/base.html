@@ -15,7 +15,7 @@
     {% block style %}
     {% endblock %}
   </head>
-  <body>
+  <body{% if bodyClasses %} class="{{ bodyClasses }}"{% endif %}>
     <header class="site-header">
       {{ navbar(_relPath, version) }}
       {% block header %}

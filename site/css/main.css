@@ -451,6 +451,10 @@ section.demo-wrap:not(.clean) {
   background: #5693c8;
 }
 
+.container .demo.largeprint x-flipbox > * {
+    font-size: 1.25em;
+    padding: 0;
+}
 
 .docs dl {
   padding-left: 1em;
