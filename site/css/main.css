@@ -1,37 +1,260 @@
-
 body {
+  color: #555;
+  font-family: Helvetica, "Helvetica Neue", "Open Sans", Arial, sans-serif;
+  margin: 0 auto;
+  max-width: 1272px;
   padding-top: 70px;
 }
 
-.jumbotron {
-    background-color: #a20;
-    color: #fff;
+/*
+Add border to the side of the page on very large viewports; prevents the
+.jumbotron from looking like it just abruptly cuts off.
+*/
+@media (min-width: 1273px) {
+  body {
+    border-left: #e7e7e7 1px solid;
+  }
 }
-.jumbotron h1 {
-  font-size: 4em;
+@media (min-width: 1274px) {
+  body {
+    border-right: #e7e7e7 1px solid;
+  }
 }
 
+/* Fix for phone content overlapping header in WebKit */
+.navbar-fixed-top {
+  z-index: 12000;
+}
+
+/* Brick logo */
+.logo {
+  margin: -8px 4px -8px 0;
+  width: 48px;
+}
+
+/*
+The large header at the top of the page, with the brick-texture background.
+*/
+.jumbotron {
+  background: url(../img/brick-bg.jpg) #ebebeb no-repeat 50% 0 / 1272px 258px;
+  border-bottom: 1px solid #d8d8d8;
+  margin-top: -21px;
+  max-height: 460px;
+  padding-top: 16px;
+}
+.jumbotron h1, .jumbotron h2 {
+  color: #fff;
+  font-family: "Museo Sans", "Open Sans", Helvetica, "Helvetica Neue", Arial, sans-serif;
+  font-size: 67px;
+  line-height: 1em;
+  margin-bottom: 0;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .42);
+}
+.jumbotron h1 {
+  font-weight: bold;
+  margin-left: -5px;
+}
+.jumbotron h2 {
+  font-size: 23px;
+  line-height: 1.1em;
+  margin: 0;
+}
+.jumbotron .fork {
+  color: #e5a190;
+  float: left;
+  font-size: 14px;
+  line-height: 1em;
+  margin: 50px 0 0 10px;
+}
+.jumbotron .fork a {
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+}
+.markup-wrap section {
+  margin: 0 0 5px;
+  width: 100%;
+}
+/* Download buttons across the site and on the header */
+.download, .download:hover, .download:active, .download:focus {
+  background: #629ecb;
+  border: 1px solid #4376a2;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .50);
+  color: #c0e8f9;
+  display: inline-block;
+  float: left;
+  font-size: 12px;
+  height: 58px;
+  line-height: 1em;
+  margin: 28px 0 44px;
+  padding: 12px 0 0;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .42);
+  width: 180px;
+  white-space: nowrap;
+}
+.download h3, .download:hover h3, .download:active h3, .download:focus h3 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  text-indent: -.1rem;
+}
+/*
+Phone-sized styles for jumbotron; we hide the fake demo phone on smaller
+screens and focus on content, with demos on another page.
+*/
+@media (max-width: 394px) {
+  .jumbotron h2 {
+    font-size: 19px;
+    margin-bottom: 0;
+  }
+
+  .jumbotron .fork {
+    margin: -25px 0 20px 30px;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 767px) {
+  .demo-wrap .markup-wrap .controls {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .jumbotron {
+    margin-bottom: 0;
+    padding: 30px 30px 0;
+  }
+
+  .jumbotron h1 {
+    margin-top: 0;
+  }
+
+  .demo-wrap .phone figure, .index .demo-wrap .markup-wrap .controls, .toggle-and-code {
+    display: none;
+  }
+}
+
+/* Tweaks for tablet and desktop viewports in header */
+@media (max-width: 991px) {
+  .download, .download:hover, .download:active, .download:focus {
+    margin-bottom: 36px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1027px) {
+  .download, .download:hover, .download:active, .download:focus {
+    margin-bottom: 56px;
+  }
+}
+
+@media (max-width: 1027px) {
+  .markup-wrap h4, .markup-wrap .demos, .markup-wrap section h3 {
+    display: none;
+  }
+
+  .markup-wrap .js {
+    clear: both;
+  }
+}
+
+@media (min-width: 1028px) and (max-width: 1200px) {
+  .markup-wrap .js {
+    width: 370px;
+  }
+}
+
+@media (min-width: 1028px) {
+  .markup-wrap section {
+    float: left;
+    margin: 15px 0 0;
+  }
+  .markup-wrap .markup {
+    clear: both;
+  }
+}
+
+/* Intro text on front page, describing Brick and Web Components */
+.intro {
+  margin-left: 15px;
+  padding: 0 35px;
+  max-width: 500px;
+}
+
+.intro h2 {
+  color: #a72f0e;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.intro p {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.1em;
+}
+
+@media (min-width: 992px) {
+  .intro {
+    margin-left: 0;
+    text-align: justify;
+  }
+}
+
+@media (min-width: 341px) {
+  .intro h2 {
+    white-space: nowrap;
+  }
+}
+
+/* Mozilla <3 HTML5 in footer */
 .moz img {
   width: 128px;
   float: right;
 }
-
-.logo {
-  width: 48px;
-  margin: -8px 4px -8px 0;
+/* Center Mozilla <3 HTML5 on frontpage */
+.index .moz {
+  display: block;
+  margin: 0 auto;
+  width: 128px;
+}
+.index .moz {
+  float: none;
 }
 
+/* Site elements */
+.row:after {
+  content: '';
+  display: block;
+  clear: left;
+  margin-bottom: 2em;
+}
+
+/* clearfix */
+.c:after{
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.container {
+  clear: both;
+}
+
+/* Demo/docs section */
 #sidebar {
   font-size: 12px;
 }
 
-section.demo-wrap .two-up{
+section.demo-wrap .two-up {
   margin-top: 1.5em;
 }
 
-section.demo-wrap:not(.clean){
+section.demo-wrap:not(.clean) {
   margin-top: 2em;
-  border-top: 1px solid grey;
+  border-top: 1px solid #808080;
 }
 
 @media (min-width: 768px) {
@@ -60,7 +283,6 @@ section.demo-wrap:not(.clean){
     top: 50px;
     left: 0;
   }
-
 }
 
 @media (max-width: 767px) {
@@ -99,6 +321,9 @@ section.demo-wrap:not(.clean){
   border-bottom: 1px solid gray;
 }
 
+.navbar {
+  font-family: "Open Sans", Helvetica, "Helvetica Neue", Arial, sans-serif;
+}
 .navbar-brand {
   font-size: 180%;
   margin: -2px 0 -3px;
@@ -116,90 +341,52 @@ section.demo-wrap:not(.clean){
   float: left;
 }
 
-.row:after {
-  content: '';
-  display: block;
-  clear: left;
-  margin-bottom: 2em;
-}
-
-.jumbotron {
-  margin-top: -21px;
-  padding-bottom: 64px;
-  text-align: center;
-}
-.jumbotron h1 {
-  font-size: ;
-}
-
-footer {
-  margin-top: 2em;
-}
-
-/* clearfix */
-.c:after{
-  content: "";
-  display: block;
-  clear: both;
-}
-
 /* centers demo items in the viewport for demo site;
  * exclude appbar because it should be at the top of the demo;
  * exclude layout because setting absolute position on flexbox causes
  * weirdness in FF18 where the flex item render doesn't override the
  * height 0 fix in layout.css */
 .demo-wrap .demo > *:only-child:not(x-appbar):not(x-layout){
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 /* to address rendering issue when button is absolutely positioned */
 .demo-wrap .demo > x-iconbutton:only-child:not(x-appbar):not(x-layout){
-    position:relative;
+  position:relative;
 }
 
 .demo-wrap .demo > form{
-    box-shadow: 1px 1px 4px grey;
-    background-color: rgba(255,255,255,0.5);
-    background-image: none;
-    padding: 0.5em;
+  box-shadow: 1px 1px 4px #808080;
+  background-color: rgba(255,255,255,0.5);
+  background-image: none;
+  padding: 0.5em;
 }
 
-.grayshade {
-}
-
-.download {
-  background: url('../img/zip.png') no-repeat;
-  background-size: 64px;
-  font-size: 120%;
+.top {
   display: inline-block;
-  height: 64px;
   margin: 5px 0 0;
-  padding-left: 90px;
-  white-space: nowrap;
 }
-.download h3 {
-  margin: .3rem 0;
-  text-indent: -.1rem;
-  font-size: 150%;
-}
+
+/* Demo phone */
 .demo {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   width: 240px;
   height: 360px;
   margin: 2em auto;
-  border: 10px solid #eee;
+  border: 10px solid #1e1e1e;
   border-width: 40px 15px 60px;
   border-radius: 20px;
   position: relative;
   background: #fff;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, .42);
 }
 
 /* fake phone button */
@@ -211,7 +398,7 @@ footer {
   top: 103%;
   left: 43.75%;
   left: calc(50% - 15px);
-  background: #fff;
+  background: #3f3f3f;
   border-radius: 20px;
 }
 
@@ -220,7 +407,7 @@ footer {
 }
 
 .demo-left {
-  margin: 1em 0;
+  margin: 1em 0 1em 12.5px;
 }
 
 .demo iframe {
@@ -238,34 +425,115 @@ footer {
   width: 320px;
 }
 
+.demo x-flipbox {
+  background: #000;
+}
+.demo x-flipbox > *:first-child {
+  background-color: #5693c8;
+  color: #fff;
+  text-align: center;
+}
+.demo x-flipbox > *:last-child {
+  background-color: #4376a2;
+  color: #fff;
+  text-align: center;
+}
+.demo x-flipbox > *:before {
+  background: #4376a2;
+  border-radius: 3px;
+  content: '';
+  display: block;
+  height: 1.5em;
+  margin: 160px auto -1.75em;
+  width: 75%;
+}
+.demo x-flipbox > *:last-child:before {
+  background: #5693c8;
+}
+
+.container .demo.largeprint x-flipbox > * {
+    font-size: 1.25em;
+    padding: 0;
+}
+
 .docs dl {
   padding-left: 1em;
 }
 
-pre.prettyprint{
-  text-align: left;
-  overflow: auto;
-  padding: .5em;
-  font-size: .9em;
+.markup-wrap .controls {
+  clear: both;
+  margin: 0 15px 0 0;
 }
 
-.markup-wrap pre.prettyprint,
-.markup-wrap .code-box{
-    text-align: left;
-    margin: 0;
-    width: 100%;
-    max-height: 20em;
+.index .markup-wrap .controls {
+  float: left;
+}
 
-    overflow: auto;
-    font-size: .9em;
-    box-shadow: inset 1px 1px 4px grey;
-    padding: .5em;
+.markup-wrap h4 {
+  color: #494949;
+  float: left;
+  font-size: 14px;
+  margin: 15px 0 0 0;
+}
+
+.markup-wrap .demos {
+  float: left;
+  margin: -1px 0 0;
+  padding: 0 0 0 8px;
+  text-transform: lowercase;
+}
+.markup-wrap .demos li {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 1em;
+  list-style: none;
+  margin: 0;
+}
+.markup-wrap .demos li:after {
+  color: #676767;
+  content: "·";
+  display: inline-block;
+  font-size: 13px;
+  padding: 0 0 0 4px;
+}
+.markup-wrap .demos li:last-child:after {
+  content: "";
+}
+.markup-wrap .demos a {
+  color: #d3431c;
+  cursor: pointer;
+}
+
+.markup-wrap section h3 {
+  color: #555;
+  font-size: 13px;
+  margin: 0 0 5px;
+}
+
+.markup-wrap .markup {
+  float: left;
+  max-width: 245px;
+  width: 100%;
+}
+.markup-wrap .js {
+  max-width: 400px;
+}
+
+.markup-wrap .prettyprint, .markup-wrap .code-box {
+  box-shadow: inset 1px 1px 4px #808080;
+  font-size: 11px;
+  margin: 0;
+  max-height: 20em;
+  overflow: auto;
+  padding: .5em;
+  text-align: left;
+  width: 95%;
 }
 
 .markup-wrap .code-box code{
-    display: block;
-    text-align: left;
-    white-space: nowrap;
+  display: block;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .panel-footer span {
@@ -276,7 +544,6 @@ pre.prettyprint{
 
 progress {
   display: none;
-  float: right;
 }
 
 #zip {
@@ -304,12 +571,6 @@ progress {
   background: none;
 }
 
-/*
-a.top {
-  clear: both;
-  float: right;
-}
-*/
 @media screen and (max-width: 400px) {
   .panel-footer .btn {
     width: 100%;
@@ -324,17 +585,5 @@ a.top {
   }
   .demo iframe {
     pointer-events: none;
-  }
-}
-/*
-@media screen and (max-width: 960px) {
-  header {
-    text-align: center;
-  }
-}
-
-@media screen and (max-width: 1280px) {
-  article {
-    max-width: 800px;
   }
 }
