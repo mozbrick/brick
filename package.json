@@ -4,7 +4,7 @@
   "description": "UI Web Components for Mobile Web Apps",
   "main": "index.js",
   "scripts": {
-    "test": "casperjs test --engine=slimerjs $(pwd)/test"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -22,11 +22,13 @@
     "grunt": "~0.4.1",
     "grunt-bumpup": "~0.3.1",
     "grunt-tagrelease": "~0.2.1",
+    "grunt-casper": "~0.3.3",
     "grunt-contrib-stylus": "~0.8.0",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-compress": "~0.5.2",
-    "grunt-contrib-connect": "~0.5.0"
+    "grunt-contrib-connect": "~0.5.0",
+    "load-grunt-tasks": "~0.4.0"
   }
 }
