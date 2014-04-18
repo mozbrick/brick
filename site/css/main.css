@@ -2,23 +2,7 @@ body {
   color: #555;
   font-family: Helvetica, "Helvetica Neue", "Open Sans", Arial, sans-serif;
   margin: 0 auto;
-  max-width: 1272px;
   padding-top: 70px;
-}
-
-/*
-Add border to the side of the page on very large viewports; prevents the
-.jumbotron from looking like it just abruptly cuts off.
-*/
-@media (min-width: 1273px) {
-  body {
-    border-left: #e7e7e7 1px solid;
-  }
-}
-@media (min-width: 1274px) {
-  body {
-    border-right: #e7e7e7 1px solid;
-  }
 }
 
 /* Fix for phone content overlapping header in WebKit */
@@ -36,7 +20,7 @@ Add border to the side of the page on very large viewports; prevents the
 The large header at the top of the page, with the brick-texture background.
 */
 .jumbotron {
-  background: url(../img/brick-bg.jpg) #ebebeb no-repeat 50% 0 / 1272px 258px;
+  background: url(../img/brick-bg.jpg) #ebebeb repeat-x 50% 0 / 933px 258px;
   border-bottom: 1px solid #d8d8d8;
   margin-top: -21px;
   max-height: 460px;
