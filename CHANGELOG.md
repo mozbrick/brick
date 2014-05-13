@@ -1,7 +1,10 @@
-# 1.0.1 (TBD)
+# 1.0.1
 
 * Removed `grunt build-dev` task
 * Added `--dev` option to all grunt tasks that build sections of Brick [site,demos,downloadpage,homepage,build].  This allows Brick to be built from ./dev-repos/ instead of ./bower_components/.
+* Removed overflow:hidden from `x-card` to ease UI construction
+
+[See all the commits in this release](https://github.com/mozilla/brick/compare/https://github.com/mozilla/brick/compare/1.0.0...1.0.1)
 
 # 1.0.0 (2014-03-04)
 
