@@ -422,6 +422,7 @@ section.demo-wrap:not(.clean) {
   color: #fff;
   text-align: center;
 }
+/*
 .demo x-flipbox > *:before {
   background: #4376a2;
   border-radius: 3px;
@@ -434,7 +435,7 @@ section.demo-wrap:not(.clean) {
 .demo x-flipbox > *:last-child:before {
   background: #5693c8;
 }
-
+*/
 .container .demo.largeprint x-flipbox > * {
     font-size: 1.25em;
     padding: 0;
