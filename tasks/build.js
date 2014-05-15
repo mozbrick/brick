@@ -37,7 +37,7 @@ module.exports = function(grunt){
     });
   });
 
-  grunt.registerTask('download', 'Generate download page' , function(){
+  grunt.registerTask('gendownloadpage', 'Generate download page' , function(){
     var done = this.async();
 
     var dependencies = grunt.file.readJSON('dependencies.json').filter(function(item){
