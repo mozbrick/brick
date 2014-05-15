@@ -20,12 +20,12 @@ module.exports = function(grunt){
       done();
     });
   });
-  grunt.registerTask('downloadpage', 'Rebuild download page', function(){
-    var done = this.async();
-    grunt.util.spawn({cmd:'node', args: ['./build/download.js', ~process.argv.indexOf('--dev') ? '--dev': '']}, function(e, result){
-      console.log(result.stdout);
-      done();
-    });
-  });
+  // grunt.registerTask('downloadpage', 'Rebuild download page', function(){
+  //   var done = this.async();
+  //   grunt.util.spawn({cmd:'node', args: ['./build/download.js', ~process.argv.indexOf('--dev') ? '--dev': '']}, function(e, result){
+  //     console.log(result.stdout);
+  //     done();
+  //   });
+  // });
 
 }
