@@ -50,5 +50,6 @@ module.exports = function(grunt) {
   grunt.registerTask('site', ['clean:site', 'build', 'demos', 'docs', 'homepage', 'downloadpage']);
   grunt.registerTask('release', ['build', 'zip']);
   grunt.registerTask('test', ['build', 'site', 'casper:gecko']);
+  grunt.registerTask('downloadpage', ['dgen', 'gendownloadpage']);
 
 };

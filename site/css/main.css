@@ -1,3 +1,5 @@
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css");
+
 body {
   color: #555;
   font-family: Helvetica, "Helvetica Neue", "Open Sans", Arial, sans-serif;
@@ -543,17 +545,43 @@ progress {
   background: #f8f8f8;
   cursor: pointer;
   padding: .5em 1em;
+  text-transform: capitalize;
 }
 #buildBundle {
   margin-right: 1em;
 }
-#components input[type=checkbox] {
+#components input[type=checkbox], #advanced input[type=checkbox] {
   float: right;
 }
 #byob .panel-heading label {
   margin-top: -7px;
   float: right;
   background: none;
+}
+
+#advanced > div.row:after {
+  margin-bottom: 0;
+}
+
+#advancedheading {
+  border-top: solid 1px #ddd;
+  border-bottom: none;
+}
+
+.package-type{
+  font-size: 12px;
+  font-weight: 700;
+  color: #BBB;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.collapsible {
+  cursor: pointer;
+}
+
+.collapse {
+  display: none;
 }
 
 @media screen and (max-width: 400px) {

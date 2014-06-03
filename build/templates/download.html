@@ -23,26 +23,49 @@
             Select just the components you want <label for="dev-build">Minified <input type="checkbox" id="dev-build" checked></label>
           </div>
           <div id="components" class="panel-body row">
-          <div class="col-sm-6">
-          <label>x-tag core<input type="checkbox" checked="checked" disabled="" value="x-tag-core">
-          </label>
-          </div>
-          {% for component, deps in dependencies %}
-            <div class="col-sm-6">
-
-              <label>
-                {{ component.replace('x-tag-','') }}
-                <input type="checkbox" value="{{ component }}"
-                       data-dependencies="{{ deps|join(' ') }}">
-              </label>
+          {% for item in components %}
+            <div class="col-sm-6 component">
+            <label>
+            {{ item[item.key].pkgMeta.name.replace('x-tag-','') }}
+            <input type="checkbox" value="{{ item[item.key].endpoint.name }}"
+                   data-dependencies="{{ item[item.key].dependenciesArray|join(' ') }}">
+                   </label>
             </div>
           {% endfor %}
+          </div>
+          <div id="advancedheading" class="panel-group panel-heading">
+
+              <a class="pull-right collapsible" data-target="advanced">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+              </a>
+              Advanced
+
+            <div class="clearfix"></div>
+          </div>
+          <div id="advanced" class="panel-body row collapse">
+          {% for type, dependencies in allDependencies %}
+            {% if dependencies.length > 0 %}
+            <div class="panel-heading package-type">
+              {{ type }}
+            </div>
+            <div id="{{ type }}" class="panel-body row">
+              {% for item in dependencies %}
+                <div class="col-sm-6 component">
+                <label>
+                {{ item[item.key].pkgMeta.name.replace('x-tag-','') }}
+                  <input type="checkbox" value="{{ item[item.key].endpoint.name }}"
+                    data-dependencies="{{ item[item.key].dependenciesArray|join(' ') }}">
+                    </label>
+                </div>
+              {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+
           </div>
           <div class="panel-footer c">
             <input type="submit" id="buildBundle"
                    class="btn btn-primary pull-left" value="Build Bundle">
-
-
             <span style=""><b id="dl-count"></b> components selected </span>
             <progress id="buildProgress" value="0" max="0">Building Your zip...</progress>
             <a id="zip" class="btn btn-success pull-right">Download Bundle</a>
@@ -112,6 +135,7 @@
           var i = form.querySelector('[value="' + d + '"]');
           if (i) {
             i.checked = true;
+            selectDependencies(i);
           }
         });
       }
@@ -122,9 +146,17 @@
       return "dist/" + file + (minifed?'.min.':'.') + ext;
     }
 
-    xtag.addEvent(form, 'change:delegate(#components input)', function(e){
+    xtag.addEvent(form, 'change:delegate(.component input)', function(e){
       selectDependencies(e.target);
       updateCart();
+    });
+
+    xtag.addEvent(form, 'click:delegate(.collapsible)', function(e){
+      this.firstElementChild.classList.toggle('glyphicon-chevron-down');
+      this.firstElementChild.classList.toggle('glyphicon-chevron-up');
+      var elem = document.getElementById(this.dataset.target);
+      console.log(elem, this.target);
+      xtag.toggleClass(elem,'collapse');
     });
 
     form.addEventListener('submit', function(e) {
@@ -136,18 +168,42 @@
 
       var selected = [];
 
-      for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i].checked) {
-          if(inputs[i].dataset.dependencies){
-            inputs[i].dataset.dependencies.split(' ').forEach(function(dep){
-              if(selected.indexOf(dep)==-1){
-                selected.push(dep);
-              }
-            });
+      var crawlDependencies = function(dependencies, parent){
+        dependencies.forEach(function(dep){
+          var input = document.querySelector('input[value="' + dep + '"]');
+          var item = input ? input.value : dep;
+
+          console.log('debug',item);
+
+          if (input && input.dataset && input.dataset.dependencies){
+            crawlDependencies(input.dataset.dependencies.split(' '), input.value);
           }
-          selected.push(inputs[i].value);
-        }
+
+          var existsAt = selected.indexOf(item),
+            parentAt = selected.indexOf(parent);
+
+          if (parentAt >= 0 && existsAt === -1){  //insert before
+            selected.splice(parentAt,0, item);
+          }
+          else if (parentAt >= 0 && existsAt > parentAt){  // shuffle higher
+            selected.splice(parentAt, 0, item);
+            selected.splice(existsAt+1,1);
+          }
+          else if (existsAt === -1){  // doesn't exist yet and no parent
+            selected.push(item);
+          }
+
+        });
       }
+
+      xtag.query(document, '.component input').forEach(function(input){
+        if (input.checked){
+          crawlDependencies(input.dataset.dependencies.split(' '), input.value);
+          if (selected.indexOf(input.value) == -1){
+            selected.push(input.value);
+          }
+        }
+      });
 
       buildURL += '?byob=' + selected.join(',') + ' */ ';
 

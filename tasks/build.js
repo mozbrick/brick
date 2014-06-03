@@ -4,6 +4,90 @@ var path = require('path'),
 
 module.exports = function(grunt){
 
+  grunt.registerTask('dgen', 'Generate dependencies file' , function(){
+    var done = this.async();
+
+    grunt.util.spawn({cmd:'bower', args: ['-j', 'list']}, function(e, result){
+      if (e) grunt.log.write(e);
+      grunt.log.debug('parsing bower data');
+      var bower_data;
+      try {
+        bower_data = JSON.parse(result.stdout);
+      } catch (e) {
+        grunt.log.error('cannot parse bower output. giving up.');
+        grunt.log.debug('bower said:');
+        grunt.log.debug(result.stdout);
+        return done(e);
+      }
+
+      var dependencies = tools
+        .flattenBowerDependencies(bower_data)
+        .map(function (item) {
+            var key = Object.keys(item)[0];
+            delete item[key].dependencies['brick-common'];
+            item[key].dependenciesArray = Object.keys(item[key].dependencies);
+            item.key = key;
+            return item;
+      });
+
+      grunt.file.write('dependencies.json', JSON.stringify(dependencies,null,2));
+
+      done();
+
+    });
+  });
+
+  grunt.registerTask('gendownloadpage', 'Generate download page' , function(){
+    var done = this.async();
+
+    var dependencies = grunt.file.readJSON('dependencies.json').filter(function(item){
+      var key = Object.keys(item)[0];
+      return key != 'brick-common';
+    });
+
+    var coreComponents = grunt.file.readJSON(path.join('build','components.json'));
+    coreComponents = dependencies.filter(function(item){
+      return (item.key == coreComponents[item.key.replace('x-tag-','')]);
+    });
+
+    var mixins = dependencies.filter(function(item){
+      return packageType(item,['mixin']);
+    });
+
+    var libraries = dependencies.filter(function(item){
+      return packageType(item,['lib','library']);
+    });
+
+    var pseudos = dependencies.filter(function(item){
+      return packageType(item,['pseudo']);
+    });
+
+    var polyfill = dependencies.filter(function(item){
+      return packageType(item,['polyfill','polymer']);
+    });
+
+    var finalComponents = {
+        'pseudos': pseudos,
+        'mixins': mixins,
+        'libraries': libraries,
+        'polyfills': polyfill
+      };
+
+      Object.keys(finalComponents).forEach(function(key){
+        finalComponents[key] = finalComponents[key].sort(function(a,b){
+          a = a[a.key].endpoint.name.replace('x-tag-','');
+          b = b[b.key].endpoint.name.replace('x-tag-','');
+          if(a > b) return 1;
+          if(a < b) return -1;
+          return 0;
+        });
+      });
+
+    tools.staticPage('download.html',
+      path.join('download.html'),
+        { components: coreComponents, allDependencies: finalComponents });
+  });
+
   grunt.registerTask('build', 'Build dist from bower components' , function(){
     var done = this.async();
 
@@ -224,5 +308,16 @@ function buildGruntConfiguration(grunt, source, callback){
     });
 
   });
-
 }
+
+function packageType(pkg, types){
+    var key = Object.keys(pkg)[0],
+      kw = pkg[key].pkgMeta.keywords || [],
+      found = false;
+    types.forEach(function(t){
+      if(kw.map(function(word){return word.toLowerCase();}).indexOf(t)>-1){
+        found = true;
+      }
+    });
+    return found;
+  }
