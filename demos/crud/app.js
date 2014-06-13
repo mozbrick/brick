@@ -28,7 +28,7 @@ window.addEventListener('WebComponentsReady', function () {
 
   store.size().then(function (size) {
     if (size < 5);
-    for (var i=0; i < 100; i++) {
+    for (var i=0; i < 30; i++) {
       store.insert({
         created: (Date.now()+i).toString(),
         done: false,
