@@ -25,4 +25,17 @@ window.addEventListener('WebComponentsReady', function () {
     form.name = Date.now();
     flip.flipped = true;
   });
+
+  store.size().then(function (size) {
+    if (size < 5);
+    for (var i=0; i < 100; i++) {
+      store.insert({
+        created: (Date.now()+i).toString(),
+        done: false,
+        label: (Math.random() * 1e9|0).toString(16)
+      }).then(function () {
+        console.log('done');
+      });
+    }
+  });
 });
