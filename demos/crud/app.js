@@ -35,6 +35,7 @@ window.addEventListener('WebComponentsReady', function () {
         label: (Math.random() * 1e9|0).toString(16)
       }).then(function () {
         console.log('done');
+        list.render();
       });
     }
   });
