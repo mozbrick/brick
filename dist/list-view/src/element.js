@@ -62,12 +62,11 @@
       div.classList.add('item');
     }
     data.getMany({offset:i,count:1}).then(function (item) {
-      div.__item__ = item[0];
       defaultRenderer(div, item[0], i, item[0][labelKey]);
-      div.style.transform = 'translateY(' + i * height + 'px)';
-      div.style.webkitTransform = 'translateY(' + i * height + 'px)';
     });
     // place the element along the scroll strip.
+    div.style.transform = 'translateY(' + i * height + 'px)';
+    div.style.webkitTransform = 'translateY(' + i * height + 'px)';
     return div;
   }
 
@@ -190,11 +189,6 @@
     if (attr in attrs) {
       attrs[attr].call(this, oldVal, newVal);
     }
-  };
-
-  ListViewPrototype.render = function () {
-    var listview = this;
-    init(listview).then(render);
   };
 
   Object.defineProperty(ListViewPrototype, "height", {
