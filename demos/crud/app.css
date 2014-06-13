@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Fira Sans', sans-serif;
+}
+body {
+  opacity: 0;
+  transition: .3s opacity ease-out;
+}
+x-flipbox {
+  height: 100%;
+}
+x-layout {
+  width: 100%;
+  height: 100%;
+  background: #F4F4F4;
+}
+h1 {
+  font-size: inherit;
+  font-weight: 400;
+  line-height: 48px;
+  height: 48px;
+  flex: 1;
+  margin: 0;
+  padding: 0 .5em;
+}
+header {
+  height: 48px;
+  font-size: 28px;
+  display: flex;
+  border-bottom: 1px solid black;
+}
+header button {
+  font-size: 28px;
+  display: block;
+  font-weight: 800;
+  width: 48px;
+  background: 0;
+  border: 0;
+  cursor: pointer;
+}
+form > label, form > input, form > button {
+  display: block;
+  font-size: inherit;
+  margin: 1em 0;
+  width: 100%;
+}
+form label + input {
+  margin-top: -.5em;
+}
+form label input {
+  float: right;
+}
+form input {
+  line-height: 2em;
+  height: 2em;
+}
+form {
+  width: 100%;
+  padding: 1em;
+}

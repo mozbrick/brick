@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>The CRUD Demo</title>
+    <script src="/dist/platform/platform.js"></script>
+    <link rel="import" href="/dist/brick.html">
+    <link rel="stylesheet" href="app.css">
+  </head>
+  <body>
+    <x-storage-indexeddb id="store" name="todos" key="created"></x-storage-indexeddb>
+    <x-flipbox>
+      <x-layout>
+        <header><h1>Todos</h1><button id="new">&plus;</button></header>
+        <section>
+          <list-view storage="store" label="label" id="list"></list-view>
+        </section>
+      </x-layout>
+      <x-layout>
+        <header><h1>Edit Todo</h1><button id="cancel">&times;</button></header>
+        <section>
+          <form is="x-form" storage="store" autosave="false" key="created">
+            <label for="description">Description</label>
+            <input id="description" name="label">
+            <label>Done<input type="checkbox" name="done"></label>
+            <button>Save</button>
+          </x-form>
+        </section>
+      </x-layout>
+    </x-flipbox>
+    <script src="app.js"></script>
+  </body>
+</html>

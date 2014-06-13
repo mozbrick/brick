@@ -1,0 +1,31 @@
+{
+  "name": "brick",
+  "version": "2.0.0",
+  "homepage": "http://mozilla.github.io/brick",
+  "authors": [
+    "Matt Claypotch <thepotch@gmail.com>"
+  ],
+  "description": "Web Components for Modern Webapps",
+  "main": "dist/brick.html",
+  "keywords": [
+    "webcomponents",
+    "mozilla"
+  ],
+  "license": "Apache License v2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "x-storage-indexeddb": "~0.0.1",
+    "es6-promise": "jakearchibald/es6-promise#~1.0.0",
+    "x-formrow": "dotch/x-formrow",
+    "list-view": "potch/list-view",
+    "x-form": "dotch/x-form",
+    "x-tag-layout": "potch/layout",
+    "x-flipbox": "dotch/x-flipbox"
+  }
+}
