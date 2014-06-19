@@ -1,3 +1,4 @@
+/* global Event */
 (function () {
 
   var prefix = (function () {
@@ -8,10 +9,10 @@
           .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
         )[1];
     return {
-      dom: pre == 'ms' ? 'MS' : pre,
+      dom: pre === 'ms' ? 'MS' : pre,
       lowercase: pre,
       css: '-' + pre + '-',
-      js: pre == 'ms' ? pre : pre[0].toUpperCase() + pre.substr(1)
+      js: pre === 'ms' ? pre : pre[0].toUpperCase() + pre.substr(1)
     };
   })();
 
@@ -40,8 +41,8 @@
 
   FlipboxPrototype.createdCallback = function () {
     this.ns = {};
-    this.flipped = this.hasAttribute("flipped") ? true : false;
-    this.direction = this.getAttribute("direction");
+    this.flipped = this.hasAttribute('flipped') ? true : false;
+    this.direction = this.getAttribute('direction');
     // instantiate sides without initial flip animation
     if (this.firstElementChild) {
       skipTransition(this.firstElementChild, function () {});
@@ -50,9 +51,9 @@
       skipTransition(this.lastElementChild, function () {});
     }
     // fire an flipend Event when the transition ended.
-    this.firstElementChild.addEventListener("transitionend", function(e) {
+    this.firstElementChild.addEventListener('transitionend', function(e) {
       var flipBox = e.target.parentNode;
-      var event = new Event("flipend");
+      var event = new Event('flipend');
       flipBox.dispatchEvent(event);
       e.stopPropagation();
     });
@@ -114,11 +115,13 @@
       },
       set: function(newVal) {
         // default to left
-        var val = newVal || "left";
+        var val = newVal || 'left';
         // set animation direction attribute and skip any transition
         var self = this;
         skipTransition(this.firstElementChild, function () {
           self.setAttribute('_anim-direction', val);
+        });
+        skipTransition(this.lastElementChild, function () {
         });
         this.ns._direction = val;
       }

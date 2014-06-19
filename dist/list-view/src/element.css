@@ -1,7 +1,40 @@
-list-view,list-view *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-moz-box-sizing:border-box}
-list-view{overflow:auto;overflow:scroll;-webkit-overflow-scrolling:touch;position:relative;height:100%;width:100%;max-height:100%;max-width:100%;display:block;}
-list-view .list{position:relative;transform:translateZ(0)}
-list-view .item{line-height:40px;font-family:'Fira Sans';padding:3px 1em 3px 64px;position:absolute;height:48px;width:100%;border-bottom:1px solid #ccc;cursor:pointer;}
-list-view .item:hover{background:#eee}
-list-view .item img{position:absolute;top:8px;left:14px;width:32px;height:32px;border-radius:48px;background:#ccc}
-list-view.scrolling .item{pointer-events:none}
+list-view,
+list-view * {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+list-view {
+  overflow: auto;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  display: block;
+}
+list-view .item.sentinel {
+  visibility: hidden;
+}
+list-view .list {
+  position: relative;
+  transform: translateZ(0);
+}
+list-view .item {
+  height: 4rem;
+  line-height: 2rem;
+  font-size: 1rem;
+  font-family: 'Fira Sans';
+  padding: 0.5rem 0 0.5rem 1rem;
+  position: absolute;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+list-view .item:hover {
+  background: #eee;
+}
+list-view.scrolling .item {
+  pointer-events: none;
+}

@@ -10,7 +10,7 @@
   </head>
   <body>
     <x-storage-indexeddb id="store" name="todos" key="created"></x-storage-indexeddb>
-    <x-flipbox>
+    <x-flipbox id="flip">
       <x-layout>
         <header><h1>Todos</h1><button id="new">&plus;</button></header>
         <section>
@@ -29,6 +29,7 @@
         </section>
       </x-layout>
     </x-flipbox>
+    <x-action source="list" trigger="select" target="flip" action="toggle">
     <script src="app.js"></script>
   </body>
 </html>

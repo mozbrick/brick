@@ -6,9 +6,9 @@ window.addEventListener('WebComponentsReady', function () {
   var flip = document.querySelector('x-flipbox');
   var form = document.querySelector('form');
 
-  list.addEventListener('click', function (e) {
-    if (e.target.__item__) {
-      form.name = e.target.__item__.created;
+  list.addEventListener('select', function (e) {
+    if (e.detail) {
+      form.name = e.detail.created;
       flip.flipped = true;
     }
   });
@@ -26,16 +26,4 @@ window.addEventListener('WebComponentsReady', function () {
     flip.flipped = true;
   });
 
-  store.size().then(function (size) {
-    if (size < 5);
-    for (var i=0; i < 30; i++) {
-      store.insert({
-        created: (Date.now()+i).toString(),
-        done: false,
-        label: (Math.random() * 1e9|0).toString(16)
-      }).then(function () {
-        console.log('done');
-      });
-    }
-  });
 });

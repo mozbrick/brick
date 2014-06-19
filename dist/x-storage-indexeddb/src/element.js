@@ -76,11 +76,12 @@
 
     // Internal function: returns the objectStore with the supplied
     // transaction mode. Defaults to readonly transaction.
-    _getObjectStore: function(mode) {
+    _getTransactionAndStore: function(mode) {
       var self = this;
       mode = typeof mode !== 'undefined' ? mode : 'readonly';
-      return self.db.transaction(self.storeName, mode)
-                    .objectStore(self.storeName);
+      var tx = self.db.transaction(self.storeName, mode);
+      var store = tx.objectStore(self.storeName);
+      return {'transaction': tx, 'store': store};
     },
 
     // Internal function to defer the execution of a supplied function
@@ -108,8 +109,12 @@
     },
     _insert: function (object) {
       var self = this;
-      var store = self._getObjectStore('readwrite');
-      return wrap(store.add(object));
+      var db = self._getTransactionAndStore('readwrite');
+      var promise = wrap(db.store.add(object));
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
     },
 
     /**
@@ -125,8 +130,35 @@
     },
     _set: function (object) {
       var self = this;
-      var store = self._getObjectStore('readwrite');
-      return wrap(store.put(object));
+      var db = self._getTransactionAndStore('readwrite');
+      var promise = wrap(db.store.put(object));
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
+    },
+
+    /**
+    * Update or insert multiple objects into the database
+    * @param {objects} objects the object array to be saved
+    * @return {promise}
+    */
+    setMany: function (objects) {
+      var self = this;
+      return self._awaitReady(self._setMany, arguments);
+    },
+    _setMany: function (objects) {
+      var self = this;
+      var db = self._getTransactionAndStore('readwrite');
+      var promises = [];
+      for (var i = 0; i < objects.length; i++) {
+        promises.push(db.store.put(objects[i]));
+      }
+      var promise = Promise.all(promises);
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
     },
 
     /**
@@ -140,8 +172,12 @@
     },
     _get: function (key) {
       var self = this;
-      var store = self._getObjectStore();
-      return wrap(store.get(key));
+      var db = self._getTransactionAndStore();
+      var promise = wrap(db.store.get(key));
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
     },
 
     /**
@@ -155,8 +191,12 @@
     },
     _remove: function (key) {
       var self = this;
-      var store = self._getObjectStore('readwrite');
-      return wrap(store.delete(key));
+      var db = self._getTransactionAndStore('readwrite');
+      var promise = wrap(db.store.delete(key));
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
     },
 
     /**
@@ -180,7 +220,7 @@
     _getMany: function(options) {
       options = options || {};
       var self = this;
-      var store = self._getObjectStore();
+      var db = self._getTransactionAndStore();
       var counter = 0;
       var advanced = false;
       var start = options.start;
@@ -203,12 +243,12 @@
         bound = null;
       }
       var allItems = [];
-      return new Promise(function(resolve,reject){
+      var promise = new Promise(function(resolve,reject){
         var cursorRequest;
         if (!orderby || orderby === self.key) {
-          cursorRequest = store.openCursor(bound, direction);
+          cursorRequest = db.store.openCursor(bound, direction);
         } else {
-          var index = store.index(orderby);
+          var index = db.store.index(orderby);
           cursorRequest = index.openCursor(bound, direction);
         }
         cursorRequest.onsuccess = function(e){
@@ -232,6 +272,10 @@
           }
         };
       });
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
     },
 
     /**
@@ -244,8 +288,12 @@
     },
     _size: function() {
       var self = this;
-      var store = self._getObjectStore();
-      return wrap(store.count());
+      var db = self._getTransactionAndStore();
+      var promise = wrap(db.store.count());
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
     },
 
     /**
@@ -258,8 +306,12 @@
     },
     _clear: function() {
       var self = this;
-      var store = self._getObjectStore('readwrite');
-      return wrap(store.clear());
+      var db = self._getTransactionAndStore('readwrite');
+      var promise = wrap(db.store.clear());
+      promise.abort = function(){
+        db.transaction.abort();
+      };
+      return promise;
     }
   };
 
@@ -281,6 +333,9 @@ var StoragePrototype = Object.create(HTMLElement.prototype);
   };
   StoragePrototype.set = function (key, object) {
     return this.storage.set(key, object);
+  };
+  StoragePrototype.setMany = function (objects) {
+    return this.storage.setMany(objects);
   };
   StoragePrototype.get = function (key) {
     return this.storage.get(key);

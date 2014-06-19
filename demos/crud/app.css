@@ -1,10 +1,21 @@
 * {
   box-sizing: border-box;
 }
+html {
+  --blue: #00539F;
+  --orange: #E66000;
+  --light-orange: #FF9500;
+  --light-blue: #0095DD;
+  --brown: #330000;
+  --charcoal: #4D4E53;
+  --light-grey: #EAEFF2;
+}
 html, body {
   height: 100%;
   margin: 0;
   font-family: 'Fira Sans', sans-serif;
+  font-size: 13px;
+  --accent: var(--light-orange);
 }
 body {
   opacity: 0;
@@ -18,29 +29,51 @@ x-layout {
   height: 100%;
   background: #F4F4F4;
 }
-h1 {
-  font-size: inherit;
-  font-weight: 400;
-  line-height: 48px;
-  height: 48px;
-  flex: 1;
+header h1 {
+  font-size: 2rem;
+  line-height: 4rem;
+  text-align: left;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
   margin: 0;
-  padding: 0 .5em;
+  padding: 0 1rem 0 3rem;
+  height: 100%;
+  font-weight: lighter;
+  font-style: italic;
+  flex: 1;
 }
 header {
-  height: 48px;
-  font-size: 28px;
+  position: relative;
+  z-index: 10;
+  padding: 0;
+  height: 4rem;
+  color: #fff;
+  background-color: #F97C17;
+  background-color: var(--accent);
+  border: none;
   display: flex;
-  border-bottom: 1px solid black;
 }
 header button {
-  font-size: 28px;
-  display: block;
-  font-weight: 800;
-  width: 48px;
   background: 0;
   border: 0;
+  color: inherit;
   cursor: pointer;
+  display: block;
+  font: inherit;
+  font-size: 3rem;
+  font-weight: 200;
+  height: 4rem;
+  line-height: 2rem;
+  text-align: center;
+  width: 4rem;
+  padding: 0;
+}
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
 }
 form > label, form > input, form > button {
   display: block;
@@ -61,4 +94,9 @@ form input {
 form {
   width: 100%;
   padding: 1em;
+}
+.list .item {
+  padding: 1rem 0px 1rem 2rem;
+  font-weight: 200;
+  font-size: 1.2rem;
 }

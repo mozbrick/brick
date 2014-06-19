@@ -26,6 +26,7 @@
     "list-view": "potch/list-view",
     "x-form": "dotch/x-form",
     "x-tag-layout": "potch/layout",
-    "x-flipbox": "dotch/x-flipbox"
+    "x-flipbox": "dotch/x-flipbox",
+    "x-layout": "potch/x-action"
   }
 }
