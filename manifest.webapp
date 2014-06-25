@@ -1,0 +1,13 @@
+{
+  "name": "Brick Test App",
+  "description": "Try out the Brick Demos on your device",
+  "launch_path": "/demos/crud/index.html",
+  "icons": {
+    "128": "/img/icon-128.png"
+  },
+  "developer": {
+    "name": "Mozilla",
+    "url": "http://mozilla.github.io/brick"
+  },
+  "default_locale": "en"
+}

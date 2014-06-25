@@ -8,6 +8,7 @@ module.exports = function () {
 
   var files = [];
   var stream = through(function write(data) {
+    console.log(data.path);
     files.push(data);
   },
   function end () {

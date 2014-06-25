@@ -21,12 +21,12 @@
   ],
   "dependencies": {
     "x-storage-indexeddb": "~0.0.1",
-    "es6-promise": "jakearchibald/es6-promise#~1.0.0",
     "x-formrow": "dotch/x-formrow",
     "list-view": "potch/list-view",
     "x-form": "dotch/x-form",
     "x-tag-layout": "potch/layout",
     "x-flipbox": "dotch/x-flipbox",
-    "x-layout": "potch/x-action"
+    "x-layout": "potch/x-action",
+    "es6-promise": "components/es6-promise#~1.0.0"
   }
 }
