@@ -95,7 +95,7 @@ grunt build --dev   # build from repositories instead of bower
 
 Now you can work one each component within their respective git repository.
 
-## Working on the [Brick website](http://mozilla.github.io/brick/)
+## Working on the [Brick website](http://mozbrick.github.io/)
 
 To make changes to the Brick website, edit the files in the `build/` directory,
 then run `grunt site` to rebuild `index.html`, `docs.html`, and `download.html`
@@ -106,7 +106,7 @@ located in the root directory. The CSS for the site is in `site/css/main.css`.
 This is a list of the currently bundled components provided in the library.
 
 Full documentation can be found on
-[the Brick site](http://mozilla.github.io/brick/).
+[the Brick site](http://mozbrick.github.io/).
 
 ### Structural Components
 
