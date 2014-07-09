@@ -20,10 +20,11 @@
     "tests"
   ],
   "dependencies": {
-    "brick-layout": "mozbrick/brick-layout",
-    "brick-flipbox": "mozbrick/brick-flipbox",
-    "brick-tabbar": "mozbrick/brick-tabbar",
+    "brick-action": "mozbrick/brick-action",
     "brick-deck": "mozbrick/brick-deck",
+    "brick-flipbox": "mozbrick/brick-flipbox",
+    "brick-layout": "mozbrick/brick-layout",
+    "brick-tabbar": "mozbrick/brick-tabbar",
     "es6-promise": "components/es6-promise#~1.0.0"
   }
 }

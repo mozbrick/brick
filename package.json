@@ -21,18 +21,19 @@
     "gulp": "^3.6.2"
   },
   "devDependencies": {
-    "gulp-gh-pages": "^0.3.2",
-    "gulp-vulcanize": "^0.1.1",
-    "gulp-rename": "^1.2.0",
-    "gulp-bower-files": "^0.2.5",
-    "event-stream": "^3.1.5",
-    "gulp-helptext": "0.0.10",
-    "gulp": "^3.8.0",
     "cheerio": "^0.17.0",
-    "gulp-util": "^2.2.17",
     "es6-promise": "^1.0.0",
+    "event-stream": "^3.1.5",
+    "gulp": "^3.8.0",
+    "gulp-bower-files": "^0.2.5",
     "gulp-connect": "^2.0.5",
-    "through": "^2.3.4",
-    "gulp-rm": "^0.2.0"
+    "gulp-gh-pages": "^0.3.2",
+    "gulp-helptext": "0.0.10",
+    "gulp-rename": "^1.2.0",
+    "gulp-rm": "^0.2.0",
+    "gulp-util": "^2.2.17",
+    "gulp-vulcanize": "^0.1.1",
+    "stream-reduce": "^1.0.3",
+    "through": "^2.3.4"
   }
 }
