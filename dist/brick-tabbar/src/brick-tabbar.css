@@ -1,0 +1,35 @@
+brick-tabbar {
+  display: block;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
+brick-tabbar > brick-tabbar-tab {
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: auto;
+  min-height: auto;
+  vertical-align: middle;
+}
+brick-tabbar > brick-tabbar-tab > *:only-child {
+  vertical-align: top;
+  height: 100%;
+  width: 100%;
+  margin: 0 !important;
+}

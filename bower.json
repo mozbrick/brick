@@ -20,13 +20,10 @@
     "tests"
   ],
   "dependencies": {
-    "x-storage-indexeddb": "~0.0.1",
-    "x-formrow": "dotch/x-formrow",
-    "list-view": "potch/list-view",
-    "x-form": "dotch/x-form",
-    "x-tag-layout": "potch/layout",
-    "x-flipbox": "dotch/x-flipbox",
-    "x-layout": "potch/x-action",
+    "brick-layout": "mozbrick/brick-layout",
+    "brick-flipbox": "mozbrick/brick-flipbox",
+    "brick-tabbar": "mozbrick/brick-tabbar",
+    "brick-deck": "mozbrick/brick-deck",
     "es6-promise": "components/es6-promise#~1.0.0"
   }
 }
