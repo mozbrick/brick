@@ -1,0 +1,184 @@
+brick-deck {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+brick-deck > brick-card {
+  display: none;
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  opacity: 1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transform: translate(0%, 0%) scale(1);
+  -moz-transform: translate(0%, 0%) scale(1);
+  -ms-transform: translate(0%, 0%) scale(1);
+  -o-transform: translate(0%, 0%) scale(1);
+  transform: translate(0%, 0%) scale(1);
+}
+brick-deck > brick-card[selected],
+brick-deck > brick-card[transition] {
+  display: block;
+}
+brick-deck[transition-type^="slide"] > brick-card,
+brick-deck > brick-card[transition-type^="slide"] {
+  z-index: 1;
+}
+brick-deck[transition-type^="slide"] > brick-card[transition-direction="reverse"],
+brick-deck > brick-card[transition-type^="slide"][transition-direction="reverse"] {
+  z-index: 2;
+}
+brick-deck[transition-type^=slide] > brick-card,
+brick-deck > brick-card[transition-type^="slide"] {
+  -webkit-transition: -webkit-transform 0.4s ease;
+  transition: transform 0.4s ease;
+}
+brick-deck[transition-type="slide-right"] > brick-card[transition-direction="forward"],
+brick-deck[transition-type="slide-right"] > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+brick-deck[transition-type="slide-right"] > brick-card[transition-direction="reverse"],
+brick-deck[transition-type="slide-right"] > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+brick-deck[transition-type="slide-left"] > brick-card[transition-direction="forward"],
+brick-deck[transition-type="slide-left"] > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+brick-deck[transition-type="slide-left"] > brick-card[transition-direction="reverse"],
+brick-deck[transition-type="slide-left"] > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+brick-deck[transition-type="slide-up"] > brick-card[transition-direction="forward"],
+brick-deck[transition-type="slide-up"] > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+brick-deck[transition-type="slide-up"] > brick-card[transition-direction="reverse"],
+brick-deck[transition-type="slide-up"] > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+brick-deck[transition-type="slide-down"] > brick-card[transition-direction="forward"],
+brick-deck[transition-type="slide-down"] > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+brick-deck[transition-type="slide-down"] > brick-card[transition-direction="reverse"],
+brick-deck[transition-type="slide-down"] > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+brick-deck[transition-type^="slide"] > brick-card[transition] {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+brick-deck > brick-card[transition-type="slide-right"][transition-direction="forward"],
+brick-deck > brick-card[transition-type="slide-right"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+brick-deck > brick-card[transition-type="slide-right"][transition-direction="reverse"],
+brick-deck > brick-card[transition-type="slide-right"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+brick-deck > brick-card[transition-type="slide-left"][transition-direction="forward"],
+brick-deck > brick-card[transition-type="slide-left"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+brick-deck > brick-card[transition-type="slide-left"][transition-direction="reverse"],
+brick-deck > brick-card[transition-type="slide-left"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+brick-deck > brick-card[transition-type="slide-up"][transition-direction="forward"],
+brick-deck > brick-card[transition-type="slide-up"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+brick-deck > brick-card[transition-type="slide-up"][transition-direction="reverse"],
+brick-deck > brick-card[transition-type="slide-up"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+brick-deck > brick-card[transition-type="slide-down"][transition-direction="forward"],
+brick-deck > brick-card[transition-type="slide-down"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+brick-deck > brick-card[transition-type="slide-down"][transition-direction="reverse"],
+brick-deck > brick-card[transition-type="slide-down"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+brick-deck > brick-card[transition-type^="slide"][transition] {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
