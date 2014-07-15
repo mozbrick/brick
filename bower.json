@@ -23,7 +23,9 @@
     "brick-action": "mozbrick/brick-action",
     "brick-deck": "mozbrick/brick-deck",
     "brick-flipbox": "mozbrick/brick-flipbox",
+    "brick-form": "mozbrick/brick-form",
     "brick-layout": "mozbrick/brick-layout",
+    "brick-storage-indexeddb": "mozbrick/brick-storage-indexeddb",
     "brick-tabbar": "mozbrick/brick-tabbar",
     "es6-promise": "components/es6-promise#~1.0.0"
   }

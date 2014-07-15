@@ -56,7 +56,9 @@ Here is a list of the components currently in the primary distribution of Brick:
 * [brick-action](https://github.com/mozbrick/brick-action)
 * [brick-deck](https://github.com/mozbrick/brick-deck)
 * [brick-flipbox](https://github.com/mozbrick/brick-flipbox)
+* [brick-form](https://github.com/mozbrick/brick-form)
 * [brick-layout](https://github.com/mozbrick/brick-layout)
+* [brick-storage-indexeddb](https://github.com/mozbrick/brick-storage-indexeddb)
 * [brick-tabbar](https://github.com/mozbrick/brick-tabbar)
 
 If you encounter issues with a component, please file issues against the individual component repositories.

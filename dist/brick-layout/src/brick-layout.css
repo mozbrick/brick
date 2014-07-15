@@ -1,8 +1,11 @@
 /**
  * example:
- *  & > [horizontal-min-$1-3] { mixin() }
+ *  & > [horizontal-lt-s/m/l] { mixin() }
+ *  & > [horizontal-gt-xs/s/m] { mixin() }
+ *  & > [horizontal-xs/s/m/l] { mixin() }
+ *  & > [horizontal] { mixin() }
  * would be created by:
- * responsify("& > ", horizontal, min, mixin)
+ * responsify("& > ", horizontal, mixin)
  */
 brick-layout {
   display: flex;
@@ -18,23 +21,56 @@ brick-layout {
    *  Flex-children
    *--------------------------------------------------*/
 /**
+   *  hide
+   *--------------------------------------------------*/
+/**
    *  Drawer
    *--------------------------------------------------*/
 }
+@media (max-width: 768px) {
+  brick-layout[horizontal-lt-s] {
+    box-orient: horizontal;
+    flex-direction: row;
+  }
+}
+@media (max-width: 992px) {
+  brick-layout[horizontal-lt-m] {
+    box-orient: horizontal;
+    flex-direction: row;
+  }
+}
+@media (max-width: 1200px) {
+  brick-layout[horizontal-lt-l] {
+    box-orient: horizontal;
+    flex-direction: row;
+  }
+}
 @media (min-width: 768px) {
-  brick-layout[horizontal-min-s] {
+  brick-layout[horizontal-gt-xs] {
     box-orient: horizontal;
     flex-direction: row;
   }
 }
 @media (min-width: 992px) {
-  brick-layout[horizontal-min-m] {
+  brick-layout[horizontal-gt-s] {
     box-orient: horizontal;
     flex-direction: row;
   }
 }
 @media (min-width: 1200px) {
-  brick-layout[horizontal-min-l] {
+  brick-layout[horizontal-gt-m] {
+    box-orient: horizontal;
+    flex-direction: row;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  brick-layout[horizontal-s] {
+    box-orient: horizontal;
+    flex-direction: row;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  brick-layout[horizontal-m] {
     box-orient: horizontal;
     flex-direction: row;
   }
@@ -43,20 +79,50 @@ brick-layout[horizontal] {
   box-orient: horizontal;
   flex-direction: row;
 }
+@media (max-width: 768px) {
+  brick-layout > [flex-lt-s] {
+    flex: 1;
+    overflow: auto;
+  }
+}
+@media (max-width: 992px) {
+  brick-layout > [flex-lt-m] {
+    flex: 1;
+    overflow: auto;
+  }
+}
+@media (max-width: 1200px) {
+  brick-layout > [flex-lt-l] {
+    flex: 1;
+    overflow: auto;
+  }
+}
 @media (min-width: 768px) {
-  brick-layout > [flex-min-s] {
+  brick-layout > [flex-gt-xs] {
     flex: 1;
     overflow: auto;
   }
 }
 @media (min-width: 992px) {
-  brick-layout > [flex-min-m] {
+  brick-layout > [flex-gt-s] {
     flex: 1;
     overflow: auto;
   }
 }
 @media (min-width: 1200px) {
-  brick-layout > [flex-min-l] {
+  brick-layout > [flex-gt-m] {
+    flex: 1;
+    overflow: auto;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  brick-layout > [flex-s] {
+    flex: 1;
+    overflow: auto;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  brick-layout > [flex-m] {
     flex: 1;
     overflow: auto;
   }
@@ -66,7 +132,50 @@ brick-layout > [flex] {
   overflow: auto;
 }
 @media (max-width: 768px) {
-  brick-layout > [drawer-max-s] {
+  brick-layout [hide-lt-s] {
+    display: none;
+  }
+}
+@media (max-width: 992px) {
+  brick-layout [hide-lt-m] {
+    display: none;
+  }
+}
+@media (max-width: 1200px) {
+  brick-layout [hide-lt-l] {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  brick-layout [hide-gt-xs] {
+    display: none;
+  }
+}
+@media (min-width: 992px) {
+  brick-layout [hide-gt-s] {
+    display: none;
+  }
+}
+@media (min-width: 1200px) {
+  brick-layout [hide-gt-m] {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  brick-layout [hide-s] {
+    display: none;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  brick-layout [hide-m] {
+    display: none;
+  }
+}
+brick-layout [hide] {
+  display: none;
+}
+@media (max-width: 768px) {
+  brick-layout > [drawer-lt-s] {
     height: 100%;
     position: absolute;
     transform: translate(-100%, 0);
@@ -74,7 +183,7 @@ brick-layout > [flex] {
   }
 }
 @media (max-width: 992px) {
-  brick-layout > [drawer-max-m] {
+  brick-layout > [drawer-lt-m] {
     height: 100%;
     position: absolute;
     transform: translate(-100%, 0);
@@ -82,7 +191,47 @@ brick-layout > [flex] {
   }
 }
 @media (max-width: 1200px) {
-  brick-layout > [drawer-max-l] {
+  brick-layout > [drawer-lt-l] {
+    height: 100%;
+    position: absolute;
+    transform: translate(-100%, 0);
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 768px) {
+  brick-layout > [drawer-gt-xs] {
+    height: 100%;
+    position: absolute;
+    transform: translate(-100%, 0);
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 992px) {
+  brick-layout > [drawer-gt-s] {
+    height: 100%;
+    position: absolute;
+    transform: translate(-100%, 0);
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 1200px) {
+  brick-layout > [drawer-gt-m] {
+    height: 100%;
+    position: absolute;
+    transform: translate(-100%, 0);
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  brick-layout > [drawer-s] {
+    height: 100%;
+    position: absolute;
+    transform: translate(-100%, 0);
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  brick-layout > [drawer-m] {
     height: 100%;
     position: absolute;
     transform: translate(-100%, 0);
@@ -96,13 +245,20 @@ brick-layout > [drawer] {
   transition: transform 0.2s ease;
 }
 brick-layout[open] > [drawer],
-brick-layout[open] > [drawer-max-s],
-brick-layout[open] > [drawer-max-m],
-brick-layout[open] > [drawer-max-l] {
+brick-layout[open] > [drawer-lt-s],
+brick-layout[open] > [drawer-lt-m],
+brick-layout[open] > [drawer-lt-l],
+brick-layout[open] > [drawer-gt-xs],
+brick-layout[open] > [drawer-gt-s],
+brick-layout[open] > [drawer-gt-m],
+brick-layout[open] > [drawer-xs],
+brick-layout[open] > [drawer-s],
+brick-layout[open] > [drawer-m],
+brick-layout[open] > [drawer-l] {
   transform: translate(0, 0);
 }
 @media (max-width: 768px) {
-  brick-layout > [drawer-top-max-s] {
+  brick-layout > [drawer-top-lt-s] {
     position: absolute;
     transform: translate(0, -100%);
     transition: transform 0.2s ease;
@@ -110,7 +266,7 @@ brick-layout[open] > [drawer-max-l] {
   }
 }
 @media (max-width: 992px) {
-  brick-layout > [drawer-top-max-m] {
+  brick-layout > [drawer-top-lt-m] {
     position: absolute;
     transform: translate(0, -100%);
     transition: transform 0.2s ease;
@@ -118,7 +274,47 @@ brick-layout[open] > [drawer-max-l] {
   }
 }
 @media (max-width: 1200px) {
-  brick-layout > [drawer-top-max-l] {
+  brick-layout > [drawer-top-lt-l] {
+    position: absolute;
+    transform: translate(0, -100%);
+    transition: transform 0.2s ease;
+    width: 100%;
+  }
+}
+@media (min-width: 768px) {
+  brick-layout > [drawer-top-gt-xs] {
+    position: absolute;
+    transform: translate(0, -100%);
+    transition: transform 0.2s ease;
+    width: 100%;
+  }
+}
+@media (min-width: 992px) {
+  brick-layout > [drawer-top-gt-s] {
+    position: absolute;
+    transform: translate(0, -100%);
+    transition: transform 0.2s ease;
+    width: 100%;
+  }
+}
+@media (min-width: 1200px) {
+  brick-layout > [drawer-top-gt-m] {
+    position: absolute;
+    transform: translate(0, -100%);
+    transition: transform 0.2s ease;
+    width: 100%;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  brick-layout > [drawer-top-s] {
+    position: absolute;
+    transform: translate(0, -100%);
+    transition: transform 0.2s ease;
+    width: 100%;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  brick-layout > [drawer-top-m] {
     position: absolute;
     transform: translate(0, -100%);
     transition: transform 0.2s ease;
@@ -132,8 +328,15 @@ brick-layout > [drawer-top] {
   width: 100%;
 }
 brick-layout[open] > [drawer-top],
-brick-layout[open] > [drawer-top-max-s],
-brick-layout[open] > [drawer-top-max-m],
-brick-layout[open] > [drawer-top-max-l] {
+brick-layout[open] > [drawer-top-lt-s],
+brick-layout[open] > [drawer-top-lt-m],
+brick-layout[open] > [drawer-top-lt-l],
+brick-layout[open] > [drawer-top-gt-xs],
+brick-layout[open] > [drawer-top-gt-s],
+brick-layout[open] > [drawer-top-gt-m],
+brick-layout[open] > [drawer-top-xs],
+brick-layout[open] > [drawer-top-s],
+brick-layout[open] > [drawer-top-m],
+brick-layout[open] > [drawer-top-l] {
   transform: translate(0, 0);
 }
