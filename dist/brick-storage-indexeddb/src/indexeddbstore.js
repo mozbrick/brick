@@ -1,4 +1,4 @@
-(function () {
+(function() {
 
   var KEYVALUE_API_VERSION = 1;
 
@@ -7,18 +7,13 @@
                   window.webkitIndexedDB ||
                   window.msIndexedDB;
 
-  var IDBTransaction = window.IDBTransaction ||
-                       window.webkitIDBTransaction ||
-                       window.mozIDBTransaction ||
-                       window.msIDBTransaction;
-
   var IDBKeyRange = window.IDBKeyRange ||
                     window.webkitIDBKeyRange ||
                     window.msIDBKeyRange;
 
   function wrap(req) {
     return new Promise(function (resolve, reject) {
-      req.onsuccess = function (e) {
+      req.onsuccess = function () {
         resolve(req.result);
       };
       req.onerror = function (e) {
@@ -49,14 +44,14 @@
         reject('No indexedDB implementation found!');
       }
       var req = indexedDB.open(self.storeName, KEYVALUE_API_VERSION);
-      req.onerror = function (e) {
+      req.onerror = function () {
         reject(req.error);
       };
-      req.onsuccess = function (e) {
+      req.onsuccess = function () {
         self.db = req.result;
         resolve(self);
       };
-      req.onupgradeneeded = function (e) {
+      req.onupgradeneeded = function () {
         self.db = req.result;
         var store = self.db.createObjectStore(self.storeName, { keyPath: self.key, autoIncrement: self.autoIncrement });
         // create indices
@@ -99,7 +94,7 @@
 
     /**
     * Save an object into the database
-    * @param {object} object the object to be saved
+    * @param {object}   object
     * @return {promise} Promise for the id/key to which
     * it was saved
     */
@@ -140,7 +135,7 @@
 
     /**
     * Update or insert multiple objects into the database
-    * @param {objects} objects the object array to be saved
+    * @param {objects}  objects
     * @return {promise}
     */
     setMany: function (objects) {
@@ -163,7 +158,7 @@
 
     /**
      * Get the object saved at a given id/key.
-     * @param  {number|string} id
+     * @param  {number|string} key
      * @return {promise}       Promise for the object
      */
     get: function (key) {
@@ -182,8 +177,8 @@
 
     /**
      * Removes the the entry with the supplied id/key from the database.
-     * @param  {number|string} id
-     * @return {promise} for undefined
+     * @param  {number|string} key
+     * @return {promise}       Promise for undefined
      */
     remove: function (key) {
       var self = this;
@@ -222,7 +217,6 @@
       var self = this;
       var db = self._getTransactionAndStore();
       var counter = 0;
-      var advanced = false;
       var start = options.start;
       var end = options.end;
       var count = options.count || undefined;
@@ -315,46 +309,6 @@
     }
   };
 
-
-var StoragePrototype = Object.create(HTMLElement.prototype);
-
-  StoragePrototype.createdCallback = function () {
-  };
-
-  StoragePrototype.attachedCallback = function () {
-    this.name = this.getAttribute('name') || 'storage';
-    this.key = this.getAttribute('key') || null;
-    this.indices = this.getAttribute('index') ? this.getAttribute('index').split(" ") : [];
-    this.storage = new IndexedDbStore(this.name, this.key, this.indices);
-  };
-
-  StoragePrototype.insert = function (object) {
-    return this.storage.insert(object);
-  };
-  StoragePrototype.set = function (key, object) {
-    return this.storage.set(key, object);
-  };
-  StoragePrototype.setMany = function (objects) {
-    return this.storage.setMany(objects);
-  };
-  StoragePrototype.get = function (key) {
-    return this.storage.get(key);
-  };
-  StoragePrototype.remove = function (key) {
-    return this.storage.remove(key);
-  };
-  StoragePrototype.getMany = function (options) {
-    return this.storage.getMany(options);
-  };
-  StoragePrototype.size = function () {
-    return this.storage.size();
-  };
-  StoragePrototype.clear = function () {
-    return this.storage.clear();
-  };
-
-  window.XStorageIndexedDB = document.registerElement('x-storage-indexeddb', {
-    prototype: StoragePrototype
-  });
+  window.IndexedDbStore = IndexedDbStore;
 
 })();
