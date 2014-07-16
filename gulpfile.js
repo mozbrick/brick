@@ -1,9 +1,9 @@
 var bower = require('gulp-bower-files');
 var connect = require('gulp-connect');
-var distfile = require('./gulp/distfile');
+var distfile = require('./tasks/distfile');
 var gulp = require('gulp');
 var helptext = require('gulp-helptext');
-var imports = require('./gulp/imports');
+var imports = require('./tasks/imports');
 var rm = require('gulp-rm');
 
 gulp.task('imports', ['clean'], function () {
