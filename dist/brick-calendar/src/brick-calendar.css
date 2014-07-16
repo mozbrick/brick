@@ -1,0 +1,106 @@
+brick-calendar {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  font-size: 1em;
+  text-align: center;
+  overflow: hidden;
+}
+brick-calendar,
+brick-calendar * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+brick-calendar .calendar {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+brick-calendar .month {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 224px;
+  max-width: 100%;
+}
+brick-calendar .week,
+brick-calendar .weekday-labels {
+  margin: 1px 0;
+  overflow: visible;
+  width: 100%;
+  white-space: nowrap;
+}
+brick-calendar .day,
+brick-calendar .prev,
+brick-calendar .next,
+brick-calendar .weekday-label {
+  display: inline-block;
+  width: 32px;
+}
+brick-calendar .month-label,
+brick-calendar .weekday-labels,
+brick-calendar .week,
+brick-calendar .prev,
+brick-calendar .next {
+  height: 2em;
+  line-height: 2em;
+}
+brick-calendar .weekday-label {
+  opacity: 0.8;
+  font-size: 0.8em;
+}
+brick-calendar .weekday-label,
+brick-calendar .day {
+  height: 100%;
+  line-height: inherit;
+  margin: 0 auto;
+}
+brick-calendar .month-label {
+  width: 100%;
+}
+brick-calendar .day {
+  position: relative;
+  white-space: nowrap;
+}
+brick-calendar .badmonth {
+  opacity: 0.5;
+}
+brick-calendar:not([controls]) .controls {
+  display: none !important;
+}
+brick-calendar[controls] .controls {
+  display: block;
+}
+brick-calendar .prev,
+brick-calendar .next {
+  position: absolute;
+  top: 0px;
+  max-width: 3em;
+}
+brick-calendar .prev {
+  left: 0px;
+}
+brick-calendar .next {
+  right: 0px;
+}
+brick-calendar:not([active]) .day:hover,
+brick-calendar:not([active]) .prev:hover,
+brick-calendar:not([active]) .next:hover {
+  cursor: pointer;
+}

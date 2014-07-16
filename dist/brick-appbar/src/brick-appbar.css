@@ -1,0 +1,54 @@
+brick-appbar {
+  padding: 0;
+  width: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+brick-appbar,
+brick-appbar * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+brick-appbar > * {
+  border: none;
+  vertical-align: middle;
+  text-align: center;
+  -webkit-flex-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  text-align: center;
+}
+brick-appbar > h1,
+brick-appbar h2,
+brick-appbar h3,
+brick-appbar h4,
+brick-appbar h5,
+brick-appbar h6 {
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+brick-appbar > h1:after,
+brick-appbar h2:after,
+brick-appbar h3:after,
+brick-appbar h4:after,
+brick-appbar h5:after,
+brick-appbar h6:after {
+  content: attr(subheading);
+}
