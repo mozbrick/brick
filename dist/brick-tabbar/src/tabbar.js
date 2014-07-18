@@ -29,8 +29,13 @@
   BrickTabbarElementPrototype.attachedCallback = function () {
     var self = this;
     self.selectHandler = delegate("brick-tabbar-tab", function(){ _selectTab(this); });
-    delegate(self,"select","brick-tabbar-tab", self.selectHandler);
-    delegate(self,"click","brick-tabbar-tab", self.selectHandler);
+    self.addEventListener("click", self.selectHandler);
+    self.addEventListener("select", self.selectHandler);
+  };
+
+  BrickTabbarElementPrototype.detachedCallback = function () {
+    this.removeEventListener("click", this.selectHandler);
+    this.removeEventListener("select", this.selectHandler);
   };
 
   Object.defineProperties(BrickTabbarElementPrototype, {
