@@ -8,12 +8,14 @@
  * responsify("& > ", horizontal, mixin)
  */
 brick-layout {
-  display: flex;
   overflow: hidden;
   box-sizing: border-box;
   box-orient: vertical;
-  flex-direction: column;
   position: relative;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
 /**
    * Horizontal Layout
    *--------------------------------------------------*/
@@ -30,106 +32,124 @@ brick-layout {
 @media (max-width: 768px) {
   brick-layout[horizontal-lt-s] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 @media (max-width: 992px) {
   brick-layout[horizontal-lt-m] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 @media (max-width: 1200px) {
   brick-layout[horizontal-lt-l] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 @media (min-width: 768px) {
   brick-layout[horizontal-gt-xs] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 @media (min-width: 992px) {
   brick-layout[horizontal-gt-s] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 @media (min-width: 1200px) {
   brick-layout[horizontal-gt-m] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 @media (max-width: 768px) and (min-width: 992px) {
   brick-layout[horizontal-s] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 @media (max-width: 992px) and (min-width: 1200px) {
   brick-layout[horizontal-m] {
     box-orient: horizontal;
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
 brick-layout[horizontal] {
   box-orient: horizontal;
+  -webkit-flex-direction: row;
   flex-direction: row;
 }
 @media (max-width: 768px) {
   brick-layout > [flex-lt-s] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 @media (max-width: 992px) {
   brick-layout > [flex-lt-m] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 @media (max-width: 1200px) {
   brick-layout > [flex-lt-l] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 @media (min-width: 768px) {
   brick-layout > [flex-gt-xs] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 @media (min-width: 992px) {
   brick-layout > [flex-gt-s] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 @media (min-width: 1200px) {
   brick-layout > [flex-gt-m] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 @media (max-width: 768px) and (min-width: 992px) {
   brick-layout > [flex-s] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 @media (max-width: 992px) and (min-width: 1200px) {
   brick-layout > [flex-m] {
-    flex: 1;
     overflow: auto;
+    -webkit-flex: 1;
+    flex: 1;
   }
 }
 brick-layout > [flex] {
-  flex: 1;
   overflow: auto;
+  -webkit-flex: 1;
+  flex: 1;
 }
 @media (max-width: 768px) {
   brick-layout [hide-lt-s] {
@@ -178,7 +198,9 @@ brick-layout [hide] {
   brick-layout > [drawer-lt-s] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
@@ -186,7 +208,9 @@ brick-layout [hide] {
   brick-layout > [drawer-lt-m] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
@@ -194,7 +218,9 @@ brick-layout [hide] {
   brick-layout > [drawer-lt-l] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
@@ -202,7 +228,9 @@ brick-layout [hide] {
   brick-layout > [drawer-gt-xs] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
@@ -210,7 +238,9 @@ brick-layout [hide] {
   brick-layout > [drawer-gt-s] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
@@ -218,7 +248,9 @@ brick-layout [hide] {
   brick-layout > [drawer-gt-m] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
@@ -226,7 +258,9 @@ brick-layout [hide] {
   brick-layout > [drawer-s] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
@@ -234,14 +268,18 @@ brick-layout [hide] {
   brick-layout > [drawer-m] {
     height: 100%;
     position: absolute;
+    -webkit-transform: translate(-100%, 0);
     transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
   }
 }
 brick-layout > [drawer] {
   height: 100%;
   position: absolute;
+  -webkit-transform: translate(-100%, 0);
   transform: translate(-100%, 0);
+  -webkit-transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
 }
 brick-layout[open] > [drawer],
@@ -255,77 +293,96 @@ brick-layout[open] > [drawer-xs],
 brick-layout[open] > [drawer-s],
 brick-layout[open] > [drawer-m],
 brick-layout[open] > [drawer-l] {
+  -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
 @media (max-width: 768px) {
   brick-layout > [drawer-top-lt-s] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 @media (max-width: 992px) {
   brick-layout > [drawer-top-lt-m] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 @media (max-width: 1200px) {
   brick-layout > [drawer-top-lt-l] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 @media (min-width: 768px) {
   brick-layout > [drawer-top-gt-xs] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 @media (min-width: 992px) {
   brick-layout > [drawer-top-gt-s] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 @media (min-width: 1200px) {
   brick-layout > [drawer-top-gt-m] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 @media (max-width: 768px) and (min-width: 992px) {
   brick-layout > [drawer-top-s] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 @media (max-width: 992px) and (min-width: 1200px) {
   brick-layout > [drawer-top-m] {
     position: absolute;
-    transform: translate(0, -100%);
-    transition: transform 0.2s ease;
     width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
 }
 brick-layout > [drawer-top] {
   position: absolute;
-  transform: translate(0, -100%);
-  transition: transform 0.2s ease;
   width: 100%;
+  -webkit-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
 }
 brick-layout[open] > [drawer-top],
 brick-layout[open] > [drawer-top-lt-s],
@@ -338,5 +395,6 @@ brick-layout[open] > [drawer-top-xs],
 brick-layout[open] > [drawer-top-s],
 brick-layout[open] > [drawer-top-m],
 brick-layout[open] > [drawer-top-l] {
+  -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
