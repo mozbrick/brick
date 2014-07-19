@@ -1,34 +1,31 @@
 (function () {
 
-  function delegate(selector, handler) {
+  function delegateChild(handler) {
     return function(e) {
       var target = e.target;
       var delegateEl = e.currentTarget;
-      var matches = delegateEl.querySelectorAll(selector);
       for (var el = target; el.parentNode && el !== delegateEl; el = el.parentNode) {
-        for (var i = 0; i < matches.length; i++) {
-          if (matches[i] === el) {
-            handler.call(el, e);
-            return;
-          }
+        if (delegateEl === el.parentNode) {
+          handler.call(el, e);
+          return;
         }
       }
     };
   }
 
-  function _selectItem(el) {
-    var selectedEl = el.parentNode.querySelectorAll('brick-menu-item[selected]');
-    for (var i = 0; i < selectedEl.length; i++) {
-      selectedEl[i].removeAttribute('selected');
+  function _selectItem(item) {
+    var selectedItems = item.parentNode.querySelectorAll('*[selected]');
+    for (var i = 0; i < selectedItems.length; i++) {
+      selectedItems[i].removeAttribute('selected');
     }
-    el.setAttribute('selected', true);
+    item.setAttribute('selected', true);
   }
 
   var BrickMenuElementPrototype = Object.create(HTMLElement.prototype);
 
   BrickMenuElementPrototype.attachedCallback = function () {
     var self = this;
-    self.selectHandler = delegate("brick-menu-item", function(){
+    self.selectHandler = delegateChild(function(){
       _selectItem(this);
     });
     self.addEventListener("click", self.selectHandler);

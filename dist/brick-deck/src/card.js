@@ -48,6 +48,10 @@
     },
   };
 
+  BrickCardElementPrototype.reveal = function() {
+    this.dispatchEvent(new CustomEvent("reveal",{bubbles: true}));
+  };
+
   // Property handlers
   Object.defineProperties(BrickCardElementPrototype, {
     'selected': {

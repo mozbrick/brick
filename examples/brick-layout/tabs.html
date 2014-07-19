@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>brick-layout example: drawer</title>
+
+    <script src="../../dist/platform/platform.js"></script>
+
+    <link rel="import" href="../../dist/brick.html">
+
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        box-sizing: border-box;
+      }
+      #layout {
+        height: 100%;
+      }
+      #header {
+        border-bottom: 1px solid #ccc;
+        padding: 12px 9px 9px 9px;
+      }
+      #menu {
+        border-right: 1px solid #ccc;
+        background: white;
+      }
+      #menu > * {
+        padding: 9px;
+        width: 100%;
+      }
+      #menu [selected] {
+        font-weight: bold;
+      }
+      brick-card {
+        padding: 9px;
+        font-size: 6em;
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        #content {
+          order: 1;
+        }
+        #menu {
+          border: none;
+          border-top: 1px solid #ccc;
+          order: 2;
+        }
+        #menu > * {
+          border-left: 1px solid #ccc;
+        }
+        #menu > *:first-child {
+          border-left: none;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <brick-layout id="layout">
+
+      <header id="header">
+        Brick Layout Example: Responsive Tabs
+      </header>
+
+      <brick-layout id="main" horizontal-gt-xs flex>
+
+        <brick-menu id="menu" horizontal-lt-s>
+          <brick-action selected target="card1" action="reveal">
+            Menu Item 1
+          </brick-action>
+          <brick-action target="card2" action="reveal">
+            Menu Item 2
+          </brick-action>
+          <brick-action target="card3" action="reveal">
+            Menu Item 3
+          </brick-action>
+        </brick-menu>
+
+        <brick-deck id="content" flex selected-index="0">
+          <brick-card id="card1" selected>1</brick-card>
+          <brick-card id="card2">2</brick-card>
+          <brick-card id="card3">3</brick-card>
+        </brick-deck>
+
+      </brick-layout>
+
+    </brick-layout>
+
+
+
+  </body>
+</html>

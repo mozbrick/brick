@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>brick-layout example: drawer</title>
+
+    <script src="../../dist/platform/platform.js"></script>
+
+    <link rel="import" href="../../dist/brick.html">
+
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+      }
+      #layout {
+        height: 100%;
+      }
+      #header {
+        border-bottom: 1px solid #ccc;
+        padding: 12px 9px 9px 9px;
+      }
+      #menu {
+        border-right: 1px solid #ccc;
+        padding: 9px;
+        background: white;
+      }
+      #menu brick-menu-item {
+        padding: 3px 0;
+      }
+      #menu brick-menu-item[selected] {
+        font-weight: bold;
+      }
+      #article {
+        padding: 9px;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <brick-layout id="layout">
+
+      <header id="header">
+        <button id="menu-button" hide-gt-xs>M</button>
+        Brick Layout Example: Simple responsive Drawer
+      </header>
+
+      <brick-layout id="main" horizontal flex>
+
+        <brick-menu id="menu" drawer-lt-s>
+          <brick-menu-item selected>Menu Item 1</brick-menu-item>
+          <brick-menu-item>Menu Item 2</brick-menu-item>
+          <brick-menu-item>Menu Item 3</brick-menu-item>
+        </brick-menu>
+
+        <div id="article" flex>
+          article
+        </div>
+
+      </brick-layout>
+
+    </brick-layout>
+
+    <brick-action source="menu-button" target="main" action="toggleDrawer"></brick-action>
+
+  </body>
+</html>
