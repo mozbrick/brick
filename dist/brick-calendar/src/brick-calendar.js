@@ -565,7 +565,7 @@
     monthEl.setAttribute('role', 'grid');
     // create month label
     var monthLabel = makeEl('div.month-label');
-    monthLabel.textContent = labels.months[month] + ' ' + d.getYear();
+    monthLabel.textContent = labels.months[month] + ' ' + d.getFullYear();
 
     monthEl.appendChild(monthLabel);
 
@@ -1398,7 +1398,7 @@
 
     this.ns.listeners.clickPrev = delegate(".prev", function (e) {
       var xCalendar = e.currentTarget;
-      xCalendar.nextMonth();
+      xCalendar.prevMonth();
       xCalendar.dispatchEvent(new CustomEvent("prevmonth",{
         bubbles:true
       }));
