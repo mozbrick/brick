@@ -4,8 +4,8 @@ Thanks for helping to make Brick better! Brick as a project is spread out over s
 
 If you're filing an issue or submitting a pull request, please try to file it in the right place:
 
-[The Brick Project](https://github.com/mozbrick/brick/) - the overall project. Use this repository for question about usage, distribution, overall compatibility, and discussing possible new features/components.
-[Brick website](https://github.com/mozbrick/mozbrick.github.io/) - Issues with the https://mozbrick.github.io/ website, such as issues with the documentation or examples.
+* [The Brick Project](https://github.com/mozbrick/brick/) - the overall project. Use this repository for question about usage, distribution, overall compatibility, and discussing possible new features/components.
+* [Brick website](https://github.com/mozbrick/mozbrick.github.io/) - Issues with the https://mozbrick.github.io/ website, such as issues with the documentation or examples.
 
 Individual component repositories:
 
