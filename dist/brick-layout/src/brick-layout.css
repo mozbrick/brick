@@ -94,6 +94,7 @@ brick-layout[horizontal] {
 @media (max-width: 768px) {
   brick-layout > [flex-lt-s] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
@@ -101,6 +102,7 @@ brick-layout[horizontal] {
 @media (max-width: 992px) {
   brick-layout > [flex-lt-m] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
@@ -108,6 +110,7 @@ brick-layout[horizontal] {
 @media (max-width: 1200px) {
   brick-layout > [flex-lt-l] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
@@ -115,6 +118,7 @@ brick-layout[horizontal] {
 @media (min-width: 768px) {
   brick-layout > [flex-gt-xs] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
@@ -122,6 +126,7 @@ brick-layout[horizontal] {
 @media (min-width: 992px) {
   brick-layout > [flex-gt-s] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
@@ -129,6 +134,7 @@ brick-layout[horizontal] {
 @media (min-width: 1200px) {
   brick-layout > [flex-gt-m] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
@@ -136,6 +142,7 @@ brick-layout[horizontal] {
 @media (max-width: 768px) and (min-width: 992px) {
   brick-layout > [flex-s] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
@@ -143,12 +150,14 @@ brick-layout[horizontal] {
 @media (max-width: 992px) and (min-width: 1200px) {
   brick-layout > [flex-m] {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     -webkit-flex: 1;
     flex: 1;
   }
 }
 brick-layout > [flex] {
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   -webkit-flex: 1;
   flex: 1;
 }
