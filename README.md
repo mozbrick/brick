@@ -49,6 +49,30 @@ bower install
 gulp build
 ```
 
+If you'd like to work on *all* the Brick components at once, try this handy script:
+
+```sh
+repos=(
+  brick
+  brick-action
+  brick-appbar
+  brick-calendar
+  brick-common
+  brick-deck
+  brick-flipbox
+  brick-form
+  brick-layout
+  brick-listview
+  brick-menu
+  brick-storage-indexeddb
+  brick-tabbar
+)
+for repo in $repos
+do
+  git clone https://github.com/mozbrick/$repo.git;
+done
+```
+
 ## Components
 
 Here is a list of the components currently in the primary distribution of Brick:
