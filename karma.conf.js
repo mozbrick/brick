@@ -3,10 +3,10 @@ module.exports = function(config){
     basePath: '.',
 
     files : [
-      'dist/platform/platform.js',
+      'bower_components/platform/platform.js',
       'test/browser.js',
       'dist/brick.html',
-      {pattern: 'dist/*', watched: true, included: false, served: true}
+      {pattern: 'dist/**/*', watched: true, included: false, served: true}
     ],
 
     autoWatch : true,

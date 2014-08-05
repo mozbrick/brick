@@ -16,19 +16,29 @@ window.addEventListener('WebComponentsReady', function() {
 
 });
 
-describe("the key value store with key", function(){
+describe("The distribution", function (){
 
-  // before(function(done){
-  //   sampleItems = generateSampleItems(n);
-  //   singleItem = generateSampleItems(1)[0];
-  //   populateDb(kvk)
-  //     .then(function(){
-  //       done();
-  //     });
-  // });
+  it("should work at all", function () {
+    expect(document.registerElement).to.exist;
+  });
 
-  it("should work at all", function(){
-    expect(document.registerElement).to.be.truthy;
+  it("should offer Promises", function () {
+    expect(window.Promise).to.exist;
+  });
+
+  it("should initialize components", function () {
+    expect(window.BrickAppbarElement).to.exist;
+    expect(window.BrickCalendar).to.exist;
+    expect(window.BrickCardElement).to.exist;
+    expect(window.BrickDeckElement).to.exist;
+    expect(window.BrickFlipboxElement).to.exist;
+    expect(window.BrickFormElement).to.exist;
+    expect(window.BrickLayoutElement).to.exist;
+    expect(window.BrickMenuElement).to.exist;
+    expect(window.BrickStorageIndexeddbElement).to.exist;
+    expect(window.BrickTabbarTabElement).to.exist;
+    expect(window.BrickTabbarElement).to.exist;
+    expect(window.BrickActionElement).to.exist;
   });
 
 });
