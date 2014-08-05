@@ -1,0 +1,315 @@
+<link rel="import" href="../../brick-common/brick-common.html">
+
+<template id="brick-tabbar-template">
+  <style>/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  position: relative;
+}
+@media (max-width: 768px) {
+  :host([vertical-lt-s]) {
+    flex-direction: column;
+  }
+}
+@media (max-width: 992px) {
+  :host([vertical-lt-m]) {
+    flex-direction: column;
+  }
+}
+@media (max-width: 1200px) {
+  :host([vertical-lt-l]) {
+    flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  :host([vertical-gt-xs]) {
+    flex-direction: column;
+  }
+}
+@media (min-width: 992px) {
+  :host([vertical-gt-s]) {
+    flex-direction: column;
+  }
+}
+@media (min-width: 1200px) {
+  :host([vertical-gt-m]) {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([vertical-s]) {
+    flex-direction: column;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([vertical-m]) {
+    flex-direction: column;
+  }
+}
+:host([vertical]) {
+  flex-direction: column;
+}
+::content brick-tabbar-tab {
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+}
+</style>
+  <style>/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  border-top: 1px solid #f4f4f4;
+  background: #fff;
+}
+:host .selected-indicator {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  height: 3px;
+  background: #000;
+  transition: all 0.2s ease;
+  transform: translateX(0);
+  z-index: 2;
+}
+@media (max-width: 768px) {
+  :host([vertical-lt-s]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-lt-s]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-lt-s]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-lt-s]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+@media (max-width: 992px) {
+  :host([vertical-lt-m]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-lt-m]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-lt-m]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-lt-m]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+@media (max-width: 1200px) {
+  :host([vertical-lt-l]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-lt-l]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-lt-l]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-lt-l]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+@media (min-width: 768px) {
+  :host([vertical-gt-xs]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-gt-xs]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-gt-xs]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-gt-xs]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+@media (min-width: 992px) {
+  :host([vertical-gt-s]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-gt-s]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-gt-s]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-gt-s]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+@media (min-width: 1200px) {
+  :host([vertical-gt-m]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-gt-m]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-gt-m]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-gt-m]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([vertical-s]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-s]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-s]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-s]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([vertical-m]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-m]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-m]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-m]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    transform: translateX(0);
+  }
+}
+:host([vertical]) {
+  border-top: none;
+  border-right: 1px solid #f4f4f4;
+  padding-left: 14px;
+}
+:host([vertical]) ::content brick-tabbar-tab {
+  border-bottom: 1px solid #f4f4f4;
+  text-align: left;
+}
+:host([vertical]) ::content brick-tabbar-tab:last-of-type {
+  border: none;
+}
+:host([vertical]) .selected-indicator {
+  top: 0px;
+  left: 0px;
+  width: 3px;
+  transform: translateX(0);
+}
+::content brick-tabbar-tab {
+  height: 45px;
+  line-height: 45px;
+  cursor: pointer;
+  position: relative;
+  font-style: italic;
+  color: #858585;
+}
+::content brick-tabbar-tab:active {
+  transition: none;
+  opacity: 0.3;
+}
+::content brick-tabbar-tab[selected]:active {
+  background: transparent;
+}
+</style>
+  <div class="selected-indicator"></div>
+  <content></content>
+</template>
+
+
+
+<script src="brick-tabbar.js"></script>

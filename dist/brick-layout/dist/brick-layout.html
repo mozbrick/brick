@@ -1,0 +1,497 @@
+<link rel="import" href="../../brick-common/brick-common.html">
+
+<template>
+  <style>/**
+ * example:
+ *  & > [horizontal-lt-s/m/l] { mixin() }
+ *  & > [horizontal-gt-xs/s/m] { mixin() }
+ *  & > [horizontal-xs/s/m/l] { mixin() }
+ *  & > [horizontal] { mixin() }
+ * would be created by:
+ * responsify("& > ", horizontal, mixin)
+ */
+/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  box-orient: vertical;
+  position: relative;
+  height: 100%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+/**
+   * Horizontal Layout
+   *--------------------------------------------------*/
+/**
+   *  Flex-children
+   *--------------------------------------------------*/
+/**
+   *  hide
+   *--------------------------------------------------*/
+/**
+   *  Drawer
+   *--------------------------------------------------*/
+}
+@media (max-width: 768px) {
+  :host([horizontal-lt-s]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 992px) {
+  :host([horizontal-lt-m]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 1200px) {
+  :host([horizontal-lt-l]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (min-width: 768px) {
+  :host([horizontal-gt-xs]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  :host([horizontal-gt-s]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (min-width: 1200px) {
+  :host([horizontal-gt-m]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([horizontal-s]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([horizontal-m]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+:host([horizontal]) {
+  box-orient: horizontal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
+@media (max-width: 768px) {
+  :host ::content > [flex-lt-s] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content > [flex-lt-m] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content > [flex-lt-l] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content > [flex-gt-xs] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content > [flex-gt-s] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content > [flex-gt-m] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content > [flex-s] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content > [flex-m] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+:host ::content > [flex] {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  -webkit-flex: 1;
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+}
+@media (max-width: 768px) {
+  :host ::content [hide-lt-s] {
+    display: none;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content [hide-lt-m] {
+    display: none;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content [hide-lt-l] {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content [hide-gt-xs] {
+    display: none;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content [hide-gt-s] {
+    display: none;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content [hide-gt-m] {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content [hide-s] {
+    display: none;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content [hide-m] {
+    display: none;
+  }
+}
+:host ::content [hide] {
+  display: none;
+}
+@media (max-width: 768px) {
+  :host ::content > [drawer-lt-s] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content > [drawer-lt-m] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content > [drawer-lt-l] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content > [drawer-gt-xs] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content > [drawer-gt-s] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content > [drawer-gt-m] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content > [drawer-s] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content > [drawer-m] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+:host ::content > [drawer] {
+  height: 100%;
+  position: absolute;
+  -webkit-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
+}
+:host([open]) > [drawer],
+:host([open]) > [drawer-lt-s],
+:host([open]) > [drawer-lt-m],
+:host([open]) > [drawer-lt-l],
+:host([open]) > [drawer-gt-xs],
+:host([open]) > [drawer-gt-s],
+:host([open]) > [drawer-gt-m],
+:host([open]) > [drawer-xs],
+:host([open]) > [drawer-s],
+:host([open]) > [drawer-m],
+:host([open]) > [drawer-l] {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+@media (max-width: 768px) {
+  :host ::content > [drawer-top-lt-s] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content > [drawer-top-lt-m] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content > [drawer-top-lt-l] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content > [drawer-top-gt-xs] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content > [drawer-top-gt-s] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content > [drawer-top-gt-m] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content > [drawer-top-s] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content > [drawer-top-m] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+:host ::content > [drawer-top] {
+  position: absolute;
+  width: 100%;
+  -webkit-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
+}
+:host([open]) > [drawer-top],
+:host([open]) > [drawer-top-lt-s],
+:host([open]) > [drawer-top-lt-m],
+:host([open]) > [drawer-top-lt-l],
+:host([open]) > [drawer-top-gt-xs],
+:host([open]) > [drawer-top-gt-s],
+:host([open]) > [drawer-top-gt-m],
+:host([open]) > [drawer-top-xs],
+:host([open]) > [drawer-top-s],
+:host([open]) > [drawer-top-m],
+:host([open]) > [drawer-top-l] {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+</style>
+  <style></style>
+  <content></content>
+</template>
+
+
+<script src="brick-layout.js"></script>

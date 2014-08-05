@@ -7,9 +7,7 @@ $darkBG = #00202F;
 $barFG = #fff;
 
 $barHeight = 45px;
-
 $tapTargetSize = 32px;
-
 
 $COMPONENT_CUSTOM_FONT_NAME = "Fira Sans";
 $fontFamilyPrimary = $COMPONENT_CUSTOM_FONT_NAME, "Fira Sans", "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
@@ -20,3 +18,9 @@ $COMPONENT_UI_LINE_PADDING = ($COMPONENT_UI_LINE_HEIGHT - $COMPONENT_UI_FONT_SIZ
 $COMPONENT_UI_TEXT_COLOR = #D4D4D4;
 $COMPONENT_UI_TEXT_COLOR_SELECTED = #F2F2F2;
 $COMPONENT_UI_TEXT_COLOR_HOVER = mix($COMPONENT_UI_TEXT_COLOR, $COMPONENT_UI_TEXT_COLOR_SELECTED, 25%);
+
+// responsive breakpoints
+$xs = {                end:  768px, name: xs }
+$s  = { start:  768px, end:  992px, name: s  }
+$m  = { start:  992px, end: 1200px, name: m  }
+$l  = { start: 1200px,              name: l  }

@@ -1,0 +1,143 @@
+<link rel="import" href="../../brick-common/brick-common.html">
+
+<template>
+  <style>:host {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  font-size: 1em;
+  text-align: center;
+  overflow: hidden;
+}
+:host(:not([controls])) ::content .controls {
+  display: none !important;
+}
+:host([controls]) ::content .controls {
+  display: block;
+}
+:host(:not([active])) ::content .day:hover,
+:host(:not([active])) ::content .prev:hover,
+:host(:not([active])) ::content .next:hover {
+  cursor: pointer;
+}
+:host ::content {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+:host ::content .calendar {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+:host ::content .month {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 224px;
+  max-width: 100%;
+}
+:host ::content .week,
+:host ::content .weekday-labels {
+  margin: 1px 0;
+  overflow: visible;
+  width: 100%;
+  white-space: nowrap;
+}
+:host ::content .day,
+:host ::content .prev,
+:host ::content .next,
+:host ::content .weekday-label {
+  display: inline-block;
+  width: 32px;
+}
+:host ::content .month-label,
+:host ::content .weekday-labels,
+:host ::content .week,
+:host ::content .prev,
+:host ::content .next {
+  height: 2em;
+  line-height: 2em;
+}
+:host ::content .weekday-label {
+  opacity: 0.8;
+  font-size: 0.8em;
+}
+:host ::content .weekday-label,
+:host ::content .day {
+  height: 100%;
+  line-height: inherit;
+  margin: 0 auto;
+}
+:host ::content .month-label {
+  width: 100%;
+}
+:host ::content .day {
+  position: relative;
+  white-space: nowrap;
+}
+:host ::content .badmonth {
+  opacity: 0.5;
+}
+:host ::content .prev,
+:host ::content .next {
+  position: absolute;
+  top: 0px;
+  max-width: 3em;
+}
+:host ::content .prev {
+  left: 0px;
+}
+:host ::content .next {
+  right: 0px;
+}
+</style>
+  <style>:host {
+  border: 1px solid #cecece;
+}
+:host:not([active]) ::content .prev:hover,
+:host:not([active]) ::content .next:hover {
+  background-color: #f9f9f9;
+  opacity: 0.7;
+}
+:host:not([active]) ::content .day:not(.chosen):hover {
+  background: #ccc;
+}
+:host ::content .month-label {
+  border-bottom: 1px solid #cecece;
+}
+:host ::content .day[active] {
+  border-color: #ffa500;
+}
+:host ::content .day.chosen {
+  background: #0095dd;
+  color: #fff;
+}
+:host ::content .day.today {
+  font-weight: bold;
+}
+</style>
+  <content></content>
+</template>
+
+
+
+<script src="brick-calendar.js"></script>

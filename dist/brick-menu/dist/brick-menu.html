@@ -1,0 +1,284 @@
+<link rel="import" href="../../brick-common/brick-common.html">
+
+<template>
+  <style>/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+}
+@media (max-width: 768px) {
+  :host([horizontal-lt-s]) {
+    flex-direction: row;
+  }
+  :host([horizontal-lt-s]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 992px) {
+  :host([horizontal-lt-m]) {
+    flex-direction: row;
+  }
+  :host([horizontal-lt-m]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 1200px) {
+  :host([horizontal-lt-l]) {
+    flex-direction: row;
+  }
+  :host([horizontal-lt-l]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (min-width: 768px) {
+  :host([horizontal-gt-xs]) {
+    flex-direction: row;
+  }
+  :host([horizontal-gt-xs]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (min-width: 992px) {
+  :host([horizontal-gt-s]) {
+    flex-direction: row;
+  }
+  :host([horizontal-gt-s]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (min-width: 1200px) {
+  :host([horizontal-gt-m]) {
+    flex-direction: row;
+  }
+  :host([horizontal-gt-m]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([horizontal-s]) {
+    flex-direction: row;
+  }
+  :host([horizontal-s]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([horizontal-m]) {
+    flex-direction: row;
+  }
+  :host([horizontal-m]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+:host([horizontal]) {
+  flex-direction: row;
+}
+:host([horizontal]) ::content > * {
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: auto;
+  min-height: auto;
+  vertical-align: middle;
+  text-align: center;
+}
+:host ::content > * {
+  position: relative;
+}
+:host([arrow]:not([horizontal])) ::content > *:after {
+  content: "\f105";
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  position: absolute;
+  right: 0;
+}
+:host(:not([horizontal])) ::content > *[arrow]:after {
+  content: "\f105";
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  position: absolute;
+  right: 0;
+}
+</style>
+  <style>:host {
+  padding: 0 14px;
+  box-sizing: border-box;
+}
+:host ::content > * {
+  color: #4d4d4d;
+  padding: 14px 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+:host ::content > *:last-child {
+  border-bottom: none;
+}
+:host([horizontal]) {
+  padding: 14px 0;
+}
+:host([horizontal]) ::content > * {
+  padding: 0 14px;
+  border-bottom: none;
+  border-right: 1px solid #e7e7e7;
+}
+:host([horizontal]) ::content > *:last-child {
+  border-right: none;
+}
+</style>
+  <content></content>
+</template>
+
+
+<script src="brick-menu.js"></script>

@@ -71,9 +71,9 @@ function crawl(file, cb) {
       for (i = 0; i < styles.length; i++) {
         importPromises.push(getFile(path.join(baseDir, styles.eq(i).attr('href')),baseDir));
       }
-      for (i = 0; i < imports.length; i++) {
-        importPromises.push(crawl(path.join(baseDir, styles.eq(i).attr('href'))));
-      }
+      // for (i = 0; i < imports.length; i++) {
+      //   importPromises.push(crawl(path.join(baseDir, styles.eq(i).attr('href'))));
+      // }
       resolve(Promise.all(importPromises).then(function (result) {
         return result;
       }));
