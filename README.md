@@ -59,6 +59,7 @@ repos=(
   brick-calendar
   brick-common
   brick-deck
+  brick-dialog
   brick-flipbox
   brick-form
   brick-layout
@@ -81,6 +82,7 @@ Here is a list of the components currently in the primary distribution of Brick:
 * [brick-appbar](https://github.com/mozbrick/brick-appbar)
 * [brick-calendar](https://github.com/mozbrick/brick-calendar)
 * [brick-deck](https://github.com/mozbrick/brick-deck)
+* [brick-dialog](https://github.com/mozbrick/brick-dialog)
 * [brick-flipbox](https://github.com/mozbrick/brick-flipbox)
 * [brick-form](https://github.com/mozbrick/brick-form)
 * [brick-layout](https://github.com/mozbrick/brick-layout)

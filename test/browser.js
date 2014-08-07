@@ -31,6 +31,7 @@ describe("The distribution", function (){
     expect(window.BrickCalendar).to.exist;
     expect(window.BrickCardElement).to.exist;
     expect(window.BrickDeckElement).to.exist;
+    expect(window.BrickDialogElement).to.exist;
     expect(window.BrickFlipboxElement).to.exist;
     expect(window.BrickFormElement).to.exist;
     expect(window.BrickLayoutElement).to.exist;
