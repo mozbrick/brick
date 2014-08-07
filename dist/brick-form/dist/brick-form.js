@@ -13,10 +13,6 @@
     }
     self.appendChild(self.form);
 
-    // use querySelector because form.elements
-    // does not work in chrome
-    self.inputElements = self.querySelectorAll("input, select");
-
     if (self.autosave) {
       self.form.addEventListener("change", function(){
         self.saveFormData();
@@ -103,7 +99,7 @@
     },
     'elements': {
       get: function() {
-        return this.inputElements;
+        return this.querySelectorAll("input, select");
       }
     },
     'keyname': {
