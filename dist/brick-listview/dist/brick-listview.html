@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>brick-listview</title>
+  <style>brick-listview,
+brick-listview * {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+brick-listview {
+  overflow: auto;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  display: block;
+}
+brick-listview .item.sentinel {
+  visibility: hidden;
+}
+brick-listview .list {
+  position: relative;
+  transform: translateZ(0);
+}
+brick-listview .item {
+  height: 4rem;
+  line-height: 2rem;
+  font-size: 1rem;
+  font-family: 'Fira Sans';
+  padding: 0.5rem 0 0.5rem 1rem;
+  position: absolute;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+brick-listview .item:hover {
+  background: #eee;
+}
+brick-listview.scrolling .item {
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+  
+<script src="brick-listview.js"></script></body>
+</html>

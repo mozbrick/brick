@@ -1,0 +1,129 @@
+<link rel="import" href="../../brick-common/brick-common.html">
+
+<template>
+  <style></style>
+  <style>:host .field {
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #d6d6d6;
+  position: relative;
+  overflow: hidden;
+}
+:host .field ::content input {
+  min-height: 2.353em;
+  width: 100%;
+  border: medium none;
+  padding: 0 0.825em;
+  margin: 0;
+  color: #333;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+:host .field ::content input:focus {
+  outline-width: 0;
+}
+:host .field ::content input::-moz-placeholder {
+  font-style: italic;
+  font-weight: lighter;
+  color: #909ca7;
+}
+:host .field ::content input::-webkit-input-placeholder {
+  font-style: italic;
+  font-weight: lighter;
+  color: #909ca7;
+}
+:host .field ::content textarea {
+  width: 100%;
+  border: medium none;
+  padding: 0.825em;
+  color: #333;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  font-family: inherit;
+  font-size: inherit;
+  resize: vertical;
+}
+:host .field ::content textarea:focus {
+  outline-width: 0;
+}
+:host .label {
+  color: #858585;
+  margin: 0.825em 0 0.25em 0.825em;
+  margin-left: 0.825em;
+}
+:host .error {
+  color: #c00;
+  display: none;
+  margin: 0.235em 0 0 0.825em;
+}
+:host .indicator {
+  content: " ";
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0.176em;
+  background: #333;
+  -webkit-transition: transform 0.2s;
+  transition: transform 0.2s;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  opacity: 0;
+  z-index: 1;
+}
+:host .clear {
+  cursor: pointer;
+  line-height: 1em;
+  position: absolute;
+  top: 0.706em;
+  right: 0.588em;
+  width: 1em;
+  height: 1em;
+  color: #909ca7;
+  display: none;
+  font-family: "FontAwesome";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -moz-osx-font-smoothing: grayscale;
+}
+:host([type=search]) .field {
+  border-radius: 1.8em;
+}
+:host([focus]) .indicator {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+  opacity: 1;
+}
+:host([focus]) .clear {
+  display: block;
+}
+:host([focus]) .clear:active,
+:host([focus]) .clear:hover {
+  opacity: 0.3;
+}
+:host([multiline]) .clear {
+  display: none;
+}
+:host([error][invalid]) .error {
+  display: block;
+  font-size: 0.85em;
+}
+</style>
+  <div class="label"></div>
+  <div class="field">
+    <div class="clear" role="button">&#xF057;</div>
+    <div class="indicator"></div>
+    <content></content>
+  </div>
+  <div class="error"></div>
+</template>
+
+
+<script src="brick-input.js"></script>
