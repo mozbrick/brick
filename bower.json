@@ -32,7 +32,8 @@
     "brick-menu": "mozbrick/brick-menu",
     "brick-storage-indexeddb": "mozbrick/brick-storage-indexeddb",
     "brick-tabbar": "mozbrick/brick-tabbar",
-    "es6-promise": "components/es6-promise#~1.0.0"
+    "es6-promise": "components/es6-promise#~1.0.0",
+    "brick-dialog": "mozbrick/brick-dialog"
   },
   "devDependencies": {
     "platform": "Polymer/platform#~0.3.4"
