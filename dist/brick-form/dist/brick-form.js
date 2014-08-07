@@ -37,6 +37,9 @@
 
   BrickFormElementPrototype.loadFormData = function () {
     var self = this;
+    if (!self.name) {
+      return;
+    }
     self.storage.get(self.name).then(function(data){
       for (var i = 0; i < self.elements.length; i++) {
         var element = self.elements[i];
@@ -55,6 +58,9 @@
   BrickFormElementPrototype.saveFormData = function () {
     var self = this;
     var data = {};
+    if (!self.name) {
+      return;
+    }
     data[self.keyname] = self.name;
     for (var i = 0; i < self.elements.length; i++) {
       var input = self.elements[i];
@@ -99,7 +105,7 @@
     },
     'elements': {
       get: function() {
-        return this.querySelectorAll("input, select");
+        return this.querySelectorAll("input, select, textarea");
       }
     },
     'keyname': {
