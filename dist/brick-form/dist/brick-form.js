@@ -32,14 +32,10 @@
   };
 
   BrickFormElementPrototype.attributeChangedCallback = function (attr, oldVal, newVal) {
-    if (attr in attrs) {
-      attrs[attr].call(this, oldVal, newVal);
-    }
-  };
-
-  var attrs = {
-    'name': function () {
-      this.loadFormData();
+    if (attr === 'name') {
+      if (newVal) {
+        this.loadFormData();
+      }
     }
   };
 
