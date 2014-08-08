@@ -51,7 +51,8 @@ gulp build
 
 If you'd like to work on *all* the Brick components at once, try this handy script:
 
-```sh
+```bash
+#!/bin/bash
 repos=(
   brick
   brick-action
@@ -68,7 +69,7 @@ repos=(
   brick-storage-indexeddb
   brick-tabbar
 )
-for repo in $repos
+for repo in "${repos[@]}"
 do
   git clone https://github.com/mozbrick/$repo.git;
 done
