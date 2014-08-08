@@ -96,7 +96,7 @@ h6 {
 </div>
   <div hidden>
 
-<template>
+<template id="brick-calendar-template">
   <style>:host {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -237,7 +237,9 @@ h6 {
 
 
 </div>
-  <div hidden><template>
+  <div hidden>
+
+<template id="brick-deck-template">
   <style>/**
  * Selectors like brick-card[transition-type^="slide"]
  * which match the beginning of an attribute currently
@@ -506,7 +508,7 @@ h6 {
   -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-:host::content > *:first-child {
+:host ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
@@ -514,7 +516,7 @@ h6 {
   transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
   z-index: 2;
 }
-:host::content > *:last-child {
+:host ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
@@ -522,22 +524,22 @@ h6 {
   transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
   z-index: 1;
 }
-:host([_anim-direction="up"])::content > *:first-child,
-:host([_anim-direction="down"])::content > *:first-child {
+:host([_anim-direction="up"]) ::content > *:first-child,
+:host([_anim-direction="down"]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="up"])::content > *:last-child {
+:host([_anim-direction="up"]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
 }
-:host([_anim-direction="down"])::content > *:last-child {
+:host([_anim-direction="down"]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
@@ -549,7 +551,7 @@ h6 {
   content: "";
   display: none;
 }
-:host([flipped])::content > *:first-child {
+:host([flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
@@ -557,7 +559,7 @@ h6 {
   transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
   z-index: 1;
 }
-:host([flipped])::content > *:last-child {
+:host([flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
@@ -565,42 +567,42 @@ h6 {
   transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
   z-index: 2;
 }
-:host([_anim-direction="left"][flipped])::content > *:first-child {
+:host([_anim-direction="left"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="left"][flipped])::content > *:last-child {
+:host([_anim-direction="left"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   -o-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
 }
-:host([_anim-direction="up"][flipped])::content > *:first-child {
+:host([_anim-direction="up"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="up"][flipped])::content > *:last-child {
+:host([_anim-direction="up"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
 }
-:host([_anim-direction="down"][flipped])::content > *:first-child {
+:host([_anim-direction="down"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="down"][flipped])::content > *:last-child {
+:host([_anim-direction="down"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
@@ -620,7 +622,7 @@ h6 {
 </div>
   <div hidden>
 
-<template>
+<template id="brick-input-template">
   <style></style>
   <style>:host .field {
   display: inline-block;
@@ -749,7 +751,7 @@ h6 {
 </div>
   <div hidden>
 
-<template>
+<template id="brick-layout-template">
   <style>/**
  * example:
  *  & > [horizontal-lt-s/m/l] { mixin() }
@@ -1121,17 +1123,17 @@ h6 {
   -webkit-transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
 }
-:host([open]) > [drawer],
-:host([open]) > [drawer-lt-s],
-:host([open]) > [drawer-lt-m],
-:host([open]) > [drawer-lt-l],
-:host([open]) > [drawer-gt-xs],
-:host([open]) > [drawer-gt-s],
-:host([open]) > [drawer-gt-m],
-:host([open]) > [drawer-xs],
-:host([open]) > [drawer-s],
-:host([open]) > [drawer-m],
-:host([open]) > [drawer-l] {
+:host([open]) ::content > [drawer],
+:host([open]) ::content > [drawer-lt-s],
+:host([open]) ::content > [drawer-lt-m],
+:host([open]) ::content > [drawer-lt-l],
+:host([open]) ::content > [drawer-gt-xs],
+:host([open]) ::content > [drawer-gt-s],
+:host([open]) ::content > [drawer-gt-m],
+:host([open]) ::content > [drawer-xs],
+:host([open]) ::content > [drawer-s],
+:host([open]) ::content > [drawer-m],
+:host([open]) ::content > [drawer-l] {
   -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
@@ -1223,17 +1225,17 @@ h6 {
   -webkit-transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
 }
-:host([open]) > [drawer-top],
-:host([open]) > [drawer-top-lt-s],
-:host([open]) > [drawer-top-lt-m],
-:host([open]) > [drawer-top-lt-l],
-:host([open]) > [drawer-top-gt-xs],
-:host([open]) > [drawer-top-gt-s],
-:host([open]) > [drawer-top-gt-m],
-:host([open]) > [drawer-top-xs],
-:host([open]) > [drawer-top-s],
-:host([open]) > [drawer-top-m],
-:host([open]) > [drawer-top-l] {
+:host([open]) ::content [drawer-top],
+:host([open]) ::content [drawer-top-lt-s],
+:host([open]) ::content [drawer-top-lt-m],
+:host([open]) ::content [drawer-top-lt-l],
+:host([open]) ::content [drawer-top-gt-xs],
+:host([open]) ::content [drawer-top-gt-s],
+:host([open]) ::content [drawer-top-gt-m],
+:host([open]) ::content [drawer-top-xs],
+:host([open]) ::content [drawer-top-s],
+:host([open]) ::content [drawer-top-m],
+:host([open]) ::content [drawer-top-l] {
   -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
@@ -1289,7 +1291,7 @@ brick-listview.scrolling .item {
 </div>
   <div hidden>
 
-<template>
+<template id="brick-menu-template">
   <style>/**
  * notice the () around teh attribute. that is because of
  * :host([attr]) syntax to style the host node.
@@ -1959,7 +1961,7 @@ brick-listview.scrolling .item {
 </div>
   <div hidden>
 
-<template>
+<template id="brick-dialog-template">
   <style>/**
  * notice the () around teh attribute. that is because of
  * :host([attr]) syntax to style the host node.

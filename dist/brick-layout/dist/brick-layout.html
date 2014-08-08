@@ -1,6 +1,6 @@
 <link rel="import" href="../../brick-common/brick-common.html">
 
-<template>
+<template id="brick-layout-template">
   <style>/**
  * example:
  *  & > [horizontal-lt-s/m/l] { mixin() }
@@ -372,17 +372,17 @@
   -webkit-transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
 }
-:host([open]) > [drawer],
-:host([open]) > [drawer-lt-s],
-:host([open]) > [drawer-lt-m],
-:host([open]) > [drawer-lt-l],
-:host([open]) > [drawer-gt-xs],
-:host([open]) > [drawer-gt-s],
-:host([open]) > [drawer-gt-m],
-:host([open]) > [drawer-xs],
-:host([open]) > [drawer-s],
-:host([open]) > [drawer-m],
-:host([open]) > [drawer-l] {
+:host([open]) ::content > [drawer],
+:host([open]) ::content > [drawer-lt-s],
+:host([open]) ::content > [drawer-lt-m],
+:host([open]) ::content > [drawer-lt-l],
+:host([open]) ::content > [drawer-gt-xs],
+:host([open]) ::content > [drawer-gt-s],
+:host([open]) ::content > [drawer-gt-m],
+:host([open]) ::content > [drawer-xs],
+:host([open]) ::content > [drawer-s],
+:host([open]) ::content > [drawer-m],
+:host([open]) ::content > [drawer-l] {
   -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
@@ -474,17 +474,17 @@
   -webkit-transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
 }
-:host([open]) > [drawer-top],
-:host([open]) > [drawer-top-lt-s],
-:host([open]) > [drawer-top-lt-m],
-:host([open]) > [drawer-top-lt-l],
-:host([open]) > [drawer-top-gt-xs],
-:host([open]) > [drawer-top-gt-s],
-:host([open]) > [drawer-top-gt-m],
-:host([open]) > [drawer-top-xs],
-:host([open]) > [drawer-top-s],
-:host([open]) > [drawer-top-m],
-:host([open]) > [drawer-top-l] {
+:host([open]) ::content [drawer-top],
+:host([open]) ::content [drawer-top-lt-s],
+:host([open]) ::content [drawer-top-lt-m],
+:host([open]) ::content [drawer-top-lt-l],
+:host([open]) ::content [drawer-top-gt-xs],
+:host([open]) ::content [drawer-top-gt-s],
+:host([open]) ::content [drawer-top-gt-m],
+:host([open]) ::content [drawer-top-xs],
+:host([open]) ::content [drawer-top-s],
+:host([open]) ::content [drawer-top-m],
+:host([open]) ::content [drawer-top-l] {
   -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
 }
