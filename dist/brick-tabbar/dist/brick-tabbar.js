@@ -106,8 +106,10 @@
     var indicator = tabbar.selectedIndicator;
 
     if (tabbar.hasAttribute('vertical')) {
+      indicator.style.webkitTransform = 'translateY(' + 100 * index + '%)';
       indicator.style.transform = 'translateY(' + 100 * index + '%)';
     } else {
+      indicator.style.webkitTransform = 'translateX(' + 100 * index + '%)';
       indicator.style.transform = 'translateX(' + 100 * index + '%)';
     }
   }
