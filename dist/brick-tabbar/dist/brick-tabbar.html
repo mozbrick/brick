@@ -20,54 +20,108 @@
   margin: 0;
   padding: 0;
   display: -webkit-box;
+  display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
   position: relative;
 }
 @media (max-width: 768px) {
   :host([vertical-lt-s]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 @media (max-width: 992px) {
   :host([vertical-lt-m]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 @media (max-width: 1200px) {
   :host([vertical-lt-l]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 @media (min-width: 768px) {
   :host([vertical-gt-xs]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 @media (min-width: 992px) {
   :host([vertical-gt-s]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 @media (min-width: 1200px) {
   :host([vertical-gt-m]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 @media (max-width: 768px) and (min-width: 992px) {
   :host([vertical-s]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 @media (max-width: 992px) and (min-width: 1200px) {
   :host([vertical-m]) {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 :host([vertical]) {
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 ::content brick-tabbar-tab {
   min-width: auto;
@@ -78,7 +132,6 @@
   -ms-flex: 1;
   box-flex: 1;
   flex: 1;
-  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
@@ -108,8 +161,10 @@
   left: 0px;
   height: 3px;
   background: #000;
-  transition: all 0.2s ease;
-  transform: translateX(0);
+  -webkit-transition: all 0.2s ease;
+          transition: all 0.2s ease;
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
   z-index: 2;
 }
 @media (max-width: 768px) {
@@ -129,7 +184,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 @media (max-width: 992px) {
@@ -149,7 +205,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 @media (max-width: 1200px) {
@@ -169,7 +226,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 @media (min-width: 768px) {
@@ -189,7 +247,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 @media (min-width: 992px) {
@@ -209,7 +268,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 @media (min-width: 1200px) {
@@ -229,7 +289,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 @media (max-width: 768px) and (min-width: 992px) {
@@ -249,7 +310,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 @media (max-width: 992px) and (min-width: 1200px) {
@@ -269,7 +331,8 @@
     top: 0px;
     left: 0px;
     width: 3px;
-    transform: translateX(0);
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 :host([vertical]) {
@@ -288,7 +351,8 @@
   top: 0px;
   left: 0px;
   width: 3px;
-  transform: translateX(0);
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
 }
 ::content brick-tabbar-tab {
   height: 45px;
@@ -299,8 +363,12 @@
   color: #858585;
 }
 ::content brick-tabbar-tab:active {
-  transition: none;
+  -webkit-transition: none;
+          transition: none;
   opacity: 0.3;
+}
+::content brick-tabbar-tab[selected] {
+  color: #000;
 }
 ::content brick-tabbar-tab[selected]:active {
   background: transparent;

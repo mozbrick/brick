@@ -1,0 +1,2240 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="font-awesome/css/font-awesome.css">
+  
+  <div hidden><link rel="stylesheet" href="font-awesome/css/font-awesome.css">
+
+</div>
+  <div hidden>
+
+<template>
+  <style>:host {
+  padding: 0;
+  width: 100%;
+  display: block;
+}
+::content h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  margin: 0;
+}
+</style>
+  <style>:host {
+  background: #fff;
+  display: flex;
+  min-height: 50px;
+}
+::content h1,
+::content h2,
+::content h3,
+::content h4,
+::content h5,
+::content h6 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  -webkit-align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-right: 0px;
+  margin-left: 0px;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  padding: 0 16px;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 24px;
+  line-height: 26px;
+  color: #333;
+}
+::content button {
+  color: #333;
+  display: block;
+  border: none;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  min-width: 50px;
+  text-decoration: none;
+  text-align: center;
+  background: none;
+  border-radius: 0;
+}
+::content button:active {
+  color: #333;
+  background: rgba(0,0,0,0.1);
+}
+</style>
+  <content></content>
+</template>
+
+</div>
+  <div hidden>
+
+<template>
+  <style>:host {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  font-size: 1em;
+  text-align: center;
+  overflow: hidden;
+}
+:host(:not([controls])) ::content .controls {
+  display: none !important;
+}
+:host([controls]) ::content .controls {
+  display: block;
+}
+:host(:not([active])) ::content .day:hover,
+:host(:not([active])) ::content .prev:hover,
+:host(:not([active])) ::content .next:hover {
+  cursor: pointer;
+}
+:host ::content {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+:host ::content .calendar {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+:host ::content .month {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 224px;
+  max-width: 100%;
+}
+:host ::content .week,
+:host ::content .weekday-labels {
+  margin: 1px 0;
+  overflow: visible;
+  width: 100%;
+  white-space: nowrap;
+}
+:host ::content .day,
+:host ::content .prev,
+:host ::content .next,
+:host ::content .weekday-label {
+  display: inline-block;
+  width: 32px;
+}
+:host ::content .month-label,
+:host ::content .weekday-labels,
+:host ::content .week,
+:host ::content .prev,
+:host ::content .next {
+  height: 2em;
+  line-height: 2em;
+}
+:host ::content .weekday-label {
+  opacity: 0.8;
+  font-size: 0.8em;
+}
+:host ::content .weekday-label,
+:host ::content .day {
+  height: 100%;
+  line-height: inherit;
+  margin: 0 auto;
+}
+:host ::content .month-label {
+  width: 100%;
+}
+:host ::content .day {
+  position: relative;
+  white-space: nowrap;
+}
+:host ::content .badmonth {
+  opacity: 0.5;
+}
+:host ::content .prev,
+:host ::content .next {
+  position: absolute;
+  top: 0px;
+  max-width: 3em;
+}
+:host ::content .prev {
+  left: 0px;
+}
+:host ::content .next {
+  right: 0px;
+}
+</style>
+  <style>:host {
+  border: 1px solid #cecece;
+}
+:host:not([active]) ::content .prev:hover,
+:host:not([active]) ::content .next:hover {
+  background-color: #f9f9f9;
+  opacity: 0.7;
+}
+:host:not([active]) ::content .day:not(.chosen):hover {
+  background: #ccc;
+}
+:host ::content .month-label {
+  border-bottom: 1px solid #cecece;
+}
+:host ::content .day[active] {
+  border-color: #ffa500;
+}
+:host ::content .day.chosen {
+  background: #0095dd;
+  color: #fff;
+}
+:host ::content .day.today {
+  font-weight: bold;
+}
+</style>
+  <content></content>
+</template>
+
+
+
+</div>
+  <div hidden><template>
+  <style>/**
+ * Selectors like brick-card[transition-type^="slide"]
+ * which match the beginning of an attribute currently
+ * do not work with Platform.ShadowCSS.shimStyle().
+ * Therefore they are not used even though they would
+ * simplify the selectors.
+ */
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+:host ::content > brick-card {
+  display: none;
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  opacity: 1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transform: translate(0%, 0%) scale(1);
+  -moz-transform: translate(0%, 0%) scale(1);
+  -ms-transform: translate(0%, 0%) scale(1);
+  -o-transform: translate(0%, 0%) scale(1);
+  transform: translate(0%, 0%) scale(1);
+}
+:host ::content > brick-card[selected],
+:host ::content > brick-card[transition] {
+  display: block;
+}
+:host([transition-type="slide-up"]) ::content > brick-card,
+:host([transition-type="slide-down"]) ::content > brick-card,
+:host([transition-type="slide-right"]) ::content > brick-card,
+:host([transition-type="slide-left"]) ::content > brick-card,
+:host ::content > brick-card[transition-type="slide-up"],
+:host ::content > brick-card[transition-type="slide-down"],
+:host ::content > brick-card[transition-type="slide-right"],
+:host ::content > brick-card[transition-type="slide-left"] {
+  z-index: 1;
+  -webkit-transition: -webkit-transform 0.4s ease;
+  transition: transform 0.4s ease;
+}
+:host([transition-type="slide-up"]) ::content > brick-card[transition-direction="reverse"],
+:host([transition-type="slide-down"]) ::content > brick-card[transition-direction="reverse"],
+:host([transition-type="slide-right"]) ::content > brick-card[transition-direction="reverse"],
+:host([transition-type="slide-left"]) ::content > brick-card[transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-up"][transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-down"][transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-left"][transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-right"][transition-direction="reverse"] {
+  z-index: 2;
+}
+:host([transition-type="slide-right"]) ::content > brick-card[transition-direction="forward"],
+:host([transition-type="slide-right"]) ::content > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+:host([transition-type="slide-right"]) ::content > brick-card[transition-direction="reverse"],
+:host([transition-type="slide-right"]) ::content > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+:host([transition-type="slide-left"]) ::content > brick-card[transition-direction="forward"],
+:host([transition-type="slide-left"]) ::content > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+:host([transition-type="slide-left"]) ::content > brick-card[transition-direction="reverse"],
+:host([transition-type="slide-left"]) ::content > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+:host([transition-type="slide-up"]) ::content > brick-card[transition-direction="forward"],
+:host([transition-type="slide-up"]) ::content > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+:host([transition-type="slide-up"]) ::content > brick-card[transition-direction="reverse"],
+:host([transition-type="slide-up"]) ::content > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+:host([transition-type="slide-down"]) ::content > brick-card[transition-direction="forward"],
+:host([transition-type="slide-down"]) ::content > brick-card[transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+:host([transition-type="slide-down"]) ::content > brick-card[transition-direction="reverse"],
+:host([transition-type="slide-down"]) ::content > brick-card[transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+:host([transition-type="slide-right"]) ::content > brick-card[transition],
+:host([transition-type="slide-left"]) ::content > brick-card[transition],
+:host([transition-type="slide-up"]) ::content > brick-card[transition],
+:host([transition-type="slide-down"]) ::content > brick-card[transition] {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+:host ::content > brick-card[transition-type="slide-right"][transition-direction="forward"],
+:host ::content > brick-card[transition-type="slide-right"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+:host ::content > brick-card[transition-type="slide-right"][transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-right"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+:host ::content > brick-card[transition-type="slide-left"][transition-direction="forward"],
+:host ::content > brick-card[transition-type="slide-left"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(100%, 0);
+  -moz-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  -o-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+:host ::content > brick-card[transition-type="slide-left"][transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-left"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+:host ::content > brick-card[transition-type="slide-up"][transition-direction="forward"],
+:host ::content > brick-card[transition-type="slide-up"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+:host ::content > brick-card[transition-type="slide-up"][transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-up"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+:host ::content > brick-card[transition-type="slide-down"][transition-direction="forward"],
+:host ::content > brick-card[transition-type="slide-down"][transition-direction="reverse"][hide] {
+  -webkit-transform: translate(0, -100%);
+  -moz-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  -o-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+:host ::content > brick-card[transition-type="slide-down"][transition-direction="reverse"],
+:host ::content > brick-card[transition-type="slide-down"][transition-direction="forward"][hide] {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+:host ::content > brick-card[transition-type="slide-up"][transition],
+:host ::content > brick-card[transition-type="slide-down"][transition],
+:host ::content > brick-card[transition-type="slide-left"][transition],
+:host ::content > brick-card[transition-type="slide-right"][transition] {
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+</style>
+  <content></content>
+</template>
+
+
+
+</div>
+  <div hidden>
+
+<template id="template">
+  <style>:host {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+:host ::content > * {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  -ms-transition-property: -ms-transform;
+  -o-transition-property: -o-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.25s;
+  -moz-transition-duration: 0.25s;
+  -ms-transition-duration: 0.25s;
+  -o-transition-duration: 0.25s;
+  transition-duration: 0.25s;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-timing-function: linear;
+  -ms-transition-timing-function: linear;
+  -o-transition-timing-function: linear;
+  transition-timing-function: linear;
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -ms-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  transition-delay: 0s;
+/* DO NOT ERASE THESE TRANSFORM-STYLES; they fix a flickering issue in FFOS*/
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+:host::content > *:first-child {
+  -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
+  -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
+  -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
+  -o-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
+  transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
+  z-index: 2;
+}
+:host::content > *:last-child {
+  -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
+  -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
+  -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
+  -o-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
+  transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
+  z-index: 1;
+}
+:host([_anim-direction="up"])::content > *:first-child,
+:host([_anim-direction="down"])::content > *:first-child {
+  -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
+  -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
+  -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
+  -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
+  transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
+}
+:host([_anim-direction="up"])::content > *:last-child {
+  -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
+  -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
+  -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
+  -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
+  transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
+}
+:host([_anim-direction="down"])::content > *:last-child {
+  -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
+  -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
+  -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
+  -o-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
+  transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
+}
+:host([flipped]):after {
+/* DO NOT ERASE THIS :after SELECTOR */
+  content: "";
+  display: none;
+}
+:host([flipped])::content > *:first-child {
+  -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
+  -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
+  -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
+  -o-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
+  transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
+  z-index: 1;
+}
+:host([flipped])::content > *:last-child {
+  -webkit-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
+  -moz-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
+  -ms-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
+  -o-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
+  transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
+  z-index: 2;
+}
+:host([_anim-direction="left"][flipped])::content > *:first-child {
+  -webkit-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
+  -moz-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
+  -ms-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
+  -o-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
+  transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
+}
+:host([_anim-direction="left"][flipped])::content > *:last-child {
+  -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
+  -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
+  -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
+  -o-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
+  transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
+}
+:host([_anim-direction="up"][flipped])::content > *:first-child {
+  -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
+  -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
+  -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
+  -o-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
+  transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
+}
+:host([_anim-direction="up"][flipped])::content > *:last-child {
+  -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+}
+:host([_anim-direction="down"][flipped])::content > *:first-child {
+  -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
+  -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
+  -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
+  -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
+  transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
+}
+:host([_anim-direction="down"][flipped])::content > *:last-child {
+  -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+  transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+}
+</style>
+  <style></style>
+  <content></content>
+</template>
+
+
+</div>
+  <div hidden>
+
+
+</div>
+  <div hidden>
+
+<template>
+  <style></style>
+  <style>:host .field {
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #d6d6d6;
+  position: relative;
+  overflow: hidden;
+}
+:host .field ::content input {
+  min-height: 2.353em;
+  width: 100%;
+  border: medium none;
+  padding: 0 0.825em;
+  margin: 0;
+  color: #333;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+:host .field ::content input:focus {
+  outline-width: 0;
+}
+:host .field ::content input::-moz-placeholder {
+  font-style: italic;
+  font-weight: lighter;
+  color: #909ca7;
+}
+:host .field ::content input::-webkit-input-placeholder {
+  font-style: italic;
+  font-weight: lighter;
+  color: #909ca7;
+}
+:host .field ::content textarea {
+  width: 100%;
+  border: medium none;
+  padding: 0.825em;
+  color: #333;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  font-family: inherit;
+  font-size: inherit;
+  resize: vertical;
+}
+:host .field ::content textarea:focus {
+  outline-width: 0;
+}
+:host .label {
+  color: #858585;
+  margin: 0.825em 0 0.25em 0.825em;
+  margin-left: 0.825em;
+}
+:host .error {
+  color: #c00;
+  display: none;
+  margin: 0.235em 0 0 0.825em;
+}
+:host .indicator {
+  content: " ";
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0.176em;
+  background: #333;
+  -webkit-transition: transform 0.2s;
+  transition: transform 0.2s;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  opacity: 0;
+  z-index: 1;
+}
+:host .clear {
+  cursor: pointer;
+  line-height: 1em;
+  position: absolute;
+  top: 0.706em;
+  right: 0.588em;
+  width: 1em;
+  height: 1em;
+  color: #909ca7;
+  display: none;
+  font-family: "FontAwesome";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -moz-osx-font-smoothing: grayscale;
+}
+:host([type=search]) .field {
+  border-radius: 1.8em;
+}
+:host([focus]) .indicator {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+  opacity: 1;
+}
+:host([focus]) .clear {
+  display: block;
+}
+:host([focus]) .clear:active,
+:host([focus]) .clear:hover {
+  opacity: 0.3;
+}
+:host([multiline]) .clear {
+  display: none;
+}
+:host([error][invalid]) .error {
+  display: block;
+  font-size: 0.85em;
+}
+</style>
+  <div class="label"></div>
+  <div class="field">
+    <div class="clear" role="button">&#xF057;</div>
+    <div class="indicator"></div>
+    <content></content>
+  </div>
+  <div class="error"></div>
+</template>
+
+
+</div>
+  <div hidden>
+
+<template>
+  <style>/**
+ * example:
+ *  & > [horizontal-lt-s/m/l] { mixin() }
+ *  & > [horizontal-gt-xs/s/m] { mixin() }
+ *  & > [horizontal-xs/s/m/l] { mixin() }
+ *  & > [horizontal] { mixin() }
+ * would be created by:
+ * responsify("& > ", horizontal, mixin)
+ */
+/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  box-orient: vertical;
+  position: relative;
+  height: 100%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+/**
+   * Horizontal Layout
+   *--------------------------------------------------*/
+/**
+   *  Flex-children
+   *--------------------------------------------------*/
+/**
+   *  hide
+   *--------------------------------------------------*/
+/**
+   *  Drawer
+   *--------------------------------------------------*/
+}
+@media (max-width: 768px) {
+  :host([horizontal-lt-s]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 992px) {
+  :host([horizontal-lt-m]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 1200px) {
+  :host([horizontal-lt-l]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (min-width: 768px) {
+  :host([horizontal-gt-xs]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (min-width: 992px) {
+  :host([horizontal-gt-s]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (min-width: 1200px) {
+  :host([horizontal-gt-m]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([horizontal-s]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([horizontal-m]) {
+    box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+:host([horizontal]) {
+  box-orient: horizontal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
+@media (max-width: 768px) {
+  :host ::content > [flex-lt-s] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content > [flex-lt-m] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content > [flex-lt-l] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content > [flex-gt-xs] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content > [flex-gt-s] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content > [flex-gt-m] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content > [flex-s] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content > [flex-m] {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-flex: 1;
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+  }
+}
+:host ::content > [flex] {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  -webkit-flex: 1;
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+}
+@media (max-width: 768px) {
+  :host ::content [hide-lt-s] {
+    display: none;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content [hide-lt-m] {
+    display: none;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content [hide-lt-l] {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content [hide-gt-xs] {
+    display: none;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content [hide-gt-s] {
+    display: none;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content [hide-gt-m] {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content [hide-s] {
+    display: none;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content [hide-m] {
+    display: none;
+  }
+}
+:host ::content [hide] {
+  display: none;
+}
+@media (max-width: 768px) {
+  :host ::content > [drawer-lt-s] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content > [drawer-lt-m] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content > [drawer-lt-l] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content > [drawer-gt-xs] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content > [drawer-gt-s] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content > [drawer-gt-m] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content > [drawer-s] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content > [drawer-m] {
+    height: 100%;
+    position: absolute;
+    -webkit-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+:host ::content > [drawer] {
+  height: 100%;
+  position: absolute;
+  -webkit-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
+}
+:host([open]) > [drawer],
+:host([open]) > [drawer-lt-s],
+:host([open]) > [drawer-lt-m],
+:host([open]) > [drawer-lt-l],
+:host([open]) > [drawer-gt-xs],
+:host([open]) > [drawer-gt-s],
+:host([open]) > [drawer-gt-m],
+:host([open]) > [drawer-xs],
+:host([open]) > [drawer-s],
+:host([open]) > [drawer-m],
+:host([open]) > [drawer-l] {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+@media (max-width: 768px) {
+  :host ::content > [drawer-top-lt-s] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) {
+  :host ::content > [drawer-top-lt-m] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 1200px) {
+  :host ::content > [drawer-top-lt-l] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 768px) {
+  :host ::content > [drawer-top-gt-xs] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 992px) {
+  :host ::content > [drawer-top-gt-s] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (min-width: 1200px) {
+  :host ::content > [drawer-top-gt-m] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host ::content > [drawer-top-s] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host ::content > [drawer-top-m] {
+    position: absolute;
+    width: 100%;
+    -webkit-transform: translate(0, -100%);
+    transform: translate(0, -100%);
+    -webkit-transition: -webkit-transform 0.2s ease;
+    transition: transform 0.2s ease;
+  }
+}
+:host ::content > [drawer-top] {
+  position: absolute;
+  width: 100%;
+  -webkit-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
+}
+:host([open]) > [drawer-top],
+:host([open]) > [drawer-top-lt-s],
+:host([open]) > [drawer-top-lt-m],
+:host([open]) > [drawer-top-lt-l],
+:host([open]) > [drawer-top-gt-xs],
+:host([open]) > [drawer-top-gt-s],
+:host([open]) > [drawer-top-gt-m],
+:host([open]) > [drawer-top-xs],
+:host([open]) > [drawer-top-s],
+:host([open]) > [drawer-top-m],
+:host([open]) > [drawer-top-l] {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+</style>
+  <style></style>
+  <content></content>
+</template>
+
+
+</div>
+  <div hidden><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>brick-listview</title>
+  <style>brick-listview,
+brick-listview * {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+brick-listview {
+  overflow: auto;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  display: block;
+}
+brick-listview .item.sentinel {
+  visibility: hidden;
+}
+brick-listview .list {
+  position: relative;
+  transform: translateZ(0);
+}
+brick-listview .item {
+  height: 4rem;
+  line-height: 2rem;
+  font-size: 1rem;
+  font-family: 'Fira Sans';
+  padding: 0.5rem 0 0.5rem 1rem;
+  position: absolute;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+brick-listview .item:hover {
+  background: #eee;
+}
+brick-listview.scrolling .item {
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+  
+<script src="brick.min.js"></script></body>
+</html>
+</div>
+  <div hidden>
+
+<template>
+  <style>/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+}
+@media (max-width: 768px) {
+  :host([horizontal-lt-s]) {
+    flex-direction: row;
+  }
+  :host([horizontal-lt-s]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 992px) {
+  :host([horizontal-lt-m]) {
+    flex-direction: row;
+  }
+  :host([horizontal-lt-m]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 1200px) {
+  :host([horizontal-lt-l]) {
+    flex-direction: row;
+  }
+  :host([horizontal-lt-l]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (min-width: 768px) {
+  :host([horizontal-gt-xs]) {
+    flex-direction: row;
+  }
+  :host([horizontal-gt-xs]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (min-width: 992px) {
+  :host([horizontal-gt-s]) {
+    flex-direction: row;
+  }
+  :host([horizontal-gt-s]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (min-width: 1200px) {
+  :host([horizontal-gt-m]) {
+    flex-direction: row;
+  }
+  :host([horizontal-gt-m]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([horizontal-s]) {
+    flex-direction: row;
+  }
+  :host([horizontal-s]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([horizontal-m]) {
+    flex-direction: row;
+  }
+  :host([horizontal-m]) ::content > * {
+    min-width: auto;
+    min-height: auto;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    flex: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: auto;
+    min-height: auto;
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+:host([horizontal]) {
+  flex-direction: row;
+}
+:host([horizontal]) ::content > * {
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: auto;
+  min-height: auto;
+  vertical-align: middle;
+  text-align: center;
+}
+:host ::content > * {
+  position: relative;
+}
+:host([arrow]:not([horizontal])) ::content > *:after {
+  content: "\f105";
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  position: absolute;
+  right: 0;
+}
+:host(:not([horizontal])) ::content > *[arrow]:after {
+  content: "\f105";
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  position: absolute;
+  right: 0;
+}
+</style>
+  <style>:host {
+  padding: 0 14px;
+  box-sizing: border-box;
+}
+:host ::content > * {
+  color: #4d4d4d;
+  padding: 14px 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+:host ::content > *:last-child {
+  border-bottom: none;
+}
+:host([horizontal]) {
+  padding: 14px 0;
+}
+:host([horizontal]) ::content > * {
+  padding: 0 14px;
+  border-bottom: none;
+  border-right: 1px solid #e7e7e7;
+}
+:host([horizontal]) ::content > *:last-child {
+  border-right: none;
+}
+</style>
+  <content></content>
+</template>
+
+
+</div>
+  <div hidden>
+
+</div>
+  <div hidden>
+
+<template id="brick-tabbar-template">
+  <style>/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+}
+@media (max-width: 768px) {
+  :host([vertical-lt-s]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (max-width: 992px) {
+  :host([vertical-lt-m]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (max-width: 1200px) {
+  :host([vertical-lt-l]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  :host([vertical-gt-xs]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (min-width: 992px) {
+  :host([vertical-gt-s]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (min-width: 1200px) {
+  :host([vertical-gt-m]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([vertical-s]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([vertical-m]) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+       -moz-box-orient: vertical;
+       -moz-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+:host([vertical]) {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+::content brick-tabbar-tab {
+  min-width: auto;
+  min-height: auto;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  box-flex: 1;
+  flex: 1;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+}
+</style>
+  <style>/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  border-top: 1px solid #f4f4f4;
+  background: #fff;
+}
+:host .selected-indicator {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  height: 3px;
+  background: #000;
+  -webkit-transition: all 0.2s ease;
+          transition: all 0.2s ease;
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  z-index: 2;
+}
+@media (max-width: 768px) {
+  :host([vertical-lt-s]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-lt-s]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-lt-s]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-lt-s]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+@media (max-width: 992px) {
+  :host([vertical-lt-m]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-lt-m]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-lt-m]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-lt-m]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+@media (max-width: 1200px) {
+  :host([vertical-lt-l]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-lt-l]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-lt-l]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-lt-l]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+@media (min-width: 768px) {
+  :host([vertical-gt-xs]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-gt-xs]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-gt-xs]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-gt-xs]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+@media (min-width: 992px) {
+  :host([vertical-gt-s]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-gt-s]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-gt-s]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-gt-s]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+@media (min-width: 1200px) {
+  :host([vertical-gt-m]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-gt-m]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-gt-m]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-gt-m]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+@media (max-width: 768px) and (min-width: 992px) {
+  :host([vertical-s]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-s]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-s]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-s]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+@media (max-width: 992px) and (min-width: 1200px) {
+  :host([vertical-m]) {
+    border-top: none;
+    border-right: 1px solid #f4f4f4;
+    padding-left: 14px;
+  }
+  :host([vertical-m]) ::content brick-tabbar-tab {
+    border-bottom: 1px solid #f4f4f4;
+    text-align: left;
+  }
+  :host([vertical-m]) ::content brick-tabbar-tab:last-of-type {
+    border: none;
+  }
+  :host([vertical-m]) .selected-indicator {
+    top: 0px;
+    left: 0px;
+    width: 3px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+:host([vertical]) {
+  border-top: none;
+  border-right: 1px solid #f4f4f4;
+  padding-left: 14px;
+}
+:host([vertical]) ::content brick-tabbar-tab {
+  border-bottom: 1px solid #f4f4f4;
+  text-align: left;
+}
+:host([vertical]) ::content brick-tabbar-tab:last-of-type {
+  border: none;
+}
+:host([vertical]) .selected-indicator {
+  top: 0px;
+  left: 0px;
+  width: 3px;
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+}
+::content brick-tabbar-tab {
+  height: 45px;
+  line-height: 45px;
+  cursor: pointer;
+  position: relative;
+  font-style: italic;
+  color: #858585;
+}
+::content brick-tabbar-tab:active {
+  -webkit-transition: none;
+          transition: none;
+  opacity: 0.3;
+}
+::content brick-tabbar-tab[selected] {
+  color: #000;
+}
+::content brick-tabbar-tab[selected]:active {
+  background: transparent;
+}
+</style>
+  <div class="selected-indicator"></div>
+  <content></content>
+</template>
+
+
+
+</div>
+  <div hidden>
+
+<template>
+  <style>/**
+ * notice the () around teh attribute. that is because of
+ * :host([attr]) syntax to style the host node.
+ *
+ * example:
+ *  &([horizontal-lt-s/m/l]) { mixin() }
+ *  &([horizontal-gt-xs/s/m]) { mixin() }
+ *  &([horizontal-xs/s/m/l]) { mixin() }
+ *  &([horizontal]) { mixin() }
+ * would be created by:
+ * responsifyHost("& > ", horizontal, mixin)
+ */
+:host {
+  display: none;
+  background: none repeat scroll 0% 0% rgba(199,199,199,0.85);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  z-index: 200;
+}
+:host([show]) {
+  display: flex;
+}
+:host > .dialog {
+  max-height: 75%;
+  max-width: 350px;
+  width: 90%;
+  margin: auto;
+}
+:host ::content footer {
+  display: flex;
+}
+:host ::content footer > * {
+  flex-grow: 1;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+  position: relative;
+}
+:host ::content footer[vertical] {
+  flex-direction: column;
+}
+:host ::content footer[vertical] > * {
+  position: relative;
+}
+</style>
+  <style>:host {
+  opacity: 0;
+}
+:host([show="in"]) {
+  opacity: 1;
+  -moz-animation: fadeIn 0.3s;
+  -webkit-animation: fadeIn 0.3s;
+  animation: fadeIn 0.3s;
+}
+:host([show="in"]) > .dialog {
+  opacity: 1;
+  -moz-animation: translateIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -webkit-animation: translateIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: translateIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+:host([show="out"]) {
+  opacity: 1;
+  -moz-animation: fadeOut 0.3s;
+  -webkit-animation: fadeOut 0.3s;
+  animation: fadeOut 0.3s;
+}
+:host > .dialog {
+  background: #f4f4f4;
+}
+:host ::content header {
+  text-align: center;
+  padding: 14px;
+}
+:host ::content header h1,
+:host ::content header h2,
+:host ::content header h3,
+:host ::content header h4,
+:host ::content header h5,
+:host ::content header h6 {
+  font-weight: lighter;
+  font-style: italic;
+  color: #4d4d4d;
+}
+:host ::content header h1 {
+  font-size: 1.5em;
+  line-height: 26px;
+  margin: 6px 0px 24px;
+}
+:host ::content section {
+  padding: 14px;
+}
+:host ::content section[center] {
+  text-align: center;
+}
+:host ::content footer button {
+  cursor: pointer;
+  background: #fff;
+  text-align: center;
+  font-style: italic;
+  font-weight: lighter;
+  height: 50px;
+  margin: 0px;
+  border: 0px none;
+  padding: 0rem 25px;
+  color: #00caf2;
+  font-size: inherit;
+  width: 100%;
+  outline: none;
+}
+:host ::content footer button:active {
+  background-color: #00caf2;
+  color: #fff;
+  transition: none;
+}
+:host ::content footer > *:after {
+  content: " ";
+  position: absolute;
+  height: 60%;
+  width: 1px;
+  top: 20%;
+  right: 0px;
+  background: none repeat scroll 0% 0% #e7e7e7;
+  z-index: 1;
+}
+:host ::content footer > *:active:after {
+  z-index: -1;
+}
+:host ::content footer > *:last-child:after {
+  display: none;
+}
+:host ::content footer[vertical] > *:after {
+  position: absolute;
+  width: 95%;
+  height: 1px;
+  bottom: 0px;
+  left: 2.5%;
+  top: 49px;
+  background: #e7e7e7;
+}
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-o-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@-moz-keyframes translateIn {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+@-webkit-keyframes translateIn {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+@-o-keyframes translateIn {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+@keyframes translateIn {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+</style>
+  
+  	<div class="dialog">
+  		<content></content>
+  	</div>
+</template>
+
+
+</div>
+  <div hidden>
+
+
+</div>
+</head></html>
