@@ -53,7 +53,7 @@
   -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
-:host::content > *:first-child {
+:host ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
@@ -61,7 +61,7 @@
   transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
   z-index: 2;
 }
-:host::content > *:last-child {
+:host ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
@@ -69,22 +69,22 @@
   transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
   z-index: 1;
 }
-:host([_anim-direction="up"])::content > *:first-child,
-:host([_anim-direction="down"])::content > *:first-child {
+:host([_anim-direction="up"]) ::content > *:first-child,
+:host([_anim-direction="down"]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="up"])::content > *:last-child {
+:host([_anim-direction="up"]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
   transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
 }
-:host([_anim-direction="down"])::content > *:last-child {
+:host([_anim-direction="down"]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
@@ -96,7 +96,7 @@
   content: "";
   display: none;
 }
-:host([flipped])::content > *:first-child {
+:host([flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
@@ -104,7 +104,7 @@
   transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
   z-index: 1;
 }
-:host([flipped])::content > *:last-child {
+:host([flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
@@ -112,42 +112,42 @@
   transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
   z-index: 2;
 }
-:host([_anim-direction="left"][flipped])::content > *:first-child {
+:host([_anim-direction="left"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="left"][flipped])::content > *:last-child {
+:host([_anim-direction="left"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   -o-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
   transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
 }
-:host([_anim-direction="up"][flipped])::content > *:first-child {
+:host([_anim-direction="up"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="up"][flipped])::content > *:last-child {
+:host([_anim-direction="up"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
 }
-:host([_anim-direction="down"][flipped])::content > *:first-child {
+:host([_anim-direction="down"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
   transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
 }
-:host([_anim-direction="down"][flipped])::content > *:last-child {
+:host([_anim-direction="down"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
   -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);

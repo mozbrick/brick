@@ -1,16 +1,13 @@
 mocha.setup('bdd');
 
 var ready;
+var expect = chai.expect;
 
 before(function (done) {
   ready = done;
 });
 
-var expect = chai.expect;
-
 window.addEventListener('WebComponentsReady', function() {
-
-  // document.head.innerHTML += '<link rel="import" id="el" href="/base/src/brick-storage-indexeddb.html">';
 
   ready();
 

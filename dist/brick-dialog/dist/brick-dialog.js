@@ -17,7 +17,7 @@
   BrickDialogElementPrototype.attachedCallback = function() {
 
     var importDoc = currentScript.ownerDocument;
-    var template = importDoc.querySelector('template');
+    var template = importDoc.querySelector('#brick-dialog-template');
 
     // fix styling for polyfill
     if (Platform.ShadowCSS) {
