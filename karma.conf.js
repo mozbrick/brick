@@ -4,8 +4,8 @@ module.exports = function(config){
 
     files : [
       'bower_components/platform/platform.js',
-      'test/browser.js',
-      'dist/brick.html',
+      'test/smoke.js',
+      'dist/brick.min.html',
       {pattern: 'dist/**/*', watched: true, included: false, served: true}
     ],
 
