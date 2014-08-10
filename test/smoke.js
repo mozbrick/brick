@@ -24,6 +24,7 @@ describe("The distribution", function (){
   });
 
   it("should initialize components", function () {
+    expect(window.BrickActionElement).to.exist;
     expect(window.BrickAppbarElement).to.exist;
     expect(window.BrickCalendar).to.exist;
     expect(window.BrickCardElement).to.exist;
@@ -31,12 +32,13 @@ describe("The distribution", function (){
     expect(window.BrickDialogElement).to.exist;
     expect(window.BrickFlipboxElement).to.exist;
     expect(window.BrickFormElement).to.exist;
+    expect(window.BrickInputElement).to.exist;
     expect(window.BrickLayoutElement).to.exist;
+    expect(window.BrickListViewElement).to.exist;
     expect(window.BrickMenuElement).to.exist;
     expect(window.BrickStorageIndexeddbElement).to.exist;
     expect(window.BrickTabbarTabElement).to.exist;
     expect(window.BrickTabbarElement).to.exist;
-    expect(window.BrickActionElement).to.exist;
   });
 
 });

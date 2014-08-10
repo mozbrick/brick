@@ -24,6 +24,7 @@
     "brick-appbar": "mozbrick/brick-appbar",
     "brick-calendar": "mozbrick/brick-calendar",
     "brick-deck": "mozbrick/brick-deck",
+    "brick-dialog": "mozbrick/brick-dialog",
     "brick-flipbox": "mozbrick/brick-flipbox",
     "brick-form": "mozbrick/brick-form",
     "brick-input": "mozbrick/brick-input",
@@ -32,8 +33,7 @@
     "brick-menu": "mozbrick/brick-menu",
     "brick-storage-indexeddb": "mozbrick/brick-storage-indexeddb",
     "brick-tabbar": "mozbrick/brick-tabbar",
-    "es6-promise": "components/es6-promise#~1.0.0",
-    "brick-dialog": "mozbrick/brick-dialog"
+    "es6-promise": "components/es6-promise#~1.0.0"
   },
   "devDependencies": {
     "platform": "Polymer/platform#~0.3.4"

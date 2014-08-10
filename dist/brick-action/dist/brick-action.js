@@ -4,7 +4,7 @@
 
   function cleanupHandler(el) {
     var pair = el._ns.listener;
-    if (pair[0]) {
+    if (pair && pair[0]) {
       pair[0].removeEventListener(pair[1], pair[2]);
     }
   }
@@ -60,8 +60,10 @@
     setupHandler(this);
   };
 
-  window.BrickActionElement = document.registerElement('brick-action', {
-    prototype: BrickActionElementPrototype
-  });
+  if (!window.BrickActionElement) {
+    window.BrickActionElement = document.registerElement('brick-action', {
+      prototype: BrickActionElementPrototype
+    });
+  }
 
 })();
