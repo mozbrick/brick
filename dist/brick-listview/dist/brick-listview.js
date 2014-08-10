@@ -288,7 +288,7 @@
     init(this).then(render);
   };
 
-  window.ListView = document.registerElement('brick-listview', {
+  window.BrickListViewElement = document.registerElement('brick-listview', {
     prototype: ListViewPrototype
   });
 
