@@ -138,7 +138,16 @@
   //ensure the children is a brick-card (or wraps it with one)
   function ensureIsCard(child){
     if(child.tagName !== 'BRICK-CARD'){
-      var wrap = card.cloneNode();
+      var wrap = card.cloneNode(),
+          attributes = ['selected', 'transition-type'],
+          attribute;
+
+      for(var i=0, max=attributes.length; i<max; i++){
+        attribute = attributes[i];
+        if(child.hasAttribute(attribute)){
+          wrap.setAttribute(attribute, child.getAttribute(attribute));
+        }
+      }
       child.parentNode.replaceChild(wrap, child);
       wrap.appendChild(child);
     }

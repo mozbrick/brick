@@ -10,7 +10,7 @@
   BrickAppbarElementPrototype.attachedCallback = function () {
 
     var importDoc = currentScript.ownerDocument;
-    var template = importDoc.querySelector('template');
+    var template = importDoc.querySelector('#brick-appbar-template');
 
     // fix styling for polyfill
     if (Platform.ShadowCSS) {
