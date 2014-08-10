@@ -63,6 +63,7 @@ repos=(
   brick-dialog
   brick-flipbox
   brick-form
+  brick-input
   brick-layout
   brick-listview
   brick-menu
@@ -86,10 +87,11 @@ Here is a list of the components currently in the primary distribution of Brick:
 * [brick-dialog](https://github.com/mozbrick/brick-dialog)
 * [brick-flipbox](https://github.com/mozbrick/brick-flipbox)
 * [brick-form](https://github.com/mozbrick/brick-form)
+* [brick-input](https://github.com/mozbrick/brick-input)
 * [brick-layout](https://github.com/mozbrick/brick-layout)
+* [brick-listview](https://github.com/mozbrick/brick-listview)
 * [brick-menu](https://github.com/mozbrick/brick-menu)
 * [brick-storage-indexeddb](https://github.com/mozbrick/brick-storage-indexeddb)
 * [brick-tabbar](https://github.com/mozbrick/brick-tabbar)
 
 If you encounter issues with a component, please file issues against the individual component repositories.
-
