@@ -116,8 +116,10 @@
   });
 
   // Register the element
-  window.BrickFormElement = document.registerElement('brick-form', {
-    prototype: BrickFormElementPrototype
-  });
+  if (!window.BrickFormElement) {
+    window.BrickFormElement = document.registerElement('brick-form', {
+      prototype: BrickFormElementPrototype
+    });
+  }
 
 })();

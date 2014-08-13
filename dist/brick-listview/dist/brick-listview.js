@@ -1,6 +1,10 @@
+/* global Platform, Promise*/
+
 (function () {
 
   var SCROLL_TIMEOUT = 100;
+
+  var currentScript = document._currentScript || document.currentScript;
 
   var requestAnimationFrame = window.requestAnimationFrame ||
                               window.mozRequestAnimationFrame ||
@@ -18,6 +22,35 @@
     window.addEventListener('WebComponentsReady', resolve);
   });
 
+  function ArrayAdapter(array) {
+
+    this.array = array;
+
+    this.size = function () {
+      return Promise.resolve(array.length);
+    };
+
+    this.getMany = function (options) {
+      options = options || {};
+      var start = options.offset || 0;
+      var end = options.count ? options.count + start + 1: undefined;
+      return Promise.resolve(array.slice(start, end));
+    };
+
+  }
+
+  function shimShadowStyles(styles, tag) {
+    if (!Platform.ShadowCSS) {
+      return;
+    }
+    for (var i = 0; i < styles.length; i++) {
+      var style = styles[i];
+      var cssText = Platform.ShadowCSS.shimStyle(style, tag);
+      Platform.ShadowCSS.addCssToDocument(cssText);
+      style.remove();
+    }
+  }
+
   function computeMetrics(listview) {
     listview.ns.numItemsVisible = (listview.offsetHeight / listview.ns.height|0) + 1;
   }
@@ -26,15 +59,17 @@
     var ns = listview.ns;
     var data = ns.data;
     if (!data) {
-      return;
+      return Promise.resolve(listview);
     }
     // create a hidden item to measure its height
-    ns.list.innerHTML = '<div class="item sentinel"></div>';
+    ns.list.innerHTML = '<div class="item sentinel">test</div>';
     return data.size().then(function (numItems) {
       // A list of created, not-in-use DOM nodes
       ns.deadPool = [];
       // Object key to use for display label;
       ns.labelKey = listview.getAttribute('label');
+      ns.imageKey = listview.getAttribute('image');
+      ns.detailKey = listview.getAttribute('detail');
       // The indexes of the items currently rendered
       ns.visibleItems = [];
       // A lookup cache by index of items from ns.data
@@ -49,8 +84,36 @@
     });
   }
 
-  function defaultRenderer(el, item, label) {
-    el.textContent = label;
+  function defaultRenderer(el, row, listview) {
+    el.innerHTML = "";
+    var labelKey = listview.ns.labelKey;
+    var imageKey = listview.ns.imageKey;
+    var detailKey = listview.ns.detailKey;
+
+    // the image
+    if (imageKey) {
+      var img = document.createElement('img');
+      img.src = row[listview.getAttribute(imageKey)];
+      el.appendChild(img);
+    }
+
+    // the content
+    var content = document.createElement('div');
+    content.classList.add('content');
+
+    if (labelKey) {
+      var label = document.createElement('div');
+      label.textContent = row[labelKey];
+      content.appendChild(label);
+    }
+    if (detailKey) {
+      var detail = document.createElement('div');
+      detail.textContent = row[detailKey];
+      content.appendChild(detail);
+    }
+    if (content.hasChildNodes()) {
+      el.appendChild(content);
+    }
   }
 
   function placeItem(listview, i) {
@@ -86,7 +149,7 @@
   }
 
   function renderItem(el, row, listview) {
-    defaultRenderer(el, row, row[listview.ns.labelKey]);
+    defaultRenderer(el, row, listview);
   }
 
   function removeReq(requests, min, max) {
@@ -115,7 +178,6 @@
         }
       }
     });
-
     var req = data.getMany({offset: realMin, count: realMax-realMin+1});
 
     rangeRequests.push({
@@ -145,7 +207,7 @@
     }
     var list = ns.list;
     var items = ns.items;
-    var visibleItems = ns.visibleItems;
+    var visibleItems = ns.visibleItems || [];
     var deadPool = ns.deadPool;
     var height = ns.height;
     var min = Math.max((listview.scrollTop / height|0) - itemWindow * 2, 0);
@@ -177,7 +239,6 @@
 
     // do we need to fetch data?
     if (numToFetch > 0) {
-      // console.log('requesting ' + (realMax - realMin + 1) + ' rows');
       fetchRange(listview, realMin, realMax);
     }
 
@@ -238,7 +299,6 @@
     this.ns = {};
     var list = document.createElement('div');
     list.classList.add('list');
-    this.ns.foo = 'bar';
     this.ns.list = list;
     this.appendChild(list);
   };
@@ -247,6 +307,8 @@
     var listview = this;
 
     webComponentsReady.then(function() {
+
+      // get the storage
       var storage = listview.getAttribute('storage');
       if (storage) {
         storage = document.getElementById(storage);
@@ -255,11 +317,25 @@
         }
       }
 
+      // import template
+      var importDoc = currentScript.ownerDocument;
+      var templateContent = importDoc.querySelector('#brick-listview-template').content;
+
+      // fix styling for polyfill
+      shimShadowStyles(templateContent.querySelectorAll('style'), 'brick-listview');
+
+      // create shadowRoot and append template
+      var shadowRoot = listview.createShadowRoot();
+      shadowRoot.appendChild(templateContent.cloneNode(true));
+
+      // setup event handlers
       listview.ns.scrollHandler = listview.addEventListener('scroll', function() {
         scroll(listview);
       });
       listview.ns.clickHandler = listview.addEventListener('click', clickHandler.bind(listview));
-      init(listview).then(render);
+
+      // render the list
+      listview.render();
 
     });
   };
@@ -272,9 +348,17 @@
 
   var attrs = {
     'storage': function (oldVal, newVal) {
-      var list = this;
-      list.ns.storage = document.getElementById(newVal);
-      init(list).then(render);
+      this.ns.storage = document.getElementById(newVal);
+      this.render();
+    },
+    'label': function () {
+      this.render();
+    },
+    'detail': function () {
+      this.render();
+    },
+    'image': function () {
+      this.render();
     }
   };
 
@@ -287,6 +371,23 @@
   ListViewPrototype.render = function () {
     init(this).then(render);
   };
+
+  Object.defineProperties (ListViewPrototype, {
+    'data': {
+      get: function () {
+        // return either the array or the store
+        return this.ns.data.array || this.ns.data;
+      },
+      set: function (newVal) {
+        if (Array.isArray(newVal)) {
+          this.ns.data = new ArrayAdapter(newVal);
+        } else {
+          this.ns.data = newVal;
+        }
+        this.render();
+      }
+    }
+  });
 
   window.BrickListViewElement = document.registerElement('brick-listview', {
     prototype: ListViewPrototype

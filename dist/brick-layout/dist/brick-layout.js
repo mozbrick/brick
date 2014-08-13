@@ -39,9 +39,10 @@
     var shadowRoot = this.createShadowRoot();
     shadowRoot.appendChild(template.content.cloneNode(true));
   };
-
-  window.BrickLayoutElement = document.registerElement('brick-layout', {
-    prototype: BrickLayoutElementPrototype
-  });
+  if (!window.BrickLayoutElement) {
+    window.BrickLayoutElement = document.registerElement('brick-layout', {
+      prototype: BrickLayoutElementPrototype
+    });
+  }
 
 })();

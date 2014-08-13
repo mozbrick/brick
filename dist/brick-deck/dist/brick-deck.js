@@ -77,9 +77,11 @@
   });
 
   // Register the element
-  window.BrickCardElement = document.registerElement('brick-card', {
-    prototype: BrickCardElementPrototype
-  });
+  if (!window.BrickCardElement) {
+    window.BrickCardElement = document.registerElement('brick-card', {
+      prototype: BrickCardElementPrototype
+    });
+  }
 
 })();
 ;
@@ -174,10 +176,11 @@
 
   BrickDeckElementPrototype.createdCallback = function() {
     this.ns = {};
-    var children = this.children, i, max;
+    var children = this.children, i, max, anyChildSelected = false;
 
     for(i=0, max=children.length; i<max; i++){
       ensureIsCard(children[i]);
+      anyChildSelected = anyChildSelected || children[i].hasAttribute('selected');
     }
 
     var observer = new MutationObserver(function(mutations) {
@@ -190,6 +193,9 @@
     });
 
     observer.observe(this, { childList: true });
+    if(!anyChildSelected){
+      this.showCard(this.selectedIndex, {skipTransition:true});
+    }
   };
 
   BrickDeckElementPrototype.attachedCallback = function() {
@@ -378,8 +384,10 @@
   });
 
   // Register the element
-  window.BrickDeckElement = document.registerElement('brick-deck', {
-    prototype: BrickDeckElementPrototype
-  });
+  if (!window.BrickDeckElement) {
+    window.BrickDeckElement = document.registerElement('brick-deck', {
+      prototype: BrickDeckElementPrototype
+    });
+  }
 
 })();

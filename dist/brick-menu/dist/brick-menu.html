@@ -15,18 +15,30 @@
  */
 :host {
   display: -webkit-box;
+  display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
   width: 100%;
   margin: 0;
   padding: 0;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 @media (max-width: 768px) {
   :host([horizontal-lt-s]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-lt-s]) ::content > * {
     min-width: auto;
@@ -37,7 +49,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -49,7 +60,13 @@
 }
 @media (max-width: 992px) {
   :host([horizontal-lt-m]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-lt-m]) ::content > * {
     min-width: auto;
@@ -60,7 +77,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -72,7 +88,13 @@
 }
 @media (max-width: 1200px) {
   :host([horizontal-lt-l]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-lt-l]) ::content > * {
     min-width: auto;
@@ -83,7 +105,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -95,7 +116,13 @@
 }
 @media (min-width: 768px) {
   :host([horizontal-gt-xs]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-gt-xs]) ::content > * {
     min-width: auto;
@@ -106,7 +133,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -118,7 +144,13 @@
 }
 @media (min-width: 992px) {
   :host([horizontal-gt-s]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-gt-s]) ::content > * {
     min-width: auto;
@@ -129,7 +161,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -141,7 +172,13 @@
 }
 @media (min-width: 1200px) {
   :host([horizontal-gt-m]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-gt-m]) ::content > * {
     min-width: auto;
@@ -152,7 +189,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -164,7 +200,13 @@
 }
 @media (max-width: 768px) and (min-width: 992px) {
   :host([horizontal-s]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-s]) ::content > * {
     min-width: auto;
@@ -175,7 +217,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -187,7 +228,13 @@
 }
 @media (max-width: 992px) and (min-width: 1200px) {
   :host([horizontal-m]) {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+       -moz-box-orient: horizontal;
+       -moz-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   :host([horizontal-m]) ::content > * {
     min-width: auto;
@@ -198,7 +245,6 @@
     -ms-flex: 1;
     box-flex: 1;
     flex: 1;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
@@ -209,7 +255,13 @@
   }
 }
 :host([horizontal]) {
-  flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+     -moz-box-orient: horizontal;
+     -moz-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
 }
 :host([horizontal]) ::content > * {
   min-width: auto;
@@ -220,7 +272,6 @@
   -ms-flex: 1;
   box-flex: 1;
   flex: 1;
-  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
@@ -255,7 +306,8 @@
 </style>
   <style>:host {
   padding: 0 14px;
-  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+       box-sizing: border-box;
 }
 :host ::content > * {
   color: #4d4d4d;

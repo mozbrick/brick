@@ -2,16 +2,12 @@
 
 <template id="brick-flipbox-template">
   <style>:host {
-  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   display: block;
   position: relative;
   -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
+          transform-style: preserve-3d;
 }
 :host ::content > * {
   display: block;
@@ -22,74 +18,35 @@
   height: 100%;
   overflow: auto;
   -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-transition-property: -webkit-transform;
-  -moz-transition-property: -moz-transform;
-  -ms-transition-property: -ms-transform;
-  -o-transition-property: -o-transform;
-  transition-property: transform;
-  -webkit-transition-duration: 0.25s;
-  -moz-transition-duration: 0.25s;
-  -ms-transition-duration: 0.25s;
-  -o-transition-duration: 0.25s;
-  transition-duration: 0.25s;
-  -webkit-transition-timing-function: linear;
-  -moz-transition-timing-function: linear;
-  -ms-transition-timing-function: linear;
-  -o-transition-timing-function: linear;
-  transition-timing-function: linear;
-  -webkit-transition-delay: 0s;
-  -moz-transition-delay: 0s;
-  -ms-transition-delay: 0s;
-  -o-transition-delay: 0s;
-  transition-delay: 0s;
+          backface-visibility: hidden;
+  -webkit-transition: -webkit-transform 0.25s linear;
+          transition: transform 0.25s linear;
 /* DO NOT ERASE THESE TRANSFORM-STYLES; they fix a flickering issue in FFOS*/
   -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
+          transform-style: preserve-3d;
 }
 :host ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
-  -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
-  -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
-  -o-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
-  transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
+          transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 2px);
   z-index: 2;
 }
 :host ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
-  -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
-  -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
-  -o-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
-  transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
+          transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 1px);
   z-index: 1;
 }
 :host([_anim-direction="up"]) ::content > *:first-child,
 :host([_anim-direction="down"]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
-  -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
-  -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
-  -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
-  transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
+          transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 2px);
 }
 :host([_anim-direction="up"]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
-  -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
-  -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
-  -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
-  transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
+          transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 1px);
 }
 :host([_anim-direction="down"]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
-  -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
-  -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
-  -o-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
-  transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
+          transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 1px);
 }
 :host([flipped]):after {
 /* DO NOT ERASE THIS :after SELECTOR */
@@ -98,61 +55,37 @@
 }
 :host([flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
-  -moz-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
-  -ms-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
-  -o-transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
-  transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
+          transform: perspective(800px) rotateY(180deg) translate3d(0px, 0px, 2px);
   z-index: 1;
 }
 :host([flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
-  -moz-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
-  -ms-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
-  -o-transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
-  transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
+          transform: perspective(800px) rotateY(360deg) translate3d(0px, 0px, 1px);
   z-index: 2;
 }
 :host([_anim-direction="left"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
-  -moz-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
-  -ms-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
-  -o-transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
-  transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
+          transform: perspective(800px) rotateY(-180deg) translate3d(0px, 0px, 2px);
 }
 :host([_anim-direction="left"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
-  -moz-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
-  -ms-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
-  -o-transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
-  transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
+          transform: perspective(800px) rotateY(0deg) translate3d(0px, 0px, 1px);
 }
 :host([_anim-direction="up"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
-  -moz-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
-  -ms-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
-  -o-transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
-  transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
+          transform: perspective(800px) rotateX(180deg) translate3d(0px, 0px, 2px);
 }
 :host([_anim-direction="up"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+          transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
 }
 :host([_anim-direction="down"][flipped]) ::content > *:first-child {
   -webkit-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
-  -moz-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
-  -ms-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
-  -o-transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
-  transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
+          transform: perspective(800px) rotateX(-180deg) translate3d(0px, 0px, 2px);
 }
 :host([_anim-direction="down"][flipped]) ::content > *:last-child {
   -webkit-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  -moz-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  -ms-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  -o-transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
-  transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
+          transform: perspective(800px) rotateX(0deg) translate3d(0px, 0px, 1px);
 }
 </style>
   <style></style>

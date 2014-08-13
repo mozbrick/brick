@@ -1774,8 +1774,11 @@
   });
 
   // Register the element
-  window.BrickCalendar = document.registerElement('brick-calendar', {
-    prototype: BrickCalendarElementPrototype
-  });
+  if (!window.BrickCalendar) {
+    window.BrickCalendar = document.registerElement('brick-calendar', {
+      prototype: BrickCalendarElementPrototype
+    });
+  }
+
 
 })();

@@ -28,8 +28,10 @@
     shadowRoot.appendChild(template.content.cloneNode(true));
   };
 
-  window.BrickAppbarElement = document.registerElement('brick-appbar', {
-    prototype: BrickAppbarElementPrototype
-  });
+  if (!window.BrickAppbarElement) {
+    window.BrickAppbarElement = document.registerElement('brick-appbar', {
+      prototype: BrickAppbarElementPrototype
+    });
+  }
 
 })();

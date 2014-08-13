@@ -29,8 +29,10 @@
   };
 
   // Register the element
-  window.BrickMenuElement = document.registerElement('brick-menu', {
-    prototype: BrickMenuElementPrototype
-  });
+  if (!window.BrickMenuElement) {
+    window.BrickMenuElement = document.registerElement('brick-menu', {
+      prototype: BrickMenuElementPrototype
+    });
+  }
 
 })();
