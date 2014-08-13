@@ -67,9 +67,11 @@
     }
   });
 
-  window.BrickTabbarTabElement = document.registerElement('brick-tabbar-tab', {
-    prototype: BrickTabbarTabElementPrototype
-  });
+  if (!window.BrickTabbarTabElement) {
+    window.BrickTabbarTabElement = document.registerElement('brick-tabbar-tab', {
+      prototype: BrickTabbarTabElementPrototype
+    });
+  }
 
 })();
 ;
@@ -203,8 +205,10 @@
     }
   });
 
-  window.BrickTabbarElement = document.registerElement('brick-tabbar', {
-    prototype: BrickTabbarElementPrototype
-  });
+  if (!window.BrickTabbarElement) {
+    window.BrickTabbarElement = document.registerElement('brick-tabbar', {
+      prototype: BrickTabbarElementPrototype
+    });
+  }
 
 })();

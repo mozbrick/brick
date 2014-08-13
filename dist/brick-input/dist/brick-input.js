@@ -135,7 +135,6 @@
   };
 
   // Attribute handlers
-
   var attrs = {
 
   };
@@ -146,9 +145,10 @@
   });
 
   // Register the element
-
-  window.BrickInputElement = document.registerElement('brick-input', {
-    prototype: BrickInputElementPrototype
-  });
+  if (!window.BrickInputElement) {
+    window.BrickInputElement = document.registerElement('brick-input', {
+      prototype: BrickInputElementPrototype
+    });
+  }
 
 })();

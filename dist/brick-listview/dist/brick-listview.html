@@ -1,9 +1,12 @@
-<style>brick-listview,
-brick-listview * {
+<link rel="import" href="../../brick-common/brick-common.html">
+
+<template id="brick-listview-template">
+  <style>:host,
+:host * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
-brick-listview {
+:host {
   overflow: auto;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
@@ -14,30 +17,54 @@ brick-listview {
   max-width: 100%;
   display: block;
 }
-brick-listview .item.sentinel {
+:host .item.sentinel {
   visibility: hidden;
 }
-brick-listview .list {
+:host .list {
   position: relative;
-  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
 }
-brick-listview .item {
-  height: 4rem;
-  line-height: 2rem;
-  font-size: 1rem;
-  font-family: 'Fira Sans';
-  padding: 0.5rem 0 0.5rem 1rem;
+:host .item {
+  height: 80px;
   position: absolute;
   width: 100%;
-  border-bottom: 1px solid #ccc;
   cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
 }
-brick-listview .item:hover {
-  background: #eee;
+:host .item img {
+  height: 100%;
 }
-brick-listview.scrolling .item {
+:host .item .content {
+  -webkit-align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center;
+}
+:host.scrolling .item {
   pointer-events: none;
 }
 </style>
+  <style>:host .item {
+  border-bottom: 1px solid #f4f4f4;
+}
+:host .item:hover {
+  background: #eee;
+}
+:host .item .content {
+  line-height: 1.4em;
+  margin-left: 1.2em;
+}
+:host .item .content div:last-child {
+  font-size: 0.88em;
+  color: #858585;
+}
+</style>
+  <content></content>
+</template>
+
 
 <script src="brick-listview.js"></script>

@@ -181,8 +181,10 @@
   });
 
   // Register the element
-  window.BrickFlipboxElement = document.registerElement('brick-flipbox', {
-    prototype: BrickFlipboxElementPrototype
-  });
+  if (!window.BrickFlipboxElement) {
+    window.BrickFlipboxElement = document.registerElement('brick-flipbox', {
+      prototype: BrickFlipboxElementPrototype
+    });
+  }
 
 })();
