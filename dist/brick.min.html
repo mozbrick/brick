@@ -2236,4 +2236,43 @@ h6 {
 
 
 </div>
+  <div hidden>
+
+
+<template id="brick-button-template">
+  <style>:host {
+  display: inline-block;
+  position: relative;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  outline: none;
+  border-radius: 30px;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  padding: 10px;
+}
+:host([disabled]) {
+  color: #808080;
+  pointer-events: none;
+  cursor: auto;
+}
+</style>
+  <style>:host {
+  color: #00caf2;
+}
+:host([default]) {
+  background-color: #00caf2;
+  color: #fff;
+}
+:host([default][disabled]) {
+  background-color: #67858b;
+}
+</style>
+  <content></content>
+</template>
+
+
+</div>
 </head></html><script src="brick.min.js"></script>
