@@ -26,6 +26,7 @@ describe("The distribution", function (){
   it("should initialize components", function () {
     expect(window.BrickActionElement).to.exist;
     expect(window.BrickAppbarElement).to.exist;
+    expect(window.BrickButtonElement).to.exist;
     expect(window.BrickCalendar).to.exist;
     expect(window.BrickCardElement).to.exist;
     expect(window.BrickDeckElement).to.exist;

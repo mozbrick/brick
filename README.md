@@ -57,6 +57,7 @@ repos=(
   brick
   brick-action
   brick-appbar
+  brick-button
   brick-calendar
   brick-common
   brick-deck
@@ -82,6 +83,7 @@ Here is a list of the components currently in the primary distribution of Brick:
 
 * [brick-action](https://github.com/mozbrick/brick-action)
 * [brick-appbar](https://github.com/mozbrick/brick-appbar)
+* [brick-button](https://github.com/mozbrick/brick-button)
 * [brick-calendar](https://github.com/mozbrick/brick-calendar)
 * [brick-deck](https://github.com/mozbrick/brick-deck)
 * [brick-dialog](https://github.com/mozbrick/brick-dialog)

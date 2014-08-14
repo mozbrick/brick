@@ -22,6 +22,7 @@
   "dependencies": {
     "brick-action": "mozbrick/brick-action",
     "brick-appbar": "mozbrick/brick-appbar",
+    "brick-button": "mozbrick/brick-button",
     "brick-calendar": "mozbrick/brick-calendar",
     "brick-deck": "mozbrick/brick-deck",
     "brick-dialog": "mozbrick/brick-dialog",
