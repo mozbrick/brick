@@ -1,6 +1,6 @@
 /* global Platform */
 
-(function () {
+(function() {
 
   var currentScript = document._currentScript || document.currentScript;
 
@@ -19,11 +19,12 @@
   var className = 'className';
 
   // used during creating calendar elements
-  var defaultLabels  = {
+  var defaultLabels = {
     prev: '←',
     next: '→',
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-         'August', 'September', 'October', 'November', 'December'],
+      'August', 'September', 'October', 'November', 'December'
+    ],
     weekdays: ['Sun', "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   };
 
@@ -64,7 +65,7 @@
   function isWeekdayNum(dayNum) {
     var dayInt = parseIntDec(dayNum);
     return (dayInt === dayNum && (!isNaN(dayInt)) &&
-        dayInt >= 0 && dayInt <= 6);
+      dayInt >= 0 && dayInt <= 6);
   }
 
   /** isValidDateObj: (*) => Boolean
@@ -122,7 +123,7 @@
   function iso(d) {
     return [
       pad(d.getFullYear(), 4),
-      pad(d.getMonth()+1, 2),
+      pad(d.getMonth() + 1, 2),
       pad(d.getDate(d), 2)
     ].join('-');
   }
@@ -134,13 +135,14 @@
   If successful, returns the corresponding Date object, otherwise return null
   **/
   var ISO_DATE_REGEX = /(\d{4})[^\d]?(\d{2})[^\d]?(\d{2})/;
+
   function fromIso(s) {
     if (isValidDateObj(s)) {
       return s;
     }
     var d = ISO_DATE_REGEX.exec(s);
     if (d) {
-      return normalize(new Date(d[1],d[2]-1,d[3]));
+      return normalize(new Date(d[1], d[2] - 1, d[3]));
     } else {
       return null;
     }
@@ -199,13 +201,12 @@
       return [multiDateStr];
     } else if (typeof(multiDateStr) === "string" && multiDateStr.length > 0) {
       // check if this is a JSON representing a range of dates
-      try{
+      try {
         ranges = JSON.parse(multiDateStr);
         if (!isArray(ranges)) {
           return null;
         }
-      }
-      catch(err) {
+      } catch (err) {
         // check for if this represents a single date
         var parsedSingle = parseSingleDate(multiDateStr);
         if (parsedSingle) {
@@ -266,15 +267,15 @@
   */
   function from(base, y, m, d) {
     if (y === undefined) {
-    y = base.getFullYear();
+      y = base.getFullYear();
     }
     if (m === undefined) {
-    m = base.getMonth();
+      m = base.getMonth();
     }
     if (d === undefined) {
-    d = base.getDate();
+      d = base.getDate();
     }
-    return normalize(new Date(y,m,d));
+    return normalize(new Date(y, m, d));
   }
 
   /* daysInMonth: (month) => Number
@@ -286,7 +287,7 @@
     if (!year) {
       year = (new Date()).getFullYear();
     }
-    return (new Date(year, month+1, 0)).getDate();
+    return (new Date(year, month + 1, 0)).getDate();
   }
 
   /* relOffset: (Date, number, number. number) => Date
@@ -298,27 +299,27 @@
   */
   function relOffset(base, y, m, d) {
     return from(base,
-          base.getFullYear() + y,
-          base.getMonth() + m,
-          base.getDate() + d);
+      base.getFullYear() + y,
+      base.getMonth() + m,
+      base.getDate() + d);
   }
 
   function nextMonth(d) {
     var date = d.getDate();
-    var daysInNextMonth = daysInMonth(d.getMonth()+1, d.getFullYear());
+    var daysInNextMonth = daysInMonth(d.getMonth() + 1, d.getFullYear());
     if (date > daysInNextMonth) {
       date = daysInNextMonth;
     }
-    return new Date(d.getFullYear(), d.getMonth()+1, date);
+    return new Date(d.getFullYear(), d.getMonth() + 1, date);
   }
 
   function prevMonth(d) {
     var date = d.getDate();
-    var daysInPrevMonth = daysInMonth(d.getMonth()-1, d.getFullYear());
+    var daysInPrevMonth = daysInMonth(d.getMonth() - 1, d.getFullYear());
     if (date > daysInPrevMonth) {
       date = daysInPrevMonth;
     }
-    return new Date(d.getFullYear(), d.getMonth()-1, date);
+    return new Date(d.getFullYear(), d.getMonth() - 1, date);
   }
 
   /** findWeekStart: Date => Date
@@ -335,7 +336,7 @@
       firstWeekday = 0;
     }
 
-    for (var step=0; step < 7; step++) {
+    for (var step = 0; step < 7; step++) {
       if (d.getDay() === firstWeekday) {
         return d;
       } else {
@@ -359,7 +360,7 @@
       lastWeekDay = 6;
     }
 
-    for (var step=0; step < 7; step++) {
+    for (var step = 0; step < 7; step++) {
       if (d.getDay() === lastWeekDay) {
         return d;
       } else {
@@ -425,16 +426,16 @@
     }
     matches = (matches.length === undefined) ? [matches] : matches;
     var foundMatch = false;
-    matches.forEach(function (match) {
-    if (match.length === 2) {
-      if (dateInRange(match[0], match[1], d)) {
-        foundMatch = true;
+    matches.forEach(function(match) {
+      if (match.length === 2) {
+        if (dateInRange(match[0], match[1], d)) {
+          foundMatch = true;
+        }
+      } else {
+        if (iso(match) === iso(d)) {
+          foundMatch = true;
+        }
       }
-    } else {
-      if (iso(match) === iso(d)) {
-        foundMatch = true;
-      }
-    }
     });
     return foundMatch;
   }
@@ -458,7 +459,7 @@
   earlier dates come first
   **/
   function sortRanges(ranges) {
-    ranges.sort(function (rangeA, rangeB) {
+    ranges.sort(function(rangeA, rangeB) {
       var dateA = (isValidDateObj(rangeA)) ? rangeA : rangeA[0];
       var dateB = (isValidDateObj(rangeB)) ? rangeB : rangeB[0];
       return dateA.valueOf() - dateB.valueOf();
@@ -523,7 +524,7 @@
     // initialize private vars
     self._viewDate = self._sanitizeViewDate(data.view, data.chosen);
     self._chosenRanges = self._sanitizeChosenRanges(data.chosen,
-                                data.view);
+      data.view);
     self._firstWeekdayNum = parseIntDec(data.firstWeekdayNum) || 0;
 
     // Note that self._el is the .calendar child div,
@@ -555,7 +556,7 @@
   params:
     d               the date whose month we will be rendering
   **/
-  CalendarPrototype.makeMonth = function (d) {
+  CalendarPrototype.makeMonth = function(d) {
     if (!isValidDateObj(d)) {
       throw 'Invalid view date!';
     }
@@ -577,7 +578,7 @@
     // create the weekday labels
     var weekdayLabels = makeEl('div.weekday-labels');
     for (var step = 0; step < 7; step++) {
-      var weekdayNum = (firstWeekday + step)  % 7;
+      var weekdayNum = (firstWeekday + step) % 7;
       var weekdayLabel = makeEl('span.weekday-label');
       weekdayLabel.textContent = labels.weekdays[weekdayNum];
       weekdayLabels.appendChild(weekdayLabel);
@@ -590,7 +591,7 @@
     var cDate = sDate;
     var maxDays = 7 * 6; // maximum is 6 weeks displayed at once
 
-    for (step=0; step < maxDays; step++) {
+    for (step = 0; step < maxDays; step++) {
       var day = makeEl('span.day');
       day.setAttribute('data-date', iso(cDate));
       day.setAttribute('role', 'gridcell');
@@ -615,16 +616,16 @@
       cDate = nextDay(cDate);
       // if the next day starts a new week, append finished week and see if
       // we are done drawing the month
-      if ((step+1) % 7 === 0) {
+      if ((step + 1) % 7 === 0) {
         monthEl.appendChild(week);
         week = makeEl('div.week');
         // Are we finished drawing the month?
         // Checks month rollover and year rollover
         // (ie: if month or year are after the current ones)
         var done = (cDate.getMonth() > month ||
-                     (cDate.getMonth(cDate) < month &&
-                      cDate.getYear(cDate) > sDate.getYear())
-                   );
+          (cDate.getMonth(cDate) < month &&
+            cDate.getYear(cDate) > sDate.getYear())
+        );
         if (done) {
           break;
         }
@@ -653,15 +654,14 @@
                   list of Date/[Date,Date]  ranges
                   (defaults to this.chosen)
   **/
-  CalendarPrototype._sanitizeViewDate = function (viewDate,
-                            chosenRanges)
-  {
+  CalendarPrototype._sanitizeViewDate = function(viewDate,
+    chosenRanges) {
     chosenRanges = (chosenRanges === undefined) ?
-              this.chosen : chosenRanges;
+      this.chosen : chosenRanges;
     var saneDate;
     // if given a valid viewDate, return it
     if (isValidDateObj(viewDate)) {
-       saneDate = viewDate;
+      saneDate = viewDate;
     }
     // otherwise if given a single date for chosenRanges, use it
     else if (isValidDateObj(chosenRanges)) {
@@ -679,7 +679,7 @@
     }
     // if not given a valid viewDate or chosenRanges, return the current
     // day as the view date
-    else{
+    else {
       saneDate = TODAY;
     }
     return saneDate;
@@ -699,7 +699,7 @@
     for (var i = 0; i < ranges.length; i++) {
       var currRange = ranges[i];
       var prevRange = (collapsed.length > 0) ?
-                collapsed[collapsed.length-1] : null;
+        collapsed[collapsed.length - 1] : null;
 
       var currStart, currEnd;
       var prevStart, prevEnd;
@@ -712,7 +712,7 @@
       }
       // collapse extraneous range into a singular date
       currRange = (dateMatches(currStart, currEnd)) ?
-               currStart : [currStart, currEnd];
+        currStart : [currStart, currEnd];
 
       if (isValidDateObj(prevRange)) {
         prevStart = prevEnd = prevRange;
@@ -730,15 +730,15 @@
         dateMatches(prevDay(currStart), [prevRange])) {
 
         var minStart = (prevStart.valueOf() < currStart.valueOf()) ?
-                              prevStart : currStart;
+          prevStart : currStart;
         var maxEnd = (prevEnd.valueOf() > currEnd.valueOf()) ?
-                              prevEnd : currEnd;
+          prevEnd : currEnd;
 
         var newRange = (dateMatches(minStart, maxEnd)) ?
-                        minStart : [minStart, maxEnd];
-        collapsed[collapsed.length-1] = newRange;
+          minStart : [minStart, maxEnd];
+        collapsed[collapsed.length - 1] = newRange;
       } else {
-      // if we don't collapse, just add to list
+        // if we don't collapse, just add to list
         collapsed.push(currRange);
       }
     }
@@ -768,9 +768,8 @@
     viewDate                    (optional) the current cursor date
                   (default = this.view)
   **/
-  CalendarPrototype._sanitizeChosenRanges = function (chosenRanges,
-                                viewDate)
-  {
+  CalendarPrototype._sanitizeChosenRanges = function(chosenRanges,
+    viewDate) {
     viewDate = (viewDate === undefined) ? this.view : viewDate;
 
     var cleanRanges;
@@ -779,8 +778,7 @@
     } else if (isArray(chosenRanges)) {
       cleanRanges = chosenRanges;
     } else if (chosenRanges === null || chosenRanges === undefined ||
-        !viewDate)
-    {
+      !viewDate) {
       cleanRanges = [];
     } else {
       cleanRanges = [viewDate];
@@ -810,7 +808,7 @@
 
   if append is truthy, adds the given date to the stored list of date ranges
   **/
-  CalendarPrototype.addDate = function (dateObj, append) {
+  CalendarPrototype.addDate = function(dateObj, append) {
     if (isValidDateObj(dateObj)) {
       if (append) {
         this.chosen.push(dateObj);
@@ -826,7 +824,7 @@
 
   removes the given date from the Calendar's stored chosen date ranges
   **/
-  CalendarPrototype.removeDate = function (dateObj) {
+  CalendarPrototype.removeDate = function(dateObj) {
     if (!isValidDateObj(dateObj)) {
       return;
     }
@@ -866,7 +864,7 @@
 
   returns true if the given date is one of the dates stored as chosen
   **/
-  CalendarPrototype.hasChosenDate = function (dateObj) {
+  CalendarPrototype.hasChosenDate = function(dateObj) {
     return dateMatches(dateObj, this._chosenRanges);
   };
 
@@ -881,13 +879,15 @@
   within the current visible span of dates, ignoring those in months not
   actually within the span
   **/
-  CalendarPrototype.hasVisibleDate = function (dateObj, excludeBadMonths) {
+  CalendarPrototype.hasVisibleDate = function(dateObj, excludeBadMonths) {
     var startDate = (excludeBadMonths) ? this.firstVisibleMonth :
-                       this.firstVisibleDate;
+      this.firstVisibleDate;
     var endDate = (excludeBadMonths) ? findLast(this.lastVisibleMonth) :
-                       this.lastVisibleDate;
+      this.lastVisibleDate;
 
-    return dateMatches(dateObj, [[startDate, endDate]]);
+    return dateMatches(dateObj, [
+      [startDate, endDate]
+    ]);
   };
 
 
@@ -908,7 +908,7 @@
   NOTE: this doesn't update the navigation controls, as they are separate from
   the calendar element
   **/
-  CalendarPrototype.render = function (preserveNodes) {
+  CalendarPrototype.render = function(preserveNodes) {
     var span = this._span;
     var i;
     if (!preserveNodes) {
@@ -923,7 +923,7 @@
     }
     // if we want to maintain the original elements without completely
     // wiping and rewriting nodes (ex: when the visible dates don't change)
-    else{
+    else {
       var days = this.el.querySelectorAll(".day");
       var day;
       for (i = 0; i < days.length; i++) {
@@ -959,7 +959,7 @@
 
   // call custom renderer on each day, passing in the element, the
   // date, and the iso representation of the date
-  CalendarPrototype._callCustomRenderer = function () {
+  CalendarPrototype._callCustomRenderer = function() {
     if (!this._customRenderFn) {
       return;
     }
@@ -967,10 +967,10 @@
     // prevent infinite recursion of custom rendering requiring a rerender
     // of the calendar
     if (this._renderRecursionFlag) {
-      throw ("Error: customRenderFn causes recursive loop of "+
-           "rendering calendar; make sure your custom rendering "+
-           "function doesn't modify attributes of the brick-calendar that "+
-           "would require a re-render!");
+      throw ("Error: customRenderFn causes recursive loop of " +
+        "rendering calendar; make sure your custom rendering " +
+        "function doesn't modify attributes of the brick-calendar that " +
+        "would require a re-render!");
     }
 
     var days = this.el.querySelectorAll(".day");
@@ -980,9 +980,8 @@
       var parsedDate = fromIso(dateIso);
 
       this._renderRecursionFlag = true;
-      this._customRenderFn(day,
-                 (parsedDate) ? parsedDate : null,
-                 dateIso);
+      this._customRenderFn(day, (parsedDate) ? parsedDate : null,
+        dateIso);
       this._renderRecursionFlag = false;
     }
   };
@@ -998,7 +997,7 @@
      layout repositioning due to z-indexing)
     **/
     "el": {
-      get: function () {
+      get: function() {
         return this._el;
       }
     },
@@ -1009,10 +1008,10 @@
     simultaneously
     **/
     "multiple": {
-      get: function () {
+      get: function() {
         return this._multiple;
       },
-      set: function (multi) {
+      set: function(multi) {
         this._multiple = multi;
         this.chosen = this._sanitizeChosenRanges(this.chosen);
         this.render(true);
@@ -1023,11 +1022,11 @@
 
     the number of months to show in the calendar display
     **/
-    "span":{
-      get: function () {
+    "span": {
+      get: function() {
         return this._span;
       },
-      set: function (newSpan) {
+      set: function(newSpan) {
         var parsedSpan = parseIntDec(newSpan);
         if (!isNaN(parsedSpan) && parsedSpan >= 0) {
           this._span = parsedSpan;
@@ -1042,18 +1041,18 @@
 
     the cursor date to center the calendar display on
     **/
-    "view":{
+    "view": {
       attribute: {},
-      get: function () {
+      get: function() {
         return this._viewDate;
       },
-      set: function (rawViewDate) {
+      set: function(rawViewDate) {
         var newViewDate = this._sanitizeViewDate(rawViewDate);
         var oldViewDate = this._viewDate;
         this._viewDate = newViewDate;
 
         this.render(oldViewDate.getMonth() === newViewDate.getMonth() &&
-              oldViewDate.getYear() === newViewDate.getYear());
+          oldViewDate.getYear() === newViewDate.getYear());
       }
     },
 
@@ -1066,21 +1065,21 @@
     (null is interpreted as an empty array)
     **/
     "chosen": {
-      get: function () {
+      get: function() {
         return this._chosenRanges;
       },
-      set: function (newChosenRanges) {
+      set: function(newChosenRanges) {
         this._chosenRanges =
-            this._sanitizeChosenRanges(newChosenRanges);
+          this._sanitizeChosenRanges(newChosenRanges);
         this.render(true);
       }
     },
 
     "firstWeekdayNum": {
-      get: function () {
+      get: function() {
         return this._firstWeekdayNum;
       },
-      set: function (weekdayNum) {
+      set: function(weekdayNum) {
         weekdayNum = parseIntDec(weekdayNum);
         if (!isWeekdayNum(weekdayNum)) {
           weekdayNum = 0;
@@ -1091,7 +1090,7 @@
     },
 
     "lastWeekdayNum": {
-      get: function () {
+      get: function() {
         return (this._firstWeekdayNum + 6) % 7;
       }
     },
@@ -1103,10 +1102,10 @@
     used to apply any user-defined rendering to the days in the element
     **/
     "customRenderFn": {
-      get: function () {
+      get: function() {
         return this._customRenderFn;
       },
-      set: function (newRenderFn) {
+      set: function(newRenderFn) {
         this._customRenderFn = newRenderFn;
         this.render(true);
       }
@@ -1117,12 +1116,12 @@
     an attribute safe string representing the currently chosen range of
     dates (ie: the JSON string representing it)
     **/
-    "chosenString":{
-      get: function () {
+    "chosenString": {
+      get: function() {
         if (this.multiple) {
           var isoDates = this.chosen.slice(0);
 
-          for (var i=0; i < isoDates.length; i++) {
+          for (var i = 0; i < isoDates.length; i++) {
             var range = isoDates[i];
             if (isValidDateObj(range)) {
               isoDates[i] = iso(range);
@@ -1145,7 +1144,7 @@
     first month out of those included in the calendar span
     **/
     "firstVisibleMonth": {
-      get: function () {
+      get: function() {
         return findFirst(this.view);
       }
     },
@@ -1156,31 +1155,31 @@
     last month out of those included in the calendar span
     **/
     "lastVisibleMonth": {
-      get: function () {
+      get: function() {
         return relOffset(this.firstVisibleMonth, 0,
-                 Math.max(0, this.span-1), 0);
+          Math.max(0, this.span - 1), 0);
       }
     },
 
     "firstVisibleDate": {
-      get: function () {
+      get: function() {
         return findWeekStart(this.firstVisibleMonth,
-                   this.firstWeekdayNum);
+          this.firstWeekdayNum);
       }
     },
 
     "lastVisibleDate": {
-      get: function () {
+      get: function() {
         return findWeekEnd(findLast(this.lastVisibleMonth),
-                   this.lastWeekdayNum);
+          this.lastWeekdayNum);
       }
     },
 
     "labels": {
-      get: function () {
+      get: function() {
         return this._labels;
       },
-      set: function (newLabelData) {
+      set: function(newLabelData) {
         var oldLabelData = this.labels;
         for (var labelType in oldLabelData) {
           if (!(labelType in newLabelData)) {
@@ -1195,20 +1194,19 @@
           // number of labels
           if (isArray(oldLabel)) {
             if (isArray(newLabel) &&
-               oldLabel.length === newLabel.length)
-            {
+              oldLabel.length === newLabel.length) {
               newLabel = newLabel.slice(0);
               for (var i = 0; i < newLabel.length; i++) {
                 // check for existing builtin toString for
                 // string casting optimization
                 newLabel[i] = (newLabel[i].toString) ?
-                        newLabel[i].toString() :
-                        String(newLabel[i]);
+                  newLabel[i].toString() :
+                  String(newLabel[i]);
               }
             } else {
-              throw("invalid label given for '"+labelType+
-                  "': expected array of "+ oldLabel.length +
-                  " labels, got " + JSON.stringify(newLabel));
+              throw ("invalid label given for '" + labelType +
+                "': expected array of " + oldLabel.length +
+                " labels, got " + JSON.stringify(newLabel));
             }
           } else {
             newLabel = String(newLabel);
@@ -1241,7 +1239,7 @@
     xCalendar.ns.dragAllowTap = true;
 
     if (!xCalendar.noToggle) {
-      xCalendar.dispatchEvent(new CustomEvent(toggleEventName,{
+      xCalendar.dispatchEvent(new CustomEvent(toggleEventName, {
         detail: {
           date: dateObj,
           iso: isoDate
@@ -1272,8 +1270,8 @@
       // trigger a selection if we enter a nonchosen day while in
       // addition mode
       if (xCalendar.ns.dragType === DRAG_ADD &&
-         !(day.classList.contains(chosenClass))) {
-        xCalendar.dispatchEvent(new CustomEvent("datetoggleon",{
+        !(day.classList.contains(chosenClass))) {
+        xCalendar.dispatchEvent(new CustomEvent("datetoggleon", {
           detail: {
             date: dateObj,
             iso: isoDate
@@ -1284,7 +1282,7 @@
       // trigger a remove if we enter a chosen day while in
       // removal mode
       else if (xCalendar.ns.dragType === DRAG_REMOVE &&
-               day.classList.contains(chosenClass)) {
+        day.classList.contains(chosenClass)) {
         xCalendar.dispatchEvent(new CustomEvent("datetoggleoff", {
           detail: {
             date: dateObj,
@@ -1313,7 +1311,7 @@
     }
 
     var days = document.querySelectorAll("brick-calendar .day[active]");
-    for (var j=0; j < days.length; j++) {
+    for (var j = 0; j < days.length; j++) {
       days[j].removeAttribute("active");
     }
   }
@@ -1323,7 +1321,7 @@
   */
   function _pointIsInRect(x, y, rect) {
     return (rect.left <= x && x <= rect.right &&
-        rect.top <= y && y <= rect.bottom);
+      rect.top <= y && y <= rect.bottom);
   }
 
   // added on the body to delegate dragends to all brick-calendars
@@ -1347,11 +1345,11 @@
 
   var BrickCalendarElementPrototype = Object.create(HTMLElement.prototype);
 
-  BrickCalendarElementPrototype.createdCallback = function () {
+  BrickCalendarElementPrototype.createdCallback = function() {
     this.ns = {};
   };
 
-  BrickCalendarElementPrototype.attachedCallback = function () {
+  BrickCalendarElementPrototype.attachedCallback = function() {
 
     var importDoc = currentScript.ownerDocument;
     var template = importDoc.querySelector('#brick-calendar-template');
@@ -1374,7 +1372,7 @@
       view: parseSingleDate(this.getAttribute("view")),
       chosen: parseMultiDates(chosenRange),
       multiple: this.hasAttribute("multiple"),
-      firstWeekdayNum : this.getAttribute("first-weekday-num")
+      firstWeekdayNum: this.getAttribute("first-weekday-num")
     });
     this.appendChild(this.ns.calObj.el);
 
@@ -1394,39 +1392,39 @@
 
     // add the global listeners only once
     if (!DOC_MOUSEUP_LISTENER) {
-      DOC_MOUSEUP_LISTENER = document.addEventListener("mouseup",_onDragEnd);
+      DOC_MOUSEUP_LISTENER = document.addEventListener("mouseup", _onDragEnd);
     }
     this.render(false);
 
     // EventListeners
     this.ns.listeners = {};
 
-    this.ns.listeners.clickNext = delegate(".next", function (e) {
+    this.ns.listeners.clickNext = delegate(".next", function(e) {
       var xCalendar = e.currentTarget;
       xCalendar.nextMonth();
-      xCalendar.dispatchEvent(new CustomEvent("nextmonth",{
-        bubbles:true
+      xCalendar.dispatchEvent(new CustomEvent("nextmonth", {
+        bubbles: true
       }));
     });
     this.addEventListener("click", this.ns.listeners.clickNext);
 
-    this.ns.listeners.clickPrev = delegate(".prev", function (e) {
+    this.ns.listeners.clickPrev = delegate(".prev", function(e) {
       var xCalendar = e.currentTarget;
       xCalendar.prevMonth();
-      xCalendar.dispatchEvent(new CustomEvent("prevmonth",{
-        bubbles:true
+      xCalendar.dispatchEvent(new CustomEvent("prevmonth", {
+        bubbles: true
       }));
     });
     this.addEventListener("click", this.ns.listeners.clickPrev);
 
-    this.ns.listeners.pointerdownDay = delegate(".day", function (e) {
+    this.ns.listeners.pointerdownDay = delegate(".day", function(e) {
       // TDOD: FIX THIS
       // prevent firing on right click
       if (e.button && e.button !== LEFT_MOUSE_BTN) {
         return;
       }
-       // prevent dragging around existing selections
-       // also prevent mobile drag scroll
+      // prevent dragging around existing selections
+      // also prevent mobile drag scroll
       e.preventDefault();
       if (e.baseEvent) {
         e.baseEvent.preventDefault();
@@ -1436,7 +1434,7 @@
     this.addEventListener("mousedown", this.ns.listeners.pointerdownDay);
 
     // mouse drag move, firing toggles on newly entered dates if needed
-    this.ns.listeners.mouseoverDay = delegate(".day", function (e) {
+    this.ns.listeners.mouseoverDay = delegate(".day", function(e) {
       var xCalendar = e.currentTarget;
       var day = this;
 
@@ -1444,13 +1442,13 @@
     });
     this.addEventListener("mouseover", this.ns.listeners.mouseoverDay);
 
-    this.ns.listeners.mouseoutDay = delegate(".day.", function () {
+    this.ns.listeners.mouseoutDay = delegate(".day.", function() {
       var day = this;
       day.removeAttribute("active");
     });
     this.addEventListener("mouseout", this.ns.mouseoutDay);
 
-    this.ns.listeners.pointerupDay = delegate(".day", function (e) {
+    this.ns.listeners.pointerupDay = delegate(".day", function(e) {
       var xCalendar = e.currentTarget;
 
       // make sure that we can actually consider this a tap
@@ -1471,15 +1469,15 @@
         bubbles: true
       }));
     });
-    this.addEventListener("mouseup", this.ns.pointerupDay);
+    this.addEventListener("mouseup", this.ns.listeners.pointerupDay);
 
-    this.ns.listeners.datetoggleon = function (e) {
+    this.ns.listeners.datetoggleon = function(e) {
       var xCalendar = this;
       xCalendar.toggleDateOn(e.detail.date, xCalendar.multiple);
     };
     this.addEventListener("datetoggleon", this.ns.listeners.datetoggleon);
 
-    this.ns.listeners.datetoggleoff = function (e) {
+    this.ns.listeners.datetoggleoff = function(e) {
       var xCalendar = this;
       xCalendar.toggleDateOn(e.detail.date, xCalendar.multiple);
     };
@@ -1491,7 +1489,7 @@
 
   };
 
-  BrickCalendarElementPrototype.detachedCallback = function () {
+  BrickCalendarElementPrototype.detachedCallback = function() {
     // Cleanup EventListeners
     this.removeEventListener("click", this.ns.listeners.clickNext);
     this.removeEventListener("click", this.ns.listeners.clickPrev);
@@ -1506,14 +1504,14 @@
     }
   };
 
-  BrickCalendarElementPrototype.attributeChangedCallback = function (attr, oldVal, newVal) {
+  BrickCalendarElementPrototype.attributeChangedCallback = function(attr, oldVal, newVal) {
     if (attr in attrs) {
       attrs[attr].call(this, oldVal, newVal);
     }
   };
 
   var attrs = {
-    'attr': function (oldVal, newVal) {
+    'attr': function(oldVal, newVal) {
 
     }
   };
@@ -1522,19 +1520,19 @@
 
   // updates the brick-calendar display, recreating nodes if preserveNodes
   // if falsy or not given
-  BrickCalendarElementPrototype.render = function (preserveNodes) {
+  BrickCalendarElementPrototype.render = function(preserveNodes) {
     this.ns.calObj.render(preserveNodes);
   };
 
   // Go back one month by updating the view attribute of the calendar
-  BrickCalendarElementPrototype.prevMonth = function () {
+  BrickCalendarElementPrototype.prevMonth = function() {
     var calObj = this.ns.calObj;
     calObj.view = prevMonth(calObj.view);
   };
 
   // Advance one month forward by updating the view attribute
   // of the calendar
-  BrickCalendarElementPrototype.nextMonth = function () {
+  BrickCalendarElementPrototype.nextMonth = function() {
     var calObj = this.ns.calObj;
     calObj.view = nextMonth(calObj.view);
   };
@@ -1543,7 +1541,7 @@
   // chosen dates if append is falsy or not given, or adding to the
   // list of chosen dates, if append is truthy
   // also updates the chosen attribute of the calendar
-  BrickCalendarElementPrototype.toggleDateOn = function (newDateObj, append) {
+  BrickCalendarElementPrototype.toggleDateOn = function(newDateObj, append) {
     this.ns.calObj.addDate(newDateObj, append);
     // trigger setter
     this.chosen = this.chosen;
@@ -1551,7 +1549,7 @@
 
   // removes the given date from the chosen list
   // also updates the chosen attribute of the calendar
-  BrickCalendarElementPrototype.toggleDateOff = function (dateObj) {
+  BrickCalendarElementPrototype.toggleDateOff = function(dateObj) {
     this.ns.calObj.removeDate(dateObj);
     // trigger setter
     this.chosen = this.chosen;
@@ -1561,7 +1559,7 @@
   // 'appendIfAdd' specifies how the date is added to the list of
   // chosen dates if toggled on
   // also updates the chosen attribute of the calendar
-  BrickCalendarElementPrototype.toggleDate = function (dateObj, appendIfAdd) {
+  BrickCalendarElementPrototype.toggleDate = function(dateObj, appendIfAdd) {
     if (this.ns.calObj.hasChosenDate(dateObj)) {
       this.toggleDateOff(dateObj);
     } else {
@@ -1572,9 +1570,9 @@
   // returns whether or not the given date is in the visible
   // calendar display, optionally ignoring dates outside of the
   // month span
-  BrickCalendarElementPrototype.hasVisibleDate = function (dateObj, excludeBadMonths) {
+  BrickCalendarElementPrototype.hasVisibleDate = function(dateObj, excludeBadMonths) {
     return this.ns.calObj.hasVisibleDate(dateObj,
-                         excludeBadMonths);
+      excludeBadMonths);
   };
 
   // Property handlers
@@ -1584,7 +1582,7 @@
     // not
     // Boolean
     'controls': {
-      set : function (newVal) {
+      set: function(newVal) {
         if (newVal && !this.ns.calControls) {
           this.setAttribute("controls", "");
           this.ns.calControls = makeControls(this.ns.calObj.labels);
@@ -1596,10 +1594,10 @@
     // chosen at once
     // Boolean
     'multiple': {
-      get : function () {
+      get: function() {
         return this.ns.calObj.multiple;
       },
-      set : function (newVal) {
+      set: function(newVal) {
         if (newVal) {
           this.setAttribute("multiple", newVal);
         } else {
@@ -1610,20 +1608,20 @@
     },
     // handles how many months the brick-calendar displays at once
     'span': {
-      get : function () {
+      get: function() {
         return this.ns.calObj.span;
       },
-      set : function (newVal) {
+      set: function(newVal) {
         this.ns.calObj.span = newVal;
-        this.setAttribute("span",newVal);
+        this.setAttribute("span", newVal);
       }
     },
     // handles where the brick-calendar's display is focused
     'view': {
-      get : function () {
+      get: function() {
         return this.ns.calObj.view;
       },
-      set : function (newVal) {
+      set: function(newVal) {
         var parsedDate = parseSingleDate(newVal);
         if (parsedDate) {
           this.ns.calObj.view = parsedDate;
@@ -1634,7 +1632,7 @@
     // setter can take a parseable string, a singular date, or a range
     // of dates/dateranges
     'chosen': {
-      get : function () {
+      get: function() {
         var chosenRanges = this.ns.calObj.chosen;
         // return a single date if multiple selection not allowed
         if (!this.multiple) {
@@ -1650,14 +1648,14 @@
           }
         }
         // otherwise return the entire selection list
-        else{
+        else {
           return this.ns.calObj.chosen;
         }
       },
-      set : function (newVal) {
+      set: function(newVal) {
         var parsedDateRanges = (this.multiple) ?
-                    parseMultiDates(newVal) :
-                    parseSingleDate(newVal);
+          parseMultiDates(newVal) :
+          parseSingleDate(newVal);
         if (parsedDateRanges) {
           this.ns.calObj.chosen = parsedDateRanges;
         } else {
@@ -1667,7 +1665,7 @@
         if (this.ns.calObj.chosenString) {
           // override attribute with auto-generated string
           this.setAttribute("chosen",
-                    this.ns.calObj.chosenString);
+            this.ns.calObj.chosenString);
         } else {
           this.removeAttribute("chosen");
         }
@@ -1675,10 +1673,10 @@
     },
     // handles which day to use as the first day of the week
     'firstWeekdayNum': {
-      get : function () {
+      get: function() {
         return this.getAttribute("first-weekday-num");
       },
-      set : function (newVal) {
+      set: function(newVal) {
         this.ns.calObj.firstWeekdayNum = newVal;
         this.setAttribute("first-weekday-num", newVal);
       }
@@ -1686,13 +1684,13 @@
     // handles if the brick-calendar allows dates to be chosen or not
     // ie: if set, overrides default chosen-toggling behavior of the UI
     'noToggle': {
-      get : function () {
+      get: function() {
         return this.hasAttribute("notoggle");
       },
-      set : function (newVal) {
+      set: function(newVal) {
         if (newVal) {
           this.chosen = null;
-          this.setAttribute("notoggle","");
+          this.setAttribute("notoggle", "");
         } else {
           this.removeAttribute("notoggle");
         }
@@ -1701,28 +1699,28 @@
     // (readonly) retrieves the first day in the first fully-visible
     // month of the calendar
     'firstVisibleMonth': {
-      get : function () {
+      get: function() {
         return this.ns.calObj.firstVisibleMonth;
       }
     },
     // (readonly) retrieves the first day in the first fully-visible
     // month of the calendar
     'lastVisibleMonth': {
-      get : function () {
+      get: function() {
         return this.ns.calObj.lastVisibleMonth;
       }
     },
     // (readonly) retrieves the first day in the calendar, even if it
     // is not part of a fully visible month
     'firstVisibleDate': {
-      get : function () {
+      get: function() {
         return this.ns.calObj.firstVisibleDate;
       }
     },
     // (readonly) retrieves the last day in the calendar, even if it
     // is not part of a fully visible month
     'lastVisibleDate': {
-      get : function () {
+      get: function() {
         return this.ns.calObj.lastVisibleDate;
       }
     },
@@ -1739,15 +1737,15 @@
     rendered, and because most calendar attribute changes
     **/
     'customRenderFn': {
-      get: function () {
+      get: function() {
         return this.ns.calObj.customRenderFn;
       },
-      set: function (newRenderFn) {
+      set: function(newRenderFn) {
         this.ns.calObj.customRenderFn = newRenderFn;
       }
     },
     'labels': {
-      get: function () {
+      get: function() {
         // clone labels to prevent user from clobbering aliases
         return JSON.parse(JSON.stringify(this.ns.calObj.labels));
       },
@@ -1756,7 +1754,7 @@
       // newLabelData. Ensures that labels that were initially strings
       // stay strings, and that labels that were initially arrays of
       // strings stay arrays of strings (with the same # of elements)
-      set: function (newLabelData) {
+      set: function(newLabelData) {
         this.ns.calObj.labels = newLabelData;
         var labels = this.ns.calObj.labels;
         // also update the control labels, if available
