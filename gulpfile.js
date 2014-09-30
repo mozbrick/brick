@@ -69,4 +69,6 @@ gulp.task('connect', function() {
   });
 });
 
+gulp.task('server', ['build','connect']);
+
 gulp.task('default', ['help']);
