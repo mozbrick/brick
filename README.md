@@ -1,6 +1,10 @@
 # Brick
 
-[![Build Status](https://travis-ci.org/mozbrick/brick.png)](https://travis-ci.org/mozbrick/brick)
+
+[![Build Status](http://img.shields.io/travis/mozbrick/brick.svg?style=flat)](https://travis-ci.org/mozbrick/brick)
+[![Dependency Status](http://img.shields.io/david/mozbrick/brick.svg?style=flat)](https://david-dm.org/mozbrick/brick)
+[![DevDependencies Status](http://img.shields.io/david/dev/mozbrick/brick.svg?style=flat)](https://david-dm.org/mozbrick/brick#info=devDependencies)
+
 
 Brick is a collection of UI components designed for the easy and quick building of web application UIs. Brick components are built using the Web Components standard to allow developers to describe the UI of their app using the HTML syntax they already know.
 
